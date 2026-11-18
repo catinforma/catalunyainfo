@@ -28,7 +28,7 @@ import {
   spainRuns,
   variableDates,
 } from "@/lib/programmatic/spain-2027/calendar";
-import { citiesOf } from "@/lib/programmatic/spain-2027/cities";
+import { citiesOf, searchedCitiesOf } from "@/lib/programmatic/spain-2027/cities";
 import { CATALAN_CITIES } from "@/lib/programmatic/spain-2027/cities-data";
 import { cityListLineIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import {
@@ -68,7 +68,7 @@ import {
   type Edition,
   type EditionNames,
 } from "@/lib/programmatic/spain-2027/editions";
-import { BOE_REF, SOURCES, SOURCES_READ_ON, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
+import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 import { SOURCE_PROSE, placeName } from "@/lib/programmatic/spain-2027/sources-intl";
 
 /**
@@ -139,6 +139,32 @@ function catalanTowns(locale: Edition) {
     .filter((x) => x.town !== null && (locale === "ca" || englishTownBySlug(x.town.slug) !== null))
     .map((x) => ({ row: x.row, town: x.town! }))
     .sort((a, b) => b.row.population - a.row.population);
+}
+
+/** Right under the calendar, as the Spanish edition (18 Nov 2026): the most searched city pages, then the full list. */
+function SearchedCities({ c, locale }: { c: EditionNames; locale: Edition }) {
+  const cities = searchedCitiesOf(c.region);
+  if (cities.length === 0) return null;
+  const all = citiesOf(c.region).length;
+  return (
+    <p data-searched-cities>
+      <strong>{tr(locale, `Festius locals del ${YEAR} per ciutat:`, `${YEAR} local holidays by city:`)}</strong>{" "}
+      {cities.map((x, i) => (
+        <span key={x.slug}>
+          {i > 0 ? " · " : ""}
+          <Link href={editionCityPath(locale, x)}>{caStart(editionCityName(x, locale))}</Link>{" "}
+          <small className="text-[var(--color-muted)]">({cityListLineIntl(x, locale)})</small>
+        </span>
+      ))}
+      {all > cities.length ? (
+        <>
+          {" · "}
+          <a href="#ciutats">{tr(locale, `les ${all} ciutats`, `all ${all} cities`)}</a>
+        </>
+      ) : null}
+      .
+    </p>
+  );
 }
 
 function CityList({ c, locale }: { c: EditionNames; locale: Edition }) {
@@ -338,6 +364,7 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
             </table>
           </div>
           {weekend ? <p>{weekend}</p> : null}
+          <SearchedCities c={c} locale={locale} />
           {s.boeNote ? (
             <div role="note" className="ci-callout ci-callout-official">
               <p>
@@ -683,8 +710,8 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
           <p>
             {tr(
               locale,
-              `A més dels dies del BOE, cada municipi té fins a 2 festius locals, que cada comunitat publica al seu butlletí (o, a Castella i Lleó i al País Basc, els butlletins de cada província). Estat a ${dayMonthYear(SOURCES_READ_ON, "ca")}:`,
-              `Besides the BOE days, every municipality has up to 2 local holidays, which each community publishes in its own bulletin (in Castile and León and the Basque Country, the bulletins of each province). Status as of ${dayMonthYear(SOURCES_READ_ON, "en")}:`,
+              `A més dels dies del BOE, cada municipi té fins a 2 festius locals, que cada comunitat publica al seu butlletí (o, a Castella i Lleó i al País Basc, els butlletins de cada província). Estat a ${dayMonthYear(latestReading(), "ca")}:`,
+              `Besides the BOE days, every municipality has up to 2 local holidays, which each community publishes in its own bulletin (in Castile and León and the Basque Country, the bulletins of each province). Status as of ${dayMonthYear(latestReading(), "en")}:`,
             )}
           </p>
           <ul>

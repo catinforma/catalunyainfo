@@ -10,7 +10,7 @@ import { CITIES_AS_OF } from "./cities-data";
 import { COMMUNITIES, communityBySlug, type CommunityNames } from "./communities";
 import { DAY_PAGES } from "./days";
 import { editionLanguages, editionsOf } from "./editions";
-import { SOURCES_READ_ON } from "./sources";
+import { SOURCES_READ_ON, latestReading } from "./sources";
 
 /**
  * URLs of the Spain-wide 2027 calendar, Spanish only (but the day pages, in three languages):
@@ -153,7 +153,7 @@ export function spainPaths(): string[] {
 
 /** Sitemap entries of the Spanish edition, each with its ca and en editions (editions.ts); x-default is the English one. */
 export function spainSitemapEntries(): MetadataRoute.Sitemap {
-  const read = SOURCES_READ_ON > CITIES_AS_OF ? SOURCES_READ_ON : CITIES_AS_OF;
+  const read = latestReading(CITIES_AS_OF);
   const lastModified = new Date(`${read}T00:00:00Z`);
   const cities = new Set(CITIES.map((c) => cityPath(c)));
   return spainPaths().map((path) => ({

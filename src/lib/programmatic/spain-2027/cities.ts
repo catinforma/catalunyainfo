@@ -5,7 +5,7 @@ import { addDays } from "@/lib/programmatic/holidays/format";
 import { communityDays, weekday, type CommunityDay } from "./calendar";
 import { CITY_ROWS, CITIES_AS_OF, CITIES_RECHECK_DAYS, type CityRow, type LocalDay, type LocalList } from "./cities-data";
 import { names, type CommunityNames } from "./communities";
-import { SOURCES } from "./sources";
+import { SOURCES, type PendingCheck } from "./sources";
 
 /**
  * The city pages' facts, computed from `cities-data.ts` (the local days, as
@@ -31,9 +31,20 @@ export function cityBySlug(region: Region, slug: string): City | null {
   return CITIES.find((c) => c.region === region && c.slug === slug) ?? null;
 }
 
-/** The day the city's local days were read on its bulletin: the row's own date (20,000+ wave) or `CITIES_AS_OF`. */
-export function cityReadOn(c: Pick<CityRow, "readOn">): string {
-  return c.readOn ?? CITIES_AS_OF;
+/**
+ * The day the city's local days were read on its bulletin: the row's own date
+ * (20,000+ wave) or `CITIES_AS_OF`; for a city still waiting for its
+ * community's list, the day that bulletin was last searched for it
+ * (`PENDING_CHECKS`, sources.ts).
+ */
+export function cityReadOn(c: Pick<CityRow, "readOn" | "status2027" | "region">): string {
+  const checked = c.status2027 === "pending" ? SOURCES[c.region].local.checked : undefined;
+  return checked?.date ?? c.readOn ?? CITIES_AS_OF;
+}
+
+/** The last issue of the community's bulletin searched for the city's 2027 days, while they are pending. */
+export function pendingCheck(c: Pick<CityRow, "status2027" | "region">): PendingCheck | null {
+  return c.status2027 === "pending" ? (SOURCES[c.region].local.checked ?? null) : null;
 }
 
 /** "Las Palmas" where the full name would not fit a title. */
@@ -155,4 +166,70 @@ export function sharedWith(c: City, iso: string): City[] {
 export function expectedMonth(region: Region): string | null {
   const y2026 = SOURCES[region].local.y2026;
   return y2026 ? y2026.date.slice(0, 7) : null;
+}
+
+/**
+ * The city's 2027 calendar split by who fixes each day (18 Nov 2026), for the
+ * block under the answer: the days common to all of Spain, the community's
+ * own (its BOE column minus the common ones, from its decree), the island day
+ * in Canarias, and the local days with their bulletin, or the pending status.
+ * Every day of `cityCalendar` is in exactly one layer (a test holds it).
+ */
+export interface CityLayers {
+  common: CommunityDay[];
+  community: CommunityDay[];
+  island: { date: string; name: string; place: string } | null;
+  /** The 2027 local days (of the main area when zoned), or Navarra's common one while the town's own is pending. */
+  local: LocalDay[];
+  /** The bulletin the local days come from, when the 2027 list is out. */
+  localSource: LocalList["source"] | null;
+  /** While the list is pending: the last issue searched for it. */
+  pending: PendingCheck | null;
+}
+
+export function cityLayers(c: City): CityLayers {
+  const days = communityDays(c.region);
+  const list = local2027(c);
+  return {
+    common: days.filter((d) => d.common),
+    community: days.filter((d) => !d.common),
+    island: islandDay(c),
+    local: list ? localDays(c) : commonLocalDays(c),
+    localSource: list?.source ?? null,
+    pending: pendingCheck(c),
+  };
+}
+
+/**
+ * The community's most searched city pages, for the line under the
+ * community page's calendar ("festivos <ciudad> 2027" lands on the city
+ * pages, not on the community). Search Console 5–18 Nov 2026, impressions per
+ * city page, up to six with 50 or more (`scripts/snapshot.py page 2027 14`
+ * and the page split), most first; re-read at the low-demand review
+ * (LOW_DEMAND_REVIEW_BY, 10 Dec). A community without one falls back to its
+ * most populous cities.
+ */
+export const SEARCHED_CITIES: Partial<Record<Region, readonly string[]>> = {
+  AN: ["marbella", "jerez-de-la-frontera", "el-puerto-de-santa-maria", "la-linea-de-la-concepcion", "sevilla", "dos-hermanas"],
+  AR: ["zaragoza", "teruel", "huesca"],
+  AS: ["gijon", "aviles", "oviedo", "siero"],
+  CB: ["torrelavega"],
+  CL: ["ponferrada", "segovia", "palencia", "salamanca"],
+  CN: ["telde", "arona", "la-laguna", "san-bartolome-de-tirajana", "adeje", "santa-lucia-de-tirajana"],
+  EX: ["merida"],
+  GA: ["vigo", "ourense", "a-coruna", "santiago-de-compostela"],
+  IB: ["palma", "ibiza"],
+  MC: ["cartagena", "lorca", "molina-de-segura"],
+  MD: ["alcobendas", "alcorcon", "pinto", "valdemoro", "parla", "tres-cantos"],
+  NC: ["pamplona"],
+  PV: ["vitoria", "bilbao", "getxo", "barakaldo", "san-sebastian"],
+  RI: ["logrono"],
+  VC: ["gandia", "benidorm", "paterna", "san-vicente-del-raspeig", "vila-real", "sagunto"],
+};
+
+/** The cities for that line: the searched ones, else the four most populous; empty where the community has no city page. */
+export function searchedCitiesOf(region: Region): City[] {
+  const slugs = SEARCHED_CITIES[region];
+  if (!slugs) return citiesOf(region).slice(0, 4);
+  return slugs.map((s) => cityBySlug(region, s)).filter((x): x is City => x !== null);
 }

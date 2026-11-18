@@ -54,6 +54,14 @@ export function weekdayDate(iso: string): string {
   return `${weekdayName(iso, "es")} ${dayMonth(iso, "es")}`;
 }
 
+const WEEKDAY_ABBR = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+
+/** "vie 19 mar": the weekday and date in a list of many days. */
+export function shortWeekdayDate(iso: string): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  return `${WEEKDAY_ABBR[d.getUTCDay()]} ${d.getUTCDate()} ${MONTH_ABBR[d.getUTCMonth()]}`;
+}
+
 /** "del viernes 1 al domingo 3 de enero", "del sábado 9 al martes 12 de octubre", "del sábado 30 de octubre al lunes 1 de noviembre". */
 export function rangeWords(from: string, to: string): string {
   const sameMonth = from.slice(0, 7) === to.slice(0, 7);
@@ -196,6 +204,7 @@ export function localStatusLine(c: CommunityNames, local: LocalStatus): string {
   }
   if (local.status === "partial") return `Publicados en parte: ${local.note ?? ""}`.trim();
   const last = local.y2026 ? ` En 2026 se publicaron el ${dayMonthYear(local.y2026.date, "es")} (${local.y2026.ref}).` : "";
+  if (local.checked) return `Pendientes: ${c.en} todavía no se ha publicado la lista de ${YEAR} (consultado hasta el ${local.checked.through}).${last}`;
   return `Pendientes a ${dayMonthYear(SOURCES_READ_ON, "es")}: ${c.en} todavía no se ha publicado la lista de ${YEAR}.${last}`;
 }
 

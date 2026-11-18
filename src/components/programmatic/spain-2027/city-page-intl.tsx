@@ -26,7 +26,7 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { areaNameIntl, caIn, caOf, cityAnswerIntl, cityFaqIntl, cityH1Intl, cityLeadIntl, cityListLineIntl, localNameIntl, localNoteIntl, planWordsIntl, populationIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
+import { areaNameIntl, caIn, caOf, cityAnswerIntl, cityFaqIntl, cityLayerLinesIntl, cityH1Intl, cityLeadIntl, cityListLineIntl, localNameIntl, localNoteIntl, planWordsIntl, populationIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { KIND_LABEL_INTL, compactDatesIntl, dayNameIntl, runLineIntl, tr, weekdayDateIntl } from "@/lib/programmatic/spain-2027/copy-intl";
 import {
   editionBridgesPath,
@@ -114,6 +114,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
   const leaveRuns = runs.filter((x) => x.take.length > 0).length;
   const islandPlace = island ? placeName(island.place, locale) : "";
   const answer = cityAnswerIntl(c, locale);
+  const layers = cityLayerLinesIntl(c, locale);
 
   return (
     <article>
@@ -126,6 +127,14 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             <strong>{answer.strong}</strong>
             {answer.rest}
           </p>
+          {/* Every 2027 day by who fixes it, each layer with its text and date (18 Nov 2026). */}
+          <ul className="mt-3" data-layers aria-label={tr(locale, `Festius del ${YEAR} ${caIn(name)}, per origen`, `${Name}'s ${YEAR} holidays, by who sets them`)}>
+            {layers.map((l) => (
+              <li key={l.id}>
+                <strong>{l.label}:</strong> {l.days}. <small className="text-[var(--color-muted)]">({l.source})</small>
+              </li>
+            ))}
+          </ul>
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
           <h2 id="calendario">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
           <div className="ci-table-scroll mt-4">
@@ -299,6 +308,13 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
                         `The 2026 list came out on ${dayMonthYear(s.local.y2026.date, "en")} (${s.local.y2026.ref}).`,
                       )
                     : ""}
+                {s.local.checked && c.status2027 === "pending"
+                  ? tr(
+                      locale,
+                      ` La del ${YEAR} no és a cap número publicat fins al ${s.local.checked.through} (consultats el ${dayMonthYear(s.local.checked.date, "ca")}).`,
+                      ` The ${YEAR} list is in no issue published up to ${s.local.checked.through} (read on ${dayMonthYear(s.local.checked.date, "en")}).`,
+                    )
+                  : ""}
               </p>
               {c.local2026 ? (
                 <>

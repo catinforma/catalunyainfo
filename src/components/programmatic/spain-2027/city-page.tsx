@@ -26,7 +26,7 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { cityAnswer, cityFaq, cityH1, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
+import { cityAnswer, cityFaq, cityH1, cityLayerLines, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
 import { KIND_LABEL, compactDates, dayName, runLine, weekdayDate } from "@/lib/programmatic/spain-2027/copy";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
@@ -92,6 +92,7 @@ export function CityPage({ c }: { c: City }) {
   const weekend = weekendLocalDays(c);
   const common = commonLocalDays(c);
   const answer = cityAnswer(c);
+  const layers = cityLayerLines(c);
 
   return (
     <article>
@@ -104,6 +105,14 @@ export function CityPage({ c }: { c: City }) {
             <strong>{answer.strong}</strong>
             {answer.rest}
           </p>
+          {/* Every 2027 day by who fixes it, each layer with its text and date (18 Nov 2026). */}
+          <ul className="mt-3" data-layers aria-label={`Festivos de ${YEAR} en ${c.name}, por origen`}>
+            {layers.map((l) => (
+              <li key={l.id}>
+                <strong>{l.label}:</strong> {l.days}. <small className="text-[var(--color-muted)]">({l.source})</small>
+              </li>
+            ))}
+          </ul>
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
           <h2 id="calendario">Calendario laboral {YEAR} de {c.name}</h2>
           <div className="ci-table-scroll mt-4">
@@ -226,6 +235,9 @@ export function CityPage({ c }: { c: City }) {
                   : s.local.y2026
                     ? `La lista de 2026 salió el ${dayMonthYear(s.local.y2026.date, "es")} (${s.local.y2026.ref}).`
                     : ""}
+                {s.local.checked && c.status2027 === "pending"
+                  ? ` La de ${YEAR} no está en ningún número publicado hasta el ${s.local.checked.through} (consultados el ${dayMonthYear(s.local.checked.date, "es")}).`
+                  : ""}
               </p>
               {c.local2026 ? (
                 <>

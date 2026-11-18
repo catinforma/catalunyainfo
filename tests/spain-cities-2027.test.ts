@@ -209,9 +209,11 @@ test("calendar: local days add to the BOE days, never fall on one, and Canarias 
 /* -------------------------------------------------------------------------- */
 
 test("titles: 'Festivos locales <Ciudad> 2027: <día 1> y <día 2>' when known, else 'Calendario laboral <Ciudad> 2027: festivos'", () => {
+  // The titles until CITY_TITLES_FROM (2 Dec 2026); the ones after are in tests/spain-2027-laboral-18nov.test.ts.
+  const before = "2026-11-18";
   const titles = new Set<string>();
   for (const c of CITIES) {
-    const title = cityTitle(c);
+    const title = cityTitle(c, before);
     assert.ok(title.length <= TITLE_LIMIT, `${title} (${title.length})`);
     titles.add(title);
     const known = c.status2027 === "published" && !c.local2027?.zones?.length;
@@ -227,8 +229,8 @@ test("titles: 'Festivos locales <Ciudad> 2027: <día 1> y <día 2>' when known, 
     assert.ok(cityH1(c).startsWith(`Calendario laboral ${c.name} 2027`), c.slug);
   }
   assert.equal(titles.size, CITIES.length, "no two cities share a title");
-  assert.equal(cityTitle(CITIES.find((c) => c.slug === "sevilla")!), "Festivos locales Sevilla 2027: 14 de abril y 27 de mayo");
-  assert.equal(cityTitle(CITIES.find((c) => c.slug === "burgos")!), "Calendario laboral Burgos 2027: festivos");
+  assert.equal(cityTitle(CITIES.find((c) => c.slug === "sevilla")!, before), "Festivos locales Sevilla 2027: 14 de abril y 27 de mayo");
+  assert.equal(cityTitle(CITIES.find((c) => c.slug === "burgos")!, before), "Calendario laboral Burgos 2027: festivos");
 });
 
 test("intros: each city's own facts, no two alike; pending cities say so plainly", () => {

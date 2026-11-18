@@ -1,10 +1,13 @@
 import type { Plan } from "@/lib/content/holidays/bridges";
 import { dayMonth, dayMonthYear, dayPair, weekdayName } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
+import { todayInMadrid } from "@/lib/programmatic/holidays/status";
 
 import { YEAR, dayCount } from "./calendar";
 import { CITIES_AS_OF, INE_POPULATION, type LocalDay, type LocalList } from "./cities-data";
 import {
+  cityLayers,
+  cityReadOn,
   expectedMonth,
   holidayCount,
   commonLocalDays,
@@ -13,14 +16,15 @@ import {
   local2027,
   localDays,
   localRuns,
+  pendingCheck,
   planForLocal,
   sharedWith,
   shortName,
   weekendLocalDays,
   type City,
 } from "./cities";
-import { DESCRIPTION_LIMIT, TITLE_LIMIT, compactDates, rangeWords, runLine, weekdayDate, type Faq } from "./copy";
-import { SOURCES } from "./sources";
+import { DESCRIPTION_LIMIT, TITLE_LIMIT, compactDates, rangeWords, runLine, shortWeekdayDate, weekdayDate, type Faq } from "./copy";
+import { BOE_REF, SOURCES } from "./sources";
 
 /**
  * Spanish words for the city pages. Every date, name and number comes from
@@ -70,7 +74,40 @@ export function expectedWords(c: City): string | null {
 
 /* ------------------------------------------------------------- Metadata --- */
 
-export function cityTitle(c: City): string {
+/**
+ * 18 Nov 2026: the title takes the two forms people search, "festivos
+ * <ciudad> 2027" and "calendario laboral <ciudad> 2027" (GSC 5–18 Nov:
+ * "festivos vigo 2027" 136 at 10.8, "calendario laboral torrelavega 2027" 106
+ * at 8.5, "festivos alcobendas 2027" 92 at 9.4), with the two local days when
+ * they are out. It waits for the measurement window of the 13 Nov first-line
+ * change (read 20 Nov and 1 Dec, docs/SEO_EXPERIMENTS.md): from this day the
+ * next build or `calendario-2027-espana` publish renders it.
+ */
+export const CITY_TITLES_FROM = "2026-12-02";
+
+export function cityTitle(c: City, today: string = todayInMadrid(new Date())): string {
+  return today >= CITY_TITLES_FROM ? cityTitleSearched(c) : cityTitleBefore(c);
+}
+
+/** "Festivos Vigo 2027: calendario laboral, 29 mar y 16 ago"; "Festivos Alcobendas 2027: calendario laboral" while the days are pending. */
+export function cityTitleSearched(c: City): string {
+  const days = localDays(c);
+  if (local2027(c) && !isZoned(c) && days.length === 2) {
+    const pair = abbrPair(days[0]!.date, days[1]!.date);
+    const candidates = [
+      `Festivos ${c.name} ${YEAR}: calendario laboral, ${pair}`,
+      `Festivos ${shortName(c)} ${YEAR}: calendario laboral, ${pair}`,
+      `Festivos ${shortName(c)} ${YEAR}: ${pair}`,
+    ];
+    const fit = candidates.find((t) => t.length <= TITLE_LIMIT);
+    if (fit) return fit;
+  }
+  const generic = [`Festivos ${c.name} ${YEAR}: calendario laboral`, `Festivos ${shortName(c)} ${YEAR}: calendario laboral`];
+  return generic.find((t) => t.length <= TITLE_LIMIT) ?? generic[1]!;
+}
+
+/** The title from 6 Nov to `CITY_TITLES_FROM`. */
+function cityTitleBefore(c: City): string {
   const days = localDays(c);
   if (local2027(c) && !isZoned(c) && days.length === 2) {
     const [a, b] = [days[0]!.date, days[1]!.date];
@@ -203,14 +240,102 @@ export function cityAnswer(c: City): { strong: string; rest: string } {
       : ` Se esperan ${when ? `en ${when}` : "en las próximas semanas"} en ${bulletin}.`;
   const known = common.length ? ` Una ya se conoce: el ${weekdayDate(common[0]!.date)} (${common[0]!.name}).` : "";
   const last = c.local2026 ? ` En 2026 fueron ${joinList(c.local2026.days.map((d) => `el ${dayMonth(d.date, "es")}`), "es")}.` : "";
+  const check = pendingCheck(c);
   return {
     strong: `Fiestas locales de ${c.name} en ${YEAR}: aún sin publicar.`,
-    rest: `${status}${known}${last} Boletines consultados el ${dayMonthYear(CITIES_AS_OF, "es")}.`,
+    rest: `${status}${known}${last} Boletines consultados el ${dayMonthYear(cityReadOn(c), "es")}${check ? ` (hasta el ${check.through})` : ""}.`,
   };
 }
 
 function capitalise(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/* --------------------------------------------------------------- Layers --- */
+
+export interface LayerLine {
+  id: "common" | "community" | "island" | "local";
+  label: string;
+  days: string;
+  /** The text the layer comes from, dated. */
+  source: string;
+}
+
+/** "Decreto 82/2026 (BOCM núm. 234, de 1.10.2026)": the community's own text, short. */
+export function decreeShort(c: Pick<City, "region">): string | null {
+  const decree = SOURCES[c.region].decree;
+  if (decree.status !== "published") return null;
+  return `${decree.text.title.split(",")[0]} (${decree.text.ref})`;
+}
+
+const BOE_DATED = `BOE de ${dayMonthYear(BOE_REF.date, "es")}, ${BOE_REF.id}`;
+
+/**
+ * The block under the answer (18 Nov 2026): the full 2027 list split by who
+ * fixes each day, each layer with its text and date. "festivos <ciudad> 2027"
+ * asks for every day; readers also ask which are local and whether they are
+ * out yet. The local layer says "pendiente" with the last issue searched when
+ * the list is not out; nothing is filled in from 2026.
+ */
+export function cityLayerLines(c: City): LayerLine[] {
+  const l = cityLayers(c);
+  const decree = decreeShort(c);
+  const named = (d: { date: string; name: string | null }) => `${shortWeekdayDate(d.date)}${d.name ? ` (${d.name})` : ""}`;
+  const lines: LayerLine[] = [
+    { id: "common", label: `Comunes a toda España (${l.common.length})`, days: joinList(l.common.map((d) => shortWeekdayDate(d.date)), "es"), source: BOE_DATED },
+  ];
+  if (l.community.length) {
+    lines.push({
+      id: "community",
+      // Not "propios": San José or Holy Thursday are national days some communities keep and others swap.
+      label: `Además, ${c.community.en} (${l.community.length})`,
+      days: joinList(
+        l.community.map((d) => named({ date: d.date, name: d.replaces ? "traslado de la Asunción" : d.name })),
+        "es",
+      ),
+      source: decree ? `${decree} y ${BOE_DATED}` : BOE_DATED,
+    });
+  }
+  if (l.island) {
+    lines.push({ id: "island", label: `Fiesta insular de ${l.island.place}`, days: named(l.island), source: decree ?? BOE_DATED });
+  }
+  const list = local2027(c);
+  if (list) {
+    lines.push({
+      id: "local",
+      label: isZoned(c) ? `Locales de ${c.name}, por zonas (${(list.mainArea ?? c.name).replace(/^Todo /, "todo ")})` : `Locales de ${c.name} (${l.local.length})`,
+      days: joinList(l.local.map(named), "es"),
+      source: list.source.ref,
+    });
+    return lines;
+  }
+  const s = SOURCES[c.region].local;
+  const searched = l.pending ? `; consultado hasta el ${l.pending.through}` : "";
+  if (c.status2027 === "missing") {
+    lines.push({
+      id: "local",
+      label: `Locales de ${c.name}`,
+      days: `la lista de ${YEAR} no las da`,
+      source: s.parts?.find((p) => p.place === c.province)?.text.ref ?? s.y2027?.ref ?? s.bulletinName,
+    });
+    return lines;
+  }
+  if (l.local.length) {
+    lines.push({
+      id: "local",
+      label: `Locales de ${c.name} (2)`,
+      days: `${joinList(l.local.map((d) => `${shortWeekdayDate(d.date)} (${d.name}, ${d.note ?? "común"})`), "es")} y otra pendiente de publicación en ${s.bulletinShort}`,
+      source: `${decree ?? BOE_DATED}${searched}`,
+    });
+    return lines;
+  }
+  lines.push({
+    id: "local",
+    label: `Locales de ${c.name} (2)`,
+    days: `pendientes de publicación en ${s.bulletinShort}`,
+    source: l.pending ? `consultado hasta el ${l.pending.through}` : `boletines consultados el ${dayMonthYear(cityReadOn(c), "es")}`,
+  });
+  return lines;
 }
 
 /** " El 8 de septiembre también es fiesta local en Huelva, Mijas y Utrera.": the cities of the community sharing a day (up to 4 named). */
