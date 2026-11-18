@@ -81,14 +81,10 @@ test("hub: the eight groups, each card complete in ca, es and en, linking indexa
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
   // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
-  // The vehicles group: the ITV calculator (lib/programmatic/itv).
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv"]);
   // The official-figures group: the SMI, the INE average salary, the CPI and the Letras del Tesoro reference pages.
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "average-salary", "ipc", "treasury-bills"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv) and the traffic-fines deadlines (lib/programmatic/traffic-fines).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv", "traffic-fines"]);
-  // The official-figures group: the SMI, the CPI and the Letras del Tesoro reference pages.
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc", "treasury-bills"]);
   for (const g of HUB_GROUPS) {
     assert.ok(g.cards.length > 0, g.id);
     for (const l of CALC_LOCALES) assert.ok(g.title[l].trim(), `${g.id} (${l})`);
