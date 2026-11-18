@@ -42,6 +42,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "pensions-2027": ["ipc", "pay-dates"],
   "working-days": ["leave-2027", "paid-leave"],
   "smi-2027": ["net-salary", "extra-pay"],
+  // The average salary is gross: its readers want the net of a figure, then the floor (SMI).
+  "average-salary": ["net-salary", "smi-2027"],
   ipc: ["rent-update", "pensions-2027"],
   "treasury-bills": ["euribor", "ipc"],
   itv: ["fuel"],

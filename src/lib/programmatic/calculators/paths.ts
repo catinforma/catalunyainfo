@@ -48,6 +48,8 @@ export const CALCULATORS = [
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },
+  // Average salary (INE EAES by community, age, sex and sector; EPA wage deciles): lib/programmatic/average-salary.
+  { id: "average-salary", slugs: { es: "salario-medio", ca: "salari-mitja", en: "average-salary-spain" } },
   { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
   { id: "treasury-bills", slugs: { es: "letras-del-tesoro", ca: "lletres-del-tresor", en: "spain-treasury-bills" } },
   // Lottery (hub group "lottery"): the special levy on lottery prizes (Ley 35/2006, DA 33ª) per décimo, share and draw.

@@ -162,6 +162,7 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   { keys: ["bono social", "bo social", "social bonus"], id: "bono-social", label: { ca: "Bo social elèctric: tens dret?", es: "Bono social eléctrico: ¿tienes derecho?", en: "Bono social (electricity): do you qualify?" } },
   { keys: ["itv"], id: "itv", label: { ca: "Quan toca passar l'ITV", es: "Cuándo toca pasar la ITV", en: "When the ITV is due" } },
   { keys: ["ipc", "inflacio", "inflacion", "cpi"], id: "ipc", label: { ca: "IPC avui", es: "IPC hoy", en: "Spain CPI" } },
+  { keys: ["salario medio", "salari mitja", "sueldo medio", "sou mitja", "salario mediano", "average salary", "tabla salarial", "taula salarial"], id: "average-salary", label: { ca: "Salari mitjà a Espanya (INE)", es: "Salario medio en España (INE)", en: "Average salary in Spain (INE)" } },
   { keys: ["smi", "salari minim", "salario minimo", "minimum wage"], id: "smi-2027", label: { ca: "Salari mínim 2027", es: "Salario mínimo 2027", en: "Minimum wage 2027" } },
   { keys: ["atur", "paro", "prestacio", "prestacion"], id: "unemployment", label: { ca: "Calculadora de l'atur", es: "Calculadora del paro", en: "Unemployment benefit calculator" } },
   { keys: ["pensions", "pensiones", "pension"], id: "pensions-2027", label: { ca: "Pujada de les pensions 2027", es: "Subida de las pensiones 2027", en: "Pension increase 2027" } },

@@ -86,6 +86,7 @@ export const CALCULATOR_USE_IDS = [
   "pensions-2027",
   "working-days",
   "smi-2027",
+  "average-salary",
   "treasury-bills",
   "lottery-tax",
   "itv",

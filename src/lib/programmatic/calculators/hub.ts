@@ -386,6 +386,23 @@ export const HUB_GROUPS: HubGroup[] = [
         checked: SMI_RULES_AS_OF,
       },
       {
+        key: "average-salary",
+        calculator: true,
+        href: calc("average-salary"),
+        title: { ca: "Salari mitjà a Espanya", es: "Salario medio en España", en: "Average salary in Spain" },
+        answers: {
+          ca: "Quant es cobra de mitjana i de mediana per comunitat, edat, sexe i sector, i en quin decil és el teu sou?",
+          es: "¿Cuánto se cobra de media y de mediana por comunidad, edad, sexo y sector, y en qué decil está tu sueldo?",
+          en: "What people earn (mean and median) by region, age, sex and sector, and which decile your salary is in.",
+        },
+        basis: {
+          ca: "Enquesta Anual d'Estructura Salarial de l'INE (taules 28191, 28201, 28192, 28193, 28189, 28185, 28186, 28187) i decils de salaris de l'EPA (taules 66252, 66237).",
+          es: "Encuesta Anual de Estructura Salarial del INE (tablas 28191, 28201, 28192, 28193, 28189, 28185, 28186, 28187) y deciles de salarios de la EPA (tablas 66252, 66237).",
+          en: "The INE's Annual Wage Structure Survey (tables 28191, 28201, 28192, 28193, 28189, 28185, 28186, 28187) and EPA wage deciles (tables 66252, 66237).",
+        },
+        scope: "spain",
+      },
+      {
         key: "ipc",
         calculator: true,
         href: calc("ipc"),
