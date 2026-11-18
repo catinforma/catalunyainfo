@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
+import { createRequire } from "node:module";
 import { join, relative } from "node:path";
 import { test } from "node:test";
 
@@ -10,7 +11,14 @@ import { pollsPageData } from "../src/lib/programmatic/polls/data.ts";
 import { POLLS, POLLS_CHECKED_ON } from "../src/lib/programmatic/polls/figures.ts";
 import { pollsCrumbs, pollsMetadata, pollsSchemas } from "../src/lib/programmatic/polls/page.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
-import { POLLS_INTERNAL_SEGMENT, POLLS_PATHS, pollsHeaderSources, pollsPath } from "../src/lib/programmatic/polls/paths.ts";
+import {
+  POLLS_BLACKOUT_SEGMENT,
+  POLLS_INTERNAL_SEGMENT,
+  POLLS_PATHS,
+  pollsBlackoutInternalPath,
+  pollsHeaderSources,
+  pollsPath,
+} from "../src/lib/programmatic/polls/paths.ts";
 import type { Figure, PublishedPoll } from "../src/lib/programmatic/polls/types.ts";
 import { BLACKOUT_END, BLACKOUT_START, isPollBlackout } from "../src/lib/programmatic/polls/window.ts";
 
@@ -229,6 +237,77 @@ test("the route is force-dynamic, never prerendered or revalidated, and the guid
   // The client island gets a timestamp, never data.
   const reload = readFileSync(join(SRC, "components", "programmatic", "polls", "PollsReload.tsx"), "utf8");
   assert.doesNotMatch(reload, /import .*polls\/(data|figures|types)/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* Static inside the window, through the proxy                                */
+/* -------------------------------------------------------------------------- */
+
+test("the proxy sends the public URLs to the static blackout route exactly inside the window", async () => {
+  const { pollsProxyRewrite } = await import("../src/lib/programmatic/polls/routing.ts");
+  for (const locale of LOCALES) {
+    const target = `/${locale}/${POLLS_INTERNAL_SEGMENT}/${POLLS_BLACKOUT_SEGMENT}/`;
+    assert.equal(pollsBlackoutInternalPath(locale), target);
+    for (const path of [pollsPath(locale), pollsPath(locale).slice(0, -1)]) {
+      for (const { at, blackout } of CASES) {
+        assert.equal(pollsProxyRewrite(path, madrid(at)), blackout ? target : null, `${path} at ${at}`);
+      }
+      // Fails closed, like the gate.
+      assert.equal(pollsProxyRewrite(path, new Date(Number.NaN)), target, `${path}: invalid clock`);
+    }
+  }
+  // Nothing else is rewritten, at any time.
+  for (const path of ["/es/guias/", "/es/elecciones/", "/es/guias/encuestas-elecciones-generales-cataluna/x/", "/es/internal-polls/", "/ca/guies/encuestas-elecciones-generales-cataluna/"]) {
+    assert.equal(pollsProxyRewrite(path, madrid("2026-11-26T12:00")), null, path);
+  }
+});
+
+test("the static blackout view is the gate's blackout state, built without the gate", async () => {
+  const { BLACKOUT_VIEW } = await import("../src/lib/programmatic/polls/routing.ts");
+  assert.deepEqual(BLACKOUT_VIEW, pollsPageData(madrid("2026-11-26T12:00")));
+  assert.deepEqual(Object.keys(BLACKOUT_VIEW).sort(), ["returnsAt", "state"]);
+  assertNoFigure(JSON.stringify(BLACKOUT_VIEW), "BLACKOUT_VIEW");
+});
+
+test("the blackout route is static and cannot reach a figure; the shared view reads no clock", () => {
+  const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const route = join(SRC, "app", "(public)", "[locale]", POLLS_INTERNAL_SEGMENT, POLLS_BLACKOUT_SEGMENT, "page.tsx");
+  const blackoutPage = join(SRC, "components", "programmatic", "polls", "PollsBlackoutPage.tsx");
+  const view = join(SRC, "components", "programmatic", "polls", "PollsView.tsx");
+  const routing = join(SRC, "lib", "programmatic", "polls", "routing.ts");
+  for (const file of [route, blackoutPage, view, routing]) {
+    const code = strip(readFileSync(file, "utf8"));
+    // No runtime import of the gate or the figures (a type-only import is erased).
+    assert.doesNotMatch(code, /^import (?!type )[^;]*polls\/(data|figures)["']/m, `${relative(ROOT, file)} imports the gate`);
+    assert.doesNotMatch(code, /from ["']\.\/(data|figures)["']/, relative(ROOT, file));
+    assert.doesNotMatch(code, /pollsPageData|connection\(|force-dynamic|"use cache"/, relative(ROOT, file));
+  }
+  for (const file of [route, blackoutPage, view]) {
+    assert.doesNotMatch(strip(readFileSync(file, "utf8")), /new Date\(|Date\.now\(/, `${relative(ROOT, file)} reads the clock`);
+  }
+  assert.match(strip(readFileSync(route, "utf8")), /<PollsBlackoutPage locale=\{locale\} \/>/);
+  assert.match(strip(readFileSync(blackoutPage, "utf8")), /data=\{BLACKOUT_VIEW\}/);
+});
+
+test("the proxy matcher covers the three public URLs (Next's own matcher compiler) and the proxy uses the routing gate", () => {
+  const proxy = readFileSync(join(SRC, "proxy.ts"), "utf8");
+  const block = proxy.match(/matcher: \[([\s\S]*?)\]/)?.[1] ?? "";
+  const sources = [...block.matchAll(/"([^"]+)"/g)].map((m) => m[1]!);
+  const require = createRequire(import.meta.url);
+  const { getMiddlewareMatchers } = require("next/dist/build/analysis/get-page-static-info.js") as {
+    getMiddlewareMatchers: (matchers: string[], config: object) => { regexp: string }[];
+  };
+  const regexps = getMiddlewareMatchers(sources, {}).map((m) => new RegExp(m.regexp));
+  const covered = (path: string) => regexps.some((r) => r.test(path));
+  for (const locale of LOCALES) {
+    const path = pollsPath(locale);
+    assert.ok(sources.includes(`${path}:path*`), `${locale}: literal "${path}:path*" in config.matcher`);
+    for (const form of [path, path.slice(0, -1), `${path.slice(0, -1)}.rsc`]) assert.ok(covered(form), `${locale}: ${form}`);
+  }
+  assert.ok(!covered("/es/guias/huelga-hoy-cataluna/"), "the proxy still skips ordinary pages");
+  assert.match(proxy, /pollsProxyRewrite\(pathname, new Date\(\)\)/);
+  assert.match(proxy, /NextResponse\.rewrite\(url\)/);
+  assert.match(proxy, /POLLS_CACHE_HEADERS/);
 });
 
 type HeaderRule = { source: string; headers: { key: string; value: string }[] };

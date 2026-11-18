@@ -17,6 +17,13 @@ const FOOTER_SECTIONS = ["destinations", "guides", "events", "routes", "news"] a
 /** Legal and editorial-trust pages, which AdSense and readers both look for. */
 const FOOTER_LEGAL = LEGAL_KEYS;
 
+/**
+ * Every footer link is `prefetch={false}` (the "Disabled prefetch" case of the
+ * Next 16 prefetching guide, which names footer links): on every page they
+ * reached the viewport and each pulled an RSC payload that Cloudflare never
+ * caches. A click still navigates client-side; it just fetches then. The
+ * header uses intent prefetch instead (components/nav/IntentLink.tsx).
+ */
 export async function SiteFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const year = new Date().getUTCFullYear();
@@ -44,19 +51,19 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           <ul className="flex list-none flex-col gap-2 p-0 text-sm">
             {sections.map((key) => (
               <li key={key}>
-                <Link href={sectionPath(key, locale)}>{t.nav[key]}</Link>
+                <Link prefetch={false} href={sectionPath(key, locale)}>{t.nav[key]}</Link>
               </li>
             ))}
             {/* The calculators hub, which the owner asked to have in the
                 header and the footer (lib/nav/menu.ts). */}
             <li>
-              <Link href={MENU_PATHS.calculators[locale]}>{MENU_LABELS.calculators[locale]}</Link>
+              <Link prefetch={false} href={MENU_PATHS.calculators[locale]}>{MENU_LABELS.calculators[locale]}</Link>
             </li>
             {/* In season only: the Christmas fairs hub (lib/nav/footer.ts), so
                 its town pages are two clicks from any page. */}
             {seasonalFooterLinks(locale).map((item) => (
               <li key={item.key}>
-                <Link href={item.href}>{item.label}</Link>
+                <Link prefetch={false} href={item.href}>{item.label}</Link>
               </li>
             ))}
             {/* Topics and authors are linked only once they have something
@@ -65,7 +72,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 that problem. */}
             {hasTopics ? (
               <li>
-                <Link href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
+                <Link prefetch={false} href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
               </li>
             ) : null}
           </ul>
@@ -77,15 +84,15 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           </h2>
           <ul className="flex list-none flex-col gap-2 p-0 text-sm">
             <li>
-              <Link href={sectionPath("about", locale)}>{t.nav.about}</Link>
+              <Link prefetch={false} href={sectionPath("about", locale)}>{t.nav.about}</Link>
             </li>
             {hasAuthors ? (
               <li>
-                <Link href={sectionPath("authors", locale)}>{t.nav.authors}</Link>
+                <Link prefetch={false} href={sectionPath("authors", locale)}>{t.nav.authors}</Link>
               </li>
             ) : null}
             <li>
-              <Link href={sectionPath("contact", locale)}>{t.nav.contact}</Link>
+              <Link prefetch={false} href={sectionPath("contact", locale)}>{t.nav.contact}</Link>
             </li>
             <li>
               <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
@@ -98,12 +105,12 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
               that nothing linked: the site audit of 17 Nov 2026 found it
               unreachable from the home pages in all three languages. */}
           <h2 id="ci-foot-legal" className="ci-label mb-3 font-sans">
-            <Link href={sectionPath("legal", locale)}>{t.nav.legal}</Link>
+            <Link prefetch={false} href={sectionPath("legal", locale)}>{t.nav.legal}</Link>
           </h2>
           <ul className="flex list-none flex-col gap-2 p-0 text-sm">
             {FOOTER_LEGAL.map((key) => (
               <li key={key}>
-                <Link href={legalPath(key, locale)}>{legalLabel(key, locale)}</Link>
+                <Link prefetch={false} href={legalPath(key, locale)}>{legalLabel(key, locale)}</Link>
               </li>
             ))}
             <li>

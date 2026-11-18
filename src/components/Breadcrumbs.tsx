@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/nav/IntentLink";
 
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -31,7 +31,7 @@ export function Breadcrumbs({ items, locale }: { items: Crumb[]; locale: Locale 
                   {item.label}
                 </span>
               ) : (
-                <Link href={item.href}>{item.label}</Link>
+                <IntentLink href={item.href}>{item.label}</IntentLink>
               )}
               {!isLast ? (
                 <span

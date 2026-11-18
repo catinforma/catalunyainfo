@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 import { LEGACY_GONE } from "@/lib/migration/legacy-redirects";
+import { POLLS_CACHE_HEADERS } from "@/lib/programmatic/polls/paths";
+import { pollsProxyRewrite } from "@/lib/programmatic/polls/routing";
 import { contentSecurityPolicy, NOINDEX_VALUE, SECURITY_HEADERS } from "@/lib/security-headers";
 import { deployEnv } from "@/lib/site";
 
@@ -12,7 +14,10 @@ import { deployEnv } from "@/lib/site";
  *  2. Send `/` to a locale root, using the visitor's Accept-Language.
  *  3. Gate `/admin` behind the presence of a session cookie. The cookie is
  *     *verified* in the route handlers; this is only a cheap early bounce.
- *  4. Attach the security headers to the responses it builds itself.
+ *  4. Serve the 29N polls page from its static, figure-free route while the
+ *     LOREG 69.7 blackout is on (24 Nov 2026 00:00 to 29 Nov 21:00), so the
+ *     busiest days need no render per request (lib/programmatic/polls/routing.ts).
+ *  5. Attach the security headers to the responses it builds itself.
  *
  * Every other response gets its security and X-Robots-Tag headers statically
  * from `next.config.ts`, so the proxy only runs on the three paths that need
@@ -105,6 +110,21 @@ export default function proxy(request: NextRequest) {
     }
   }
 
+  // ---- 29N polls page: static during the LOREG 69.7 blackout ----------------
+  // The clock is read here, per request, so the switch happens on the second
+  // (00:00 on 24 Nov, 21:00 on 29 Nov) with nothing to purge. Outside the
+  // window the request goes on to the force-dynamic route (next.config.ts
+  // rewrites), which reads the clock again. The no-store headers are set here
+  // too, on top of next.config's, so no shared cache keeps either view.
+  const pollsTarget = pollsProxyRewrite(pathname, new Date());
+  if (pollsTarget) {
+    const url = request.nextUrl.clone();
+    url.pathname = pollsTarget;
+    const response = NextResponse.rewrite(url);
+    for (const { key, value } of POLLS_CACHE_HEADERS) response.headers.set(key, value);
+    return decorate(response, pathname, request);
+  }
+
   // ---- Locale root --------------------------------------------------------
   if (pathname === "/") {
     const url = request.nextUrl.clone();
@@ -138,9 +158,18 @@ function decorate(
 
 export const config = {
   // Only where the proxy has logic to run: the locale redirect on "/", the
-  // admin gate, and the version-1 URLs answered with 410 (all under
-  // /article/, see LEGACY_GONE). Headers for everything else are static.
-  matcher: ["/", "/admin/:path*", "/article/:path*"],
+  // admin gate, the version-1 URLs answered with 410 (all under /article/, see
+  // LEGACY_GONE), and the three public URLs of the 29N polls page
+  // (lib/programmatic/polls/paths.ts; Next needs literal strings here, a test
+  // checks them against POLLS_PATHS). Headers for everything else are static.
+  matcher: [
+    "/",
+    "/admin/:path*",
+    "/article/:path*",
+    "/ca/guies/enquestes-eleccions-generals-catalunya/:path*",
+    "/es/guias/encuestas-elecciones-generales-cataluna/:path*",
+    "/en/guides/spain-general-election-polls-catalonia/:path*",
+  ],
 };
 
 export { SESSION_COOKIE, LOCALE_COOKIE };

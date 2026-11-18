@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/nav/IntentLink";
 
 import { getMessages } from "@/lib/i18n";
 import { sectionPath, type SectionKey } from "@/lib/i18n/routes";
@@ -39,6 +39,9 @@ interface NavLink {
  * holidays, elections: lib/nav/menu.ts, chosen from Search Console data).
  * From lg up they sit in a visible bar with a "More" group; below lg one
  * menu button opens the whole list.
+ *
+ * Menu links prefetch on intent only (hover, focus, touch), not on entering
+ * the viewport: components/nav/IntentLink.tsx, measured 18 Nov 2026.
  */
 export async function SiteHeader({
   locale,
@@ -79,14 +82,14 @@ export async function SiteHeader({
 
           <nav aria-label={t.common.menu} className="ml-auto hidden items-center gap-5 lg:flex">
             {bar.map((link) => (
-              <Link
+              <IntentLink
                 key={link.key}
                 href={link.href}
                 className="ci-nav-link whitespace-nowrap"
                 aria-current={link.current ? "page" : undefined}
               >
                 {link.label}
-              </Link>
+              </IntentLink>
             ))}
             <MenuDisclosure
               panelId="ci-menu-more"
@@ -103,9 +106,9 @@ export async function SiteHeader({
               <ul>
                 {barMore.map((link) => (
                   <li key={link.key}>
-                    <Link href={link.href} aria-current={link.current ? "page" : undefined}>
+                    <IntentLink href={link.href} aria-current={link.current ? "page" : undefined}>
                       {link.label}
-                    </Link>
+                    </IntentLink>
                   </li>
                 ))}
               </ul>
@@ -144,16 +147,16 @@ export async function SiteHeader({
                 <ul className="ci-menu-list">
                   {phone.map((link) => (
                     <li key={link.key}>
-                      <Link href={link.href} aria-current={link.current ? "page" : undefined}>
+                      <IntentLink href={link.href} aria-current={link.current ? "page" : undefined}>
                         {link.label}
-                      </Link>
+                      </IntentLink>
                     </li>
                   ))}
                   {more.map((link, i) => (
                     <li key={link.key} className={i === 0 ? "ci-menu-sep" : undefined}>
-                      <Link href={link.href} aria-current={link.current ? "page" : undefined}>
+                      <IntentLink href={link.href} aria-current={link.current ? "page" : undefined}>
                         {link.label}
-                      </Link>
+                      </IntentLink>
                     </li>
                   ))}
                 </ul>

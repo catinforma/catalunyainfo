@@ -533,7 +533,10 @@ matching rule wins, so the bypass goes **last**:
    reach the origin, which answers them from its ISR cache. **The last four
    lines are the 29N polls page** (CIS, CEO; `src/lib/programmatic/polls/`; the guide URLs rewrite to `/<locale>/internal-polls/`):
    electoral law bans showing poll figures from 24 Nov 2026 00:00 to 29 Nov
-   21:00 Madrid (LOREG art. 69.7; the Canaries close at 21:00), and the page decides per request. The origin
+   21:00 Madrid (LOREG art. 69.7; the Canaries close at 21:00), and the page decides per request
+   (outside the window a force-dynamic render; inside it the proxy rewrites to the static,
+   figure-free `/<locale>/internal-polls/blackout/`, so polling day needs no render per
+   request; `src/lib/programmatic/polls/routing.ts`). The origin
    already sends `Cache-Control: private, no-store` plus `CDN-Cache-Control`
    and `Cloudflare-CDN-Cache-Control: no-store` on it, which rule 2 respects;
    the explicit bypass keeps it uncached even if rule 2 is ever switched to
