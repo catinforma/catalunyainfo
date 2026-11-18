@@ -1,4 +1,5 @@
-import { IPREM_MONTHLY, SMI_MONTHLY } from "@/lib/programmatic/employment/rules";
+import { SMI_MONTHLY } from "@/lib/programmatic/employment/rules";
+import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
 
 /**
  * The rules behind the unemployment subsidy checker (subsidio por desempleo)
@@ -12,9 +13,9 @@ import { IPREM_MONTHLY, SMI_MONTHLY } from "@/lib/programmatic/employment/rules"
  * in force for subsidies from 1 November 2024 (its DT 1ª keeps the old wording
  * until 31 October 2024).
  *
- * IPREM and SMI are the employment module's (one source for every calculator):
- * IPREM 600 €/month (Ley 31/2022 DA 90ª, budget prorogued; SEPE "Cuantías
- * anuales" 2026), SMI 2026 1.221 €/month (RD 126/2026). From 1 Jan 2027 a test
+ * The IPREM is the shared IPREM module's (lib/programmatic/iprem/rules.ts, one
+ * source for every calculator: Ley 31/2022 DA 90ª, budget extended; SEPE
+ * "Cuantías anuales" 2026) and the SMI the employment module's (RD 126/2026). From 1 Jan 2027 a test
  * fails until both are re-read (a 2027 budget, decree-law or SMI decree can
  * change them) and SUBSIDY_RULES_UNTIL moves.
  */
@@ -213,7 +214,7 @@ export const SOURCES = {
   sepeAmounts: { name: "SEPE, Cuantías anuales (IPREM, SMI, subsidios, CAE)", ref: "sepe.es", url: "https://www.sepe.es/HomeSepe/prestaciones-desempleo/Cuantias-anuales.html", date: SUBSIDY_RULES_AS_OF },
   sepeSubsidy: { name: "SEPE, Subsidios por desempleo", ref: "sepe.es", url: "https://www.sepe.es/HomeSepe/prestaciones-desempleo/subsidio-desempleo.html", date: SUBSIDY_RULES_AS_OF },
   sepeOver52: { name: "SEPE, Tengo más de 52 años", ref: "sepe.es", url: "https://www.sepe.es/HomeSepe/prestaciones-desempleo/subsidio-desempleo/tengo-mas-de-52.html", date: SUBSIDY_RULES_AS_OF },
-  pge2023: { name: "Ley 31/2022, PGE 2023, DA 90ª (IPREM 600 €, prorrogada)", ref: "BOE-A-2022-22128", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2022-22128", date: SUBSIDY_RULES_AS_OF },
+  pge2023: { name: `Ley 31/2022, PGE 2023, DA 90ª (IPREM ${IPREM_MONTHLY} €, prorrogada)`, ref: "BOE-A-2022-22128", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2022-22128", date: SUBSIDY_RULES_AS_OF },
   smi2026: { name: "Real Decreto 126/2026, SMI 2026", ref: "BOE-A-2026-3815", url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-3815", date: SUBSIDY_RULES_AS_OF },
   imvLaw: { name: "Ley 19/2021, del ingreso mínimo vital, texto consolidado (art. 13 y anexo I)", ref: "BOE-A-2021-21007", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2021-21007", date: SUBSIDY_RULES_AS_OF },
   rdl3: { name: "Real Decreto-ley 3/2026, revalorización de las pensiones 2026 (art. 2.5), convalidado", ref: "BOE-A-2026-2548", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2026-2548", date: SUBSIDY_RULES_AS_OF },

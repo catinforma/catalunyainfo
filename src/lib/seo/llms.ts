@@ -19,10 +19,12 @@ import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
 import { paidLeaveEditions } from "@/lib/programmatic/paid-leave/copy";
 import { subsidyEditions } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
-import { rentEditions } from "@/lib/programmatic/rent-update/copy";
+import { num, rentEditions } from "@/lib/programmatic/rent-update/copy";
+import { IPREM_14, IPREM_ANNUAL, IPREM_DAILY, IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { smiEditions } from "@/lib/programmatic/smi/copy";
+import { ipremEditions } from "@/lib/programmatic/iprem/copy";
 import { ipcEditions } from "@/lib/programmatic/ipc/copy";
 import { euros as wageMoney, wageEditions } from "@/lib/programmatic/average-salary/copy";
 import { SALARY_SNAPSHOT } from "@/lib/programmatic/average-salary/data";
@@ -212,7 +214,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Unemployment benefit calculator (Spain)",
       hubs: calcEditions("unemployment"),
-      description: "contributory unemployment benefit (paro): duration from days contributed (LGSS art. 269 scale), 70% of the base for 180 days then 60%, the 2026 minimum and maximum by children (IPREM 600 €), and the Social Security deduction.",
+      description: `contributory unemployment benefit (paro): duration from days contributed (LGSS art. 269 scale), 70% of the base for 180 days then 60%, the 2026 minimum and maximum by children (IPREM ${IPREM_MONTHLY} €), and the Social Security deduction.`,
     },
     {
       name: "Sick pay calculator (Spain, incapacidad temporal / baja laboral)",
@@ -227,7 +229,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Unemployment subsidy checker (Spain, subsidio por desempleo) + Minimum Living Income 2026",
       hubs: subsidyEditions(),
-      description: "who qualifies for the non-contributory unemployment subsidy after the 2024 reform (RDL 2/2024, from 1 Nov 2024): benefit exhausted (6 months; 24 or 30 with family responsibilities; under 45 without family needs a 360-day benefit), insufficient contributions 90-359 days (3-6 months, 21 with family), aged 52+ (80% IPREM until retirement, retirement contributions paid), returning emigrants (18 months), victims of gender or sexual violence (30 months); income test: own gross income of the previous month, or family-unit income per head, no more than 75% of the SMI without extra payments = 915.75 EUR in 2026; amounts 95/90/80% of the 600 EUR IPREM = 570/540/480 EUR; the employment support top-up (CAE) when working; IMV 2026 guaranteed income 733.60 EUR a month for one adult and the household scale (LGSS arts. 274-282, DA 57-58; Ley 19/2021 art. 13; RDL 3/2026 art. 2.5).",
+      description: `who qualifies for the non-contributory unemployment subsidy after the 2024 reform (RDL 2/2024, from 1 Nov 2024): benefit exhausted (6 months; 24 or 30 with family responsibilities; under 45 without family needs a 360-day benefit), insufficient contributions 90-359 days (3-6 months, 21 with family), aged 52+ (80% IPREM until retirement, retirement contributions paid), returning emigrants (18 months), victims of gender or sexual violence (30 months); income test: own gross income of the previous month, or family-unit income per head, no more than 75% of the SMI without extra payments = 915.75 EUR in 2026; amounts 95/90/80% of the ${IPREM_MONTHLY} EUR IPREM = 570/540/480 EUR; the employment support top-up (CAE) when working; IMV 2026 guaranteed income 733.60 EUR a month for one adult and the household scale (LGSS arts. 274-282, DA 57-58; Ley 19/2021 art. 13; RDL 3/2026 art. 2.5).`,
     },
     {
       name: "Rent increase calculator (Spain)",
@@ -253,6 +255,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain working days and deadline calculator (días hábiles)",
       hubs: workingDaysEditions(),
       description: "the last day of a Spanish administrative deadline (Ley 39/2015 art. 30: from the day after notification, Saturdays, Sundays and national, regional and local holidays excluded, months to the same day, a last day that is inhábil moves to the next hábil one) or court deadline (LOPJ arts. 182-183, LEC arts. 130.2 and 133: also August and 24 December to 6 January), or the working days between two dates, for any Spanish region, every Catalan town and the Spanish cities with a page, with the official 2026 and 2027 holidays (BOE, DOGC, regional bulletins).",
+    },
+    {
+      name: `Spain's IPREM ${IPREM_YEAR} (indicador público de renta de efectos múltiples)`,
+      hubs: ipremEditions(),
+      description: `the IPREM in force from the BOE: ${num(IPREM_DAILY, 0, "en")} euros a day, ${num(IPREM_MONTHLY, 0, "en")} a month, ${num(IPREM_ANNUAL, 0, "en")} a year in 12 payments and ${num(IPREM_14, 0, "en")} in 14 (Law 31/2022, the 2023 budget act, additional provision 90, still applied because no budget has been passed since: Constitution art. 134.4, General Budget Act art. 38.1; SEPE publishes the same figures for ${IPREM_YEAR}); when to use the 12- or the 14-payment figure (letter d; Royal Decree-law 3/2004 art. 2.3); ${IPREM_YEAR + 1}: no budget bill (Cortes dissolved by Royal Decree 806/2026, new chambers 23 December 2026), so the figure stays until a new budget act; every amount from 2004 to 2023 quoted from its own BOE text (years with an extended budget and no text of their own left blank); common limits in IPREM multiples, each from its rule: bono social for electricity (1.5 x the 14-payment IPREM + 0.3 per adult + 0.5 per minor, RD 897/2017 art. 3), free legal aid (2 / 2.5 / 3 x, exceptionally 5 x, the yearly IPREM, Law 1/1996 arts. 3 and 5), State Housing Plan 2026-2030 rent aid (5 / 5.5 / 6 x the 14-payment IPREM, RD 326/2026 arts. 8.2.b and 116.1.c), unemployment subsidy (95/90/80% of the monthly IPREM, LGSS arts. 278 and 280.4) and contributory benefit limits (art. 270.3), with the warning that the subsidy's income test is 75% of the minimum wage, not the IPREM (art. 275.1); a calculator for any multiple and for "my income is x times the IPREM".`,
     },
     {
       name: "Spain minimum wage (SMI) 2027",
@@ -292,7 +299,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Bono social eléctrico checker (Spain's electricity discount for vulnerable consumers)",
       hubs: bonoSocialEditions(),
-      description: "who qualifies for Spain's bono social for electricity and what it gives, quoted from the BOE: holder of the contract at the main home, 10 kW or less, on the regulated PVPC tariff, which only a reference supplier (comercializadora de referencia) sells; vulnerable with household income up to 1.5 times the 14-payment IPREM (8,400 euros: 12,600 euros alone, +2,520 per further adult, +4,200 per minor, +8,400 with disability of 33% or more, gender or terrorism victim, dependency II/III, single parent or electrodependency), or a large-family title, minimum pensioners or IMV recipients; severely vulnerable at half the limit (1 x IPREM for minimum pensioners, 2 x IPREM for large families); at risk of social exclusion when social services pay at least half the bill (Royal Decree 897/2017 arts. 3-4; income = general + savings taxable base, Orden ETU/943/2017 art. 4). Discount 42.5% / 57.5% from 1 January to 31 December 2026 (Royal Decree-law 7/2026 art. 1, after Royal Decree-laws 16/2025 and 2/2026 were repealed), back to 35% / 50% from 1 January 2027 unless extended (RD 897/2017 art. 6.3); yearly kWh caps 1,587 / 2,222 / 2,698 / 4,761 (Annex I); no cut-offs until 31 December 2026 (RDL 7/2026 art. 4); how to apply, documents, the reference suppliers' phones (MITECO) and the thermal bono.",
+      description: `who qualifies for Spain's bono social for electricity and what it gives, quoted from the BOE: holder of the contract at the main home, 10 kW or less, on the regulated PVPC tariff, which only a reference supplier (comercializadora de referencia) sells; vulnerable with household income up to 1.5 times the 14-payment IPREM (${num(IPREM_14, 0, "en")} euros: 12,600 euros alone, +2,520 per further adult, +4,200 per minor, +8,400 with disability of 33% or more, gender or terrorism victim, dependency II/III, single parent or electrodependency), or a large-family title, minimum pensioners or IMV recipients; severely vulnerable at half the limit (1 x IPREM for minimum pensioners, 2 x IPREM for large families); at risk of social exclusion when social services pay at least half the bill (Royal Decree 897/2017 arts. 3-4; income = general + savings taxable base, Orden ETU/943/2017 art. 4). Discount 42.5% / 57.5% from 1 January to 31 December 2026 (Royal Decree-law 7/2026 art. 1, after Royal Decree-laws 16/2025 and 2/2026 were repealed), back to 35% / 50% from 1 January 2027 unless extended (RD 897/2017 art. 6.3); yearly kWh caps 1,587 / 2,222 / 2,698 / 4,761 (Annex I); no cut-offs until 31 December 2026 (RDL 7/2026 art. 4); how to apply, documents, the reference suppliers' phones (MITECO) and the thermal bono.`,
     },
     {
       name: "Is my town a zona tensionada? Spain's declared tight housing market areas",

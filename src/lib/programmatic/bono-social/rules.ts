@@ -1,3 +1,5 @@
+import { IPREM_14, IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
+
 /**
  * Every rule and figure of the bono social eléctrico checker, each with its
  * source. Nothing numeric is typed anywhere else: the engine, the page and the
@@ -68,10 +70,12 @@ export const RULES_UNTIL = "2026-12-31";
 /* Income thresholds (RD 897/2017 art. 3; IPREM, Ley 31/2022 DA 90ª)          */
 /* -------------------------------------------------------------------------- */
 
-/** IPREM a month in 2026 (Ley 31/2022 DA 90ª b, budget prorogued; SEPE 2026). */
-export const IPREM_MONTHLY = 600;
-/** "IPREM de 14 pagas": 14 × 600 = 8,400 € (Ley 31/2022 DA 90ª d; MITECO). */
-export const IPREM_14 = IPREM_MONTHLY * 14;
+/**
+ * IPREM a month in 2026 (Ley 31/2022 DA 90ª b, budget extended; SEPE 2026) and
+ * the "IPREM de 14 pagas", 8,400 € (DA 90ª d; MITECO): from the shared IPREM
+ * module, the one source for every calculator.
+ */
+export { IPREM_14, IPREM_MONTHLY };
 /** Art. 3.2.a: 1.5 × IPREM for the holder alone. */
 export const BASE_MULTIPLIER = 1.5;
 /** Art. 3.2.a: +0.3 for each further adult of the household. */
@@ -221,7 +225,7 @@ export const SOURCES = {
     name: "Cuantías anuales: valores mensuales y anuales del SMI y del IPREM",
     url: "https://www.sepe.es/HomeSepe/prestaciones-desempleo/Cuantias-anuales.html",
     publisher: "SEPE",
-    ref: "IPREM 2026: 600 € al mes, fijado en la Ley 31/2022",
+    ref: `IPREM ${IPREM_YEAR}: ${IPREM_MONTHLY} € al mes, fijado en la Ley 31/2022`,
     read: RULES_AS_OF,
   },
   mitecoRequisitos: {

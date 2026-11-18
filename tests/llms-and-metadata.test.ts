@@ -38,6 +38,7 @@ const { rentEditions } = await import("../src/lib/programmatic/rent-update/copy.
 const { pensionEditions } = await import("../src/lib/programmatic/pensions-2027/copy.ts");
 const { workingDaysEditions } = await import("../src/lib/programmatic/working-days/copy.ts");
 const { smiEditions } = await import("../src/lib/programmatic/smi/copy.ts");
+const { ipremEditions } = await import("../src/lib/programmatic/iprem/copy.ts");
 const { ipcEditions } = await import("../src/lib/programmatic/ipc/copy.ts");
 const { wageEditions } = await import("../src/lib/programmatic/average-salary/copy.ts");
 const { letrasEditions } = await import("../src/lib/programmatic/treasury-bills/copy.ts");
@@ -132,6 +133,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(pensionEditions()),
     ...Object.values(workingDaysEditions()),
     ...Object.values(smiEditions()),
+    ...Object.values(ipremEditions()),
     ...Object.values(ipcEditions()),
     ...Object.values(wageEditions()),
     ...Object.values(letrasEditions()),

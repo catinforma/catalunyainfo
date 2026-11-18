@@ -16,6 +16,8 @@ import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/s
 import { DRAFT_2027, NORMS, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
 import type { LiveBoe } from "@/lib/programmatic/smi/engine";
 import { wagePath } from "@/lib/programmatic/average-salary/copy";
+import { ipremPath } from "@/lib/programmatic/iprem/copy";
+import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { percent } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT as NET_DEFAULT, calculateNetSalary } from "@/lib/programmatic/net-salary/engine";
 import { SMI_DEDUCTION } from "@/lib/programmatic/net-salary/rules-2026";
@@ -443,6 +445,14 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                   en: "The SMI is the legal floor. What people actually earn, mean and median, by region, age, sex and sector, is measured by the INE:",
                 })}{" "}
                 <Link href={wagePath(locale)}>{L(locale, { es: "Salario medio en España (INE)", ca: "Salari mitjà a Espanya (INE)", en: "Average salary in Spain (INE)" })}</Link>.
+              </p>
+              <p>
+                {L(locale, {
+                  es: `No hay que confundirlo con el IPREM (${money(IPREM_MONTHLY, "es")} al mes en ${IPREM_YEAR}), que desde 2004 sustituye al SMI como referencia de ayudas y subsidios:`,
+                  ca: `No s'ha de confondre amb l'IPREM (${money(IPREM_MONTHLY, "ca")} al mes el ${IPREM_YEAR}), que des del 2004 substitueix l'SMI com a referència d'ajuts i subsidis:`,
+                  en: `Not to be confused with the IPREM (${money(IPREM_MONTHLY, "en")} a month in ${IPREM_YEAR}), which since 2004 replaces the SMI as the yardstick for benefits and subsidies:`,
+                })}{" "}
+                <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
               </p>
 
               <h2 id="irpf">{h.irpf}</h2>

@@ -8500,3 +8500,66 @@ cap-de-setmana 14`, `page fin-de-semana 14`, `page en/weekend 14`, `daily 14` (S
 Revert path: `revalidate = false` + the `WeekendLive` island (git history) if positions fall or weekend renders error.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-18 — "IPREM 2026": the figures in force from the BOE, history 2004–2026, 2027, common limits and a multiples calculator, es + ca + en (new page; deploy only, no publish group) (review 2026-12-16)
+
+**Why.** Research row 12 (research_notes/spain-utilities-opportunities-nov2026.md, subsidios / IPREM) and row 19 (bono social
+thresholds in IPREM): IPREM thresholds decide the unemployment subsidy, bono social, justicia gratuita and housing aid, and
+searches spike every January. The site already used the IPREM in four modules (paro, subsidio, bono social, pensions) with
+two separate `600` constants; it had no page answering "IPREM 2026". Fact pack: research_notes/iprem-2026.md (gitignored).
+
+- URLs: `/es/calculadoras/iprem/` (primary), `/ca/calculadores/iprem/`, `/en/calculators/iprem-spain/` (no year in the slug:
+  each January's figures go to the same URL). Sitemap + hreflang (x-default en), llms.txt entry, site-search shortcut
+  "iprem", `calculator_use` id `iprem`. Registry `CALCULATORS` id `iprem`; hub card in the `official` group right after
+  the SMI. Next step: bono social, unemployment subsidy.
+- Figures (read 18 Nov 2026, curl + grep; every amount and quote checked by tests/iprem.test.ts against the verbatim
+  passages in tests/fixtures/boe-iprem-provisions.json): 2026 = Ley 31/2022 DA 90ª (BOE-A-2022-22128) «a) El IPREM
+  diario, 20 euros. b) El IPREM mensual, 600 euros. c) El IPREM anual, 7.200 euros», d) 8.400 € (14 payments); no budget
+  act for 2024, 2025, 2026 or 2027 in the BOE's legislation search, so CE art. 134.4 / LGP art. 38.1 extend it; SEPE
+  "Cuantías anuales" 2026: «IPREM fijado en: Ley 31/2022», 600,00 € / 7.200,00 €. History: RDL 3/2004 art. 2.2 (Jul–Dec 2004)
+  and the budget acts 2005–2018 and 2021–2023 (each act's own DA, as published; 2008's 14-payment figure 7.131,80 €);
+  2019, 2020, 2024, 2025 left blank ("budget extended, no BOE text sets an amount"). 2027: Cortes dissolved by RD 806/2026
+  (BOE 6 Oct; elections 29 Nov; new chambers 23 Dec), Orden HAC/557/2026 only sets drafting rules: the page says the
+  2023 figure stays until a new budget act is published and prints no forecast.
+- Limits in IPREM multiples, each quoted from its own rule: bono social (RD 897/2017 art. 3, the bono social module's
+  engine), justicia gratuita (Ley 1/1996 arts. 3.1 and 5.1, on the 12-payment IPREM as the Generalitat's tràmit prints
+  it: 14.400 / 18.000 / 21.600 / 36.000 €), State Housing Plan 2026-2030 rent aid (RD 326/2026 arts. 8.2.b and 116.1.c,
+  14 payments: 42.000 / 46.200 / 50.400 €), subsidio (LGSS arts. 278, 280.4) and paro limits (art. 270.3). The subsidy's
+  income test is 75 % of the SMI (art. 275.1), shown as NOT the IPREM.
+- Calculator: any multiple → month, day, year in 12 and 14 payments; "my income is x times the IPREM" (rounded down)
+  against six common limits. Server-rendered on 1.5 × and 12,000 €.
+- Refactor: `src/lib/programmatic/iprem/rules.ts` is the one source. employment/rules.ts, unemployment-subsidy/rules.ts and
+  bono-social/rules.ts re-export from it (no literal of their own); bono-social engine/page/copy, BonoSocialPage,
+  SubsidyPage, PensionPage, UnemploymentPage and llms.ts import it; the hardcoded "8.400 €", "600 €" strings now read it.
+  Outputs identical (tests assert the old strings and values).
+- Links (body only, no title, description or H1 touched): bono social page (after the art. 3.2.a quotes), unemployment
+  subsidy page (after the art. 278 quote), SMI page (history section, "no confundir con el IPREM").
+
+**Date guard (tests/iprem.test.ts).** From **1 Jan 2027** the test fails: re-read the BOE (a 2027 budget act or any rule
+fixing the IPREM) and SEPE "Cuantías anuales", add the 2027 row, move `IPREM_RECHECK_FROM`. The paro, subsidy, bono social
+and pensions modules follow automatically.
+
+**Baseline:** 0 (no page). The SMI, bono social and subsidy pages carry one extra body link each (their own windows read
+the same body plus this line).
+
+**Prediction.** Indexed within 7 days (IndexNow). "iprem 2026" / "iprem" are dominated by SEPE, BOE and news: positions
+8–20 by mid-December; long tail on page 1 possible ("iprem 14 pagas", "1,5 veces iprem", "iprem 2027", "iprem justicia
+gratuita", "iprem anual 2026"). January lift when people look for "iprem 2027". By 13 Jan 2027: 1,500–6,000 impressions /
+28 days, CTR 2–5 %. Wrong if under 500 impressions / 28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered tables + calculator); 16 Dec and 13 Jan 2027 `snapshot.py page
+calculadoras/iprem 28` (+ calculadores/iprem, iprem-spain); `calculator_use` `iprem`; next-step clicks to bono social and
+subsidy. **Review: 2026-12-16.**
+
+**Confounders.** 29N general election and a new government's budget plans move "presupuestos 2027" news; any decree-law
+touching the IPREM would change the page the day it is read.
+
+**Deploy.** Deploy only (static, nothing in the database): no publish group. IndexNow prefixes: `/es/calculadoras/iprem/`,
+`/ca/calculadores/iprem/`, `/en/calculators/iprem-spain/`, plus the re-crawl of `/es/calculadoras/bono-social-electrico/`,
+`/ca/calculadores/bo-social-electric/`, `/en/calculators/bono-social-electricity-spain/`, `/es/calculadoras/subsidio-desempleo/`,
+`/ca/calculadores/subsidi-atur/`, `/en/calculators/spain-unemployment-subsidy/`, `/es/calculadoras/salario-minimo-2027/`,
+`/ca/calculadores/salari-minim-2027/`, `/en/calculators/spain-minimum-wage-2027/` and the three calculators hubs.
+
+**Outcome:** _pending_

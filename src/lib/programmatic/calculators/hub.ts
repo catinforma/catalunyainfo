@@ -18,6 +18,7 @@ import { RULES_AS_OF as PAID_LEAVE_AS_OF } from "@/lib/programmatic/paid-leave/r
 import { SUBSIDY_RULES_AS_OF } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
+import { IPREM_RULES_AS_OF, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { warningsTranslations } from "@/lib/programmatic/warnings/paths";
@@ -404,6 +405,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: SMI_RULES_AS_OF,
+      },
+      {
+        key: "iprem",
+        calculator: true,
+        href: calc("iprem"),
+        title: { ca: `IPREM ${IPREM_YEAR}`, es: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR} (Spain)` },
+        answers: {
+          ca: "Quant és l'IPREM al mes, a l'any en 12 i en 14 pagues, quant són 1,5 o 2 vegades l'IPREM i quantes vegades l'IPREM són els teus ingressos?",
+          es: "¿Cuánto es el IPREM al mes, al año en 12 y en 14 pagas, cuánto son 1,5 o 2 veces el IPREM y cuántas veces el IPREM son tus ingresos?",
+          en: "How much is the IPREM a month and a year in 12 or 14 payments, what are 1.5 or 2 times the IPREM, and how many times the IPREM is your income?",
+        },
+        basis: {
+          ca: "Llei 31/2022 de pressupostos per al 2023, disposició addicional norantena (prorrogada), Reial decret llei 3/2004 i les lleis de pressupostos des del 2005 (BOE), i les quanties anuals del SEPE.",
+          es: "Ley 31/2022 de Presupuestos para 2023, disposición adicional nonagésima (prorrogada), Real Decreto-ley 3/2004 y las leyes de presupuestos desde 2005 (BOE), y las cuantías anuales del SEPE.",
+          en: "Law 31/2022, the 2023 budget act, additional provision 90 (extended), Royal Decree-law 3/2004 and the budget acts since 2005 (BOE), and SEPE's yearly amounts.",
+        },
+        scope: "spain",
+        checked: IPREM_RULES_AS_OF,
       },
       {
         key: "average-salary",
