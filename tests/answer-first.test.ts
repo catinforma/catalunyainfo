@@ -18,6 +18,7 @@ import { ENTRY_KEY as HOLIDAY_TODAY_KEY } from "../src/lib/content/holidays/toda
 import { LOCALES } from "../src/lib/i18n/config.ts";
 import {
   ANSWER_FIRST_ENTRY_KEYS,
+  ANSWER_FIRST_REVERTED_KEYS,
   MORE_FACTS_LABEL,
   answerFirstEnabled,
   answerFirstLayout,
@@ -41,22 +42,22 @@ function sameBlocks(original: readonly Block[], locale: (typeof LOCALES)[number]
   return layout;
 }
 
-test("the switch covers the first group: strike guides, 11N cities, holiday guides", () => {
+test("the switch covers the strike guides and 11N cities; the holiday guides left it at the 19 Nov review", () => {
   for (const key of [
     STRIKE_11N.entryKey,
     STRIKE_11N_SPAIN.entryKey,
     STRIKES_GUIDE.entryKey,
     STRIKES_SPAIN_GUIDE.entryKey,
     STRIKE_RENFE_GUIDE.entryKey,
-    BRIDGES_2027.entryKey,
-    DECEMBER_BRIDGE.entryKey,
-    DECEMBER_BRIDGE_SPAIN.entryKey,
-    WORK_CALENDAR_KEY,
-    HOLIDAY_TODAY_KEY,
     ...STRIKE_11N_CITY_ARTICLES.map((a) => a.entryKey),
   ]) {
     assert.ok(answerFirstEnabled(key), key);
   }
+  // docs/SEO_EXPERIMENTS.md, "19 Nov review": the holiday family failed the 12 Nov rule (mobile engagement,
+  // engagement time, position), so its five guides render in their pre-12 Nov order again.
+  const holidayGuides = [BRIDGES_2027.entryKey, DECEMBER_BRIDGE.entryKey, DECEMBER_BRIDGE_SPAIN.entryKey, WORK_CALENDAR_KEY, HOLIDAY_TODAY_KEY];
+  assert.deepEqual([...ANSWER_FIRST_REVERTED_KEYS].sort(), [...holidayGuides].sort());
+  for (const key of holidayGuides) assert.equal(answerFirstEnabled(key), false, key);
   assert.equal(answerFirstEnabled("guide-mesa-electoral"), false);
   assert.equal(answerFirstEnabled(null), false);
   assert.equal(new Set(ANSWER_FIRST_ENTRY_KEYS).size, ANSWER_FIRST_ENTRY_KEYS.length);
@@ -77,8 +78,8 @@ test("Sevilla 11N: facts on top, after the lead the 'Y ahora en Sevilla' links (
   assert.equal(layout.end[0]?.type, "callout", "original order kept: verification note, then upcoming strikes");
 });
 
-test("every edition of the first group keeps all its blocks", () => {
-  const articles = [STRIKE_11N, STRIKE_11N_SPAIN, STRIKES_GUIDE, STRIKES_SPAIN_GUIDE, STRIKE_RENFE_GUIDE, BRIDGES_2027, DECEMBER_BRIDGE, DECEMBER_BRIDGE_SPAIN, ...STRIKE_11N_CITY_ARTICLES];
+test("every edition of the switched pages keeps all its blocks", () => {
+  const articles = [STRIKE_11N, STRIKE_11N_SPAIN, STRIKES_GUIDE, STRIKES_SPAIN_GUIDE, STRIKE_RENFE_GUIDE, ...STRIKE_11N_CITY_ARTICLES];
   for (const article of articles) {
     for (const locale of LOCALES) {
       const edition = (article.editions as Partial<Record<(typeof LOCALES)[number], { blocks: Block[] }>>)[locale];

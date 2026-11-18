@@ -185,7 +185,7 @@ export function municipalityH1(
 }
 
 /** What the holiday is: "la Inmaculada", "fiesta local", "festa local a Ordal". */
-function holidayLabel(row: HolidayRow, locale: MuniLocale): string {
+export function holidayLabel(row: HolidayRow, locale: MuniLocale): string {
   if (row.kind !== "local") return row.name;
   const where = row.where?.length ? joinList(row.where.map((n) => (locale === "es" ? esName(n) : n)), locale) : null;
   if (locale === "ca") return where ? `festa local a ${where}` : "festa local";

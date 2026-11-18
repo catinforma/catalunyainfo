@@ -2173,6 +2173,12 @@
 .ci-local-table th { text-align: left; font-size: 0.78rem; color: var(--color-muted); border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; }
 .ci-local-table td { border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; vertical-align: top; }
 .ci-local-table small { color: var(--color-muted); }
+/* Spanish town pages (19 Nov 2026, holidays/first-screen.ts): this year's past
+   days, collapsed under the ones still ahead and shown in muted ink. */
+.ci-past-holidays { margin-top: 0.75rem; }
+.ci-past-holidays > summary { cursor: pointer; min-height: 2.75rem; padding: 0.6rem 0; font-size: 0.9rem; font-weight: 600; color: var(--color-ink-soft); }
+.ci-past-holidays .ci-local-table td { color: var(--color-muted); }
+.ci-past-holidays .ci-local-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 40rem) {
   .ci-local-table th,
   .ci-local-table td { padding: 0.4rem 0.3rem; }

@@ -3570,6 +3570,11 @@ demand whatever the layout; the Renfe strike (17/19 Nov) and the education
 strike (26 Nov) rise in the same week; the header and homepage changes are
 sitewide, so they move the control family too.
 
+**Outcome (review run 18 Nov, data to 17 Nov):** strikes kept; the five holiday
+guides taken out of the switch; not extended to other articles; the Spanish
+town pages answer "hoy / mañana" before the table. See the entry "2026-11-18 —
+Answer-first review" at the end of this file.
+
 ## 2026-11-12 — December bridge, Spain-wide: the 7 December yes/no title, the Catalan page hands national readers on, a strip line after 29N (deploy; groups `puente-diciembre-espana`, `puente-diciembre-espana-links`)
 
 **Why.** GSC 30 Oct–12 Nov (`snapshot.py page …`, a query→page breakdown):
@@ -8218,3 +8223,164 @@ page against the 14 Nov step pages left unchanged (metro hours, zoo, R4) as a co
 **Review:** 25 Nov 2026 (7 days) and 2 Dec 2026 (14 days), counted from 18 Nov; from the publish day if it goes
 live later. Same scripts, query × page per day for the three query baselines above. Revert any item whose page loses
 > 1.5 positions with no gain on its target query.
+
+## 2026-11-18 — Answer-first review (the 19 Nov review, run a day early): strikes kept, the holiday guides reverted, Spanish town pages answer "hoy / mañana" before the table (deploy only; no publish group; no title, description or H1 touched)
+
+**Data.** GSC API (`page × date`, complete; `query × page` for mix-free position; `page × device` is only a sample:
+GSC drops most page × device rows on these pages, e.g. 4,635 of the ES town pages' 20,669 impressions in the before
+window) and GA4 property 554310792 (landing page × device: sessions, engaged sessions, engagement time, views).
+**Before = 5–11 Nov (7 days); after = 13–17 Nov (5 days).** 13–16 Nov are final in GSC; 17 Nov is complete (all 24
+hourly buckets) but still "fresh" data; 18 Nov is partial and left out; 12 Nov (the deploy day) is left out. GA4 13–17
+Nov are full days. Per-day averages, so the windows compare. Jump-link URLs (`…/#section`, 5.7 % of impressions) left
+out. Scripts in the session scratchpad (`lr19/pull.py`, `analyse.py`, `analyse2.py`, `analyse3.py`), on
+`scripts/snapshot.py`'s `gsc()`/`ga()`.
+
+**Rules.** For the switch, the 12 Nov rule as written (mobile engagement rate not down > 3 points, engagement time not
+down > 10 %, CTR within its band at the same position), per family; "band" defined before looking as clicks ÷
+expected clicks (the site's own page-level curve at each page's rounded position, per window) after ≥ 0.75 × before;
+plus a position check the entry lacked (mix-free position not > 2 worse than the same-language non-event pages). The
+12 Nov entry has no rule for the town pages (commit d2a328b: date table first), so one was written before the numbers:
+fail if the edition's mix-free position is > 2 worse than the same-language date pages (`/xx/festivos/dia/`), or
+mobile engagement rate falls > 3 points, or engagement time > 10 %; under 1,000 impressions in either window = no
+verdict, keep. On a fail: **adjust** (answer first) if the temporal queries ("hoy", "mañana", weekday, "es festivo…")
+lost ≥ 2 positions more than the list queries ("festivos <town> 2026/2027"), else **revert**.
+
+**GSC, page level, per day (clicks · impressions · CTR · position · CTR ratio to curve), before → after.**
+
+| Family | Before 5–11 Nov | After 13–17 Nov | Mix-free Δ pos |
+| --- | --- | --- | --- |
+| Strikes, switched, live (2 hubs ca/es/en + Renfe) | 339 · 9,467 · 3.58 % · 7.3 · 1.14 | 305 · 7,491 · 4.08 % · 7.4 · 1.58 | −0.3 |
+| Strikes, switched, 11N pages (event over 12 Nov) | 2,951 · 54,471 · 5.42 % · 6.6 | 2.2 · 873 · 0.25 % · 8.8 | +1.1 |
+| Holiday guides, switched, es (5 guides) | 97.9 · 3,596 · 2.72 % · 7.5 · 0.65 | 11.4 · 938 · 1.22 % · 14.8 · 0.68 | **+4.8** |
+| Holiday guides, switched, ca | 3.6 · 116 · 3.09 % · 6.2 · 0.59 | 3.0 · 231 · 1.30 % · 6.7 · 0.36 | −0.3 |
+| — work calendar (all editions) | 2.0 · 259 · 0.77 % · 18.4 | 0.6 · 139 · 0.43 % · 45.2 | es +14.8 |
+| — today-holiday guide | 0.3 · 44 · 15.5 | 0 · 21 · 47.0 | es +34.2 |
+| — bridges + ponts 2027 | 100.9 · 3,494 · 2.89 % · 6.4 · 0.63 | 13.8 · 1,024 · 1.35 % · 8.1 · 0.55 | es +2.6 (Cat.), +4.4 (Spain) |
+| Town pages es (`/es/festivos/<town>/`) | 71.3 · 2,953 · 2.41 % · 6.3 · 0.54 | 42.8 · 1,820 · 2.35 % · 7.6 · 0.67 | **+6.7** |
+| Town pages ca (`/ca/festius/<town>/`) | 63.1 · 1,864 · 3.39 % · 5.9 · 0.67 | 42.0 · 1,568 · 2.68 % · 6.3 · 0.80 | −0.3 |
+| Town pages en | 0.7 · 32 · 6.9 | 0.2 · 16 · 5.6 | n/a |
+| Spain 2027 pages es (table first too) | 8.7 · 985 · 0.88 % · 9.1 | 13.4 · 1,651 · 0.81 % · 10.4 | +0.4 |
+| Control (entry): school calendar + mesa + voting, es | 27.4 · 634 · 4.33 % · 8.3 | 2.6 · 176 · 1.48 % · 10.4 | +3.1 (ca +2.3, en +0.6) |
+| Control: date pages es (`/es/festivos/dia/`) | 59.9 · 1,180 · 5.07 % · 4.5 | 9.6 · 844 · 1.14 % · 6.2 | +1.1 |
+| Control: other non-event pages es / ca / en | 80.4 · 6,928 · 1.16 % · 8.4 (es) | 78.8 · 6,508 · 1.21 % · 10.5 (es) | +1.3 / +0.7 / −0.5 |
+
+Town pages by query intent (mix-free): **es temporal +20.0** (weight 233) vs **es list +1.9** (645); ca list −0.3
+(468; ca temporal 7 impressions); ES date pages temporal +1.2, list +0.8. `/es/festivos/barcelona/`, per query
+(impressions @ position, window totals): "hoy es festivo en barcelona" 116 @ 8.1 → 6 @ 10.8, "mañana es festivo"
+94 @ 9.7 → 20 @ 64.5, "hoy es festivo" 82 @ 9.2 → 9 @ 43.6, "festivo hoy" 24 @ 9.6 → 4 @ 36.0, while "festius barcelona"
+17 @ 7.7 → 20 @ 7.8. Daily median position 5–11 → 14–17 Nov: Barcelona es 9.1 → 34.7 (13 Nov 9.7, 14 Nov 53.3, then
+36.0, 33.5, 26.0), Barcelona ca 7.4 → 7.3, Tarragona es 7.4 → 16.7, work calendar es 19.1 → 49.1, today guide es
+14.0 → 49.0. GSC device sample (position, mobile / desktop): ES town 8.9 → 10.2 / 12.2 → 25.6; ES holiday guides
+7.7 → 11.6 / 10.4 → 34.0; ES other pages 8.4 → 9.9 / 22.1 → 31.4 (desktop fell everywhere in the Spanish edition).
+
+Robustness: without the 13–14 Nov step days (after = 15–17 Nov) the picture is the same: ES town pages +5.5
+(temporal +24.9, list +1.9), CA town pages 0.0, ES date pages +1.3, other ES pages +1.1, ES holiday guides +4.4. The ES
+town family's daily position is back at 5.5–7.6 on 15–17 Nov only because list queries carry most impressions. The
+temporal loss is mostly Barcelona's (other towns +4.5, on a weight of 26), the page with the "hoy / mañana" demand.
+
+**GA4, landing page, mobile (sessions/day · engagement rate · engagement time per session · views per session).**
+
+| Family | Before | After |
+| --- | --- | --- |
+| Strikes, live hubs + Renfe | 133.6 · 52.3 % · 36.0 s | 149.0 · 53.3 % · 34.1 s |
+| Strikes, 11N pages | 1,244 · 60.7 % · 40.2 s | 18.6 · 9.7 % · 1.4 s |
+| Holiday guides (all) | 34.9 · 51.2 % · 27.2 s · 1.08 | 7.8 · 46.2 % · 23.4 s · 1.08 |
+| Holiday guides es | 32.7 · 51.1 % · 27.4 s | 6.0 · 46.7 % · 21.7 s |
+| Town pages es | 17.6 · 47.2 % · 24.1 s · 1.12 | 13.2 · 42.4 % · 35.2 s · 1.33 |
+| Town pages ca | 11.1 · 52.6 % · 23.2 s · 1.06 | 9.6 · 50.0 % · 22.8 s · 1.19 |
+| Control: date pages es | 27.1 · 52.6 % · 27.7 s | 5.6 · 60.7 % · 24.3 s |
+| Control: school + mesa + voting | 25.4 · 60.7 % · 70.9 s | 7.6 · 63.2 % · 83.7 s |
+| Control: other pages es | 41.6 · 55.3 % · 34.3 s | 55.2 · 62.0 % · 34.9 s |
+
+Desktop, for the record: holiday guides 71.7 → 72.4 % (45.8 → 61.2 s); town pages es 80.6 → 65.5 %, ca 67.4 → 77.4 %.
+The work calendar and today guides have under 1 GA4 session a day: their verdict rests on GSC.
+
+**Core update and other confounders.** Google's "November 2026 core update" started on 10 Nov and has no completion
+message on 18 Nov: it overlaps both windows (10–11 Nov are in "before") and is the largest confounder. Across it, the
+Spanish edition drifted about one position (other ES pages +1.3, ES date pages +1.1), the Catalan one less (+0.7),
+the English not at all (−0.5). The Catalan editions with the same layout did not fall (town pages −0.3, holiday guides
+−0.3); the Spanish ones did (+6.7, +4.8), far beyond the Spanish drift, and on the temporal queries above all. That
+points at the layout, but it is not proof: the update can re-rank generic "hoy es festivo" intents by itself. Also:
+"hoy / mañana" demand fell after 11N, and the 8–11 Nov news spike ended (the Spain bridge page; compare position, not
+clicks); the Spain bridge page's ES title changed on 12 Nov; the 12 Nov homepage lost its "Útil ara mateix" grid (a
+link to the today guide); the work calendar's body changed on 13 Nov (group `holidays`); the database moved to the VPS
+on the evening of 12 Nov; today's diagnosis fixes (the today page now links the today guide first) ship with the same
+deploy.
+
+**Decision, per family.**
+
+- **Strikes: keep.** The live pages pass every test (mobile engagement +1.0 point, time −5 %, CTR ratio 1.14 → 1.58,
+  position −0.3). The 11N pages cannot be read: the event ended on 12 Nov (the confounder the entry named). **Not
+  extended to every DB article:** the rule extends only when the first group passes, and its holiday half failed.
+- **Holiday guides (work calendar, today-holiday, ponts 2027, both December bridges; ca/es/en): revert.** Mobile
+  engagement −5.0 points (es −4.4), engagement time −14 % (es −21 %), mix-free position es +4.8 against +1.3 for the
+  other Spanish pages. CTR stays in band (es 0.65 → 0.68). The weakest part of the evidence is the bridges: the Catalan
+  ES bridge page held its position (6.1 → 6.2) and CTR (1.84 → 1.91 %). Reverted in every edition: the switch is per
+  entry, and the Catalan editions' data is too thin to keep them apart (CTR ratio 0.59 → 0.36 on ~3 clicks a day).
+- **Town pages es: adjust** (rule fails on position, +6.7 against the ES date pages' +1.1, and on mobile engagement,
+  −4.8 points; the temporal queries lost 18 positions more than the list queries).
+- **Town pages ca: keep** the table first (−0.3 against the CA date pages' +0.3; mobile engagement −2.6 points, time −2 %).
+- **Town pages en: keep, no verdict** (222 and 79 impressions).
+- **Spain 2027 pages (table first, not under the rule): keep** (+0.4; engagement up; list-intent pages).
+
+**What changed.**
+
+1. `src/lib/layout/answer-first.ts`: the five holiday keys leave `ANSWER_FIRST_ENTRY_KEYS` (listed in
+   `ANSWER_FIRST_REVERTED_KEYS`). Those pages render as before 12 Nov: photo, then the stored body (work calendar:
+   the 2027 lead, then the 2027 table; today guide: the live "¿Es festivo hoy?" box, then its lead). They lose the
+   summary box, the "Añádenos como fuente preferida" link and "Lo más leído"; the "Siguiente paso útil" box goes back
+   into the body (after the lead). Strike pages unchanged.
+2. **How the town page computes "hoy" (unchanged):** in the browser only. `HolidayStatus` (client component) reads
+   the clock in Europe/Madrid after hydration; the server HTML carries a fallback note under `data-nosnippet`. The
+   static first line names the next holiday from `todayInCatalonia()` at render time. Pages render on their first
+   request (the 20 largest at deploy) and the nightly cron rebuilds each one the day after each of its holidays
+   (`holidayRefreshPaths`, with the Cloudflare purge).
+3. **Spanish town pages, new first screen** (`src/lib/programmatic/holidays/first-screen.ts`, switch
+   `TODAY_FIRST = { ca: false, es: true }`, used by `MunicipalityPage.tsx`):
+   (a) a server-rendered answer from the same render date and the same rebuilds, e.g. Barcelona on 18 Nov:
+   "**¿Es festivo hoy o mañana en Barcelona?** Hasta el **martes 8 de diciembre de 2026** no hay ningún festivo en
+   Barcelona: es el próximo (la Inmaculada, en toda Cataluña)." It names dates, never "hoy", so it holds on every day
+   the cached page can be served (render day to the next holiday) and in a snippet read later; on a holiday it says
+   "Sí: el martes 8 de diciembre de 2026 es festivo en Barcelona (…). El siguiente: viernes 25 de diciembre de 2026
+   (…)"; where next year's local days are not out, it names only the next Catalonia-wide day, with the caveat;
+   towns whose nuclei have days of their own say so.
+   (b) then "Todos los festivos de 2026 en <town>" with only the days still ahead, and the past ones in a closed
+   `<details>` ("Festivos de 2026 que ya han pasado (n)", muted; the full table when either half is empty).
+   (c) then the lead (the town's local days and the order), the next step, the live box, as before.
+   Catalan and English town pages are unchanged. `holidayLabel` in `copy.ts` is now exported.
+4. Tests: `tests/holiday-first-screen.test.ts` (order per edition; the page renders from `firstScreenOrder` before
+   the next step and the live box; the English page keeps the table first; Barcelona's answer on 18 Nov and on a
+   holiday; for a sample of towns and every render day 18 Nov–31 Dec, the answer agrees with `status.ts` on every day
+   the cached page is served; the unpublished-local caveat; nothing dropped when past rows collapse);
+   `tests/answer-first.test.ts` (holiday guides out of the switch); `tests/next-step.test.ts` (placement regex).
+
+**New baseline (after window, 13–17 Nov, per day).** ES town family 42.8 clicks · 1,820 impressions · 2.35 % · 7.6;
+CA town family 42.0 · 1,568 · 2.68 % · 6.3; `/es/festivos/barcelona/` 0.8 · 148 · 0.54 % · 23.7 (median 14–17 Nov
+34.7); `/es/festivos/tarragona/` 0 · 14 · 21.3 (median 16.7); `/es/guias/calendario-laboral-cataluna/` 0.4 · 117 ·
+0.34 % · 51.8 (median 49.1); `/es/guias/es-festivo-hoy-cataluna/` 0 · 18 · 55.1 (median 49.0);
+`/es/guias/puente-diciembre-cataluna/` 8.8 · 461 · 1.91 % · 6.2; `/es/guias/puente-diciembre-espana/` 1.4 · 326 ·
+0.43 % · 11.8; `/es/guias/puentes-2027-cataluna/` 0.8 · 17 · 8.6; ES date pages 9.6 · 844 · 1.14 % · 6.2; other ES
+pages 78.8 · 6,508 · 1.21 % · 10.5. GA4 mobile: ES town pages 13.2 sessions · 42.4 % · 35.2 s; ES holiday guides 6.0 ·
+46.7 % · 21.7 s. Query baselines: the Barcelona ES queries listed above (after-window values).
+
+**Prediction and rule for the next reviews.** (1) ES town pages: the temporal queries' mix-free position improves by
+≥ 3 against 13–17 Nov, and the family's change is no worse than the ES date pages' by > 1.5. Revert (`TODAY_FIRST.es =
+false`, a deploy) if it is worse by > 1.5, or if ES town mobile engagement falls > 3 points below 42.4 %. If the ES
+temporal queries recover, the 3 Dec review decides whether the Catalan edition gets the same first screen. (2)
+Holiday guides: their ES mix-free position is no worse than the other ES pages' by > 2. If they keep falling with the
+old layout, the layout was not the cause: log it, and bring them back only with a new first group. Read both against
+the core update's completion date if Google posts it.
+
+**Publish.** Deploy only: the switch is applied at render time and the town pages are code routes; **no publish
+group**. IndexNow after the deploy: `python scripts/indexnow-sitemap.py /es/festivos/ /ca/guies/calendari-laboral-catalunya/
+/es/guias/calendario-laboral-cataluna/ /en/guides/catalonia-public-holidays/ /ca/guies/es-festiu-avui-catalunya/
+/es/guias/es-festivo-hoy-cataluna/ /en/guides/is-today-a-holiday-in-catalonia/ /ca/guies/ponts-2027-catalunya/
+/es/guias/puentes-2027-cataluna/ /en/guides/long-weekends-2027-catalonia/ /ca/guies/pont-desembre-catalunya/
+/es/guias/puente-diciembre-cataluna/ /en/guides/december-long-weekend-catalonia/ /ca/guies/pont-desembre-espanya/
+/es/guias/puente-diciembre-espana/ /en/guides/december-holidays-spain/` (`/es/festivos/` also sends the unchanged
+date and 2027 pages; the script has no exclude).
+
+**Review:** 26 Nov 2026 (7 days) and 3 Dec 2026 (14 days), counted from a 19 Nov deploy; from the deploy day if it
+goes live later. Same scripts; query × page for the Barcelona and Tarragona ES temporal queries.
+
+**Outcome:** _pending_
