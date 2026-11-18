@@ -8,7 +8,10 @@ import { resolveElectionsHub } from "@/lib/programmatic/elections/pages";
 /** `/en/elections/`: the English municipality pages (largest towns and resorts). `en` only. */
 const LOCALE = "en";
 
-export const revalidate = false;
+// 29N election-day layer (lib/programmatic/elections/election-day.ts): the page prints the phase it was
+// rendered in, so it regenerates every 5 minutes (s-maxage=300 at Cloudflare) from 28 Nov to 7 Dec 2026
+// without a deploy or a purge on the night. Back to `false` in the first deploy after 8 Dec 2026 (tested).
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: string }> };
 

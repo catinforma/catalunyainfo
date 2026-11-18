@@ -202,6 +202,29 @@ import {
  * calendar ("Jornada de reflexión 28 de noviembre"; polls ban 24-28 Nov).
  * The 30 Nov local holidays are the holiday family's own date page.
  *
+ * 18 Nov 2026 (body only; titles, descriptions and leads untouched inside the
+ * 11 and 16 Nov windows, logged in docs/SEO_EXPERIMENTS.md, "18 Nov 2026 —
+ * 29N election-day layer"). GSC 5-18 Nov, EN: "2026 spain general election
+ * how to register to vote" 1,602 impressions at 5.8 (3 clicks), "how to vote
+ * 2026 spain general election" 1,294 at 4.7 (5), "... dates" 203 at 9.8,
+ * "... polling stations" 89 at 5.7; the first H2 under the lead was "Next
+ * elections in Catalonia", which those searchers did not ask. English now
+ * runs registration, where, hours and ID, calendar; ca/es keep "next
+ * elections" first (their queries) and move registration up after "where".
+ * New in the registration section, all three editions, read that day: INE
+ * cid=1700 ("el censo cerrado a 1 de agosto de 2026, que recoge los
+ * movimientos comunicados por los Ayuntamientos, Consulados y Registros
+ * Civiles hasta el 30 de julio, inclusive"; certificación censal específica
+ * "hasta el mismo día de la votación", "un medio de prueba de estar inscrito
+ * ... aunque no figure en los ejemplares certificados de las listas"; line
+ * 900 343 232 "El día 29 de noviembre ... de 8:00 a 20:00 horas"), LOREG art.
+ * 35.3 (the January update adds "con la calificación de menor" residents who
+ * turn 18 the following year) and 85.2 (the tables' lists hold "los ciudadanos
+ * mayores de edad en la fecha de la votación"), Correos (request "hasta el día
+ * 19 de noviembre de 2026", deposit "hasta el 25 de noviembre de 2026"). Not
+ * re-read: the DOGC voter-leave order, the JEC session list, the CERA pages,
+ * so VERIFIED stays 3 Nov.
+ *
  * The URL is evergreen on purpose: after 29 November the same page switches
  * its worked example to the municipal elections, whose date is fixed by law
  * (LOREG art. 42.3, fourth Sunday of May). Strictly procedural and
@@ -344,6 +367,8 @@ const COPY: Record<Locale, T> = {
     registerTitle: "Do I need to register to vote in Spain's 2026 general election?",
     register: [
       "**No, if you are a Spanish citizen living in Spain.** Being on the electoral roll is compulsory and you do not apply for it: the INE's Oficina del Censo Electoral builds the roll from the municipal register (padró), whose changes town halls send it every month (electoral law, arts. 29, 32 and 35). The roll used on 29 November is the one closed on 1 August 2026, and the window to check it and claim (12 to 19 October) has closed. So there is nothing to sign up for: just check where you vote with the INE's finder.",
+      "**Registration deadlines for 29 November, as the law and the INE set them:** the roll closed on 1 August 2026 with the changes town halls had reported up to 30 July, so a move reported later is not on it and you vote where your census card and the INE lookup say; claims against the roll ran from 12 to 19 October; Spaniards temporarily abroad had to register at the consulate and request their vote by 31 October; a postal vote can be requested at Correos until 19 November.",
+      "**Turning 18 by 29 November?** You are already on the roll: residents who come of age during the year are added to it in advance, and the list at your table includes everyone who is of age on polling day (electoral law, articles 35.3 and 85.2). **Missing from the list on the day?** Up to polling day the census office's provincial branch can issue a specific census certificate (certificación censal específica), which proves you are on the roll even if your table's list leaves you out; its free line, 900 343 232, is open from 8:00 to 20:00 on Sunday 29 November.",
       "**Who can vote:** only Spanish citizens aged 18 or over who are on the electoral roll (electoral law, article 2). **Foreign residents, EU citizens included, cannot vote in a general election**, so there is no registration a foreign resident can make for 29 November; EU citizens can vote in the municipal elections instead (see below).",
       "**Spaniards living abroad** must be on their consulate's register (Matrícula Consular) to appear on the overseas roll (CERA).",
     ],
@@ -448,6 +473,8 @@ const COPY: Record<Locale, T> = {
     registerTitle: "¿Tengo que inscribirme para votar?",
     register: [
       "**No, si eres español y vives en España.** La inscripción en el censo electoral es obligatoria y no se solicita: la forma la Oficina del Censo Electoral del INE a partir del padrón, cuyos cambios le envían los ayuntamientos cada mes (LOREG, arts. 29, 32 y 35). El censo del 29 de noviembre es el cerrado a 1 de agosto de 2026, y el plazo para consultarlo y reclamar (del 12 al 19 de octubre) ya ha terminado.",
+      "**Si te has mudado:** el censo recoge los cambios que los ayuntamientos habían comunicado hasta el 30 de julio; un cambio de domicilio comunicado después no está en él, y votas donde dicen la tarjeta censal y la consulta del INE. **Si cumples 18 años hasta el 29 de noviembre**, ya estás en el censo: entran por adelantado los residentes que cumplirán 18 años durante el año, y la lista de la mesa incluye a todos los mayores de edad el día de la votación (LOREG, artículos 35.3 y 85.2).",
+      "**Si el día de la votación no apareces en la lista:** hasta ese mismo día la delegación provincial de la Oficina del Censo Electoral puede expedir una certificación censal específica, que acredita que estás en el censo aunque la lista de la mesa no te incluya; su teléfono gratuito, 900 343 232, atiende el domingo 29 de noviembre de 8:00 a 20:00.",
       "**Los españoles residentes en el extranjero** deben estar inscritos en el Registro de Matrícula Consular para figurar en el censo de residentes ausentes (CERA). **Los extranjeros residentes, también los de la UE, no votan** en las elecciones generales.",
     ],
     whereTitle: "¿Dónde voto? Cómo saber tu colegio electoral para el 29 de noviembre",
@@ -548,6 +575,8 @@ const COPY: Record<Locale, T> = {
     registerTitle: "M'he d'inscriure per votar?",
     register: [
       "**No, si ets espanyol i vius a Espanya.** La inscripció al cens electoral és obligatòria i no es demana: la fa l'Oficina del Cens Electoral de l'INE a partir del padró, els canvis del qual li envien els ajuntaments cada mes (LOREG, arts. 29, 32 i 35). El cens del 29 de novembre és el tancat a 1 d'agost de 2026, i el termini per consultar-lo i reclamar (del 12 al 19 d'octubre) ja s'ha acabat.",
+      "**Si t'has mudat:** el cens recull els canvis que els ajuntaments havien comunicat fins al 30 de juliol; un canvi de domicili comunicat després no hi és, i votes on diuen la targeta censal i la consulta de l'INE. **Si fas 18 anys fins al 29 de novembre**, ja ets al cens: hi entren per endavant els residents que faran 18 anys durant l'any, i la llista de la mesa inclou tothom que és major d'edat el dia de la votació (LOREG, articles 35.3 i 85.2).",
+      "**Si el dia de la votació no surts a la llista:** fins aquell mateix dia la delegació provincial de l'Oficina del Cens Electoral pot expedir una certificació censal específica, que acredita que ets al cens encara que la llista de la mesa no t'hi inclogui; el seu telèfon gratuït, 900 343 232, atén el diumenge 29 de novembre de 8:00 a 20:00.",
       "**Els espanyols residents a l'estranger** han d'estar inscrits al Registre de Matrícula Consular per figurar al cens de residents absents (CERA). **Els estrangers residents, també els de la UE, no voten** a les eleccions generals.",
     ],
     whereTitle: "On voto? Com saber el teu col·legi electoral per al 29 de novembre",
@@ -646,22 +675,24 @@ const POLLS_LABEL: Record<Locale, string> = {
 
 function body(locale: Locale) {
   const t = COPY[locale];
+  const next = [...h2(t.nextTitle, ...t.next), table(t.nextCaption, t.nextHeaders, t.nextRows, t.nextNote)];
+  const where = [...h2(t.whereTitle), list(...t.where), callout("warning", t.warnTitle, t.warn)];
+  const register = h2(t.registerTitle, ...t.register);
+  const calendar = [...h2(t.calTitle), table(t.calCaption, t.calHeaders, t.calRows, t.calNote), callout("official", verifiedLine(locale, VERIFIED), t.note)];
+  const day = [...h2(t.dayTitle), list(...t.day)];
+  // 18 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "18 Nov 2026 — 29N election-day layer"): the sections in the order
+  // each edition's queries ask. English: "how to register to vote" (1,602 impressions at 5.8 in 14 days), "how to vote",
+  // "dates", "polling stations", so registration, where, hours and ID, then the calendar; "next elections in Catalonia"
+  // (what the Catalan and Spanish queries ask first) moves down. ca/es keep it first and get registration after "where".
+  const order =
+    locale === "en"
+      ? [...register, ...where, ...day, ...calendar, ...h2(t.postTitle, ...t.post), ...next]
+      : [...next, ...where, ...register, ...calendar, ...day, ...h2(t.postTitle, ...t.post)];
   return [
     lead(t.lead),
     // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
     languageLinks(),
-    ...h2(t.nextTitle, ...t.next),
-    table(t.nextCaption, t.nextHeaders, t.nextRows, t.nextNote),
-    ...h2(t.whereTitle),
-    list(...t.where),
-    callout("warning", t.warnTitle, t.warn),
-    ...h2(t.calTitle),
-    table(t.calCaption, t.calHeaders, t.calRows, t.calNote),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
-    ...h2(t.dayTitle),
-    list(...t.day),
-    ...h2(t.postTitle, ...t.post),
-    ...h2(t.registerTitle, ...t.register),
+    ...order,
     ...h2(t.abroadTitle),
     list(...t.abroad),
     ...h2(t.seatsTitle, ...t.seats),

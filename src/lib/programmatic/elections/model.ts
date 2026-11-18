@@ -11,6 +11,7 @@
  */
 
 import { B2_TITLES, b2href, type B2Key } from "@/lib/content/batch02/shared";
+import { slugifyAnchor } from "@/lib/content/blocks";
 import { shortDate } from "@/lib/content/holidays/calendar";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
@@ -32,6 +33,7 @@ import {
   type RegionalView,
 } from "./results";
 import { buildMesaDuty, type MesaDutyModel } from "./mesa-duty";
+import { electionDayBlock, INE_29N_URL, type ElectionDayBlock, type ElectionDayPhase } from "./election-day";
 import { INE_MESA_URL, buildPolling, type PollingModel } from "./polling";
 import { RESULTS_SITE_CHECKED, resultsNightLine } from "./results-night";
 import { SNAPSHOT } from "./snapshot";
@@ -467,6 +469,32 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
   };
 }
 
+/**
+ * The town's election-day block (election-day.ts) for a phase: the page's own
+ * locative, a link to its polling-places section (the BOP list) and, once the
+ * 29N file is in, no "results will appear here" line. Pure: the page passes
+ * the phase it computed when it rendered.
+ */
+export function townElectionDay(
+  m: Municipality,
+  locale: Locale,
+  phase: ElectionDayPhase,
+  polling: PollingModel = buildPolling(m, locale, (iso) => longDate(iso, locale)),
+  snapshot: ElectionsSnapshot = SNAPSHOT,
+): ElectionDayBlock | null {
+  const place = placeName(m, locale);
+  const where = locale === "ca" ? inCa(place) : locale === "es" ? `en ${place}` : `in ${place}`;
+  return electionDayBlock(locale, phase, {
+    town: {
+      where,
+      anchor: `${electionPath(locale, m.slug)}#${slugifyAnchor(polling.title)}`,
+      places: polling.totals?.places ?? null,
+      tables: polling.totals?.tables ?? null,
+    },
+    hasResults: generalOf(m, snapshot) !== null,
+  });
+}
+
 const POLLING_FACT_LABEL: Record<Locale, string> = { ca: "Locals electorals del 29N", es: "Locales electorales del 29N", en: "29 Nov polling places" };
 
 function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot): Omit<ElectionPageModel, "polling" | "mesa"> {
@@ -687,6 +715,8 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         title: `Cens electoral ${ofCa(place)}`,
         md: [
           `A les generals del ${dates.congress}, el cens electoral ${ofCa(place)} era de **${f.n(m.congress.electorate)} persones**; a les municipals del 2023, de ${f.n(m.municipal.electorate)}. On votes el 29 de novembre (secció, mesa i local) ho diuen la targeta censal i la [consulta oficial de mesa i local de l'INE](${INE_MESA_URL}).`,
+          // 18 Nov 2026: the "censo electoral <town>" queries ask about inclusion too (INE cid=1700 and LOREG 35.3, 85.2, read that day).
+          `El cens del 29N és el tancat l'**1 d'agost de 2026**, amb els canvis que els ajuntaments havien comunicat fins al 30 de juliol ([INE](${INE_29N_URL})): un canvi de domicili comunicat després no hi és, i votes on diuen la targeta censal i la consulta de l'INE. Si fas 18 anys fins al 29 de novembre, el cens ja et té (hi entren per endavant els residents que faran 18 anys durant l'any) i la llista de la mesa inclou tothom que és major d'edat el dia de la votació (LOREG, articles 35.3 i 85.2).`,
           `El cens electoral és la llista de les persones amb dret a vot ([LOREG, article 31](${LOREG_URL})). No és la població: no hi ha els menors de 18 anys ni els estrangers sense dret a vot. Per això ${place} té ${f.n(m.population)} habitants i a les municipals del 2023 tenia un cens de ${f.n(m.municipal.electorate)} persones.`,
           "A les municipals, el cens també inclou els ciutadans de la Unió Europea i dels països amb tractat de reciprocitat que hi resideixen i s'hi han inscrit (article 176). A les generals i a les del Parlament, el vot de les persones inscrites a l'estranger (CERA) es compta per províncies i no apareix a les xifres del municipi.",
           "La **participació** és el nombre de votants dividit pel cens. Els percentatges de cada llista es calculen sobre els **vots vàlids**: els vots a candidatures més els vots en blanc. Els vots nuls no compten.",
@@ -875,6 +905,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         title: `Censo electoral de ${place}`,
         md: [
           `En las generales del ${dates.congress}, el censo electoral de ${place} era de **${f.n(m.congress.electorate)} personas**; en las municipales de 2023, de ${f.n(m.municipal.electorate)}. Dónde votas el 29 de noviembre (sección, mesa y local) lo dicen la tarjeta censal y la [consulta oficial de mesa y local del INE](${INE_MESA_URL}).`,
+          `El censo del 29N es el cerrado el **1 de agosto de 2026**, con los cambios que los ayuntamientos habían comunicado hasta el 30 de julio ([INE](${INE_29N_URL})): un cambio de domicilio comunicado después no está, y votas donde dicen la tarjeta censal y la consulta del INE. Si cumples 18 años hasta el 29 de noviembre, el censo ya te tiene (entran por adelantado los residentes que cumplirán 18 años durante el año) y la lista de la mesa incluye a todos los mayores de edad el día de la votación (LOREG, artículos 35.3 y 85.2).`,
           `El censo electoral es la lista de las personas con derecho a voto ([LOREG, artículo 31](${LOREG_URL})). No es la población: no están los menores de 18 años ni los extranjeros sin derecho a voto. Por eso ${place} tiene ${f.n(m.population)} habitantes y en las municipales de 2023 tenía un censo de ${f.n(m.municipal.electorate)} personas.`,
           "En las municipales, el censo también incluye a los ciudadanos de la Unión Europea y de los países con tratado de reciprocidad que residen allí y se han inscrito (artículo 176). En las generales y en las del Parlament, el voto de las personas inscritas en el extranjero (CERA) se cuenta por provincias y no aparece en las cifras del municipio.",
           "La **participación** es el número de votantes dividido por el censo. Los porcentajes de cada lista se calculan sobre los **votos válidos**: los votos a candidaturas más los votos en blanco. Los votos nulos no cuentan.",
@@ -1062,6 +1093,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
       title: `Electoral roll (censo electoral) of ${place}`,
       md: [
         `At the general election of ${dates.congress}, ${place}'s electoral roll had **${f.n(m.congress.electorate)} people**; at the 2023 local election, ${f.n(m.municipal.electorate)}. Where you vote on 29 November (section, table and polling place) is on your census card and in the [INE's official polling place and table lookup](${INE_MESA_URL}) (in Spanish).`,
+        `The roll used on 29 November is the one closed on **1 August 2026**, with the changes town halls had reported up to 30 July ([INE](${INE_29N_URL})): a change of address reported later is not on it, so you vote where your census card and the INE lookup say. If you turn 18 on or before 29 November, you are already on it (residents who come of age during the year are added in advance) and the list at your table includes everyone who is of age on polling day (LOREG, articles 35.3 and 85.2).`,
         `The electoral roll (_censo electoral_) lists everyone entitled to vote ([LOREG, article 31](${LOREG_URL})). It is not the population: under-18s and foreign residents without voting rights are not on it. That is why ${place} has ${f.n(m.population)} residents and had an electorate of ${f.n(m.municipal.electorate)} at the 2023 local election.`,
         "For local elections the roll also includes citizens of other EU countries, and of countries with a reciprocity treaty, who live there and have registered (article 176). In general and Catalan elections, votes from people registered abroad (CERA) are counted by province and do not appear in the municipality's figures.",
         "**Turnout** is voters divided by the electorate. Each list's percentage is of **valid votes**: votes for lists plus blank votes. Spoilt votes do not count.",

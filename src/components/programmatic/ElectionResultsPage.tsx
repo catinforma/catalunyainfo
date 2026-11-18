@@ -8,11 +8,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
 import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
+import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
-import { buildElectionPage, type Table } from "@/lib/programmatic/elections/model";
+import { electionPhase } from "@/lib/programmatic/elections/election-day";
+import { buildElectionPage, townElectionDay, type Table } from "@/lib/programmatic/elections/model";
 import { comarcaOf, comarcaPath, electionPath, electionTranslations, hubMeta, hubPath, isComarcaLocale, placeName } from "@/lib/programmatic/elections/pages";
 import { electionDataset } from "@/lib/programmatic/elections/structured";
 import type { Municipality } from "@/lib/programmatic/elections/types";
@@ -20,8 +22,10 @@ import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 
 /**
  * One municipality's election results. Everything is in the server HTML and
- * comes from the committed snapshot: no database, no fetch, no clock. The only
- * date-dependent line (the 29N countdown) is computed in the browser.
+ * comes from the committed snapshot: no database, no fetch. Two things depend
+ * on the date: the election-day block (28 Nov - 7 Dec 2026), decided on the
+ * server from the render time (the route regenerates every 5 minutes), and
+ * the 29N countdown line, computed in the browser.
  */
 export function electionCrumbs(locale: Locale, m: Municipality): Crumb[] {
   const t = getMessages(locale);
@@ -37,6 +41,8 @@ export function electionCrumbs(locale: Locale, m: Municipality): Crumb[] {
 
 export function ElectionResultsPage({ locale, municipality }: { locale: Locale; municipality: Municipality }) {
   const model = buildElectionPage(municipality, locale);
+  // Server clock at render time, never the reader's: the cached HTML carries the phase (election-day.ts).
+  const day = townElectionDay(municipality, locale, electionPhase(new Date()), model.polling);
   const crumbs = electionCrumbs(locale, municipality);
   const faqBlock = { type: "faq", items: model.faq } as Block;
 
@@ -78,6 +84,9 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
           <div className="ci-shell py-10">
             <div className="ci-article-layout">
               <div className="ci-prose">
+                {/* 28 Nov - 7 Dec 2026: what matters that day, before anything else. */}
+                <ElectionDayCallout block={day} />
+
                 <section className="ci-margin-block" aria-label={model.h1}>
                   <dl className="ci-facts">
                     {model.facts.map((fact) => (
@@ -172,7 +181,10 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                       <ul className="mt-1 flex list-none flex-wrap gap-x-4 gap-y-1 p-0">
                         {group.links.map((item) => (
                           <li key={item.href} className="!mt-0">
-                            <Link href={item.href}>{item.label}</Link>
+                            {/* No prefetch: each town link would pull an RSC payload from the origin (Cloudflare never caches them). */}
+                            <Link href={item.href} prefetch={false}>
+                              {item.label}
+                            </Link>
                           </li>
                         ))}
                       </ul>

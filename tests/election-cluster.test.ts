@@ -118,13 +118,21 @@ test("mesa: a key-facts block right after the lead answers today's questions", (
 /* How to vote: next elections and where to vote, near the top               */
 /* -------------------------------------------------------------------------- */
 
-test("voting: the first two sections answer 'next elections' and 'where do I vote'", () => {
-  const first = { ca: "Properes eleccions a Catalunya", es: "Próximas elecciones en Cataluña", en: "Next elections in Catalonia" };
+// 18 Nov 2026 (docs/SEO_EXPERIMENTS.md, "18 Nov 2026 — 29N election-day layer"): each edition opens with what its
+// queries ask. ca/es: "when are the next elections", then where to vote, then registration. English ("2026 spain
+// general election how to register to vote", "how to vote", "polling stations"): registration, then where to vote;
+// "Next elections in Catalonia" stays on the page, further down.
+test("voting: the first sections answer each edition's queries (ca/es next elections, en registration), then where to vote", () => {
+  const first = { ca: "Properes eleccions a Catalunya", es: "Próximas elecciones en Cataluña", en: "Do I need to register to vote in Spain's 2026 general election?" };
   const second = { ca: /^On voto\?/, es: /^¿Dónde voto\?/, en: /^Where do I vote\?/ };
+  const third = { ca: /^M'he d'inscriure/, es: /^¿Tengo que inscribirme/, en: /^Voting hours and what ID/ };
   for (const locale of LOCALES) {
     const headings = h2s(VOTING, locale);
     assert.equal(headings[0], first[locale], `${locale}: first section`);
     assert.match(headings[1] ?? "", second[locale], `${locale}: second section`);
+    assert.match(headings[2] ?? "", third[locale], `${locale}: third section`);
+    const nextTitle = { ca: "Properes eleccions a Catalunya", es: "Próximas elecciones en Cataluña", en: "Next elections in Catalonia" };
+    assert.ok(headings.includes(nextTitle[locale]), `${locale}: next elections still answered`);
   }
 });
 
@@ -136,7 +144,8 @@ test("voting: municipal elections 'expected' on 23 May 2027 with LOREG 42.3, wor
     assert.match(raw, expected[locale], `${locale}: expected, not fixed`);
     assert.match(raw, decree[locale], `${locale}: decree dates`);
     assert.match(raw, /42\.3/, `${locale}: legal basis`);
-    const next = blocks(VOTING, locale).find((b) => b.type === "table");
+    // The "next elections" table (first on ca/es; after the calendar in English since 18 Nov).
+    const next = blocks(VOTING, locale).find((b) => b.type === "table" && (b.rows ?? []).some((row) => /Parlament|Parliament/.test(row[0] ?? "")));
     const parliament = next?.rows?.find((row) => /Parlament|Parliament/.test(row[0] ?? ""));
     assert.match(parliament?.[1] ?? "", /Sense data|Sin fecha|No date/, `${locale}: no Parlament date`);
   }

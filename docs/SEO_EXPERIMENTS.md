@@ -7134,3 +7134,69 @@ pages' answer, title and layers on its own; seasonal demand.
 renders the new titles.
 
 **Outcome:** _pending_
+
+## 18 Nov 2026 — 29N election-day layer on the hubs, comarca and town pages; EN how-to-vote answers "how to register" first; census inclusion facts (deploy; groups `voting`, `election-results`)
+
+**Why.** Target 30,000 sessions on 29 Nov (docs/MEDIA_PLAN.md). The election family is page 1 but rarely top 3, and the EN
+vote queries click at 0.2–0.4 % at positions 4.7–5.8. Titles, descriptions and leads of the election guides are inside the
+11 Nov and 16 Nov windows (reviews 18 and 26–27 Nov): **none touched here**; body and layout only.
+
+**Baseline (GSC 5–18 Nov, 14 d, 18 Nov partial; `snapshot.py page <substr> 14`).**
+- `/en/guides/how-to-vote-catalonia/`: 146 clicks / 7,852 impr. / 1.86 % / 6.0. "2026 spain general election how to register
+  to vote" 1,602 at 5.8 (3 clicks), "how to vote 2026 spain general election" 1,294 at 4.7 (5), "… dates" 203 at 9.8 (0),
+  "… polling stations" 89 at 5.7 (0). Gap: the lead answers registration, but the first H2 under it was "Next elections in
+  Catalonia" (the ca/es intent) and "Do I need to register…" was the 7th H2; nothing on moves after the roll closed, turning
+  18, or what to do if missing from the list.
+- `/es/guias/como-votar-elecciones-cataluna/`: 179 / 10,893 / 1.64 % / 6.5 ("cuando son las elecciones en cataluña" 787 at
+  7.1, 0.3 %); `/ca/guies/com-votar-eleccions-catalunya/`: 47 / 1,884 / 2.49 % / 6.8.
+- Pages containing "elecci" (es guides + 947 town pages + hub): 3,632 / 70,457 / 5.15 % / 5.9; town queries "mesa electoral
+  29n <town>", "censo electoral <town>" at 4–9.
+
+**What changed.**
+1. **Election-day layer** (`src/lib/programmatic/elections/election-day.ts`, `ElectionDayCallout`): the ca/es/en hubs, the
+   ca/es comarca pages and every town page lead with a server-rendered block by phase, Madrid time: eve (Sat 28: tomorrow's
+   hours, ID, where, help line, reflection day), polling (Sun 29 00:00–19:59: 9–20 h and the 20:00 rule, original DNI /
+   passport / licence, MiDNI, the INE lookup, on town pages a link to the town's BOP polling places, 900 343 232 from 8 to
+   20 h, certificación censal específica, four paid hours, mesa at 8:00, results from 20:00), count (20:00–23:59: the
+   official results site as a button once `ELECTION_NIGHT_RESULTS_URL` is set, provisional vs 4–7 Dec count), after (30 Nov–
+   7 Dec: provisional vs official, mesa members' five hours on Mon 30). Deterministic: `electionPhase(instant)`, called on the
+   server at render time, never the reader's clock. Tests: `tests/election-day.test.ts` (28 Nov, 29 Nov 10:30, 29 Nov 20:30,
+   30 Nov, every boundary).
+2. **Load:** the 8 election routes go from `revalidate = false` (Cloudflare `s-maxage=31536000`) to `revalidate = 300`, so each
+   phase reaches the origin cache and Cloudflare within ~5–10 min without a deploy, a purge-everything (the purge switches to
+   whole-zone above 600 URLs) or a timer at 20:00. Back to `false` after 8 Dec (the test fails until then). Town links in the
+   hub (~300 visible), comarca tables and town sibling lists no longer prefetch (each prefetch is an uncached RSC request to
+   the origin).
+3. **EN how-to-vote body order:** registration → where → hours and ID → calendar → postal → next elections (ca/es keep
+   "next elections" first, registration moves up after "where"). New registration lines in all three editions: roll closed
+   1 Aug 2026 with changes reported by 30 July (a later move is not on it); turning 18 by 29 Nov (LOREG 35.3, 85.2); the
+   certificación censal específica and the help line's polling-day hours (INE cid=1700); the deadlines already set (claims
+   12–19 Oct, ERTA 31 Oct, postal 19 Nov).
+4. **Town pages "censo electoral <town>":** the census section's second paragraph says which roll is used (1 Aug / 30 Jul) and
+   the turning-18 rule, ca/es/en.
+5. **Results site:** still not announced. Re-read 18 Nov: 29neleccionesgenerales.es home, "Enlaces de interés", sitemap
+   (lastmod 3 Nov), no results link; lamoncloa.gob.es timed out, interior.gob.es and infoelectoral 403. `RESULTS_SITE_CHECKED`
+   2026-11-13 → 2026-11-18 (the "checked on" date in the town, hub and Congress-results lines). Re-check from a browser on or
+   after 26 Nov (test).
+
+Sources read 18 Nov 2026 (curl + grep): LOREG consolidated text (BOE, arts. 28.1, 35.3, 80.1, 84.1, 85.1–3, 88.1, 98.2);
+INE 29N page cid=1700; Interior's 29N "voto presencial" page; Correos postal-vote page (19 / 25 Nov); JEC 29N calendar PDF
+(4–7 Dec general count, 28 Nov reflection day).
+
+**Prediction.** By 27 Nov (`snapshot.py page how-to-vote-catalonia 7`): "how to register to vote" and "how to vote 2026 spain
+general election" ≥ 1 % CTR and position ≤ 4; "… polling stations" ≤ 5. 29 Nov: election family sessions ≥ 15,000 (GA4),
+no origin error spike (`journalctl -u catalunyainfo`), `cf-cache-status: HIT` on the hubs.
+
+**Review.** 26 Nov with the 11/16 Nov entries (equal-query, 7 d before vs after the deploy); 30 Nov for the day itself
+(`snapshot.py daily 3`, `page /elecciones/ 3`). **Revert rule:** if the EN page loses ≥ 1.5 positions on the two named
+queries at equal impressions by 26 Nov with no CTR gain, restore the old section order (one line in `body()`).
+
+**Confounders.** 11 Nov titles and 16 Nov ES lead (same pages), news cycle in the last campaign week, 24 Nov polls ban,
+the 19 Nov postal deadline (the "request by 19 Nov" warning box changes on 20 Nov, separate task).
+
+**Go-live.** Deploy (code routes), then publish `voting` and `election-results`. IndexNow prefixes: `/ca/eleccions/`,
+`/es/elecciones/`, `/en/elections/`, `/ca/guies/com-votar-eleccions-catalunya/`, `/es/guias/como-votar-elecciones-cataluna/`,
+`/en/guides/how-to-vote-catalonia/`. Checks after deploy: `curl -sI https://www.catalunyainfo.com/es/elecciones/ | grep -i
+cache-control` must say `s-maxage=300`; on 28 Nov 00:10 and 29 Nov 00:10 / 20:10, `curl -s <town URL> | grep -o 'data-phase="[a-z]*"'`.
+
+**Outcome:** _pending_

@@ -5,9 +5,11 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
+import { electionDayBlock, electionPhase } from "@/lib/programmatic/elections/election-day";
 import { HUB_VISIBLE, hubCopy } from "@/lib/programmatic/elections/hub";
 import {
   byComarca,
@@ -28,12 +30,17 @@ import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
  * The family's index: every municipality page in this language, by comarca.
  * Since tranche 3 (947 towns) each comarca shows its largest towns and folds
  * the rest; its comarca page has them all, with their 2023 result, in a table.
+ * The town links do not prefetch: some 300 visible links would each pull an
+ * RSC payload from the origin on scroll, and Cloudflare never caches those
+ * (ops/vps/README.md section 10), which matters at 20-50x traffic on 29N.
  */
 export function ElectionsHubPage({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const meta = hubMeta(locale);
   const copy = hubCopy(locale);
   const groups = byComarca(locale);
+  // Server clock at render time (the route regenerates every 5 minutes): from 28 Nov to 7 Dec 2026 the hub leads with the day.
+  const day = electionDayBlock(locale, electionPhase(new Date()));
   const whole = new Intl.NumberFormat(INTL_LOCALE[locale], { maximumFractionDigits: 0 });
   const crumbs: Crumb[] = [
     { label: t.common.home, href: `/${locale}/` },
@@ -61,6 +68,8 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
 
         <div className="ci-shell py-10">
           <div className="ci-prose">
+            <ElectionDayCallout block={day} />
+
             {copy.intro.map((text) => (
               <p key={text}>{renderInline(text)}</p>
             ))}
@@ -86,13 +95,18 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
                   {copy.table && isComarcaLocale(locale) ? (
                     <p className="!mt-1 text-sm">
                       <span className="text-[var(--color-muted)]">{copy.towns(group.municipalities.length)} · </span>
-                      <Link href={comarcaPath(locale, group.slug)}>{copy.table(group.comarca)}</Link>
+                      <Link href={comarcaPath(locale, group.slug)} prefetch={false}>
+                        {copy.table(group.comarca)}
+                      </Link>
                     </p>
                   ) : null}
                   <ul className="mt-1 flex list-none flex-wrap gap-x-5 gap-y-1 p-0 [&>li]:!mt-0 [&_span]:text-xs [&_span]:text-[var(--color-muted)]">
                     {visible.map((m) => (
                       <li key={m.slug}>
-                        <Link href={electionPath(locale, m.slug)}>{placeName(m, locale)}</Link> <span>{whole.format(m.population)}</span>
+                        <Link href={electionPath(locale, m.slug)} prefetch={false}>
+                          {placeName(m, locale)}
+                        </Link>{" "}
+                        <span>{whole.format(m.population)}</span>
                       </li>
                     ))}
                   </ul>
@@ -102,7 +116,9 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
                       <ul className="mt-2 list-none columns-2 gap-x-6 p-0 text-sm sm:columns-3 [&>li]:!mt-0 [&>li]:break-inside-avoid [&>li]:py-0.5">
                         {rest.map((m) => (
                           <li key={m.slug}>
-                            <Link href={electionPath(locale, m.slug)}>{placeName(m, locale)}</Link>
+                            <Link href={electionPath(locale, m.slug)} prefetch={false}>
+                              {placeName(m, locale)}
+                            </Link>
                           </li>
                         ))}
                       </ul>
