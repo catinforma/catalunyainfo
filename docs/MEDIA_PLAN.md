@@ -32,7 +32,12 @@ House rules still apply to every item (`.claude/product-marketing.md`): official
 9. A — Christmas lottery night (22 Dec) and El Niño: runbook `docs/GORDO_NAVIDAD_RUNBOOK.md`, SELAE fetch from the owner's PC if the VPS stays blocked.
 10. D — town hubs: link 2026/2027 holidays, fair, elections and working days per town.
 
-## Targets (goals, not results)
-- 15 Dec: 2,500 sessions/day on a day without a strike; average position ≤ 7.0; views/session ≥ 1.25.
-- 31 Jan 2027: 5,000 sessions/day without a strike; average position ≤ 6.0.
-Review every Monday with `scripts/snapshot.py daily 14` and `families 7`; log in `docs/SEO_EXPERIMENTS.md`.
+## Targets (stretch goals set with the owner 18 Nov — goals, not results; first draft rejected as too weak)
+| When | Sessions (GA4) | What it takes |
+|---|---|---|
+| 29 Nov (election day) | 30,000 in the day | top 3 for "dónde votar / mesa / voto por correo / resultados" per town; election hubs fast under load |
+| December average | 10,000/day | calculators (paga extra, lotería, SMI, pensiones) top 3; puente/tiendas/fairs; strikes |
+| 22 Dec (lottery) | 100,000 in the day | gordo hub + province/town pages indexed early, results the minute SELAE publishes (owner's PC fetch if the VPS stays blocked) |
+| 31 Jan 2027 | 20,000/day without an event | 2027 rules for every calculator on 1 Jan, calendario laboral 2027 per city, rebajas/IPREM/SMI/pensiones |
+| 30 Jun 2027 | 100,000/day | 40+ tools top 3, every municipality hub, Discover/Top Stories, links from widgets |
+Average position ≤ 6 by 31 Jan; views/session ≥ 1.4. Review every Monday with `scripts/snapshot.py daily 14` and `families 7`; report the honest gap.
