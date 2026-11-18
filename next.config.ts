@@ -167,6 +167,19 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The Christmas lottery checker's numbers (app/data/loteria-navidad.json,
+        // from the committed SELAE snapshot): shareable, short-lived. A deploy
+        // changes it and the publish groups `comprobar-loteria` and
+        // `gordo-navidad` purge it at Cloudflare; browsers keep it a minute.
+        source: "/data/loteria-navidad.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+          },
+        ],
+      },
+      {
         // The full security header set, statically: none of it varies per
         // request, so the proxy no longer has to run on every page for it.
         // X-Frame-Options is in the next rule: every path but the widgets.

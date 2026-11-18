@@ -32,6 +32,9 @@ import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
+import { gordoHubTranslations } from "@/lib/programmatic/gordo/paths";
+import { checkEditions } from "@/lib/programmatic/lottery-check/paths";
+import { CATEGORIES as CHECK_CATEGORIES, PROGRAMME_YEAR as CHECK_YEAR } from "@/lib/programmatic/lottery-check/programme";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { legalPath, sectionPath } from "@/lib/i18n/routes";
 import { siteAuthorPath } from "@/lib/content/author";
@@ -259,6 +262,16 @@ export function liveTools(): LiveTool[] {
       name: "Spanish lottery prize tax calculator (El Gordo, El Niño, La Grossa)",
       hubs: lotteryTaxEditions(),
       description: `what you keep from a Spanish lottery prize after the special levy of Law 35/2006 on income tax, additional provision 33, quoted from the BOE: each winning décimo (ticket or bet) has its own 40,000 euros tax-free and 20% of the rest is withheld when it is paid; shared décimos and participaciones split the tax-free part by each holder's share; not declared on the income tax return. Presets for the Christmas Lottery 2026 prizes per 20-euro décimo (El Gordo ${lotteryMoney(lotteryHeadline().gordo.total.gross, "en")}: ${lotteryMoney(lotteryHeadline().gordo.total.withholding, "en")} withheld, ${lotteryMoney(lotteryHeadline().gordo.total.net, "en")} kept), El Niño 2027's first prize and La Grossa de Cap d'Any 2026 (Catalan government lottery, DOGC 9640), any other amount, non-residents (treaty refund on form 210) and the Agencia Tributaria's forms 136 and 230.`,
+    },
+    {
+      name: `Spanish Christmas Lottery ${CHECK_YEAR} ticket checker (comprobar décimo, pedrea)`,
+      hubs: checkEditions(),
+      description: `on 22 December, type a five-digit number and the amount played to see every prize it wins in SELAE's ${CHECK_YEAR} programme (${CHECK_CATEGORIES.length} categories: El Gordo, second, third, fourth and fifth prizes, the 1,794-number pedrea, aproximaciones, centenas, last two digits, reintegro) per 20-euro décimo and per euro, and the net after the special levy (40,000 euros tax-free per décimo, 20% of the rest); the drawn numbers and the full pedrea grouped by thousand, read from SELAE's own pages, never from other outlets; never says "no prize" until all 1,807 numbers are in. Before the draw: the programme with every amount, how the derived prizes are assigned (quoted from the last programme the BOE published, pending SELAE's 2026 wording), the draw, collecting and the official ways to check. Only SELAE's Lista Oficial de Premios is valid for payment.`,
+    },
+    {
+      name: "Spanish Christmas Lottery results: where El Gordo was sold",
+      hubs: gordoHubTranslations(),
+      description: "on 22 December, El Gordo and the other main prizes of the Christmas draw and every lottery shop SELAE lists for each, by province and town (one page each, only where SELAE lists a sale); before the draw, how SELAE publishes the winners and points of sale, how to check a décimo and where to collect.",
     },
     {
       name: "Bono social eléctrico checker (Spain's electricity discount for vulnerable consumers)",

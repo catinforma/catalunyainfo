@@ -7,6 +7,9 @@ import type { GordoPrizeKey, GordoSnapshot } from "./types";
  * never reach a page.
  */
 
+/** SELAE 2026 programme: "1.794" prizes of 1,000 € a billete drawn besides the top ones (the pedrea). */
+export const PEDREA_COUNT = 1_794;
+
 /** Key, how many numbers the programme draws, euros per 20 € décimo (SELAE, 2026 programme). */
 export const PRIZE_RULES: readonly { key: GordoPrizeKey; count: number; perDecimo: number }[] = [
   { key: "first", count: 1, perDecimo: 400_000 },
@@ -75,6 +78,20 @@ export function snapshotProblems(input: unknown): string[] {
     }
   });
   if ((prizes[0]?.numbers ?? []).length === 0) p.push("the snapshot has no Gordo");
+  // The pedrea, for the checker: five digits, each once, never a top-prize number, at most 1,794.
+  if (s.pedrea != null) {
+    if (!Array.isArray(s.pedrea)) p.push("pedrea must be a list or null");
+    else {
+      if (s.pedrea.length > PEDREA_COUNT) p.push(`pedrea: ${s.pedrea.length} numbers, the programme has ${PEDREA_COUNT}`);
+      const pedrea = new Set<string>();
+      for (const n of s.pedrea) {
+        if (!/^\d{5}$/.test(String(n))) p.push(`pedrea: "${n}" is not five digits`);
+        else if (seen.has(n)) p.push(`pedrea: ${n} is also a top prize`);
+        else if (pedrea.has(n)) p.push(`pedrea: ${n} appears twice`);
+        pedrea.add(n);
+      }
+    }
+  }
   // One slug per municipality and province: the URL must name one place.
   const slugs = new Map<string, string>();
   for (const prize of prizes) {

@@ -96,6 +96,8 @@ export const ALWAYS_NOINDEX_SOURCES = [
   "/canal/:path*",
   // The holiday calendar feeds (.ics, lib/programmatic/ics/feeds.ts): for calendar apps, not search results.
   "/ics/:path*",
+  // Data the pages fetch (the Christmas lottery checker's numbers): not a search result.
+  "/data/:path*",
   "/ca/cerca",
   "/ca/cerca/:path*",
   "/es/buscar",

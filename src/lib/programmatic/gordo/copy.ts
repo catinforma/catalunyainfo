@@ -35,6 +35,8 @@
  *    paragraph and FAQ also give the net per Gordo décimo and link the lottery
  *    prize tax calculator (lib/programmatic/lottery-tax, same engine), and the
  *    province and municipality pages link the calculator for tax.
+ *  - Since 18 Nov 2026 "how to check a décimo" also links the number checker
+ *    (lib/programmatic/lottery-check), body only.
  *
  * Checked and not used: a BOE resolution with the 2026 programme does not
  * exist (a BOE title search for "programa de premios 22 de diciembre" returns
@@ -57,6 +59,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { calculateOk } from "@/lib/programmatic/lottery-tax/engine";
 import { presetInput } from "@/lib/programmatic/lottery-tax/page";
+import { checkPath } from "@/lib/programmatic/lottery-check/paths";
 
 import { hasResults, prizesIn, provinceGroups, readDay, readTime, webSales, type GordoMunicipalityGroup, type GordoProvinceGroup, type GordoSale } from "./data";
 import { gordoHubPath, gordoMunicipalityPath, gordoProvincePath } from "./paths";
@@ -224,6 +227,8 @@ const taxCalc = (locale: Locale, label: string) => link(calcPath("lottery-tax", 
 /** What one whole El Gordo décimo leaves after the levy, from the calculator's engine. */
 const gordoNet = (locale: Locale) => eur(calculateOk(presetInput("gordo")).total.net, locale);
 const grossa = (locale: Locale, label: string) => link(b2href("grossa", locale), label);
+/** The Christmas lottery checker (lib/programmatic/lottery-check): every prize of a number, per décimo and after tax. */
+const checker = (locale: Locale, label: string) => link(checkPath(locale), label);
 
 function timeLine(c: Ctx): string {
   if (DRAW_TIME_2026) {
@@ -257,6 +262,7 @@ function evergreen(c: Ctx): Block[] {
         "A qualsevol punt de venda de Loteries de l'Estat.",
         `Si el vas comprar per internet: SELAE avisa per correu, notificació i SMS, i el que val és l'apartat «Apuestas» del teu compte (${link(U.notify, "SELAE")}).`,
       ),
+      ...paras(`Tots els premis d'un número d'una ullada (també la pedrea, les aproximacions, les centenes i el reintegrament), per dècim i per euro, i el que en cobres després d'Hisenda: ${checker("ca", "comprovador de la Loteria de Nadal")}, amb els números de SELAE.`),
       ...paras(`Segons SELAE, la cantada del sorteig pot tenir errors i es revisa diverses vegades: si un número no és a la Llista Oficial, no es pot reclamar el premi (${link(U.dossier2025, "dossier del 2025")}).`),
       h("On i fins quan es cobra", "cobrar"),
       list(
@@ -287,6 +293,7 @@ function evergreen(c: Ctx): Block[] {
         "En cualquier punto de venta de Loterías y Apuestas del Estado.",
         `Si lo compraste por internet: SELAE avisa por correo, notificación y SMS, y lo que vale es el apartado «Apuestas» de tu cuenta (${link(U.notify, "SELAE")}).`,
       ),
+      ...paras(`Todos los premios de un número de un vistazo (también la pedrea, las aproximaciones, las centenas y el reintegro), por décimo y por euro, y lo que cobras tras Hacienda: ${checker("es", "comprobador de la Lotería de Navidad")}, con los números de SELAE.`),
       ...paras(`Según SELAE, la cantada del sorteo puede tener errores y se revisa varias veces: si un número no figura en la Lista Oficial, no se puede reclamar el premio (${link(U.dossier2025, "dosier de 2025")}).`),
       h("Dónde y hasta cuándo se cobra", "cobrar"),
       list(
@@ -316,6 +323,7 @@ function evergreen(c: Ctx): Block[] {
       "At any Loterías y Apuestas del Estado lottery shop.",
       `If you bought it online: SELAE notifies you by email, in-app notice and text message, and the "Apuestas" section of your account is what counts (${link(U.notify, "SELAE")}).`,
     ),
+    ...paras(`Every prize a number wins at a glance (pedrea, aproximaciones, centenas and reintegro included), per décimo and per euro, and what you keep after tax: ${checker("en", "Spanish Christmas Lottery checker")}, from SELAE's numbers.`),
     ...paras(`According to SELAE, numbers can be sung wrongly during the draw and are checked several times: if a number is not on the official list, no prize can be claimed for it (${link(U.dossier2025, "2025 dossier")}).`),
     h("Where and until when to collect", "collect"),
     list(

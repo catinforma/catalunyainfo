@@ -56,6 +56,7 @@ import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { SNAPSHOT as ELECTIONS } from "../src/lib/programmatic/elections/snapshot.ts";
 import { GORDO_ROUTE } from "../src/lib/programmatic/gordo/paths.ts";
+import { CHECK_ROUTE } from "../src/lib/programmatic/lottery-check/paths.ts";
 
 /**
  * The Spanish Christmas lottery 2026 (31 Oct 2026): one page per language, one
@@ -76,7 +77,8 @@ const body = (locale: Locale) => text(LOTERIA_NADAL.editions[locale].blocks);
 const sentences = (plain: string) => plain.split(/\n|(?<=[.!?])\s+/);
 
 // GORDO_ROUTE: the Spain-wide results hub (a code route), linked once from each edition.
-const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GORDO_ROUTE];
+// CHECK_ROUTE: the number checker (a code route), linked from "how to check".
+const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GORDO_ROUTE, CHECK_ROUTE];
 const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
 
 /** A made-up result (not real numbers), with every kind of Catalan line. */

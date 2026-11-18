@@ -42,6 +42,7 @@ import { towns } from "../src/lib/programmatic/christmas-fairs/data.ts";
 import { fairsHubPath, townTranslations } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { municipalities } from "../src/lib/programmatic/holidays/data.ts";
 import { leavePath } from "../src/lib/programmatic/leave-2027/copy.ts";
+import { checkPath } from "../src/lib/programmatic/lottery-check/paths.ts";
 import { hubMeta as rodaliesHubMeta } from "../src/lib/programmatic/rodalies/pages.ts";
 import { hubPath as rodaliesHubPath } from "../src/lib/programmatic/rodalies/paths.ts";
 
@@ -66,6 +67,8 @@ function knownPaths(locale: Locale): Set<string> {
     ...CALCULATOR_IDS.map((id) => calcPath(id, locale)),
     ...hubCards().filter((card) => !card.hrefLang?.[locale]).map((card) => card.href[locale]),
     ...towns().flatMap((town) => townTranslations(town)[locale] ?? []),
+    // The Christmas lottery checker (a code route), the prize tax calculator's next step.
+    checkPath(locale),
   ]);
 }
 const KNOWN = Object.fromEntries(LOCALES.map((locale) => [locale, knownPaths(locale)])) as Record<Locale, Set<string>>;
