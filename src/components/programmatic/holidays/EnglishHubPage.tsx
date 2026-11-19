@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
+import { hubPhoto } from "@/lib/content/place-photos";
 import { getMessages } from "@/lib/i18n";
 import { hubPath as electionsHubPath } from "@/lib/programmatic/elections/paths";
 import { NEXT, YEAR, regionalDays, type HolidayRow } from "@/lib/programmatic/holidays/data";
@@ -99,6 +101,9 @@ export function EnglishHubPage() {
           <p>
             <Link href={reportPath("en")}>{REPORT_COPY.en.hubLink}</Link>
           </p>
+
+          {/* A licensed photograph of a festa major (lib/content/place-photos.ts), after both calendars; lazy-loaded. */}
+          <PlacePhoto photo={hubPhoto("holidays", "en")} locale="en" />
 
           <h2 id="towns">{t.townsTitle}</h2>
           <p>{t.townsLead}</p>

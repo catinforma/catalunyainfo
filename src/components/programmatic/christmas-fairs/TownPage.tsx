@@ -2,11 +2,13 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
+import { fairPagePhoto } from "@/lib/content/place-photos";
 import { christmasNextStep } from "@/lib/engagement/next-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
@@ -115,6 +117,10 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
             step={christmasNextStep(locale, crumbPath(townCrumbs(town, locale)), checked, { barcelona: town.ine === BARCELONA_INE })}
             locale={locale}
           />
+
+          {/* The fair's (else the town's) licensed photograph (lib/content/place-photos.ts): after the fair cards and
+              the next step, so the dates keep their place; lazy-loaded. */}
+          <PlacePhoto photo={fairPagePhoto(town.slug, locale)} locale={locale} />
 
           <h2 id="com-arribar">{t.getThere}</h2>
           <p>{renderInline(trains.intro)}</p>

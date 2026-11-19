@@ -4,6 +4,8 @@ import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { PlacePhoto } from "@/components/PlacePhoto";
+import { townPhoto } from "@/lib/content/place-photos";
 import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
@@ -198,6 +200,10 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
           {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
+
+          {/* The town's licensed photograph (lib/content/place-photos.ts): after the first screen and the
+              live box, so the answer, the table and the lead keep their place (19 Nov 2026); lazy-loaded. */}
+          <PlacePhoto photo={townPhoto(m.slug, locale)} locale={locale} />
 
           {m.nuclei.length > 0 ? (
             <>

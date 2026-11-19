@@ -3,6 +3,8 @@ import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { PlacePhoto } from "@/components/PlacePhoto";
+import { townPhoto } from "@/lib/content/place-photos";
 import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
@@ -119,6 +121,9 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
             locale="en"
             labels={STATUS_LABELS}
           />
+
+          {/* The town's licensed photograph (lib/content/place-photos.ts), after the dates and the today box; lazy-loaded. */}
+          <PlacePhoto photo={townPhoto(m.slug, "en")} locale="en" />
 
           {m.nuclei.length > 0 ? (
             <>

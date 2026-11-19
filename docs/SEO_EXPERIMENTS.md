@@ -8620,3 +8620,103 @@ touching the IPREM would change the page the day it is read.
 `/ca/calculadores/salari-minim-2027/`, `/en/calculators/spain-minimum-wage-2027/` and the three calculators hubs.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — Licensed place photos: 25 towns, the Espinelves fair, three hubs and Sau get a real photograph instead of the site card (deploy only; no publish group; no title, description, lead or H1 touched) (review 2026-12-16)
+
+**Why.** Discover (Google, "Get on Discover"): "Include compelling, high-quality images … at least 1200 px wide …
+enabled by the max-image-preview:large setting"; "Avoid using generic images (for example, your site logo) in the
+schema.org markup or og:image meta tag". Live audit, 18 Nov (og:image of the top 600 pages by GSC impressions, 22 Oct–18
+Nov): the DB guides already carry a licensed Commons crop; the generic `/social-card.png` sits on the code routes — town
+holiday pages (`/es/festivos/barcelona/`, 10,071 impressions, is the site's top photo-less page), election town pages,
+Christmas-fair towns (Espinelves 4,641, Canyelles 3,839), date pages, the holiday / fair / reservoir hubs, Sau, Rodalies
+lines, calculators. Discover 0, Google News 0 in 28 days.
+
+**What changed.**
+- `src/lib/content/place-photos.ts` (new): `TOWN_PHOTOS` (keyed by the slug the holiday, election and fair families share),
+  `FAIR_PHOTOS` (the fair itself; wins on the fair page and is the only photo that goes into its Event `image`),
+  `HUB_PHOTOS` (holidays, fairs, reservoirs), `RESERVOIR_PHOTOS` (Sau). Alt text and caption in ca/es/en, written from
+  the file's own Commons description and categories (subject checked on each one).
+- `src/components/PlacePhoto.tsx` (new): `next/image`, `loading="lazy"`, width/height from the manifest (no CLS), caption +
+  "Foto: <author, linked to the Commons file page> (Wikimedia Commons) · <licence, linked to the deed>".
+- Placement, always below the answer: ca/es town page after the first screen and the live "today" box (the 19 Nov ES
+  first screen — answer, table, lead, next step — is untouched); EN town page after the dates and the today box; election
+  pages after the 29N slot, mesa and polling places; fair pages after the fair cards and the next step; hubs after the
+  dated questions / calendars / fair list / levels table; Sau after today's reading and the facts.
+- `og:image` / `twitter:image`: the 16:9 crop `/img/16x9/<key>.jpg` (≥ 1,200 px; 1,824–1,920 px here). JSON-LD: a standalone
+  `ImageObject` (contentUrl, creator, creditText, license, acquireLicensePage) in each page's graph — these pages carry no
+  Article/NewsArticle markup, so `articleImage` is not involved; the Espinelves Event gets `image` (16:9, 4:3, 1:1).
+- 22 new files via the pipeline (`npm run images:commons -- pick` → `npm run images:import`): 1,920 px WebP, 110–406 KB,
+  5.8 MB in all; 8 photos already in the repo reused (Barcelona city hall, Girona Onyar, Terrassa Vapor Aymerich, Figueres
+  Dalí museum, Borges Blanques gegants, Santa Llúcia fair, Sau ×2). Every Commons page and licence deed answered 200 (curl,
+  19 Nov).
+- Licences (30 photos): CC BY-SA 4.0 (11), CC BY-SA 3.0 (8), CC0 (4), CC BY-SA 2.0 (3), CC BY 2.0 (2), CC BY 3.0 (2). No NC/ND.
+- Tests: `tests/place-photos.test.ts` (licence open, author, Commons source page, manifest ≥ 1,600 px, 16:9 crop ≥ 1,200 px
+  served by the crop route, alt and caption in ca/es/en, WebP ≤ 512 KB, the slugs are real pages, og:image/twitter:image,
+  ImageObject fields, Event image only for a photo of the fair, lazy figure placed after the answer on every family).
+
+**Towns:** Barcelona, Lleida, Tarragona, Terrassa, Badalona, Girona, Sant Boi de Llobregat, Mataró, Reus, Vic, el Prat de
+Llobregat, Manresa, Rubí, Vilanova i la Geltrú, Vilassar de Mar, l'Hospitalet de Llobregat, Matadepera, Sant Celoni,
+Figueres, Santa Coloma de Gramenet, Salou, Lloret de Mar, Viladecans, Castelldefels, Canyelles (castle; its fair page too).
+
+**Left without a photograph (and why).** Date pages (7 Dec 2026 5,168 impressions, 11 Nov 2026, 8 Dec 2026, 7 Dec 2027,
+17 May 2027): the subject is a calendar day, nothing to photograph honestly. Calculators (SMI 2027, Letras del Tesoro): no
+place. Canyelles' Fira de Santa Llúcia: no file of the fair on Commons (owner photo needed); the castle stands in. Rodalies
+line pages, Spain 2027 city pages, Susqueda, Caldes de Montbui / Cardedeu fairs: below the top ~40, next batch. The AI
+illustrations on the castanyada, bolets and autumn-colour guides are untouched (DB articles, own groups).
+
+**Baseline (GSC, 22 Oct–18 Nov, 28 days; 147 target URLs with impressions: the 25 towns' holiday, election and fair pages
+in every edition, Espinelves, the 9 hubs and Sau).** Web 1,472
+clicks / 88,507 impressions. Image search: 0 impressions on the target URLs (site 17,347 impressions, 45 clicks). Discover:
+0 (site 0). Google News: 0.
+
+**Prediction.** First Discover impressions on town/fair pages during the December peak (fairs 28 Nov–13 Dec, 29N election
+night, the 6–8 Dec bridge); Image-search impressions on the target URLs > 0 within 2 weeks of the crawl. Web position: no
+change expected from the photo alone.
+
+**Confounders.** The ES town pages' first-screen test (19 Nov, reviews 26 Nov and 3 Dec): the photo is below that first
+screen, but a thumbnail in mobile results can move CTR — read those reviews with this date in mind. Town hubs (18 Nov,
+review 9 Dec), next-step boxes (review 2 Dec), the 29N election and the Christmas fair season all move the same pages.
+
+**Measure.** GSC Search Analytics `type=discover` and `type=image` by page (`snapshot.gsc()`; the 147 target URLs vs the
+rest of the site), 19 Nov–15 Dec; Rich Results Test on `/es/mercados-navidad/espinelves/` (Event image) and one town page; a spot check
+of `/img/16x9/<key>.jpg` (200, image/jpeg) after the deploy. **Review: 2026-12-16** (Discover / Image search impressions).
+**Revert rule:** if Search Console reports image or Event errors, drop the ImageObject / Event `image` and keep the figure.
+
+**Deploy.** Deploy only (code routes + static files): no publish group. IndexNow after the deploy:
+`python scripts/indexnow-sitemap.py /ca/festius/barcelona/ /es/festivos/barcelona/ /en/holidays/barcelona/ /ca/eleccions/barcelona/
+/es/elecciones/barcelona/ /en/elections/barcelona/ /ca/fires-de-nadal/barcelona/ /es/mercados-navidad/barcelona/
+/en/christmas-markets/barcelona/ /ca/festius/lleida/ /es/festivos/lleida/ /en/holidays/lleida/ /ca/eleccions/lleida/
+/es/elecciones/lleida/ /en/elections/lleida/ /ca/festius/tarragona/ /es/festivos/tarragona/ /en/holidays/tarragona/
+/ca/eleccions/tarragona/ /es/elecciones/tarragona/ /en/elections/tarragona/ /ca/festius/terrassa/ /es/festivos/terrassa/
+/en/holidays/terrassa/ /ca/eleccions/terrassa/ /es/elecciones/terrassa/ /en/elections/terrassa/ /ca/festius/badalona/
+/es/festivos/badalona/ /en/holidays/badalona/ /ca/eleccions/badalona/ /es/elecciones/badalona/ /en/elections/badalona/
+/ca/festius/girona/ /es/festivos/girona/ /ca/eleccions/girona/ /es/elecciones/girona/ /en/elections/girona/
+/ca/fires-de-nadal/girona/ /es/mercados-navidad/girona/ /en/christmas-markets/girona/ /ca/festius/sant-boi-de-llobregat/
+/es/festivos/sant-boi-de-llobregat/ /ca/eleccions/sant-boi-de-llobregat/ /es/elecciones/sant-boi-de-llobregat/
+/ca/festius/mataro/ /es/festivos/mataro/ /en/holidays/mataro/ /es/elecciones/mataro/ /en/elections/mataro/ /ca/festius/reus/
+/es/festivos/reus/ /en/holidays/reus/ /ca/eleccions/reus/ /es/elecciones/reus/ /en/elections/reus/ /ca/festius/vic/
+/es/festivos/vic/ /ca/eleccions/vic/ /es/elecciones/vic/ /ca/fires-de-nadal/vic/ /es/mercados-navidad/vic/
+/en/christmas-markets/vic/ /ca/festius/el-prat-de-llobregat/ /es/festivos/el-prat-de-llobregat/
+/ca/eleccions/el-prat-de-llobregat/ /es/elecciones/el-prat-de-llobregat/ /ca/festius/manresa/ /es/festivos/manresa/
+/ca/eleccions/manresa/ /es/elecciones/manresa/ /ca/fires-de-nadal/manresa/ /es/mercados-navidad/manresa/ /ca/festius/rubi/
+/es/festivos/rubi/ /ca/eleccions/rubi/ /es/elecciones/rubi/ /ca/festius/vilanova-i-la-geltru/ /es/festivos/vilanova-i-la-geltru/
+/ca/eleccions/vilanova-i-la-geltru/ /es/elecciones/vilanova-i-la-geltru/ /ca/festius/vilassar-de-mar/
+/es/festivos/vilassar-de-mar/ /es/elecciones/vilassar-de-mar/ /ca/festius/l-hospitalet-de-llobregat/
+/es/festivos/l-hospitalet-de-llobregat/ /en/holidays/l-hospitalet-de-llobregat/ /ca/eleccions/l-hospitalet-de-llobregat/
+/es/elecciones/l-hospitalet-de-llobregat/ /en/elections/l-hospitalet-de-llobregat/ /ca/festius/matadepera/
+/es/festivos/matadepera/ /ca/eleccions/matadepera/ /es/elecciones/matadepera/ /ca/festius/sant-celoni/ /es/festivos/sant-celoni/
+/ca/eleccions/sant-celoni/ /es/elecciones/sant-celoni/ /ca/fires-de-nadal/sant-celoni/ /es/mercados-navidad/sant-celoni/
+/ca/festius/figueres/ /es/festivos/figueres/ /ca/eleccions/figueres/ /es/elecciones/figueres/ /ca/fires-de-nadal/figueres/
+/es/mercados-navidad/figueres/ /en/christmas-markets/figueres/ /ca/festius/santa-coloma-de-gramenet/
+/es/festivos/santa-coloma-de-gramenet/ /ca/eleccions/santa-coloma-de-gramenet/ /es/elecciones/santa-coloma-de-gramenet/
+/en/elections/santa-coloma-de-gramenet/ /ca/festius/salou/ /es/festivos/salou/ /en/holidays/salou/ /ca/eleccions/salou/
+/es/elecciones/salou/ /en/elections/salou/ /ca/festius/lloret-de-mar/ /es/festivos/lloret-de-mar/ /en/holidays/lloret-de-mar/
+/ca/eleccions/lloret-de-mar/ /es/elecciones/lloret-de-mar/ /en/elections/lloret-de-mar/ /es/festivos/viladecans/
+/ca/eleccions/viladecans/ /es/elecciones/viladecans/ /ca/festius/castelldefels/ /es/festivos/castelldefels/
+/ca/eleccions/castelldefels/ /es/elecciones/castelldefels/ /ca/eleccions/canyelles/ /es/elecciones/canyelles/
+/ca/fires-de-nadal/canyelles/ /es/mercados-navidad/canyelles/ /ca/fires-de-nadal/espinelves/ /es/mercados-navidad/espinelves/
+/ca/embassaments/ /es/embalses/ /en/reservoirs/` (137 town pages, every noindex sibling left out; the reservoir prefixes
+also send the other eight reservoirs, unchanged). The holiday and fair hubs are not sent: their prefix would re-send every
+town page; they are crawled daily.
+
+**Outcome:** _pending_

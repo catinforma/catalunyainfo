@@ -12,6 +12,7 @@
 
 import type { Metadata, MetadataRoute } from "next";
 
+import { hubPhoto, photoMetaImage, reservoirPhoto } from "@/lib/content/place-photos";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
@@ -60,6 +61,8 @@ export function reservoirMetadata(r: SnapshotReservoir, locale: Locale): Metadat
     description: reservoirDescription(r, locale),
     translations: reservoirTranslations(r.slug),
     type: "website",
+    // The reservoir's licensed photograph, when it has one (lib/content/place-photos.ts); else the site card.
+    image: photoMetaImage(reservoirPhoto(r.slug, locale)),
   });
 }
 
@@ -72,6 +75,7 @@ export function reservoirHubMetadata(locale: Locale): Metadata {
     description: copy.description,
     translations: reservoirHubTranslations(),
     type: "website",
+    image: photoMetaImage(hubPhoto("reservoirs", locale)),
   });
 }
 

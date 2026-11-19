@@ -17,7 +17,8 @@ import type { Fair } from "./types";
 
 const PROVINCE: Record<string, string> = { "08": "Barcelona", "17": "Girona", "25": "Lleida", "43": "Tarragona" };
 
-export function christmasFairEvents(fairs: readonly Fair[], path: string, locale: FairsLocale) {
+/** `image`: the crops of a photograph of the fair itself (place-photos.ts `fairEventImages`), when there is one. */
+export function christmasFairEvents(fairs: readonly Fair[], path: string, locale: FairsLocale, image?: string[]) {
   return fairs
     .filter((f) => !f.toConfirm && /^\d{4}-\d{2}-\d{2}$/.test(f.start) && /^\d{4}-\d{2}-\d{2}$/.test(f.end))
     .flatMap((f) => {
@@ -35,6 +36,7 @@ export function christmasFairEvents(fairs: readonly Fair[], path: string, locale
           url: f.webReplaced ? null : f.web,
           // The same Place as the town's holiday and election pages (INE code).
           placeId: townPlaceId(f.ine),
+          ...(image ? { image } : {}),
         }),
       ];
     });
