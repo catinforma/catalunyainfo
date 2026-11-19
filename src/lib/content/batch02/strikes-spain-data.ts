@@ -97,7 +97,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * marches on the 19th at 18:00); Sindicato de Estudiantes (20N kept); BOE of
  * 18 Nov (no strike order).
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-18";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-19";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.

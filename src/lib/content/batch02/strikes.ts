@@ -279,7 +279,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * nothing new on 26N; Metges de Catalunya (newest item 17 Nov, no call-off);
  * SMU (no call-off, Barcelona march on the 19th at 18:00 from Drassanes).
  */
-export const STRIKES_AS_OF: string = "2026-11-18";
+export const STRIKES_AS_OF: string = "2026-11-19";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
