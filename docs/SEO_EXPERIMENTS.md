@@ -9111,3 +9111,51 @@ plus the hub and the inheritance pages that gained the link: `/ca/calculadores/ 
 /en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/`.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — "Plusvalía municipal: calculadora por los dos métodos", es + ca + en (new page; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 18: "plusvalía" ≈ 35k searches/month and the
+calculators that rank lack the 2026 coefficient history; per-municipality rates stay out of scope (only Barcelona's,
+quoted). Fact pack: research_notes/plusvalia-municipal-nov2026.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/plusvalia-municipal/` (primary), `/ca/calculadores/plusvalua-municipal/`,
+  `/en/calculators/spain-plusvalia-tax/` (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut
+  "plusvalía", "plusvàlua", "iivtnu"; `calculator_use` id `plusvalia`). Registry id `plusvalia`; hub card in the
+  `housing` group after the home-purchase taxes (scope `spain`). Next step: home-purchase taxes, Catalan inheritance tax.
+  Linked from the home-purchase tax page (who pays, art. 106) and the four inheritance tax pages (heir's deadline).
+- Rules (read 19 Nov 2026 with curl from the BOE API and diario XML): TRLRHL (RDL 2/2004, BOE-A-2004-4214, consolidated
+  text of 7 Oct 2026) arts. 59.2, 104.1, 104.3, 104.5, 105.1.c, 106, 107.1-107.5, 108.1-108.4, 109.1, 110.1-110.6, as
+  reformed by RDL 26/2021 (context: STC 182/2021, BOE 25-11-2021). Maximum coefficients by devengo date: RDL 8/2023 art.
+  24 (from 1-1-2024; back in force from 23-1-2025 and 28-1-2026), RDL 9/2024 art. 9 and RDL 16/2025 art. 18 (same table;
+  in force only 1-22 Jan 2025 and 1-27 Jan 2026, derogated by Congress), RDL 29/2026 art. 10 from 1 Dec 2026
+  (convalidated 12 Nov 2026, BOE-A-2026-23755). No 2027 update published. Barcelona: ordenança fiscal 1.3 (BOP
+  23-12-2024, unchanged by the 2026 modification): 30 %, own coefficients (0,05 under a year), 95 % habitual-home rebate,
+  automatic application of legal updates; IMH procedure with its own estimate. ORGT quoted from its homepage only.
+- Every quote is checked as a substring of the downloaded official text; the engine is tested on six hand-calculated
+  cases (1.620 / 1.980 / 2.250 / 0 / 225 / 1.530 € at 30 %).
+- YMYL: disclaimer (the council's assessment or self-assessment is the official amount; no state simulator, Barcelona's
+  linked) under the tool and at the foot; `RULES_UNTIL` 2027-01-01 (tests/plusvalia.test.ts fails from then until art.
+  107.4 is re-read for 2027).
+
+**Baseline (GSC 22 Oct–18 Nov 2026).** 0 impressions for any query containing "plusv": the site has never ranked for
+the topic.
+
+**Hypothesis.** Indexed within a week of IndexNow, the three editions reach ≥ 500 impressions in the 28 days to the
+review, mostly "plusvalía municipal" / "calculadora plusvalía" / "coeficientes plusvalía 2026|diciembre", top-20 average
+position, and ≥ 30 % of sessions with a `calculator_use`. Wrong if fewer than 150 impressions by 17 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, three URLs). 2 Dec: queries naming the December coefficients. Review
+**2026-12-17**: `snapshot.py page plusvalia-municipal 28`, `page plusvalua-municipal 28`, `page spain-plusvalia-tax 28`;
+GA4 `calculator_use` `plusvalia`.
+
+**Confounders.** The 1 Dec 2026 coefficient change itself (news demand); a 2027 update in late December would force a
+body update during the window: log it here if it happens.
+
+**Deploy.** Deploy only (static route; no publish group). IndexNow prefixes: `/es/calculadoras/plusvalia-municipal/
+/ca/calculadores/plusvalua-municipal/ /en/calculators/spain-plusvalia-tax/`, plus the hub and the pages that gained the
+link: `/es/calculadoras/ /ca/calculadores/ /en/calculators/ /es/calculadoras/impuestos-compra-vivienda/
+/ca/calculadores/impostos-compra-habitatge/ /en/calculators/spain-home-purchase-taxes/ /es/calculadoras/impuesto-sucesiones-
+/ca/calculadores/impost-successions- /en/calculators/catalonia-inheritance-tax/ /en/calculators/madrid-inheritance-tax/
+/en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/`.
+
+**Outcome:** _pending_

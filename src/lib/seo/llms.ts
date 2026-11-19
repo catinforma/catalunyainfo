@@ -41,6 +41,7 @@ import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
+import { pvEditions } from "@/lib/programmatic/plusvalia/copy";
 import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
 import { regionEditions as isdRegionEditions } from "@/lib/programmatic/inheritance-tax/regional-copy";
 import { giftEditions } from "@/lib/programmatic/gift-tax/copy";
@@ -373,6 +374,11 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Spain home purchase taxes calculator (ITP, IVA and AJD by region)",
       hubs: htEditions(),
       description: "the taxes on buying a home in each Spanish region: ITP (transfer tax) on a resale home at the region's general rate or scale, or the reduced rate a buyer qualifies for (young buyers, large families, disability, main or first home, protected housing, price caps, with the income limits and other conditions the law sets), and on a new home IVA 10% (4% for special-regime VPO, VAT Act art. 91; IGIC in the Canary Islands, IPSI in Ceuta and Melilla) plus the AJD on the deed; each rate with the article of the region's consolidated tax law (BOE, regional bulletins, the Basque and Navarre foral norms) and the reading date, the mortgage AJD paid by the lender (TRLITP art. 29, Royal Decree-law 17/2018), and the notary and registry fee scales (RD 1426/1989, RD 1427/1989) without invented totals. Not tax advice.",
+    },
+    {
+      name: "Spain plusvalía municipal tax calculator (IIVTNU, both methods)",
+      hubs: pvEditions(),
+      description: "the Spanish municipal tax on the increase in value of urban land (plusvalía municipal, IIVTNU) on a sale, inheritance or gift, under arts. 104 to 110 of the consolidated Local Finance Act (Royal Legislative Decree 2/2004) as reformed by Royal Decree-law 26/2021 after Constitutional Court ruling 182/2021, each step with the BOE article quoted: the objective method (the land's cadastral value for IBI at the transfer date times the coefficient for the full years held, at most 20; under a year the annual coefficient prorated by full months; the council's coefficient never above the legal maximum, art. 107.4), the real-gain method (transfer minus acquisition value, each the higher of deed and checked value with no costs, times the land's share of the total cadastral value; zero or less means no taxable event, art. 104.5; the lower base at the taxpayer's request, art. 107.5), the council's rate (at most 30%, art. 108.1) and the inheritance rebate (up to 95% for descendants, spouses and ascendants, art. 108.4). Maximum coefficients by transfer date: Royal Decree-law 8/2023 (in force again after Congress derogated RDL 9/2024 and RDL 16/2025, which applied only 1-22 January 2025 and 1-27 January 2026) until 30 November 2026, and Royal Decree-law 29/2026 art. 10 (ratified 12 November 2026) from 1 December 2026 (for example 0.11 for 14 years and 0.30 for 20 or more, against 0.09 and 0.40 before); no 2027 update published as of 19 November 2026. Who pays (seller on a sale, buyer as substitute for a non-resident seller, heir or donee otherwise, art. 106), deadlines (30 working days inter vivos, six months extendable to one year on death, art. 110.2), and Barcelona's ordinance 1.3 (30% rate, own coefficients, 95% habitual-home rebate, self-assessment with the IMH). Re-checked from 1 January 2027. An estimate, not tax advice.",
     },
     {
       name: "Catalonia inheritance tax calculator (impost sobre successions, one heir)",

@@ -265,6 +265,14 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
                 })}{" "}
                 <A href="https://www1.sedecatastro.gob.es/Accesos/SECAccvr.aspx">{L(locale, { es: "Valor de referencia (Sede del Catastro)", ca: "Valor de referència (Seu del Cadastre)", en: "Reference value (Catastro e-office)" })}</A>
               </p>
+              <p>
+                {L(locale, {
+                  es: "La plusvalía municipal de la venta no la paga quien compra sino quien vende (texto refundido de la Ley Reguladora de las Haciendas Locales, art. 106.1.b), salvo que sea una persona física no residente en España: entonces la paga quien compra, como sustituto (art. 106.2).",
+                  ca: "La plusvàlua municipal de la venda no la paga qui compra sinó qui ven (text refós de la Llei reguladora de les hisendes locals, art. 106.1.b), llevat que sigui una persona física no resident a Espanya: aleshores la paga qui compra, com a substitut (art. 106.2).",
+                  en: "The plusvalía municipal on the sale is paid by the seller, not the buyer (consolidated Local Finance Act, art. 106.1.b), unless the seller is an individual not resident in Spain: then the buyer pays it as a substitute (art. 106.2).",
+                })}{" "}
+                <Link href={calcPath("plusvalia", locale)}>{L(locale, { es: "Calculadora de la plusvalía municipal", ca: "Calculadora de la plusvàlua municipal", en: "Plusvalía municipal tax calculator" })}</Link>.
+              </p>
 
               <h2 id="vivienda-nueva">{h.newHome}</h2>
               <p>

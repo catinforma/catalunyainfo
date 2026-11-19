@@ -77,8 +77,10 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("gift-tax-valencia"), { ca: "/ca/calculadores/impost-donacions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-donaciones-comunidad-valenciana/", en: "/en/calculators/valencia-gift-tax/" });
 });
 
-test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax and plusvalía tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "plusvalia"]);
+  // 19 Nov 2026.
+  assert.deepEqual(calcEditions("plusvalia"), { ca: "/ca/calculadores/plusvalua-municipal/", es: "/es/calculadoras/plusvalia-municipal/", en: "/en/calculators/spain-plusvalia-tax/" });
 });
 
 test("hub: the taxes group is 'inheritance and gift tax by community', Catalonia first, with a one-line intro in every language", () => {

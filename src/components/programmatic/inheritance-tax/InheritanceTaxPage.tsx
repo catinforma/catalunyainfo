@@ -632,6 +632,15 @@ export function InheritanceTaxRoute({ locale }: { locale: IsdLocale }) {
                 {officialLinks}.
               </p>
 
+              <p>
+                {L(locale, {
+                  ca: "Si l'herència inclou un habitatge o un altre immoble urbà, l'hereu paga també la plusvàlua municipal a l'ajuntament, amb un termini propi de sis mesos des de la mort, prorrogables fins a un any (text refós de la Llei reguladora de les hisendes locals, arts. 106.1.a i 110.2.b):",
+                  es: "Si la herencia incluye una vivienda u otro inmueble urbano, el heredero paga también la plusvalía municipal al ayuntamiento, con un plazo propio de seis meses desde el fallecimiento, prorrogables hasta un año (texto refundido de la Ley Reguladora de las Haciendas Locales, arts. 106.1.a y 110.2.b):",
+                  en: "If the estate includes a home or other urban property, the heir also pays the plusvalía municipal to the council, with its own deadline of six months from the death, extendable to one year (consolidated Local Finance Act, arts. 106.1.a and 110.2.b):",
+                })}{" "}
+                <Link href={calcPath("plusvalia", locale)}>{L(locale, { ca: "calculadora de la plusvàlua municipal", es: "calculadora de la plusvalía municipal", en: "plusvalía municipal tax calculator" })}</Link>.
+              </p>
+
               <InheritanceByRegion current="inheritance-tax" locale={locale} />
 
               <h2 id="canvis">{hd.changes}</h2>
