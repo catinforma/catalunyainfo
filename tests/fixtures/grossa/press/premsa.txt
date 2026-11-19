@@ -1,0 +1,49 @@
+        DADES DE PROVA - NO SÓN RESULTATS REALS
+        (text inventat amb la forma de la nota de premsa de Loteries de Catalunya, per a tests/grossa-check.test.ts)
+
+        La Grossa de Cap d’Any reparteix
+       (xifra de prova) d’euros per tot Catalunya
+
+Barcelona, 31 de desembre de 2026 – La Grossa de Cap d’Any 2026 ha repartit
+(xifra de prova) en premis.
+
+El primer premi, amb el número 24680, s’ha venut a Població de prova i ha repartit 200.000
+euros per bitllet. El segon ha estat el número 13579, distribuït a Població de prova
+per un total de 65.000 euros per bitllet. El tercer premi,
+amb el número 86420, ha caigut a la localitat de Població de prova, que han rebut 30.000 euros per bitllet.
+
+En la següent taula figuren els 8 grans premis de La Grossa de Cap d’Any 2026,
+que es poden consultar al web: loteriesdecatalunya.cat.
+         Número                                                               Import premi per
+Premis                        Llocs de venda                 Població
+         premiat                                                                bitllet de 10 €
+
+                   •   Punt de prova 001
+                       C. de Prova 7                        Població A
+Primer   24680                                                                   200.000 €
+                       Població A
+
+
+Segon    13579     •   Punt de prova 002                    Població B            65.000 €
+                       Av. de Prova 15
+
+
+Tercer   86420     •   Punt de prova 003                    Població C            30.000 €
+                       Av. de Prova, 98
+
+
+         97531     •   Punt de prova 004                    Població D            10.000 €
+                       Ctra. de Prova KM 2
+Quart
+         11223     •   Punt de prova 005                    Població E            10.000 €
+                       C. de Prova 7-9
+
+
+         44556     •   Punt de prova 006                    Població F            5.000 €
+Cinquè             •   Internet
+         67788     •   Punt de prova 007                    Població G            5.000 €
+                       Carrer de Prova, 335-337
+         90011     •   Punt de prova 008                    Població H            5.000 €
+
+
+Facilitat per cobrar els premis (text de prova)

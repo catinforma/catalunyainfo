@@ -24,6 +24,8 @@ import {
 import { SNAPSHOT, provinceGroups, webSales } from "../src/lib/programmatic/gordo/data.ts";
 import { GORDO_ROUTE, gordoHubPath } from "../src/lib/programmatic/gordo/paths.ts";
 import { checkEditions } from "../src/lib/programmatic/lottery-check/paths.ts";
+import { grossaCheckEditions } from "../src/lib/programmatic/grossa-check/paths.ts";
+import { ninoCheckEditions } from "../src/lib/programmatic/nino-check/paths.ts";
 import { PROVINCES } from "../src/lib/programmatic/gordo/provinces.ts";
 import { placeStaticParams, resolveMunicipalityPage, resolveProvincePage } from "../src/lib/programmatic/gordo/routing.ts";
 import { gordoPaths } from "../src/lib/programmatic/gordo/sitemap.ts";
@@ -60,6 +62,9 @@ const KNOWN_INTERNAL = new Set([
   ...Object.values(calcEditions("lottery-tax")),
   // The Christmas lottery checker, linked from "how to check a décimo".
   ...Object.values(checkEditions()),
+  // The La Grossa de Cap d'Any and El Niño checkers, linked from "how the draw works".
+  ...Object.values(grossaCheckEditions()),
+  ...Object.values(ninoCheckEditions()),
 ]);
 
 function checkLinks(blocks: Block[], locale: Locale, sources: string[]) {

@@ -2,6 +2,8 @@ import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
 import { checkPath } from "@/lib/programmatic/lottery-check/paths";
+import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
+import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 
 import { dateYear, dayDate } from "./festive";
 import { GROSSA_DRAW_DATE, GROSSA_URLS, PRIZES as GROSSA_PRIZES, TICKET_PRICE as GROSSA_TICKET, eur, levy, LEVY_EXEMPT } from "./grossa";
@@ -789,7 +791,7 @@ const COPY: Record<Locale, Copy> = {
     grossaHeading: "La loteria de Nadal no és La Grossa: La Grossa de Cap d'Any i el Nen",
     grossa: [
       `La loteria de Nadal és de l'Estat (SELAE) i se sorteja a Madrid. A Catalunya, nou dies després, hi ha ${b2link("grossa", "ca", "La Grossa de Cap d'Any")}, la loteria de la Generalitat: es fa el ${dayDate(GROSSA_DRAW_DATE, "ca")}, el bitllet costa ${eur(GROSSA_TICKET, "ca")} i el primer premi és de ${eur(GROSSA_PRIZES.first.five, "ca")} per bitllet. Els bitllets d'una no serveixen per a l'altra.`,
-      `Després ve el sorteig extraordinari del Nen (El Niño) de SELAE, el dimecres 6 de gener de 2027, amb 2 milions d'euros per sèrie al primer premi i dècims de 20 €, segons la ${link(U.lnac, "pàgina de la Loteria Nacional")}. Per a la resta de les festes, mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")} i ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}.`,
+      `Després ve el sorteig extraordinari del Nen (El Niño) de SELAE, el dimecres 6 de gener de 2027, amb 2 milions d'euros per sèrie al primer premi i dècims de 20 €, segons la ${link(U.lnac, "pàgina de la Loteria Nacional")}. Els dos sortejos tenen el seu comprovador: ${link(grossaCheckPath("ca"), "La Grossa de Cap d'Any")} i ${link(ninoCheckPath("ca"), "la Loteria del Nen")}. Per a la resta de les festes, mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")} i ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}.`,
     ],
     responsibleTitle: "Joc responsable",
     responsible: "Juga només si ets major d'edat i amb un pressupost tancat. SELAE té un telèfon d'atenció a la clientela, el 900 11 23 13.",
@@ -1002,7 +1004,7 @@ const COPY: Record<Locale, Copy> = {
     grossaHeading: "La Lotería de Navidad no es La Grossa: La Grossa de Cap d'Any y El Niño",
     grossa: [
       `La Lotería de Navidad es del Estado (SELAE) y se sortea en Madrid. En Cataluña, nueve días después, está ${b2link("grossa", "es", "La Grossa de Cap d'Any")}, la lotería de la Generalitat: se celebra el ${dayDate(GROSSA_DRAW_DATE, "es")}, el billete cuesta ${eur(GROSSA_TICKET, "es")} y el primer premio es de ${eur(GROSSA_PRIZES.first.five, "es")} por billete. Los billetes de una no valen para la otra.`,
-      `Después llega el sorteo extraordinario de El Niño de SELAE, el miércoles 6 de enero de 2027, con 2 millones de euros por serie al primer premio y décimos de 20 €, según la ${link(U.lnac, "página de la Lotería Nacional")}. Para el resto de las fiestas, mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")} y ${b2link("newYear", "es", "Nochevieja en Barcelona")}.`,
+      `Después llega el sorteo extraordinario de El Niño de SELAE, el miércoles 6 de enero de 2027, con 2 millones de euros por serie al primer premio y décimos de 20 €, según la ${link(U.lnac, "página de la Lotería Nacional")}. Los dos sorteos tienen su comprobador: ${link(grossaCheckPath("es"), "La Grossa de Cap d'Any")} y ${link(ninoCheckPath("es"), "la Lotería del Niño")}. Para el resto de las fiestas, mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")} y ${b2link("newYear", "es", "Nochevieja en Barcelona")}.`,
     ],
     responsibleTitle: "Juego responsable",
     responsible: "Juega solo si eres mayor de edad y con un presupuesto cerrado. SELAE tiene un teléfono de atención al cliente, el 900 11 23 13.",
@@ -1215,7 +1217,7 @@ const COPY: Record<Locale, Copy> = {
     grossaHeading: "Christmas Lottery, La Grossa de Cap d'Any and El Niño",
     grossa: [
       `The Christmas Lottery is the Spanish state's (SELAE's) and is drawn in Madrid. In Catalonia, nine days later, comes ${b2link("grossa", "en", "La Grossa de Cap d'Any")}, the Catalan government's lottery: it is drawn on ${dayDate(GROSSA_DRAW_DATE, "en")}, a ticket costs ${eur(GROSSA_TICKET, "en")} and the first prize is ${eur(GROSSA_PRIZES.first.five, "en")} per ticket. Tickets for one are no good for the other.`,
-      `Then comes SELAE's El Niño draw on Wednesday 6 January 2027, with €2 million per series for the first prize and €20 décimos, according to the ${link(U.lnac, "Lotería Nacional page")}. For the rest of the holidays, see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")} and ${b2link("newYear", "en", "New Year's Eve in Barcelona")}.`,
+      `Then comes SELAE's El Niño draw on Wednesday 6 January 2027, with €2 million per series for the first prize and €20 décimos, according to the ${link(U.lnac, "Lotería Nacional page")}. Both draws have their own checker: ${link(grossaCheckPath("en"), "La Grossa de Cap d'Any")} and ${link(ninoCheckPath("en"), "El Niño")}. For the rest of the holidays, see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")} and ${b2link("newYear", "en", "New Year's Eve in Barcelona")}.`,
     ],
     responsibleTitle: "Play responsibly",
     responsible: "Only play if you are 18 or over, and set a budget first. SELAE has a customer helpline on 900 11 23 13.",

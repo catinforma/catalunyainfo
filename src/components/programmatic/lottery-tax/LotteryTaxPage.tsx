@@ -13,6 +13,8 @@ import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
 import { checkPath } from "@/lib/programmatic/lottery-check/paths";
+import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
+import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { DRAW_SHORT, PRESET_LABEL, elDay, lotteryTaxEditions, lotteryTaxPath, money, type LtLocale } from "@/lib/programmatic/lottery-tax/copy";
 import { calculateOk, type Breakdown } from "@/lib/programmatic/lottery-tax/engine";
@@ -218,9 +220,9 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
   });
 
   const links = L(locale, {
-    es: { check: "Comprobar Lotería de Navidad: qué premio tiene tu número y cuánto cobras", hub: "Dónde ha tocado el Gordo, cómo comprobar el décimo y dónde se cobra", guide: "Guía de la Lotería de Navidad 2026", grossa: "Guía de La Grossa de Cap d'Any 2026", aeat: "Agencia Tributaria: premios del sorteo de la lotería de Navidad" },
-    ca: { check: "Comprovar la Loteria de Nadal: quin premi té el teu número i quant en cobres", hub: "On ha tocat la loteria de Nadal, com comprovar el dècim i on es cobra", guide: "Guia de la loteria de Nadal 2026", grossa: "Guia de La Grossa de Cap d'Any 2026", aeat: "Agència Tributària: premis del sorteig de la loteria de Nadal (en castellà)" },
-    en: { check: "Check your Christmas Lottery ticket: what your number wins and what you keep", hub: "Where El Gordo was sold, how to check your décimo and where to collect", guide: "Spanish Christmas Lottery 2026 guide", grossa: "La Grossa de Cap d'Any 2026 guide", aeat: "Agencia Tributaria: Christmas lottery prizes (in Spanish)" },
+    es: { check: "Comprobar Lotería de Navidad: qué premio tiene tu número y cuánto cobras", grossaCheck: "Comprobar La Grossa de Cap d'Any (31 de diciembre): premio y neto", ninoCheck: "Comprobar Lotería del Niño (6 de enero): premio y neto", hub: "Dónde ha tocado el Gordo, cómo comprobar el décimo y dónde se cobra", guide: "Guía de la Lotería de Navidad 2026", grossa: "Guía de La Grossa de Cap d'Any 2026", aeat: "Agencia Tributaria: premios del sorteo de la lotería de Navidad" },
+    ca: { check: "Comprovar la Loteria de Nadal: quin premi té el teu número i quant en cobres", grossaCheck: "Comprovar La Grossa de Cap d'Any (31 de desembre): premi i net", ninoCheck: "Comprovar la Loteria del Nen (6 de gener): premi i net", hub: "On ha tocat la loteria de Nadal, com comprovar el dècim i on es cobra", guide: "Guia de la loteria de Nadal 2026", grossa: "Guia de La Grossa de Cap d'Any 2026", aeat: "Agència Tributària: premis del sorteig de la loteria de Nadal (en castellà)" },
+    en: { check: "Check your Christmas Lottery ticket: what your number wins and what you keep", grossaCheck: "Check your La Grossa de Cap d'Any ticket (31 December): prize and net", ninoCheck: "Check your El Niño lottery ticket (6 January): prize and net", hub: "Where El Gordo was sold, how to check your décimo and where to collect", guide: "Spanish Christmas Lottery 2026 guide", grossa: "La Grossa de Cap d'Any 2026 guide", aeat: "Agencia Tributaria: Christmas lottery prizes (in Spanish)" },
   });
 
   const limits = L(locale, {
@@ -396,6 +398,12 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
               <ul>
                 <li>
                   <Link href={checkPath(locale)}>{links.check}</Link>
+                </li>
+                <li>
+                  <Link href={grossaCheckPath(locale)}>{links.grossaCheck}</Link>
+                </li>
+                <li>
+                  <Link href={ninoCheckPath(locale)}>{links.ninoCheck}</Link>
                 </li>
                 <li>
                   <Link href={gordoHub}>{links.hub}</Link>

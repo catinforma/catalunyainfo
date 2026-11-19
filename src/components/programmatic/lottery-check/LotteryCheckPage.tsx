@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
@@ -42,6 +41,7 @@ import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { LotteryChecker } from "./LotteryChecker";
+import { A, Rich, Quote as SharedQuote } from "./Rich";
 
 /**
  * "Comprobar Lotería de Navidad 2026" / "Comprovar la Loteria de Nadal 2026" /
@@ -67,54 +67,8 @@ export function lotteryCheckMetadata(locale: Locale): Metadata {
   return buildMetadata({ locale, path: checkPath(locale), title: clampText(m.title, TITLE_LIMIT), description: clampText(m.description, DESCRIPTION_LIMIT), translations: checkEditions() });
 }
 
-/** `**bold**` and `[label](href)` → React: internal links with next/link, official ones in a new tab. */
-function Rich({ text }: { text: string }) {
-  const out: ReactNode[] = [];
-  const re = /\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
-  let last = 0;
-  let m: RegExpExecArray | null;
-  let i = 0;
-  const inline = (s: string): ReactNode[] => {
-    const parts: ReactNode[] = [];
-    const lr = /\[([^\]]+)\]\(([^)\s]+)\)/g;
-    let p = 0;
-    let lm: RegExpExecArray | null;
-    while ((lm = lr.exec(s))) {
-      if (lm.index > p) parts.push(s.slice(p, lm.index));
-      parts.push(<A key={`l${i++}`} href={lm[2]!}>{lm[1]}</A>);
-      p = lm.index + lm[0].length;
-    }
-    if (p < s.length) parts.push(s.slice(p));
-    return parts;
-  };
-  while ((m = re.exec(text))) {
-    if (m.index > last) out.push(...inline(text.slice(last, m.index)));
-    if (m[1] !== undefined) out.push(<strong key={`b${i++}`}>{inline(m[1])}</strong>);
-    else out.push(<A key={`a${i++}`} href={m[3]!}>{m[2]}</A>);
-    last = m.index + m[0].length;
-  }
-  if (last < text.length) out.push(...inline(text.slice(last)));
-  return <>{out}</>;
-}
-
-function A({ href, children }: { href: string; children: ReactNode }) {
-  if (href.startsWith("/")) return <Link href={href}>{children}</Link>;
-  return (
-    <a href={href} rel="noopener" target="_blank">
-      {children}
-    </a>
-  );
-}
-
 function Quote({ text, label }: { text: string; label: string }) {
-  return (
-    <blockquote lang="es">
-      <p>«{text}»</p>
-      <footer className="text-sm">
-        <A href={SOURCES.boe2010.url}>{label}</A>
-      </footer>
-    </blockquote>
-  );
+  return <SharedQuote text={text} label={label} href={SOURCES.boe2010.url} lang="es" />;
 }
 
 /* ------------------------------------------------------------- Results --- */

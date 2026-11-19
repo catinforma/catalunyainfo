@@ -54,6 +54,8 @@ import {
 } from "../src/lib/programmatic/lottery-check/programme.ts";
 import { checkSitemapEntries } from "../src/lib/programmatic/lottery-check/sitemap.ts";
 import { DRAWS, PRESETS } from "../src/lib/programmatic/lottery-tax/rules.ts";
+import { grossaCheckEditions } from "../src/lib/programmatic/grossa-check/paths.ts";
+import { ninoCheckEditions } from "../src/lib/programmatic/nino-check/paths.ts";
 import { ALWAYS_NOINDEX_SOURCES } from "../src/lib/security-headers.ts";
 
 /**
@@ -389,7 +391,7 @@ test("titles and descriptions fit the snippet, in both states; the H1 names the 
 });
 
 test("before the draw the page prints no winning number, says the rules are pending, and links only official or own pages", () => {
-  const known = new Set([...Object.values(checkEditions()), ...Object.values(gordoHubTranslations()), ...Object.values(calcEditions("lottery-tax")), ...LOCALES.map((l) => `/${l}/${B2_PATHS.loteriaNadal[l]}/`)]);
+  const known = new Set([...Object.values(checkEditions()), ...Object.values(gordoHubTranslations()), ...Object.values(calcEditions("lottery-tax")), ...LOCALES.map((l) => `/${l}/${B2_PATHS.loteriaNadal[l]}/`), ...Object.values(grossaCheckEditions()), ...Object.values(ninoCheckEditions())]);
   const sources = checkSources(checkerData(null)).map((s) => s.url);
   for (const locale of LOCALES) {
     const text = pageText(locale);

@@ -45,6 +45,11 @@ import { ztEditions } from "@/lib/programmatic/zona-tensionada/copy";
 import { gordoHubTranslations } from "@/lib/programmatic/gordo/paths";
 import { checkEditions } from "@/lib/programmatic/lottery-check/paths";
 import { CATEGORIES as CHECK_CATEGORIES, PROGRAMME_YEAR as CHECK_YEAR } from "@/lib/programmatic/lottery-check/programme";
+import { grossaCheckEditions } from "@/lib/programmatic/grossa-check/paths";
+import { GROSSA_YEAR, eurosPerSeries as grossaEurosPerSeries } from "@/lib/programmatic/grossa-check/programme";
+import { ninoCheckEditions } from "@/lib/programmatic/nino-check/paths";
+import { NINO_YEAR } from "@/lib/programmatic/nino-check/programme";
+import { PROGRAMME_2027 as NINO_PROGRAMME } from "@/lib/programmatic/nino-check/programme-data";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { legalPath, sectionPath } from "@/lib/i18n/routes";
 import { siteAuthorPath } from "@/lib/content/author";
@@ -303,6 +308,18 @@ export function liveTools(): LiveTool[] {
       name: `Spanish Christmas Lottery ${CHECK_YEAR} ticket checker (comprobar décimo, pedrea)`,
       hubs: checkEditions(),
       description: `on 22 December, type a five-digit number and the amount played to see every prize it wins in SELAE's ${CHECK_YEAR} programme (${CHECK_CATEGORIES.length} categories: El Gordo, second, third, fourth and fifth prizes, the 1,794-number pedrea, aproximaciones, centenas, last two digits, reintegro) per 20-euro décimo and per euro, and the net after the special levy (40,000 euros tax-free per décimo, 20% of the rest); the drawn numbers and the full pedrea grouped by thousand, read from SELAE's own pages, never from other outlets; never says "no prize" until all 1,807 numbers are in. Before the draw: the programme with every amount, how the derived prizes are assigned (quoted from the last programme the BOE published, pending SELAE's 2026 wording), the draw, collecting and the official ways to check. Only SELAE's Lista Oficial de Premios is valid for payment.`,
+    },
+    {
+      name: `La Grossa de Cap d'Any ${GROSSA_YEAR} ticket checker (comprovar La Grossa, Catalan government New Year's Eve lottery)`,
+      hubs: grossaCheckEditions(),
+      description: `on 31 December, type a five-digit number and the amount played to see every prize it wins in La Grossa de Cap d'Any ${GROSSA_YEAR} (Loteries de Catalunya) per 10-euro ticket and per euro, and the net after the special levy (40,000 euros tax-free per ticket, 20% of the rest), from the eight winning numbers Loteries de Catalunya publishes, never from other outlets. Rules and amounts quoted from the DOGC (no. 9640, 8 April 2026, annex 3): eight extractions (three fifth prizes of 5,000 euros, two fourths of 10,000, third 30,000, second 65,000, first 200,000), each also paying the last four, three and two digits and the numbers either side (first prize: 1,000, 250, 35 and 2,000 euros, plus 10 euros for its last digit); only the highest category per extraction (point 8.2), prizes from different extractions add up (8.3); ${grossaEurosPerSeries().toLocaleString("en")} euros per series of 100,000 tickets, the 61.59% the DOGC sets; 90 days to collect (Resolution ECO/425/2022).`,
+    },
+    {
+      name: `El Niño lottery ${NINO_YEAR} ticket checker (comprobar Lotería del Niño, 6 January)`,
+      hubs: ninoCheckEditions(),
+      description: NINO_PROGRAMME
+        ? `on 6 January ${NINO_YEAR}, type a five-digit number and the amount played to see every prize it wins in SELAE's ${NINO_YEAR} El Niño programme (${NINO_PROGRAMME.categories.length} categories, ${NINO_PROGRAMME.prizesPerSeries.toLocaleString("en")} prizes per series) per 20-euro décimo and per euro, and the net after the special levy, from SELAE's own numbers; only SELAE's official list is valid for payment.`
+        : `the Sorteo Extraordinario de El Niño on Wednesday 6 January ${NINO_YEAR} (SELAE): 20-euro décimos and a first prize of 2,000,000 euros per series (200,000 per décimo, 168,000 after the special levy), as SELAE's Lotería Nacional page states; how aproximaciones, centenas, endings and reintegros are assigned, quoted from the last El Niño programme the BOE published (BOE-A-2010-20031, for 2011) and marked pending confirmation against SELAE's ${NINO_YEAR} programme, whose other amounts are not printed until read; on the day, a checker on SELAE's numbers per décimo, per euro and after tax.`,
     },
     {
       name: "Spanish Christmas Lottery results: where El Gordo was sold",

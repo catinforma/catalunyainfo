@@ -44,6 +44,7 @@ import { holidayOn, weekdayIndex } from "../src/lib/content/holidays/calendar.ts
 import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { GROSSA_CHECK_ROUTE } from "../src/lib/programmatic/grossa-check/paths.ts";
 
 /**
  * La Grossa de Cap d'Any 2026 (30 Oct 2026): one page per language, one
@@ -61,7 +62,8 @@ const json = (locale: Locale) => JSON.stringify(GROSSA.editions[locale].blocks);
 const body = (locale: Locale) => text(GROSSA.editions[locale].blocks);
 const sentences = (plain: string) => plain.split(/\n|(?<=[.!?])\s+/);
 
-const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)];
+// GROSSA_CHECK_ROUTE: the number checker (a code route), linked from "how to check".
+const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GROSSA_CHECK_ROUTE];
 const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
 
 /** A made-up result (not real numbers), with the 99999/00000 wrap on purpose. */

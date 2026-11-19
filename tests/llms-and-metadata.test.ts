@@ -48,6 +48,8 @@ const { itvEditions } = await import("../src/lib/programmatic/itv/copy.ts");
 const { htEditions } = await import("../src/lib/programmatic/home-purchase-tax/copy.ts");
 const { lotteryTaxEditions } = await import("../src/lib/programmatic/lottery-tax/copy.ts");
 const { checkEditions } = await import("../src/lib/programmatic/lottery-check/paths.ts");
+const { grossaCheckEditions } = await import("../src/lib/programmatic/grossa-check/paths.ts");
+const { ninoCheckEditions } = await import("../src/lib/programmatic/nino-check/paths.ts");
 const { gordoHubTranslations } = await import("../src/lib/programmatic/gordo/paths.ts");
 const { bonoSocialEditions } = await import("../src/lib/programmatic/bono-social/copy.ts");
 const { trafficFinesEditions } = await import("../src/lib/programmatic/traffic-fines/copy.ts");
@@ -150,6 +152,8 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(widowEditions()),
     ...Object.values(ztEditions()),
     ...Object.values(checkEditions()),
+    ...Object.values(grossaCheckEditions()),
+    ...Object.values(ninoCheckEditions()),
     ...Object.values(gordoHubTranslations()),
     ...Object.values(reportEditions()),
   ]);

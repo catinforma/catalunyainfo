@@ -94,6 +94,8 @@ import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
+import { grossaCheckPublishPaths } from "@/lib/programmatic/grossa-check/sitemap";
+import { ninoCheckPublishPaths } from "@/lib/programmatic/nino-check/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 
@@ -517,6 +519,19 @@ export async function POST(request: Request) {
     // purged with them, never sent to IndexNow (noindex).
     const checkWanted = wants("comprobar-loteria") || wants("gordo-navidad");
     if (checkWanted) gordoCodePaths.push(...checkPublishPaths().pages);
+    // Comprovar La Grossa de Cap d'Any (/ca/comprovar-la-grossa-cap-d-any/,
+    // /es/comprobar-la-grossa-cap-d-any/, /en/check-la-grossa-ticket/) and
+    // Comprobar Lotería del Niño (/es/comprobar-loteria-nino/,
+    // /ca/comprovar-loteria-nen/, /en/check-el-nino-lottery-ticket/): code
+    // routes on their own committed snapshots (lib/programmatic/grossa-check,
+    // nino-check), so a new snapshot needs a deploy; these groups then
+    // revalidate, purge and IndexNow-ping the three pages, and revalidate and
+    // purge their JSON (/data/grossa-cap-d-any.json, /data/loteria-nino.json;
+    // never IndexNow: noindex). Runbook: docs/GROSSA_NINO_RUNBOOK.md.
+    const grossaCheckWanted = wants("comprobar-grossa");
+    const ninoCheckWanted = wants("comprobar-nino");
+    if (grossaCheckWanted) gordoCodePaths.push(...grossaCheckPublishPaths().pages);
+    if (ninoCheckWanted) gordoCodePaths.push(...ninoCheckPublishPaths().pages);
     if (wants("gordo-navidad-links")) published.push(await publishB2Article(LOTERIA_NADAL));
     const codePaths = [...(wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : []), ...gordoCodePaths];
     // "Posa el calendari laboral 2027 al teu web" (/ca/festius/2027/al-teu-web/,
@@ -574,6 +589,8 @@ export async function POST(request: Request) {
     // Exact paths only: no section or locale-home revalidation for code routes.
     for (const path of codePaths) revalidate(path.replace(/\/$/, ""));
     if (checkWanted) for (const path of checkPublishPaths().data) revalidate(path);
+    if (grossaCheckWanted) for (const path of grossaCheckPublishPaths().data) revalidate(path);
+    if (ninoCheckWanted) for (const path of ninoCheckPublishPaths().data) revalidate(path);
     // The sitemap, the RSS feeds and the Google News sitemap list the same pieces.
     for (const url of revalidateSitemapAndFeeds()) revalidated.add(url);
 

@@ -150,18 +150,19 @@ export type StakeResult = { status: "invalid" } | { status: "ok"; decimos: numbe
  * What `played` euros on this number keep after the special levy (lottery-tax
  * engine, Ley 35/2006 DA 33ª): each whole 20 € décimo has its own 40,000 €
  * exempt part, and a share of a décimo (a participación) its share of it.
- * 25 € = one whole décimo + a quarter of another.
+ * 25 € = one whole décimo + a quarter of another. `price` is the ticket's
+ * (20 € décimos here and for El Niño, 10 € La Grossa tickets).
  */
-export function withStake(prizePerDecimo: number, played: number): StakeResult {
-  if (!Number.isFinite(played) || played <= 0 || played > MAX_PLAYED || !(prizePerDecimo >= 0)) return { status: "invalid" };
-  const whole = Math.floor(played / DECIMO_PRICE + 1e-9);
-  const rest = round2(played - whole * DECIMO_PRICE);
+export function withStake(prizePerDecimo: number, played: number, price: number = DECIMO_PRICE): StakeResult {
+  if (!Number.isFinite(played) || played <= 0 || played > MAX_PLAYED || !(prizePerDecimo >= 0) || !(price > 0)) return { status: "invalid" };
+  const whole = Math.floor(played / price + 1e-9);
+  const rest = round2(played - whole * price);
   const zero: Breakdown = { gross: 0, exempt: 0, base: 0, withholding: 0, net: 0 };
-  if (prizePerDecimo === 0) return { status: "ok", decimos: played / DECIMO_PRICE, total: zero };
-  const one = breakdown(prizePerDecimo, DECIMO_PRICE, 1);
-  const part = rest > 0 ? breakdown(prizePerDecimo, DECIMO_PRICE, rest / DECIMO_PRICE) : zero;
+  if (prizePerDecimo === 0) return { status: "ok", decimos: played / price, total: zero };
+  const one = breakdown(prizePerDecimo, price, 1);
+  const part = rest > 0 ? breakdown(prizePerDecimo, price, rest / price) : zero;
   const sum = (k: keyof Breakdown) => round2(one[k] * whole + part[k]);
-  return { status: "ok", decimos: played / DECIMO_PRICE, total: { gross: sum("gross"), exempt: sum("exempt"), base: sum("base"), withholding: sum("withholding"), net: sum("net") } };
+  return { status: "ok", decimos: played / price, total: { gross: sum("gross"), exempt: sum("exempt"), base: sum("base"), withholding: sum("withholding"), net: sum("net") } };
 }
 
 /** How many numbers of 00000-99999 win each category: the tests compare it with the programme's counts. */

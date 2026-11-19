@@ -181,6 +181,18 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // The La Grossa de Cap d'Any and El Niño checkers' numbers
+      // (app/data/grossa-cap-d-any.json, app/data/loteria-nino.json): the same
+      // short shared lifetime; `comprobar-grossa` and `comprobar-nino` purge them.
+      ...["/data/grossa-cap-d-any.json", "/data/loteria-nino.json"].map((source) => ({
+        source,
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+          },
+        ],
+      })),
       {
         // The full security header set, statically: none of it varies per
         // request, so the proxy no longer has to run on every page for it.
