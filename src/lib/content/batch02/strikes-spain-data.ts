@@ -123,7 +123,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * 23rd: not found (its press room is a script page; no notice at the 17N
  * notice's URL pattern).
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-19";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-20";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.

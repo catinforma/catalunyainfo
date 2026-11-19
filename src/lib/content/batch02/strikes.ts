@@ -304,7 +304,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * DOGC home and Renfe's press room (script pages; Treball's list, the e-Tauler
  * API and the Ministry's lists stand in for them).
  */
-export const STRIKES_AS_OF: string = "2026-11-19";
+export const STRIKES_AS_OF: string = "2026-11-20";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
