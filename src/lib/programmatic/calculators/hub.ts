@@ -38,6 +38,7 @@ import { RULES_AS_OF as PLUSVALIA_AS_OF } from "@/lib/programmatic/plusvalia/rul
 import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
 import { RULES_AS_OF as REGIONAL_ISD_AS_OF } from "@/lib/programmatic/inheritance-tax/regions/state";
 import { RULES_AS_OF as GIFT_TAX_AS_OF } from "@/lib/programmatic/gift-tax/regions/state";
+import { RULES_AS_OF as INHERITANCE_COMPARE_AS_OF } from "@/lib/programmatic/inheritance-compare/state";
 import { RULES_AS_OF as ZONA_TENSIONADA_AS_OF } from "@/lib/programmatic/zona-tensionada/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -493,11 +494,29 @@ export const HUB_GROUPS: HubGroup[] = [
     id: "taxes",
     title: { ca: "Impost de successions i donacions per comunitat", es: "Impuesto de sucesiones y donaciones por comunidad", en: "Inheritance and gift tax by region" },
     intro: {
-      ca: "Cada comunitat té les seves reduccions, tarifa i bonificacions. Una herència paga amb les de la comunitat on la persona morta va viure més dies dels últims cinc anys; una donació, amb les de la comunitat on és l'immoble o, si són diners o altres béns, on viu qui la rep. Calculadores per a aquestes quatre comunitats, amb els articles de la seva llei:",
-      es: "Cada comunidad tiene sus reducciones, tarifa y bonificaciones. Una herencia paga con las de la comunidad donde la persona fallecida vivió más días de los últimos cinco años; una donación, con las de la comunidad donde está el inmueble o, si es dinero u otros bienes, donde vive quien la recibe. Calculadoras para estas cuatro comunidades, con los artículos de su ley:",
-      en: "Each region has its own reductions, scale and rebates. An inheritance pays under those of the region where the deceased lived the most days of the last five years; a gift, under those of the region where the property is or, for money and other assets, where the donee lives. Calculators for these four regions, with the articles of each law:",
+      ca: "Cada comunitat té les seves reduccions, tarifa i bonificacions. Una herència paga amb les de la comunitat on la persona morta va viure més dies dels últims cinc anys; una donació, amb les de la comunitat on és l'immoble o, si són diners o altres béns, on viu qui la rep. La comparativa posa al costat les normes dels 21 territoris amb un mateix exemple; després, les calculadores de quatre comunitats, amb els articles de la seva llei:",
+      es: "Cada comunidad tiene sus reducciones, tarifa y bonificaciones. Una herencia paga con las de la comunidad donde la persona fallecida vivió más días de los últimos cinco años; una donación, con las de la comunidad donde está el inmueble o, si es dinero u otros bienes, donde vive quien la recibe. La comparativa pone lado a lado las normas de los 21 territorios con un mismo ejemplo; después, las calculadoras de cuatro comunidades, con los artículos de su ley:",
+      en: "Each region has its own reductions, scale and rebates. An inheritance pays under those of the region where the deceased lived the most days of the last five years; a gift, under those of the region where the property is or, for money and other assets, where the donee lives. The comparison sets the rules of all 21 territories side by side with one worked example; then the calculators for four regions, with the articles of each law:",
     },
     cards: [
+      {
+        key: "inheritance-tax-by-region",
+        calculator: true,
+        href: calc("inheritance-tax-by-region"),
+        title: { ca: "Impost de successions per comunitat: comparativa", es: "Impuesto de sucesiones por comunidad: comparativa", en: "Inheritance tax by region: comparison" },
+        answers: {
+          ca: "On es paga menys per una herència? Les reduccions, bonificacions i l'habitatge de cada comunitat, Ceuta, Melilla i els territoris forals, amb un mateix exemple calculat.",
+          es: "¿Dónde se paga menos por una herencia? Las reducciones, bonificaciones y la vivienda de cada comunidad, Ceuta, Melilla y los territorios forales, con un mismo ejemplo calculado.",
+          en: "Where do you pay least on an inheritance? Each region's reductions, rebates and home relief, Ceuta, Melilla and the foral territories, with one worked example.",
+        },
+        basis: {
+          ca: "Lleis de tributs cedits de cada comunitat (textos consolidats del BOE i butlletins), normes forals d'Àlaba, Bizkaia, Gipuzkoa i Navarra, i Llei 29/1987 (art. 23 bis per a Ceuta i Melilla).",
+          es: "Leyes de tributos cedidos de cada comunidad (textos consolidados del BOE y boletines), normas forales de Álava, Bizkaia, Gipuzkoa y Navarra, y Ley 29/1987 (art. 23 bis para Ceuta y Melilla).",
+          en: "Each region's ceded-taxes law (BOE consolidated texts and regional bulletins), the foral norms of Álava, Bizkaia, Gipuzkoa and Navarre, and Law 29/1987 (art. 23 bis for Ceuta and Melilla).",
+        },
+        scope: "spain",
+        checked: INHERITANCE_COMPARE_AS_OF,
+      },
       {
         key: "inheritance-tax",
         calculator: true,

@@ -36,6 +36,17 @@ export function InheritanceByRegion({ current, locale }: { current: CalculatorId
           </li>
         ))}
       </ul>
+      <p>
+        <Link href={calcPath("inheritance-tax-by-region", locale)}>
+          {
+            {
+              ca: "Les normes dels 21 territoris, una al costat de l'altra i amb el mateix exemple: l'impost de successions per comunitat",
+              es: "Las normas de los 21 territorios, una al lado de otra y con el mismo ejemplo: el impuesto de sucesiones por comunidad",
+              en: "All 21 territories' rules side by side, with one worked example: inheritance tax by region",
+            }[locale]
+          }
+        </Link>
+      </p>
       {gift ? (
         <p>
           <Link href={calcPath(gift.id, locale)}>

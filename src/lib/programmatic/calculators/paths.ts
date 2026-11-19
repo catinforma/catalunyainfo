@@ -54,6 +54,8 @@ export const CALCULATORS = [
   { id: "inheritance-tax-madrid", slugs: { es: "impuesto-sucesiones-madrid", ca: "impost-successions-madrid", en: "madrid-inheritance-tax" } },
   { id: "inheritance-tax-andalucia", slugs: { es: "impuesto-sucesiones-andalucia", ca: "impost-successions-andalusia", en: "andalusia-inheritance-tax" } },
   { id: "inheritance-tax-valencia", slugs: { es: "impuesto-sucesiones-comunidad-valenciana", ca: "impost-successions-comunitat-valenciana", en: "valencia-inheritance-tax" } },
+  // The comparison of every territory's inheritance and gift tax rules (15 common-regime communities, Ceuta, Melilla, the three Basque territories and Navarra), with one worked example (lib/programmatic/inheritance-compare).
+  { id: "inheritance-tax-by-region", slugs: { es: "impuesto-sucesiones-por-comunidad", ca: "impost-successions-per-comunitat", en: "spain-inheritance-tax-by-region" } },
   // Gift tax (impuesto de donaciones) in the same four communities (lib/programmatic/gift-tax): Catalonia (Codi tributari arts. 632-20, 633-1 to 633-3), Madrid (DL 1/2010 arts. 22 bis to 25), Andalucía (Ley 5/2021 arts. 32 to 40), Comunitat Valenciana (Ley 13/1997 arts. 10 bis to 12 ter).
   { id: "gift-tax-catalonia", slugs: { es: "impuesto-donaciones-cataluna", ca: "impost-donacions-catalunya", en: "catalonia-gift-tax" } },
   { id: "gift-tax-madrid", slugs: { es: "impuesto-donaciones-madrid", ca: "impost-donacions-madrid", en: "madrid-gift-tax" } },

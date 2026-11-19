@@ -52,6 +52,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "inheritance-tax-madrid": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-andalucia": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-valencia": ["widow-pension", "home-purchase-tax"],
+  // The comparison: the heir's other tax on the same home (plusvalía municipal), then the widow's pension when the spouse died.
+  "inheritance-tax-by-region": ["plusvalia", "widow-pension"],
   // A gift of money for a home: the purchase taxes, then the mortgage for the rest of the price.
   "gift-tax-catalonia": ["home-purchase-tax", "mortgage"],
   "gift-tax-madrid": ["home-purchase-tax", "mortgage"],

@@ -9231,3 +9231,65 @@ link: `/es/calculadoras/ /ca/calculadores/ /en/calculators/ /es/calculadoras/imp
 /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/`.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — "Impuesto de sucesiones por comunidad 2026: comparativa" of the 21 territories, es + ca + en (new page + CSV; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** "¿Dónde se paga menos impuesto de sucesiones?", "impuesto de sucesiones por comunidad 2026", "comparativa
+sucesiones comunidades": one authoritative comparison instead of 13 thin pages (house rule), and a linkable
+original-data asset with a CC BY 4.0 CSV (docs/MEDIA_PLAN.md, pillar E). Fact packs: research_notes/isd-por-comunidad/
+(gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/impuesto-sucesiones-por-comunidad/` (primary), `/ca/calculadores/impost-successions-per-comunitat/`,
+  `/en/calculators/spain-inheritance-tax-by-region/`; CSV `/data/impuesto-sucesiones-por-comunidad-2026.csv` (Link header:
+  canonical es page + licence). Registry id `inheritance-tax-by-region`; first card of the hub's `taxes` group, whose
+  intro now names the comparison; sitemap + hreflang (x-default en); llms.txt entry; site-search shortcut ("sucesiones por
+  comunidad", "comparativa sucesiones", "dónde se paga menos sucesiones", "successions per comunitat", "inheritance tax by
+  region"); next step: plusvalía municipal, widow's pension. Linked from the "other regions" block of the four inheritance
+  and four gift calculators (gifts link to `#donaciones`). No `calculator_use`: no inputs (sortable table only), excluded in
+  tests/analytics-events.test.ts like the IPC page.
+- Content: per territory (15 common-regime communities; Ceuta and Melilla under Ley 29/1987 with art. 23 bis — 99 % for
+  groups I-II, 50 % for the rest, not a flat 50 %; Álava NF 11/2005, Bizkaia NF 4/2015, Gipuzkoa NF 2/2022 — NF 3/1990 is
+  repealed — and Navarra DFLeg 250/2002, groups I-II basics) the group II reductions, the group I-II rebate, the
+  habitual-home reduction, siblings (group III), and parent→child gifts (benefit + formal requirement), each cell with
+  article, in-force date and source link; the law's words per cell in collapsible sections; a verification note for the
+  12 territories with an open point (texts not downloadable, ambiguous rules, announced 2027 changes). No cell is
+  "pendiente de verificar" today; the component and CSV support it.
+- Rules read 19 Nov 2026 by four research agents and checked: BOE consolidated texts (Aragón, Asturias, Baleares, Canarias,
+  Cantabria, Castilla-La Mancha, Castilla y León, Extremadura, Galicia, Murcia, La Rioja, Navarra), the amending 2024-2026
+  laws, the diputaciones' consolidated foral texts, the BOIB (Orden 13/2026) and the ACAT's gift page; the four built
+  communities reuse their calculators' quoted rules. Every quote is a mechanically checked substring of the downloaded
+  official text (scripts in research_notes/isd-por-comunidad/tools/).
+- Worked example (only child, 30, 300.000 € net incl. a 150.000 € home he did not live in, no prior wealth): 0 € in 12
+  territories (Andalucía, Aragón, Asturias, Baleares, Cantabria, Castilla-La Mancha, Castilla y León, Extremadura, Galicia,
+  Álava, Bizkaia, Gipuzkoa), 17,22 € Canarias, 59,55 € C. Valenciana, 233,34 € Madrid, 234,46 € Murcia, La Rioja, Ceuta and
+  Melilla, 1.000 € Navarra, 1.946,25 € Cataluña. The four built communities go through their own engines; the rest through
+  the quoted rules; tests/inheritance-compare.test.ts checks all 21 against independent hand calculations and that every
+  figure applied appears in the quotes.
+- YMYL: disclaimer under the lead and at the foot, links to the four communities' calculators and each agency;
+  `RULES_UNTIL` 2027-01-01 (tests/inheritance-compare.test.ts fails from then until the 21 texts are re-read).
+
+**Baseline (GSC 23 Oct–19 Nov 2026).** 0 impressions for any query containing "sucesion", "successions", "herencia" or
+"inheritance" (the four inheritance calculators were also built on 19 Nov and are not live yet).
+
+**Hypothesis.** Indexed within a week of IndexNow; ≥ 300 impressions across the three editions in the 28 days to the
+review, mostly "impuesto de sucesiones por comunidad", "dónde se paga menos impuesto de sucesiones", "comparativa impuesto
+sucesiones", at a top-20 average position; ≥ 1 referring domain citing the page or the CSV by 31 Jan 2027 (pillar E).
+Wrong if fewer than 100 impressions by 17 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, three URLs). Review **2026-12-17**: `snapshot.py page
+impuesto-sucesiones-por-comunidad 28`, `page impost-successions-per-comunitat 28`, `page spain-inheritance-tax-by-region
+28`; next-step clicks to and from the eight calculators; GSC Links report for the page and the CSV (31 Jan 2027).
+
+**Confounders.** The eight inheritance and gift calculators launch in the same deploy and link the page; any 2027 budget
+law (most apply from 1 January) forces a body update inside the window — log it here; Castilla y León's announced 2027
+cuts.
+
+**Deploy.** Deploy only (static routes, nothing in the database: no publish group). IndexNow prefixes:
+`/es/calculadoras/impuesto-sucesiones- /ca/calculadores/impost-successions- /en/calculators/spain-inheritance-tax-by-region/
+/es/calculadoras/impuesto-donaciones- /ca/calculadores/impost-donacions- /en/calculators/catalonia-inheritance-tax/
+/en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/
+/en/calculators/catalonia-gift-tax/ /en/calculators/madrid-gift-tax/ /en/calculators/andalusia-gift-tax/
+/en/calculators/valencia-gift-tax/` (the hubs `/es/calculadoras/ /ca/calculadores/ /en/calculators/` are prefixes of every
+calculator: ping them only together with the rest of the deploy's calculators).
+
+**Outcome:** _pending_

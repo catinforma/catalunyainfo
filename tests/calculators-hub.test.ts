@@ -75,6 +75,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("gift-tax-madrid"), { ca: "/ca/calculadores/impost-donacions-madrid/", es: "/es/calculadoras/impuesto-donaciones-madrid/", en: "/en/calculators/madrid-gift-tax/" });
   assert.deepEqual(calcEditions("gift-tax-andalucia"), { ca: "/ca/calculadores/impost-donacions-andalusia/", es: "/es/calculadoras/impuesto-donaciones-andalucia/", en: "/en/calculators/andalusia-gift-tax/" });
   assert.deepEqual(calcEditions("gift-tax-valencia"), { ca: "/ca/calculadores/impost-donacions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-donaciones-comunidad-valenciana/", en: "/en/calculators/valencia-gift-tax/" });
+  assert.deepEqual(calcEditions("inheritance-tax-by-region"), { ca: "/ca/calculadores/impost-successions-per-comunitat/", es: "/es/calculadoras/impuesto-sucesiones-por-comunidad/", en: "/en/calculators/spain-inheritance-tax-by-region/" });
   assert.deepEqual(calcEditions("home-purchase-costs"), { ca: "/ca/calculadores/despeses-compravenda-habitatge/", es: "/es/calculadoras/gastos-compraventa-vivienda/", en: "/en/calculators/spain-home-buying-costs/" });
 });
 
@@ -87,13 +88,16 @@ test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor,
 test("hub: the taxes group is 'inheritance and gift tax by community', Catalonia first, with a one-line intro in every language", () => {
   const taxes = HUB_GROUPS.find((g) => g.id === "taxes")!;
   assert.deepEqual(taxes.cards.map((c) => c.key), [
+    "inheritance-tax-by-region",
     "inheritance-tax", "inheritance-tax-madrid", "inheritance-tax-andalucia", "inheritance-tax-valencia",
     "gift-tax-catalonia", "gift-tax-madrid", "gift-tax-andalucia", "gift-tax-valencia",
   ]);
   assert.equal(taxes.title.es, "Impuesto de sucesiones y donaciones por comunidad");
   for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /cinc anys|cinco años|five years/);
   for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /donació|donación|gift/);
-  assert.deepEqual(taxes.cards.map((c) => c.scope), ["catalonia", "madrid", "andalucia", "valencia", "catalonia", "madrid", "andalucia", "valencia"]);
+  assert.deepEqual(taxes.cards.map((c) => c.scope), ["spain", "catalonia", "madrid", "andalucia", "valencia", "catalonia", "madrid", "andalucia", "valencia"]);
+  // 19 Nov 2026: the comparison of the 21 territories opens the group, and the intro says so.
+  for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /21 territoris|21 territorios|21 territories/);
   assert.match(read("src/components/programmatic/calculators/CalculatorsHub.tsx"), /group\.intro \? <p/);
 });
 

@@ -46,6 +46,8 @@ import { pvEditions } from "@/lib/programmatic/plusvalia/copy";
 import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
 import { regionEditions as isdRegionEditions } from "@/lib/programmatic/inheritance-tax/regional-copy";
 import { giftEditions } from "@/lib/programmatic/gift-tax/copy";
+import { extremes as cmpExtremes } from "@/lib/programmatic/inheritance-compare/copy";
+import { cmpEditions } from "@/lib/programmatic/inheritance-compare/paths";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
@@ -425,6 +427,11 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Valencia region gift tax calculator (impuesto sobre donaciones, one gift)",
       hubs: giftEditions("valencia"),
       description: "one gift's tax in the Comunitat Valenciana under Valencian Law 13/1997 (BOE consolidated text, arts. 10 bis and 12 bis as worded from 11 August 2026), step by step with each article quoted: kinship reductions on gifts (art. 10 bis.2.a: 100,000 euros for children and grandchildren aged 21 or over, the spouse, parents and grandparents; up to 156,000 under 21) and disability ones (240,000 / 120,000), with a public document (or digitally signed documents up to 4,000 euros in cash or a vehicle) and, for cash, the origin of the funds; the Valencian scale 7.65% to 34% and coefficients (arts. 11 and 12) with the excess rule; rebates (art. 12 bis: 99% for those relatives and for donees with a 65% or intellectual/mental 33% disability; 25% for blood siblings, nephews, nieces, uncles and aunts since 1 June 2026, 50% from 1 June 2027); earlier gifts accumulated (Law 29/1987 art. 30). Deadline one month (art. 12 ter), no extension, form 651 with the ATV's help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Inheritance tax by region in Spain: the 21 territories compared (impuesto de sucesiones por comunidad)",
+      hubs: cmpEditions(),
+      description: `the inheritance and gift tax rules of all 21 Spanish territories side by side: the 15 common-regime communities, Ceuta and Melilla (Law 29/1987 in full, with its art. 23 bis rebate: 99% for groups I and II, 50% for the rest) and the foral Álava, Bizkaia, Gipuzkoa and Navarre (their own norma foral or ley foral, basics for groups I and II). For each: the reductions for children aged 21 or more and the spouse, the rebate on the tax for groups I and II, the deceased's habitual home, siblings (group III), and a gift from a parent to an adult child (reduction or rebate, and the formal requirement: public document, origin of cash); every cell with its article, the date its wording applies from and the law's own words, read on 19 November 2026 in the BOE's consolidated texts, the regional bulletins and the diputaciones' consolidated foral texts; a cell not read with confidence says "pendiente de verificar". One worked example in every territory (a 30-year-old only child inheriting €300,000 net, €150,000 of it the deceased's home, no prior wealth), computed with the site's calculators for Catalonia, Madrid, Andalusia and Valencia and from the quoted rules elsewhere: €${cmpExtremes().lowPay} in ${cmpExtremes().low.length} of the ${cmpExtremes().total} territories, up to €${cmpExtremes().highPay.toFixed(2)} in ${cmpExtremes().high.map((t) => t.name.en).join(" and ")}. CSV download (CC BY 4.0). Which rules apply: the region where the deceased lived the most days of the last five years (Law 22/2009 arts. 28 and 32). Re-checked from 1 January 2027. Not tax advice.`,
     },
     {
       name: "Strikes in Catalonia today",

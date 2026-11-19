@@ -57,6 +57,7 @@ import { pvSitemapEntries } from "@/lib/programmatic/plusvalia/page";
 import { isdSitemapEntries } from "@/lib/programmatic/inheritance-tax/page";
 import { regionSitemapEntries as isdRegionSitemapEntries } from "@/lib/programmatic/inheritance-tax/regional-page";
 import { giftSitemapEntries } from "@/lib/programmatic/gift-tax/page";
+import { cmpSitemapEntries } from "@/lib/programmatic/inheritance-compare/paths";
 import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
 import { retirementSitemapEntries } from "@/lib/programmatic/retirement-age/page";
@@ -260,6 +261,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...isdRegionSitemapEntries(),
     // Gift tax in the same four communities (calculators family, group "taxes"), in es, ca and en.
     ...giftSitemapEntries(),
+    // Inheritance and gift tax compared across the 21 territories, one worked example (calculators family, group "taxes"), in es, ca and en.
+    ...cmpSitemapEntries(),
     // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
     ...lotteryTaxSitemapEntries(),
     ...bonoSocialSitemapEntries(),

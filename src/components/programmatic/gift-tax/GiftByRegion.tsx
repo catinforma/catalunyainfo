@@ -41,6 +41,17 @@ export function GiftByRegion({ current, locale }: { current: GiftRegionId; local
       <p>
         <Link href={calcPath(INHERITANCE_OF[current], locale)}>{inheritance}</Link>
       </p>
+      <p>
+        <Link href={`${calcPath("inheritance-tax-by-region", locale)}#donaciones`}>
+          {
+            {
+              ca: "La donació de pares a fills als 21 territoris: bonificació i requisit de forma de cadascun",
+              es: "La donación de padres a hijos en los 21 territorios: bonificación y requisito de forma de cada uno",
+              en: "Gifts from parents to children in all 21 territories: each one's rebate and formal requirement",
+            }[locale]
+          }
+        </Link>
+      </p>
     </section>
   );
 }

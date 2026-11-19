@@ -36,8 +36,8 @@ test("the tracking plan's events are in the contract, and the never-wired extern
 });
 
 test("every calculator in the registry with a tool reports calculator_use under its own id", () => {
-  // The IPC page is a reference table with no inputs.
-  const withTool = CALCULATOR_IDS.filter((id) => id !== "ipc");
+  // The IPC page and the inheritance tax comparison (one fixed worked example, a sortable table) have no inputs.
+  const withTool = CALCULATOR_IDS.filter((id) => id !== "ipc" && id !== "inheritance-tax-by-region");
   for (const id of withTool) assert.ok((CALCULATOR_USE_IDS as readonly string[]).includes(id), id);
 });
 
