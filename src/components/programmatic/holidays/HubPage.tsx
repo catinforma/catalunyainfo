@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
+import { hubPhoto } from "@/lib/content/place-photos";
 import { getMessages } from "@/lib/i18n";
 import { HUB_VISIBLE, displayName, hubCopy, workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { SNAPSHOT, byComarca, unlistedTownBySlug } from "@/lib/programmatic/holidays/data";
@@ -73,6 +75,11 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
           <DateQuestions locale={locale} />
         </section>
+
+        {/* A licensed photograph of a festa major (lib/content/place-photos.ts), after the dated questions; lazy-loaded. */}
+        <div className="ci-prose">
+          <PlacePhoto photo={hubPhoto("holidays", locale)} locale={locale} />
+        </div>
 
         {/* A jump list to each comarca's section. */}
         <p className="mt-10 text-sm">

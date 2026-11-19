@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { fairEventImages, fairPagePhoto, hubPhoto, photoImageObject, photoMetaImage } from "@/lib/content/place-photos";
 import { hubMeta, townDescription, townTitle } from "@/lib/programmatic/christmas-fairs/copy";
 import { familyLastChecked, type Town } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath, hubTranslations, townPath, townTranslations, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
@@ -25,7 +26,15 @@ export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: fa
 
 export function hubMetadata(locale: FairsLocale): Metadata {
   const meta = hubMeta(locale, hubCounts(), familyLastChecked());
-  return buildMetadata({ locale, path: fairsHubPath(locale), title: meta.title, description: meta.description, translations: hubTranslations() });
+  return buildMetadata({
+    locale,
+    path: fairsHubPath(locale),
+    title: meta.title,
+    description: meta.description,
+    translations: hubTranslations(),
+    // A licensed photograph of a Catalan Christmas fair instead of the site card (lib/content/place-photos.ts).
+    image: photoMetaImage(hubPhoto("fairs", locale)),
+  });
 }
 
 export function HubRoute({ locale }: { locale: FairsLocale }) {
@@ -35,7 +44,7 @@ export function HubRoute({ locale }: { locale: FairsLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), photoImageObject(hubPhoto("fairs", locale), fairsHubPath(locale))])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -48,6 +57,8 @@ export function townMetadata(locale: FairsLocale, town: Town): Metadata {
     title: townTitle(town, locale),
     description: townDescription(town, locale),
     translations: townTranslations(town),
+    // The fair's own licensed photograph, else the town's (lib/content/place-photos.ts); else the site card.
+    image: photoMetaImage(fairPagePhoto(town.slug, locale)),
   });
 }
 
@@ -58,7 +69,14 @@ export function TownRoute({ locale, town }: { locale: FairsLocale; town: Town })
       <main id="main">
         <TownPage town={town} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(townCrumbs(town, locale)), ...christmasFairEvents(town.fairs, townPath(locale, town.slug), locale)])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(townCrumbs(town, locale)),
+          // `image` only when the photograph shows the fair itself, never a picture of the town.
+          ...christmasFairEvents(town.fairs, townPath(locale, town.slug), locale, fairEventImages(town.slug)),
+          photoImageObject(fairPagePhoto(town.slug, locale), townPath(locale, town.slug)),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );

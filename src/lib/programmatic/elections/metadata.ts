@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { photoMetaImage, townPhoto } from "@/lib/content/place-photos";
 import type { Locale } from "@/lib/i18n/config";
 import { cardImage } from "@/lib/seo/cards";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -41,6 +42,8 @@ export function electionMetadata(locale: Locale, m: Municipality): Metadata {
     description: electionDescription(locale, m),
     translations: electionTranslations(m),
     type: "website",
+    // The town's licensed photograph, when it has one (lib/content/place-photos.ts); else the site card.
+    image: photoMetaImage(townPhoto(m.slug, locale)),
   });
 }
 

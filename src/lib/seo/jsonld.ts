@@ -431,6 +431,8 @@ export interface TownEventInput {
   url?: string | null;
   /** `townPlaceId` of the municipality, so the location is the same Place the town's other pages describe. */
   placeId?: string;
+  /** Absolute URLs of a licensed photograph of the event itself (its crops); never a picture of something else. */
+  image?: string[];
 }
 
 /**
@@ -460,6 +462,7 @@ export function townEventSchema(input: TownEventInput): Json {
       },
     },
     ...(input.url ? { url: input.url } : {}),
+    ...(input.image && input.image.length > 0 ? { image: input.image } : {}),
   };
 }
 

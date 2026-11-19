@@ -3,10 +3,12 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
+import { hubPhoto, photoImageObject, reservoirPhoto } from "@/lib/content/place-photos";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import {
@@ -157,6 +159,9 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
                   </dl>
                 </section>
 
+                {/* The reservoir's licensed photograph (lib/content/place-photos.ts), after today's reading and the facts; lazy-loaded. */}
+                <PlacePhoto photo={reservoirPhoto(r.slug, locale)} locale={locale} />
+
                 <h2 id="any">{w.year}</h2>
                 <Paragraphs items={trendParagraphs(r, locale)} />
                 <div className="ci-table-scroll mt-4">
@@ -283,7 +288,14 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirDataset(r, locale, server.live ? mine?.date : undefined), faqSchema([faqBlock])])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(crumbs),
+          reservoirDataset(r, locale, server.live ? mine?.date : undefined),
+          faqSchema([faqBlock]),
+          photoImageObject(reservoirPhoto(r.slug, locale), reservoirPath(locale, r.slug)),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );
@@ -336,6 +348,9 @@ export function ReservoirHubPage({ locale, server, totalPct }: { locale: Locale;
               </ul>
             </nav>
 
+            {/* A licensed photograph of a Catalan reservoir (lib/content/place-photos.ts), after the levels table; lazy-loaded. */}
+            <PlacePhoto photo={hubPhoto("reservoirs", locale)} locale={locale} />
+
             <h2 id="quins">{t.aboutTitle}</h2>
             {t.about.map((text) => (
               <p key={text}>{renderInline(text)}</p>
@@ -351,7 +366,13 @@ export function ReservoirHubPage({ locale, server, totalPct }: { locale: Locale;
           <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="reservoirs" variant="full" />
         </div>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirHubDataset(locale, server.live ? server.latestDate : undefined)])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(crumbs),
+          reservoirHubDataset(locale, server.live ? server.latestDate : undefined),
+          photoImageObject(hubPhoto("reservoirs", locale), reservoirHubPath(locale)),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );

@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { hubPhoto, photoImageObject, photoMetaImage, townPhoto } from "@/lib/content/place-photos";
 import { comarcaDescription, comarcaTitle, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
 import { comarcaBySlug, municipalityBySlug, nextYearFor, unlistedTownBySlug } from "@/lib/programmatic/holidays/data";
 import { unlistedCopy } from "@/lib/programmatic/holidays/unlisted-copy";
@@ -53,7 +54,15 @@ import { UnlistedTownPage, unlistedCrumbs } from "./UnlistedTownPage";
 
 export function hubMetadata(locale: MuniLocale): Metadata {
   const t = hubCopy(locale);
-  return buildMetadata({ locale, path: hubPath(locale), title: t.title, description: t.description, translations: hubTranslations() });
+  return buildMetadata({
+    locale,
+    path: hubPath(locale),
+    title: t.title,
+    description: t.description,
+    translations: hubTranslations(),
+    // A licensed photograph instead of the site card (lib/content/place-photos.ts).
+    image: photoMetaImage(hubPhoto("holidays", locale)),
+  });
 }
 
 export function HubRoute({ locale }: { locale: MuniLocale }) {
@@ -63,7 +72,7 @@ export function HubRoute({ locale }: { locale: MuniLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), holidayHubDataset(locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), holidayHubDataset(locale), photoImageObject(hubPhoto("holidays", locale), hubPath(locale))])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -81,6 +90,8 @@ export function municipalityMetadata(locale: MuniLocale, slug: string): Metadata
     // Names the next holiday as of the render date; the cron rebuilds the page after each holiday.
     description: municipalityDescription(m, locale, undefined, todayInCatalonia()),
     translations: municipalityTranslations(m.slug),
+    // The town's licensed photograph, when it has one (lib/content/place-photos.ts); else the site card.
+    image: photoMetaImage(townPhoto(m.slug, locale)),
   });
 }
 
@@ -105,6 +116,7 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
               items: municipalityFaq(m, locale, nextYearFor(m.slug), todayInCatalonia()).map(({ question, answer }) => ({ question, answer })),
             },
           ]),
+          photoImageObject(townPhoto(m.slug, locale), municipalityPath(locale, m.slug)),
         ])}
       />
       <SiteFooter locale={locale} />
@@ -148,6 +160,7 @@ export function englishTownMetadata(slug: string): Metadata {
     title: englishTownTitle(m),
     description: englishTownDescription(m),
     translations: municipalityTranslations(m.slug),
+    image: photoMetaImage(townPhoto(m.slug, "en")),
   });
 }
 
@@ -167,6 +180,7 @@ export function EnglishTownRoute({ slug }: { slug: string }) {
           englishTownDataset(m),
           // The questions the page prints (english-copy.ts englishTownFaq), as FAQPage.
           faqSchema([{ type: "faq", items: englishTownFaq(m, nextYearFor(m.slug)) }]),
+          photoImageObject(townPhoto(m.slug, "en"), municipalityPath("en", m.slug)),
         ])}
       />
       <SiteFooter locale="en" />
@@ -176,7 +190,14 @@ export function EnglishTownRoute({ slug }: { slug: string }) {
 
 export function englishHubMetadata(): Metadata {
   const t = englishHubCopy();
-  return buildMetadata({ locale: "en", path: hubPath("en"), title: t.title, description: t.description, translations: hubTranslations() });
+  return buildMetadata({
+    locale: "en",
+    path: hubPath("en"),
+    title: t.title,
+    description: t.description,
+    translations: hubTranslations(),
+    image: photoMetaImage(hubPhoto("holidays", "en")),
+  });
 }
 
 export function EnglishHubRoute() {
@@ -186,7 +207,7 @@ export function EnglishHubRoute() {
       <main id="main">
         <EnglishHubPage />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(englishHubCrumbs()), englishHubDataset()])} />
+      <JsonLd json={graph([breadcrumbSchema(englishHubCrumbs()), englishHubDataset(), photoImageObject(hubPhoto("holidays", "en"), hubPath("en"))])} />
       <SiteFooter locale="en" />
     </>
   );

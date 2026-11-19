@@ -628,6 +628,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "fira-avet-espinelves-avets",
+    "url": "/images/fira-avet-espinelves-avets.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoQAAwAA4BaJYwC7ACkgvBZDwAA+SEYbrZWhEN2cZ2G2iNNKMdr/D38Es7/YNEWWG+qiEm33EmvUajX7Wb9UYJbPF3gzAAA",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:2016_Fira_de_l%27Avet_d%27Espinelves_02.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "fira-castanya-viladrau-tardor",
     "url": "/images/fira-castanya-viladrau-tardor.webp",
     "width": 1672,
@@ -871,6 +881,216 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Oliver-Bonjoch",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Salo_de_Cent.jpg",
     "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-badalona-pont-del-petroli",
+    "url": "/images/municipi-badalona-pont-del-petroli.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoQAAwAA4BaJQBOgB08OX/WAAD3sINq86HW8zP0oLxJDHWVc6p00lCN400aJtUltoQAAA==",
+    "credit": "Isidro Jabato",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Platja_del_Pont_del_Petroli,_Badalona.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-canyelles-castell",
+    "url": "/images/municipi-canyelles-castell.webp",
+    "width": 1920,
+    "height": 1268,
+    "blurDataUrl": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQAQCdASoQAAsAA4BaJbACdAC2pyLlwAD+1zoPpomv8u0VvJzRyz6/xMj6ZmWefVuVfLwwXGtPBPzaXrCHPEXiOogPbpWEuIeOhhMrsBnBuvQT2wjVPNT03qTR+zMAAAA=",
+    "credit": "MARIA ROSA FERRE",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Castell_de_Canyelles_-_1.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "municipi-castelldefels-passeig-maritim",
+    "url": "/images/municipi-castelldefels-passeig-maritim.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAwAgCdASoQAAsAA4BaJagCdAEfvGw6XLe8AAD+1QZ9KQOph6IJ3m1qaEr7ocxrbBqhL1eCxmdZsPWJPi9MMck17Sqp9Vsv1pOYwAAA",
+    "credit": "kallerna",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Castelldefels_beach_promenade_5.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-el-prat-placa-vila-ajuntament",
+    "url": "/images/municipi-el-prat-placa-vila-ajuntament.webp",
+    "width": 1836,
+    "height": 1365,
+    "blurDataUrl": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACwAQCdASoQAAwAA4BaJbACdACTho0cAPakoQLSmpbhqXXaGmsKfg6dsA5SZslt0dXGMfTdIyZGCINrSLzR8SxdxUjFITIJfewH3iQcRY1ETD92UNcskigOB5e/zBQAAAA=",
+    "credit": "Zarateman",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:El_Prat_de_Llobregat_-_Pla%C3%A7a_de_la_Vila,_Ayuntamiento_3.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "municipi-hospitalet-casa-de-la-vila",
+    "url": "/images/municipi-hospitalet-casa-de-la-vila.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwAgCdASoQAAwAA4BaJQBdgMYJ4FNnp33wAAD+6D9e4nNqvwPRPYrYrLvDTK5BMGSVsSI+tRgLTRFUAGJe4SS+aCZYbe/Cz1XQ30flx41LkIf30elTtcrRCmmfe2EhG4elRgAA",
+    "credit": "Zarateman",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Hospitalet_de_Llobregat_-_Ayuntamiento_1.JPG",
+    "license": "CC0"
+  },
+  {
+    "key": "municipi-lleida-seu-vella-ciutat",
+    "url": "/images/municipi-lleida-seu-vella-ciutat.webp",
+    "width": 1920,
+    "height": 1218,
+    "blurDataUrl": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoQAAoAA4BaJQBOgCHZuwh5QAD+6EjH31frFP6NZd65J/rrMdrdHtDIYz2U8HoOoOLmj1a3R6GULmAAAAA=",
+    "credit": "Manuel Portero",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Seu_Vella_de_Lleida_03.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-lloret-de-mar-platja",
+    "url": "/images/municipi-lloret-de-mar-platja.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoQAAwAA4BaJYgCdADbU+SkYAD+U/jJj6JqFPFFmOn+ij8/ysLpSgJEPrHGVqu77mIKJvTSNBG65zFVY/p4hQAA",
+    "credit": "Xavigivax",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Platja_de_Lloret.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-manresa-pont-vell-seu",
+    "url": "/images/municipi-manresa-pont-vell-seu.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACwAQCdASoQAAwAA4BaJZgCdAEOy8hYAP7EsWZ6nN4Q8GeurUiypQcIsatsPTNnO0Rvw8YRAjzfbYYcbigDQAAA",
+    "credit": "Enrique Íñiguez Rodríguez (Qoan)",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Manresa._Pont_Vell_i_Seu_5.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-matadepera-cavall-bernat",
+    "url": "/images/municipi-matadepera-cavall-bernat.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAwAA4BaJbACdAEeYpkrPeAAAP7GBiGbqoExgnvM+I62Obac/ULUT2EqlQTrcSnyJUUYeSQSxAqeGV6fPVg/ITWOo5Y0/0/ohFaU7Nbo9iTG3LOeLWOQAAA=",
+    "credit": "Mgclape",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cavall_Bernat_(Matadepera).jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-mataro-ajuntament-la-riera",
+    "url": "/images/municipi-mataro-ajuntament-la-riera.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAABwAgCdASoQAAwAA4BaJZgCdAYuRoBU7jvPeWIAAP4Jr/121ISqEt7ChYkzO9/Iu6RxOqScJbAQWpmDieEJhNKm0nQ9mMZg8Cm9NCIwqzVqyvGtv78hYdqbTa2E/z/TyTcFkzYVW2//F3WV6UWGs0NTDKAAAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:533_Ajuntament_de_Matar%C3%B3,_la_Riera_48_-_el_Carrer%C3%B3.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-reus-placa-mercadal",
+    "url": "/images/municipi-reus-placa-mercadal.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJYgCdADMqmnb4yOAAP3fwAVdZ3A4ZofClZDLfPpMXczRJbL55bX365C0uhUYSr65iaWBtveoZB3FwJ/UOfBvtyZxEYAA",
+    "credit": "Jorge Franganillo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Reus_Pla%C3%A7a_del_Mercadal_(46055158955).jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "municipi-rubi-casa-de-la-vila",
+    "url": "/images/municipi-rubi-casa-de-la-vila.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAwAA4BaJQBOgCFwvJ7DTDAA/vYOA+LeMJgnUPKOc8F6YH7Wbl2Iyi68694u0FfIpaU6CHj79gJE/c9NOSjWPTIpaXBBO+4/pU4iahJAAA==",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:160_Ajuntament.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-salou-passeig-jaume-i",
+    "url": "/images/municipi-salou-passeig-jaume-i.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADQAQCdASoQAAwAA4BaJZgCdACJrl6zIAD+REl3T24cpXCtKSq7P1RYJlV/eBGITOPX+m6Bp1H7DcqQggtQ8O9tX8pUvveyf6Zof3uM2VXOfIfAkhwkqobU3p9x5QNIkvkTiH5bBgAAAA==",
+    "credit": "Txapisotegi",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Passeig_Jaume_I.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-sant-boi-casa-de-la-vila",
+    "url": "/images/municipi-sant-boi-casa-de-la-vila.webp",
+    "width": 1920,
+    "height": 1246,
+    "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADQAQCdASoQAAoAA4BaJbACdACl/PpbAAD9QmmqL3ZfaKm4CvXrP9tlw/RG5ZqGopYLWutQiL0I0KlJyJDSGvB0gEz4jlaJdi04WAWIt5EzmyxL9jPUYXeX+OAAAA==",
+    "credit": "MARIA ROSA FERRE ✿ from Vilafranca del penedes, Catalunya",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:WLM14ES_-_Casa_de_la_Vila,_Sant_boi_de_Llobregat,_Baix_Llobregat_-_MARIA_ROSA_FERRE.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "municipi-sant-celoni-placa-ajuntament",
+    "url": "/images/municipi-sant-celoni-placa-ajuntament.webp",
+    "width": 1920,
+    "height": 1328,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAsAA4BaJZQCdAENvhWIAAD+xgO3PWmM3YXqiL1+7/80YZQVFGWpechlEepxeX/1tBP6lHdzace7/lisOtJGHw4AAA==",
+    "credit": "Alberto-g-rovi",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Ayuntamiento_de_Sant_Celoni_(1).jpg",
+    "license": "CC BY 3.0"
+  },
+  {
+    "key": "municipi-santa-coloma-ajuntament",
+    "url": "/images/municipi-santa-coloma-ajuntament.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADQAQCdASoQAAwAA4BaJZACsACXZ6F0YAD+85TWk0cnG3vNa9eZJoiExhjIQ5CphJd964ikPpOoLINimrNbEFsLvEjB/u18DVTUpcCtrQAAAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:076_Ajuntament_de_Santa_Coloma_de_Gramenet.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "municipi-tarragona-placa-font-ajuntament",
+    "url": "/images/municipi-tarragona-placa-font-ajuntament.webp",
+    "width": 1920,
+    "height": 1285,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQAgCdASoQAAsAA4BaJZgCdADwWCvmYJMAAP7Bw8G+4ai5YZO9aqQsJtnjitugIlFdo1OHqtQATm9Tgq/N8GIYpGy5Mx4N4bwhznU/SqtoziB/YlMCjAAA",
+    "credit": "cisko66",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:TARRAGONA_,_Ajuntament_-_panoramio.jpg",
+    "license": "CC BY 3.0"
+  },
+  {
+    "key": "municipi-vic-placa-major",
+    "url": "/images/municipi-vic-placa-major.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAwAgCdASoQAAwAA4BaJQBOiP/wNuc/lMA0AAD7n3QyvDgTn09JiPOanqEaWfDzXvnAAnshLyIzM/SccTeX/+iszdLis0D9nAe2+Q8xcGmFeVws/ncjAAAA",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:191_Pla%C3%A7a_Major,_angle_nord-est.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-viladecans-can-modolell",
+    "url": "/images/municipi-viladecans-can-modolell.webp",
+    "width": 1920,
+    "height": 1457,
+    "blurDataUrl": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABQAgCdASoQAAwAA4BaJbACdDBMwZsaRt/XEcAA/on1a1Sh3BcOxjJXNvZ/1cqpCWQxyG/2pVaNQ+gcs2mf92VjO8mF7L8CmB1nzUc4hE3HnVL5c+Cl9nopuUd3nF0f9zcT7P3ROoNiaUXUXKbLsdgfFvaPws/XXlUMgAAA",
+    "credit": "Zarateman",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Viladecans_-_Can_Modolell_(Ayuntamiento_de_Viladecans)_12.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "municipi-vilanova-placa-de-la-vila",
+    "url": "/images/municipi-vilanova-placa-de-la-vila.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwAgCdASoQAAwAA4BaJYgCdAEWMl9UE9hIAAD+297Ec62CheutQrlbUXQ8zmaUdaaVpX4RAt9Z0lNjAa1MhNZKezsbQMqRNKBFJzLJ9mwWWJzxA5LueYcyHAA=",
+    "credit": "Cornelia Bohl Smolders",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pla%C3%A7a_de_la_Vila_de_Vilanova_i_la_Geltr%C3%BA.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipi-vilassar-de-mar-vista",
+    "url": "/images/municipi-vilassar-de-mar-vista.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADwAQCdASoQAAwAA4BaJZQCdAEOzZGlqoAA/rB8m8R47y4xhSrkipTfjPqUKm0UJAGBRqpFuQns241T0O6AAA==",
+    "credit": "Pere López Brosa",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Vilassar_de_Mar_-_P1130894.jpg",
+    "license": "CC BY-SA 4.0"
   },
   {
     "key": "museus-palau-nacional-mnac",

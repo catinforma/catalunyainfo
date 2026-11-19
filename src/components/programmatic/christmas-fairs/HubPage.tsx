@@ -2,9 +2,11 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
+import { hubPhoto } from "@/lib/content/place-photos";
 import { christmasNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import { hubLead, hubMeta, labels, statusLabels, townName } from "@/lib/programmatic/christmas-fairs/copy";
@@ -76,6 +78,9 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
 
           <h2 id="per-data">{t.byDate}</h2>
           <FairRows fairs={FAIRS} locale={locale} />
+
+          {/* A licensed photograph of a Catalan Christmas fair (lib/content/place-photos.ts), after the dated list; lazy-loaded. */}
+          <PlacePhoto photo={hubPhoto("fairs", locale)} locale={locale} />
         </div>
 
         {groups.map((g) =>

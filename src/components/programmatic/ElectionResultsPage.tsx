@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { NextStep } from "@/components/NextStep";
+import { PlacePhoto } from "@/components/PlacePhoto";
 import { TownHub } from "@/components/TownHub";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -14,6 +15,7 @@ import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
+import { photoImageObject, townPhoto } from "@/lib/content/place-photos";
 import { electionTownNextStep } from "@/lib/engagement/next-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
@@ -136,6 +138,10 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                 {model.mesa ? <MesaSection mesa={model.mesa} headingId={id(model.mesa.title)} /> : null}
 
                 <PollingSection polling={model.polling} headingId={id(model.polling.title)} />
+
+                {/* The town's licensed photograph (lib/content/place-photos.ts): after the 29N slot, the mesa and
+                    the polling places, so the election-day answers keep their place; lazy-loaded. */}
+                <PlacePhoto photo={townPhoto(municipality.slug, locale)} locale={locale} />
 
                 <h2 id={id(model.municipal.title)}>{model.municipal.title}</h2>
                 <p>{model.municipal.summary}</p>
@@ -262,7 +268,14 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), electionDataset(municipality, locale, model.h1), faqSchema([faqBlock])])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(crumbs),
+          electionDataset(municipality, locale, model.h1),
+          faqSchema([faqBlock]),
+          photoImageObject(townPhoto(municipality.slug, locale), electionPath(locale, municipality.slug)),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );
