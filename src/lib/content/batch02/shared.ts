@@ -116,6 +116,9 @@ export type B2Key =
   // 17 Nov 2026: is there a strike on Thursday 19 / Friday 20 November? (strike-days-1920n.ts).
   | "strike19n"
   | "strike20n"
+  // 19 Nov 2026: is there a strike on Monday 23 / Thursday 26 November? (strike-days-2326n.ts).
+  | "strike23n"
+  | "strike26n"
   // 13 Nov 2026: evergreen flagship guides (research_notes/evergreen-demand-nov2026.md).
   // How to register on the padró (padro.ts).
   | "padro"
@@ -481,6 +484,17 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-20-novembre",
     es: "guias/huelga-20-noviembre",
     en: "guides/spain-strike-20-november",
+  },
+  // 19 Nov 2026: the next two strike days ("huelga 23 noviembre 2026", "huelga 26 noviembre 2026").
+  strike23n: {
+    ca: "guies/vaga-23-novembre",
+    es: "guias/huelga-23-noviembre",
+    en: "guides/spain-strike-23-november",
+  },
+  strike26n: {
+    ca: "guies/vaga-26-novembre",
+    es: "guias/huelga-26-noviembre",
+    en: "guides/spain-strike-26-november",
   },
   // No year in the path: the campaign comes back every November.
   granRecapte: {
@@ -948,6 +962,17 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga del 20 de novembre de 2026: estudiants, metges i Madrid",
     es: "Huelga del 20 de noviembre de 2026: estudiantes, médicos y Madrid",
     en: "Strikes on 20 November 2026 in Spain: students, doctors, Madrid",
+  },
+  // 19 Nov 2026: link labels in the searched words ("huelga 23 noviembre 2026", "huelga renfe 23 noviembre", "vaga 26 novembre").
+  strike23n: {
+    ca: "Vaga del 23 de novembre de 2026: Renfe i Rodalies (SEMAF), Correus i metges",
+    es: "Huelga del 23 de noviembre de 2026: Renfe y Rodalies (SEMAF), Correos y médicos",
+    en: "Strikes on 23 November 2026 in Spain: Renfe and Rodalies drivers, Correos, doctors",
+  },
+  strike26n: {
+    ca: "Vaga del 26 de novembre de 2026: educació a Catalunya, metges i Madrid",
+    es: "Huelga del 26 de noviembre de 2026: educación en Cataluña, médicos y Madrid",
+    en: "Strikes on 26 November 2026: Catalonia schools, doctors, Madrid",
   },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",

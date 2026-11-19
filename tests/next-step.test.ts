@@ -147,13 +147,15 @@ test("strikes: no dated link points to a day already past, and the hubs stand in
   assert.deepEqual(strikeNextStep("spain", "en", b2href("railStrike17n", "en"), "2026-12-15", "2026-12-15")!.links.map((l) => l.href), [b2href("strikesSpain", "en")]);
 });
 
-test("strikes: a strike page whose title has no day says the day under the link", () => {
-  const renfe = nextStrikePages("catalonia", "2026-11-21", "2026-11-21").find((p) => p.key === "strikeRenfe");
-  if (!renfe) return; // the 23N call is gone from strikes.ts: nothing to check
-  const step = strikeNextStep("catalonia", "es", b2href("strikes", "es"), "2026-11-21", "2026-11-21")!;
-  const link = step.links.find((l) => l.href === b2href("strikeRenfe", "es"))!;
-  assert.equal(link.label, B2_TITLES.strikeRenfe.es);
-  assert.match(link.note ?? "", /^Lunes 23 de noviembre$/);
+test("strikes: the day pages win over the guides on their day, and their titles carry the day (no note)", () => {
+  // 19 Nov 2026: the 23rd and the 26th have day pages of their own (strike-days-2326n.ts), which win over the Renfe and education
+  // guides on their day; their titles carry the day, so no note.
+  const pages = nextStrikePages("catalonia", "2026-11-21", "2026-11-21");
+  assert.ok(!pages.some((p) => p.key === "strikeRenfe" || p.key === "strikeEducation"), "a guide beside the day page of its own day");
+  const later = strikeNextStep("catalonia", "es", b2href("strikes", "es"), "2026-11-21", "2026-11-21")!;
+  const day23 = later.links.find((l) => l.href === b2href("strike23n", "es"))!;
+  assert.equal(day23.label, B2_TITLES.strike23n.es);
+  assert.equal(day23.note, undefined);
   // The 19N/20N titles carry their day: no note.
   const early = strikeNextStep("catalonia", "es", b2href("strikes", "es"), "2026-11-18", "2026-11-18")!;
   assert.ok(early.links.every((l) => !l.note));

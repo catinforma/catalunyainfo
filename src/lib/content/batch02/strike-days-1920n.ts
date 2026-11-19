@@ -172,7 +172,8 @@ export const STUDENT_DEMOS_20N: readonly { city: string; place: string }[] = [
   { city: "Teruel", place: "Plaza del Torico" },
 ];
 
-const MADRID_SOURCES: B2Source[] = [
+/** Exported for the 23 and 26 Nov pages (strike-days-2326n.ts), which carry the same Madrid section. */
+export const MADRID_SOURCES: B2Source[] = [
   { name: "La escuela pública madrileña abrirá en septiembre con una huelga indefinida (nota de prensa, 27 de mayo de 2026)", url: DAY_URLS.ccooMadridCall, publisher: "Federación de Educación de CCOO Madrid" },
   { name: "CCOO llevará a los tribunales el endurecimiento de los servicios mínimos (11 de noviembre de 2026)", url: DAY_URLS.ccooMadridMs, publisher: "Federación de Educación de CCOO Madrid" },
   { name: "CSIF Educación Madrid convoca huelga indefinida a partir del 14 de octubre", url: DAY_URLS.csifMadrid, publisher: "CSIF Educación Madrid" },
@@ -651,7 +652,8 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     heading(2, t.notHeading, t.notId),
     ...paras(`${d.notCalled} ${t.checked(checked)}`),
     ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
-    list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale])),
+    // 19 Nov 2026: and the next strike day with a page of its own, the 23rd (SEMAF at Renfe; strike-days-2326n.ts).
+    list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale]), b2link("strike23n", locale, B2_TITLES.strike23n[locale])),
     ...(phase === "after" ? [] : [faq(faqItems)]),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
     ...b2Related(["strikesSpain", "strikes", "strikeRenfe"], locale),

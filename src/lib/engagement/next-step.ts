@@ -1,8 +1,7 @@
 import { dayDate } from "@/lib/content/batch02/festive";
 import { POSTAL_29N } from "@/lib/content/batch02/postal-vote";
 import { B2_PATHS, b2href, type B2Key } from "@/lib/content/batch02/shared";
-import { STRIKE_DAY, type StrikeDayKey } from "@/lib/content/batch02/strike-days-1920n";
-import { STRIKES_AS_OF, guideEntry, isUpcoming } from "@/lib/content/batch02/strikes";
+import { STRIKES_AS_OF, STRIKE_DAY_PAGES, guideEntry, isUpcoming } from "@/lib/content/batch02/strikes";
 import { STRIKES_SPAIN_AS_OF } from "@/lib/content/batch02/strikes-spain-data";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
@@ -81,11 +80,10 @@ export function rodaliesStep(locale: Locale): NextStepLink {
 /** Catalonia's strike pages: the hub, the 11N page, the Renfe and education guides. */
 export const CATALONIA_STRIKE_KEYS: readonly B2Key[] = ["strikes", "strike11n", "strikeRenfe", "strikeEducation"];
 /** The Spain-wide strike pages (and, by entry key, the 11N Spain and city pages). */
-export const SPAIN_STRIKE_KEYS: readonly B2Key[] = ["strikesSpain", "railStrike17n", "strike19n", "strike20n"];
+export const SPAIN_STRIKE_KEYS: readonly B2Key[] = ["strikesSpain", "railStrike17n", "strike19n", "strike20n", "strike23n", "strike26n"];
 /** `entries.key` of the 11N Spain page and the 13 city pages ("…-spain", "…-sevilla"…). */
 export const STRIKE_11N_SPAIN_KEY_PREFIX = "guide-general-strike-11-november-2026-";
 
-const STRIKE_DAY_KEYS: readonly StrikeDayKey[] = ["strike19n", "strike20n"];
 /** Catalonia's dated guides that follow their strike entry in strikes.ts. */
 const CATALONIA_DATED_GUIDES: readonly B2Key[] = ["strikeRenfe", "strikeEducation"];
 
@@ -95,15 +93,16 @@ interface DatedStrikePage {
 }
 
 /**
- * The next strike pages with a day, in date order, one page per day: the 19
- * and 20 November day pages (STRIKES_SPAIN_AS_OF, as those pages read it)
+ * The next strike pages with a day, in date order, one page per day: the 19,
+ * 20, 23 and 26 November day pages (STRIKES_SPAIN_AS_OF, as those pages read it)
  * and, for Catalonia, the Renfe and education guides on the next day of
  * action of the strike they cover (STRIKES_AS_OF, guideEntry). The strike day
  * itself still counts. On a day with both, the day page wins: it lists every
  * strike of that day.
  */
 export function nextStrikePages(scope: "catalonia" | "spain", asOf: string = STRIKES_AS_OF, spainAsOf: string = STRIKES_SPAIN_AS_OF): DatedStrikePage[] {
-  const days: DatedStrikePage[] = STRIKE_DAY_KEYS.filter((key) => spainAsOf <= STRIKE_DAY[key]).map((key) => ({ key, date: STRIKE_DAY[key] }));
+  // 19 Nov 2026: every one-day page (19, 20, 23 and 26 Nov), from the list both hubs link them from.
+  const days: DatedStrikePage[] = STRIKE_DAY_PAGES.filter((page) => spainAsOf <= page.day).map((page) => ({ key: page.key, date: page.day }));
   if (scope === "spain") return days;
   const guides = CATALONIA_DATED_GUIDES.flatMap((key): DatedStrikePage[] => {
     const entry = guideEntry(key, asOf);
