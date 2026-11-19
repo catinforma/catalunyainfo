@@ -91,7 +91,8 @@ const PRESS_HOSTS =
 
 /** Hosts whose pages are an official record: the state gazette and the Ministry of Transport. */
 // 17 Nov 2026: and the Generalitat (treball.gencat.cat lists its minimum-services orders; the regional doctors' strike has no BOE or Ministry record).
-const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es|gencat\.cat)$/;
+// 19 Nov 2026: and the Basque Government (euskadi.eus lists its orders; the Bizkaia and Gipuzkoa care-home strikes have no other record).
+const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es|gencat\.cat|euskadi\.eus)$/;
 
 const texts = (value: L | undefined) => (value ? LOCALES.map((locale) => value[locale]) : []);
 const strikeTexts = (strike: SpainStrike) => [strike.scope, strike.hours, strike.calledBy, strike.basis, strike.minimumServices.text].flatMap(texts);

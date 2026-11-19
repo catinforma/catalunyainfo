@@ -618,8 +618,11 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   assert.equal(schools.minimumServices.status, "pending");
   // Re-checked 2 Nov 2026: the joint press release of 28 Oct (PDF on cgtensenyament.cat) lists the 26 November strike too.
   // 17 Nov 2026: plus USTEC·STEs' unitary 21N manifesto (the march's time and place).
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs"]);
+  // 19 Nov 2026: plus CGT Ensenyament's 26N call of 18 Nov and the strike notice it links (hours and who is called out).
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs"]);
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.cgtEns26Notice));
+  for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /00:00 hores i fins les 24:00 hores/, `${locale}: the notice's own hours`);
   assert.match(STRIKE_URLS.edu26Joint, /^https:\/\/www\.cgtensenyament\.cat\/.+\.pdf$/);
   assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");
   for (const locale of LOCALES) {

@@ -126,8 +126,9 @@ test("the first line answers the question, in the tense of the as-of date", () =
 
 test("the day's strikes come from the Spain entries and every one is named and has its section", () => {
   // 18 Nov 2026: SCF called off the 19th at Adif (SCFCOM 38), so the rail entry is no longer on that day.
-  assert.deepEqual(spainStrikesOnDay("strike19n").map((s) => s.id).sort(), ["huelga-limpieza-bizkaia-2026-11-17", "huelga-medicos-smu-2026-11-16"]);
-  assert.deepEqual(spainStrikesOnDay("strike20n").map((s) => s.id).sort(), ["huelga-estudiantil-2026-11-20", "huelga-limpieza-bizkaia-2026-11-17", "huelga-medicos-smu-2026-11-16"]);
+  // 19 Nov 2026: the Basque Government's orders of 17 Nov add Bizkaia's care homes (19th) and Gipuzkoa's private care homes (20th).
+  assert.deepEqual(spainStrikesOnDay("strike19n").map((s) => s.id).sort(), ["huelga-limpieza-bizkaia-2026-11-17", "huelga-medicos-smu-2026-11-16", "huelga-residencias-bizkaia-2026-11-19"]);
+  assert.deepEqual(spainStrikesOnDay("strike20n").map((s) => s.id).sort(), ["huelga-estudiantil-2026-11-20", "huelga-limpieza-bizkaia-2026-11-17", "huelga-medicos-smu-2026-11-16", "huelga-residencias-gipuzkoa-2026-11-20"]);
   for (const id of Object.values(STRIKE_DAY_IDS)) assert.ok(SPAIN_STRIKES.some((s) => s.id === id), id);
   for (const key of KEYS) {
     for (const locale of LOCALES) {
@@ -172,11 +173,13 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
   assert.equal(smu.dates[0], "2026-11-16");
   assert.equal(smu.dates.at(-1), "2026-11-27");
   assert.equal(smu.dates.length, 12);
-  assert.equal(SMU_MARCHES_19N.length, 20);
+  // 19 Nov 2026: the SMU's page no longer lists Zaragoza (20 → 19).
+  assert.equal(SMU_MARCHES_19N.length, 19);
+  assert.ok(!SMU_MARCHES_19N.some((m) => m.city === "Zaragoza"));
   assert.ok(SMU_MARCHES_19N.some((m) => m.city === "Barcelona" && m.start === "Plaça de les Drassanes"));
   for (const locale of LOCALES) {
     const tables = STRIKE_19N_GUIDE.editions[locale].blocks.filter((b) => b.type === "table") as unknown as { rows: string[][] }[];
-    assert.equal(tables[0]?.rows.length, 20, locale);
+    assert.equal(tables[0]?.rows.length, SMU_MARCHES_19N.length, locale);
     // 17 Nov 2026: the 20th has its own table, the students' mobilisations at 12:00 (Sindicato de Estudiantes' page), not the doctors' marches.
     const tables20 = STRIKE_20N_GUIDE.editions[locale].blocks.filter((b) => b.type === "table") as unknown as { caption?: string; rows: string[][] }[];
     assert.equal(tables20.length, 1, locale);
@@ -184,7 +187,9 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
     assert.match(tables20[0]?.caption ?? "", /Sindicato de Estudiantes/, locale);
     assert.ok(!tables20[0]?.rows.some((row) => row[1] === "Plaça de les Drassanes"), `${locale}: the doctors' marches are the 19th's`);
   }
-  assert.equal(STUDENT_DEMOS_20N.length, 24);
+  // 19 Nov 2026: the students' page adds Donostia, Zamora, Zaragoza and Teruel (24 → 28).
+  assert.equal(STUDENT_DEMOS_20N.length, 28);
+  assert.ok(STUDENT_DEMOS_20N.some((d) => d.city === "Teruel" && d.place === "Plaza del Torico"));
   assert.ok(STUDENT_DEMOS_20N.some((d) => d.city === "Barcelona" && d.place === "Plaça Universitat"));
   assert.ok(STUDENT_DEMOS_20N.some((d) => d.city === "Madrid" && d.place === "Sol"));
   // Catalonia on the 19th: both doctors' strikes (18 Nov 2026: the rail strike's 19th was called off).
