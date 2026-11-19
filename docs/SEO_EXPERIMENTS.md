@@ -8620,3 +8620,7 @@ touching the IPREM would change the page the day it is read.
 `/ca/calculadores/salari-minim-2027/`, `/en/calculators/spain-minimum-wage-2027/` and the three calculators hubs.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — Barcelona weather by month: month H3s in the query's words applied (docs/patches/weather-month-h3-19nov.patch; group `climate`)
+
+Applied as planned in the 13 Nov entry and confirmed by the 18 Nov check (title kept: 0.3 → 0.4 % CTR at 7.3 → 8.6). Body only: each month's H3 reads "Barcelona weather in January" / "El tiempo en Barcelona en enero" / "El temps a Barcelona al gener"; the old anchor ids are kept. No new figures (AEMET 0076). Title not before 9 Dec. **Review 26 Nov and 3 Dec**: `snapshot.py page barcelona-weather-by-month 7` — month queries ("barcelona weather january/august/by month") at ≤ 6 is the target; revert if the page loses > 1.5 positions on the month queries with no CTR gain.
