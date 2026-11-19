@@ -186,6 +186,8 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   // Before "paro": "subsidio de paro" answers with the subsidy first.
   { keys: ["subsidio", "subsidi", "subsidio desempleo", "subsidi atur", "subsidio de paro", "unemployment subsidy"], id: "unemployment-subsidy", label: { ca: "Subsidi per desocupació", es: "Subsidio por desempleo", en: "Unemployment subsidy (subsidio)" } },
   { keys: ["atur", "paro", "prestacio", "prestacion"], id: "unemployment", label: { ca: "Calculadora de l'atur", es: "Calculadora del paro", en: "Unemployment benefit calculator" } },
+  // Before "jubilacion" and "pension": "pensión no contributiva de jubilación" answers with the PNC first.
+  { keys: ["no contributiva", "no contributivas", "no contributives", "pnc", "non contributory", "noncontributory"], id: "non-contributory-pension", label: { ca: "Pensió no contributiva: requisits i quant es cobra", es: "Pensión no contributiva: requisitos y cuánto se cobra", en: "Non-contributory pension: who qualifies and how much" } },
   { keys: ["jubilacion", "jubilacio", "jubilarme", "jubilar me", "edad de jubilacion", "edat de jubilacio", "retirement", "retire"], id: "retirement-age", label: { ca: "Edat de jubilació: quan et pots jubilar", es: "Edad de jubilación: cuándo te puedes jubilar", en: "Retirement age: when you can retire" } },
   // Before "pension": "pensión de viudedad" answers with the widow's pension first.
   { keys: ["viudedad", "viuda", "viudo", "viduitat", "vidua", "vidu", "widow", "widows", "widower"], id: "widow-pension", label: { ca: "Pensió de viduïtat: requisits i quant es cobra", es: "Pensión de viudedad: requisitos y cuánto se cobra", en: "Widow's pension: requirements and amount" } },

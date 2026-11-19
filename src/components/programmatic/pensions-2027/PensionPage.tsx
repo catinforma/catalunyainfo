@@ -510,6 +510,10 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <p className="text-sm">
                 <A href={OFFICIAL_LINKS.imsersoPnc}>IMSERSO · {L(locale, { es: "pensiones no contributivas", ca: "pensions no contributives", en: "non-contributory pensions" })}</A>
               </p>
+              <p>
+                {L(locale, { es: "¿Tienes derecho a la no contributiva?", ca: "Tens dret a la no contributiva?", en: "Do you qualify for the non-contributory pension?" })}{" "}
+                <Link href={calcPath("non-contributory-pension", locale)}>{L(locale, { es: "Calcula la pensión no contributiva y el límite de ingresos de tu hogar", ca: "Calcula la pensió no contributiva i el límit d'ingressos de la llar", en: "Work out the non-contributory pension and your household's income limit" })}</Link>.
+              </p>
 
               <h2 id="cobro">{h.pay}</h2>
               <p>

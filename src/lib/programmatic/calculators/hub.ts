@@ -20,6 +20,7 @@ import { SUBSIDY_RULES_AS_OF } from "@/lib/programmatic/unemployment-subsidy/rul
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { RULES_AS_OF as RETIREMENT_AGE_AS_OF } from "@/lib/programmatic/retirement-age/rules";
 import { RULES_AS_OF as WIDOW_PENSION_AS_OF } from "@/lib/programmatic/widow-pension/rules";
+import { RULES_AS_OF as NC_PENSION_AS_OF } from "@/lib/programmatic/non-contributory-pension/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { IPREM_RULES_AS_OF, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -303,6 +304,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: WIDOW_PENSION_AS_OF,
+      },
+      {
+        key: "non-contributory-pension",
+        calculator: true,
+        href: calc("non-contributory-pension"),
+        title: { ca: "Pensió no contributiva", es: "Pensión no contributiva", en: "Non-contributory pension" },
+        answers: {
+          ca: "Tens dret a la pensió no contributiva de jubilació o d'incapacitat amb els ingressos de la teva llar, i quant cobraràs el 2026?",
+          es: "¿Tienes derecho a la pensión no contributiva de jubilación o de incapacidad con los ingresos de tu hogar, y cuánto cobrarás en 2026?",
+          en: "Whether you qualify for the non-contributory retirement or invalidity pension on your household's income, and how much in 2026.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, arts. 363 a 372; Reial decret 241/2026, art. 21; Reial decret 1191/2012.",
+          es: "Ley General de la Seguridad Social, arts. 363 a 372; Real Decreto 241/2026, art. 21; Real Decreto 1191/2012.",
+          en: "General Social Security Act, arts. 363 to 372; Royal Decree 241/2026, art. 21; Royal Decree 1191/2012.",
+        },
+        scope: "spain",
+        checked: NC_PENSION_AS_OF,
       },
       {
         key: "pay-dates",

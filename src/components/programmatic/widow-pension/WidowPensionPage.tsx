@@ -752,6 +752,9 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
                 <li>
                   <Link href={pensionPath(locale)}>{links.pension}</Link>
                 </li>
+                <li>
+                  <Link href={calcPath("non-contributory-pension", locale)}>{L(locale, { es: "Pensión no contributiva: requisitos y cuánto se cobra", ca: "Pensió no contributiva: requisits i quant es cobra", en: "Spain non-contributory pension: rules and amount" })}</Link>
+                </li>
               </ul>
               <p className="text-sm text-[var(--color-muted)]">
                 {disclaimer} <A href={SOURCES.ssWidow.url}>{procedureLink}</A>.

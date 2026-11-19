@@ -86,6 +86,7 @@ export const CALCULATOR_USE_IDS = [
   "pensions-2027",
   "retirement-age",
   "widow-pension",
+  "non-contributory-pension",
   "working-days",
   "smi-2027",
   "iprem",

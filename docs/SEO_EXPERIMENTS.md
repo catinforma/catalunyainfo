@@ -8890,3 +8890,72 @@ hub and Christmas checker on 22 Dec; Reyes-day news traffic on 6 Jan.
 /es/calculadoras/premios-loteria/ /ca/calculadores/premis-loteria/ /en/calculators/spain-lottery-prize-tax/`.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-19 — "Pensión no contributiva: requisitos y cuánto se cobra", calculator es + ca + en (new page; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** Owner brief (19 Nov 2026): PNC de jubilación e incapacidad, Spain-wide demand and managed in Catalonia by the
+Generalitat. The site had the 2026 PNC only as two lines of the pensions-2027 page. Fact pack:
+research_notes/pension-no-contributiva-factpack.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/pension-no-contributiva/` (primary), `/ca/calculadores/pensio-no-contributiva/`,
+  `/en/calculators/spain-non-contributory-pension/` (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut
+  "no contributiva", "no contributives", "pnc", "non contributory", placed before "jubilacion" and "pension"; `calculator_use`
+  id `non-contributory-pension`). Registry `CALCULATORS` id `non-contributory-pension`; hub card in the `work` group right
+  after the widow's pension. Next step: pensions 2027, IPREM.
+- Inputs: type (retirement / invalidity), age, disability % and third-person need (≥ 75 %), years of legal residence, the
+  last 2 years in Spain, members of the unidad económica (1–12), a parent or child among them, beneficiaries in the unit,
+  own income, the other members' income, renting + the four rent-supplement conditions. Outputs: eligible or not with the
+  article of each unmet condition, the household limit, the amount in 14 payments with each step (shared amount, 35 % rule,
+  household cut, 25 % floor, +50 %), whether the 525 € rent supplement may apply.
+- Rules (read 19 Nov 2026, curl + grep; 53 quotes verbatim, checked by a scratchpad script against the downloaded BOE,
+  IMSERSO and Generalitat texts; 20 URLs answer 200, imserso.es only to a browser user agent): LGSS consolidated
+  (BOE-A-2015-11724, última actualización 11/11/2026) arts. 363 (363.1.d new paragraph by **Ley 4/2026, BOE-A-2026-20528,
+  in force 23/10/2026**: civil-liability compensation not counted), 364, 365, 366, 367.3, 368, 369, 370, 371, 372; RDL 3/2026
+  (BOE-A-2026-2548) art. 2.5 and RD 241/2026 (BOE-A-2026-6977) art. 21.1 (8.803,20 €) and 21.2 (525,00 €); RD 357/1991
+  (BOE-A-1991-7270) arts. 10.2, 14.1; RD 1191/2012 (BOE-A-2012-10476) art. 2 and DA única. Every derived figure equals the
+  IMSERSO "Guía resumen de las PNC 2026": 628,80 / 157,20 / 314,40 / 943,20 € a month; 3.081,12 € (35 %); household limits
+  2–10 members (14.965,44 … 64.263,36; × 2,5: 37.413,60 … 160.658,40; third person 22.448,16 … ); 2–5 beneficiaries
+  (7.482,72 / 7.042,56 / 6.822,48 / 6.690,43); work limit 16.003,20 € = IPREM (iprem module) + PNC. Amounts imported from
+  pensions-2027 and iprem (a test fails if the module types one).
+- Conflicts and readings on the page: RD 357/1991 art. 14.2 (1991: all own income deducted) vs LGSS art. 364.2 (only above
+  35 %) — the law and IMSERSO applied; other beneficiaries taken at the full share (conservative) and their PNC not counted
+  as unit income; no household cut when everyone in the unit is a beneficiary (364.3); third-person limits ×1.5 and the
+  complement added after the cuts (IMSERSO guide; the LGSS is silent); pareja de hecho not in art. 363.4 (ask). The brief's
+  "full amount minus income" is not the law: only income above 35 % is deducted.
+- Catalonia: Generalitat (Departament de Drets Socials i Inclusió, Direcció General de Prestacions Socials) tràmits 512,
+  511, 8170 and 7282 (pages dated 18.05.2026) linked as the official procedure; the Catalan complementary benefit is quoted
+  (up to 119,67 € a month) but not computed.
+- Links (body only, no title or description touched): the pensions-2027 PNC section, the widow's pension closing links, the
+  IPREM page (after the subsidy links), the unemployment-subsidy page's IMV section and the retirement-age list link the
+  new page, ca/es/en; the new page links all five.
+
+**Date guard (tests/non-contributory-pension.test.ts).** From **1 Jan 2027** (2027 PNC, rent supplement, IPREM).
+
+**Baseline (GSC, last 28 days to 19 Nov).** No page targets it: the pensions-2027 page shows "tabla de pensiones no contributivas
+2027" with 1 impression at 74.
+
+**Prediction.** Indexed within 7 days (IndexNow). The head "pensión no contributiva" is held by imserso.es, seg-social.es
+and big media: no top-3 target. Long tail on page 1–2 by mid-December: "pensión no contributiva 2026", "requisitos pensión
+no contributiva", "límite ingresos pensión no contributiva unidad familiar", "pensión no contributiva viviendo con hijos",
+"complemento alquiler pensión no contributiva", "pensió no contributiva Catalunya". By 14 Jan 2027: 3,000–10,000
+impressions/28 days, CTR 1.5–4 %. Wrong if under 1,000 impressions/28 days by 14 Jan.
+
+**Measure:** 26 Nov `batch_url_inspection` (rendered tables); 17 Dec and 14 Jan 2027 `snapshot.py page
+pension-no-contributiva 28` (+ pensio-no-contributiva, spain-non-contributory-pension); `calculator_use`
+`non-contributory-pension`; next-step clicks from it. **Review: 2026-12-17.**
+
+**Confounders.** Five pages each gain one body link; the January 2027 revaluation news (and the 2027 PNC amount) moves
+"no contributiva" searches in late December–January.
+
+**Deploy.** Deploy only (code routes, nothing in the database: no publish group). IndexNow prefixes:
+`/es/calculadoras/pension-no-contributiva/`, `/ca/calculadores/pensio-no-contributiva/`,
+`/en/calculators/spain-non-contributory-pension/`, plus the re-crawl of `/es/calculadoras/subida-pensiones-2027/`,
+`/ca/calculadores/pujada-pensions-2027/`, `/en/calculators/spain-pension-increase-2027/`, `/es/calculadoras/pension-viudedad/`,
+`/ca/calculadores/pensio-viduitat/`, `/en/calculators/spain-widows-pension/`, `/es/calculadoras/iprem/`,
+`/ca/calculadores/iprem/`, `/en/calculators/iprem-spain/`, `/es/calculadoras/subsidio-desempleo/`,
+`/ca/calculadores/subsidi-atur/`, `/en/calculators/spain-unemployment-subsidy/`, `/es/calculadoras/edad-jubilacion/`,
+`/ca/calculadores/edat-jubilacio/`, `/en/calculators/spain-retirement-age/` and the three calculators hubs.
+
+**Outcome:** _pending_

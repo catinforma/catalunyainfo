@@ -646,6 +646,11 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
                     {L(locale, { es: "Pensión de viudedad: requisitos y cuánto se cobra", ca: "Pensió de viduïtat: requisits i quant es cobra", en: "Spain widow's pension: requirements and amount" })}
                   </Link>
                 </li>
+                <li>
+                  <Link href={calcPath("non-contributory-pension", locale)}>
+                    {L(locale, { es: "Pensión no contributiva: requisitos y cuánto se cobra", ca: "Pensió no contributiva: requisits i quant es cobra", en: "Spain non-contributory pension: rules and amount" })}
+                  </Link>
+                </li>
               </ul>
 
               <h2 id="preguntas">{hd.faq}</h2>

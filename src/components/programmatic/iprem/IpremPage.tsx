@@ -500,6 +500,10 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
                   <Link href={calcPath("unemployment", locale)}>{doleLinks[1]}</Link>
                 </li>
               </ul>
+              <p>
+                {L(locale, { es: "La pensión no contributiva de incapacidad deja trabajar con el IPREM más la pensión como tope:", ca: "La pensió no contributiva d'incapacitat deixa treballar amb l'IPREM més la pensió com a límit:", en: "The non-contributory invalidity pension allows work up to the IPREM plus the pension:" })}{" "}
+                <Link href={calcPath("non-contributory-pension", locale)}>{L(locale, { es: "calcula la pensión no contributiva", ca: "calcula la pensió no contributiva", en: "work out the non-contributory pension" })}</Link>.
+              </p>
 
               <h2 id="veces-iprem">{hd.multiples}</h2>
               <Table cols={multCols} rows={multRows} caption={L(locale, { es: `Con el IPREM de ${y}: ${M(IPREM_MONTHLY)} al mes, ${M(IPREM_ANNUAL)} o ${M(IPREM_14)} al año.`, ca: `Amb l'IPREM del ${y}: ${M(IPREM_MONTHLY)} al mes, ${M(IPREM_ANNUAL)} o ${M(IPREM_14)} l'any.`, en: `With the ${y} IPREM: ${M(IPREM_MONTHLY)} a month, ${M(IPREM_ANNUAL)} or ${M(IPREM_14)} a year.` })} />

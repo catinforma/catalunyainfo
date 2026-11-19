@@ -51,6 +51,8 @@ export const CALCULATORS = [
   { id: "retirement-age", slugs: { es: "edad-jubilacion", ca: "edat-jubilacio", en: "spain-retirement-age" } },
   // Widow's pension (LGSS arts. 219-223, Decreto 3158/1966 art. 31, RD 900/2018): who is entitled, 52/60/70 %, the amount against the 2026 minimum.
   { id: "widow-pension", slugs: { es: "pension-viudedad", ca: "pensio-viduitat", en: "spain-widows-pension" } },
+  // Non-contributory retirement and invalidity pension (LGSS arts. 363-372): who qualifies, the household limit, the amount, the rent supplement.
+  { id: "non-contributory-pension", slugs: { es: "pension-no-contributiva", ca: "pensio-no-contributiva", en: "spain-non-contributory-pension" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },

@@ -56,6 +56,7 @@ import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
 import { retirementSitemapEntries } from "@/lib/programmatic/retirement-age/page";
 import { widowSitemapEntries } from "@/lib/programmatic/widow-pension/page";
+import { ncSitemapEntries } from "@/lib/programmatic/non-contributory-pension/page";
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
 import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
 
@@ -251,6 +252,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...retirementSitemapEntries(),
     // "Pensión de viudedad: requisitos y cuánto se cobra" (LGSS arts. 219-223; calculators family, group "work"), in es, ca and en.
     ...widowSitemapEntries(),
+    // "Pensión no contributiva: requisitos y cuánto se cobra" (LGSS arts. 363-372; calculators family, group "work"), in es, ca and en.
+    ...ncSitemapEntries(),
     // Traffic fines: deadlines, the 50 % and points (Ley de Tráfico; calculators family, group "vehicle"), in es, ca and en.
     ...trafficFinesSitemapEntries(),
     // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
