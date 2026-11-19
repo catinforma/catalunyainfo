@@ -8958,4 +8958,47 @@ pension-no-contributiva 28` (+ pensio-no-contributiva, spain-non-contributory-pe
 `/ca/calculadores/subsidi-atur/`, `/en/calculators/spain-unemployment-subsidy/`, `/es/calculadoras/edad-jubilacion/`,
 `/ca/calculadores/edat-jubilacio/`, `/en/calculators/spain-retirement-age/` and the three calculators hubs.
 
+## 2026-11-19 — "Impost de successions a Catalunya: calculadora", ca + es + en (new page; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** Home ground and high value: the Catalan inheritance tax has no page on the site (calculators family had the
+home-purchase taxes but nothing for heirs). Fact pack: research_notes/isd-catalunya-nov2026.md (gitignored, worktree copy).
+
+- URLs: `/ca/calculadores/impost-successions-catalunya/` (primary), `/es/calculadoras/impuesto-sucesiones-cataluna/`,
+  `/en/calculators/catalonia-inheritance-tax/` (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut
+  "sucesiones", "successions", "herencia", "inheritance tax", "isd"; `calculator_use` id `inheritance-tax`). Registry id
+  `inheritance-tax`; hub card in the `housing` group after the home-purchase taxes (scope `catalonia`). Next step: widow's
+  pension, home-purchase taxes. The home-purchase tax page links it (one sentence, body only).
+- Rules (read 19 Nov 2026 through the Portal Jurídic/DOGC document API): **Llei 19/2010 is repealed** (DD 12 of Decret
+  legislatiu 1/2024); the rules are the Codi tributari de Catalunya, llibre sisè, consolidated text in force since
+  14/07/2026: arts. 631-2 (kinship), 631-3 (disability), 631-4 (75+), 631-5 (insurance), 631-17/18/19 (home: 95 %, 500.000 €
+  shared, 180.000 € floor, collaterals > 65 with 2 years together, keep 5 years), 633-1 (scale 7-32 %), 633-3
+  (coefficients), 633-4 (99 % spouse/partner; 1 bis gender-violence victims' descendants/ascendants from 27/06/2025, DL
+  5/2025; weighted bonus by base imposable for the rest of groups I-II; rounding 633-4.5), 634-1/2/3, 682-1. Llei 11/2026
+  (2026 budget measures) did not touch these; no decree-law since 5 May 2026. State: Llei 29/1987 art. 22.2 (excess rule,
+  applied by the ATC), RD 1629/1991 arts. 67-68 (6 months + 6). ATC pages read the same day; no ATC simulator exists for
+  this tax (link: model 650 help program, 2026 version of 29 Oct 2026).
+- Tested against the ATC's six worked examples (571,62 € / 0 / 12.896,18 € / 5,32 € / 0 / 348,37 €) and its three
+  habitual-home examples (218.500 / 250.000 / 180.000 €), plus four hand-calculated cases. One flagged reading: group II's
+  table prints 35,88 % at 2.000.000 € while the 633-4.5 rounding gives 35,87 %; the engine follows the rule.
+- YMYL: disclaimer (estimate; the ATC self-assessment, model 650, is the official calculation) under the tool and at the
+  foot; `RULES_UNTIL` 2027-01-01 (tests/inheritance-tax.test.ts fails from then until the 2027 budget law is read).
+
+**Baseline (GSC 23 Oct–19 Nov 2026).** 0 impressions for any query containing "sucesion", "successi", "inheritance",
+"herencia" or "herència": the site has never ranked for the topic.
+
+**Hypothesis.** Indexed within a week of IndexNow, the three editions reach ≥ 300 impressions in the 28 days to the review,
+mostly "impuesto de sucesiones cataluña" / "impost de successions" / "calculadora sucesiones cataluña", top-20 average
+position, and ≥ 30 % of sessions with a `calculator_use`. Wrong if fewer than 100 impressions by 17 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, three URLs). Review **2026-12-17**: `snapshot.py page impost-successions 28`,
+`page impuesto-sucesiones 28`, `page catalonia-inheritance-tax 28`; GA4 `calculator_use` `inheritance-tax`.
+
+**Confounders.** None on these URLs (new). A January 2027 rule change (Catalan 2027 budget law) would force a body update
+during the window: log it here if it happens.
+
+**Deploy.** Deploy only (static route; no publish group). IndexNow prefixes: `/ca/calculadores/impost-successions-catalunya/
+/es/calculadoras/impuesto-sucesiones-cataluna/ /en/calculators/catalonia-inheritance-tax/`, plus the re-crawl of the hub
+and the linking page: `/ca/calculadores/ /es/calculadoras/ /en/calculators/ /ca/calculadores/impostos-compra-habitatge/
+/es/calculadoras/impuestos-compra-vivienda/ /en/calculators/spain-home-purchase-taxes/`.
+
 **Outcome:** _pending_

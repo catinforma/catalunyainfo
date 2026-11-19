@@ -67,10 +67,12 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("widow-pension"), { ca: "/ca/calculadores/pensio-viduitat/", es: "/es/calculadoras/pension-viudedad/", en: "/en/calculators/spain-widows-pension/" });
   assert.deepEqual(calcEditions("non-contributory-pension"), { ca: "/ca/calculadores/pensio-no-contributiva/", es: "/es/calculadoras/pension-no-contributiva/", en: "/en/calculators/spain-non-contributory-pension/" });
   assert.deepEqual(calcEditions("traffic-fines"), { ca: "/ca/calculadores/multes-transit/", es: "/es/calculadoras/multas-trafico/", en: "/en/calculators/traffic-fines-spain/" });
+  // 19 Nov 2026.
+  assert.deepEqual(calcEditions("inheritance-tax"), { ca: "/ca/calculadores/impost-successions-catalunya/", es: "/es/calculadoras/impuesto-sucesiones-cataluna/", en: "/en/calculators/catalonia-inheritance-tax/" });
 });
 
-test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax and Catalan inheritance tax tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "inheritance-tax"]);
 });
 
 test("hub: lists every calculator of the registry exactly once, linking its own editions", () => {

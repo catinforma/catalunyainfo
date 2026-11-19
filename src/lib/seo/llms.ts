@@ -41,6 +41,7 @@ import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
+import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
@@ -370,6 +371,11 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Spain home purchase taxes calculator (ITP, IVA and AJD by region)",
       hubs: htEditions(),
       description: "the taxes on buying a home in each Spanish region: ITP (transfer tax) on a resale home at the region's general rate or scale, or the reduced rate a buyer qualifies for (young buyers, large families, disability, main or first home, protected housing, price caps, with the income limits and other conditions the law sets), and on a new home IVA 10% (4% for special-regime VPO, VAT Act art. 91; IGIC in the Canary Islands, IPSI in Ceuta and Melilla) plus the AJD on the deed; each rate with the article of the region's consolidated tax law (BOE, regional bulletins, the Basque and Navarre foral norms) and the reading date, the mortgage AJD paid by the lender (TRLITP art. 29, Royal Decree-law 17/2018), and the notary and registry fee scales (RD 1426/1989, RD 1427/1989) without invented totals. Not tax advice.",
+    },
+    {
+      name: "Catalonia inheritance tax calculator (impost sobre successions, one heir)",
+      hubs: isdEditions(),
+      description: "one heir's Catalan inheritance tax under book six of the Catalan Tax Code (Legislative Decree 1/2024, which replaced Law 19/2010; consolidated text in force since 14 July 2026), step by step with each article quoted: taxable base (net share plus life insurance on a policy the deceased took out), kinship reductions (art. 631-2: group I 100,000 euros plus 12,000 per year under 21, up to 196,000; spouse and child 100,000, other descendants 50,000, ascendants 30,000; group III 8,000; group IV none), disability 275,000 / 650,000 (art. 631-3) or 275,000 at 75 or over in group II (art. 631-4, never both), life insurance up to 25,000 (art. 631-5), 95% of the deceased's habitual home with a 500,000-euro cap shared by the heirs and a 180,000-euro floor each (art. 631-17); the scale 7% to 32% (art. 633-1), coefficients by group and prior wealth (art. 633-3: 1 to 1.2 for groups I-II, 1.5882 group III, 2 group IV) with the excess rule, and the rebate (art. 633-4: 99% for spouses and stable partners; weighted average by taxable-base slices for the rest of groups I and II, 99% to 20% and 60% to 0%). Reproduces the Catalan Tax Agency's six worked examples; deadline six months from the death plus a six-month extension asked within five (RD 1629/1991 arts. 67-68), forms 660 and 650 and the ATC's help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
     },
     {
       name: "Strikes in Catalonia today",

@@ -294,7 +294,7 @@ test("templates render the box server-side, after the answer, with the placement
   const calcPages = [
     "net-salary/NetSalaryPage", "extra-pay/ExtraPayPage", "self-employed/SelfEmployedPage", "employment/DismissalPage", "employment/SettlementPage",
     "employment/UnemploymentPage", "unemployment-subsidy/SubsidyPage", "sick-leave/SickLeavePage", "paid-leave/PaidLeavePage", "rent-update/RentPage",
-    "euribor/EuriborPage", "mortgage/MortgagePage", "home-purchase-tax/HomeTaxPage", "pensions-2027/PensionPage", "retirement-age/RetirementAgePage", "widow-pension/WidowPensionPage", "non-contributory-pension/NcPensionPage", "working-days/WorkingDaysPage",
+    "euribor/EuriborPage", "mortgage/MortgagePage", "home-purchase-tax/HomeTaxPage", "inheritance-tax/InheritanceTaxPage", "pensions-2027/PensionPage", "retirement-age/RetirementAgePage", "widow-pension/WidowPensionPage", "non-contributory-pension/NcPensionPage", "working-days/WorkingDaysPage",
     "smi/SmiPage", "iprem/IpremPage", "ipc/IpcPage", "treasury-bills/LetrasPage", "lottery-tax/LotteryTaxPage", "itv/ItvPage", "traffic-fines/TrafficFinesPage", "bono-social/BonoSocialPage", "average-salary/AverageSalaryPage", "zona-tensionada/ZonaTensionadaPage", "leave-2027/LeavePage",
   ];
   assert.equal(calcPages.length, CALCULATOR_IDS.length + 1);

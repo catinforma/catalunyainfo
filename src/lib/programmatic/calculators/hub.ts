@@ -33,6 +33,7 @@ import { RULES_AS_OF as TRAFFIC_FINES_AS_OF } from "@/lib/programmatic/traffic-f
 import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
+import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
 import { RULES_AS_OF as ZONA_TENSIONADA_AS_OF } from "@/lib/programmatic/zona-tensionada/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -439,6 +440,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: HOME_TAX_AS_OF,
+      },
+      {
+        key: "inheritance-tax",
+        calculator: true,
+        href: calc("inheritance-tax"),
+        title: { ca: "Impost de successions a Catalunya", es: "Impuesto de sucesiones en Cataluña", en: "Catalonia inheritance tax" },
+        answers: {
+          ca: "Quant pagaràs per una herència a Catalunya segons el parentiu, l'edat i el que reps, amb l'habitatge i l'assegurança de vida?",
+          es: "¿Cuánto pagarás por una herencia en Cataluña según el parentesco, la edad y lo que recibes, con la vivienda y el seguro de vida?",
+          en: "How much tax you pay on an inheritance in Catalonia by relationship, age and what you receive, with the home and life insurance.",
+        },
+        basis: {
+          ca: "Codi tributari de Catalunya, llibre sisè (Decret legislatiu 1/2024), arts. 631-2 a 633-4, i els exemples de l'Agència Tributària de Catalunya.",
+          es: "Código tributario de Cataluña, libro sexto (Decreto legislativo 1/2024), arts. 631-2 a 633-4, y los ejemplos de la Agència Tributària de Catalunya.",
+          en: "Catalan Tax Code, book six (Legislative Decree 1/2024), arts. 631-2 to 633-4, and the Catalan Tax Agency's worked examples.",
+        },
+        scope: "catalonia",
+        checked: INHERITANCE_TAX_AS_OF,
       },
     ],
   },
