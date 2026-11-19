@@ -15,6 +15,8 @@ import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
+import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
+import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 import { money, num } from "@/lib/programmatic/lottery-tax/copy";
 import { breakdown } from "@/lib/programmatic/lottery-tax/engine";
 import { EXEMPT_PER_TICKET } from "@/lib/programmatic/lottery-tax/rules";
@@ -461,16 +463,22 @@ export function relatedLinks(locale: Locale): { href: string; label: string }[] 
       { href: gordoHubPath("es"), label: "Dónde ha tocado el Gordo: los premios principales por provincias y municipios" },
       { href: calcPath("lottery-tax", "es"), label: "Calculadora de premios de lotería: cuánto se queda Hacienda" },
       { href: b2href("loteriaNadal", "es"), label: "Guía de la Lotería de Navidad 2026" },
+      { href: grossaCheckPath("es"), label: "Comprobar La Grossa de Cap d'Any (31 de diciembre)" },
+      { href: ninoCheckPath("es"), label: "Comprobar la Lotería del Niño (6 de enero)" },
     ],
     ca: [
       { href: gordoHubPath("ca"), label: "On ha tocat la loteria de Nadal: els premis grossos per províncies i municipis" },
       { href: calcPath("lottery-tax", "ca"), label: "Calculadora de premis de loteria: quant se'n queda Hisenda" },
       { href: b2href("loteriaNadal", "ca"), label: "Guia de la Loteria de Nadal 2026" },
+      { href: grossaCheckPath("ca"), label: "Comprovar La Grossa de Cap d'Any (31 de desembre)" },
+      { href: ninoCheckPath("ca"), label: "Comprovar la Loteria del Nen (6 de gener)" },
     ],
     en: [
       { href: gordoHubPath("en"), label: "Where El Gordo was sold: the main prizes by province and town" },
       { href: calcPath("lottery-tax", "en"), label: "Spanish lottery prize tax calculator" },
       { href: b2href("loteriaNadal", "en"), label: "Spanish Christmas Lottery 2026 guide" },
+      { href: grossaCheckPath("en"), label: "Check your La Grossa de Cap d'Any ticket (31 December)" },
+      { href: ninoCheckPath("en"), label: "Check your El Niño lottery ticket (6 January)" },
     ],
   });
 }

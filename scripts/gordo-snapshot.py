@@ -58,6 +58,22 @@ register in src/lib/programmatic/weekend/snapshot.json) or an entry of
 scripts/data/gordo-locality-aliases.json, which must cite the INE Nomenclátor.
 Anything else is kept with SELAE's own spelling and gets no municipality page.
 
+Two more draws use the same pipeline with `--game` (runbook
+docs/GROSSA_NINO_RUNBOOK.md):
+
+  # La Grossa de Cap d'Any (Loteries de Catalunya, 31 December): the eight
+  # winning numbers from the press note (loteriesdecatalunya.info), the results
+  # page, or a typed numbers.txt -> src/lib/programmatic/grossa-check/snapshot.json
+  python3 -I scripts/gordo-snapshot.py fetch --game grossa --year 2026 --dir ~/grossa/run-1340
+  python3 -I scripts/gordo-snapshot.py build --game grossa --year 2026 --dir ~/grossa/run-1340
+  python3 -I scripts/gordo-snapshot.py guide --game grossa      # RESULTS_2026 for grossa.ts
+
+  # El Niño (SELAE, 6 January): SELAE's draw record -> nino-check/snapshot.json,
+  # against the programme transcribed into nino-check/programme-2027.json
+  python3 -I scripts/gordo-snapshot.py fetch --game nino --year 2027 --dir ~/nino/run-1330
+  python3 -I scripts/gordo-snapshot.py programme --game nino --dir ~/nino/run-1330
+  python3 -I scripts/gordo-snapshot.py build --game nino --year 2027 --dir ~/nino/run-1330
+
 Standard library only.
 """
 
@@ -741,7 +757,7 @@ def cmd_build(args: argparse.Namespace) -> None:
     summary(snapshot, warnings)
     if args.dry_run:
         return
-    out = Path(args.out)
+    out = Path(args.out or DEFAULT_OUT)
     if snapshot["testData"] and out.resolve() == DEFAULT_OUT.resolve():
         raise Refused("test data never goes into the committed snapshot")
     out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
@@ -749,9 +765,10 @@ def cmd_build(args: argparse.Namespace) -> None:
 
 
 def cmd_check(args: argparse.Namespace) -> None:
-    data = json.loads(Path(args.file).read_text(encoding="utf-8"))
+    path = Path(args.file or DEFAULT_OUT)
+    data = json.loads(path.read_text(encoding="utf-8"))
     problems = snapshot_problems(data)
-    if data is not None and data.get("testData") and Path(args.file).resolve() == DEFAULT_OUT.resolve():
+    if data is not None and data.get("testData") and path.resolve() == DEFAULT_OUT.resolve():
         problems.append("the committed snapshot is marked testData")
     if problems:
         raise Refused("; ".join(problems))
@@ -831,30 +848,655 @@ def cmd_catalonia(args: argparse.Namespace) -> None:
     print("};")
 
 
+# =========================================================================
+# --game grossa: La Grossa de Cap d'Any (Loteries de Catalunya, 31 December)
+# =========================================================================
+#
+# Official sources only (Loteries de Catalunya):
+#   - the press notes index (reachable from the server in Nov 2026), whose
+#     "<year>_GCA_Numeros_premiats" PDF printed the eight winning numbers on
+#     31 December in 2024 and 2025;
+#   - the results page and the sales system's draw record (403 to the server
+#     since 13 Nov 2026: save them from a browser if needed).
+# The numbers can also come from numbers.txt, typed by a person from those
+# pages. The prize rules are DOGC 9640 annex 3
+# (src/lib/programmatic/grossa-check/programme.ts): only the eight numbers
+# go into the snapshot.
+
+LC_INFO = "https://www.loteriesdecatalunya.info"
+LC_PRESS = f"{LC_INFO}/ca/sobre-loteries/publicitat/premsa/"
+LC_RESULTS = "https://www.loteriesdecatalunya.cat/resultats/grossa/"
+GROSSA_HOSTS = {"www.loteriesdecatalunya.cat", "www.loteriesdecatalunya.info", "api.loteriesdecatalunya.cat"}
+GROSSA_OUT = ROOT / "src/lib/programmatic/grossa-check/snapshot.json"
+# key, how many numbers, the press note's row label
+GROSSA_PRIZES = [("first", 1, "Primer"), ("second", 1, "Segon"), ("third", 1, "Tercer"), ("fourth", 2, "Quart"), ("fifth", 3, "Cinqu")]
+# La Grossa de Cap d'Any 2025 (Loteries de Catalunya, 31 Dec 2025), in prize order: never this year's
+# (same list as LAST_YEAR in src/lib/programmatic/grossa-check/validate.ts; a test keeps them in step).
+GROSSA_LAST_YEAR = ["01379", "92574", "73762", "29181", "15376", "34006", "20005", "68675"]
+FIVE_STRICT = re.compile(r"(?<![\d.,])\d{5}(?![\d.,])")
+
+
+def grossa_api_url(year: int) -> str:
+    return f"https://api.loteriesdecatalunya.cat/web/lagrossa/rest/dgs/v1/games/LAGROSSACAT/draws/?drawingDate={year}-12-31"
+
+
+def cmd_grossa_fetch(args: argparse.Namespace) -> None:
+    out = Path(args.dir).expanduser()
+    if out.exists() and any(out.iterdir()):
+        raise Refused(f"{out} is not empty: downloads go to a new, empty directory")
+    if out.resolve().is_relative_to(ROOT):
+        raise Refused("keep downloads outside the repository")
+    out.mkdir(parents=True, exist_ok=True)
+    manifest = []
+
+    def save(name: str, url: str, status: int, body: bytes) -> None:
+        (out / name).write_bytes(body)
+        manifest.append({"file": name, "url": url, "status": status, "sha256": hashlib.sha256(body).hexdigest()})
+
+    status, body = get(LC_PRESS)
+    print(f"{status} {LC_PRESS}")
+    if status == 200:
+        save("premsa-index.html", LC_PRESS, status, body)
+        links = sorted(set(re.findall(rf'href="([^"]*{args.year}_GCA_[^"]*?N(?:u|ú|%C3%BA)meros?_[Pp]remiats[^"]*?\.pdf)"', body.decode("utf-8", errors="replace"), flags=re.I)))
+        if len(links) > 1:
+            print(f"WARNING several {args.year} Cap d'Any numbers notes: {links}; taking the first")
+        if links:
+            url = urllib.parse.urljoin(LC_INFO, links[0])
+            st, pdf = get(url)
+            print(f"{st} {url}")
+            if st == 200 and pdf.startswith(b"%PDF"):
+                save("premsa.pdf", url, st, pdf)
+        else:
+            print(f"no {args.year}_GCA_..._Numeros_premiats PDF in the press notes yet (2024 and 2025: published on 31 December)")
+    for name, url in (("resultats.html", LC_RESULTS), ("draw.json", grossa_api_url(args.year))):
+        st, page = get(url)
+        print(f"{st} {url}")
+        if st == 200:
+            save(name, url, st, page)
+    stamp = dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
+    (out / "manifest.json").write_text(json.dumps({"fetchedAt": stamp, "files": manifest}, indent=2), encoding="utf-8")
+    print(f"saved {len(manifest)} files in {out}")
+
+
+def read_numbers_txt(path: Path, keys: dict[str, tuple[int, int]]) -> dict[str, list[str]]:
+    """Lines '<key> <number> [<number>...]' ('#' lines ignored); keys maps key -> (max numbers, digits)."""
+    out: dict[str, list[str]] = {k: [] for k in keys}
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        key, *values = line.split()
+        if key not in keys:
+            raise Refused(f"{path.name}: unknown key {key!r} (expected one of {', '.join(keys)})")
+        limit, digits = keys[key]
+        for v in values:
+            if not re.fullmatch(rf"\d{{{digits}}}", v):
+                raise Refused(f"{path.name}: {key} {v!r} is not {digits} digits")
+        out[key].extend(values)
+        if len(out[key]) > limit:
+            raise Refused(f"{path.name}: {key} has {len(out[key])} numbers, the programme has {limit}")
+    return out
+
+
+def parse_grossa_press(text: str, year: int) -> tuple[dict[str, list[str]], list[str]]:
+    """The eight numbers from the press note's table (pdftotext -layout), checked against its labels and prose."""
+    warnings: list[str] = []
+    if not re.search(rf"Cap d.Any {year}", text):
+        raise Refused(f"premsa: not the La Grossa de Cap d'Any {year} note")
+    lines = text.splitlines()
+    head = next((i for i, l in enumerate(lines) if re.search(r"N[úu]mero", l) and any("premiat" in x for x in lines[i : i + 4])), None)
+    if head is None:
+        raise Refused("premsa: no 'Número premiat' table")
+    found: list[tuple[str, int]] = []
+    for i in range(head + 1, len(lines)):
+        if re.match(r"\s*(Facilitat|La Dooble|Tots els beneficis|Joc responsable)", lines[i]):
+            break
+        found.extend((n, i) for n in FIVE_STRICT.findall(lines[i]))
+    if len(found) != 8:
+        raise Refused(f"premsa: {len(found)} five-digit numbers in the table, expected 8 ({[n for n, _ in found]}): type numbers.txt from the official page instead")
+    numbers = [n for n, _ in found]
+    at = [i for _, i in found]
+    for k, label in ((0, "Primer"), (1, "Segon"), (2, "Tercer")):
+        if label not in lines[at[k]]:
+            raise Refused(f"premsa: {numbers[k]} is not on the '{label}' row")
+    if not any("Quart" in l for l in lines[at[2] + 1 : at[5] + 1]):
+        raise Refused("premsa: no 'Quart' row between the third and the fifth prizes")
+    if not any("Cinqu" in l for l in lines[at[4] + 1 : at[7] + 1]):
+        raise Refused("premsa: no 'Cinquè' row after the fourth prizes")
+    flat = re.sub(r"\s+", " ", text)
+    for k, pattern in ((0, r"primer premi, amb el número (\d{5})"), (1, r"segon ha estat el número (\d{5})"), (2, r"tercer premi, amb el número (\d{5})")):
+        m = re.search(pattern, flat, flags=re.I)
+        if not m:
+            warnings.append(f"premsa: the prose does not name the {('first', 'second', 'third')[k]} prize; compare by hand")
+        elif m.group(1) != numbers[k]:
+            raise Refused(f"premsa: the table says {numbers[k]}, the prose {m.group(1)}")
+    return {"first": numbers[0:1], "second": numbers[1:2], "third": numbers[2:3], "fourth": numbers[3:5], "fifth": numbers[5:8]}, warnings
+
+
+def grossa_snapshot_problems(s: object) -> list[str]:
+    """The same rules as src/lib/programmatic/grossa-check/validate.ts."""
+    if s is None:
+        return []
+    if not isinstance(s, dict):
+        return ["the snapshot is not an object"]
+    p: list[str] = []
+    if s.get("schema") != 1:
+        p.append("schema must be 1")
+    if s.get("game") != "grossa":
+        p.append('game must be "grossa"')
+    year = s.get("year")
+    if not isinstance(year, int) or s.get("drawDate") != f"{year}-12-31":
+        p.append("drawDate must be 31 December of the snapshot's year")
+    if not isinstance(s.get("testData"), bool):
+        p.append("testData must be true or false")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?([+-]\d{2}:\d{2}|Z)", str(s.get("readAt", ""))):
+        p.append("readAt must be an ISO timestamp with offset")
+    for name, url in (s.get("sources") or {}).items():
+        if (url is not None or name == "results") and urllib.parse.urlparse(str(url)).hostname not in GROSSA_HOSTS:
+            p.append(f"source {name} is not on an official Loteries de Catalunya host")
+    n = s.get("numbers") or {}
+    all_numbers: list[str] = []
+    for key, count, _label in GROSSA_PRIZES:
+        value = n.get(key)
+        items = (value if isinstance(value, list) else None) if key in ("fourth", "fifth") else ([] if value is None else [value])
+        if items is None:
+            p.append(f"{key} must be a list")
+            continue
+        if len(items) > count:
+            p.append(f"{key}: more than {count} numbers")
+        for x in items:
+            if not re.fullmatch(r"\d{5}", str(x)):
+                p.append(f"{key}: {x!r} is not five digits")
+            all_numbers.append(str(x))
+    if len(set(all_numbers)) != len(all_numbers):
+        p.append("a number appears twice: the eight winning numbers are always different (DOGC 9640, annex 3, 8.1)")
+    if not all_numbers:
+        p.append("no winning number yet: nothing to publish")
+    if len([x for x in all_numbers if x in GROSSA_LAST_YEAR]) >= 3 or n.get("first") == GROSSA_LAST_YEAR[0]:
+        p.append("these look like the 2025 numbers")
+    return p
+
+
+def cross_check(directory: Path, numbers: list[str]) -> list[str]:
+    """Every number must be on the official results page or draw record saved next to it, when one is there."""
+    warnings: list[str] = []
+    for name in ("resultats.html", "draw.json"):
+        path = directory / name
+        if not path.exists():
+            continue
+        tokens = set(FIVE.findall(path.read_text(encoding="utf-8", errors="replace")))
+        present = [n for n in numbers if n in tokens]
+        if not present:
+            warnings.append(f"{name}: carries none of the numbers (the page may draw them with JavaScript): compare by hand")
+        elif len(present) != len(numbers):
+            raise Refused(f"{name}: {sorted(set(numbers) - set(present))} are not in it: fix the input")
+        else:
+            print(f"{name}: all {len(numbers)} numbers are in it")
+    return warnings
+
+
+def cmd_grossa_build(args: argparse.Namespace) -> None:
+    directory = Path(args.dir).expanduser()
+    marker = (directory / "TEST_DATA").exists()
+    if marker and not args.test_data:
+        raise Refused(f"{directory} is marked TEST_DATA: pass --test-data (and never ship the result)")
+    if args.test_data and not marker:
+        raise Refused("--test-data is only for directories marked TEST_DATA")
+    warnings: list[str] = []
+    typed = read_numbers_txt(directory / "numbers.txt", {k: (c, 5) for k, c, _l in GROSSA_PRIZES}) if (directory / "numbers.txt").exists() else None
+    press = None
+    press_url = None
+    for name in ("premsa.txt", "premsa.pdf"):
+        path = directory / name
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8") if name.endswith(".txt") else pdf_text(path)
+        if text is None:
+            raise Refused("pdftotext is not installed (apt install poppler-utils), or save premsa.txt")
+        press, more = parse_grossa_press(text, args.year)
+        warnings.extend(more)
+        manifest = directory / "manifest.json"
+        if manifest.exists():
+            for f in json.loads(manifest.read_text(encoding="utf-8")).get("files", []):
+                if f.get("file") == "premsa.pdf":
+                    press_url = f.get("url")
+        break
+    if typed and press and any(typed[k] and typed[k] != press[k] for k in typed):
+        raise Refused(f"numbers.txt and the press note disagree: {typed} vs {press}")
+    chosen = press or typed
+    if not chosen:
+        raise Refused("no numbers: save premsa.pdf (fetch) or type numbers.txt from Loteries de Catalunya's results page")
+    if typed and not press:
+        print("numbers: numbers.txt (typed from the official page)")
+    else:
+        print(f"numbers: press note{' (numbers.txt agrees)' if typed else ''}")
+    numbers = {"first": (chosen["first"] or [None])[0], "second": (chosen["second"] or [None])[0], "third": (chosen["third"] or [None])[0], "fourth": chosen["fourth"], "fifth": chosen["fifth"]}
+    flat = [x for k, _c, _l in GROSSA_PRIZES for x in ([numbers[k]] if k in ("first", "second", "third") else numbers[k]) if x]
+    if len(flat) < 8:
+        warnings.append(f"{len(flat)} of 8 numbers: the checker answers 'not among the numbers published so far' until all are in")
+    warnings.extend(cross_check(directory, flat))
+    read_at = args.read_at or dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
+    snapshot = {
+        "schema": 1,
+        "game": "grossa",
+        "testData": bool(args.test_data),
+        "year": args.year,
+        "drawDate": f"{args.year}-12-31",
+        "readAt": read_at,
+        "numbers": numbers,
+        "sources": {"results": LC_RESULTS, "press": press_url},
+    }
+    problems = grossa_snapshot_problems(snapshot)
+    if problems:
+        raise Refused("; ".join(problems))
+    for key, _c, _l in GROSSA_PRIZES:
+        value = numbers[key]
+        print(f"{key:7} {', '.join(value) if isinstance(value, list) else (value or '-')}")
+    for w in warnings:
+        print(f"WARNING {w}")
+    if args.dry_run:
+        return
+    out = Path(args.out or GROSSA_OUT)
+    if snapshot["testData"] and out.resolve() == GROSSA_OUT.resolve():
+        raise Refused("test data never goes into the committed snapshot")
+    out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"wrote {out}")
+
+
+def cmd_grossa_check(args: argparse.Namespace) -> None:
+    path = Path(args.file or GROSSA_OUT)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    problems = grossa_snapshot_problems(data)
+    if data is not None and data.get("testData") and path.resolve() == GROSSA_OUT.resolve():
+        problems.append("the committed snapshot is marked testData")
+    if problems:
+        raise Refused("; ".join(problems))
+    print("no snapshot (the checker shows its pre-draw page)" if data is None else f"ok: {sum(1 for k, _c, _l in GROSSA_PRIZES for x in ([data['numbers'][k]] if k in ('first', 'second', 'third') else data['numbers'][k]) if x)} of 8 numbers")
+
+
+def cmd_grossa_guide(args: argparse.Namespace) -> None:
+    """Prints RESULTS_2026 for the La Grossa guide (src/lib/content/batch02/grossa.ts) from the snapshot."""
+    path = Path(args.file or GROSSA_OUT)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    problems = grossa_snapshot_problems(data)
+    if data is None or problems:
+        raise Refused("; ".join(problems) or "no snapshot")
+    n = data["numbers"]
+    if not (n["first"] and n["second"] and n["third"] and len(n["fourth"]) == 2 and len(n["fifth"]) == 3):
+        raise Refused("the guide needs all eight numbers: wait for the rest of the draw")
+    source = data["sources"]["press"] or data["sources"]["results"]
+    name = f"La Grossa de Cap d'Any {data['year']}: números premiats" if data["sources"]["press"] else f"Resultats de La Grossa de Cap d'Any {data['year']}"
+    print(f"export const RESULTS_{data['year']}: GrossaResults | null = {{")
+    print(f'  first: "{n["first"]}",')
+    print(f'  second: "{n["second"]}",')
+    print(f'  third: "{n["third"]}",')
+    print(f"  fourth: {json.dumps(n['fourth'])},")
+    print(f"  fifth: {json.dumps(n['fifth'])},")
+    print("  firstSoldIn: null, // fill by hand from the press note's 'Població' column, or leave null")
+    print(f'  source: {{ name: "{name}", url: "{source}", publisher: "Loteries de Catalunya" }},')
+    print("};")
+
+
+# =========================================================================
+# --game nino: El Niño (SELAE, Sorteo Extraordinario de 6 January)
+# =========================================================================
+#
+# Official sources only (SELAE): the draw record (buscadorSorteos, 6 January),
+# the first-quarter Saturday prize programmes PDF and the official list.
+# The programme the checker applies is src/lib/programmatic/nino-check/
+# programme-2027.json, transcribed by a person from SELAE's PDF (null until
+# then); `programme --game nino` checks its figures against the PDF text and
+# `build --game nino` refuses to run without it.
+
+NINO_PROGRAMME = ROOT / "src/lib/programmatic/nino-check/programme-2027.json"
+NINO_OUT = ROOT / "src/lib/programmatic/nino-check/snapshot.json"
+NINO_TOPS = {"first": "primerPremio", "second": "segundoPremio", "third": "tercerosPremios"}
+NINO_LISTS = {5: "x5", 4: "x4", 3: "x3", 2: "x2", 1: "x1"}
+
+
+def nino_draw_url(year: int, held: bool) -> str:
+    return f"{HOST}/servicios/buscadorSorteos?game_id=LNAC&celebrados={'true' if held else 'false'}&fechaInicioInclusiva={year}0106&fechaFinInclusiva={year}0106"
+
+
+def nino_programme_url(year: int) -> str:
+    """SELAE's first-quarter Saturday programmes (a web search shows the 2027 file under this name)."""
+    return f"{HOST}/f/loterias/documentos/Loter%C3%ADa%20Nacional/programas%20de%20premios/PROGRAMAS_PREMIOS_PRIMER_TRIMESTRE_{year}_SABADOS.pdf"
+
+
+def load_nino_programme(path: Path | None) -> dict | None:
+    data = json.loads((path or NINO_PROGRAMME).read_text(encoding="utf-8"))
+    if data is None:
+        return None
+    if not isinstance(data, dict) or not isinstance(data.get("categories"), list):
+        raise Refused("the El Niño programme JSON is not a programme (npm test validates it)")
+    return data
+
+
+def cmd_nino_fetch(args: argparse.Namespace) -> None:
+    out = Path(args.dir).expanduser()
+    if out.exists() and any(out.iterdir()):
+        raise Refused(f"{out} is not empty: downloads go to a new, empty directory")
+    if out.resolve().is_relative_to(ROOT):
+        raise Refused("keep downloads outside the repository")
+    out.mkdir(parents=True, exist_ok=True)
+    manifest = []
+    url = nino_draw_url(args.year, True)
+    status, body = get(url)
+    if status == 200 and not body.lstrip().startswith(b"[{"):
+        url = nino_draw_url(args.year, False)
+        status, body = get(url)
+    print(f"{status} {url}")
+    official_list = None
+    if status == 200:
+        (out / "draw.json").write_bytes(body)
+        manifest.append({"file": "draw.json", "url": url, "status": status, "sha256": hashlib.sha256(body).hexdigest()})
+        try:
+            record = json.loads(body)
+            if isinstance(record, list) and record and isinstance(record[0], dict):
+                official_list = record[0].get("urlListadoOficial")
+                print("draw record lists: " + ", ".join(f"{k} ({len(v)})" for k, v in nino_candidates(record[0]).items()))
+        except ValueError:
+            pass
+    else:
+        print("draw record not saved (SELAE may block scripts: save it from a browser as draw.json, see the runbook)")
+    targets = [("programa.pdf", [nino_programme_url(args.year)])]
+    if official_list:
+        targets.append(("lista-oficial.pdf", [HOST + urllib.parse.quote(official_list) if str(official_list).startswith("/") else official_list]))
+    for name, urls in targets:
+        for u in urls:
+            st, pdf = get(u)
+            print(f"{st} {u}")
+            if st == 200 and pdf.startswith(b"%PDF"):
+                (out / name).write_bytes(pdf)
+                manifest.append({"file": name, "url": u, "status": st, "sha256": hashlib.sha256(pdf).hexdigest()})
+                break
+    stamp = dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
+    (out / "manifest.json").write_text(json.dumps({"fetchedAt": stamp, "files": manifest}, indent=2), encoding="utf-8")
+    print(f"saved {len(manifest)} files in {out}")
+
+
+def nino_candidates(record: dict) -> dict[str, list[str]]:
+    """Every list in the draw record, besides the named top prizes, whose entries all carry a 'decimo' of one length (1-5 digits)."""
+    out: dict[str, list[str]] = {}
+    for key, value in record.items():
+        if key in NINO_TOPS.values() or not isinstance(value, list) or not value or not all(isinstance(x, dict) for x in value):
+            continue
+        numbers = [str(x.get("decimo", "")) for x in value]
+        if all(re.fullmatch(r"\d{1,5}", n) for n in numbers) and len({len(n) for n in numbers}) == 1:
+            out[key] = numbers
+    return out
+
+
+def parse_nino_draw(raw: str, year: int) -> tuple[str, dict[str, object], list[str], str | None]:
+    data = json.loads(raw)
+    if not isinstance(data, list) or len(data) != 1 or not isinstance(data[0], dict):
+        raise Refused("draw.json: expected SELAE's draw record, a list with one draw")
+    d = data[0]
+    problems = []
+    if d.get("game_id") != "LNAC":
+        problems.append(f"game_id {d.get('game_id')!r} is not LNAC (Lotería Nacional)")
+    if not str(d.get("fecha_sorteo", "")).startswith(f"{year}-01-06"):
+        problems.append(f"fecha_sorteo {d.get('fecha_sorteo')!r} is not 6 January {year}")
+    if "NINO" not in fold(str(d.get("nombre", ""))):
+        problems.append(f"nombre {d.get('nombre')!r} is not El Niño")
+    if not re.fullmatch(r"\d{6,12}", str(d.get("id_sorteo", ""))):
+        problems.append("id_sorteo missing")
+    if problems:
+        raise Refused("draw.json: " + "; ".join(problems))
+    numbers: dict[str, object] = {}
+    for key, field in NINO_TOPS.items():
+        value = d.get(field)
+        items = [value] if isinstance(value, dict) else (value or [])
+        found = [str(x.get("decimo", "")) for x in items if isinstance(x, dict) and x.get("decimo")]
+        if len(found) > 1:
+            raise Refused(f"{key}: {len(found)} numbers in {field}")
+        numbers[key] = found[0] if found else None
+    warnings: list[str] = []
+    by_len: dict[int, list[tuple[str, list[str]]]] = {}
+    for k, v in nino_candidates(d).items():
+        by_len.setdefault(len(v[0]), []).append((k, v))
+    tops = [n for n in numbers.values() if n]
+    for digits, key in NINO_LISTS.items():
+        lists = by_len.get(digits, [])
+        if len(lists) > 1:
+            raise Refused(f"{digits}-digit lists: several in the draw record ({', '.join(k for k, _ in lists)}): type extracciones.txt")
+        values = lists[0][1] if lists else []
+        if digits == 5 and any(n in values for n in tops):
+            values = [n for n in values if n not in tops]
+            warnings.append("the five-digit list holds the top prizes too: left out")
+        numbers[key] = values
+    official = d.get("urlListadoOficial")
+    if official:
+        official = HOST + urllib.parse.quote(official) if official.startswith("/") else official
+    return str(d["id_sorteo"]), numbers, warnings, official or None
+
+
+def nino_snapshot_problems(s: object, programme: dict | None) -> list[str]:
+    """The same rules as src/lib/programmatic/nino-check/validate.ts."""
+    if s is None:
+        return []
+    if not isinstance(s, dict):
+        return ["the snapshot is not an object"]
+    p: list[str] = []
+    year = s.get("year")
+    if s.get("schema") != 1 or s.get("game") != "nino":
+        p.append('schema 1 and game "nino"')
+    if not isinstance(year, int) or s.get("drawDate") != f"{year}-01-06":
+        p.append("drawDate must be 6 January of the snapshot's year")
+    if not re.fullmatch(r"\d{6,12}", str(s.get("drawId", ""))):
+        p.append("drawId missing")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?([+-]\d{2}:\d{2}|Z)", str(s.get("readAt", ""))):
+        p.append("readAt must be an ISO timestamp with offset")
+    for name, url in (s.get("sources") or {}).items():
+        if (url is not None or name == "results") and urllib.parse.urlparse(str(url)).hostname not in OFFICIAL_HOSTS:
+            p.append(f"source {name} is not on an official SELAE host")
+    n = s.get("numbers") or {}
+    fives = [n[k] for k in NINO_TOPS if n.get(k)]
+    if not n.get("first"):
+        p.append("the snapshot has no first prize")
+    cats = (programme or {}).get("categories", [])
+    for key in ("second", "third"):
+        if n.get(key) and programme is not None and not any(c.get("id") == key for c in cats):
+            p.append(f"{key}: the programme has no {key} prize")
+    for x in fives:
+        if not re.fullmatch(r"\d{5}", str(x)):
+            p.append(f"{x!r} is not five digits")
+    for digits, key in NINO_LISTS.items():
+        values = n.get(key)
+        if not isinstance(values, list):
+            p.append(f"{key} must be a list")
+            continue
+        for x in values:
+            if not re.fullmatch(rf"\d{{{digits}}}", str(x)):
+                p.append(f"{key}: {x!r} is not {digits} digits")
+        if programme is not None:
+            cat = next((c for c in cats if c.get("kind") == "extraction" and c.get("digits") == digits), None)
+            limit = cat.get("extractions", 0) if cat else 0
+            if len(values) > limit:
+                p.append(f"{key}: {len(values)} extractions, the programme has {limit}")
+        if digits == 5:
+            fives.extend(values)
+    if len(set(fives)) != len(fives):
+        p.append("a five-digit number appears twice")
+    return p
+
+
+def cmd_nino_build(args: argparse.Namespace) -> None:
+    directory = Path(args.dir).expanduser()
+    marker = (directory / "TEST_DATA").exists()
+    if marker and not args.test_data:
+        raise Refused(f"{directory} is marked TEST_DATA: pass --test-data (and never ship the result)")
+    if args.test_data and not marker:
+        raise Refused("--test-data is only for directories marked TEST_DATA")
+    programme = load_nino_programme(Path(args.programme) if args.programme else None)
+    if programme is None:
+        raise Refused(f"{NINO_PROGRAMME.relative_to(ROOT)} is null: transcribe SELAE's {args.year} programme first (runbook), then build")
+    if programme.get("year") != args.year:
+        raise Refused(f"the programme is for {programme.get('year')}, not {args.year}")
+    warnings: list[str] = []
+    draw_id, official = None, None
+    typed = directory / "extracciones.txt"
+    if typed.exists():
+        limits = {"first": (1, 5), "second": (1, 5), "third": (1, 5), **{key: (99, d) for d, key in NINO_LISTS.items()}}
+        read = read_numbers_txt(typed, limits)
+        numbers: dict[str, object] = {k: (read[k][0] if read[k] else None) for k in NINO_TOPS}
+        numbers.update({key: read[key] for key in NINO_LISTS.values()})
+        print("numbers: extracciones.txt (typed from SELAE's official list)")
+        if (directory / "draw.json").exists():
+            draw_id, _n, _w, official = parse_nino_draw((directory / "draw.json").read_text(encoding="utf-8"), args.year)
+    elif (directory / "draw.json").exists():
+        draw_id, numbers, more, official = parse_nino_draw((directory / "draw.json").read_text(encoding="utf-8"), args.year)
+        warnings.extend(more)
+        print("numbers: SELAE's draw record")
+    else:
+        raise Refused("no draw.json and no extracciones.txt: run fetch, or save SELAE's draw record from a browser (runbook)")
+    if not draw_id:
+        draw_id = args.draw_id
+    if not draw_id:
+        raise Refused("no draw id: keep draw.json next to extracciones.txt, or pass --draw-id from SELAE's record")
+    for c in programme["categories"]:
+        if c.get("kind") == "extraction":
+            got = len(numbers[NINO_LISTS[c["digits"]]])  # type: ignore[arg-type]
+            if got < c["extractions"]:
+                warnings.append(f"{NINO_LISTS[c['digits']]}: {got} of {c['extractions']} extractions so far")
+        if c.get("kind") == "top" and not numbers.get(c["id"]):
+            warnings.append(f"{c['id']}: not drawn yet")
+    five = [str(x) for x in [numbers.get(k) for k in NINO_TOPS] if x] + [str(x) for x in numbers["x5"]]  # type: ignore[union-attr]
+    warnings.extend(check_against_list(directory, five))
+    read_at = args.read_at or dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
+    snapshot = {
+        "schema": 1,
+        "game": "nino",
+        "testData": bool(args.test_data),
+        "year": args.year,
+        "drawDate": f"{args.year}-01-06",
+        "drawId": draw_id,
+        "readAt": read_at,
+        "numbers": numbers,
+        "sources": {"results": f"{HOST}/es/loteria-nacional", "officialList": official},
+    }
+    problems = nino_snapshot_problems(snapshot, programme)
+    if problems:
+        raise Refused("; ".join(problems))
+    for key in [*NINO_TOPS, *NINO_LISTS.values()]:
+        value = numbers[key]
+        print(f"{key:7} {', '.join(value) if isinstance(value, list) else (value or '-')}")  # type: ignore[arg-type]
+    for w in warnings:
+        print(f"WARNING {w}")
+    if args.dry_run:
+        return
+    out = Path(args.out or NINO_OUT)
+    if snapshot["testData"] and out.resolve() == NINO_OUT.resolve():
+        raise Refused("test data never goes into the committed snapshot")
+    out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"wrote {out}")
+
+
+def cmd_nino_check(args: argparse.Namespace) -> None:
+    path = Path(args.file or NINO_OUT)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    problems = nino_snapshot_problems(data, load_nino_programme(None))
+    if data is not None and data.get("testData") and path.resolve() == NINO_OUT.resolve():
+        problems.append("the committed snapshot is marked testData")
+    if problems:
+        raise Refused("; ".join(problems))
+    print("no snapshot (the checker shows its pre-draw page)" if data is None else f"ok: first prize {data['numbers']['first']}")
+
+
+def es_thousands(n: int) -> str:
+    return f"{n:,}".replace(",", ".")
+
+
+def cmd_nino_programme(args: argparse.Namespace) -> None:
+    """Looks for every figure of the El Niño programme JSON in SELAE's PDF text; a human still reads the page."""
+    programme = load_nino_programme(Path(args.programme) if args.programme else None)
+    if programme is None:
+        raise Refused(f"{NINO_PROGRAMME.relative_to(ROOT)} is null: transcribe the Niño page of {nino_programme_url(args.year)} into it first (runbook), then run this")
+    directory = Path(args.dir).expanduser()
+    txt, pdf = directory / "programa.txt", directory / "programa.pdf"
+    if txt.exists():
+        text = txt.read_text(encoding="utf-8")
+    elif pdf.exists():
+        text = pdf_text(pdf)
+        if text is None:
+            raise Refused("pdftotext is not installed (apt install poppler-utils)")
+    else:
+        raise Refused(f"no programa.pdf in {directory}: run fetch --game nino, or save {nino_programme_url(args.year)} there from a browser")
+    flat = re.sub(r"\s+", " ", text)
+    found = re.search(r"ni[ñn]o", flat, flags=re.I)
+    if not found:
+        raise Refused("no El Niño programme in the text")
+    window = flat[found.start() : found.start() + 15_000]
+    checks = [("6 de enero", r"6 de enero"), ("prizes per series", rf"(?<![\d.]){re.escape(es_thousands(programme['prizesPerSeries']))}(?![\d])"), ("euros per series", rf"(?<![\d.]){re.escape(es_thousands(programme['eurosPerSeries']))}(?![\d])")]
+    for c in programme["categories"]:
+        checks.append((f"{c['id']} {es_thousands(c['perBillete'])} €", rf"(?<![\d.]){re.escape(es_thousands(c['perBillete']))}(?![\d])"))
+        checks.append((f"{c['id']} count {es_thousands(c['count'])}", rf"(?<![\d.]){re.escape(es_thousands(c['count']))}(?![\d])"))
+    missing = []
+    for label, pattern in checks:
+        ok = re.search(pattern, window) is not None
+        print(f"{'ok     ' if ok else 'MISSING'} {label}")
+        if not ok:
+            missing.append(label)
+    if missing:
+        raise Refused(f"{len(missing)} of {len(checks)} figures missing: fix programme-2027.json against the PDF")
+    print("Every figure is in the PDF text. Read the Niño page yourself; `confirmed` in the JSON says who and when.")
+
+
+GAME_COMMANDS = {
+    ("grossa", "fetch"): cmd_grossa_fetch,
+    ("grossa", "build"): cmd_grossa_build,
+    ("grossa", "check"): cmd_grossa_check,
+    ("grossa", "guide"): cmd_grossa_guide,
+    ("nino", "fetch"): cmd_nino_fetch,
+    ("nino", "build"): cmd_nino_build,
+    ("nino", "check"): cmd_nino_check,
+    ("nino", "programme"): cmd_nino_programme,
+}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
-    f = sub.add_parser("fetch", help="download SELAE's draw record and prize pages into a new directory")
+    games = ("navidad", "grossa", "nino")
+    game_help = "navidad (22 Dec, default), grossa (La Grossa de Cap d'Any, 31 Dec) or nino (El Niño, 6 Jan)"
+    f = sub.add_parser("fetch", help="download the official draw pages into a new directory")
+    f.add_argument("--game", choices=games, default="navidad", help=game_help)
     f.add_argument("--year", type=int, required=True)
     f.add_argument("--dir", required=True)
     b = sub.add_parser("build", help="parse, validate and write the snapshot")
+    b.add_argument("--game", choices=games, default="navidad", help=game_help)
     b.add_argument("--year", type=int, required=True)
     b.add_argument("--dir", required=True)
-    b.add_argument("--out", default=str(DEFAULT_OUT))
+    b.add_argument("--out", default=None, help="default: the game's committed snapshot")
     b.add_argument("--read-at", help="ISO timestamp of the download (default: now)")
     b.add_argument("--dry-run", action="store_true")
     b.add_argument("--test-data", action="store_true", help="only for the test fixture directory")
-    b.add_argument("--no-pedrea", action="store_true", help="build without the pedrea (the checker then says it is not in yet)")
+    b.add_argument("--no-pedrea", action="store_true", help="navidad: build without the pedrea (the checker then says it is not in yet)")
+    b.add_argument("--programme", help="nino: the programme JSON (default src/lib/programmatic/nino-check/programme-2027.json)")
+    b.add_argument("--draw-id", help="nino: SELAE's id_sorteo when only extracciones.txt is at hand")
     c = sub.add_parser("check", help="validate a snapshot file")
-    c.add_argument("--file", default=str(DEFAULT_OUT))
-    g = sub.add_parser("catalonia", help="print RESULTS_2026 for the lottery guide from a snapshot")
+    c.add_argument("--game", choices=games, default="navidad", help=game_help)
+    c.add_argument("--file", default=None, help="default: the game's committed snapshot")
+    g = sub.add_parser("catalonia", help="print RESULTS_2026 for the Christmas lottery guide from a snapshot")
     g.add_argument("--file", default=str(DEFAULT_OUT))
-    pr = sub.add_parser("programme", help="check SELAE's prize programme PDF (programa.pdf) against the checker's programme")
-    pr.add_argument("--year", type=int, default=2026)
+    gg = sub.add_parser("guide", help="grossa: print RESULTS_<year> for the La Grossa guide from the snapshot")
+    gg.add_argument("--game", choices=("grossa",), default="grossa")
+    gg.add_argument("--file", default=None)
+    pr = sub.add_parser("programme", help="check a prize programme PDF (programa.pdf) against the checker's programme")
+    pr.add_argument("--game", choices=("navidad", "nino"), default="navidad", help="navidad (default) or nino")
+    pr.add_argument("--year", type=int, default=None, help="default 2026 (navidad) or 2027 (nino)")
     pr.add_argument("--dir", required=True)
+    pr.add_argument("--programme", help="nino: the programme JSON (default src/lib/programmatic/nino-check/programme-2027.json)")
     args = parser.parse_args()
+    if args.command == "programme" and args.year is None:
+        args.year = 2027 if args.game == "nino" else 2026
+    game = getattr(args, "game", "navidad")
+    navidad = {"fetch": cmd_fetch, "build": cmd_build, "check": cmd_check, "catalonia": cmd_catalonia, "programme": cmd_programme}
     try:
-        {"fetch": cmd_fetch, "build": cmd_build, "check": cmd_check, "catalonia": cmd_catalonia, "programme": cmd_programme}[args.command](args)
+        command = navidad.get(args.command) if game == "navidad" else GAME_COMMANDS.get((game, args.command))
+        if command is None:
+            raise Refused(f"{args.command} has no --game {game} mode")
+        command(args)
     except Refused as error:
         print(f"REFUSED: {error}", file=sys.stderr)
         return 1

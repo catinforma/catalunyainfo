@@ -63,7 +63,9 @@ unless the block lifts. Do not try to get round the block. Plan:
    directory to the server (`scp -r <dir> claude@84.46.242.202:~/gordo/`);
    then run `build` and the rest of the steps below on the server.
 3. Loteries de Catalunya (La Grossa, 31 Dec) answered 403 to the server the
-   same day: plan its results the same way.
+   same day: plan its results the same way. The La Grossa (31 Dec) and El
+   Niño (6 Jan) checkers have their own runbook: docs/GROSSA_NINO_RUNBOOK.md
+   (`gordo-snapshot.py ... --game grossa|nino`).
 
 The page code does not depend on the fetch: until `snapshot.json` changes,
 the hubs keep their pre-draw state, and from 23 Dec `tests/loteria-nadal.test.ts`

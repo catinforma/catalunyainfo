@@ -60,6 +60,8 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { calculateOk } from "@/lib/programmatic/lottery-tax/engine";
 import { presetInput } from "@/lib/programmatic/lottery-tax/page";
 import { checkPath } from "@/lib/programmatic/lottery-check/paths";
+import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
+import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 
 import { hasResults, prizesIn, provinceGroups, readDay, readTime, webSales, type GordoMunicipalityGroup, type GordoProvinceGroup, type GordoSale } from "./data";
 import { gordoHubPath, gordoMunicipalityPath, gordoProvincePath } from "./paths";
@@ -229,6 +231,8 @@ const gordoNet = (locale: Locale) => eur(calculateOk(presetInput("gordo")).total
 const grossa = (locale: Locale, label: string) => link(b2href("grossa", locale), label);
 /** The Christmas lottery checker (lib/programmatic/lottery-check): every prize of a number, per décimo and after tax. */
 const checker = (locale: Locale, label: string) => link(checkPath(locale), label);
+/** The La Grossa de Cap d'Any (31 Dec) and El Niño (6 Jan) checkers, linked from "how the draw works". */
+const laterChecker = (game: "grossa" | "nino", locale: Locale, label: string) => link(game === "grossa" ? grossaCheckPath(locale) : ninoCheckPath(locale), label);
 
 function timeLine(c: Ctx): string {
   if (DRAW_TIME_2026) {
@@ -275,6 +279,7 @@ function evergreen(c: Ctx): Block[] {
       ...paras(
         `Amb dos bombos: un amb les 100.000 boles dels números i un altre amb les dels premis. Un nen o una nena de la Residència de San Ildefonso treu una bola de cada bombo alhora i dos més les canten (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
         `No s'ha de confondre amb ${grossa("ca", "La Grossa de Cap d'Any")}, la loteria de la Generalitat, que se sorteja el 31 de desembre.`,
+        `Després de Nadal, amb els números oficials: ${laterChecker("grossa", "ca", "comprovador de La Grossa de Cap d'Any")} (31 de desembre) i ${laterChecker("nino", "ca", "comprovador de la Loteria del Nen")} (6 de gener).`,
       ),
     ];
   }
@@ -306,6 +311,7 @@ function evergreen(c: Ctx): Block[] {
       ...paras(
         `Con dos bombos: uno con las 100.000 bolas de los números y otro con las de los premios. Un niño o una niña de la Residencia de San Ildefonso saca una bola de cada bombo a la vez y otros dos las cantan (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
         `No hay que confundirla con ${grossa("es", "La Grossa de Cap d'Any")}, la lotería de la Generalitat de Cataluña, que se sortea el 31 de diciembre.`,
+        `Después de Navidad, con los números oficiales: ${laterChecker("grossa", "es", "comprobador de La Grossa de Cap d'Any")} (31 de diciembre) y ${laterChecker("nino", "es", "comprobador de la Lotería del Niño")} (6 de enero).`,
       ),
     ];
   }
@@ -336,6 +342,7 @@ function evergreen(c: Ctx): Block[] {
     ...paras(
       `Two drums: one with the 100,000 number balls and one with the prize balls. A child from the San Ildefonso residence in Madrid draws a ball from each drum at the same time and two others sing them out (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
       `It is not ${grossa("en", "La Grossa de Cap d'Any")}, the Catalan government's own lottery, drawn on 31 December.`,
+      `After Christmas, on the official numbers: the ${laterChecker("grossa", "en", "La Grossa de Cap d'Any checker")} (31 December) and the ${laterChecker("nino", "en", "El Niño lottery checker")} (6 January).`,
     ),
   ];
 }

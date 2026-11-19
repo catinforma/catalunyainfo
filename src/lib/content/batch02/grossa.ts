@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
 
 import { dateYear, dayDate } from "./festive";
 import {
@@ -620,6 +621,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "Com comprovar si t'ha tocat La Grossa",
     check: [
       `**Al web:** la ${link(U.results, "pàgina de resultats de La Grossa")} de Loteries de Catalunya té un comprovador de números.`,
+      `**Al nostre ${link(grossaCheckPath("ca"), "comprovador de La Grossa de Cap d'Any")}:** tots els premis del teu número (les cinc xifres, l'anterior i el posterior i les terminacions), per bitllet i per euro, i el que en cobres després d'Hisenda, amb els números de Loteries de Catalunya.`,
       "**Al punt de venda:** qualsevol establiment amb terminal pot validar el bitllet; els que no en tenen no poden validar-lo ni pagar-lo.",
       "**Si l'has comprat per internet,** el premi s'ingressa sol: fins a 400 €, al moneder del teu compte, i més de 400 €, al compte bancari que vas registrar.",
     ],
@@ -809,6 +811,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "Cómo comprobar si te ha tocado La Grossa",
     check: [
       `**En la web:** la ${link(U.results, "página de resultados de La Grossa")} de Loteries de Catalunya tiene un comprobador de números.`,
+      `**En nuestro ${link(grossaCheckPath("es"), "comprobador de La Grossa de Cap d'Any")}:** todos los premios de tu número (las cinco cifras, el anterior y el posterior y las terminaciones), por billete y por euro, y lo que cobras tras Hacienda, con los números de Loteries de Catalunya.`,
       "**En el punto de venta:** cualquier establecimiento con terminal puede validar el billete; los que no tienen terminal no pueden validarlo ni pagarlo.",
       "**Si lo compraste por internet,** el premio se ingresa solo: hasta 400 €, en el monedero de tu cuenta, y más de 400 €, en la cuenta bancaria que registraste.",
     ],
@@ -998,6 +1001,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "How to check whether your La Grossa ticket has won",
     check: [
       `**Online:** the ${link(U.results, "La Grossa results page")} on the Loteries de Catalunya website has a number checker.`,
+      `**On our ${link(grossaCheckPath("en"), "La Grossa de Cap d'Any checker")}:** every prize your number wins (all five digits, the numbers either side and the endings), per ticket and per euro, and what you keep after tax, from Loteries de Catalunya's numbers.`,
       "**At an outlet:** any shop with a terminal can validate the ticket; those without one can neither validate nor pay it.",
       "**If you bought it online,** the prize is paid in automatically: up to €400 into your account's wallet, more than €400 into the bank account you registered.",
     ],

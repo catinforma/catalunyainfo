@@ -17,6 +17,8 @@ import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 import { gordoSitemapEntries } from "@/lib/programmatic/gordo/sitemap";
 import { checkSitemapEntries } from "@/lib/programmatic/lottery-check/sitemap";
+import { grossaCheckSitemapEntries } from "@/lib/programmatic/grossa-check/sitemap";
+import { ninoCheckSitemapEntries } from "@/lib/programmatic/nino-check/sitemap";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
@@ -263,6 +265,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...gordoSitemapEntries(),
     // The Christmas lottery checker (es, ca, en): always; last modified when the snapshot was read.
     ...checkSitemapEntries(),
+    // The La Grossa de Cap d'Any (31 Dec) and El Niño (6 Jan) checkers (ca, es, en): always.
+    ...grossaCheckSitemapEntries(),
+    ...ninoCheckSitemapEntries(),
     // URLs only: no title or snippet, so nothing here can carry a poll figure.
     ...pollsSitemapEntries(),
   ];

@@ -8832,4 +8832,61 @@ licensed photo yet); 31 HowTo blocks (rich result retired, harmless); 9 pages ov
 **Deploy.** Deploy only (code routes, no database page changed: no publish group). IndexNow prefixes: `/es/calculadoras/`,
 `/ca/calculadores/`, `/en/calculators/` (hub + pensions page), `/ca/festius/2027/`, `/en/holidays/2027/` (city pages' links).
 
+## 2026-11-19 — New pages: "Comprovar La Grossa de Cap d'Any 2026" and "Comprobar Lotería del Niño 2027" (number checkers, ca/es/en; deploy, then groups `comprobar-grossa comprobar-nino gordo-navidad`) (review 2027-01-07 and 2027-01-13)
+
+**URLs.** La Grossa: `/ca/comprovar-la-grossa-cap-d-any/` (primary), `/es/comprobar-la-grossa-cap-d-any/`,
+`/en/check-la-grossa-ticket/`. El Niño: `/es/comprobar-loteria-nino/` (primary), `/ca/comprovar-loteria-nen/`,
+`/en/check-el-nino-lottery-ticket/`. Evergreen (same URLs next season). Code route families
+`src/lib/programmatic/grossa-check/` and `nino-check/`, sitemap (+hreflang, x-default en), llms.txt, `calculator_use` ids
+`grossa-check` and `nino-check`. Data `/data/grossa-cap-d-any.json` and `/data/loteria-nino.json` (noindex,
+`s-maxage=300`), each from its own committed snapshot, `null` until the draw. Runbook `docs/GROSSA_NINO_RUNBOOK.md`.
+
+**What.** La Grossa: the full prize structure of DOGC 9640 (8.4.2026) annex 3, read 19 Nov 2026 through the DOGC API —
+five digits, last four/three/two, last digit (first prize) and the numbers either side for each of the eight extractions —
+and the rule for derived prizes quoted verbatim (8.2: only the highest category per extraction; 8.3: different
+extractions add up; 8.1 repeats), checked arithmetically against the DOGC's 61.59 % (615,875 € per 1,000,000 € series);
+90-day claim period quoted from Resolució ECO/425/2022; worked examples on the real 2025 numbers, labelled 2025. El Niño:
+only what SELAE published and we read (Wed 6 Jan 2027, 20 € décimo, first prize 2,000,000 € a la serie = 200,000 € a
+décimo, 168,000 € net); the derived-prize rules quoted from the last El Niño programme the BOE published
+(BOE-A-2010-20031, for 2011), labelled "pendiente de confirmar", none of its amounts printed; the 2027 programme goes
+into `programme-2027.json` once SELAE's PDF is read (a test fails from **28 Dec** while it is null). Both: server-rendered
+pre-draw content, client-side checker on the static JSON after the draw, results tables, FAQ (6, FAQPage JSON-LD),
+tax via the lottery-tax engine and links to the calculator.
+
+**Titles (new pages, no baseline).** ca "Comprovar La Grossa de Cap d'Any 2026: bitllet i premis"; es "Comprobar La Grossa
+de Cap d'Any 2026: billete y premios"; en "Check La Grossa de Cap d'Any 2026 ticket: prizes and tax". es "Comprobar
+Lotería del Niño 2027: décimo y premios"; ca "Comprovar la Loteria del Nen 2027 (El Niño): dècim i premis"; en "Check
+your El Niño lottery ticket 2027 (Spain, 6 January)". Titles stay on the day; descriptions switch by design to lead with
+the first prize's number.
+
+**Links (body only; no title or description touched anywhere).** Gordo hubs ca/es/en: one sentence in "how the draw
+works" (hub window "measure from 23 Dec" untouched; ships with `gordo-navidad`). Christmas checker: two related links
+(page of 18 Nov, review 29 Dec: body only). Prize tax calculator: two related links (17 Nov page, review 29 Dec: body
+only). **Held for their windows:** the La Grossa guide gains one "how to check" bullet — publish `grossa` only after its
+**8 Dec** review (17 Nov title change); the Christmas guide's El Niño paragraph gains one sentence — publish
+`loteria-nadal` (or `gordo-navidad-links`) only after its **1 Dec** review (13 Nov body change).
+
+**Baseline (GSC 6–19 Nov, the La Grossa guide).** "comprovar la grossa" 12 impressions at 18.1, no click; the guide's
+head "la grossa de cap d'any 2026" 221 at 8.1 (0.9 %). No page targets El Niño yet (only the tax calculator's preset).
+
+**Hypothesis.** Indexed by mid-December (IndexNow at go-live), the checkers rank top 10 for "comprovar la grossa" /
+"comprobar grossa cap d'any" on 31 Dec and "comprobar lotería del niño" / "comprobar décimo niño" on 6 Jan, and take
+visitors from the guide, the gordo hub and the Christmas checker (views/session on the lottery family ≥ 1.3 on those
+days). Wrong if either checker has under 200 impressions on its draw day.
+
+**Measure.** 1 Dec: indexed? (URL inspection of the six URLs). 28 Dec: El Niño programme read. Review **2027-01-07**
+(`snapshot.py page comprovar-la-grossa 7`, `page comprobar-la-grossa 7`, `page check-la-grossa 7`; GA4 `calculator_use`
+`grossa-check`) and **2027-01-13** (`page comprobar-loteria-nino 7`, `page comprovar-loteria-nen 7`, `page check-el-nino 7`;
+`nino-check`).
+
+**Confounders.** The La Grossa guide's 17 Nov title test (measured 1 and 8 Dec) and its results title on 31 Dec; the gordo
+hub and Christmas checker on 22 Dec; Reyes-day news traffic on 6 Jan.
+
+**Deploy.** Deploy, then `publish.sh comprobar-grossa comprobar-nino gordo-navidad`. IndexNow prefixes:
+`/ca/comprovar-la-grossa-cap-d-any/ /es/comprobar-la-grossa-cap-d-any/ /en/check-la-grossa-ticket/
+/es/comprobar-loteria-nino/ /ca/comprovar-loteria-nen/ /en/check-el-nino-lottery-ticket/`, plus the re-crawl of
+`/es/donde-ha-tocado-el-gordo/ /ca/on-ha-tocat-la-loteria-de-nadal/ /en/spanish-christmas-lottery-results/
+/es/comprobar-loteria-navidad/ /ca/comprovar-loteria-nadal/ /en/check-spanish-christmas-lottery-ticket/
+/es/calculadoras/premios-loteria/ /ca/calculadores/premis-loteria/ /en/calculators/spain-lottery-prize-tax/`.
+
 **Outcome:** _pending_
