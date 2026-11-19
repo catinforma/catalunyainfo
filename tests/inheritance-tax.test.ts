@@ -314,8 +314,8 @@ test("the page: three editions in the registry, route files, titles and descript
   for (const e of entries) assert.deepEqual(Object.keys(e.alternates!.languages!).sort(), ["ca", "en", "es", "x-default"]);
 });
 
-test("the page is wired: hub card in the housing group, analytics id, YMYL disclaimer and official links, home-purchase tax links it", () => {
-  const card = HUB_GROUPS.find((g) => g.id === "housing")!.cards.find((c) => c.key === "inheritance-tax");
+test("the page is wired: hub card in the taxes group, analytics id, YMYL disclaimer and official links, home-purchase tax links it", () => {
+  const card = HUB_GROUPS.find((g) => g.id === "taxes")!.cards.find((c) => c.key === "inheritance-tax");
   assert.equal(card?.scope, "catalonia");
   assert.equal(card?.checked, RULES_AS_OF);
   assert.ok(CALCULATOR_USE_IDS.includes("inheritance-tax"));

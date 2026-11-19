@@ -47,6 +47,7 @@ import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+import { InheritanceByRegion } from "./InheritanceByRegion";
 import { InheritanceTaxCalculator } from "./InheritanceTaxCalculator";
 
 /**
@@ -630,6 +631,8 @@ export function InheritanceTaxRoute({ locale }: { locale: IsdLocale }) {
                 })}{" "}
                 {officialLinks}.
               </p>
+
+              <InheritanceByRegion current="inheritance-tax" locale={locale} />
 
               <h2 id="canvis">{hd.changes}</h2>
               <ul>

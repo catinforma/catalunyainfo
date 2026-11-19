@@ -44,6 +44,9 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "home-purchase-tax": ["mortgage", "euribor"],
   // An heir: the widow's pension when the spouse died, then the taxes if the inherited home is sold and another bought.
   "inheritance-tax": ["widow-pension", "home-purchase-tax"],
+  "inheritance-tax-madrid": ["widow-pension", "home-purchase-tax"],
+  "inheritance-tax-andalucia": ["widow-pension", "home-purchase-tax"],
+  "inheritance-tax-valencia": ["widow-pension", "home-purchase-tax"],
   "pensions-2027": ["ipc", "pay-dates"],
   // The retirement date: how much the pension rises next January, then the day each payment arrives.
   "retirement-age": ["pensions-2027", "pay-dates"],

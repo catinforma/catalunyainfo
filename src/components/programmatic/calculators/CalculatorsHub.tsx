@@ -80,6 +80,7 @@ export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
                   {group.title[locale]}
                 </h2>
               </div>
+              {group.intro ? <p className="ci-measure mb-4">{group.intro[locale]}</p> : null}
               <ul className="ci-tools">
                 {group.cards.map((card) => (
                   <Card key={card.key} card={card} locale={locale} />

@@ -42,6 +42,7 @@ import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
+import { regionEditions as isdRegionEditions } from "@/lib/programmatic/inheritance-tax/regional-copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
@@ -376,6 +377,21 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Catalonia inheritance tax calculator (impost sobre successions, one heir)",
       hubs: isdEditions(),
       description: "one heir's Catalan inheritance tax under book six of the Catalan Tax Code (Legislative Decree 1/2024, which replaced Law 19/2010; consolidated text in force since 14 July 2026), step by step with each article quoted: taxable base (net share plus life insurance on a policy the deceased took out), kinship reductions (art. 631-2: group I 100,000 euros plus 12,000 per year under 21, up to 196,000; spouse and child 100,000, other descendants 50,000, ascendants 30,000; group III 8,000; group IV none), disability 275,000 / 650,000 (art. 631-3) or 275,000 at 75 or over in group II (art. 631-4, never both), life insurance up to 25,000 (art. 631-5), 95% of the deceased's habitual home with a 500,000-euro cap shared by the heirs and a 180,000-euro floor each (art. 631-17); the scale 7% to 32% (art. 633-1), coefficients by group and prior wealth (art. 633-3: 1 to 1.2 for groups I-II, 1.5882 group III, 2 group IV) with the excess rule, and the rebate (art. 633-4: 99% for spouses and stable partners; weighted average by taxable-base slices for the rest of groups I and II, 99% to 20% and 60% to 0%). Reproduces the Catalan Tax Agency's six worked examples; deadline six months from the death plus a six-month extension asked within five (RD 1629/1991 arts. 67-68), forms 660 and 650 and the ATC's help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Madrid inheritance tax calculator (impuesto sobre sucesiones, one heir)",
+      hubs: isdRegionEditions("madrid"),
+      description: "one heir's inheritance tax in the Comunidad de Madrid under Legislative Decree 1/2010 (texto refundido of ceded taxes; BOE consolidated text, art. 21 in force since 1 July 2026), step by step with each article quoted: kinship reductions replacing the state's (art. 21.Uno: group I 16,000 euros plus 4,000 per year under 21, up to 48,000; group II 16,000; group III 8,000; group IV none), disability 55,000 / 153,000, life insurance up to 9,200, 95% of the deceased's habitual home up to 123,000 per heir; Madrid's scale 7.65% to 34% (art. 23), coefficients by group and prior wealth with the excess rule (art. 24), and the rebate (art. 25.1: 99% for groups I and II; 50% for the whole of group III for deaths since 1 July 2025, on the tax of assets declared on time). Reproduces the Comunidad de Madrid's own figure (gross tax 1,250 euros, 12.50 to pay); deadline six months plus a six-month extension asked within five (RD 1629/1991 arts. 67-68), form 650 through the Oficina Virtual Tributaria. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Andalusia inheritance tax calculator (impuesto sobre sucesiones, one heir)",
+      hubs: isdRegionEditions("andalucia"),
+      description: "one heir's inheritance tax in Andalusia under Law 5/2021 on ceded taxes (in force since 1 January 2022, BOE consolidated text), step by step with each article quoted: kinship reductions (art. 28: 1,000,000 euros for groups I and II, 10,000 for group III, none for group IV), disability 250,000 / 500,000 (art. 29), 99% of the deceased's habitual home with the state limit of 122,606.47 per heir (art. 27; kept three years), the state life-insurance reduction up to 9,195.49 (Law 29/1987 art. 20.2.b); Andalusia's scale 7% to 26% (art. 37), coefficients by group only, 1 / 1.5 / 1.9 (art. 38), and the 99% rebate for groups I and II (art. 39). Deadline six months plus a six-month extension asked within five (RD 1629/1991 arts. 67-68), forms 650 and 660 with the Agencia Tributaria de Andalucía. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Valencia region inheritance tax calculator (impuesto sobre sucesiones, one heir)",
+      hubs: isdRegionEditions("valencia"),
+      description: "one heir's inheritance tax in the Comunitat Valenciana under Valencian Law 13/1997 (BOE consolidated text, arts. 10 and 12 bis as worded from 11 August 2026), step by step with each article quoted: kinship reductions for groups I and II (art. 10.1.a: 100,000 euros plus 8,000 per year under 21, up to 156,000; 100,000), the state's 7,993.46 for group III and none for group IV (Law 29/1987 art. 20.2.a, as the ATV's form 650 instructions apply it), disability 120,000 / 240,000 (65%, or intellectual or mental 33%), the state life-insurance reduction up to 9,195.49, 95% of the deceased's habitual home up to 150,000 per heir; the Valencian scale 7.65% to 34% (art. 11) and coefficients with the excess rule (art. 12), and the rebates (art. 12 bis: 99% for groups I and II and for heirs with a 65% or intellectual/mental 33% disability; 25% for blood siblings, nephews, nieces, uncles and aunts for deaths since 1 June 2026, 50% from 1 June 2027). Deadline six months plus a six-month extension (art. 12 ter, RD 1629/1991), form 650 with the Agència Tributària Valenciana's online help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
     },
     {
       name: "Strikes in Catalonia today",

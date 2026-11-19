@@ -46,6 +46,10 @@ export const CALCULATORS = [
   { id: "home-purchase-tax", slugs: { es: "impuestos-compra-vivienda", ca: "impostos-compra-habitatge", en: "spain-home-purchase-taxes" } },
   // Housing and taxes: one heir's Catalan inheritance tax (Codi tributari de Catalunya, llibre sisè, arts. 631-2 to 633-4; lib/programmatic/inheritance-tax).
   { id: "inheritance-tax", slugs: { es: "impuesto-sucesiones-cataluna", ca: "impost-successions-catalunya", en: "catalonia-inheritance-tax" } },
+  // The same tax in three more communities (lib/programmatic/inheritance-tax/regions/): Madrid (DL 1/2010 arts. 21-26), Andalucía (Ley 5/2021 arts. 26-39), Comunitat Valenciana (Ley 13/1997 arts. 10-12 quáter).
+  { id: "inheritance-tax-madrid", slugs: { es: "impuesto-sucesiones-madrid", ca: "impost-successions-madrid", en: "madrid-inheritance-tax" } },
+  { id: "inheritance-tax-andalucia", slugs: { es: "impuesto-sucesiones-andalucia", ca: "impost-successions-andalusia", en: "andalusia-inheritance-tax" } },
+  { id: "inheritance-tax-valencia", slugs: { es: "impuesto-sucesiones-comunidad-valenciana", ca: "impost-successions-comunitat-valenciana", en: "valencia-inheritance-tax" } },
   // Housing: is a town a declared zona de mercado residencial tensionado (Ley 12/2023 art. 18; BOE lists), and what changes (LAU arts. 10.3, 17.6-17.7).
   { id: "zona-tensionada", slugs: { es: "zona-tensionada", ca: "zona-tensionada", en: "spain-rent-control-areas" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },

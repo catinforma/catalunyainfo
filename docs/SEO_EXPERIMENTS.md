@@ -9002,3 +9002,53 @@ and the linking page: `/ca/calculadores/ /es/calculadoras/ /en/calculators/ /ca/
 /es/calculadoras/impuestos-compra-vivienda/ /en/calculators/spain-home-purchase-taxes/`.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — "Impuesto de sucesiones" in Madrid, Andalucía and the Comunidad Valenciana, es + ca + en (3 new pages × 3 editions; deploy only, no publish group) + hub section "Impuesto de sucesiones por comunidad" (review 2026-12-17)
+
+**Why.** Spain-wide demand for "impuesto de sucesiones Madrid / Andalucía / Comunidad Valenciana" is large and the site only
+had Catalonia. One calculator page per community, nothing thinner for the rest (no pages for other communities). Fact pack:
+research_notes/inheritance-tax-spain.md (gitignored, worktree copy).
+
+- URLs (es primary): `/es/calculadoras/impuesto-sucesiones-madrid/`, `/es/calculadoras/impuesto-sucesiones-andalucia/`,
+  `/es/calculadoras/impuesto-sucesiones-comunidad-valenciana/`; `/ca/calculadores/impost-successions-madrid/`,
+  `/ca/calculadores/impost-successions-andalusia/`, `/ca/calculadores/impost-successions-comunitat-valenciana/`;
+  `/en/calculators/madrid-inheritance-tax/`, `/en/calculators/andalusia-inheritance-tax/`, `/en/calculators/valencia-inheritance-tax/`.
+  Sitemap + hreflang (x-default en), llms.txt, site-search shortcuts ("sucesiones madrid", "sucesiones andalucia",
+  "sucesiones comunidad valenciana"…), `calculator_use` ids `inheritance-tax-madrid|andalucia|valencia`, next step
+  (widow's pension, home-purchase taxes). Registry ids in calculators/paths.ts.
+- Hub (/es/calculadoras/ + ca/en): new group `taxes` titled "Impuesto de sucesiones por comunidad" with a one-line intro
+  (the deceased's residence decides) and four cards: Cataluña (moved from `housing`), Madrid, Andalucía, Comunidad
+  Valenciana. Hub title/description unchanged. Each of the four pages links the other three ("El impuesto de sucesiones
+  en otras comunidades"), the Catalan page included (one block, body only).
+- Rules read 19 Nov 2026 (BOE consolidated texts, curl + grep): Madrid DL 1/2010 arts. 21 (in force 01/07/2026, Ley
+  3/2026, same figures), 23, 24, 25.1 (99 % I-II; 50 % group III from 01/07/2025, Ley 2/2025), 26; Andalucía Ley 5/2021
+  arts. 26-29, 37-39 (unchanged since 01/01/2022; home 99 % with the state 122.606,47 € cap, insurance state 9.195,49 €);
+  Valencia Ley 13/1997 arts. 10 (in force 11/08/2026, Ley 5/2026, same figures), 11-12 (01/01/2024), 12 bis (99 % I-II;
+  99 % disability ≥65 % or mental ≥33 %; 25 % blood collaterals from 01/06/2026, 50 % from 01/06/2027), 12 ter/quáter;
+  group III, IV and insurance = state (ATV form 650 instructions). State: Ley 29/1987 arts. 20-22, RD 1629/1991 arts. 39,
+  67, 68, Ley 22/2009 arts. 28, 32, 48.
+- Tests: Madrid's own published figure (cuota íntegra 1.250 € → 12,50 €) to the cent; no official simulator exists for
+  any of the three (Madrid computes inside the Oficina Virtual; Andalucía's old simulator domain is parked; the ATV only
+  simulates property/vehicle values), so 17 cases hand-calculated outside the engine (Python Decimal, half-up) plus the
+  excess rule at 403.500 € (Madrid) and 391.000 € (Valencia). `RULES_UNTIL` 2027-01-01 (tests/inheritance-tax-regions.test.ts).
+
+**Baseline (GSC 23 Oct–19 Nov 2026).** 0 impressions for any query containing "sucesion", "successi", "inheritance",
+"herencia" or "herència" (same check as the Catalan entry above, same day): no ranking for the topic anywhere.
+
+**Hypothesis.** Indexed within a week of IndexNow; the nine URLs reach ≥ 1,000 impressions in the 28 days to the review,
+mostly the three Spanish editions on "impuesto de sucesiones madrid|andalucía|comunidad valenciana" and "calculadora
+sucesiones …", and ≥ 25 % of sessions with a `calculator_use`. Wrong if fewer than 300 impressions by 17 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, the three es URLs). Review **2026-12-17**: `snapshot.py page
+impuesto-sucesiones 28`, `page impost-successions 28`, `page inheritance-tax 28`; GA4 `calculator_use` for the three ids;
+the hub's own clicks before/after the new group (`snapshot.py page /es/calculadoras/ 28`).
+
+**Confounders.** The Catalan page went live the same day (shared queries "impuesto de sucesiones"). January 2027 budget
+laws (Madrid, Andalucía, Valencia) may change the rules inside the window: the date guard fails on 1 Jan 2027; log any
+body update here.
+
+**IndexNow after deploy:** `python scripts/indexnow-sitemap.py /es/calculadoras/impuesto-sucesiones- /ca/calculadores/impost-successions-
+/en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/
+/en/calculators/catalonia-inheritance-tax/`, plus the hub `/ca/calculadores/ /es/calculadoras/ /en/calculators/`.
+
+**Outcome:** _pending_

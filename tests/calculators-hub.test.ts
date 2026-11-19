@@ -68,11 +68,22 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("non-contributory-pension"), { ca: "/ca/calculadores/pensio-no-contributiva/", es: "/es/calculadoras/pension-no-contributiva/", en: "/en/calculators/spain-non-contributory-pension/" });
   assert.deepEqual(calcEditions("traffic-fines"), { ca: "/ca/calculadores/multes-transit/", es: "/es/calculadoras/multas-trafico/", en: "/en/calculators/traffic-fines-spain/" });
   // 19 Nov 2026.
-  assert.deepEqual(calcEditions("inheritance-tax"), { ca: "/ca/calculadores/impost-successions-catalunya/", es: "/es/calculadoras/impuesto-sucesiones-cataluna/", en: "/en/calculators/catalonia-inheritance-tax/" });
+  assert.deepEqual(calcEditions("inheritance-tax"), { ca: "/ca/calculadores/impost-successions-catalunya/", es: "/es/calculadoras/impuesto-sucesiones-cataluna/", en: "/en/calculators/catalonia-inheritance-tax/" });  assert.deepEqual(calcEditions("inheritance-tax-madrid"), { ca: "/ca/calculadores/impost-successions-madrid/", es: "/es/calculadoras/impuesto-sucesiones-madrid/", en: "/en/calculators/madrid-inheritance-tax/" });
+  assert.deepEqual(calcEditions("inheritance-tax-andalucia"), { ca: "/ca/calculadores/impost-successions-andalusia/", es: "/es/calculadoras/impuesto-sucesiones-andalucia/", en: "/en/calculators/andalusia-inheritance-tax/" });
+  assert.deepEqual(calcEditions("inheritance-tax-valencia"), { ca: "/ca/calculadores/impost-successions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-sucesiones-comunidad-valenciana/", en: "/en/calculators/valencia-inheritance-tax/" });
 });
 
-test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax and Catalan inheritance tax tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "inheritance-tax"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
+});
+
+test("hub: the taxes group is 'inheritance tax by community', Catalonia first, with a one-line intro in every language", () => {
+  const taxes = HUB_GROUPS.find((g) => g.id === "taxes")!;
+  assert.deepEqual(taxes.cards.map((c) => c.key), ["inheritance-tax", "inheritance-tax-madrid", "inheritance-tax-andalucia", "inheritance-tax-valencia"]);
+  assert.equal(taxes.title.es, "Impuesto de sucesiones por comunidad");
+  for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /cinc anys|cinco años|five years/);
+  assert.deepEqual(taxes.cards.map((c) => c.scope), ["catalonia", "madrid", "andalucia", "valencia"]);
+  assert.match(read("src/components/programmatic/calculators/CalculatorsHub.tsx"), /group\.intro \? <p/);
 });
 
 test("hub: lists every calculator of the registry exactly once, linking its own editions", () => {
@@ -83,8 +94,8 @@ test("hub: lists every calculator of the registry exactly once, linking its own 
   assert.equal(new Set(keys).size, keys.length, "a card appears twice");
 });
 
-test("hub: the eight groups, each card complete in ca, es and en, linking indexable pages", () => {
-  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "lottery", "vehicle", "holidays", "energy", "live"]);
+test("hub: the nine groups, each card complete in ca, es and en, linking indexable pages", () => {
+  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "taxes", "official", "lottery", "vehicle", "holidays", "energy", "live"]);
   // Energy at home: the bono social checker (lib/programmatic/bono-social), right before the live group (PVPC, butane).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
   // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax), then the number checker (lib/programmatic/lottery-check).

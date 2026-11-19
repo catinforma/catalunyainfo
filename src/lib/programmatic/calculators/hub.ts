@@ -34,6 +34,7 @@ import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
+import { RULES_AS_OF as REGIONAL_ISD_AS_OF } from "@/lib/programmatic/inheritance-tax/regions/state";
 import { RULES_AS_OF as ZONA_TENSIONADA_AS_OF } from "@/lib/programmatic/zona-tensionada/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -51,8 +52,8 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "official" | "lottery" | "vehicle" | "holidays" | "energy" | "live";
-export type Scope = "spain" | "catalonia";
+export type HubGroupId = "work" | "housing" | "taxes" | "official" | "lottery" | "vehicle" | "holidays" | "energy" | "live";
+export type Scope = "spain" | "catalonia" | "madrid" | "andalucia" | "valencia";
 
 export interface HubCard {
   /** The calculator's registry id, or a key of its own for the other tools. */
@@ -74,6 +75,8 @@ export interface HubCard {
 export interface HubGroup {
   id: HubGroupId;
   title: Record<CalcLocale, string>;
+  /** One line under the group's heading, when the group needs it (taxes: which community's rules apply). */
+  intro?: Record<CalcLocale, string>;
   cards: HubCard[];
 }
 
@@ -83,6 +86,9 @@ const calc = (id: CalculatorId) => each((l) => calcPath(id, l));
 export const SCOPE_LABEL: Record<Scope, Record<CalcLocale, string>> = {
   spain: { ca: "Tot Espanya", es: "Toda España", en: "All of Spain" },
   catalonia: { ca: "Catalunya", es: "Cataluña", en: "Catalonia" },
+  madrid: { ca: "Comunitat de Madrid", es: "Comunidad de Madrid", en: "Madrid region" },
+  andalucia: { ca: "Andalusia", es: "Andalucía", en: "Andalusia" },
+  valencia: { ca: "Comunitat Valenciana", es: "Comunidad Valenciana", en: "Valencia region" },
 };
 
 export const HUB_GROUPS: HubGroup[] = [
@@ -441,6 +447,18 @@ export const HUB_GROUPS: HubGroup[] = [
         scope: "spain",
         checked: HOME_TAX_AS_OF,
       },
+    ],
+  },
+  {
+    // Inheritance tax by community: the rules of the region where the deceased lived (Ley 22/2009 arts. 28 and 32).
+    id: "taxes",
+    title: { ca: "Impost de successions per comunitat", es: "Impuesto de sucesiones por comunidad", en: "Inheritance tax by region" },
+    intro: {
+      ca: "Cada comunitat té les seves reduccions, tarifa i bonificacions, i s'apliquen les de la comunitat on la persona morta va viure més dies dels últims cinc anys. Calculadores per a aquestes quatre comunitats, amb els articles de la seva llei:",
+      es: "Cada comunidad tiene sus reducciones, tarifa y bonificaciones, y se aplican las de la comunidad donde la persona fallecida vivió más días de los últimos cinco años. Calculadoras para estas cuatro comunidades, con los artículos de su ley:",
+      en: "Each region has its own reductions, scale and rebates, and those of the region where the deceased lived the most days of the last five years apply. Calculators for these four regions, with the articles of each law:",
+    },
+    cards: [
       {
         key: "inheritance-tax",
         calculator: true,
@@ -458,6 +476,60 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "catalonia",
         checked: INHERITANCE_TAX_AS_OF,
+      },
+      {
+        key: "inheritance-tax-madrid",
+        calculator: true,
+        href: calc("inheritance-tax-madrid"),
+        title: { ca: "Impost de successions a Madrid", es: "Impuesto de sucesiones en Madrid", en: "Madrid inheritance tax" },
+        answers: {
+          ca: "Quant pagaràs per una herència a la Comunitat de Madrid, amb la bonificació del 99 % de fills, cònjuge i pares o la del 50 % de germans i nebots?",
+          es: "¿Cuánto pagarás por una herencia en la Comunidad de Madrid, con la bonificación del 99 % de hijos, cónyuge y padres o la del 50 % de hermanos y sobrinos?",
+          en: "How much tax you pay on an inheritance in the Madrid region, with the 99% rebate for children, spouses and parents or the 50% one for siblings and nephews.",
+        },
+        basis: {
+          ca: "Decret legislatiu 1/2010 de la Comunitat de Madrid, arts. 21 a 26 (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions.",
+          es: "Decreto Legislativo 1/2010 de la Comunidad de Madrid, arts. 21 a 26 (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones.",
+          en: "Madrid Legislative Decree 1/2010, arts. 21 to 26 (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "madrid",
+        checked: REGIONAL_ISD_AS_OF,
+      },
+      {
+        key: "inheritance-tax-andalucia",
+        calculator: true,
+        href: calc("inheritance-tax-andalucia"),
+        title: { ca: "Impost de successions a Andalusia", es: "Impuesto de sucesiones en Andalucía", en: "Andalusia inheritance tax" },
+        answers: {
+          ca: "Quant pagaràs per una herència a Andalusia, amb la reducció d'1.000.000 € i la bonificació del 99 % de fills, cònjuge i pares?",
+          es: "¿Cuánto pagarás por una herencia en Andalucía, con la reducción de 1.000.000 € y la bonificación del 99 % de hijos, cónyuge y padres?",
+          en: "How much tax you pay on an inheritance in Andalusia, with the €1,000,000 reduction and the 99% rebate for children, spouses and parents.",
+        },
+        basis: {
+          ca: "Llei 5/2021 de tributs cedits d'Andalusia, arts. 26 a 29 i 37 a 39 (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions.",
+          es: "Ley 5/2021 de Tributos Cedidos de Andalucía, arts. 26 a 29 y 37 a 39 (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones.",
+          en: "Andalusian Ceded Taxes Act (Law 5/2021), arts. 26 to 29 and 37 to 39 (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "andalucia",
+        checked: REGIONAL_ISD_AS_OF,
+      },
+      {
+        key: "inheritance-tax-valencia",
+        calculator: true,
+        href: calc("inheritance-tax-valencia"),
+        title: { ca: "Impost de successions a la Comunitat Valenciana", es: "Impuesto de sucesiones en la Comunidad Valenciana", en: "Valencia region inheritance tax" },
+        answers: {
+          ca: "Quant pagaràs per una herència a la Comunitat Valenciana, amb la bonificació del 99 % de fills, cònjuge i pares o la del 25 % de germans i nebots de sang?",
+          es: "¿Cuánto pagarás por una herencia en la Comunidad Valenciana, con la bonificación del 99 % de hijos, cónyuge y padres o la del 25 % de hermanos y sobrinos de sangre?",
+          en: "How much tax you pay on an inheritance in the Valencia region, with the 99% rebate for children, spouses and parents or the 25% one for blood siblings and nephews.",
+        },
+        basis: {
+          ca: "Llei valenciana 13/1997, arts. 10 a 12 quàter (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions.",
+          es: "Ley valenciana 13/1997, arts. 10 a 12 quáter (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones.",
+          en: "Valencian Law 13/1997, arts. 10 to 12 quáter (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "valencia",
+        checked: REGIONAL_ISD_AS_OF,
       },
     ],
   },
