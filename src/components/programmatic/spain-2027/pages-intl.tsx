@@ -4,7 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
-import { WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
+import { WorkingDaysCommunityLink, WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalculatorsHubLink } from "@/components/programmatic/calculators/MoreCalculators";
 import { getMessages } from "@/lib/i18n";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
@@ -424,6 +424,8 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
               : tr(locale, `${c.Full} no ${c.plural ? "tenen" : "té"} festius diferents dels comuns.`, `${c.Full} ${c.plural ? "have" : "has"} no holidays beyond the shared ones.`)}
           </p>
           {notKept ? <p>{notKept}</p> : null}
+          {/* The working-days calculator with this community picked (19 Nov 2026); the value is the Spanish slug's. */}
+          <WorkingDaysCommunityLink locale={locale} region={c.region} esSlug={c.esSlug} inPlace={c.in} />
 
           <h2 id="ponts">{tr(locale, `Ponts i caps de setmana llargs del ${YEAR} ${c.in}`, `Long weekends and bridges ${c.in} in ${YEAR}`)}</h2>
           <p>

@@ -147,6 +147,28 @@ export function breadcrumbSchema(items: { label: string; href: string }[]): Json
   };
 }
 
+/**
+ * A calculator page's tool, as the 22 calculators that had one already wrote it inline (net salary, paid leave,
+ * IPREM…): a free WebApplication published by the site, named as the page's H1, described as its meta
+ * description. Since 19 Nov 2026 the templates that had only a BreadcrumbList (SMI, Letras, working days,
+ * pensions 2027, the three employment calculators, rent update, ITV, mortgage, home-purchase taxes) use it too.
+ * No rating, no review: we hold none.
+ */
+export function calculatorAppSchema(input: { name: string; path: string; description: string; locale: Locale; category: "FinanceApplication" | "UtilitiesApplication" | "BusinessApplication" }): Json {
+  return {
+    "@type": "WebApplication",
+    name: input.name,
+    url: absoluteUrl(input.path),
+    applicationCategory: input.category,
+    operatingSystem: "Any",
+    inLanguage: input.locale,
+    isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    description: input.description,
+  };
+}
+
 function imageObject(entry: EntryDetail): Json | undefined {
   const hero = entry.og ?? entry.hero;
   if (!hero) return undefined;

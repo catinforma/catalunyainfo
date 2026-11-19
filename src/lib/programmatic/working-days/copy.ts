@@ -1,5 +1,6 @@
 import { calcEditions, calcPath } from "@/lib/programmatic/calculators/paths";
 import { dayMonthYear, longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
+import { CATALONIA_ID } from "@/lib/programmatic/leave-2027/copy";
 
 import type { Reason, RuleSet, Unit } from "./engine";
 
@@ -23,6 +24,11 @@ export function workingDaysPath(locale: WdLocale): string {
 /** The calculator with a place picked (the hash the calculator reads: `p` = the leave planner's place id). */
 export function workingDaysLinkFor(locale: WdLocale, placeId: string): string {
   return `${workingDaysPath(locale)}#p=${placeId}`;
+}
+
+/** A whole community's place id, as the leave planner names it: "<Spanish slug>/all", or Catalonia's own CATALONIA_ID ("catalunya"). */
+export function communityPlaceId(region: string, esSlug: string): string {
+  return region === "CT" ? CATALONIA_ID : `${esSlug}/all`;
 }
 
 export function workingDaysEditions(): Record<WdLocale, string> {

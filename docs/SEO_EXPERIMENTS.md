@@ -9365,3 +9365,89 @@ if repealed, the under-21/under-25 rule quoted is the same in both wordings.
 /es/calculadoras/pension-viudedad/ /ca/calculadores/pensio-viduitat/ /en/calculators/spain-widows-pension/`.
 
 **Outcome:** _pending_
+
+
+## 2026-11-19 — Calculators top-5 push: SMI 2027 typed in from today's BOE, the kinship table, which pensions rise, 15 working days, WebApplication on 12 tools, two links in (body only; deploy, then groups `pagos`, `calendario-2027-espana`) (review 2026-12-03 and 2026-12-17)
+
+**Observation.** The calculators family moved from ~27 to ~10 in a week (GSC 6–19 Nov, 19 Nov partial: ES 34 clicks / 3,562
+impressions / 1.0 % / ~12; CA 25 / 1,065 / 2.3 % / ~6; EN 2 / 141 / ~10). Page × query pull at 4.5–20.5
+(`calc_pages.py` on the snapshot.py auth; most impressions are anonymised). No calculator query is in `gaps 14 80` (strikes fill
+it). Each calculator with impressions was read against its live first screen and body:
+
+| Calculator (14 d, ca+es+en: clicks / impr. / pos) | Queries at 5–20 (impr., pos) | Gap | Change |
+| --- | --- | --- | --- |
+| SMI 2027 — 11 / 957 / 7.4 | "smi 1286" 4 · 9.0; "salario minimo cataluña 2026" 3 · 5.7; "salario mínimo 2027 españa en 12 pagas" 2 · 9.5; "smi catalunya" 2 · 5.5; "cuando lo publicaran" / "cuando se publica" 1 · 6–9; CA "salari minim interprofessional 2027" 17 · 8.3 | The BOE published RD 1013/2026 this morning; the page flipped to "official" by itself (13 Nov design) but its body still said "2027 no vale para tu nómina hasta que salga en el BOE", "el proyecto prevé…", "Historia de 2018 a 2026". No "is it the same in Catalonia" answer; no "when is it first paid" | 1 |
+| Pensions 2027 — 20 / 480 / 8.2 | CA "pujada pensions 2027" 45 · 8.2, "quan pujaran les pensions (el) 2027" 9 · 8.5; "cuanto sube la brecha de genero en 2027" 4 · 10.0; "subida pensiones 2027 incapacidad permanente" 3 · 20.0 | Lead answers "January"; nothing says which pensions rise or what the gender-gap supplement becomes | 2 |
+| Paid leave — 3 / 304 / 7.6 | "tabla de permisos por fallecimiento cataluña" 5 · 9.4; "grados de consanguinidad días de permiso" 1 · 15; "dias de permiso por boda" 1 · 18; CA "estatut dels treballadors 2026 catalunya" 3 · 9.3 | Table and FAQ say "hasta segundo grado" but never who that is | 3 |
+| Working days — 3 / 472 / 8.1 | "dias laborables" 5 · 14.0; "15 dias habiles" 2 · 18.5; "dias habiles 2027" / "calendario dias habiles 2027" 2 · 6.5–8; "dias habiles noviembre 2026" 2 · 8.0 | Monthly 2026/2027 table already there; examples only for 10 and 5 days | 4 |
+| Letras del Tesoro — 12 / 898 / 7.3 | Calendar queries (17 Nov change, review 1 Dec); CA "lletres del tresor a 12 mesos" 20 · 9.8 | The CA lead already gives 3,045 % at 12 months | none (window) |
+| Subsidy — 2 / 215 | "cuanto es el subsidio", "subsidio 2026" 1–2 · 10–11 | Lead gives 570/540/480 € | none |
+| Paro — 3 / 243 / 23.7 | "tabla de paro por dias cotizados" 1 · 14; "paro por un año trabajado" 1 · 13 | Official table in the body; ES average pulled down by queries at 35–60 | none |
+| IPC — 1 / 197 | "ipc octubre 2026 catalunya" ES 4 · 9.0 + 3 · 10.7, CA 6 · 8.0; "cuando se publica el proximo ipc" 2 · 9.0 | Catalonia's CPI is not on the page (only national series) | proposal below |
+| Rent update 4 / 128 / 18.0; ITV 1 / 185 / 21.1; self-employed 0 / 157; net salary 1 / 132 | One-impression queries ("ipc alquileres 2025", "cuanto cuesta la itv", "trams autonoms 2026", "calculadora sueldo neto barcelona") | Each is answered (price table, tramos table, region section) | none |
+
+**What changed (ca/es/en, body only; no title, description, lead or H1 touched).**
+1. **SMI 2027** (`smi/rules.ts`, `SmiPage.tsx`). `OFFICIAL_2027` = Real Decreto 1013/2026, de 18 de noviembre (BOE-A-2026-24189,
+   BOE 19 Nov 2026), read in its XML today: art. 1 42,87 €/day or 1.286 €/month, art. 3.1 18.004 €/year, art. 4.1 60,88 € per day,
+   art. 4.2 10,06 €/hour, final provision three in force 1 Jan 2027 (= the draft's figures). Fixture
+   `tests/fixtures/boe-smi-2027-rd1013.xml`; a test checks the parser reads `OFFICIAL_2027` from it and both new quotes are in it. The
+   page no longer depends on the hourly BOE answer. Body: the "what is not official" line says 2027 is in the BOE and applies from
+   1 January; the "when is it approved" paragraph drops "el proyecto prevé"; new H3 "¿Desde cuándo se cobra el SMI de 2027?" (from
+   the January 2027 payslip, no backdated rise this time, quoting final provision three); after the 2027 table, "the same all over
+   Spain, Catalonia included", quoting final provision one (art. 149.1.7.ª CE); the draft row says the decree kept its amounts;
+   "Historia del SMI de 2018 a 2027"; the disclaimer dates the amounts 19 Nov. No 2027 net figure: the IRPF and contribution rules
+   for 2027 are not published (the 2026 net table stays).
+2. **Pensions 2027** (`PensionPage.tsx`): one paragraph under the art. 58.2 quote: it covers every contributory pension
+   (permanent disability, widow's, orphan's, family members) and the gender-gap supplement the article names, 36,90 € in 2026
+   (RDL 3/2026) × the page's own rate ("unos 38,18 €" at today's provisional 3,47 %, recomputed with each INE release);
+   non-contributory pensions by the Budget Act (art. 62, already quoted further down).
+3. **Paid leave** (`paid-leave/rules.ts`, `PaidLeavePage.tsx`): H3 "¿Quién es familiar hasta segundo grado?" under the leave table:
+   spouse/partner, 1st (parents, children), 2nd (grandparents, grandchildren, siblings), 3rd (great-grandparents, uncles, nephews),
+   4th (first cousins) against 2 (4) days for a death and 5 for illness/hospitalisation; Código Civil arts. 918 and 919 quoted
+   (BOE-A-1889-4763, read today; fixture `boe-codigo-civil-915-919.txt`, test). Affinity: the page says the Statute covers in-laws up
+   to the 2nd degree but no law says how that degree is counted (no official table found; third-party tables not used) and points to
+   the collective agreement.
+4. **Working days** (`working-days/page.ts`, `WorkingDaysPage.tsx`): a fourth example from the engine: 15 días hábiles notified
+   30 Nov 2026 end Wed 23 Dec in Madrid and Tue 22 Dec in Barcelona; 15 calendar days, Tue 15 Dec (hand-checked in the test).
+5. **Structured data**: `calculatorAppSchema()` in `lib/seo/jsonld.ts` (the same WebApplication shape the 22 other calculators wrote
+   inline: free Offer, publisher = Organization, name = H1, description = meta description, no rating) added next to the
+   BreadcrumbList on SMI, Letras, working days, pensions 2027, dismissal, finiquito, paro, rent update, ITV, mortgage and home-purchase
+   taxes. Left without one: IPC and Euríbor (reference figures, no tool), average salary and the 21-territory comparison (Dataset).
+   FAQPage stays only where the questions are printed (net salary, paid leave, subsidy, self-employed, sick leave, rent update).
+   New `tests/calculators-jsonld.test.ts` fails if a registry tool's component has no WebApplication.
+6. **Links in** (one each, descriptive anchor; no strike, election or holiday-guide page touched — the strongest holiday pages
+   already link the working-days calculator and the leave planner):
+   - Pay-dates guide (`batch02/pay-dates.ts`, DB article, group `pagos`; 14 d ES 2 / 184 / 21.0, CA 1 / 28 / 4.5, EN 4 / 196 / 3.7):
+     a bullet "nor sick leave: as a rule your employer pays it in your payslip («pago delegado»)" → "Calcula cuánto cobras de baja
+     laboral" / "Calcula quant cobres de baixa laboral" / "Work out your sick pay in Spain" (sick leave 0 / 178 / 27.8, its "quan es
+     cobra estan de baixa" at 11). It already linked paro, subsidy, pensions, retirement, extra pay and net salary.
+   - Spain 2027 community pages (19 × 3, ~750 impr. / 14 d ES): under "Qué cambia respecto al resto de España", the working-days
+     calculator with that community picked (`#p=<slug>/all`, Catalonia `#p=catalunya`): "Plazos en días hábiles en la Comunidad de
+     Madrid: calcula el último día con sus festivos". Hub and city pages already had theirs; a test checks every community value
+     exists in the picker in all three languages.
+
+**Not changed / queued.** IPC: Catalonia's CPI (INE's table by community) would answer "ipc octubre 2026 catalunya" (~13 impr. at
+8–11, ES + CA): needs a new INE series in `ipc/series.ts`, the snapshot and tests — proposal for the 15 Dec IPC release. Paro: a
+"one year contributed = 4 months" sentence would repeat the official table already in the body. SMI 2027 net: wait for the 2027
+withholding rules.
+
+**Confounders.** SMI: today's BOE flip changed its title and lead by design (13 Nov entry) — read the SMI page against the 13 Nov
+entry's 1 Dec measure, not as this entry's effect alone. Letras: 17 Nov calendar heading (review 1 Dec); only its JSON-LD changes
+here. The 13 Nov calculator windows (titles to 15 Dec) are untouched.
+
+**Prediction.** By 3 Dec: "salari minim interprofessional 2027" (CA) ≤ 6 and the SMI ES page ≥ 2 % CTR at equal position; paid
+leave "tabla de permisos por fallecimiento" ≤ 6; pensions CA "pujada pensions 2027" ≤ 6; sick leave enters the top 20 for "cuánto se
+cobra de baja" variants. By 17 Dec: calculators family ES position ≤ 8 and CTR ≥ 2 %; Search Console shows the WebApplication
+items without errors (no rich result expected).
+
+**Review 2026-12-03 and 2026-12-17**: `snapshot.py page calculadoras 14`, `page calculadores 14`, `page calculators 14`,
+`page salario-minimo-2027 14`, `page permisos-laborales 14`, `page pujada-pensions-2027 14`, `page baja-laboral 14`,
+`page dias-habiles 14`, `page cuando-se-cobra-paro-pension 14`. Revert rule: a section whose page loses ≥ 2 positions at equal
+impressions by 17 Dec comes out.
+
+**Deploy.** Deploy (calculator routes and the Spain 2027 templates are code), then publish groups `pagos` (pay-dates guide body)
+and `calendario-2027-espana` (community pages). IndexNow prefixes: `/es/calculadoras/ /ca/calculadores/ /en/calculators/
+/es/guias/cuando-se-cobra-paro-pension/ /ca/guies/quan-es-cobra-atur-pensio/ /en/guides/unemployment-benefit-pension-payment-dates-spain/
+/es/festivos/2027/ /ca/festius/2027/ /en/holidays/2027/`.
+
+**Outcome:** _pending_

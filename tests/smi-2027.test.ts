@@ -52,6 +52,21 @@ test(`date guard: from ${OFFICIAL_2027_DUE} the 2027 decree from the BOE is type
   );
 });
 
+test("2027: OFFICIAL_2027 is RD 1013/2026 as the parser reads it from the BOE's own XML, and its quotes are in that text", () => {
+  assert.ok(OFFICIAL_2027, "OFFICIAL_2027 is typed in");
+  const xml = fixture("boe-smi-2027-rd1013.xml");
+  const p = parseSmiDecree(xml, 2027);
+  assert.ok(p, "the RD 1013/2026 fixture parses");
+  assert.deepEqual(
+    { boeId: p.boeId, norm: p.norm, published: p.published, monthly: p.monthly, daily: p.daily, annual: p.annual, domesticHourly: p.domesticHourly, temporaryDaily: p.temporaryDaily, effectiveFrom: p.effectiveFrom },
+    { boeId: OFFICIAL_2027.boeId, norm: OFFICIAL_2027.norm, published: OFFICIAL_2027.published, monthly: OFFICIAL_2027.monthly, daily: OFFICIAL_2027.daily, annual: OFFICIAL_2027.annual, domesticHourly: OFFICIAL_2027.domesticHourly, temporaryDaily: OFFICIAL_2027.temporaryDaily, effectiveFrom: OFFICIAL_2027.effectiveFrom },
+  );
+  assert.ok(Math.abs(OFFICIAL_2027.annual - OFFICIAL_2027.monthly * 14) < 0.001);
+  const flat = xml.replace(/<[^>]+>/g, " ").replace(/[\s  ]+/g, " ");
+  for (const q of [QUOTE.rd1013effects, QUOTE.rd1013competence]) assert.ok(flat.includes(q), q.slice(0, 60));
+  assert.equal(smi2027Status(null).kind, "official", "the page no longer depends on the live BOE answer");
+});
+
 test(`date guard: the 2027 status (draft, hearing, Council of Ministers) is re-read by ${STATUS_RECHECK_BY}`, () => {
   if (OFFICIAL_2027 !== null) return;
   assert.ok(

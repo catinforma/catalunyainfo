@@ -9,6 +9,7 @@ import { municipalities, municipalityBySlug, regionalDays } from "../src/lib/pro
 import { calcEditions } from "../src/lib/programmatic/calculators/paths.ts";
 import { hubCards } from "../src/lib/programmatic/calculators/hub.ts";
 import { CITIES } from "../src/lib/programmatic/spain-2027/cities.ts";
+import { COMMUNITIES } from "../src/lib/programmatic/spain-2027/communities.ts";
 import {
   countWorkingDays,
   dayNumber,
@@ -21,7 +22,7 @@ import {
   weekday,
   type Calendar,
 } from "../src/lib/programmatic/working-days/engine.ts";
-import { CALC_COPY, DEFAULT_EXAMPLE, NATIONAL_ID, WD_LOCALES, itemHolidays, itemInfo, packDates, unpackDates, workingDaysEditions } from "../src/lib/programmatic/working-days/copy.ts";
+import { CALC_COPY, DEFAULT_EXAMPLE, NATIONAL_ID, communityPlaceId, WD_LOCALES, itemHolidays, itemInfo, packDates, unpackDates, workingDaysEditions } from "../src/lib/programmatic/working-days/copy.ts";
 import { WD_META, calendarFor, findItem, pageFigures } from "../src/lib/programmatic/working-days/page.ts";
 import { nationalDates, region2026, workingDaysData, workingDaysSitemapEntries } from "../src/lib/programmatic/working-days/places.ts";
 import {
@@ -261,6 +262,11 @@ test("page: figures, titles and the registry", () => {
   }
   assert.equal(pageFigures(DATA, "es").example.last, "2026-12-16");
   assert.equal(pageFigures(workingDaysData("ca"), "ca").example.last, "2026-12-15");
+  // 15 días hábiles from Monday 30 Nov 2026, by hand: Madrid skips 7 and 8 Dec (Wed 23 Dec), Barcelona only 8 Dec (Tue 22 Dec); 15 calendar days end Tue 15 Dec.
+  const es15 = pageFigures(DATA, "es");
+  assert.deepEqual([es15.fifteen.last, es15.fifteenOther.last, es15.fifteenCalendar.last], ["2026-12-23", "2026-12-22", "2026-12-15"]);
+  const ca15 = pageFigures(workingDaysData("ca"), "ca");
+  assert.deepEqual([ca15.fifteen.last, ca15.fifteenOther.last], ["2026-12-22", "2026-12-23"]);
   assert.deepEqual(workingDaysEditions(), { es: "/es/calculadoras/dias-habiles/", ca: "/ca/calculadores/dies-habils/", en: "/en/calculators/working-days-spain/" });
   assert.deepEqual(calcEditions("working-days"), workingDaysEditions());
   assert.ok(hubCards().some((c) => c.key === "working-days" && c.calculator));
@@ -332,5 +338,17 @@ test("links: town and city pages open the calculator with their place picked (si
     "src/components/programmatic/spain-2027/city-page-intl.tsx",
   ]) {
     assert.match(read(file), /<WorkingDaysPlaceLink locale=/, file);
+  }
+});
+
+test("links: every Spain 2027 community page opens the calculator on a place it has (19 Nov 2026 community link)", () => {
+  for (const locale of WD_LOCALES) {
+    const data = workingDaysData(locale);
+    for (const c of COMMUNITIES) assert.doesNotThrow(() => findItem(data, communityPlaceId(c.region, c.slug)), `${locale} ${c.slug}`);
+  }
+  assert.equal(communityPlaceId("CT", "cataluna"), "catalunya");
+  assert.equal(communityPlaceId("MD", "madrid"), "madrid/all");
+  for (const file of ["src/components/programmatic/spain-2027/pages.tsx", "src/components/programmatic/spain-2027/pages-intl.tsx"]) {
+    assert.match(read(file), /<WorkingDaysCommunityLink locale=/, file);
   }
 });

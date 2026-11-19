@@ -25,6 +25,9 @@
  * itself (boe.ts searches the BOE every hour and reads the figures from the
  * decree's XML); then copy them into OFFICIAL_2027 below. A test fails from
  * OFFICIAL_2027_DUE while it is null.
+ *
+ * 19 Nov 2026: the BOE published Real Decreto 1013/2026 (BOE-A-2026-24189);
+ * the live page showed it that morning, and OFFICIAL_2027 holds it since.
  */
 
 /** The day every figure and quote below was read on the official text. */
@@ -85,10 +88,30 @@ export const SMI_HISTORY: readonly SmiYear[] = [
 export const SMI_2026: SmiYear = SMI_HISTORY.at(-1)!;
 
 /**
- * The 2027 decree once the BOE publishes it, copied from its XML like the
- * rows above. Null until then; the page reads the BOE live meanwhile.
+ * The 2027 decree, copied from its XML like the rows above: Real Decreto
+ * 1013/2026, BOE of 19 Nov 2026, read on OFFICIAL_2027_READ
+ * (https://www.boe.es/diario_boe/xml.php?id=BOE-A-2026-24189; fixture
+ * tests/fixtures/boe-smi-2027-rd1013.xml, which the parser test reads). Art. 1
+ * 42,87 €/day or 1 286 €/month; art. 3.1 18 004 €/year; art. 4.1 60,88 € per
+ * day (fixed-term ≤ 120 days); art. 4.2 10,06 €/hour (domestic work); final
+ * provision three: in force 1 Jan 2027, effects 1 Jan to 31 Dec 2027. The
+ * same figures as the Ministry's draft (DRAFT_2027).
  */
-export const OFFICIAL_2027: SmiYear | null = null;
+export const OFFICIAL_2027: SmiYear | null = {
+  year: 2027,
+  norm: "Real Decreto 1013/2026, de 18 de noviembre",
+  boeId: "BOE-A-2026-24189",
+  published: "2026-11-19",
+  effectiveFrom: "2027-01-01",
+  monthly: 1286,
+  daily: 42.87,
+  annual: 18004,
+  domesticHourly: 10.06,
+  temporaryDaily: 60.88,
+};
+
+/** The day OFFICIAL_2027 and its quotes (QUOTE.rd1013*) were read in the BOE's XML. */
+export const OFFICIAL_2027_READ = "2026-11-19";
 
 /* -------------------------------------------------------------------------- */
 /* 2027: where it stands, from official documents only                        */
@@ -157,6 +180,12 @@ export const QUOTE = {
   /** RD 126/2026, disposición final tercera. */
   rd126effects:
     "Este real decreto entrará en vigor el día siguiente al de su publicación en el «Boletín Oficial del Estado» y surtirá efectos durante el período comprendido entre el 1 de enero y el 31 de diciembre de 2026, procediendo, en consecuencia, el abono del salario mínimo fijado en este con efectos desde el 1 de enero de 2026.",
+  /** RD 1013/2026 (SMI 2027), disposición final tercera: when it applies, and so when it is paid. */
+  rd1013effects:
+    "Este real decreto entrará en vigor el 1 de enero de 2027 y surtirá efectos durante el período comprendido entre el 1 de enero y el 31 de diciembre de 2027, procediendo, en consecuencia, el abono del salario mínimo fijado en este con efectos desde el 1 de enero de 2027.",
+  /** RD 1013/2026, disposición final primera: State competence, so one SMI for all of Spain (Catalonia included). */
+  rd1013competence:
+    "Este real decreto se dicta al amparo de lo dispuesto en el artículo 149.1.7.ª de la Constitución Española, que atribuye al Estado la competencia exclusiva en materia de legislación laboral, sin perjuicio de su ejecución por los órganos de las comunidades autónomas.",
   /** Real Decreto-ley 5/2026 (BOE-A-2026-3810), preamble: why its art. 28 rewrites the IRPF deduction. */
   rdl5irpf: "resulta necesario adoptar los cambios necesarios en la normativa del impuesto que impida que los perceptores del nuevo salario mínimo interprofesional tengan que tributar por él.",
   /** Draft royal decree for 2027, art. 1. */

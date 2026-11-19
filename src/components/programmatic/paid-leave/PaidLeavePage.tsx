@@ -15,7 +15,7 @@ import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { DEFAULT_PLACE, DISCLAIMER, calendarOf, fullDate, paidLeaveEditions, paidLeavePath, type PlLocale, type PlPlace } from "@/lib/programmatic/paid-leave/copy";
 import { DEFAULT_INPUT, birthPlan, shortLeave, type BirthPlan, type PaidLeaveInput, type ShortLeaveResult } from "@/lib/programmatic/paid-leave/engine";
 import { paidLeavePlaces } from "@/lib/programmatic/paid-leave/places";
-import { BIRTH, FORCE_MAJEURE_DAYS_PER_YEAR, NURSING, PARENTAL, QUOTE, RULES_AS_OF, SHORT_RULES, SOURCES, UNREACHABLE_WORK_DAYS } from "@/lib/programmatic/paid-leave/rules";
+import { BIRTH, FORCE_MAJEURE_DAYS_PER_YEAR, KIN_DEGREES, NURSING, PARENTAL, QUOTE, RULES_AS_OF, SHORT_RULES, SOURCES, UNREACHABLE_WORK_DAYS } from "@/lib/programmatic/paid-leave/rules";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -57,6 +57,96 @@ export const PL_META: Record<PlLocale, { title: string; description: string; h1:
     appName: "Spain paid leave calculator (Workers' Statute)",
   },
 };
+
+/**
+ * "¿Quién es familiar hasta segundo grado?" (19 Nov 2026; queries "tabla de permisos por fallecimiento",
+ * "grados de consanguinidad días de permiso"): the blood relatives by degree (Código Civil art. 918, in
+ * KIN_DEGREES) against the death and illness leave of ET art. 37.3.b and b bis (SHORT_RULES). Affinity is
+ * named by the Statute but counted by no law, so the page says so instead of listing in-laws.
+ */
+function KinTable({ locale }: { locale: PlLocale }) {
+  const death = SHORT_RULES.death;
+  const illness = SHORT_RULES.illness;
+  const t = L(locale, {
+    es: {
+      h: "¿Quién es familiar hasta segundo grado?",
+      intro: `Los permisos de ${death.days} días por fallecimiento (${death.days + death.travelExtra} si tienes que desplazarte) y de ${illness.days} por accidente, enfermedad grave u hospitalización valen para el cónyuge, la pareja de hecho y los parientes «hasta el segundo grado». El grado se cuenta como dice el Código Civil: una generación es un grado, y entre hermanos, tíos o primos se sube hasta el antepasado común y se baja (arts. 918 y 919). Es la ley de toda España, también en Cataluña.`,
+      caption: "Parentesco por consanguinidad (Código Civil, art. 918) y permisos mínimos del Estatuto de los Trabajadores (art. 37.3.b y b bis).",
+      cols: ["Familiar", "Grado", "Fallecimiento", "Enfermedad grave u hospitalización"],
+      spouse: "Cónyuge o pareja de hecho",
+      named: "Lo nombra el Estatuto",
+      yesDeath: `${death.days} días (${death.days + death.travelExtra} con desplazamiento)`,
+      yesIll: `${illness.days} días`,
+      no: "No por ley (mira tu convenio)",
+      noIll: "No por ley, salvo que conviva contigo y necesite tu cuidado",
+      affinity: `Por afinidad (la familia de tu cónyuge: suegros, cuñados…) el Estatuto también da el permiso hasta el segundo grado, pero ni el Estatuto ni el Código Civil dicen cómo se cuenta ese grado; si dudas, mira tu convenio colectivo, que a menudo trae su propia tabla. Para la hospitalización, el Estatuto incluye además «el familiar consanguíneo de la pareja de hecho».`,
+    },
+    ca: {
+      h: "Qui és familiar fins al segon grau?",
+      intro: `Els permisos de ${death.days} dies per defunció (${death.days + death.travelExtra} si t'has de desplaçar) i de ${illness.days} per accident, malaltia greu o hospitalització valen per al cònjuge, la parella de fet i els parents «fins al segon grau». El grau es compta com diu el Codi civil espanyol: una generació és un grau, i entre germans, oncles o cosins es puja fins a l'avantpassat comú i es baixa (arts. 918 i 919, text oficial en castellà). És la llei de tot Espanya, també a Catalunya.`,
+      caption: "Parentiu per consanguinitat (Codi civil, art. 918) i permisos mínims de l'Estatut dels treballadors (art. 37.3.b i b bis).",
+      cols: ["Familiar", "Grau", "Defunció", "Malaltia greu o hospitalització"],
+      spouse: "Cònjuge o parella de fet",
+      named: "L'esmenta l'Estatut",
+      yesDeath: `${death.days} dies (${death.days + death.travelExtra} amb desplaçament)`,
+      yesIll: `${illness.days} dies`,
+      no: "No per llei (mira el teu conveni)",
+      noIll: "No per llei, tret que convisqui amb tu i necessiti la teva cura",
+      affinity: `Per afinitat (la família del teu cònjuge: sogres, cunyats…) l'Estatut també dona el permís fins al segon grau, però ni l'Estatut ni el Codi civil diuen com es compta aquest grau; si dubtes, mira el teu conveni col·lectiu, que sovint porta la seva pròpia taula. Per a l'hospitalització, l'Estatut inclou a més «el familiar consanguíneo de la pareja de hecho».`,
+    },
+    en: {
+      h: "Who counts as a relative up to the second degree?",
+      intro: `The ${death.days}-day leave for a death (${death.days + death.travelExtra} if you have to travel) and the ${illness.days}-day leave for an accident, serious illness or hospital stay cover your spouse, your registered partner and relatives “up to the second degree”. The degree is counted as the Civil Code says: each generation is one degree, and between siblings, uncles or cousins you go up to the common ancestor and back down (arts. 918 and 919; official text in Spanish). It is the law all over Spain, Catalonia included.`,
+      caption: "Kinship by blood (Civil Code, art. 918) and the Workers' Statute minimum leave (art. 37.3.b and b bis).",
+      cols: ["Relative", "Degree", "Death", "Serious illness or hospital stay"],
+      spouse: "Spouse or registered partner",
+      named: "Named in the Statute",
+      yesDeath: `${death.days} days (${death.days + death.travelExtra} if you travel)`,
+      yesIll: `${illness.days} days`,
+      no: "Not by law (check your collective agreement)",
+      noIll: "Not by law, unless they live with you and need your care",
+      affinity: `By marriage (your spouse's family: parents-in-law, brothers- and sisters-in-law…) the Statute also gives the leave up to the second degree, but neither the Statute nor the Civil Code says how that degree is counted; if in doubt, check your collective agreement, which often has its own table. For a hospital stay, the Statute also covers “el familiar consanguíneo de la pareja de hecho” (your registered partner's blood relative).`,
+    },
+  });
+  const degree = (n: number) => L(locale, { es: `${n}.º`, ca: ["1r", "2n", "3r", "4t"][n - 1]!, en: ["1st", "2nd", "3rd", "4th"][n - 1]! });
+  const rows: [string, string, string, string][] = [
+    [t.spouse, t.named, t.yesDeath, t.yesIll],
+    ...KIN_DEGREES.map((k): [string, string, string, string] => [k[locale], degree(k.degree), k.degree <= 2 ? t.yesDeath : t.no, k.degree <= 2 ? t.yesIll : t.noIll]),
+  ];
+  return (
+    <>
+      <h3 id="segundo-grado">{t.h}</h3>
+      <p>{t.intro}</p>
+      <div className="ci-table-scroll mt-4">
+        <table className="ci-local-table ci-stack-table">
+          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{t.caption}</caption>
+          <thead>
+            <tr>
+              {t.cols.map((c) => (
+                <th key={c} scope="col">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([who, deg, d, i]) => (
+              <tr key={who}>
+                <th scope="row" className="font-normal">
+                  {who}
+                </th>
+                <td data-label={t.cols[1]}>{deg}</td>
+                <td data-label={t.cols[2]}>{d}</td>
+                <td data-label={t.cols[3]}>{i}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>{t.affinity}</p>
+    </>
+  );
+}
 
 export function paidLeaveCrumbs(locale: PlLocale): Crumb[] {
   return [
@@ -289,7 +379,7 @@ export function PaidLeaveRoute({ locale }: { locale: PlLocale }) {
     ],
   });
 
-  const sourceList = [SOURCES.et, SOURCES.rdl5, SOURCES.rdl9, SOURCES.rdl9convalidation, SOURCES.lgss, SOURCES.ssBirth];
+  const sourceList = [SOURCES.et, SOURCES.rdl5, SOURCES.rdl9, SOURCES.rdl9convalidation, SOURCES.lgss, SOURCES.ssBirth, SOURCES.cc];
   const sourcesLead = L(locale, {
     es: `Leído el ${asOf} en los textos consolidados del BOE y en la web de la Seguridad Social. Las citas son literales, en castellano.`,
     ca: `Llegit el ${asOf} als textos consolidats del BOE i al web de la Seguretat Social. Les cites són literals, en castellà.`,
@@ -398,6 +488,10 @@ export function PaidLeaveRoute({ locale }: { locale: PlLocale }) {
                 </table>
               </div>
               {quote(QUOTE.et373intro, SOURCES.et.url, `${et("37.3")} ${etRef}`)}
+
+              <KinTable locale={locale} />
+              {quote(QUOTE.cc918, SOURCES.cc.url, L(locale, { es: "Código Civil, art. 918", ca: "Codi civil espanyol, art. 918", en: "Spanish Civil Code, art. 918" }) + ` (${SOURCES.cc.ref})`)}
+              {quote(QUOTE.cc919, SOURCES.cc.url, L(locale, { es: "Código Civil, art. 919", ca: "Codi civil espanyol, art. 919", en: "Spanish Civil Code, art. 919" }) + ` (${SOURCES.cc.ref})`)}
 
               <h2 id="naturales-o-laborables">{h.days}</h2>
               <p>{daysText[0]}</p>

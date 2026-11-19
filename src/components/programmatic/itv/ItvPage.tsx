@@ -16,7 +16,7 @@ import { firstDue, onTimeChain } from "@/lib/programmatic/itv/engine";
 import { itvMeta } from "@/lib/programmatic/itv/page";
 import { DGT_FEE, PRICES_AS_OF, REGIONS, type Region } from "@/lib/programmatic/itv/prices";
 import { BOE, CATEGORIES, FINE, ITV_RULES_AS_OF, QUOTE, type Category } from "@/lib/programmatic/itv/rules";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { ItvCalculator } from "./ItvCalculator";
@@ -456,7 +456,7 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: itvPath(locale), description: meta.description, locale, category: "UtilitiesApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

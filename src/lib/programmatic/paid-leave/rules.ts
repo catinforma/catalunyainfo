@@ -167,10 +167,36 @@ export const SOURCES = {
     url: "https://www.seg-social.es/wps/portal/wss/internet/InformacionUtil/44539/de513c99-5885-48bd-8c66-45d2c97ad947/41021nycm",
     date: "2026-11-13",
   },
+  // How "hasta el segundo grado" is counted (art. 37.3.b and b bis): Código Civil arts. 915-919, read in the BOE on 19 Nov 2026
+  // (art. 918 in the wording of 1889, art. 919 as amended by Ley 30/1981). The Code counts kinship by blood; it gives no rule for affinity.
+  cc: {
+    name: "Código Civil, arts. 915 a 919 (cómputo de los grados de parentesco)",
+    ref: "BOE-A-1889-4763",
+    url: "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763#a918",
+    date: "2026-11-19",
+  },
 } as const satisfies Record<string, Source>;
+
+/**
+ * Kinship by blood up to the fourth degree, as Código Civil art. 918 counts it ("el hijo dista del padre un
+ * grado, dos del abuelo y tres del bisabuelo … el hermano dista dos grados del hermano, tres del tío … cuatro
+ * del primo hermano"); grandchildren and nephews/nieces by the same count, down instead of up. Up to 2 =
+ * covered by the 2-day (death) and 5-day (illness, hospitalisation) leave of ET art. 37.3.b and b bis.
+ */
+export const KIN_DEGREES = [
+  { degree: 1, es: "Padre, madre, hijos e hijas", ca: "Pare, mare, fills i filles", en: "Father, mother, sons and daughters" },
+  { degree: 2, es: "Abuelos, nietos y hermanos", ca: "Avis, néts i germans", en: "Grandparents, grandchildren, brothers and sisters" },
+  { degree: 3, es: "Bisabuelos, bisnietos, tíos y sobrinos", ca: "Besavis, besnéts, oncles i nebots", en: "Great-grandparents, great-grandchildren, uncles, aunts, nephews and nieces" },
+  { degree: 4, es: "Primos hermanos", ca: "Cosins germans", en: "First cousins" },
+] as const;
 
 /** Quotes, verbatim (Spanish), as the page prints them. */
 export const QUOTE = {
+  /** Código Civil art. 918 (BOE-A-1889-4763), second and third paragraphs. */
+  cc918:
+    "En la recta se sube únicamente hasta el tronco. Así, el hijo dista del padre un grado, dos del abuelo y tres del bisabuelo. En la colateral se sube hasta el tronco común y después se baja hasta la persona con quien se hace la computación. Por esto, el hermano dista dos grados del hermano, tres del tío, hermano de su padre o madre, cuatro del primo hermano y así en adelante.",
+  /** Código Civil art. 919, as amended by Ley 30/1981: the count applies everywhere, labour law included. */
+  cc919: "El cómputo de que trata el artículo anterior rige en todas las materias.",
   et373intro: "La persona trabajadora, previo aviso y justificación, podrá ausentarse del trabajo, con derecho a remuneración, por alguno de los motivos y por el tiempo siguiente:",
   marriage: "Quince días naturales en caso de matrimonio o registro de pareja de hecho.",
   illness:

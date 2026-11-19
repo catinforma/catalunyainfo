@@ -4,7 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
-import { WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
+import { WorkingDaysCommunityLink, WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalculatorsHubLink } from "@/components/programmatic/calculators/MoreCalculators";
 import { getMessages } from "@/lib/i18n";
 import { municipalities } from "@/lib/programmatic/holidays/data";
@@ -363,6 +363,8 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
               : `${c.Full} no ${c.plural ? "tienen" : "tiene"} festivos distintos de los comunes.`}
           </p>
           {notKept ? <p>{notKept}</p> : null}
+          {/* The working-days calculator with this community picked (19 Nov 2026). */}
+          <WorkingDaysCommunityLink locale="es" region={c.region} esSlug={c.slug} inPlace={c.en} />
 
           <h2 id="puentes">Puentes y fines de semana largos de {YEAR} {c.en}</h2>
           <p>

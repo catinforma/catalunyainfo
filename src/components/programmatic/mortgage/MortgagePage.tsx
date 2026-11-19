@@ -17,7 +17,7 @@ import type { EuriborData } from "@/lib/programmatic/euribor/server";
 import { monthText, mortgageEditions, mortgagePath, type MortgageLocale } from "@/lib/programmatic/mortgage/copy";
 import { mortgageLead, mortgageMeta } from "@/lib/programmatic/mortgage/page";
 import { EARLY_REPAYMENT, QUOTE, RULES_AS_OF, URLS } from "@/lib/programmatic/mortgage/rules";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { MortgageCalculator } from "./MortgageCalculator";
@@ -205,7 +205,7 @@ export function MortgageRoute({ locale, data }: { locale: MortgageLocale; data: 
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: mortgagePath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

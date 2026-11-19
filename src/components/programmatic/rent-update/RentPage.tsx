@@ -17,7 +17,7 @@ import { SERIES, tableUrl } from "@/lib/programmatic/rent-update/ine";
 import { lastMonths, leadText, nextRelease, rentFaq, rentMeta } from "@/lib/programmatic/rent-update/page";
 import { DF6_QUOTE, GENCAT_LATEST_RESOLUTIONS, IRAV_DEFINITION_ES, NORMS, OFFICIAL_LINKS, RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import type { ServerRentData } from "@/lib/programmatic/rent-update/server";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { RentCalculator } from "./RentCalculator";
@@ -421,7 +421,7 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), faqSchema])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: rentPath(locale), description: meta.description, locale, category: "FinanceApplication" }), faqSchema])} />
       <SiteFooter locale={locale} />
     </>
   );

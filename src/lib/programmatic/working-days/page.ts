@@ -41,6 +41,10 @@ export interface PageFigures {
   /** Notified 22 December 2026, 5 días hábiles: administrative and judicial, same place. */
   christmasAdmin: DeadlineResult;
   christmasJudicial: DeadlineResult;
+  /** 15 días hábiles from the default notification, in both places, and 15 calendar days (19 Nov 2026: "15 dias habiles"). */
+  fifteen: DeadlineResult;
+  fifteenOther: DeadlineResult;
+  fifteenCalendar: DeadlineResult;
   /** Mon–Fri days per month with only the holidays all of Spain shares. */
   monthly: { month: string; y2026: number; y2027: number }[];
   totals: { y2026: number; y2027: number };
@@ -60,6 +64,9 @@ export function pageFigures(data: WdData, locale: WdLocale): PageFigures {
   const months = must(deadline("2026-01-31", 1, "months", national, ADMIN), "months");
   const christmasAdmin = must(deadline("2026-12-22", 5, "working", calendarFor(data, place), ADMIN), "christmas admin");
   const christmasJudicial = must(deadline("2026-12-22", 5, "working", calendarFor(data, place), JUDICIAL), "christmas judicial");
+  const fifteen = must(deadline(ex.notified, 15, "working", calendarFor(data, place), ADMIN), "fifteen");
+  const fifteenOther = must(deadline(ex.notified, 15, "working", calendarFor(data, otherValue), ADMIN), "fifteen other");
+  const fifteenCalendar = must(deadline(ex.notified, 15, "calendar", calendarFor(data, place), ADMIN), "fifteen calendar");
 
   const monthly = Array.from({ length: 12 }, (_, i) => {
     const mm = String(i + 1).padStart(2, "0");
@@ -79,6 +86,9 @@ export function pageFigures(data: WdData, locale: WdLocale): PageFigures {
     months,
     christmasAdmin,
     christmasJudicial,
+    fifteen,
+    fifteenOther,
+    fifteenCalendar,
     monthly,
     totals,
   };

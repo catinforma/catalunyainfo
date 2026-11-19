@@ -17,7 +17,7 @@ import { calculate } from "@/lib/programmatic/home-purchase-tax/engine";
 import { htMeta } from "@/lib/programmatic/home-purchase-tax/page";
 import { ARANCEL_REBATE, BOE_TEXTS, NOTARY_SCALE, QUOTE, REGISTRY_CAP, REGISTRY_SCALE, STATE_DEFAULTS, STATE_RULES_AS_OF, VAT, type FeeSlice } from "@/lib/programmatic/home-purchase-tax/rules";
 import type { Benefit, Community } from "@/lib/programmatic/home-purchase-tax/types";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { HomeTaxCalculator } from "./HomeTaxCalculator";
@@ -520,7 +520,7 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: htPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

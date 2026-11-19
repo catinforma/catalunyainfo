@@ -13,7 +13,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, money, netSalaryPreset, pct, smiEditions, smiPath, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/programmatic/smi/engine";
 import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/smi/page";
-import { DRAFT_2027, NORMS, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
+import { DRAFT_2027, NORMS, OFFICIAL_2027_READ, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
 import type { LiveBoe } from "@/lib/programmatic/smi/engine";
 import { wagePath } from "@/lib/programmatic/average-salary/copy";
 import { ipremPath } from "@/lib/programmatic/iprem/copy";
@@ -21,7 +21,7 @@ import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { percent } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT as NET_DEFAULT, calculateNetSalary } from "@/lib/programmatic/net-salary/engine";
 import { SMI_DEDUCTION } from "@/lib/programmatic/net-salary/rules-2026";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { SmiCalculator } from "./SmiCalculator";
@@ -129,15 +129,38 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
   const years = officialYears(status);
   const shown = currentYear(status, data.today);
   const official27 = status.kind === "official" ? status.year : null;
+  // The 2027 decree as typed in rules.ts (RD 1013/2026): its own quotes (QUOTE.rd1013*) print only then.
+  const decree27 = status.kind === "official" && status.source === "rules" ? status.year : null;
   const day = (iso: string) => bareDay(iso, locale);
   const d = DRAFT_2027;
   const heard = data.today > d.hearingTo;
+  const lastYear = official27 ? official27.year : SMI_2026.year;
+  const sameAsDraft =
+    official27 !== null && official27.monthly === d.monthly && official27.daily === d.daily && official27.annual === d.annual && official27.domesticHourly === d.domesticHourly && official27.temporaryDaily === d.temporaryDaily;
 
   const h = L(locale, {
-    es: { y27: "SMI 2027: las cuantías oficiales", y26: "SMI 2026: todas las cuantías", status: "SMI 2027: qué es oficial y qué no", when: "¿Cuándo se aprueba el SMI de cada año?", history: "Historia del SMI de 2018 a 2026", irpf: "¿El SMI paga IRPF?", sources: "Fuentes" },
-    ca: { y27: "SMI 2027: les quanties oficials", y26: "SMI 2026: totes les quanties", status: "SMI 2027: què és oficial i què no", when: "Quan s'aprova l'SMI de cada any?", history: "Història de l'SMI del 2018 al 2026", irpf: "L'SMI paga IRPF?", sources: "Fonts" },
-    en: { y27: "SMI 2027: the official amounts", y26: "SMI 2026: every amount", status: "SMI 2027: what is official and what is not", when: "When is each year's SMI approved?", history: "Spain's minimum wage from 2018 to 2026", irpf: "Does the SMI pay income tax?", sources: "Sources" },
+    es: { y27: "SMI 2027: las cuantías oficiales", y26: "SMI 2026: todas las cuantías", status: "SMI 2027: qué es oficial y qué no", when: "¿Cuándo se aprueba el SMI de cada año?", paid: "¿Desde cuándo se cobra el SMI de 2027?", history: `Historia del SMI de 2018 a ${lastYear}`, irpf: "¿El SMI paga IRPF?", sources: "Fuentes" },
+    ca: { y27: "SMI 2027: les quanties oficials", y26: "SMI 2026: totes les quanties", status: "SMI 2027: què és oficial i què no", when: "Quan s'aprova l'SMI de cada any?", paid: "Des de quan es cobra l'SMI del 2027?", history: `Història de l'SMI del 2018 al ${lastYear}`, irpf: "L'SMI paga IRPF?", sources: "Fonts" },
+    en: { y27: "SMI 2027: the official amounts", y26: "SMI 2026: every amount", status: "SMI 2027: what is official and what is not", when: "When is each year's SMI approved?", paid: "When is the 2027 SMI first paid?", history: `Spain's minimum wage from 2018 to ${lastYear}`, irpf: "Does the SMI pay income tax?", sources: "Sources" },
   });
+
+  /* The decree's own answers (19 Nov 2026): same SMI everywhere in Spain (final provision one) and paid from January (final provision three). */
+  const decreeText = decree27
+    ? L(locale, {
+        es: {
+          scope: "Es el mismo en toda España, también en Cataluña: lo fija el Gobierno porque la legislación laboral es competencia exclusiva del Estado (disposición final primera). Tu convenio colectivo puede fijar un salario mayor, nunca uno menor.",
+          paid: `Desde la nómina de enero de 2027. El ${decree27.norm.replace(/, de \d{1,2} de [a-z]+$/, "")} salió en el BOE el ${day(decree27.published)}, antes de empezar el año, y se aplica desde el ${day(decree27.effectiveFrom)}: a diferencia de 2022 a 2026, no hay subida con efectos atrasados que cobrar después (disposición final tercera):`,
+        },
+        ca: {
+          scope: "És el mateix a tot Espanya, també a Catalunya: el fixa el Govern perquè la legislació laboral és competència exclusiva de l'Estat (disposició final primera, text oficial en castellà). El teu conveni col·lectiu pot fixar un salari més alt, mai un de més baix.",
+          paid: `Des de la nòmina de gener del 2027. El ${decree27.norm.replace(/, de \d{1,2} de [a-z]+$/, "").replace("Real Decreto", "Reial decret")} va sortir al BOE ${caDay(decree27.published)}, abans de començar l'any, i s'aplica des ${caDay(decree27.effectiveFrom).replace(/^el /, "del ").replace(/^l'/, "de l'")}: a diferència del 2022 al 2026, no hi ha pujada amb efectes endarrerits per cobrar després (disposició final tercera):`,
+        },
+        en: {
+          scope: "It is the same all over Spain, Catalonia included: the government sets it because labour legislation is the State's exclusive competence (final provision one; official text in Spanish). Your collective agreement can set higher pay, never lower.",
+          paid: `From the January 2027 payslip. ${decree27.norm.replace(/, de \d{1,2} de [a-z]+$/, "").replace("Real Decreto", "Royal Decree")} came out in the BOE on ${day(decree27.published)}, before the year starts, and applies from ${day(decree27.effectiveFrom)}: unlike 2022 to 2026, there is no rise backdated to January to be paid later (final provision three; official text in Spanish):`,
+        },
+      })
+    : null;
 
   const caption = (y: SmiYear) =>
     L(locale, {
@@ -179,7 +202,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
       [
         done,
         "Proyecto de real decreto del Ministerio de Trabajo",
-        `Publicado el ${day(d.published)} para audiencia pública (del ${day(d.hearingFrom)} al ${day(d.hearingTo)}): ${money(d.monthly, "es")} al mes en 14 pagas, ${money(d.annual, "es")} al año, ${money(d.daily, "es")} al día y ${money(d.domesticHourly, "es")} la hora en el empleo de hogar (+${pct(d.increase, 1, "es")}), con entrada en vigor prevista el ${day(d.plannedFrom)}. Es un proyecto: puede cambiar antes de aprobarse.`,
+        `Publicado el ${day(d.published)} para audiencia pública (del ${day(d.hearingFrom)} al ${day(d.hearingTo)}): ${money(d.monthly, "es")} al mes en 14 pagas, ${money(d.annual, "es")} al año, ${money(d.daily, "es")} al día y ${money(d.domesticHourly, "es")} la hora en el empleo de hogar (+${pct(d.increase, 1, "es")}), con entrada en vigor prevista el ${day(d.plannedFrom)}. ${sameAsDraft ? "El real decreto aprobado mantiene estas cuantías." : "Es un proyecto: puede cambiar antes de aprobarse."}`,
       ],
       [done, "Consulta a sindicatos y patronal", `El ${day(d.socialDialogue)} se convocó la mesa de diálogo social con CEOE, CEPYME, CCOO y UGT (art. 27.1 del Estatuto de los Trabajadores exige consultarles).`],
       [inBoe ? done : pending, "Aprobación en el Consejo de Ministros", inBoe ? "Aprobado: el real decreto ya está en el BOE." : "Aún no aprobado."],
@@ -190,7 +213,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
       [
         done,
         "Projecte de reial decret del Ministeri de Treball",
-        `Publicat ${caDay(d.published)} per a audiència pública (del ${day(d.hearingFrom)} al ${day(d.hearingTo)}): ${money(d.monthly, "ca")} al mes en 14 pagues, ${money(d.annual, "ca")} l'any, ${money(d.daily, "ca")} al dia i ${money(d.domesticHourly, "ca")} l'hora en el treball de la llar (+${pct(d.increase, 1, "ca")}), amb entrada en vigor prevista ${caDay(d.plannedFrom)}. És un projecte: pot canviar abans d'aprovar-se.`,
+        `Publicat ${caDay(d.published)} per a audiència pública (del ${day(d.hearingFrom)} al ${day(d.hearingTo)}): ${money(d.monthly, "ca")} al mes en 14 pagues, ${money(d.annual, "ca")} l'any, ${money(d.daily, "ca")} al dia i ${money(d.domesticHourly, "ca")} l'hora en el treball de la llar (+${pct(d.increase, 1, "ca")}), amb entrada en vigor prevista ${caDay(d.plannedFrom)}. ${sameAsDraft ? "El reial decret aprovat manté aquestes quanties." : "És un projecte: pot canviar abans d'aprovar-se."}`,
       ],
       [done, "Consulta a sindicats i patronal", `${capitalise(caDay(d.socialDialogue))} es va convocar la mesa de diàleg social amb CEOE, CEPYME, CCOO i UGT (l'art. 27.1 de l'Estatut dels Treballadors obliga a consultar-los).`],
       [inBoe ? done : pending, "Aprovació al Consell de Ministres", inBoe ? "Aprovat: el reial decret ja és al BOE." : "Encara no aprovat."],
@@ -201,7 +224,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
       [
         done,
         "Ministry of Labour draft royal decree",
-        `Published on ${day(d.published)} for public comment (${day(d.hearingFrom)} to ${day(d.hearingTo)}): ${money(d.monthly, "en")} a month in 14 payments, ${money(d.annual, "en")} a year, ${money(d.daily, "en")} a day and ${money(d.domesticHourly, "en")} an hour for domestic work (+${pct(d.increase, 1, "en")}), planned to apply from ${day(d.plannedFrom)}. It is a draft: it can change before approval.`,
+        `Published on ${day(d.published)} for public comment (${day(d.hearingFrom)} to ${day(d.hearingTo)}): ${money(d.monthly, "en")} a month in 14 payments, ${money(d.annual, "en")} a year, ${money(d.daily, "en")} a day and ${money(d.domesticHourly, "en")} an hour for domestic work (+${pct(d.increase, 1, "en")}), planned to apply from ${day(d.plannedFrom)}. ${sameAsDraft ? "The approved royal decree keeps these amounts." : "It is a draft: it can change before approval."}`,
       ],
       [done, "Consultation with unions and employers", `On ${day(d.socialDialogue)} the social dialogue table met with CEOE, CEPYME, CCOO and UGT (Workers' Statute art. 27.1 requires consulting them).`],
       [inBoe ? done : pending, "Approval by the Council of Ministers", inBoe ? "Approved: the royal decree is in the BOE." : "Not approved yet."],
@@ -209,11 +232,17 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
     ],
   });
 
-  const notOfficial = L(locale, {
-    es: "Lo que no es oficial: las cifras que publican los medios, las que piden sindicatos o patronal y las previsiones. Aquí solo damos importes de documentos oficiales (BOE, Ministerio de Trabajo) y el de 2027 no vale para tu nómina hasta que el real decreto salga en el BOE.",
-    ca: "El que no és oficial: les xifres que publiquen els mitjans, les que demanen sindicats o patronal i les previsions. Aquí només donem imports de documents oficials (BOE, Ministeri de Treball) i el del 2027 no val per a la teva nòmina fins que el reial decret surti al BOE.",
-    en: "What is not official: figures in the press, what unions or employers ask for, and forecasts. We only print amounts from official documents (the BOE, the Ministry of Labour), and 2027's does not apply to your payslip until the royal decree is in the BOE.",
-  });
+  const notOfficial = official27
+    ? L(locale, {
+        es: `Lo que no es oficial: las cifras que publican los medios, las que piden sindicatos o patronal y las previsiones. Aquí solo damos importes de documentos oficiales (BOE, Ministerio de Trabajo). El de 2027 ya lo es: está en el BOE y vale para tu nómina desde el ${day(official27.effectiveFrom)}.`,
+        ca: `El que no és oficial: les xifres que publiquen els mitjans, les que demanen sindicats o patronal i les previsions. Aquí només donem imports de documents oficials (BOE, Ministeri de Treball). El del 2027 ja ho és: és al BOE i val per a la teva nòmina des ${caDay(official27.effectiveFrom).replace(/^el /, "del ").replace(/^l'/, "de l'")}.`,
+        en: `What is not official: figures in the press, what unions or employers ask for, and forecasts. We only print amounts from official documents (the BOE, the Ministry of Labour). 2027's now is: it is in the BOE and applies to your payslip from ${day(official27.effectiveFrom)}.`,
+      })
+    : L(locale, {
+        es: "Lo que no es oficial: las cifras que publican los medios, las que piden sindicatos o patronal y las previsiones. Aquí solo damos importes de documentos oficiales (BOE, Ministerio de Trabajo) y el de 2027 no vale para tu nómina hasta que el real decreto salga en el BOE.",
+        ca: "El que no és oficial: les xifres que publiquen els mitjans, les que demanen sindicats o patronal i les previsions. Aquí només donem imports de documents oficials (BOE, Ministeri de Treball) i el del 2027 no val per a la teva nòmina fins que el reial decret surti al BOE.",
+        en: "What is not official: figures in the press, what unions or employers ask for, and forecasts. We only print amounts from official documents (the BOE, the Ministry of Labour), and 2027's does not apply to your payslip until the royal decree is in the BOE.",
+      });
   const draftDocs = L(locale, { es: ["Proyecto de real decreto (PDF)", "Memoria del análisis de impacto normativo (PDF)", "Audiencia pública del Ministerio"], ca: ["Projecte de reial decret (PDF)", "Memòria de l'anàlisi d'impacte normatiu (PDF)", "Audiència pública del Ministeri"], en: ["Draft royal decree (PDF, Spanish)", "Regulatory impact report (PDF, Spanish)", "Ministry's public consultation page"] });
   const draftQuote = L(locale, { es: "La memoria del Ministerio lo resume así:", ca: "La memòria del Ministeri ho resumeix així:", en: "The Ministry's impact report sums it up:" });
 
@@ -221,15 +250,15 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
   const whenText = L(locale, {
     es: [
       "El Gobierno lo fija cada año por real decreto, después de consultar a sindicatos y patronal (art. 27.1 del Estatuto de los Trabajadores):",
-      `Desde 2022 el real decreto ha salido en el BOE en febrero (${febYears.map((y) => day(y.published).replace(/ de \d{4}$/, "")).join(", ")}) con efectos desde el 1 de enero, así que la subida de enero se cobra después con atrasos. El proyecto de 2027 prevé entrar en vigor el ${day(d.plannedFrom)}.`,
+      `Desde 2022 el real decreto ha salido en el BOE en febrero (${febYears.map((y) => day(y.published).replace(/ de \d{4}$/, "")).join(", ")}) con efectos desde el 1 de enero, así que la subida de enero se cobra después con atrasos.${official27 ? "" : ` El proyecto de 2027 prevé entrar en vigor el ${day(d.plannedFrom)}.`}`,
     ],
     ca: [
       "El Govern el fixa cada any per reial decret, després de consultar sindicats i patronal (art. 27.1 de l'Estatut dels Treballadors):",
-      `Des del 2022 el reial decret ha sortit al BOE al febrer (${febYears.map((y) => day(y.published).replace(/ de \d{4}$/, "")).join(", ")}) amb efectes des de l'1 de gener, així que la pujada de gener es cobra després amb endarreriments. El projecte del 2027 preveu entrar en vigor ${caDay(d.plannedFrom)}.`,
+      `Des del 2022 el reial decret ha sortit al BOE al febrer (${febYears.map((y) => day(y.published).replace(/ de \d{4}$/, "")).join(", ")}) amb efectes des de l'1 de gener, així que la pujada de gener es cobra després amb endarreriments.${official27 ? "" : ` El projecte del 2027 preveu entrar en vigor ${caDay(d.plannedFrom)}.`}`,
     ],
     en: [
       "The government sets it every year by royal decree, after consulting unions and employers (Workers' Statute, art. 27.1):",
-      `Since 2022 the decree has come out in the BOE in February (${febYears.map((y) => day(y.published).replace(/ \d{4}$/, "")).join(", ")}) with effect from 1 January, so January's rise is paid later as back pay. The 2027 draft plans to apply from ${day(d.plannedFrom)}.`,
+      `Since 2022 the decree has come out in the BOE in February (${febYears.map((y) => day(y.published).replace(/ \d{4}$/, "")).join(", ")}) with effect from 1 January, so January's rise is paid later as back pay.${official27 ? "" : ` The 2027 draft plans to apply from ${day(d.plannedFrom)}.`}`,
     ],
   });
 
@@ -313,10 +342,12 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
     ],
   });
 
+  // The 2027 figures were read in the decree on OFFICIAL_2027_READ, after the rest (SMI_RULES_AS_OF).
+  const amountsRead = decree27 ? OFFICIAL_2027_READ : SMI_RULES_AS_OF;
   const disclaimer = L(locale, {
-    es: `Importes brutos oficiales del BOE (revisados el ${day(SMI_RULES_AS_OF)}). Tu convenio colectivo puede fijar un salario mayor, que es el que te corresponde; el SMI es el mínimo para cualquier trabajo.`,
-    ca: `Imports bruts oficials del BOE (revisats ${caDay(SMI_RULES_AS_OF)}). El teu conveni col·lectiu pot fixar un salari més alt, que és el que et correspon; l'SMI és el mínim per a qualsevol feina.`,
-    en: `Official gross amounts from the BOE (checked on ${day(SMI_RULES_AS_OF)}). Your collective agreement may set higher pay, which is what you are owed; the SMI is the floor for any job.`,
+    es: `Importes brutos oficiales del BOE (revisados el ${day(amountsRead)}). Tu convenio colectivo puede fijar un salario mayor, que es el que te corresponde; el SMI es el mínimo para cualquier trabajo.`,
+    ca: `Imports bruts oficials del BOE (revisats ${caDay(amountsRead)}). El teu conveni col·lectiu pot fixar un salari més alt, que és el que et correspon; l'SMI és el mínim per a qualsevol feina.`,
+    en: `Official gross amounts from the BOE (checked on ${day(amountsRead)}). Your collective agreement may set higher pay, which is what you are owed; the SMI is the floor for any job.`,
   });
 
   const sourceNorms = [NORMS.et, NORMS.rdl38_2020, NORMS.rdl5_2026, NORMS.lirpfDa61, NORMS.rd1620_2011];
@@ -348,6 +379,12 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                   <p className="text-sm">
                     <A href={boeUrl(official27)}>{official27.norm}</A> ({official27.boeId})
                   </p>
+                  {decreeText ? (
+                    <>
+                      <p>{decreeText.scope}</p>
+                      <Quote>{QUOTE.rd1013competence}</Quote>
+                    </>
+                  ) : null}
                 </>
               ) : null}
 
@@ -399,6 +436,13 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
               <p>{whenText[0]}</p>
               <Quote>{QUOTE.et27}</Quote>
               <p>{whenText[1]}</p>
+              {decreeText ? (
+                <>
+                  <h3 id="cuando-se-cobra">{h.paid}</h3>
+                  <p>{decreeText.paid}</p>
+                  <Quote>{QUOTE.rd1013effects}</Quote>
+                </>
+              ) : null}
 
               <h2 id="historia">{h.history}</h2>
               <div className="ci-table-scroll mt-4">
@@ -524,7 +568,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: smiPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

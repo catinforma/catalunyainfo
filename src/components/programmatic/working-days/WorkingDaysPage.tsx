@@ -25,7 +25,7 @@ import { DEFAULT_EXAMPLE, DEFAULT_PLACE, DEFAULT_SPAN, dateText, shortDate, work
 import { WD_META, pageFigures } from "@/lib/programmatic/working-days/page";
 import { workingDaysData } from "@/lib/programmatic/working-days/places";
 import { AGE_2026, AGE_2027, AGE_2027_CHECKED_ON, LEGAL_TEXTS, RULES_AS_OF, type LegalText } from "@/lib/programmatic/working-days/rules";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { siteOrigin } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -138,16 +138,19 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
   const examples = L(locale, {
     es: [
       `Diez días hábiles notificados el lunes ${d(ex.notified)}: el plazo empieza el ${d(f.example.first)} y acaba el ${long(f.example.last)} en ${f.placeLabel}, y el ${long(f.other.result.last)} en ${f.other.label}. La diferencia es el 7 de diciembre: festivo en la Comunidad de Madrid y laborable en Cataluña.`,
+      `Quince días hábiles notificados el mismo ${d(ex.notified)}: acaban el ${long(f.fifteen.last)} en ${f.placeLabel} y el ${long(f.fifteenOther.last)} en ${f.other.label}. Si fueran quince días naturales, el plazo acabaría el ${long(f.fifteenCalendar.last)}.`,
       `Un mes desde el 31 de enero de 2026: no hay 31 de febrero, así que acaba el último día del mes, el ${d(f.months.nominal)}. Es sábado, inhábil, y el plazo pasa al ${long(f.months.last)}.`,
       `Cinco días hábiles notificados el ${d("2026-12-22")} en ${f.placeLabel}: si el plazo es administrativo, acaba el ${long(f.christmasAdmin.last)}; si es judicial, del 24 de diciembre al 6 de enero no cuenta nada y acaba el ${long(f.christmasJudicial.last)}.`,
     ],
     ca: [
       `Deu dies hàbils notificats el dilluns ${d(ex.notified)}: el termini comença el ${d(f.example.first)} i acaba el ${long(f.example.last)} a ${f.placeLabel}, i el ${long(f.other.result.last)} a ${f.other.label}. La diferència és el 7 de desembre: festiu a la Comunitat de Madrid i laborable a Catalunya.`,
+      `Quinze dies hàbils notificats el mateix ${d(ex.notified)}: acaben el ${long(f.fifteen.last)} a ${f.placeLabel} i el ${long(f.fifteenOther.last)} a ${f.other.label}. Si fossin quinze dies naturals, el termini acabaria el ${long(f.fifteenCalendar.last)}.`,
       `Un mes des del 31 de gener de 2026: no hi ha 31 de febrer, així que acaba l'últim dia del mes, el ${d(f.months.nominal)}. És dissabte, inhàbil, i el termini passa al ${long(f.months.last)}.`,
       `Cinc dies hàbils notificats el ${d("2026-12-22")} a ${f.placeLabel}: si el termini és administratiu, acaba el ${long(f.christmasAdmin.last)}; si és judicial, del 24 de desembre al 6 de gener no compta res i acaba el ${long(f.christmasJudicial.last)}.`,
     ],
     en: [
       `Ten working days notified on Monday ${d(ex.notified)}: the count starts on ${d(f.example.first)} and ends on ${long(f.example.last)} in ${f.placeLabel}, and on ${long(f.other.result.last)} in ${f.other.label}. The difference is 7 December: a holiday in the Madrid region and a working day in Catalonia.`,
+      `Fifteen working days notified on the same ${d(ex.notified)}: they end on ${long(f.fifteen.last)} in ${f.placeLabel} and on ${long(f.fifteenOther.last)} in ${f.other.label}. Fifteen calendar days would end on ${long(f.fifteenCalendar.last)}.`,
       `One month from 31 January 2026: there is no 31 February, so it ends on the month's last day, ${d(f.months.nominal)}. That is a Saturday, a non-working day, so the deadline moves to ${long(f.months.last)}.`,
       `Five working days notified on ${d("2026-12-22")} in ${f.placeLabel}: an administrative deadline ends on ${long(f.christmasAdmin.last)}; a court deadline skips 24 December to 6 January and ends on ${long(f.christmasJudicial.last)}.`,
     ],
@@ -368,7 +371,7 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: workingDaysPath(locale), description: meta.description, locale, category: "UtilitiesApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

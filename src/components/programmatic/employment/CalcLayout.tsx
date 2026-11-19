@@ -13,7 +13,7 @@ import { PAY_DATES_PATH, dateWords } from "@/lib/programmatic/employment/paths";
 import { calcEditions, calcPath, type CalcKey, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { RULES_AS_OF, SOURCE, type SourceKey } from "@/lib/programmatic/employment/rules";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 /**
@@ -141,7 +141,7 @@ export function CalcLayout({
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: calcPath(calcKey, locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

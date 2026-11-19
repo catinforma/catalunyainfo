@@ -32,7 +32,7 @@ import {
 } from "@/lib/programmatic/pensions-2027/rules";
 import type { ServerPensionData } from "@/lib/programmatic/pensions-2027/server";
 import { SERIES, apiSeriesUrl, tableUrl } from "@/lib/programmatic/rent-update/ine";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { PensionCalculator } from "./PensionCalculator";
@@ -211,6 +211,28 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
     if (t === null) return L(locale, { es: `${f} o más`, ca: `${f} o més`, en: `${f} or more` });
     return f === t ? f : L(locale, { es: `de ${f} a ${t}`, ca: `de ${f} a ${t}`, en: `${f} to ${t}` });
   };
+
+  /*
+   * Which pensions art. 58.2 covers, in words (19 Nov 2026: "subida pensiones 2027 incapacidad permanente",
+   * "cuánto sube la brecha de género en 2027"): every contributory pension and, named in the article, the
+   * gender-gap supplement; its 2026 amount (RDL 3/2026) times the same rate. Non-contributory: art. 62.
+   */
+  const gapRate = status && status.mean !== null ? status.percent : null;
+  const gap2027 = gapRate === null ? null : Math.round(GENDER_GAP_2026 * (1 + gapRate / 100) * 100) / 100;
+  const gapProvisional = status?.kind === "provisional";
+  const gapNote =
+    gap2027 === null || gapRate === null
+      ? null
+      : L(locale, {
+          es: `; con la media ${gapProvisional ? "provisional " : ""}del ${pct(gapRate, gapProvisional ? 2 : 1, "es")}, unos ${euros(gap2027, "es")}`,
+          ca: `; amb la mitjana ${gapProvisional ? "provisional " : ""}del ${pct(gapRate, gapProvisional ? 2 : 1, "ca")}, uns ${euros(gap2027, "ca")}`,
+          en: `; with the ${gapProvisional ? "provisional " : ""}${pct(gapRate, gapProvisional ? 2 : 1, "en")} average, about ${euros(gap2027, "en")}`,
+        });
+  const whichPensions = L(locale, {
+    es: `Vale para todas las pensiones contributivas de la Seguridad Social, no solo la de jubilación: también las de incapacidad permanente, viudedad, orfandad y en favor de familiares, y para el complemento de brecha de género, que el artículo nombra (${euros(GENDER_GAP_2026, "es")} al mes en 2026${gapNote ?? ""}). Las no contributivas se actualizan en la Ley de Presupuestos, al menos en el mismo porcentaje (art. 62, más abajo).`,
+    ca: `Val per a totes les pensions contributives de la Seguretat Social, no només la de jubilació: també les d'incapacitat permanent, viduïtat, orfandat i en favor de familiars, i per al complement de bretxa de gènere, que l'article esmenta (${euros(GENDER_GAP_2026, "ca")} al mes el 2026${gapNote ?? ""}). Les no contributives s'actualitzen a la Llei de pressupostos, com a mínim en el mateix percentatge (art. 62, més avall).`,
+    en: `It covers every contributory Social Security pension, not only retirement: permanent disability, widow's, orphan's and family-member pensions too, and the gender-gap supplement, which the article names (${euros(GENDER_GAP_2026, "en")} a month in 2026${gapNote ?? ""}). Non-contributory pensions are updated in the Budget Act, by at least the same percentage (art. 62, below).`,
+  });
 
   const lawParas = L(locale, {
     es: {
@@ -459,6 +481,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <h2 id="ley">{h.law}</h2>
               <p>{lawParas.intro}</p>
               <Quote>{QUOTE.art58_2}</Quote>
+              <p>{whichPensions}</p>
               <p>{lawParas.negative}</p>
               <Quote>{QUOTE.art58_3}</Quote>
               <p>{lawParas.extra}</p>
@@ -550,7 +573,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: pensionPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

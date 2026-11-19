@@ -16,7 +16,7 @@ import { freshnessText, leadText, letrasMeta } from "@/lib/programmatic/treasury
 import { TERMS, latestByTerm, latestResultsUrl, resultDays, type AuctionResult, type Term } from "@/lib/programmatic/treasury-bills/results";
 import { BDE_FEE, NORMS, NON_COMPETITIVE_MAX, QUOTE, RULES_AS_OF, SAVINGS_SCALE, SAVINGS_SCALE_NORM, URLS } from "@/lib/programmatic/treasury-bills/rules";
 import type { LetrasData } from "@/lib/programmatic/treasury-bills/server";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { LetrasCalculator, type TermOption } from "./LetrasCalculator";
@@ -559,7 +559,7 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: letrasPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
       <SiteFooter locale={locale} />
     </>
   );

@@ -6,7 +6,7 @@ import { test } from "node:test";
 import { CALC_COPY, DEFAULT_PLACE, EVENT_LABEL, PL_LOCALES, calendarOf, paidLeaveEditions, paidLeavePath, readHash, writeHash } from "../src/lib/programmatic/paid-leave/copy.ts";
 import { DEFAULT_INPUT, DEFAULT_START, birthPlan, countWorking, leaveDays, shortLeave, type PaidLeaveInput } from "../src/lib/programmatic/paid-leave/engine.ts";
 import { paidLeavePlaces } from "../src/lib/programmatic/paid-leave/places.ts";
-import { BIRTH, EVENTS, FORCE_MAJEURE_DAYS_PER_YEAR, NURSING, PARENTAL, QUOTE, RULES_AS_OF, RULES_UNTIL, SHORT_RULES, SOURCES } from "../src/lib/programmatic/paid-leave/rules.ts";
+import { BIRTH, EVENTS, FORCE_MAJEURE_DAYS_PER_YEAR, KIN_DEGREES, NURSING, PARENTAL, QUOTE, RULES_AS_OF, RULES_UNTIL, SHORT_RULES, SOURCES } from "../src/lib/programmatic/paid-leave/rules.ts";
 import { paidLeaveSitemapEntries } from "../src/lib/programmatic/paid-leave/sitemap.ts";
 
 /**
@@ -27,6 +27,20 @@ const national = calendarOf(placesEs, "espana");
 /* -------------------------------------------------------------------------- */
 /* The rules match the BOE wording                                            */
 /* -------------------------------------------------------------------------- */
+
+test("kinship: the Civil Code quotes are verbatim (arts. 918-919, BOE fixture) and the degree table follows art. 918's count", () => {
+  const cc = read("tests/fixtures/boe-codigo-civil-915-919.txt").replace(/\s+/g, " ");
+  for (const q of [QUOTE.cc918, QUOTE.cc919]) assert.ok(cc.includes(q), q.slice(0, 50));
+  // art. 918: father 1, grandfather 2, great-grandfather 3; brother 2, uncle 3, first cousin 4.
+  const row = (word: string) => KIN_DEGREES.find((k) => k.es.toLowerCase().includes(word))!.degree;
+  assert.deepEqual([row("padre"), row("abuelos"), row("bisabuelos"), row("hermanos"), row("tíos"), row("primos")], [1, 2, 3, 2, 3, 4]);
+  for (const k of KIN_DEGREES) assert.ok(k.es && k.ca && k.en, `degree ${k.degree} in every language`);
+  // The Statute's "hasta el segundo grado" is in both quoted letters the table applies.
+  assert.match(QUOTE.death, /hasta el segundo grado/);
+  assert.match(QUOTE.illness, /hasta el segundo grado/);
+  assert.equal(SOURCES.cc.ref, "BOE-A-1889-4763");
+  assert.match(read(PAGE), /<KinTable locale=\{locale\} \/>/);
+});
 
 test("rules: the days are the ones the quoted ET text says (art. 37.3 as worded by RDL 5/2023)", () => {
   assert.equal(SHORT_RULES.marriage.days, 15);

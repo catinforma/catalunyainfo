@@ -69,6 +69,12 @@ const HUB = calculatorsHubEditions();
 const PENSION_CALC = pensionEditions();
 /** The retirement age calculator (lib/programmatic/retirement-age/), which links back here. */
 const RETIREMENT = calcEditions("retirement-age");
+/**
+ * The sick-pay calculator (lib/programmatic/sick-leave/), 19 Nov 2026: "quan es cobra estant de baixa" reaches it.
+ * Sick pay is not on this calendar: the Seguridad Social says «el pago lo efectúa la empresa como pago delegado
+ * con la misma periodicidad que los salarios» (quoted on that page, its "Quién paga y cuándo cobras").
+ */
+const SICK = calcEditions("sick-leave");
 
 const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const weekday = (s: string) => new Date(`${s}T12:00:00Z`).getUTCDay();
@@ -161,6 +167,7 @@ const COPY: Record<Locale, PayCopy> = {
       items: [
         "Las pensiones no contributivas las paga la Tesorería de la Seguridad Social, salvo en Navarra y el País Vasco, que las gestionan ellos.",
         "Este calendario no sirve para nóminas de empresa ni para ayudas autonómicas.",
+        `Tampoco para la baja laboral: en general la paga la empresa en tu nómina, con la misma periodicidad que el salario («pago delegado»). ${link(SICK.es, "Calcula cuánto cobras de baja laboral")}.`,
       ],
       payroll: `Para saber cuánto cobrarás en la nómina, usa la ${link(NET.es, "calculadora de sueldo neto")}; el finiquito, el despido y la subida del alquiler están en las ${link(HUB.es, "calculadoras")}.`,
     },
@@ -203,6 +210,7 @@ const COPY: Record<Locale, PayCopy> = {
       items: [
         "Les pensions no contributives les paga la Tresoreria de la Seguretat Social, tret de Navarra i el País Basc, que les gestionen ells mateixos.",
         "Aquest calendari no serveix per a les nòmines d'empresa ni per als ajuts autonòmics.",
+        `Tampoc per a la baixa laboral: en general la paga l'empresa a la teva nòmina, amb la mateixa periodicitat que el sou («pagament delegat»). ${link(SICK.ca, "Calcula quant cobres de baixa laboral")}.`,
       ],
       payroll: `Per saber quant cobraràs a la nòmina, fes servir la ${link(NET.ca, "calculadora de sou net")}; la quitança, l'acomiadament i la pujada del lloguer són a les ${link(HUB.ca, "calculadores")}.`,
     },
@@ -245,6 +253,7 @@ const COPY: Record<Locale, PayCopy> = {
       items: [
         "Non-contributory pensions are paid by the Social Security Treasury, except in Navarre and the Basque Country, which manage their own.",
         "This calendar does not apply to company payrolls or to regional benefits.",
+        `Nor to sick leave: as a rule your employer pays it in your payslip, on the same schedule as your salary (“pago delegado”). ${link(SICK.en, "Work out your sick pay in Spain")}.`,
       ],
       payroll: `To see what your payslip will show, use the ${link(NET.en, "net salary calculator")}; final settlement, severance pay and rent increases are in the ${link(HUB.en, "calculators")}.`,
     },
