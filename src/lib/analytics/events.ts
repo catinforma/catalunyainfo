@@ -84,6 +84,7 @@ export const CALCULATOR_USE_IDS = [
   "mortgage-revision",
   "home-purchase-tax",
   "home-purchase-costs",
+  "plusvalia",
   "inheritance-tax",
   "inheritance-tax-madrid",
   "inheritance-tax-andalucia",

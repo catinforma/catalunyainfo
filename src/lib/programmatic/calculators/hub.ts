@@ -34,6 +34,7 @@ import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { RULES_AS_OF as PURCHASE_COSTS_AS_OF } from "@/lib/programmatic/purchase-costs/rules";
+import { RULES_AS_OF as PLUSVALIA_AS_OF } from "@/lib/programmatic/plusvalia/rules";
 import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
 import { RULES_AS_OF as REGIONAL_ISD_AS_OF } from "@/lib/programmatic/inheritance-tax/regions/state";
 import { RULES_AS_OF as GIFT_TAX_AS_OF } from "@/lib/programmatic/gift-tax/regions/state";
@@ -466,6 +467,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: PURCHASE_COSTS_AS_OF,
+      },
+      {
+        key: "plusvalia",
+        calculator: true,
+        href: calc("plusvalia"),
+        title: { ca: "Plusvàlua municipal 2026", es: "Plusvalía municipal 2026", en: "Plusvalía municipal tax 2026" },
+        answers: {
+          ca: "Quant pagaràs de plusvàlua en vendre, heretar o donar un pis, pel mètode objectiu i pel real, i quan no es paga?",
+          es: "¿Cuánto pagarás de plusvalía al vender, heredar o donar un piso, por el método objetivo y por el real, y cuándo no se paga?",
+          en: "How much plusvalía you pay when you sell, inherit or give away a flat, by the objective and the real-gain methods, and when nothing is due.",
+        },
+        basis: {
+          ca: "Text refós de la Llei reguladora de les hisendes locals, arts. 104 a 110 (Reial decret llei 26/2021); coeficients del Reial decret llei 8/2023 i, des de l'1 de desembre de 2026, del 29/2026; tipus del teu ajuntament.",
+          es: "Texto refundido de la Ley Reguladora de las Haciendas Locales, arts. 104 a 110 (Real Decreto-ley 26/2021); coeficientes del Real Decreto-ley 8/2023 y, desde el 1 de diciembre de 2026, del 29/2026; tipo de tu ayuntamiento.",
+          en: "Consolidated Local Finance Act, arts. 104 to 110 (Royal Decree-law 26/2021); coefficients of Royal Decree-law 8/2023 and, from 1 December 2026, 29/2026; your council's rate.",
+        },
+        scope: "spain",
+        checked: PLUSVALIA_AS_OF,
       },
     ],
   },

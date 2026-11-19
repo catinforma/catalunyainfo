@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -6,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { GROUP_LABEL, elDay, fromDay, money, num, percent, sinceDay, type IsdLocale } from "@/lib/programmatic/inheritance-tax/copy";
 import { REGION_AGENCY, REGION_IN, STATE_GROUP_WHO, cite, lawName, regionEditions, regionPath } from "@/lib/programmatic/inheritance-tax/regional-copy";
 import { REGION_RULES, regionDefaultInput, regionExample, regionExampleResults, regionFaq, regionMeta } from "@/lib/programmatic/inheritance-tax/regional-page";
@@ -426,6 +428,15 @@ export function RegionalInheritanceTaxBody({ region, locale, crumbs, nextStep, m
                 <Quote key={q.text} q={q} locale={locale} />
               ))}
               <p>{officialLinks}.</p>
+
+              <p>
+                {L(locale, {
+                  ca: "Si l'herència inclou un habitatge o un altre immoble urbà, l'hereu paga també la plusvàlua municipal a l'ajuntament, amb un termini propi de sis mesos des de la mort, prorrogables fins a un any (text refós de la Llei reguladora de les hisendes locals, arts. 106.1.a i 110.2.b):",
+                  es: "Si la herencia incluye una vivienda u otro inmueble urbano, el heredero paga también la plusvalía municipal al ayuntamiento, con un plazo propio de seis meses desde el fallecimiento, prorrogables hasta un año (texto refundido de la Ley Reguladora de las Haciendas Locales, arts. 106.1.a y 110.2.b):",
+                  en: "If the estate includes a home or other urban property, the heir also pays the plusvalía municipal to the council, with its own deadline of six months from the death, extendable to one year (consolidated Local Finance Act, arts. 106.1.a and 110.2.b):",
+                })}{" "}
+                <Link href={calcPath("plusvalia", locale)}>{L(locale, { ca: "calculadora de la plusvàlua municipal", es: "calculadora de la plusvalía municipal", en: "plusvalía municipal tax calculator" })}</Link>.
+              </p>
 
               <InheritanceByRegion current={rules.calculatorId} locale={locale} />
 

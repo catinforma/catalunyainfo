@@ -47,6 +47,7 @@ const { mortgageEditions } = await import("../src/lib/programmatic/mortgage/copy
 const { itvEditions } = await import("../src/lib/programmatic/itv/copy.ts");
 const { htEditions } = await import("../src/lib/programmatic/home-purchase-tax/copy.ts");
 const { pcEditions } = await import("../src/lib/programmatic/purchase-costs/copy.ts");
+const { pvEditions } = await import("../src/lib/programmatic/plusvalia/copy.ts");
 const { isdEditions } = await import("../src/lib/programmatic/inheritance-tax/copy.ts");
 const { regionEditions: isdRegionEditions } = await import("../src/lib/programmatic/inheritance-tax/regional-copy.ts");
 const { giftEditions } = await import("../src/lib/programmatic/gift-tax/copy.ts");
@@ -151,6 +152,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(itvEditions()),
     ...Object.values(htEditions()),
     ...Object.values(pcEditions()),
+    ...Object.values(pvEditions()),
     ...Object.values(isdEditions()),
     ...Object.values(isdRegionEditions("madrid")),
     ...Object.values(isdRegionEditions("andalucia")),

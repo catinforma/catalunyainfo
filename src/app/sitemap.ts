@@ -53,6 +53,7 @@ import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { pcSitemapEntries } from "@/lib/programmatic/purchase-costs/page";
+import { pvSitemapEntries } from "@/lib/programmatic/plusvalia/page";
 import { isdSitemapEntries } from "@/lib/programmatic/inheritance-tax/page";
 import { regionSitemapEntries as isdRegionSitemapEntries } from "@/lib/programmatic/inheritance-tax/regional-page";
 import { giftSitemapEntries } from "@/lib/programmatic/gift-tax/page";
@@ -251,6 +252,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...htSitemapEntries(),
     // Home buying costs: notary and Land Registry fees on their official scales plus the taxes above (calculators family, group "housing"), in es, ca and en.
     ...pcSitemapEntries(),
+    // Plusvalía municipal (IIVTNU, TRLRHL arts. 104-110; calculators family, group "housing"), in es, ca and en.
+    ...pvSitemapEntries(),
     // Catalan inheritance tax (Codi tributari, llibre sisè; calculators family, group "housing"), in ca, es and en.
     ...isdSitemapEntries(),
     // The same tax in Madrid, Andalucía and the Comunitat Valenciana (calculators family, group "taxes"), in es, ca and en.

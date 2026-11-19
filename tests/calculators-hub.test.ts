@@ -78,8 +78,10 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("home-purchase-costs"), { ca: "/ca/calculadores/despeses-compravenda-habitatge/", es: "/es/calculadoras/gastos-compraventa-vivienda/", en: "/en/calculators/spain-home-buying-costs/" });
 });
 
-test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax and home-buying costs tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "home-purchase-costs"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax, home-buying costs and plusvalía tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "home-purchase-costs", "plusvalia"]);
+  // 19 Nov 2026.
+  assert.deepEqual(calcEditions("plusvalia"), { ca: "/ca/calculadores/plusvalua-municipal/", es: "/es/calculadoras/plusvalia-municipal/", en: "/en/calculators/spain-plusvalia-tax/" });
 });
 
 test("hub: the taxes group is 'inheritance and gift tax by community', Catalonia first, with a one-line intro in every language", () => {

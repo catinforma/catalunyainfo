@@ -45,6 +45,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "home-purchase-tax": ["home-purchase-costs", "mortgage"],
   // The fees: the tax in detail (articles, reduced rates), then the mortgage.
   "home-purchase-costs": ["home-purchase-tax", "mortgage"],
+  // A seller who buys again: the purchase taxes; an heir: the inheritance tax on the same home.
+  plusvalia: ["home-purchase-tax", "inheritance-tax"],
   // An heir: the widow's pension when the spouse died, then the taxes if the inherited home is sold and another bought.
   "inheritance-tax": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-madrid": ["widow-pension", "home-purchase-tax"],
