@@ -28,6 +28,7 @@ import {
   type B2Source,
 } from "./shared";
 import { STRIKE_11N_DATE, STRIKE_11N_URLS } from "./strike-11n";
+import { entryDayPageLine } from "./strike-day-links";
 import {
   SERVICE_KEYS,
   STRIKES,
@@ -606,6 +607,12 @@ const DAY_PAGE_LINES: Record<Locale, Partial<Record<B2Key, string>>> = {
   },
 };
 
+/** 19 Nov 2026: the covered entry's one-day page (23 or 26 Nov; strike-day-links.ts), right under the answer, until its day. */
+function entryDayPageParas(c: Ctx): Block[] {
+  const line = entryDayPageLine(c.strike.id, c.locale, c.asOf);
+  return line ? paras(line) : [];
+}
+
 function dayPageParas(c: Ctx): Block[] {
   if (c.strike.id !== SPAIN_RAIL_ENTRY) return [];
   const lines = STRIKE_DAY_PAGES.filter((page) => page.day >= c.asOf).flatMap((page) => DAY_PAGE_LINES[c.locale][page.key] ?? []);
@@ -997,6 +1004,8 @@ export function buildStrikeGuideBody(
   // "En català · En castellano · In English", under the answer (as on the hub and the 11N page).
   blocks.push(languageLinks());
   blocks.push(callout("official", verifiedLine(locale, STRIKES_VERIFIED), t.data(hub)));
+  // 19 Nov 2026: the covered entry's one-day page (23 or 26 Nov), right under the answer.
+  blocks.push(...entryDayPageParas(c));
 
   // 3. Minimum services: the entry's own text, then who sets them and where.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));

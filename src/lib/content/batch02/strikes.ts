@@ -1314,10 +1314,14 @@ const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 /**
  * 17 Nov 2026: the one-day pages ("¿Hay huelga el jueves 19 / el viernes 20?",
  * strike-days-1920n.ts), linked from both hubs until their day has passed.
+ * 19 Nov 2026: and Monday 23 (SEMAF at Renfe, Correos) and Thursday 26
+ * (education in Catalonia), strike-days-2326n.ts. In date order.
  */
 export const STRIKE_DAY_PAGES: readonly { day: string; key: B2Key }[] = [
   { day: "2026-11-19", key: "strike19n" },
   { day: "2026-11-20", key: "strike20n" },
+  { day: "2026-11-23", key: "strike23n" },
+  { day: "2026-11-26", key: "strike26n" },
 ];
 
 const DAY_PAGES_LEAD: Record<Locale, string> = { ca: "Dia a dia:", es: "Día a día:", en: "Day by day:" };

@@ -9450,4 +9450,94 @@ and `calendario-2027-espana` (community pages). IndexNow prefixes: `/es/calculad
 /es/guias/cuando-se-cobra-paro-pension/ /ca/guies/quan-es-cobra-atur-pensio/ /en/guides/unemployment-benefit-pension-payment-dates-spain/
 /es/festivos/2027/ /ca/festius/2027/ /en/holidays/2027/`.
 
+## 2026-11-19 (night) — New pages: "Huelga 23 de noviembre de 2026" (SEMAF at Renfe, Correos, doctors) and "Huelga 26 de noviembre de 2026" (education in Catalonia, doctors, Madrid), es + ca + en; linked from both hubs, the Renfe and education guides and the 19N/20N pages (deploy; groups `strikes`, `huelgas-espana`, `huelga-23-26n`) (review 2026-11-24 and 2026-11-27)
+
+**Why.** The 19N/20N day pages took their dates' queries from the Spain hub within a day (GSC 18 Nov: `/es/guias/huelga-20-noviembre/`
+17,557 impressions at 7.0; 19 Nov 9,105 at 6.9). The next two big strike days had no page of their own. Baseline (GSC 13–19 Nov):
+on the education guide `/es/guias/huelga-educacion-noviembre/` "vaga 26 novembre" 567 impressions at 5.1 (28 clicks), "vaga 26 de
+noviembre" 236 at 7.2, "huelga 26 noviembre 2026" 115 at 6.9 (1 click), "huelga 26 noviembre" 59 at 8.0, "huelga dia 26 de
+noviembre" 14 at 8.5; on the Spain hub "el 26 de noviembre hay huelga" 40 at 8.4 and "huelga 23 noviembre 2026" 12 at 10.1 (the
+23rd's demand has not started yet; "huelga renfe 19 noviembre" reached 1,542 at 8.1 on the Renfe guide in the same week).
+
+**Sources re-read 19 Nov 2026, 23:10–23:40 CET** (curl with a browser UA; fact pack `research_notes/x10/strike-days-2326-factpack.md`
+in the worktree, gitignored; downloads in the session scratchpad).
+- Generalitat, Ordre EMT/ /2026 of 16 Nov (e-Tauler API, edict 659191): "La situació de vaga presentada pel sindicat SEMAF a
+  l'empresa Grupo Renfe, que està prevista per al dia 23 de novembre, de 0.01 a 23.59 hores, i que afecta tot el col·lectiu de
+  maquinistes"; ACTIU, not amended, withdrawn 15 Dec. Treball's list: newest entry still that order (17/11/2026).
+- Ministry of Transport rail list (answered 200 today): newest still the resolution of 12 Nov for the 17th; "23 de noviembre": 0
+  hits. Air list: newest the 17N ones and ELA Bizkaia; SAERCO/Groundforce/Outsmart to 30 Nov. Press room: newest 19-11-2026 (winter
+  roads), nothing on the 23rd. **The rest of Renfe (Cercanías outside Catalonia, Media Distancia, AVE, Larga Distancia) stays
+  "pendiente / por confirmar".** Basque Government list: no order for the 23rd (it set the 17th's Cercanías Bilbao/San Sebastián
+  by order of 13 Nov).
+- Renfe: no 23N notice (seven slug variants under grupo.renfe.com …/2026/11/ → "no existe"; press room, renfe.com and its Rodalies
+  page are script pages with no strike text). Rodalies: no 23N notice on the alterations list (the unlisted 11_23_Vaga_23 page still
+  links the 17N PDFs: not used).
+- SEMAF nº 2026-36 (19 Nov): "Al mismo tiempo que permanece vigente la conflictividad, desde SEMAF estamos trabajando y negociando…
+  Continuamos trabajando y negociando" (bad-weather protocol agreed; no call-off); nº 2026-35 (17 Nov): "afrontamos el 23 de
+  noviembre como la próxima jornada de movilización"; nº 2026-37 (19 Nov) is about FGC elections.
+- BOE 19 Nov, Orden INT/1239/2026 (BOE-A-2026-24259): Correos strike in Madrid 00:00 23 Nov – 24:00 27 Nov and in Cádiz, Córdoba,
+  Huelva, Málaga and Sevilla to 24:00 25 Nov (Sindicato Libre de Correos y Telecomunicaciones); offices 1/2/3 staff per shift;
+  delivery up to 50 % "del día 23 al 25 … coincidiendo con la admisión del voto por correo". Only strike order in that BOE; the
+  20 Nov BOE was not out yet.
+- 26 Nov: CGT Ensenyament (18 Nov): "El pròxim dijous 26 de novembre us convoquem a la vaga juntament amb l'Assemblea Educativa de
+  Catalunya i els sindicats CNT, COS, Intersindical i USTEC"; its notice: "Tota Catalunya", "de les 00:00 hores i fins les 24:00",
+  "exclusivament durant la jornada laboral de cada professional". USTEC·STEs (18 Nov): "El 26N hi ha convocada una vaga a
+  l'educació". **No order for the 26th** on Treball's list or in the newest 100 e-Tauler edicts (17–19 Nov): "pendientes".
+- Unchanged and re-read: SMU ("convocada del día 16 al 27 de noviembre", newest items 19 Nov, no call-off), Metges de Catalunya
+  (newest 18 Nov, no call-off), CSIF Educación Madrid (stoppages "20, 24, 26 y 30 de noviembre", 9:00–11:00 and 17:00–19:00: none on
+  the 23rd, one on the 26th), CCOO Madrid ("la huelga indefinida docente").
+- `STRIKES_VERIFIED` / `STRIKES_SPAIN_VERIFIED` were already 2026-11-19 (the ~12:00 full re-read): unchanged.
+
+**What changed.**
+- New `strike-days-2326n.ts`: `/es/guias/huelga-23-noviembre/`, `/ca/guies/vaga-23-novembre/`, `/en/guides/spain-strike-23-november/`
+  and `/es/guias/huelga-26-noviembre/`, `/ca/guies/vaga-26-novembre/`, `/en/guides/spain-strike-26-november/`, built like 19N/20N
+  (single source of truth: SPAIN_STRIKES, SPAIN_OPEN_STRIKES, STRIKES). H1 "Huelga 23 de noviembre de 2026: Renfe y Rodalies
+  (SEMAF), Correos y médicos", title "Huelga 23 de noviembre de 2026: Renfe, Rodalies y Correos" (ca "Vaga 23 de novembre de 2026:
+  Renfe, Rodalies i Correus", en "Spain strike 23 November 2026: Renfe, Rodalies, Correos"); H1 "Huelga 26 de noviembre de 2026:
+  educación en Cataluña, médicos y Madrid. ¿Hay clase?", title "Huelga 26 de noviembre de 2026: educación en Cataluña" (ca "Vaga 26
+  de novembre de 2026: educació a Catalunya", en "Spain strike 26 November 2026: Catalonia schools, doctors"). Lead answers first
+  with the minimum services (Rodalies 66 % 6:00–9:30 / 17:00–20:30, 33 % the rest; Ministry part and school order "aún no
+  publicados el jueves 19…"); before / "Mañana" (22 and 25 Nov) / "Hoy" / past from `STRIKES_SPAIN_AS_OF`. 23N: table of trains
+  (who sets what), SEMAF still on (2026-36 quoted), what to do. 26N: "¿Hay clase?" with the CGT notice's groups and a table of what
+  runs in Catalonia. Both: every strike of the day with its section, Madrid, airports, Catalonia, "lo que no hay", 5 FAQs each.
+  `MINISTRY_23N_PUBLISHED = false` and the 26N copy are pinned to the entries by a test: when the Ministry or Treball publishes,
+  the test fails until the copy is rewritten.
+- Links in (body only, no title or description touched): both hubs' "Día a día" line (`STRIKE_DAY_PAGES` now has 23 and 26 Nov;
+  second paragraph on the Spain hub, under the answer on the Catalan hub); the Spain hub's Renfe 23N and Correos sections; the Renfe
+  guide and the education guide get one line right under the answer (new `strike-day-links.ts`; anchors "Huelga de Renfe del 23 de
+  noviembre en toda España: AVE, Cercanías y el resto del día", "Huelga 26 de noviembre de 2026: educación, médicos, Correos y
+  Madrid", ca/en alike) until the day; the 19N/20N pages' closing list adds the 23N page. Day pages link back to the Spain and
+  Catalan hubs, the Renfe / education guide and each other. Next-step boxes: the day page wins over the guide on its day
+  (19/20/23/26 read from `STRIKE_DAY_PAGES`).
+- Publish: groups `strikes` and `huelgas-espana` now also publish the two pages; new group `huelga-23-26n` (both on their own).
+  `NEWS_CYCLE_ENTRY_KEYS`: `guide-strike-23-november-2026-spain`, `guide-strike-26-november-2026-spain`.
+
+**Prediction.** 23N page ranks ≤ 5 for "huelga 23 noviembre 2026" and "huelga renfe 23 noviembre" (either it or the Renfe guide
+in the top 3) by the 23rd, CTR ≥ 5 %; ca page ≤ 5 for "vaga rodalies 23 novembre". 26N page ≤ 5 for "huelga 26 noviembre 2026"
+(baseline 6.9 on the education guide) and the site's combined clicks on the "26 noviembre / 26 novembre" family above the 13–19 Nov
+week.
+
+**Risk / revert rule.** The 26N page overlaps the education guide ("vaga 26 novembre" 567 at 5.1). If on 27 Nov the education guide
+and the 26N page together get fewer clicks on that family than the guide alone did in 13–19 Nov (28 clicks on "vaga 26 novembre"),
+drop the 26N line from the education guide and the 26N link from the Catalan hub's "Día a día" line (keep the page). Same rule for
+the Renfe guide and "huelga renfe 23 noviembre" on 24 Nov.
+
+**Review 2026-11-24** (`snapshot.py page huelga-23-noviembre 3`, `page vaga-23-novembre 3`, `page huelga-renfe-rodalies 3`) and
+**2026-11-27** (`page huelga-26-noviembre 3`, `page vaga-26-novembre 3`, `page huelga-educacion 7`). After 1 Dec, decide noindex or
+leave as records (as for 19N/20N).
+
+**Tests.** `npx tsc --noEmit -p .` clean; `npm test` 2834/2834 pass at 23:48 CET (session scratchpad `strike-days-2326-test-2.log`;
+the first run, `strike-days-2326-test.log`, had one failure: the huelgas-espana route regex in `tests/strikes-spain.test.ts`, now
+widened to 19/20/23/26). New
+`tests/strike-days-2326n.test.ts`; `tests/next-step.test.ts` (the 21 Nov case: the 23N day page now wins over the Renfe guide).
+After the 00:05 timer moves `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 20 Nov, the as-of discipline guards (VERIFIED = AS_OF)
+fail until the next re-read: expected.
+
+**Go-live.** Deploy, then publish `strikes` and `huelgas-espana` (or `huelga-23-26n` alone, but the hubs and guides carry the new
+links only with `strikes`). IndexNow prefixes `/es/guias/huelga-`, `/ca/guies/vaga-`, `/en/guides/spain-strike-`,
+`/en/guides/renfe-rodalies-strike-november`, `/en/guides/catalonia-teachers-strike-november`,
+`/en/guides/strike-barcelona-catalonia-today`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
+Before the 23rd: re-read the Ministry's rail list and Renfe daily; when the resolution is out, update the 23N entries in both data
+files, set `MINISTRY_23N_PUBLISHED`, rewrite the 23N copy, publish `strikes`.
+
 **Outcome:** _pending_

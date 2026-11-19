@@ -526,7 +526,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     // Grupo Renfe on 11 Nov and sets Rodalies' minimum services; the Ministry's resolution for the rest of Renfe is still to come.
     status: "official",
     catalanEntry: "vaga-renfe-2026-11-23",
-    guides: ["strikeRenfe"],
+    // 19 Nov 2026: the 23rd has a page of its own (strike-days-2326n.ts), linked until that day has passed.
+    guides: ["strikeRenfe", "strike23n"],
     title: {
       ca: "vaga de maquinistes del Grup Renfe (SEMAF)",
       es: "huelga de maquinistas del Grupo Renfe (SEMAF)",
@@ -835,7 +836,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     dates: ["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
     sector: "services",
     status: "official",
-    guides: ["postalVote"],
+    // 19 Nov 2026: its first day is on the 23 Nov page (strike-days-2326n.ts), linked until that day has passed.
+    guides: ["postalVote", "strike23n"],
     title: {
       ca: "vaga a Correus a Madrid i a cinc províncies andaluses (Sindicato Libre de Correos)",
       es: "huelga en Correos en Madrid y en cinco provincias andaluzas (Sindicato Libre de Correos)",
