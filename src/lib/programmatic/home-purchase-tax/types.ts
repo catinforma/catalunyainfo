@@ -108,6 +108,12 @@ export interface Community {
   notes: readonly Text[];
 }
 
+/** What /data/impuestos-compra-vivienda.json serves (communities.ts `htClientData`). `schema` lets the browser refuse a shape it does not know. */
+export interface HtClientData {
+  schema: 1;
+  communities: Community[];
+}
+
 export type HomeType = "second-hand" | "new";
 
 export interface HtInput {

@@ -13,7 +13,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { COMMUNITY_LABEL, GRAN_LABEL, displayName, ztEditions, ztPath, type ZtLocale } from "@/lib/programmatic/zona-tensionada/copy";
-import { DATA, boeUrl, checkerContext, checkerTowns, granTable, latestList, listByCommunity, type ListGroup } from "@/lib/programmatic/zona-tensionada/data";
+import { DATA, ZT_DATA_PATH, boeUrl, checkerContext, checkerTown, granTable, latestList, listByCommunity, type ListGroup } from "@/lib/programmatic/zona-tensionada/data";
 import { headline, ztFaq, ztMeta } from "@/lib/programmatic/zona-tensionada/page";
 import { ANCHOR, QUOTE, RULES_AS_OF, SOURCES, UPDATE_RULE } from "@/lib/programmatic/zona-tensionada/rules";
 import { absoluteUrl } from "@/lib/site";
@@ -100,7 +100,6 @@ export function ZonaTensionadaRoute({ locale }: { locale: ZtLocale }) {
   const crumbs = ztCrumbs(locale);
   const h = headline();
   const ctx = checkerContext();
-  const towns = checkerTowns();
   const faq = ztFaq(locale);
   const d = (iso: string) => dayMonthYear(iso, locale);
   const latest = latestList();
@@ -305,7 +304,7 @@ export function ZonaTensionadaRoute({ locale }: { locale: ZtLocale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              <ZonaTensionadaChecker locale={locale} towns={towns} ctx={ctx} initial={INITIAL_TOWN} />
+              <ZonaTensionadaChecker locale={locale} initial={checkerTown(INITIAL_TOWN)} ctx={ctx} dataUrl={ZT_DATA_PATH} />
               <p className="text-sm text-[var(--color-muted)]">
                 {disclaimer} <A href={SOURCES.serpaviApp.url}>{serpaviLink}</A> · <A href={SOURCES.mivauZones.url}>{zonesLink}</A>.
               </p>

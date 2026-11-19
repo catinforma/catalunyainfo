@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { CALC_COPY, EXAMPLE, TAX_NAME, benefitRate, euros, pct, rateText, readHash, wholeEuros, writeHash, type HtLocale } from "@/lib/programmatic/home-purchase-tax/copy";
 import { calculate, type TaxLine } from "@/lib/programmatic/home-purchase-tax/engine";
-import type { Community, HomeType, HtInput } from "@/lib/programmatic/home-purchase-tax/types";
+import type { Community, HomeType, HtClientData, HtInput } from "@/lib/programmatic/home-purchase-tax/types";
 import { parseAmount } from "@/lib/programmatic/rent-update/engine";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
@@ -13,8 +13,17 @@ import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
  * rate applied, its article, and the conditions of a reduced rate the
  * calculator cannot check. Server-rendered on EXAMPLE (copy.ts), so it
  * answers without JavaScript; the URL hash keeps a calculation shareable.
- * `communities` comes without the law's quotes (clientCommunities()).
+ *
+ * The page sends only what the first render needs: the community names for
+ * the <select> (`options`, sorted on the server) and the example's community
+ * (`initial`). Every community's rates (clientCommunities(), without the
+ * law's quotes) are fetched from `dataUrl` once, on the first focus, tap or
+ * change, or at once when the URL carries a calculation; until they arrive,
+ * a community other than the example shows a loading line. As props they
+ * were ~160 KB of every edition's RSC payload.
  */
+
+type Load = "idle" | "loading" | "ready" | "error";
 
 function lineName(l: TaxLine, c: Community, locale: HtLocale): string {
   if (l.tax === "vat") return TAX_NAME[c.newHome.name === "IGIC" ? "igic" : c.newHome.name === "IPSI" ? "ipsi" : "vat"][locale];
@@ -26,20 +35,52 @@ function agencyFor(l: TaxLine, c: Community): { name: string; url: string } {
   return l.tax === "vat" && c.newHome.agency ? c.newHome.agency : c.taxAgency;
 }
 
-export function HomeTaxCalculator({ locale, communities }: { locale: HtLocale; communities: readonly Community[] }) {
+export function HomeTaxCalculator({
+  locale,
+  options,
+  initial,
+  dataUrl,
+}: {
+  locale: HtLocale;
+  options: readonly { id: string; name: string }[];
+  initial: Community;
+  dataUrl: string;
+}) {
   const t = CALC_COPY[locale];
   const id = useId();
   const [input, setInput] = useState<HtInput>(EXAMPLE);
   const [priceText, setPriceText] = useState(String(EXAMPLE.price));
   const [ageText, setAgeText] = useState(String(EXAMPLE.age));
   const [touched, setTouched] = useState(false);
+  const [all, setAll] = useState<readonly Community[] | null>(null);
+  const [load, setLoad] = useState<Load>("idle");
+  const started = useRef(false);
+
+  const fetchData = useCallback(() => {
+    if (started.current) return;
+    started.current = true;
+    setLoad("loading");
+    fetch(dataUrl, { headers: { accept: "application/json" } })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((data: HtClientData) => {
+        if (data?.schema !== 1 || !Array.isArray(data.communities) || data.communities.length === 0) throw new Error("no data");
+        setAll(data.communities);
+        setLoad("ready");
+      })
+      .catch(() => {
+        // The next interaction tries again.
+        started.current = false;
+        setLoad("error");
+      });
+  }, [dataUrl]);
 
   // The hash is only known in the browser: read it after mount, never during render.
   useEffect(() => {
     const fromHash = () => {
       // Only a calculator hash ("#c=…"): an in-page anchor such as "#itp-cataluna" must not reset the inputs.
       if (!/^#(?:.*&)?c=/.test(window.location.hash)) return;
-      const next = readHash(window.location.hash, EXAMPLE, communities.map((c) => c.id));
+      const next = readHash(window.location.hash, EXAMPLE, options.map((c) => c.id));
+      fetchData();
       setInput(next);
       setPriceText(String(next.price));
       setAgeText(String(next.age));
@@ -48,23 +89,24 @@ export function HomeTaxCalculator({ locale, communities }: { locale: HtLocale; c
     fromHash();
     window.addEventListener("hashchange", fromHash);
     return () => window.removeEventListener("hashchange", fromHash);
-  }, [communities]);
+  }, [options, fetchData]);
 
   const update = (patch: Partial<HtInput>) => {
+    fetchData();
     const next = { ...input, ...patch };
     setInput(next);
     setTouched(true);
     if (Number.isFinite(next.price) && Number.isFinite(next.age)) window.history.replaceState(null, "", writeHash(next));
   };
 
-  const r = calculate(input, communities);
-  const sorted = [...communities].sort((a, b) => a.name[locale].localeCompare(b.name[locale], locale));
+  // Until every community has arrived, only the example's can be computed.
+  const r = all || input.community === initial.id ? calculate(input, all ?? [initial]) : null;
 
   // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
   const calcUse = useCalculatorUse("home-purchase-tax", locale, r);
 
   return (
-    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} onFocusCapture={fetchData} onPointerDownCapture={fetchData} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>
@@ -77,9 +119,9 @@ export function HomeTaxCalculator({ locale, communities }: { locale: HtLocale; c
         <p className="ci-calc-row ci-calc-wide">
           <label htmlFor={`${id}-c`}>{t.community}</label>
           <select id={`${id}-c`} className="ci-field" value={input.community} onChange={(e) => update({ community: e.target.value })}>
-            {sorted.map((c) => (
+            {options.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.name[locale]}
+                {c.name}
               </option>
             ))}
           </select>
@@ -169,7 +211,9 @@ export function HomeTaxCalculator({ locale, communities }: { locale: HtLocale; c
       </div>
 
       <div aria-live="polite">
-        {r.status === "invalid" ? (
+        {r === null ? (
+          <p className="ci-calc-note">{load === "error" ? t.loadError : t.loading}</p>
+        ) : r.status === "invalid" ? (
           <p role="alert">{t.invalid[r.reason]}</p>
         ) : (
           <>

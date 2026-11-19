@@ -182,6 +182,31 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The home-purchase tax calculator's rates (app/data/impuestos-compra-
+        // vivienda.json, fetched on the first interaction): they only change
+        // with a deploy, which purges Cloudflare, so the edge keeps them a
+        // day; browsers keep them five minutes, so a new rate reaches a
+        // returning reader with the page that prints it.
+        source: "/data/impuestos-compra-vivienda.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=300, s-maxage=86400, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
+        // The zona tensionada checker's towns (app/data/zona-tensionada.json,
+        // fetched on the first focus): same lifetimes, same reason.
+        source: "/data/zona-tensionada.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=300, s-maxage=86400, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
         // The full security header set, statically: none of it varies per
         // request, so the proxy no longer has to run on every page for it.
         // X-Frame-Options is in the next rule: every path but the widgets.

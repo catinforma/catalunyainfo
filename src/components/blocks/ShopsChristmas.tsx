@@ -1,9 +1,11 @@
 import { CHRISTMAS_SHOPS_CHECKED, compactDays } from "@/lib/content/batch02/shops-christmas";
 import { RESOLUTION_COUNCILS, christmasTownRows, townLabel } from "@/lib/content/batch02/shops-christmas-towns";
+import { LabelList, type ShopRow } from "@/lib/content/packed-rows";
 import type { Locale } from "@/lib/i18n/config";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 
 import { LocalHolidaysFilter } from "./LocalHolidaysFilter";
+import { ShopRows } from "./PlaceRows";
 
 /**
  * "Can shops open over Christmas in my town?": every municipality of
@@ -12,8 +14,10 @@ import { LocalHolidaysFilter } from "./LocalHolidaysFilter";
  * defaults).
  *
  * Built like the local-holiday table: the whole table is in the HTML, the
- * filter box only hides rows. The rows sit in a scroll box so 947 towns do not
- * push the rest of the guide off the page.
+ * filter box only hides rows, and the rows come from compact props
+ * (PlaceRows.tsx) so the RSC payload does not repeat 947 rows of elements.
+ * The rows sit in a scroll box so 947 towns do not push the rest of the guide
+ * off the page.
  */
 
 const COPY: Record<
@@ -71,6 +75,12 @@ const COPY: Record<
 export function ShopsChristmas({ locale }: { locale: Locale }) {
   const t = COPY[locale];
   const rows = christmasTownRows();
+  // Most towns share the default days: each distinct label once, rows point at it (PlaceRows.tsx).
+  const days = new LabelList();
+  const packed: ShopRow[] = rows.map((row) => {
+    const open = days.of(compactDays(row.open, locale));
+    return row.swapped.length > 0 ? [townLabel(row.name, locale), open, days.of(compactDays(row.swapped, locale))] : [townLabel(row.name, locale), open];
+  });
   return (
     <section className="ci-local" aria-label={t.region}>
       <p className="ci-local-summary">{t.summary(rows.length)}</p>
@@ -84,22 +94,7 @@ export function ShopsChristmas({ locale }: { locale: Locale }) {
               <th scope="col">{t.colDays}</th>
             </tr>
           </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.name}>
-                <td>{townLabel(row.name, locale)}</td>
-                <td>
-                  {compactDays(row.open, locale)}
-                  {row.swapped.length > 0 ? (
-                    <strong>
-                      {" "}
-                      ({t.notOn} {compactDays(row.swapped, locale)})
-                    </strong>
-                  ) : null}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <ShopRows rows={packed} days={days.labels} notOn={t.notOn} />
         </table>
       </div>
       <p className="ci-calc-note">{t.note(RESOLUTION_COUNCILS, dayMonthYear(CHRISTMAS_SHOPS_CHECKED, locale))}</p>

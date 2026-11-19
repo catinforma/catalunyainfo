@@ -1,30 +1,58 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useCallback, useId, useMemo, useRef, useState } from "react";
 
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
-import { CHECKER_COPY, COMMUNITY_LABEL, displayName, matchTowns, townAnswer, type CheckerTown, type Context, type ZtLocale } from "@/lib/programmatic/zona-tensionada/copy";
+import { CHECKER_COPY, COMMUNITY_LABEL, displayName, matchTowns, townAnswer, type CheckerTown, type Context, type ZtClientData, type ZtLocale } from "@/lib/programmatic/zona-tensionada/copy";
 import { SOURCES } from "@/lib/programmatic/zona-tensionada/rules";
 
 /**
  * "¿Está tu municipio en zona tensionada?": type a town, pick it, read the
  * answer (declared or not, since and until when, the Generalitat's 2026 acts)
- * and what changes for a tenant. Every town of Catalonia is in `towns`, and
- * every declared town elsewhere. Server-rendered on `initial` (Barcelona), so
+ * and what changes for a tenant. Server-rendered on `initial` (Barcelona), so
  * the answer is in the HTML without JavaScript.
+ *
+ * The town list (every town of Catalonia and every declared town elsewhere,
+ * ~110 KB) is not a prop: it is fetched from `dataUrl` once, on the first
+ * focus or tap of the checker. Typing before it arrives shows a loading line.
  */
 
-export function ZonaTensionadaChecker({ locale, towns, ctx, initial }: { locale: ZtLocale; towns: CheckerTown[]; ctx: Context; initial: string }) {
+type Load = "idle" | "loading" | "ready" | "error";
+
+export function ZonaTensionadaChecker({ locale, initial, ctx, dataUrl }: { locale: ZtLocale; initial: CheckerTown; ctx: Context; dataUrl: string }) {
   const t = CHECKER_COPY[locale];
   const id = useId();
-  const start = towns.find((x) => x.ine === initial) ?? towns[0]!;
-  const [query, setQuery] = useState(displayName(start.name));
-  const [picked, setPicked] = useState<CheckerTown>(start);
+  const [query, setQuery] = useState(displayName(initial.name));
+  const [picked, setPicked] = useState<CheckerTown>(initial);
+  const [towns, setTowns] = useState<readonly CheckerTown[] | null>(null);
+  const [load, setLoad] = useState<Load>("idle");
+  const started = useRef(false);
 
-  const matches = useMemo(() => (query.trim() === displayName(picked.name) ? [] : matchTowns(towns, query)), [query, picked, towns]);
+  const fetchData = useCallback(() => {
+    if (started.current) return;
+    started.current = true;
+    setLoad("loading");
+    fetch(dataUrl, { headers: { accept: "application/json" } })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((data: ZtClientData) => {
+        if (data?.schema !== 1 || !Array.isArray(data.towns) || data.towns.length === 0) throw new Error("no data");
+        setTowns(data.towns);
+        setLoad("ready");
+      })
+      .catch(() => {
+        // The next focus or keystroke tries again.
+        started.current = false;
+        setLoad("error");
+      });
+  }, [dataUrl]);
+
+  const typed = query.trim() !== displayName(picked.name);
+  const matches = useMemo(() => (!towns || !typed ? [] : matchTowns(towns, query)), [query, typed, towns]);
   const exact = matches.length === 1 ? matches[0] : undefined;
   const town = exact ?? picked;
-  const noMatch = query.trim().length >= 2 && matches.length === 0 && query.trim() !== displayName(picked.name);
+  // Typing before the list has arrived: nothing to match against yet.
+  const waiting = towns === null && typed && query.trim().length >= 2;
+  const noMatch = towns !== null && query.trim().length >= 2 && matches.length === 0 && typed;
   const answer = townAnswer(town, ctx, locale);
 
   // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
@@ -36,7 +64,7 @@ export function ZonaTensionadaChecker({ locale, towns, ctx, initial }: { locale:
   };
 
   return (
-    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} onFocusCapture={fetchData} onPointerDownCapture={fetchData} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>
@@ -58,7 +86,10 @@ export function ZonaTensionadaChecker({ locale, towns, ctx, initial }: { locale:
             aria-describedby={`${id}-hint`}
             aria-controls={`${id}-matches`}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              fetchData();
+              setQuery(e.target.value);
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && matches[0]) {
                 e.preventDefault();
@@ -89,7 +120,9 @@ export function ZonaTensionadaChecker({ locale, towns, ctx, initial }: { locale:
       </div>
 
       <div aria-live="polite">
-        {noMatch ? (
+        {waiting ? (
+          <p role="status">{load === "error" ? t.loadError : t.loading}</p>
+        ) : noMatch ? (
           <p role="status">{t.noMatch(query.trim())}</p>
         ) : (
           <>

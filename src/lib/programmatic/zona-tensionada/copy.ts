@@ -88,6 +88,12 @@ export interface CheckerTown {
   zones: TownZone[];
 }
 
+/** What /data/zona-tensionada.json serves (data.ts `ztClientData`). `schema` lets the browser refuse a shape it does not know. */
+export interface ZtClientData {
+  schema: 1;
+  towns: CheckerTown[];
+}
+
 /** The dated facts every answer needs. */
 export interface Context {
   asOf: string;
@@ -259,6 +265,9 @@ export interface CheckerCopy {
   index: string;
   indexNote: string;
   community: string;
+  /** While the town list loads (the first focus fetches it). */
+  loading: string;
+  loadError: string;
 }
 
 export const CHECKER_COPY: Record<ZtLocale, CheckerCopy> = {
@@ -275,6 +284,8 @@ export const CHECKER_COPY: Record<ZtLocale, CheckerCopy> = {
     index: "Consultar el índice de referencia del Ministerio (SERPAVI)",
     indexNote: "El índice da un rango para tu vivienda según su dirección y características; el tope es el valor superior. No lo copiamos: se consulta en la aplicación oficial.",
     community: "Comunidad",
+    loading: "Cargando la lista de municipios…",
+    loadError: "No se ha podido cargar la lista de municipios. Comprueba la conexión y vuelve a escribir.",
   },
   ca: {
     title: "El teu municipi és zona tensionada?",
@@ -289,6 +300,8 @@ export const CHECKER_COPY: Record<ZtLocale, CheckerCopy> = {
     index: "Consultar l'índex de referència del Ministeri (SERPAVI)",
     indexNote: "L'índex dona un interval per al teu habitatge segons l'adreça i les característiques; el límit és el valor superior. No el copiem: es consulta a l'aplicació oficial.",
     community: "Comunitat",
+    loading: "Carregant la llista de municipis…",
+    loadError: "No s'ha pogut carregar la llista de municipis. Comprova la connexió i torna a escriure.",
   },
   en: {
     title: "Is your town a tight-market area (zona tensionada)?",
@@ -303,5 +316,7 @@ export const CHECKER_COPY: Record<ZtLocale, CheckerCopy> = {
     index: "Look up the Ministry's reference index (SERPAVI)",
     indexNote: "The index gives a range for your home from its address and features; the cap is the upper value. We do not copy it: look it up in the official app.",
     community: "Region",
+    loading: "Loading the list of towns…",
+    loadError: "The list of towns could not be loaded. Check your connection and type again.",
   },
 };
