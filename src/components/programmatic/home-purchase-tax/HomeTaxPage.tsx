@@ -363,6 +363,14 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
                 })}{" "}
                 <Link href={calcPath("mortgage", locale)}>{L(locale, { es: "Calcula la cuota de tu hipoteca", ca: "Calcula la quota de la teva hipoteca", en: "Work out your mortgage payment" })}</Link>.
               </p>
+              <p>
+                {L(locale, {
+                  es: "Si la vivienda la heredas, lo que tributa es la herencia, en el impuesto de sucesiones (Ley 29/1987, art. 3.1.a):",
+                  ca: "Si l'habitatge l'heretes, el que tributa és l'herència, a l'impost de successions (Llei 29/1987, art. 3.1.a):",
+                  en: "If you inherit the home, what is taxed is the inheritance, under inheritance tax (Law 29/1987, art. 3.1.a):",
+                })}{" "}
+                <Link href={calcPath("inheritance-tax", locale)}>{L(locale, { es: "calculadora del impuesto de sucesiones en Cataluña", ca: "calculadora de l'impost de successions a Catalunya", en: "Catalonia inheritance tax calculator" })}</Link>.
+              </p>
 
               <h2 id="notaria-registro">{h.fees}</h2>
               <p>

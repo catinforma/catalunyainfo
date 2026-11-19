@@ -83,6 +83,7 @@ export const CALCULATOR_USE_IDS = [
   "mortgage",
   "mortgage-revision",
   "home-purchase-tax",
+  "inheritance-tax",
   "pensions-2027",
   "retirement-age",
   "widow-pension",

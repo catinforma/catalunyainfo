@@ -44,6 +44,8 @@ export const CALCULATORS = [
   { id: "mortgage", slugs: { es: "hipoteca", ca: "hipoteca", en: "mortgage-calculator-spain" } },
   // Housing (hub group "housing"): ITP or IVA + AJD on buying a home, by community (lib/programmatic/home-purchase-tax).
   { id: "home-purchase-tax", slugs: { es: "impuestos-compra-vivienda", ca: "impostos-compra-habitatge", en: "spain-home-purchase-taxes" } },
+  // Housing and taxes: one heir's Catalan inheritance tax (Codi tributari de Catalunya, llibre sisè, arts. 631-2 to 633-4; lib/programmatic/inheritance-tax).
+  { id: "inheritance-tax", slugs: { es: "impuesto-sucesiones-cataluna", ca: "impost-successions-catalunya", en: "catalonia-inheritance-tax" } },
   // Housing: is a town a declared zona de mercado residencial tensionado (Ley 12/2023 art. 18; BOE lists), and what changes (LAU arts. 10.3, 17.6-17.7).
   { id: "zona-tensionada", slugs: { es: "zona-tensionada", ca: "zona-tensionada", en: "spain-rent-control-areas" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
