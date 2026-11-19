@@ -170,6 +170,8 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   { keys: ["iprem", "indicador publico de renta", "indicador public de renda"], id: "iprem", label: { ca: `IPREM ${IPREM_YEAR}`, es: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` } },
   { keys: ["atur", "paro", "prestacio", "prestacion"], id: "unemployment", label: { ca: "Calculadora de l'atur", es: "Calculadora del paro", en: "Unemployment benefit calculator" } },
   { keys: ["jubilacion", "jubilacio", "jubilarme", "jubilar me", "edad de jubilacion", "edat de jubilacio", "retirement", "retire"], id: "retirement-age", label: { ca: "Edat de jubilació: quan et pots jubilar", es: "Edad de jubilación: cuándo te puedes jubilar", en: "Retirement age: when you can retire" } },
+  // Before "pension": "pensión de viudedad" answers with the widow's pension first.
+  { keys: ["viudedad", "viuda", "viudo", "viduitat", "vidua", "vidu", "widow", "widows", "widower"], id: "widow-pension", label: { ca: "Pensió de viduïtat: requisits i quant es cobra", es: "Pensión de viudedad: requisitos y cuánto se cobra", en: "Widow's pension: requirements and amount" } },
   { keys: ["pensions", "pensiones", "pension"], id: "pensions-2027", label: { ca: "Pujada de les pensions 2027", es: "Subida de las pensiones 2027", en: "Pension increase 2027" } },
   { keys: ["lletres del tresor", "letras del tesoro", "treasury bills"], id: "treasury-bills", label: { ca: "Lletres del Tresor", es: "Letras del Tesoro", en: "Treasury bills" } },
   { keys: ["dies habils", "dias habiles", "working days"], id: "working-days", label: { ca: "Calculadora de dies hàbils", es: "Calculadora de días hábiles", en: "Working days calculator" } },

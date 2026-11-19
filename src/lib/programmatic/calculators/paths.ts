@@ -49,6 +49,8 @@ export const CALCULATORS = [
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
   // Retirement age (LGSS art. 205.1.a and DT 7ª), early retirement coefficients (arts. 207-208) and the delay bonus (art. 210.2).
   { id: "retirement-age", slugs: { es: "edad-jubilacion", ca: "edat-jubilacio", en: "spain-retirement-age" } },
+  // Widow's pension (LGSS arts. 219-223, Decreto 3158/1966 art. 31, RD 900/2018): who is entitled, 52/60/70 %, the amount against the 2026 minimum.
+  { id: "widow-pension", slugs: { es: "pension-viudedad", ca: "pensio-viduitat", en: "spain-widows-pension" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },

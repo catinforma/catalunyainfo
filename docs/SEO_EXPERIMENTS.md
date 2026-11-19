@@ -8723,4 +8723,74 @@ of `/img/16x9/<key>.jpg` (200, image/jpeg) after the deploy. **Review: 2026-12-1
 also send the other eight reservoirs, unchanged). The holiday and fair hubs are not sent: their prefix would re-send every
 town page; they are crawled daily.
 
+---
+
+## 2026-11-19 — "Pensión de viudedad: requisitos y cuánto se cobra", calculator es + ca + en (new page; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** "pensión de viudedad" ≈ 12.5k searches a month (owner brief, 18 Nov 2026); the site had the 2026 viudedad minimums
+only as four rows of the pensions-2027 table and no page answering "requisitos" or "cuánto se cobra". Fact pack:
+research_notes/pension-viudedad-factpack.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/pension-viudedad/` (primary), `/ca/calculadores/pensio-viduitat/`, `/en/calculators/spain-widows-pension/`
+  (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut "viudedad", "viuda", "viudo", "viduïtat", "vídua",
+  "vidu", "widow"; `calculator_use` id `widow-pension`). Registry `CALCULATORS` id `widow-pension`; hub card in the `work`
+  group right after the 2027 pension increase (retirement age → pensions 2027 → widow's pension). Next step: pay dates,
+  pensions 2027.
+- Inputs: relationship (married / pareja de hecho / separated-divorced-former partner) with its own questions (illness before
+  the wedding + a year/children/2 years; common children, cohabitation on the padrón, registration; remarried, compensatory
+  pension + annual amount, gender violence), the deceased's situation (pensioner / alta with or without 500 days / no alta
+  with or without 15 years) and cause (common / non-work accident / work accident or occupational illness), the survivor's
+  age, 65 % disability, family burdens, other income a year, work income, other public pension, base reguladora (optional).
+  Outputs: pension / prestación temporal / none with the article; 52, 60 or 70 % and why (or "could be 70 %"); the amount
+  in 14 (12 for work accidents) payments with the art. 57 maximum and the compensatory cap; the 2026 minimum row, the
+  complement (full, partial, over the limit, capped at the PNC) or, without a base, the floor the minimum guarantees.
+- Rules (read 18 Nov 2026, curl + grep; 49 quotes verbatim, checked by a scratchpad script against the downloaded BOE and
+  Seguridad Social texts): LGSS consolidated (BOE-A-2015-11724, última actualización 11/11/2026) arts. 57, 59, 60, 216, 217,
+  219, 220, 221 (apartado 2 as worded by **RDL 31/2026 art. 1.10, in force 21/10/2026**: with common children only 2 years'
+  cohabitation by padrón and no registration; before, Ley 21/2021: with children only the 2-year registration), 222, 223,
+  228–230, DT 13ª (RDL 31/2026 art. 1.18) and DT 48ª; Decreto 3158/1966 art. 31 (52 % RD 1795/2003; 70 %, 31.3, 31.4);
+  RD 900/2018 (60 %, art. 2 a–d, art. 7); Orden 13/02/1967 art. 11 (remarriage: >61, 75 %, 2 × SMI = 34.188 €); RD 241/2026
+  anexo I and art. 9 (minimums 709,40 / 875,90 / 936,20 / 1.256,60 € a month; 9.442 €; partial complement; residence, PNC
+  cap); SMI 2026 via the smi module (75 % → 10.989 € per member). Seguridad Social pages (causantes/beneficiarios, cuantía,
+  efectos, compatibilidades, extinción, solicitudes, prestación temporal, presentación de solicitudes, form PDF 11/08/2026).
+  The 2026 amounts are imported from pensions-2027 and smi (a test fails if rules.ts types one).
+- Conflicts and readings flagged on the page: the 70 % income ceiling — BOE "en función de la edad" (19.373,60 / 21.704,60 /
+  22.548,80 €) vs the SS page's "con cargas familiares" (27.034,40 €): BOE applied, "check" between the two; 31.2's income
+  test excludes the pension, 31.3 then cuts it (kept only if above 60/52 %); complement added after the 31.3 cut; no
+  temporal benefit for an unregistered childless pareja de hecho; compensatory pension compared per year and no complement
+  when the viudedad is cut to it (RD 241/2026 art. 9.9 sentence sits in the Clases Pasivas paragraph); no complement for
+  the prestación temporal (no text gives one). The SS cuantía page still shows 2025 figures (9.193 €, 24.979,4 €): not printed.
+- **RDL 31/2026 convalidación pending**: no resolution in the BOE summaries 22 Oct–19 Nov 2026 (RDL 29/2026's came 13 Nov).
+  The page says so; test fails from 28 Nov 2026 (`CONVALIDATION_RECHECK_BY`, shared with sick-leave) while `RDL31_STATUS`
+  is "pending".
+- Server-rendered: calculator on a 66-year-old pensioner's widow (60 % of 1.600 € = 960 € a month), percentages table,
+  2026 minimums table, deceased/spouse/partner (before-after table)/divorce/temporal/base reguladora/compatibility/apply
+  sections with quotes, 8 worked examples, 8-question FAQ + FAQPage JSON-LD, YMYL disclaimer with the SS procedure, the
+  Portal de Prestaciones, form and appointment links, sources, limits and readings.
+- Links (body only, no title or description touched): pensions-2027 page minimums section and retirement-age page "¿Y
+  cuánto cobraré?" list link the new page, ca/es/en; the new page links both and the pay-dates guide.
+
+**Date guards (tests/widow-pension.test.ts).** From **1 Jan 2027** (2027 minimums, income limit, PNC, maximum and SMI) and
+from **28 Nov 2026** while the convalidación is unread.
+
+**Baseline:** 0 (no page). The pensions-2027 page's "viudedad" impressions (if any) are its own.
+
+**Prediction.** Indexed within 7 days (IndexNow). Head "pensión de viudedad" is dominated by seg-social.es and big media: no
+top-3 target. Long tail on page 1–2 by mid-December: "pensión de viudedad requisitos", "cuánto se cobra de viudedad",
+"pensión de viudedad pareja de hecho", "viudedad 70 %", "pensión mínima de viudedad 2026", "prestación temporal de
+viudedad". By 14 Jan 2027: 5,000–15,000 impressions/28 days, CTR 1.5–4 %. Wrong if under 1,500 impressions/28 days by 14 Jan.
+
+**Measure:** 26 Nov `batch_url_inspection` (rendered tables); 17 Dec and 14 Jan 2027 `snapshot.py page pension-viudedad 28`
+(+ pensio-viduitat, spain-widows-pension); `calculator_use` `widow-pension`; next-step clicks from it.
+**Review: 2026-12-17.**
+
+**Confounders.** The pensions-2027 and retirement-age pages each gain one body link; the January 2027 revaluation news and
+the RDL 31/2026 vote move "viudedad" searches in late November–January.
+
+**Deploy.** Deploy only (code routes, nothing in the database: no publish group). IndexNow prefixes:
+`/es/calculadoras/pension-viudedad/`, `/ca/calculadores/pensio-viduitat/`, `/en/calculators/spain-widows-pension/`, plus the
+re-crawl of `/es/calculadoras/subida-pensiones-2027/`, `/ca/calculadores/pujada-pensions-2027/`,
+`/en/calculators/spain-pension-increase-2027/`, `/es/calculadoras/edad-jubilacion/`, `/ca/calculadores/edat-jubilacio/`,
+`/en/calculators/spain-retirement-age/` and the three calculators hubs.
+
 **Outcome:** _pending_

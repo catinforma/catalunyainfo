@@ -10,6 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
 import { OFFICIAL_LINKS as PENSION_LINKS } from "@/lib/programmatic/pensions-2027/rules";
@@ -639,6 +640,11 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
                 </li>
                 <li>
                   <A href={PENSION_LINKS.imsersoPnc}>{links.pnc}</A>
+                </li>
+                <li>
+                  <Link href={calcPath("widow-pension", locale)}>
+                    {L(locale, { es: "Pensión de viudedad: requisitos y cuánto se cobra", ca: "Pensió de viduïtat: requisits i quant es cobra", en: "Spain widow's pension: requirements and amount" })}
+                  </Link>
                 </li>
               </ul>
 

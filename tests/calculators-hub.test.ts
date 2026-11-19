@@ -63,6 +63,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("zona-tensionada"), { ca: "/ca/calculadores/zona-tensionada/", es: "/es/calculadoras/zona-tensionada/", en: "/en/calculators/spain-rent-control-areas/" });
   assert.deepEqual(calcEditions("bono-social"), { ca: "/ca/calculadores/bo-social-electric/", es: "/es/calculadoras/bono-social-electrico/", en: "/en/calculators/bono-social-electricity-spain/" });
   assert.deepEqual(calcEditions("retirement-age"), { ca: "/ca/calculadores/edat-jubilacio/", es: "/es/calculadoras/edad-jubilacion/", en: "/en/calculators/spain-retirement-age/" });
+  assert.deepEqual(calcEditions("widow-pension"), { ca: "/ca/calculadores/pensio-viduitat/", es: "/es/calculadoras/pension-viudedad/", en: "/en/calculators/spain-widows-pension/" });
   assert.deepEqual(calcEditions("traffic-fines"), { ca: "/ca/calculadores/multes-transit/", es: "/es/calculadoras/multas-trafico/", en: "/en/calculators/traffic-fines-spain/" });
 });
 

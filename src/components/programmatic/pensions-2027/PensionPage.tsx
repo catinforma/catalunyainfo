@@ -483,6 +483,10 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <p>{minIntro}</p>
               <MinimumsTable rows={MINIMUMS_2026} locale={locale} caption={minCaption} />
               <p className="text-sm">{minAfter}</p>
+              <p>
+                {L(locale, { es: "¿Vas a pedir la viudedad?", ca: "Has de demanar la viduïtat?", en: "Applying for a widow's pension?" })}{" "}
+                <Link href={calcPath("widow-pension", locale)}>{L(locale, { es: "Calcula si tienes derecho y cuánto cobrarás", ca: "Calcula si hi tens dret i quant cobraràs", en: "Check whether you qualify and how much you would get" })}</Link>.
+              </p>
               {official?.minimums ? (
                 <MinimumsTable rows={official.minimums} locale={locale} caption={`${minCaption.replace("2026", "2027").replace(/\(BOE-A-[^)]+\)/, `(${official.boeId})`)}`} />
               ) : (

@@ -45,6 +45,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "pensions-2027": ["ipc", "pay-dates"],
   // The retirement date: how much the pension rises next January, then the day each payment arrives.
   "retirement-age": ["pensions-2027", "pay-dates"],
+  // The widow's pension: the day each payment arrives, then how much it rises next January.
+  "widow-pension": ["pay-dates", "pensions-2027"],
   "working-days": ["leave-2027", "paid-leave"],
   "smi-2027": ["net-salary", "extra-pay"],
   // The IPREM's readers want a benefit measured in it: the bono social and the unemployment subsidy.

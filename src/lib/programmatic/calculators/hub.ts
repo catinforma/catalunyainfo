@@ -18,6 +18,7 @@ import { RULES_AS_OF as PAID_LEAVE_AS_OF } from "@/lib/programmatic/paid-leave/r
 import { SUBSIDY_RULES_AS_OF } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { RULES_AS_OF as RETIREMENT_AGE_AS_OF } from "@/lib/programmatic/retirement-age/rules";
+import { RULES_AS_OF as WIDOW_PENSION_AS_OF } from "@/lib/programmatic/widow-pension/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { IPREM_RULES_AS_OF, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -283,6 +284,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: PENSION_RULES_AS_OF,
+      },
+      {
+        key: "widow-pension",
+        calculator: true,
+        href: calc("widow-pension"),
+        title: { ca: "Pensió de viduïtat", es: "Pensión de viudedad", en: "Widow's pension" },
+        answers: {
+          ca: "Tens dret a la pensió de viduïtat, amb quin percentatge (52, 60 o 70 %) i quant cobraràs davant del mínim del 2026?",
+          es: "¿Tienes derecho a la pensión de viudedad, con qué porcentaje (52, 60 o 70 %) y cuánto cobrarás frente al mínimo de 2026?",
+          en: "Whether you are entitled to a widow's pension, at what rate (52, 60 or 70%) and how much against the 2026 minimum.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, arts. 219 a 223; Decret 3158/1966, art. 31; Reial decret 900/2018; Reial decret 241/2026.",
+          es: "Ley General de la Seguridad Social, arts. 219 a 223; Decreto 3158/1966, art. 31; Real Decreto 900/2018; Real Decreto 241/2026.",
+          en: "General Social Security Act, arts. 219 to 223; Decreto 3158/1966, art. 31; Royal Decree 900/2018; Royal Decree 241/2026.",
+        },
+        scope: "spain",
+        checked: WIDOW_PENSION_AS_OF,
       },
       {
         key: "pay-dates",

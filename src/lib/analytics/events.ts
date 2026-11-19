@@ -85,6 +85,7 @@ export const CALCULATOR_USE_IDS = [
   "home-purchase-tax",
   "pensions-2027",
   "retirement-age",
+  "widow-pension",
   "working-days",
   "smi-2027",
   "iprem",
