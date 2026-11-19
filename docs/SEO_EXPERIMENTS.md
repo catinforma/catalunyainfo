@@ -8794,3 +8794,42 @@ re-crawl of `/es/calculadoras/subida-pensiones-2027/`, `/ca/calculadores/pujada-
 `/en/calculators/spain-retirement-age/` and the three calculators hubs.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — Post-wave technical audit of the live site: calculators registry gaps, ca/en Spain-2027 anchors, llms.txt without noindex pages, no hreflang on noindex pages (deploy only; no group; no title, description, lead or H1 touched)
+
+**Observation.** `npm run site:audit` on 19 Nov 11:38–11:58 UTC (3 in flight, browser UA, cache kept): 5,982 URLs (2,783 sitemap,
+3,196 noindex), plus an offline pass on the same responses for #fragment targets, every `<img>` of the page, HTML over 500 KB
+and every JSON-LD node. The live release changed from cd16383 to 102943e a few minutes in (the widow's pension trio was then missing from the sitemap read at the start; it is in it now); the four school-calendar URLs that
+failed (one timeout, one empty 200 during the cutover) and 13 slow answers (cold cache) were re-fetched: all 200, 0.1–0.7 s.
+Clean: 0 broken internal links, 0 links to redirects, 0 orphans, sitemap 2,786 URLs all 200 + indexable + self-canonical,
+sitemap hreflang 100 % reciprocal, HTML = sitemap hreflang, one H1 everywhere, 11,957 JSON-LD blocks parse with 0 errors,
+0 images without alt or width/height, 0 duplicate descriptions, OG images 86/86. Defects:
+- **Anchors:** the ca/en Spain-2027 city pages (287) linked their community page at `#puentes` / `#locales` (the Spanish ids);
+  the ca/en community pages print `#ponts` / `#locals` (64 distinct targets). The 2,724 `/…/2027/al-teu-web/#<town>` links are
+  the widget picker's hash state (EmbedBuilder), not anchors.
+- **llms.txt:** 43 of 536 URLs were noindex: the finished 11N city pages (low-demand list) and the "Is it a holiday on…" tool
+  line opening on 1 Nov 2026, a date page past its 14 grace days.
+- **hreflang on noindex pages:** `/ca/autors/`, `/es/autores/`, `/en/authors/` (noindex, empty author index) named each other.
+- **Calculators registry (27 tools):** hub cards, llms.txt, sitemap (84 = 28 × 3 with the hub) complete; the site search could
+  not find 7 tools by name (dismissal, finiquito, subsidy, sick leave, paid leave, home-purchase taxes, lottery tax); the
+  pensions 2027 page had no "Más calculadoras" block and no hub breadcrumb; the new lottery checker had no hub card.
+
+**What changed.** `city-page-intl.tsx` links `#ponts` / `#locals`; `buildLlmsTxt` / `liveTools` leave out low-demand pages and
+open the date tool on the first date still indexed (`firstIndexableDatePage`); `buildMetadata` lists no alternates on a page
+marked `noindex`; search shortcuts for the 7 tools + a lottery topic (checker, then the Gordo hub); pensions page: hub
+breadcrumb + `MoreCalculators`; hub lottery group: the checker card. Tests: every registry tool has a search shortcut and a
+"More calculators" block with the hub breadcrumb; city-page anchors exist on the community page; llms.txt and noindex rules.
+
+**Not touched (windows or structural), for the owner.** 58 titles over 65 characters (13 Nov/18 Nov families); duplicate titles
+"Martí Aguilera · CatalunyaInfo" (ca/es/en, a name) and "Política editorial · CatalunyaInfo" (ca/es, the same words);
+6 Article headlines over 110 characters (= their titles); Article without image on the farmers' markets guides (CMS, no
+licensed photo yet); 31 HowTo blocks (rich result retired, harmless); 9 pages over 500 KB, two thirds RSC payload
+(home-purchase taxes 772 KB: `clientCommunities()` props; average salary 600 KB; local-holidays guide 565 KB).
+
+**Prediction.** By 3 Dec: `site:audit` + the anchor pass show 0 missing #fragment targets outside the widget hash, llms.txt
+0 noindex URLs, 0 hreflang-target-not-indexable. **Review 2026-12-03.**
+
+**Deploy.** Deploy only (code routes, no database page changed: no publish group). IndexNow prefixes: `/es/calculadoras/`,
+`/ca/calculadores/`, `/en/calculators/` (hub + pensions page), `/ca/festius/2027/`, `/en/holidays/2027/` (city pages' links).
+
+**Outcome:** _pending_

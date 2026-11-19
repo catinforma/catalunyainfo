@@ -36,7 +36,8 @@ import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { PensionCalculator } from "./PensionCalculator";
-import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 
 /**
  * "Subida de las pensiones 2027" / "Pujada de les pensions 2027" / "Spain
@@ -52,6 +53,7 @@ const L = <T,>(locale: PensionLocale, v: Record<PensionLocale, T>): T => v[local
 export function pensionCrumbs(locale: PensionLocale, label: string): Crumb[] {
   return [
     { label: getMessages(locale).common.home, href: `/${locale}/` },
+    hubCrumb(locale),
     { label, href: pensionPath(locale) },
   ];
 }
@@ -537,6 +539,8 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
                   <A href={OFFICIAL_LINKS.ssRevaluation}>{ssLink}</A>
                 </li>
               </ul>
+
+              <MoreCalculators current="pensions-2027" locale={locale} />
             </div>
             <ShareBar locale={locale} path={pensionPath(locale)} title={meta.h1} contentType="pensions_2027" variant="full" />
           </div>

@@ -222,3 +222,24 @@ test("links: the Catalan and English pages link only to pages of their own langu
   const pages = readFileSync(join(ROOT, "src/components/programmatic/spain-2027/pages-intl.tsx"), "utf8");
   assert.match(pages, /BOE_REF/);
 });
+
+/**
+ * Site audit, 19 Nov 2026: the Catalan and English city pages linked their
+ * community page at #puentes and #locales, the Spanish edition's ids; the
+ * ca/en community pages carry #ponts and #locals, so 64 links on 287 pages
+ * landed at the top of the page. Every #anchor a city page links on its
+ * community page must be an id that page prints.
+ */
+test("city pages link community-page anchors that exist, in every edition", () => {
+  const pairs: [string, string, RegExp][] = [
+    ["city-page.tsx", "pages.tsx", /communityPath\(c\.community\)\}#([a-z-]+)`/g],
+    ["city-page-intl.tsx", "pages-intl.tsx", /editionCommunityPath\(locale, c\.region\)\}#([a-z-]+)`/g],
+  ];
+  for (const [city, community, pattern] of pairs) {
+    const dir = join(ROOT, "src/components/programmatic/spain-2027");
+    const anchors = [...readFileSync(join(dir, city), "utf8").matchAll(pattern)].map((m) => m[1]);
+    assert.ok(anchors.length >= 2, `${city}: no community anchors found`);
+    const target = readFileSync(join(dir, community), "utf8");
+    for (const a of anchors) assert.ok(target.includes(`id="${a}"`), `${city} links #${a}, which ${community} does not print`);
+  }
+});

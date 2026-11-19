@@ -216,7 +216,12 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
     canonicalOverride,
   } = input;
 
-  const effectiveTranslations = translations ?? { [locale]: path };
+  // A page kept out of the index (noindex) lists no hreflang alternates, as a
+  // low-demand page does (indexableCluster): its siblings are usually noindex
+  // too, and Google ignores hreflang on a page it does not index (site audit,
+  // 19 Nov 2026: the three author indexes named each other). The language
+  // switcher reads the page's translations, not these alternates.
+  const effectiveTranslations = noindex ? {} : (translations ?? { [locale]: path });
   const desc = clampDescription(description);
   // Templated pages with almost no search demand stay out of the index but
   // keep their links followed (lib/seo/low-demand.ts).

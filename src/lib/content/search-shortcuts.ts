@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { calcPath, type CalculatorId } from "@/lib/programmatic/calculators/paths";
+import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
+import { checkPath } from "@/lib/programmatic/lottery-check/paths";
 import { municipalities, unlistedTowns } from "@/lib/programmatic/holidays/data";
 import { IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { municipalityPath } from "@/lib/programmatic/holidays/paths";
@@ -134,7 +136,20 @@ const FARMERS = L(
   ["/en/guides/farmers-markets-catalonia/", "Farmers' markets and the local-sale label in Catalonia"],
 );
 
+// The Christmas lottery: the number checker (live on 22 Dec), then where El Gordo fell; the prize tax is in CALC_KEYS.
+const LOTTERY_CHECK = L(
+  [checkPath("ca"), "Comprovar la Loteria de Nadal"],
+  [checkPath("es"), "Comprobar Lotería de Navidad"],
+  [checkPath("en"), "Check your Spanish Christmas Lottery ticket"],
+);
+const GORDO = L(
+  [gordoHubPath("ca"), "On ha tocat la Loteria de Nadal"],
+  [gordoHubPath("es"), "Dónde ha tocado el Gordo"],
+  [gordoHubPath("en"), "Spanish Christmas Lottery results"],
+);
+
 const TOPICS: readonly Topic[] = [
+  { keys: ["loteria", "loteria de navidad", "loteria de nadal", "decimo", "decim", "gordo", "el gordo", "pedrea", "comprobar loteria", "comprovar loteria", "christmas lottery", "lottery"], links: [LOTTERY_CHECK, GORDO] },
   { keys: ["mercat de pages", "mercats de pages", "mercats pagesos", "mercat pages", "mercats agraris", "mercat agrari", "venda directa", "venda de proximitat", "venta directa", "venta de proximidad", "mercado payes", "mercados payeses", "mercado de payes", "mercados de payes", "mercados agrarios", "km 0", "farmers market", "farmers markets"], links: [FARMERS] },
   { keys: ["metro", "tmb", "bus", "autobus", "horaris metro", "horarios metro"], links: [METRO, PASSES, XMAS_TRANSPORT] },
   { keys: ["fgc", "ferrocarrils", "ferrocarrils de la generalitat", "cremallera", "cremallera de montserrat"], links: [PASSES, MONTSERRAT, XMAS_TRANSPORT] },
@@ -168,6 +183,8 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   { keys: ["salario medio", "salari mitja", "sueldo medio", "sou mitja", "salario mediano", "average salary", "tabla salarial", "taula salarial"], id: "average-salary", label: { ca: "Salari mitjà a Espanya (INE)", es: "Salario medio en España (INE)", en: "Average salary in Spain (INE)" } },
   { keys: ["smi", "salari minim", "salario minimo", "minimum wage"], id: "smi-2027", label: { ca: "Salari mínim 2027", es: "Salario mínimo 2027", en: "Minimum wage 2027" } },
   { keys: ["iprem", "indicador publico de renta", "indicador public de renda"], id: "iprem", label: { ca: `IPREM ${IPREM_YEAR}`, es: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` } },
+  // Before "paro": "subsidio de paro" answers with the subsidy first.
+  { keys: ["subsidio", "subsidi", "subsidio desempleo", "subsidi atur", "subsidio de paro", "unemployment subsidy"], id: "unemployment-subsidy", label: { ca: "Subsidi per desocupació", es: "Subsidio por desempleo", en: "Unemployment subsidy (subsidio)" } },
   { keys: ["atur", "paro", "prestacio", "prestacion"], id: "unemployment", label: { ca: "Calculadora de l'atur", es: "Calculadora del paro", en: "Unemployment benefit calculator" } },
   { keys: ["jubilacion", "jubilacio", "jubilarme", "jubilar me", "edad de jubilacion", "edat de jubilacio", "retirement", "retire"], id: "retirement-age", label: { ca: "Edat de jubilació: quan et pots jubilar", es: "Edad de jubilación: cuándo te puedes jubilar", en: "Retirement age: when you can retire" } },
   // Before "pension": "pensión de viudedad" answers with the widow's pension first.
@@ -175,6 +192,12 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   { keys: ["pensions", "pensiones", "pension"], id: "pensions-2027", label: { ca: "Pujada de les pensions 2027", es: "Subida de las pensiones 2027", en: "Pension increase 2027" } },
   { keys: ["lletres del tresor", "letras del tesoro", "treasury bills"], id: "treasury-bills", label: { ca: "Lletres del Tresor", es: "Letras del Tesoro", en: "Treasury bills" } },
   { keys: ["dies habils", "dias habiles", "working days"], id: "working-days", label: { ca: "Calculadora de dies hàbils", es: "Calculadora de días hábiles", en: "Working days calculator" } },
+  { keys: ["despido", "despedido", "acomiadament", "acomiadat", "indemnizacion", "indemnitzacio", "severance", "dismissal"], id: "dismissal", label: { ca: "Indemnització per acomiadament", es: "Indemnización por despido", en: "Severance pay calculator" } },
+  { keys: ["finiquito", "quitanca", "final settlement"], id: "settlement", label: { ca: "Calculadora de la quitança (finiquito)", es: "Calculadora de finiquito", en: "Final settlement (finiquito) calculator" } },
+  { keys: ["baja laboral", "baixa laboral", "baja medica", "baixa medica", "incapacidad temporal", "incapacitat temporal", "sick leave", "sick pay"], id: "sick-leave", label: { ca: "Baixa laboral: quant cobraràs", es: "Baja laboral: cuánto cobrarás", en: "Sick pay calculator" } },
+  { keys: ["permisos", "permisos laborales", "permisos laborals", "permisos retribuidos", "permisos retribuits", "permiso retribuido", "permis retribuit", "permiso de nacimiento", "permiso por fallecimiento", "paid leave"], id: "paid-leave", label: { ca: "Permisos laborals: dies per llei", es: "Permisos laborales: días por ley", en: "Paid leave: days by law" } },
+  { keys: ["itp", "ajd", "transmisiones patrimoniales", "transmissions patrimonials", "impuestos compra vivienda", "impostos compra habitatge", "home purchase tax", "stamp duty"], id: "home-purchase-tax", label: { ca: "Impostos en comprar habitatge (ITP o IVA)", es: "Impuestos al comprar vivienda (ITP o IVA)", en: "Home purchase taxes (ITP or IVA)" } },
+  { keys: ["loteria", "decimo", "decim", "gordo", "premio loteria", "premios loteria", "premis loteria", "hacienda loteria", "lottery tax"], id: "lottery-tax", label: { ca: "Premis de loteria i Hisenda", es: "Premios de lotería y Hacienda", en: "Lottery prize tax" } },
   { keys: ["autonoms", "autonomos", "quota autonoms", "cuota autonomos"], id: "self-employed", label: { ca: "Quota d'autònoms", es: "Cuota de autónomos", en: "Self-employed contributions" } },
   { keys: ["lloguer", "alquiler", "irav"], id: "rent-update", label: { ca: "Actualitzar el lloguer", es: "Actualizar el alquiler", en: "Rent update" } },
 ];
@@ -322,4 +345,9 @@ export function allShortcutHrefs(): string[] {
   const hrefs = new Set<string>();
   for (const t of TOPICS) for (const l of t.links) for (const s of Object.values(l)) hrefs.add(s.href);
   return [...hrefs];
+}
+
+/** The calculators the search can open by name, for the test (every registry tool needs one). */
+export function calculatorShortcutIds(): CalculatorId[] {
+  return [...new Set(CALC_KEYS.map((c) => c.id))];
 }

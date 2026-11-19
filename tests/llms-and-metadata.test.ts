@@ -291,3 +291,27 @@ test("every programmatic title and description fits the snippet", () => {
     assert.ok(m.description.length >= 70 && m.description.length <= 165, `${m.path}: description ${m.description.length} chars`);
   }
 });
+
+/** Site audit, 19 Nov 2026: llms.txt named 43 noindex URLs (the finished 11N city pages and the 1 Nov 2026 date pages). */
+test("llms.txt leaves out noindex pages: low-demand guides, and date pages past their grace days", async () => {
+  const { isLowDemandPath } = await import("../src/lib/seo/low-demand.ts");
+  const { datePath } = await import("../src/lib/programmatic/holidays/paths.ts");
+  const { firstIndexableDatePage } = await import("../src/lib/seo/llms.ts");
+  const finished = "/es/guias/huelga-general-11-noviembre-madrid/";
+  assert.ok(isLowDemandPath(finished), "fixture: a finished 11N city page is low-demand");
+  const guides = [
+    { title: "Madrid 11N", href: finished, excerpt: null },
+    { title: "Alfa", href: "/es/guias/a/", excerpt: null },
+  ];
+  const text = buildLlmsTxt(ORIGIN, "CatalunyaInfo", { es: guides }, "2026-11-19");
+  assert.ok(!text.includes(finished));
+  assert.ok(text.includes(`${ORIGIN}/es/guias/a/`));
+  // 1 Nov 2026 is past its 14 grace days on 19 Nov: the tool line opens on the next date still indexed.
+  const first = firstIndexableDatePage("2026-11-19");
+  assert.ok(first > "2026-11-05", first);
+  for (const l of LOCALES) assert.ok(!isLowDemandPath(datePath(l, first), "2026-11-19"), `${l} ${first}`);
+  assert.ok(text.includes(`(${ORIGIN}${datePath("en", first)})`));
+  assert.ok(!text.includes(`(${ORIGIN}${datePath("en", "2026-11-01")})`));
+  // Before the range starts, the first date is the range's first.
+  assert.equal(firstIndexableDatePage("2026-10-01"), "2026-11-01");
+});

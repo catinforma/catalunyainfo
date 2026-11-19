@@ -386,7 +386,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             )}
           </p>
           <p>
-            <Link href={`${editionCommunityPath(locale, c.region)}#puentes`}>{tr(locale, `Ponts del ${YEAR} ${r.in}`, `Long weekends ${YEAR} ${r.in}`)}</Link>
+            <Link href={`${editionCommunityPath(locale, c.region)}#ponts`}>{tr(locale, `Ponts del ${YEAR} ${r.in}`, `Long weekends ${YEAR} ${r.in}`)}</Link>
             {" · "}
             <Link href={editionBridgesPath(locale)}>{tr(locale, `Ponts del ${YEAR} a tot Espanya`, `Long weekends ${YEAR} across Spain`)}</Link>
           </p>
@@ -413,7 +413,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             </ul>
           ) : null}
           <p>
-            <Link href={`${editionCommunityPath(locale, c.region)}#locales`}>
+            <Link href={`${editionCommunityPath(locale, c.region)}#locals`}>
               {tr(locale, `On es publiquen les festes locals de la resta de municipis ${r.of}`, `Where the other municipalities ${r.in} publish their local holidays`)}
             </Link>
             {" · "}

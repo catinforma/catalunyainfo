@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
@@ -8,6 +8,7 @@ import {
   CALCULATORS,
   CALCULATORS_ROOT,
   CALCULATOR_IDS,
+  CALC_KEYS,
   CALC_LOCALES,
   calcEditions,
   calcPath,
@@ -83,8 +84,8 @@ test("hub: the eight groups, each card complete in ca, es and en, linking indexa
   assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "lottery", "vehicle", "holidays", "energy", "live"]);
   // Energy at home: the bono social checker (lib/programmatic/bono-social), right before the live group (PVPC, butane).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
-  // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
+  // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax), then the number checker (lib/programmatic/lottery-check).
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax", "lottery-check"]);
   // The official-figures group: the SMI, the IPREM, the INE average salary, the CPI and the Letras del Tesoro reference pages.
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "iprem", "average-salary", "ipc", "treasury-bills"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv) and the traffic-fines deadlines (lib/programmatic/traffic-fines).
@@ -150,4 +151,22 @@ test("every calculator page ends with 'More calculators', which skips the page i
   for (const f of ["src/components/programmatic/net-salary/NetSalaryPage.tsx", "src/components/programmatic/rent-update/RentPage.tsx", "src/components/programmatic/employment/CalcLayout.tsx"]) {
     assert.match(read(f), /hubCrumb\(locale\),/, f);
   }
+});
+
+test("every calculator of the registry renders 'More calculators' and the hub breadcrumb (19 Nov 2026: the pensions page had neither)", () => {
+  const dir = join(ROOT, "src", "components", "programmatic");
+  const covered = new Set<string>();
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const family = entry.name;
+    const folder = join(dir, family);
+    for (const f of readdirSync(folder).filter((n) => n.endsWith(".tsx"))) {
+      const src = readFileSync(join(folder, f), "utf8");
+      const ids = [...src.matchAll(/<MoreCalculators\s+current=(?:"([a-z0-9-]+)"|\{calcKey\})/g)].flatMap((m) => (m[1] ? [m[1]] : [...CALC_KEYS]));
+      if (ids.length === 0) continue;
+      assert.match(src, /hubCrumb\(locale\)/, `${family}/${f}: no hub breadcrumb`);
+      for (const id of ids) covered.add(id);
+    }
+  }
+  assert.deepEqual([...covered].sort(), [...CALCULATOR_IDS].sort());
 });

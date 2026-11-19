@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { anyWordTsQuery } from "../src/lib/content/search-query.ts";
-import { allShortcutHrefs, normalise, searchShortcuts } from "../src/lib/content/search-shortcuts.ts";
+import { allShortcutHrefs, calculatorShortcutIds, normalise, searchShortcuts } from "../src/lib/content/search-shortcuts.ts";
+import { CALCULATOR_IDS } from "../src/lib/programmatic/calculators/paths.ts";
+import { checkPath } from "../src/lib/programmatic/lottery-check/paths.ts";
 
 /**
  * The site search's direct pages (17 Nov 2026), from the queries visitors
@@ -54,6 +56,22 @@ test("farmers' markets: the official-list guide", () => {
 test("calculators by name", () => {
   assert.equal(first("es", "sueldo neto"), "/es/calculadoras/sueldo-neto/");
   assert.equal(first("ca", "euríbor"), "/ca/calculadores/euribor-avui/");
+  assert.equal(first("es", "finiquito"), "/es/calculadoras/finiquito/");
+  assert.equal(first("es", "subsidio de paro"), "/es/calculadoras/subsidio-desempleo/");
+  assert.equal(first("ca", "baixa laboral"), "/ca/calculadores/baixa-laboral/");
+  assert.equal(first("es", "ITP"), "/es/calculadoras/impuestos-compra-vivienda/");
+  assert.ok(searchShortcuts("es", "hacienda lotería").some((s) => s.href === "/es/calculadoras/premios-loteria/"));
+});
+
+test("every calculator of the registry can be found by name (19 Nov 2026: seven were missing)", () => {
+  assert.deepEqual(calculatorShortcutIds().sort(), [...CALCULATOR_IDS].sort());
+});
+
+test("lottery queries open the Christmas lottery checker first", () => {
+  assert.equal(first("es", "comprobar lotería"), checkPath("es"));
+  assert.equal(first("ca", "loteria de Nadal"), checkPath("ca"));
+  assert.equal(first("en", "christmas lottery"), checkPath("en"));
+  assert.ok(searchShortcuts("es", "décimo").some((s) => s.href === "/es/calculadoras/premios-loteria/"));
 });
 
 test("nothing for empty or unrelated queries", () => {

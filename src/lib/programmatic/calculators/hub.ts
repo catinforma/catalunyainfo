@@ -7,6 +7,7 @@ import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { hubPath as holidaysHubPath } from "@/lib/programmatic/holidays/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
+import { checkEditions as lotteryCheckEditions } from "@/lib/programmatic/lottery-check/paths";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { EXTRA_PAY_RULES_AS_OF } from "@/lib/programmatic/extra-pay/rules";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
@@ -53,7 +54,7 @@ export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
   /** The calculator's registry id, or a key of its own for the other tools. */
-  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc" | "butane" | "warnings";
+  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc" | "butane" | "warnings" | "lottery-check";
   calculator: boolean;
   href: Record<CalcLocale, string>;
   /** Set when an edition links a page in another language (fuel has no English edition). */
@@ -537,6 +538,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: LOTTERY_TAX_AS_OF,
+      },
+      {
+        // The number checker (lib/programmatic/lottery-check): live on the draw day, on SELAE's own numbers.
+        key: "lottery-check",
+        calculator: false,
+        href: lotteryCheckEditions(),
+        title: { ca: "Comprovar la Loteria de Nadal", es: "Comprobar Lotería de Navidad", en: "Check your Christmas Lottery ticket" },
+        answers: {
+          ca: "Té premi el teu dècim de la Loteria de Nadal i quant en cobraràs després d'Hisenda? Amb els números de SELAE el dia del sorteig.",
+          es: "¿Tiene premio tu décimo de la Lotería de Navidad y cuánto cobrarás tras Hacienda? Con los números de SELAE el día del sorteo.",
+          en: "Has your Spanish Christmas Lottery décimo won, and what do you keep after tax? On SELAE's numbers, on the draw day.",
+        },
+        basis: {
+          ca: "Números i Llista Oficial de Premis de SELAE el dia del sorteig, programa de premis de SELAE i Llei 35/2006 de l'IRPF, disposició addicional 33a (BOE).",
+          es: "Números y Lista Oficial de Premios de SELAE el día del sorteo, programa de premios de SELAE y Ley 35/2006 del IRPF, disposición adicional 33.ª (BOE).",
+          en: "SELAE's numbers and Lista Oficial de Premios on the draw day, SELAE's prize programme and Law 35/2006 on income tax, additional provision 33 (BOE).",
+        },
+        scope: "spain",
       },
     ],
   },

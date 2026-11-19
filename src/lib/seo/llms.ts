@@ -1,11 +1,13 @@
 /**
  * The text of /llms.txt, built from data the site already holds.
  *
- * Pure: no clock, no network, no database. The route passes in the published
- * guides; everything else (which live tools exist, their URLs, how many towns
- * or stations they cover) comes from the same modules that render and list
- * those pages, so the file cannot name a page that does not exist. Guides are
- * sorted by URL, so the same content always produces the same bytes.
+ * No network, no database. The route passes in the published guides;
+ * everything else (which live tools exist, their URLs, how many towns or
+ * stations they cover) comes from the same modules that render and list those
+ * pages, so the file cannot name a page that does not exist. Guides are sorted
+ * by URL, so the same content on the same day always produces the same bytes.
+ * The day (`today`, the clock when omitted) only decides which pages are out
+ * of the index (lib/seo/low-demand.ts), so llms.txt never names a noindex URL.
  *
  * Format: the llms.txt proposal (llmstxt.org) - a title, a one-paragraph
  * summary in a blockquote, then sections of `- [name](url): notes`.
@@ -52,6 +54,7 @@ import { b2href } from "@/lib/content/batch02/shared";
 import { OWNER } from "@/lib/content/pages/institutional";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SITE, WHATSAPP_CHANNEL } from "@/lib/site";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { CITIES as SPAIN_CITIES } from "@/lib/programmatic/spain-2027/cities";
 import { COMMUNITIES as SPAIN_COMMUNITIES } from "@/lib/programmatic/spain-2027/communities";
 import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
@@ -150,9 +153,19 @@ export interface LiveTool {
   description: string;
 }
 
-/** The live tools and data hubs, in a fixed order. */
-export function liveTools(): LiveTool[] {
+/**
+ * The first date page still in the index on `today` (Madrid ISO date; the
+ * clock when omitted): a date page leaves it DATE_PAGE_GRACE_DAYS after its
+ * day (low-demand.ts), so the range's first date is noindex by mid-November.
+ */
+export function firstIndexableDatePage(today?: string): string {
+  return DATE_PAGES.find((iso) => LOCALES.every((l) => !isLowDemandPath(datePath(l, iso), today))) ?? DATE_PAGE_RANGE.last;
+}
+
+/** The live tools and data hubs, in a fixed order. `today` only picks the first date page still indexed. */
+export function liveTools(today?: string): LiveTool[] {
   const fuelPages = selectPages().length;
+  const firstDate = firstIndexableDatePage(today);
   return [
     {
       name: "Today in Catalonia",
@@ -176,7 +189,7 @@ export function liveTools(): LiveTool[] {
     },
     {
       name: "Is it a public holiday on…?",
-      hubs: { ca: datePath("ca", DATE_PAGE_RANGE.first), es: datePath("es", DATE_PAGE_RANGE.first), en: datePath("en", DATE_PAGE_RANGE.first) },
+      hubs: { ca: datePath("ca", firstDate), es: datePath("es", firstDate), en: datePath("en", firstDate) },
       description: `one page per date (${DATE_PAGES.length} dates from ${DATE_PAGE_RANGE.first} to ${DATE_PAGE_RANGE.last}): whether the day is a holiday across Catalonia and in the rest of Spain, which towns have a local holiday, shops and schools.`,
     },
     {
@@ -409,16 +422,24 @@ function toolLine(tool: Pick<LiveTool, "name" | "hubs" | "description">, origin:
   return `- [${tool.name}](${origin}${tool.hubs[main]}): ${description}${others.length ? ` Also in: ${others.join(", ")}.` : ""}`;
 }
 
-export function buildLlmsTxt(origin: string, siteName: string, guides: Partial<Record<Locale, readonly LlmsEntry[]>>): string {
+/**
+ * `today` (Madrid ISO date; the clock when omitted) decides which pages are
+ * out of the index: a guide on the low-demand list (lib/seo/low-demand.ts:
+ * finished events such as the 11N city pages) is left out, as the sitemap
+ * leaves it out (site audit, 19 Nov 2026: 43 noindex URLs in the file).
+ */
+export function buildLlmsTxt(origin: string, siteName: string, guides: Partial<Record<Locale, readonly LlmsEntry[]>>, today?: string): string {
   const parts: string[] = [`# ${siteName}`, "", LLMS_SUMMARY, "", "## Live tools and data", ""];
-  for (const tool of liveTools()) parts.push(toolLine(tool, origin));
+  for (const tool of liveTools(today)) parts.push(toolLine(tool, origin));
   parts.push("", "## About this site and how we verify", "");
   for (const page of trustPages()) parts.push(toolLine(page, origin));
   parts.push(`- [WhatsApp channel](${WHATSAPP_CHANNEL}): The site's own channel, a daily post in Catalan with what to know today.`);
   parts.push("");
 
   for (const locale of LOCALES) {
-    const entries = [...(guides[locale] ?? [])].sort((a, b) => (a.href < b.href ? -1 : a.href > b.href ? 1 : 0));
+    const entries = [...(guides[locale] ?? [])]
+      .filter((e) => !isLowDemandPath(e.href, today))
+      .sort((a, b) => (a.href < b.href ? -1 : a.href > b.href ? 1 : 0));
     if (entries.length === 0) continue;
     parts.push(`## ${GUIDE_HEADINGS[locale]}`, "");
     for (const entry of entries) {

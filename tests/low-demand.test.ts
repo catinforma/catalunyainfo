@@ -221,3 +221,18 @@ test("hreflang clusters: a noindex (low-demand) sibling is left out, and a low-d
   });
   assert.match(readFileSync("src/app/sitemap.ts", "utf8"), /indexableSitemapLanguages\(entry\.url, languages\)/);
 });
+
+/** Site audit, 19 Nov 2026: the noindex author indexes (/ca/autors/, /es/autores/, /en/authors/) named each other as alternates. */
+test("hreflang clusters: a page marked noindex lists no alternates and keeps its self canonical", async () => {
+  process.env.VERCEL_ENV = "production";
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
+  const { buildMetadata } = await import("../src/lib/seo/metadata.ts");
+  const ORIGIN = "https://www.catalunyainfo.com";
+  const translations = { ca: "/ca/autors/", es: "/es/autores/", en: "/en/authors/" };
+  const hidden = buildMetadata({ locale: "ca", path: "/ca/autors/", title: "Equip", noindex: true, translations });
+  const alt = hidden.alternates as { canonical: string; languages?: Record<string, string> };
+  assert.equal(alt.languages, undefined);
+  assert.equal(alt.canonical, `${ORIGIN}/ca/autors/`);
+  const shown = buildMetadata({ locale: "ca", path: "/ca/autors/", title: "Equip", translations });
+  assert.deepEqual(Object.keys((shown.alternates as { languages: Record<string, string> }).languages).sort(), ["ca", "en", "es", "x-default"]);
+});
