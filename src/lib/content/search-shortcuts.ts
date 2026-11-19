@@ -136,6 +136,13 @@ const FARMERS = L(
   ["/en/guides/farmers-markets-catalonia/", "Farmers' markets and the local-sale label in Catalonia"],
 );
 
+// 19 Nov 2026: the steps after a death (certificates, notary, deadlines); the tax calculators follow from CALC_KEYS.
+const DEATH = L(
+  ["/ca/guies/que-cal-fer-quan-mor-un-familiar/", "Què cal fer quan mor un familiar: tràmits i terminis"],
+  ["/es/guias/que-hacer-cuando-fallece-un-familiar/", "Qué hacer cuando fallece un familiar: trámites y plazos"],
+  ["/en/guides/what-to-do-when-someone-dies-spain/", "What to do when someone dies in Spain: steps and deadlines"],
+);
+
 // The Christmas lottery: the number checker (live on 22 Dec), then where El Gordo fell; the prize tax is in CALC_KEYS.
 const LOTTERY_CHECK = L(
   [checkPath("ca"), "Comprovar la Loteria de Nadal"],
@@ -150,6 +157,8 @@ const GORDO = L(
 
 const TOPICS: readonly Topic[] = [
   { keys: ["loteria", "loteria de navidad", "loteria de nadal", "decimo", "decim", "gordo", "el gordo", "pedrea", "comprobar loteria", "comprovar loteria", "christmas lottery", "lottery"], links: [LOTTERY_CHECK, GORDO] },
+  // Not the bare "fallecimiento": "permiso por fallecimiento" must still open the paid-leave calculator first.
+  { keys: ["tramites fallecimiento", "tramites por fallecimiento", "tramites de fallecimiento", "tramites defuncion", "tramites herencia", "fallece un familiar", "fallecimiento de un familiar", "fallecimiento familiar", "muere un familiar", "cuando fallece", "cuando muere", "defuncion", "certificado de defuncion", "certificado defuncion", "ultimas voluntades", "certificado de ultimas voluntades", "seguros de cobertura de fallecimiento", "cobertura de fallecimiento", "declaracion de herederos", "auxilio por defuncion", "licencia de enterramiento", "mor un familiar", "quan mor", "tramits defuncio", "tramits herencia", "defuncio", "certificat de defuncio", "ultimes voluntats", "certificat d ultimes voluntats", "declaracio d hereus", "auxili per defuncio", "someone dies", "death in spain", "death certificate", "last will certificate", "declaration of heirs", "death grant"], links: [DEATH] },
   { keys: ["mercat de pages", "mercats de pages", "mercats pagesos", "mercat pages", "mercats agraris", "mercat agrari", "venda directa", "venda de proximitat", "venta directa", "venta de proximidad", "mercado payes", "mercados payeses", "mercado de payes", "mercados de payes", "mercados agrarios", "km 0", "farmers market", "farmers markets"], links: [FARMERS] },
   { keys: ["metro", "tmb", "bus", "autobus", "horaris metro", "horarios metro"], links: [METRO, PASSES, XMAS_TRANSPORT] },
   { keys: ["fgc", "ferrocarrils", "ferrocarrils de la generalitat", "cremallera", "cremallera de montserrat"], links: [PASSES, MONTSERRAT, XMAS_TRANSPORT] },

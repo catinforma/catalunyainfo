@@ -9,6 +9,7 @@ import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
+import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { art, coef, elDay, fromDay, money, pvEditions, pvPath, rowLabel, untilDay, type PvLocale } from "@/lib/programmatic/plusvalia/copy";
@@ -448,7 +449,9 @@ export function PlusvaliaRoute({ locale }: { locale: PvLocale }) {
                       ca: `**Herència:** ${DEADLINE.mortisCausaMonths} mesos des de la mort, prorrogables fins a un any si ho demanes.`,
                       en: `**Inheritance:** ${DEADLINE.mortisCausaMonths} months from the death, extendable to one year if you ask.`,
                     }),
-                  )}
+                  )}{" "}
+                  {L(locale, { es: "Los demás trámites y plazos tras un fallecimiento:", ca: "La resta de tràmits i terminis després d'una mort:", en: "The other steps and deadlines after a death:" })}{" "}
+                  <Link href={b2href("deathSteps", locale)}>{B2_TITLES.deathSteps[locale]}</Link>.
                 </li>
                 <li>
                   {md(

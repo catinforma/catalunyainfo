@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { calcPath, type CalculatorId } from "@/lib/programmatic/calculators/paths";
 import { GIFT_FAMILY, GIFT_OF_INHERITANCE, GIFT_REGION_IN } from "@/lib/programmatic/gift-tax/copy";
 import type { IsdLocale } from "@/lib/programmatic/inheritance-tax/copy";
@@ -11,7 +12,9 @@ import { INHERITANCE_FAMILY } from "@/lib/programmatic/inheritance-tax/regional-
  * of the four pages. Which community's rules apply depends on where the
  * deceased lived, so a reader on the wrong page finds the right one. Then the
  * same community's gift tax calculator (lib/programmatic/gift-tax), for a
- * reader weighing a gift in life against an inheritance.
+ * reader weighing a gift in life against an inheritance. Last, the guide to
+ * the steps after a death (lib/content/batch02/death-steps.ts), which links
+ * back to these calculators.
  */
 export function InheritanceByRegion({ current, locale }: { current: CalculatorId; locale: IsdLocale }) {
   const heading = { ca: "L'impost de successions en altres comunitats", es: "El impuesto de sucesiones en otras comunidades", en: "Inheritance tax in other regions" }[locale];
@@ -60,6 +63,10 @@ export function InheritanceByRegion({ current, locale }: { current: CalculatorId
           </Link>
         </p>
       ) : null}
+      <p>
+        {{ ca: "Els certificats, el notari i els altres terminis:", es: "Los certificados, el notario y los demás plazos:", en: "The certificates, the notary and the other deadlines:" }[locale]}{" "}
+        <Link href={b2href("deathSteps", locale)}>{B2_TITLES.deathSteps[locale]}</Link>
+      </p>
     </section>
   );
 }

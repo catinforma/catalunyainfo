@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { GIFT_FAMILY, GIFT_REGION_IN, INHERITANCE_OF, type GiftLocale } from "@/lib/programmatic/gift-tax/copy";
 import type { GiftRegionId } from "@/lib/programmatic/gift-tax/regions/types";
@@ -51,6 +52,10 @@ export function GiftByRegion({ current, locale }: { current: GiftRegionId; local
             }[locale]
           }
         </Link>
+      </p>
+      <p>
+        {{ ca: "Si la persona ja ha mort, els tràmits i terminis de l'herència:", es: "Si la persona ya ha fallecido, los trámites y plazos de la herencia:", en: "If the person has died, the steps and deadlines for the estate:" }[locale]}{" "}
+        <Link href={b2href("deathSteps", locale)}>{B2_TITLES.deathSteps[locale]}</Link>
       </p>
     </section>
   );

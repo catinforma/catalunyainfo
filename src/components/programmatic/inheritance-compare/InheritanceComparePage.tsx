@@ -9,6 +9,7 @@ import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
+import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { CMP_HEADINGS, calculatorLinks, cmpDisclaimer, cmpFresh, cmpLead, cmpMeta, exampleCase } from "@/lib/programmatic/inheritance-compare/copy";
@@ -322,6 +323,14 @@ export function InheritanceCompareRoute({ locale }: { locale: CmpLocale }) {
               </ul>
               <Quote text={ISD_STATE_QUOTE.residence} src={STATE_SOURCES.lofca} />
               <Quote text={STATE_QUOTE.improved} src={STATE_SOURCES.lofca} />
+              <p>
+                {L(locale, {
+                  ca: "El termini, els certificats i el notari, per ordre:",
+                  es: "El plazo, los certificados y el notario, por orden:",
+                  en: "The deadline, the certificates and the notary, in order:",
+                })}{" "}
+                <Link href={b2href("deathSteps", locale)}>{B2_TITLES.deathSteps[locale]}</Link>
+              </p>
 
               <h2 id="calculadoras">{hd.calculators}</h2>
               <p>

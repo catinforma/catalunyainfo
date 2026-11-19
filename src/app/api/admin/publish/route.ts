@@ -81,6 +81,7 @@ import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
 import { FARMERS_MARKETS } from "@/lib/content/batch02/farmers-markets";
+import { DEATH_STEPS_GUIDE } from "@/lib/content/batch02/death-steps";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -338,6 +339,11 @@ export async function POST(request: Request) {
     // 17 Nov 2026: farmers' markets and the Venda de Proximitat label (ca, es, en),
     // on its own so the next reading of the Department's producer list republishes only it.
     if (wants("mercats-pages")) published.push(await publishB2Article(FARMERS_MARKETS));
+    // 19 Nov 2026: what to do when a relative dies, steps and deadlines (ca, es, en),
+    // on its own so the January re-read of its rules republishes only it. The
+    // calculators that link back to it (inheritance and gift tax, the 21-territory
+    // comparison, plusvalía, widow's pension) are routes: they ship with the deploy.
+    if (wants("fallecimiento")) published.push(await publishB2Article(DEATH_STEPS_GUIDE));
     // 13 Nov 2026: the Montserrat guide (index 3 of BATCH_02) on its own, for the
     // cable car vs rack railway vs car/coach upgrade; `montserrat-links` sends
     // the two pages whose English anchor text changed (Beyond Montserrat,

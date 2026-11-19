@@ -9293,3 +9293,75 @@ cuts.
 calculator: ping them only together with the rest of the deploy's calculators).
 
 **Outcome:** _pending_
+
+## 2026-11-19 — "Qué hacer cuando fallece un familiar: trámites y plazos", guide es + ca + en (new; deploy, then group `fallecimiento`) (review 2026-12-17)
+
+**Why.** Steady, non-seasonal demand ("trámites fallecimiento", "certificado de últimas voluntades", "certificado de
+seguros de cobertura de fallecimiento", "plazo impuesto sucesiones", "pensión de viudedad cómo solicitar"). This week's
+calculators (inheritance tax in four communities + the 21-territory comparison, gift tax, plusvalía, widow's pension,
+home buying costs) had no page that puts the steps in order and links them.
+
+**What was added.** Three editions on year-free URLs:
+- `/es/guias/que-hacer-cuando-fallece-un-familiar/`
+- `/ca/guies/que-cal-fer-quan-mor-un-familiar/`
+- `/en/guides/what-to-do-when-someone-dies-spain/`
+
+Module `src/lib/content/batch02/death-steps.ts` (DEATH_STEPS_AS_OF 2026-11-19, every quote in its header; fact pack
+`research_notes/death-steps-nov2026.md`), test `tests/death-steps.test.ts`.
+- Answer first: lead + an 18-row checklist with dates relative to the death, each row with its rule.
+- First hours: Ley 20/2011 arts. 62–67 (medical certificate compulsory, hospital reports electronically, elsewhere "a la
+  mayor brevedad posible", licence "en el plazo que reglamentariamente se establezca"); Ministry of Justice: the funeral
+  company usually reports it; Catalonia: Decret 297/1997 art. 11.1 (not before 24 h) and 35.1 (conservation after 48 h);
+  ET art. 37.3.b bis (2 days + 2).
+- Certificates (Ministry of Justice e-office): death (at once if online), últimas voluntades and seguros (from 15 working
+  days, tasa 006; insurance usually 24 h, max 7 working days); Ley 20/2005 arts. 2–7 (5 years, beneficiary check). The
+  law says "quince días", the e-office 15 working days: the later date is printed. Fee amount NOT printed (no official
+  page read shows it).
+- Estate: CC 657, 658, 912, 1003, 1005 (30 natural days → accepted), 1010, 1014, 1023; Ley del Notariado 55–56
+  (declaración de herederos, ≥ 20 working days).
+- Catalonia (book four, consolidated version incl. Llei 13/2026, in force 4 Feb 2027 — quoted articles unchanged): legítima
+  1/4 (451-5) vs 2/3 (CC 808), quarta vidual (452-1), intestate usufruct + 1-year commutation (442-3, 442-5.2), no
+  deadline to accept (461-12.1) but 2-month interpellation → repudiation, inventory 6 months incl. private inventory filed
+  with the tax (461-15), vecindad civil (CC 9.8, 16.1).
+- Taxes: ISD 6 months + 6 asked within 5 (RD 1629/1991 arts. 67–68, ATC), plusvalía 6 months extendable to 1 year
+  (TRLRHL 110.2.b), deceased's IRPF (LIRPF 13, LGT 39).
+- Social Security: LGSS 216, 218, 224, 230, 53.1; auxilio 46,50 €; orphan 20 %; widow's pension effects (3 months).
+- Banks: Banco de España guidance (no withdrawals before adjudication except all heirs, funeral, prior debits; indistinta
+  vs mancomunada) + LISD art. 8.1.a; "no law freezes accounts" and no deadline in the rules read.
+- "Plazos que la ley no fija" list, YMYL disclaimer (warning callout), 13 FAQs, verified line, related calculators.
+- No hero (noPhotoReason: bereavement guide).
+
+**Links.** Out: all ten calculators it ties together + pay-dates guide + working-days calculator. In (body only, small
+paragraph, no title changes): InheritanceByRegion (Catalonia, Madrid, Andalucía, Valencia inheritance pages), GiftByRegion
+(four gift pages), the comparison ("Qué norma se aplica"), plusvalía (deadline list, inheritance item), widow's pension
+("Cómo se solicita"). Site search: new topic (not the bare "fallecimiento", so "permiso por fallecimiento" still opens
+the paid-leave calculator). Sitemap and llms.txt list it once published (database entry).
+
+**Baseline (GSC 23 Oct–19 Nov 2026).** 0 impressions: no query containing fallec-/defunc-/últimas voluntades/herencia/
+viudedad/death among the site's top 25,000 queries. New URLs, nothing cannibalised.
+
+**Hypothesis.** Indexed within a week of IndexNow; ≥ 500 impressions across the three editions in the 28 days to the
+review, long tail first ("certificado de últimas voluntades cuándo se puede pedir", "certificado seguros cobertura
+fallecimiento", "plazo plusvalía herencia", "auxilio por defunción cuantía", "legítima cataluña"); next-step clicks from
+the guide to the calculators. Wrong if under 150 impressions by 17 Dec or not indexed by 3 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, three URLs). Review **2026-12-17**: `snapshot.py page
+que-hacer-cuando-fallece-un-familiar 28`, `page que-cal-fer-quan-mor-un-familiar 28`, `page
+what-to-do-when-someone-dies-spain 28`; GA4 related_content_click from the guide and from the calculators' new link.
+
+**Upkeep** (test fails until done): from 15 Jan 2027 (DEATH_STEPS_REREAD_BY) re-read the ISD/plusvalía articles, LGSS
+and the Seguridad Social pages (auxilio amount), the Ministry of Justice certificate pages and book four after Llei
+13/2026 (in force 4 Feb 2027), then move DEATH_STEPS_AS_OF. RDL 31/2026 (art. 224 wording) needs convalidation by 28 Nov:
+if repealed, the under-21/under-25 rule quoted is the same in both wordings.
+
+**Deploy.** Deploy (route code + calculators' back-links), then publish group `fallecimiento`. IndexNow prefixes:
+`/es/guias/que-hacer-cuando-fallece-un-familiar/ /ca/guies/que-cal-fer-quan-mor-un-familiar/
+/en/guides/what-to-do-when-someone-dies-spain/` plus the changed calculators: `/es/calculadoras/impuesto-sucesiones-
+/ca/calculadores/impost-successions- /es/calculadoras/impuesto-donaciones- /ca/calculadores/impost-donacions-
+/en/calculators/catalonia-inheritance-tax/ /en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/
+/en/calculators/valencia-inheritance-tax/ /en/calculators/spain-inheritance-tax-by-region/ /en/calculators/catalonia-gift-tax/
+/en/calculators/madrid-gift-tax/ /en/calculators/andalusia-gift-tax/ /en/calculators/valencia-gift-tax/
+/es/calculadoras/plusvalia-municipal/ /ca/calculadores/plusvalua-municipal/ /en/calculators/spain-plusvalia-tax/
+/es/calculadoras/pension-viudedad/ /ca/calculadores/pensio-viduitat/ /en/calculators/spain-widows-pension/`.
+
+**Outcome:** _pending_

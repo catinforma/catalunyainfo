@@ -10,6 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
+import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
@@ -711,6 +712,10 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
               <Quote text={QUOTE.art230} href={LGSS_ANCHOR.art230} label={lgss("art. 230")} />
               <p>
                 <Link href={PAY_DATES_PATH[locale]}>{links.pay}</Link>
+              </p>
+              <p>
+                {L(locale, { es: "Los certificados, la herencia y los demás plazos:", ca: "Els certificats, l'herència i els altres terminis:", en: "The certificates, the estate and the other deadlines:" })}{" "}
+                <Link href={b2href("deathSteps", locale)}>{B2_TITLES.deathSteps[locale]}</Link>
               </p>
 
               <h2 id="ejemplos">{hd.examples}</h2>
