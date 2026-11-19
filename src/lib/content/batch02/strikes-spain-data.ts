@@ -96,6 +96,32 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * e-Tauler edicts (16-18 Nov: no other strike order); SMU (no call-off,
  * marches on the 19th at 18:00); Sindicato de Estudiantes (20N kept); BOE of
  * 18 Nov (no strike order).
+ *
+ * 19 Nov 2026 (~12:00 CET): re-read (research_notes/x10/strikes-19nov-factpack.md).
+ * NEW: the BOE of 19 Nov (núm. 288) prints Orden INT/1239/2026 of 17 Nov:
+ * the Sindicato Libre de Correos y Telecomunicaciones calls Correos out in the
+ * Comunidad de Madrid from 00:00 on 23 Nov to 24:00 on 27 Nov, and in Cádiz,
+ * Córdoba, Huelva, Málaga and Sevilla from 00:00 on 23 Nov to 24:00 on 25
+ * Nov; the order sets minimum services for the postal vote. The Basque
+ * Government's list has two new orders of 17 Nov: care homes in Bizkaia (LAB
+ * and ELA, 19 Nov, 17 Dec, 21 Jan 2027) and private care homes in Gipuzkoa
+ * (ELA, 20 Nov, 22 and 23 Dec), plus its own order of 13 Nov for the Bizkaia
+ * cleaning strike (so the Ministry's airport resolution is no longer the
+ * only order printed). The SMU's march list for the 19th no longer has
+ * Zaragoza (19 cities, all at 18:00); the students' list for the 20th adds
+ * Donostia, Zamora, Zaragoza and Teruel (28 places, all at 12:00).
+ * Unchanged: the Ministry's rail list (newest still the 12 Nov Grupo Renfe
+ * resolution: none for the 23rd) and air list (newest the 17N ones and ELA
+ * Bizkaia; SAERCO, Groundforce, Outsmart in force to 30 Nov); SEMAF nº
+ * 2026-35 (17 Nov) still newest and keeps the 23rd; SCF (SCFCOM 38 newest:
+ * the 19th stays called off); Treball's list (newest 17 Nov) and the newest
+ * 100 e-Tauler edicts (17-19 Nov: no other strike order); SMU ("legalmente
+ * convocada del 16 al 27 de noviembre", no call-off); Sindicato de
+ * Estudiantes (20N kept, whole school day); CSIF Educación Madrid (stoppages
+ * on 20, 24, 26 and 30 Nov, 9:00-11:00 and 17:00-19:00); CESM (newest 13 Nov,
+ * still postponed); BOE of 18 Nov (no strike order). Renfe's notice for the
+ * 23rd: not found (its press room is a script page; no notice at the 17N
+ * notice's URL pattern).
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-19";
 
@@ -104,7 +130,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-19";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-18";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-19";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";
@@ -155,6 +181,16 @@ export const SPAIN_URLS = {
   treballMsList: STRIKE_URLS.treballMs,
   // Building cleaning in Bizkaia (ELA), 17 to 20 Nov (read 17 Nov 2026).
   elaResolution: `${CDN}/aereo/huelga-servicios-minimos/2026/54_26-11-17_-_dgac_resolucion_huelga_aspel_sectorial_limpieza_vizcaya_-_ela_vi.pdf`,
+  // Basque Government's list of minimum-services orders and three of its orders (read 19 Nov 2026).
+  euskadiList: "https://www.euskadi.eus/gobierno-vasco/-/ordenes-servicios-minimos/",
+  // Order of 13 Nov 2026: building cleaning in Bizkaia, 17-20 Nov (health centres, care homes, nursery and primary schools).
+  euskadiCleaning: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.11.13-Sector-limpieza-edificios-y-locales-bizkaia.pdf",
+  // Order of 17 Nov 2026: care homes in Bizkaia (LAB: private homes; ELA: homes, community housing and day centres), 19 Nov, 17 Dec, 21 Jan 2027.
+  euskadiCareBizkaia: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.11.-17-Orden-SSMM-Centros-de-la-tercera-edad-Bizkaia_sectorial.pdf",
+  // Order of 17 Nov 2026: private care homes in Gipuzkoa (ELA), 20 Nov, 22 and 23 Dec, full working day.
+  euskadiCareGipuzkoa: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.11.17-SSMM_Residencias-de-la-tercera-edad-Gipuzkoa.pdf",
+  // Correos in Madrid (23-27 Nov) and Cádiz, Córdoba, Huelva, Málaga, Sevilla (23-25 Nov): Orden INT/1239/2026 of 17 Nov, BOE núm. 288 of 19 Nov 2026.
+  correos2327: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259",
   // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
   scf37: "https://www.scf.es/com37/",
   // SCF nº 38, 17 Nov 2026 (22:25, read 18 Nov): "SCF ha acordado la desconvocatoria para el día 19".
@@ -631,19 +667,20 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     minimumServices: {
       status: "published",
       short: {
-        ca: "A l'aeroport de Bilbao, fixats pel Ministeri de Transports",
-        es: "En el aeropuerto de Bilbao, fijados por el Ministerio de Transportes",
-        en: "At Bilbao airport, set by the Ministry of Transport",
+        ca: "Fixats pel Govern Basc i, a l'aeroport de Bilbao, pel Ministeri de Transports",
+        es: "Fijados por el Gobierno Vasco y, en el aeropuerto de Bilbao, por el Ministerio",
+        en: "Set by the Basque Government and, at Bilbao airport, by the Ministry of Transport",
       },
       text: {
-        ca: `A l'aeroport de Bilbao, ${link(U.elaResolution, "la resolució del Ministeri de Transports del 13 de novembre")} fixa el **50% de la plantilla programada** per als lavabos de les terminals, les dependències tècniques i de control del trànsit aeri i l'exterior de les terminals al costat aire, i el **25%** per a la resta de zones públiques; la neteja dels avions es manté segons el tipus de vol (tots els d'emergència, la majoria dels que van a les illes). És l'única ordre d'aquesta vaga que hem trobat publicada.`,
-        es: `En el aeropuerto de Bilbao, ${link(U.elaResolution, "la resolución del Ministerio de Transportes del 13 de noviembre")} fija el **50% de la plantilla programada** para los aseos de las terminales, las dependencias técnicas y de control del tráfico aéreo y el exterior de las terminales en el lado aire, y el **25%** para el resto de zonas públicas; la limpieza de los aviones se mantiene según el tipo de vuelo (todos los de emergencia, la mayoría de los que van a las islas). Es la única orden de esta huelga que hemos encontrado publicada.`,
-        en: `At Bilbao airport, ${link(U.elaResolution, "the Ministry of Transport's resolution of 13 November")} sets **50% of scheduled staff** for terminal toilets, the technical and air-traffic-control premises and the outside of the terminals airside, and **25%** for the other public areas; aircraft cleaning is kept according to the type of flight (every emergency flight, most flights to the islands). It is the only order for this strike we found published.`,
+        ca: `A l'aeroport de Bilbao, ${link(U.elaResolution, "la resolució del Ministeri de Transports del 13 de novembre")} fixa el **50% de la plantilla programada** per als lavabos de les terminals, les dependències tècniques i de control del trànsit aeri i l'exterior de les terminals al costat aire, i el **25%** per a la resta de zones públiques; la neteja dels avions es manté segons el tipus de vol (tots els d'emergència, la majoria dels que van a les illes). Fora de l'aeroport, ${link(U.euskadiCleaning, "l'ordre del Govern Basc del 13 de novembre")} fixa als centres sanitaris la neteja estrictament necessària per a urgències, quiròfans, residus sanitaris, cuina i persones ingressades, amb el personal d'un festiu; a les residències i els centres de dia, només la de les zones de risc greu, amb el 20% del personal; i a les escoles bressol i d'educació infantil, una persona per als lavabos i els residus.`,
+        es: `En el aeropuerto de Bilbao, ${link(U.elaResolution, "la resolución del Ministerio de Transportes del 13 de noviembre")} fija el **50% de la plantilla programada** para los aseos de las terminales, las dependencias técnicas y de control del tráfico aéreo y el exterior de las terminales en el lado aire, y el **25%** para el resto de zonas públicas; la limpieza de los aviones se mantiene según el tipo de vuelo (todos los de emergencia, la mayoría de los que van a las islas). Fuera del aeropuerto, ${link(U.euskadiCleaning, "la orden del Gobierno Vasco del 13 de noviembre")} fija en los centros sanitarios la limpieza estrictamente necesaria para urgencias, quirófanos, residuos sanitarios, cocina y personas hospitalizadas, con el personal de un festivo; en las residencias y los centros de día, solo la de las zonas de riesgo grave, con el 20% del personal; y en las haurreskolak y los centros de educación infantil, una persona para los baños y los residuos.`,
+        en: `At Bilbao airport, ${link(U.elaResolution, "the Ministry of Transport's resolution of 13 November")} sets **50% of scheduled staff** for terminal toilets, the technical and air-traffic-control premises and the outside of the terminals airside, and **25%** for the other public areas; aircraft cleaning is kept according to the type of flight (every emergency flight, most flights to the islands). Away from the airport, ${link(U.euskadiCleaning, "the Basque Government's order of 13 November")} keeps at health centres only the cleaning strictly needed for A&E, operating theatres, clinical waste, kitchens and inpatients, with holiday staffing; at care homes and day centres, only areas with a serious risk, with 20% of staff; and at nursery and infant schools, one person for toilets and waste.`,
       },
     },
     sources: [
       { name: "Resolución de servicios mínimos en el transporte aéreo durante la huelga sectorial de limpieza de edificios y locales en Bizkaia convocada por ELA (13 de noviembre de 2026)", url: U.elaResolution, publisher: MINISTRY },
       SRC.ministryAir,
+      { name: "Orden de 13 de noviembre de 2026: servicio esencial del sector de limpieza de edificios y locales de Bizkaia, huelga del 17 al 20 de noviembre (PDF)", url: U.euskadiCleaning, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
     ],
   },
   {
@@ -690,6 +727,156 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sources: [
       { name: "20N: huelga estudiantil europea (30 de octubre de 2026)", url: U.students, publisher: "Sindicato de Estudiantes" },
       { name: "Comunicación oficial a los equipos directivos: huelga de estudiantes del viernes 20 de noviembre de 2026", url: U.studentsNotice, publisher: "Sindicato de Estudiantes" },
+    ],
+  },
+  {
+    // 19 Nov 2026 (read that day): the Basque Government's order of 17 Nov, on its list of minimum-services orders.
+    id: "huelga-residencias-bizkaia-2026-11-19",
+    dates: ["2026-11-19", "2026-12-17", "2027-01-21"],
+    sector: "services",
+    status: "official",
+    title: {
+      ca: "vaga a les residències i els centres de dia per a gent gran de Biscaia (LAB, ELA)",
+      es: "huelga en las residencias y centros de día de mayores de Bizkaia (LAB, ELA)",
+      en: "strike at care homes and day centres for older people in Bizkaia (LAB, ELA)",
+    },
+    label: { ca: "residències de gent gran a Biscaia", es: "residencias de mayores en Bizkaia", en: "care homes in Bizkaia" },
+    scope: {
+      ca: "Les residències privades de gent gran de Biscaia (LAB) i els centres per a gent gran de Biscaia: residències, habitatges comunitaris i centres de dia (ELA).",
+      es: "Las residencias privadas de mayores de Bizkaia (LAB) y los centros de mayores de Bizkaia: residencias, viviendas comunitarias y centros de día (ELA).",
+      en: "Private care homes for older people in Bizkaia (LAB) and Bizkaia's centres for older people: care homes, community housing and day centres (ELA).",
+    },
+    hours: {
+      ca: "Tota la jornada (24 hores) el dijous 19 de novembre, i de nou el 17 de desembre de 2026 i el 21 de gener de 2027, segons l'ordre del Govern Basc.",
+      es: "Toda la jornada (24 horas) el jueves 19 de noviembre, y de nuevo el 17 de diciembre de 2026 y el 21 de enero de 2027, según la orden del Gobierno Vasco.",
+      en: "The whole day (24 hours) on Thursday 19 November, and again on 17 December 2026 and 21 January 2027, according to the Basque Government's order.",
+    },
+    calledBy: {
+      ca: `Els sindicats LAB i ELA, segons ${link(U.euskadiCareBizkaia, "l'ordre de serveis mínims del Govern Basc del 17 de novembre")}.`,
+      es: `Los sindicatos LAB y ELA, según ${link(U.euskadiCareBizkaia, "la orden de servicios mínimos del Gobierno Vasco del 17 de noviembre")}.`,
+      en: `The LAB and ELA unions, according to ${link(U.euskadiCareBizkaia, "the Basque Government's minimum-services order of 17 November")}.`,
+    },
+    basis: {
+      ca: `${link(U.euskadiCareBizkaia, "L'ordre del Govern Basc del 17 de novembre")}, a ${link(U.euskadiList, "la seva llista d'ordres de serveis mínims")}.`,
+      es: `${link(U.euskadiCareBizkaia, "La orden del Gobierno Vasco del 17 de noviembre")}, en ${link(U.euskadiList, "su lista de órdenes de servicios mínimos")}.`,
+      en: `${link(U.euskadiCareBizkaia, "The Basque Government's order of 17 November")}, on ${link(U.euskadiList, "its list of minimum-services orders")}.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Residències: 50% dels gerocultors (70% amb més dependència) i 100% de nit",
+        es: "Residencias: 50% de gerocultores (70% con más dependencia) y 100% de noche",
+        en: "Care homes: 50% of care staff (70% where most are highly dependent), 100% at night",
+      },
+      text: {
+        ca: `${link(U.euskadiCareBizkaia, "L'ordre del Govern Basc del 17 de novembre")} manté a les residències el **50% del personal gerocultor** d'atenció directa (un 10% més a les hores dels àpats i de 8.00 a 10.30 h i de 20.00 a 22.00 h), el **70%** on més del 70% dels residents tenen una dependència de grau II o III, i el **100% al torn de nit**; als centres de dia, el 50% de l'atenció directa i el transport adaptat de les persones que no hi poden anar d'una altra manera; infermeria i cuina, al 50%, i neteja, al 20%.`,
+        es: `${link(U.euskadiCareBizkaia, "La orden del Gobierno Vasco del 17 de noviembre")} mantiene en las residencias el **50% del personal gerocultor** de atención directa (un 10% más en las horas de las comidas y de 8.00 a 10.30 h y de 20.00 a 22.00 h), el **70%** donde más del 70% de los residentes tienen una dependencia de grado II o III, y el **100% en el turno de noche**; en los centros de día, el 50% de la atención directa y el transporte adaptado de quienes no pueden ir de otra forma; enfermería y cocina, al 50%, y limpieza, al 20%.`,
+        en: `${link(U.euskadiCareBizkaia, "The Basque Government's order of 17 November")} keeps **50% of direct-care staff** in care homes (10% more at mealtimes, 08:00 to 10:30 and 20:00 to 22:00), **70%** where more than 70% of residents have grade II or III dependency, and **100% on the night shift**; at day centres, 50% of direct care and the adapted transport of people who cannot get there otherwise; nursing and kitchen staff at 50%, cleaning at 20%.`,
+      },
+    },
+    sources: [
+      { name: "Orden de 17 de noviembre de 2026: servicio esencial en el sector de centros de la tercera edad de Bizkaia, huelga del 19 de noviembre y el 17 de diciembre de 2026 y el 21 de enero de 2027 (PDF)", url: U.euskadiCareBizkaia, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
+      { name: "Órdenes de servicios mínimos", url: U.euskadiList, publisher: "Gobierno Vasco" },
+    ],
+  },
+  {
+    // 19 Nov 2026 (read that day): the Basque Government's order of 17 Nov, on its list of minimum-services orders.
+    id: "huelga-residencias-gipuzkoa-2026-11-20",
+    dates: ["2026-11-20", "2026-12-22", "2026-12-23"],
+    sector: "services",
+    status: "official",
+    title: {
+      ca: "vaga a les residències privades de gent gran de Guipúscoa (ELA)",
+      es: "huelga en las residencias privadas de mayores de Gipuzkoa (ELA)",
+      en: "strike at private care homes for older people in Gipuzkoa (ELA)",
+    },
+    label: { ca: "residències de gent gran a Guipúscoa", es: "residencias de mayores en Gipuzkoa", en: "care homes in Gipuzkoa" },
+    scope: {
+      ca: "Les residències privades de gent gran de Guipúscoa.",
+      es: "Las residencias privadas de mayores de Gipuzkoa.",
+      en: "Private care homes for older people in Gipuzkoa.",
+    },
+    hours: {
+      ca: "Jornada completa el divendres 20 de novembre, i de nou el 22 i el 23 de desembre de 2026, segons l'ordre del Govern Basc.",
+      es: "Jornada completa el viernes 20 de noviembre, y de nuevo el 22 y el 23 de diciembre de 2026, según la orden del Gobierno Vasco.",
+      en: "A full working day on Friday 20 November, and again on 22 and 23 December 2026, according to the Basque Government's order.",
+    },
+    calledBy: {
+      ca: `El sindicat ELA, segons ${link(U.euskadiCareGipuzkoa, "l'ordre de serveis mínims del Govern Basc del 17 de novembre")}.`,
+      es: `El sindicato ELA, según ${link(U.euskadiCareGipuzkoa, "la orden de servicios mínimos del Gobierno Vasco del 17 de noviembre")}.`,
+      en: `The ELA union, according to ${link(U.euskadiCareGipuzkoa, "the Basque Government's minimum-services order of 17 November")}.`,
+    },
+    basis: {
+      ca: `${link(U.euskadiCareGipuzkoa, "L'ordre del Govern Basc del 17 de novembre")}, a ${link(U.euskadiList, "la seva llista d'ordres de serveis mínims")}.`,
+      es: `${link(U.euskadiCareGipuzkoa, "La orden del Gobierno Vasco del 17 de noviembre")}, en ${link(U.euskadiList, "su lista de órdenes de servicios mínimos")}.`,
+      en: `${link(U.euskadiCareGipuzkoa, "The Basque Government's order of 17 November")}, on ${link(U.euskadiList, "its list of minimum-services orders")}.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Residències: 50% dels gerocultors (70% amb més dependència) i 100% de nit",
+        es: "Residencias: 50% de gerocultores (70% con más dependencia) y 100% de noche",
+        en: "Care homes: 50% of care staff (70% where most are highly dependent), 100% at night",
+      },
+      text: {
+        ca: `${link(U.euskadiCareGipuzkoa, "L'ordre del Govern Basc del 17 de novembre")} manté a les residències el **50% del personal gerocultor** d'atenció directa (un 10% més a les hores dels àpats i de 8.00 a 10.30 h i de 20.00 a 22.00 h), el **70%** on més del 70% dels residents tenen una dependència de grau II o III, i el **100% al torn de nit**; infermeria i cuina, al 50%, i neteja, al 20%.`,
+        es: `${link(U.euskadiCareGipuzkoa, "La orden del Gobierno Vasco del 17 de noviembre")} mantiene en las residencias el **50% del personal gerocultor** de atención directa (un 10% más en las horas de las comidas y de 8.00 a 10.30 h y de 20.00 a 22.00 h), el **70%** donde más del 70% de los residentes tienen una dependencia de grado II o III, y el **100% en el turno de noche**; enfermería y cocina, al 50%, y limpieza, al 20%.`,
+        en: `${link(U.euskadiCareGipuzkoa, "The Basque Government's order of 17 November")} keeps **50% of direct-care staff** in care homes (10% more at mealtimes, 08:00 to 10:30 and 20:00 to 22:00), **70%** where more than 70% of residents have grade II or III dependency, and **100% on the night shift**; nursing and kitchen staff at 50%, cleaning at 20%.`,
+      },
+    },
+    sources: [
+      { name: "Orden de 17 de noviembre de 2026: servicio esencial en el sector de residencias privadas de la tercera edad de Gipuzkoa, huelga del 20 de noviembre y el 22 y 23 de diciembre de 2026 (PDF)", url: U.euskadiCareGipuzkoa, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
+      { name: "Órdenes de servicios mínimos", url: U.euskadiList, publisher: "Gobierno Vasco" },
+    ],
+  },
+  {
+    // 19 Nov 2026 (read that day): Orden INT/1239/2026 of 17 Nov, BOE núm. 288 of 19 Nov. The caller and hours are the order's.
+    id: "huelga-correos-2026-11-23",
+    dates: ["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+    sector: "services",
+    status: "official",
+    guides: ["postalVote"],
+    title: {
+      ca: "vaga a Correus a Madrid i a cinc províncies andaluses (Sindicato Libre de Correos)",
+      es: "huelga en Correos en Madrid y en cinco provincias andaluzas (Sindicato Libre de Correos)",
+      en: "Correos (Spanish post) strike in Madrid and five Andalusian provinces (Sindicato Libre de Correos)",
+    },
+    label: { ca: "Correus (Madrid i Andalusia)", es: "Correos (Madrid y Andalucía)", en: "Correos (Madrid, Andalusia)" },
+    scope: {
+      ca: "Tot el personal de tots els centres de Correus de la Comunitat de Madrid (del 23 al 27 de novembre) i de les províncies de Cadis, Còrdova, Huelva, Màlaga i Sevilla (del 23 al 25 de novembre).",
+      es: "Todo el personal de todos los centros de Correos de la Comunidad de Madrid (del 23 al 27 de noviembre) y de las provincias de Cádiz, Córdoba, Huelva, Málaga y Sevilla (del 23 al 25 de noviembre).",
+      en: "All staff at every Correos workplace in the Community of Madrid (23 to 27 November) and in the provinces of Cádiz, Córdoba, Huelva, Málaga and Seville (23 to 25 November).",
+    },
+    hours: {
+      ca: "Jornades completes: a Madrid, de les 0.00 h del dilluns 23 a les 24.00 h del divendres 27 de novembre; a les cinc províncies andaluses, de les 0.00 h del dilluns 23 a les 24.00 h del dimecres 25.",
+      es: "Jornadas completas: en Madrid, de las 0.00 h del lunes 23 a las 24.00 h del viernes 27 de noviembre; en las cinco provincias andaluzas, de las 0.00 h del lunes 23 a las 24.00 h del miércoles 25.",
+      en: "Full days: in Madrid, from 00:00 on Monday 23 to 24:00 on Friday 27 November; in the five Andalusian provinces, from 00:00 on Monday 23 to 24:00 on Wednesday 25.",
+    },
+    calledBy: {
+      ca: `El Sindicato Libre de Correos y Telecomunicaciones, segons ${link(U.correos2327, "l'Orden INT/1239/2026 del Ministeri de l'Interior")} (BOE del 19 de novembre).`,
+      es: `El Sindicato Libre de Correos y Telecomunicaciones, según ${link(U.correos2327, "la Orden INT/1239/2026 del Ministerio del Interior")} (BOE del 19 de noviembre).`,
+      en: `The Sindicato Libre de Correos y Telecomunicaciones union, according to ${link(U.correos2327, "Interior Ministry Order INT/1239/2026")} (BOE of 19 November).`,
+    },
+    basis: {
+      ca: `${link(U.correos2327, "L'Orden INT/1239/2026, del 17 de novembre")}, publicada al BOE núm. 288 del 19 de novembre de 2026, fixa els serveis essencials de Correus durant aquestes vagues perquè coincideixen amb el vot per correu de les eleccions generals del 29 de novembre.`,
+      es: `${link(U.correos2327, "La Orden INT/1239/2026, de 17 de noviembre")}, publicada en el BOE núm. 288 del 19 de noviembre de 2026, fija los servicios esenciales de Correos durante estas huelgas porque coinciden con el voto por correo de las elecciones generales del 29 de noviembre.`,
+      en: `${link(U.correos2327, "Order INT/1239/2026 of 17 November")}, published in BOE no. 288 of 19 November 2026, sets Correos' essential services during these strikes because they coincide with postal voting for the 29 November general election.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Per al vot per correu: oficines obertes amb 1 a 3 treballadors per torn",
+        es: "Para el voto por correo: oficinas abiertas con 1 a 3 empleados por turno",
+        en: "For postal votes: post offices open with 1 to 3 staff per shift",
+      },
+      text: {
+        ca: `${link(U.correos2327, "L'Orden INT/1239/2026")} protegeix les tasques del procés electoral: les oficines obren en el seu horari habitual per admetre sol·licituds de vot per correu, lliurar la documentació electoral i admetre els vots, amb **1, 2 o 3 treballadors per torn** segons la mida de la plantilla (sempre amb el director o el responsable de l'oficina); els serveis rurals amb atenció al públic, al 100%. Al repartiment, fins al **50% de la plantilla** per als enviaments electorals i els vots, del 23 al 25 de novembre també a Madrid. Si el termini per admetre el vot s'allarga, els serveis rurals continuen.`,
+        es: `${link(U.correos2327, "La Orden INT/1239/2026")} protege las tareas del proceso electoral: las oficinas abren en su horario habitual para admitir solicitudes de voto por correo, entregar la documentación electoral y admitir los votos, con **1, 2 o 3 empleados por turno** según el tamaño de la plantilla (siempre con el director o responsable de la oficina); los servicios rurales con atención al público, al 100%. En el reparto, hasta el **50% de la plantilla** para los envíos electorales y los votos, del 23 al 25 de noviembre también en Madrid. Si se amplía el plazo de admisión del voto, siguen los servicios rurales.`,
+        en: `${link(U.correos2327, "Order INT/1239/2026")} protects election work: post offices open at their usual hours to accept postal-vote applications, hand out election papers and accept votes, with **1, 2 or 3 staff per shift** depending on the office's size (always including its manager); rural services with public counters at 100%. For delivery, up to **50% of staff** for election mail and votes, from 23 to 25 November in Madrid too. If the deadline for accepting votes is extended, rural services carry on.`,
+      },
+    },
+    sources: [
+      { name: "Orden INT/1239/2026, de 17 de noviembre: servicios esenciales en Correos durante las huelgas del 23 al 27 de noviembre en Madrid y del 23 al 25 en Cádiz, Córdoba, Huelva, Málaga y Sevilla (BOE núm. 288, 19 de noviembre de 2026)", url: U.correos2327, publisher: "Boletín Oficial del Estado (Ministerio del Interior)" },
     ],
   },
 ];
