@@ -54,6 +54,7 @@ import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { isdSitemapEntries } from "@/lib/programmatic/inheritance-tax/page";
 import { regionSitemapEntries as isdRegionSitemapEntries } from "@/lib/programmatic/inheritance-tax/regional-page";
+import { giftSitemapEntries } from "@/lib/programmatic/gift-tax/page";
 import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
 import { retirementSitemapEntries } from "@/lib/programmatic/retirement-age/page";
@@ -251,6 +252,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...isdSitemapEntries(),
     // The same tax in Madrid, Andalucía and the Comunitat Valenciana (calculators family, group "taxes"), in es, ca and en.
     ...isdRegionSitemapEntries(),
+    // Gift tax in the same four communities (calculators family, group "taxes"), in es, ca and en.
+    ...giftSitemapEntries(),
     // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
     ...lotteryTaxSitemapEntries(),
     ...bonoSocialSitemapEntries(),

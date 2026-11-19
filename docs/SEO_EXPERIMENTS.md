@@ -9052,3 +9052,62 @@ body update here.
 /en/calculators/catalonia-inheritance-tax/`, plus the hub `/ca/calculadores/ /es/calculadoras/ /en/calculators/`.
 
 **Outcome:** _pending_
+
+## 2026-11-19 — "Impuesto de donaciones" in Cataluña, Madrid, Andalucía and the Comunidad Valenciana, es + ca + en (4 new pages × 3 editions; deploy only, no publish group) + hub section renamed "Impuesto de sucesiones y donaciones por comunidad" (review 2026-12-17)
+
+**Why.** "impuesto de donaciones <comunidad>" and "donación de padres a hijos" have strong Spain-wide demand and the site
+had only the inheritance side. One calculator page per community, the same four as the inheritance family, nothing
+thinner for the rest. Fact pack: research_notes/gift-tax-spain.md (gitignored, worktree copy).
+
+- URLs (es primary): `/es/calculadoras/impuesto-donaciones-cataluna/`, `/es/calculadoras/impuesto-donaciones-madrid/`,
+  `/es/calculadoras/impuesto-donaciones-andalucia/`, `/es/calculadoras/impuesto-donaciones-comunidad-valenciana/`;
+  `/ca/calculadores/impost-donacions-catalunya/`, `/ca/calculadores/impost-donacions-madrid/`,
+  `/ca/calculadores/impost-donacions-andalusia/`, `/ca/calculadores/impost-donacions-comunitat-valenciana/`;
+  `/en/calculators/catalonia-gift-tax/`, `/en/calculators/madrid-gift-tax/`, `/en/calculators/andalusia-gift-tax/`,
+  `/en/calculators/valencia-gift-tax/`. Sitemap + hreflang (x-default en), llms.txt, site-search shortcuts ("donaciones
+  madrid", "donaciones andalucia", "donaciones comunidad valenciana", bare "donaciones"/"donacion padres a hijos" →
+  Cataluña), `calculator_use` ids `gift-tax-catalonia|madrid|andalucia|valencia`, next step (home-purchase taxes,
+  mortgage). Registry ids in calculators/paths.ts.
+- Hub (/es/calculadoras/ + ca/en): group `taxes` retitled "Impuesto de sucesiones y donaciones por comunidad" (ca
+  "Impost de successions i donacions per comunitat", en "Inheritance and gift tax by region"), intro now also says a
+  gift pays where the property is or the donee lives; four gift cards after the four inheritance ones. Hub title and
+  description unchanged. Cross-links: each gift page links the other three and the same community's inheritance
+  calculator; each inheritance page (Catalan one included, via InheritanceByRegion) links its community's gift page.
+- Rules read 19 Nov 2026 (curl + grep; Portal Jurídic API for Catalonia, BOE consolidated texts with version history):
+  Catalonia Codi tributari arts. 632-20/21 (first home 95 %, max 60.000/120.000, ≤36 years, IRPF ≤36.000, six months
+  since 27/06/2025), 633-1, 633-2 (reduced 5/7/9 % for groups I-II with deed, deed within one month of handing over
+  cash), 633-3, no rebate; deadline one month (Decret 414/2011 art. 10.b). Madrid DL 1/2010 arts. 22 bis (cash for home
+  100 % up to 250.000), 23, 24, 25.2 (from 01/07/2025: 100 % ≤1.000 € in 3 years; 99 % I-II; 50 % III; public document
+  above 10.000 €; cash origin stated); deadline 30 working days (RD 1629/1991 art. 67.1.b, Madrid page). Andalucía Ley
+  5/2021 arts. 32/33 (home 99 %, base ≤150.000/250.000, <35, prior wealth ≤402.678,11), 37, 38, 40 (from 01/01/2026:
+  document and cash origin above 5.000 €), 68.1 (two months). Valencia Ley 13/1997 arts. 10 bis.2 (100.000 / up to
+  156.000; disability 240.000/120.000), 11, 12, 12 bis (99 % direct family and disability; 25 % blood collaterals from
+  01/06/2026, 50 % from 01/06/2027), 12 ter (one month). State: Ley 29/1987 arts. 5, 9, 20.5, 22.2, 24, 30; RD 1629/1991
+  arts. 46.b, 67.1.b; Ley 22/2009 arts. 28, 32. Only Madrid uses the 30-working-day deadline.
+- Tests (tests/gift-tax.test.ts): the agencies' own worked examples to the cent — ATC cases 1-8 and 11 (15.250;
+  35.750; 15.250; 100; 1.500; 10.799,76; 7.305,72; 11.400; 2.700), Comunidad de Madrid (316,21; accumulation 16,9 % →
+  16,90), Agencia Tributaria de Andalucía guide (126,20; accumulation 9,82 % → 14,73); Valencia publishes none; 24
+  cases hand-calculated outside the engine (Python Decimal, half-up); thresholds (10.000 €, 5.000 €, 1.000 €), home
+  conditions and caps, the excess rule at 500.100 € (Catalonia). `RULES_UNTIL` 2027-01-01.
+
+**Baseline (GSC 23 Oct–19 Nov 2026).** 0 impressions for any page containing "donac" (`snapshot.py page donac 28`,
+`page donacions 28`): no ranking for the topic.
+
+**Hypothesis.** Indexed within a week of IndexNow; the twelve URLs reach ≥ 1,500 impressions in the 28 days to the review,
+mostly the four Spanish editions on "impuesto de donaciones madrid|andalucía|cataluña|comunidad valenciana" and
+"donación padres a hijos …", and ≥ 25 % of sessions with a `calculator_use`. Wrong if fewer than 400 impressions by 17 Dec.
+
+**Measure.** 26 Nov: indexed? (URL inspection, the four es URLs). Review **2026-12-17**: `snapshot.py page
+impuesto-donaciones 28`, `page impost-donacions 28`, `page gift-tax 28`; GA4 `calculator_use` for the four ids; the
+inheritance pages' clicks before/after the cross-link (`snapshot.py page impuesto-sucesiones 28`).
+
+**Confounders.** The inheritance pages went live the same day and share the hub group. January 2027 budget laws of the
+four communities may change the rules inside the window: the date guard fails on 1 Jan 2027; log any body update here.
+
+**IndexNow after deploy:** `python scripts/indexnow-sitemap.py /es/calculadoras/impuesto-donaciones- /ca/calculadores/impost-donacions-
+/en/calculators/catalonia-gift-tax/ /en/calculators/madrid-gift-tax/ /en/calculators/andalusia-gift-tax/ /en/calculators/valencia-gift-tax/`,
+plus the hub and the inheritance pages that gained the link: `/ca/calculadores/ /es/calculadoras/ /en/calculators/
+/es/calculadoras/impuesto-sucesiones- /ca/calculadores/impost-successions- /en/calculators/catalonia-inheritance-tax/
+/en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/`.
+
+**Outcome:** _pending_

@@ -71,18 +71,26 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("inheritance-tax"), { ca: "/ca/calculadores/impost-successions-catalunya/", es: "/es/calculadoras/impuesto-sucesiones-cataluna/", en: "/en/calculators/catalonia-inheritance-tax/" });  assert.deepEqual(calcEditions("inheritance-tax-madrid"), { ca: "/ca/calculadores/impost-successions-madrid/", es: "/es/calculadoras/impuesto-sucesiones-madrid/", en: "/en/calculators/madrid-inheritance-tax/" });
   assert.deepEqual(calcEditions("inheritance-tax-andalucia"), { ca: "/ca/calculadores/impost-successions-andalusia/", es: "/es/calculadoras/impuesto-sucesiones-andalucia/", en: "/en/calculators/andalusia-inheritance-tax/" });
   assert.deepEqual(calcEditions("inheritance-tax-valencia"), { ca: "/ca/calculadores/impost-successions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-sucesiones-comunidad-valenciana/", en: "/en/calculators/valencia-inheritance-tax/" });
+  assert.deepEqual(calcEditions("gift-tax-catalonia"), { ca: "/ca/calculadores/impost-donacions-catalunya/", es: "/es/calculadoras/impuesto-donaciones-cataluna/", en: "/en/calculators/catalonia-gift-tax/" });
+  assert.deepEqual(calcEditions("gift-tax-madrid"), { ca: "/ca/calculadores/impost-donacions-madrid/", es: "/es/calculadoras/impuesto-donaciones-madrid/", en: "/en/calculators/madrid-gift-tax/" });
+  assert.deepEqual(calcEditions("gift-tax-andalucia"), { ca: "/ca/calculadores/impost-donacions-andalusia/", es: "/es/calculadoras/impuesto-donaciones-andalucia/", en: "/en/calculators/andalusia-gift-tax/" });
+  assert.deepEqual(calcEditions("gift-tax-valencia"), { ca: "/ca/calculadores/impost-donacions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-donaciones-comunidad-valenciana/", en: "/en/calculators/valencia-gift-tax/" });
 });
 
 test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
 });
 
-test("hub: the taxes group is 'inheritance tax by community', Catalonia first, with a one-line intro in every language", () => {
+test("hub: the taxes group is 'inheritance and gift tax by community', Catalonia first, with a one-line intro in every language", () => {
   const taxes = HUB_GROUPS.find((g) => g.id === "taxes")!;
-  assert.deepEqual(taxes.cards.map((c) => c.key), ["inheritance-tax", "inheritance-tax-madrid", "inheritance-tax-andalucia", "inheritance-tax-valencia"]);
-  assert.equal(taxes.title.es, "Impuesto de sucesiones por comunidad");
+  assert.deepEqual(taxes.cards.map((c) => c.key), [
+    "inheritance-tax", "inheritance-tax-madrid", "inheritance-tax-andalucia", "inheritance-tax-valencia",
+    "gift-tax-catalonia", "gift-tax-madrid", "gift-tax-andalucia", "gift-tax-valencia",
+  ]);
+  assert.equal(taxes.title.es, "Impuesto de sucesiones y donaciones por comunidad");
   for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /cinc anys|cinco años|five years/);
-  assert.deepEqual(taxes.cards.map((c) => c.scope), ["catalonia", "madrid", "andalucia", "valencia"]);
+  for (const l of CALC_LOCALES) assert.match(taxes.intro![l], /donació|donación|gift/);
+  assert.deepEqual(taxes.cards.map((c) => c.scope), ["catalonia", "madrid", "andalucia", "valencia", "catalonia", "madrid", "andalucia", "valencia"]);
   assert.match(read("src/components/programmatic/calculators/CalculatorsHub.tsx"), /group\.intro \? <p/);
 });
 

@@ -35,6 +35,7 @@ import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
 import { RULES_AS_OF as REGIONAL_ISD_AS_OF } from "@/lib/programmatic/inheritance-tax/regions/state";
+import { RULES_AS_OF as GIFT_TAX_AS_OF } from "@/lib/programmatic/gift-tax/regions/state";
 import { RULES_AS_OF as ZONA_TENSIONADA_AS_OF } from "@/lib/programmatic/zona-tensionada/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -450,13 +451,13 @@ export const HUB_GROUPS: HubGroup[] = [
     ],
   },
   {
-    // Inheritance tax by community: the rules of the region where the deceased lived (Ley 22/2009 arts. 28 and 32).
+    // Inheritance and gift tax by community: an inheritance pays where the deceased lived, a gift where the property is or the donee lives (Ley 22/2009 arts. 28 and 32).
     id: "taxes",
-    title: { ca: "Impost de successions per comunitat", es: "Impuesto de sucesiones por comunidad", en: "Inheritance tax by region" },
+    title: { ca: "Impost de successions i donacions per comunitat", es: "Impuesto de sucesiones y donaciones por comunidad", en: "Inheritance and gift tax by region" },
     intro: {
-      ca: "Cada comunitat té les seves reduccions, tarifa i bonificacions, i s'apliquen les de la comunitat on la persona morta va viure més dies dels últims cinc anys. Calculadores per a aquestes quatre comunitats, amb els articles de la seva llei:",
-      es: "Cada comunidad tiene sus reducciones, tarifa y bonificaciones, y se aplican las de la comunidad donde la persona fallecida vivió más días de los últimos cinco años. Calculadoras para estas cuatro comunidades, con los artículos de su ley:",
-      en: "Each region has its own reductions, scale and rebates, and those of the region where the deceased lived the most days of the last five years apply. Calculators for these four regions, with the articles of each law:",
+      ca: "Cada comunitat té les seves reduccions, tarifa i bonificacions. Una herència paga amb les de la comunitat on la persona morta va viure més dies dels últims cinc anys; una donació, amb les de la comunitat on és l'immoble o, si són diners o altres béns, on viu qui la rep. Calculadores per a aquestes quatre comunitats, amb els articles de la seva llei:",
+      es: "Cada comunidad tiene sus reducciones, tarifa y bonificaciones. Una herencia paga con las de la comunidad donde la persona fallecida vivió más días de los últimos cinco años; una donación, con las de la comunidad donde está el inmueble o, si es dinero u otros bienes, donde vive quien la recibe. Calculadoras para estas cuatro comunidades, con los artículos de su ley:",
+      en: "Each region has its own reductions, scale and rebates. An inheritance pays under those of the region where the deceased lived the most days of the last five years; a gift, under those of the region where the property is or, for money and other assets, where the donee lives. Calculators for these four regions, with the articles of each law:",
     },
     cards: [
       {
@@ -530,6 +531,78 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "valencia",
         checked: REGIONAL_ISD_AS_OF,
+      },
+      {
+        key: "gift-tax-catalonia",
+        calculator: true,
+        href: calc("gift-tax-catalonia"),
+        title: { ca: "Impost de donacions a Catalunya", es: "Impuesto de donaciones en Cataluña", en: "Catalonia gift tax" },
+        answers: {
+          ca: "Quant pagaràs per una donació de pares a fills a Catalunya, amb la tarifa reduïda en escriptura pública i la reducció per al primer habitatge?",
+          es: "¿Cuánto pagarás por una donación de padres a hijos en Cataluña, con la tarifa reducida en escritura pública y la reducción por la primera vivienda?",
+          en: "How much tax you pay on a gift from parents to children in Catalonia, with the reduced scale in a public deed and the first-home reduction.",
+        },
+        basis: {
+          ca: "Codi tributari de Catalunya, llibre sisè (Decret legislatiu 1/2024), arts. 632-20, 632-21 i 633-1 a 633-3, i els exemples de l'Agència Tributària de Catalunya.",
+          es: "Código tributario de Cataluña, libro sexto (Decreto legislativo 1/2024), arts. 632-20, 632-21 y 633-1 a 633-3, y los ejemplos de la Agència Tributària de Catalunya.",
+          en: "Catalan Tax Code, book six (Legislative Decree 1/2024), arts. 632-20, 632-21 and 633-1 to 633-3, and the Catalan Tax Agency's worked examples.",
+        },
+        scope: "catalonia",
+        checked: GIFT_TAX_AS_OF,
+      },
+      {
+        key: "gift-tax-madrid",
+        calculator: true,
+        href: calc("gift-tax-madrid"),
+        title: { ca: "Impost de donacions a Madrid", es: "Impuesto de donaciones en Madrid", en: "Madrid gift tax" },
+        answers: {
+          ca: "Quant pagaràs per una donació a la Comunitat de Madrid, amb la bonificació del 99 % de pares a fills, la del 50 % de germans i nebots i la reducció per diners per a l'habitatge?",
+          es: "¿Cuánto pagarás por una donación en la Comunidad de Madrid, con la bonificación del 99 % de padres a hijos, la del 50 % de hermanos y sobrinos y la reducción por dinero para la vivienda?",
+          en: "How much tax you pay on a gift in the Madrid region, with the 99% rebate from parents to children, the 50% one for siblings and nephews and the cash-for-home reduction.",
+        },
+        basis: {
+          ca: "Decret legislatiu 1/2010 de la Comunitat de Madrid, arts. 22 bis a 26 (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions i donacions.",
+          es: "Decreto Legislativo 1/2010 de la Comunidad de Madrid, arts. 22 bis a 26 (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones y Donaciones.",
+          en: "Madrid Legislative Decree 1/2010, arts. 22 bis to 26 (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "madrid",
+        checked: GIFT_TAX_AS_OF,
+      },
+      {
+        key: "gift-tax-andalucia",
+        calculator: true,
+        href: calc("gift-tax-andalucia"),
+        title: { ca: "Impost de donacions a Andalusia", es: "Impuesto de donaciones en Andalucía", en: "Andalusia gift tax" },
+        answers: {
+          ca: "Quant pagaràs per una donació a Andalusia, amb la bonificació del 99 % de pares a fills i la reducció per a l'habitatge habitual dels menors de 35 anys?",
+          es: "¿Cuánto pagarás por una donación en Andalucía, con la bonificación del 99 % de padres a hijos y la reducción por la vivienda habitual de los menores de 35 años?",
+          en: "How much tax you pay on a gift in Andalusia, with the 99% rebate from parents to children and the habitual-home reduction for donees under 35.",
+        },
+        basis: {
+          ca: "Llei 5/2021 de tributs cedits d'Andalusia, arts. 32 a 40 i 68 (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions i donacions.",
+          es: "Ley 5/2021 de Tributos Cedidos de Andalucía, arts. 32 a 40 y 68 (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones y Donaciones.",
+          en: "Andalusian Ceded Taxes Act (Law 5/2021), arts. 32 to 40 and 68 (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "andalucia",
+        checked: GIFT_TAX_AS_OF,
+      },
+      {
+        key: "gift-tax-valencia",
+        calculator: true,
+        href: calc("gift-tax-valencia"),
+        title: { ca: "Impost de donacions a la Comunitat Valenciana", es: "Impuesto de donaciones en la Comunidad Valenciana", en: "Valencia region gift tax" },
+        answers: {
+          ca: "Quant pagaràs per una donació a la Comunitat Valenciana, amb la reducció de 100.000 € i la bonificació del 99 % de pares a fills, o la del 25 % de germans i nebots de sang?",
+          es: "¿Cuánto pagarás por una donación en la Comunidad Valenciana, con la reducción de 100.000 € y la bonificación del 99 % de padres a hijos, o la del 25 % de hermanos y sobrinos de sangre?",
+          en: "How much tax you pay on a gift in the Valencia region, with the €100,000 reduction and the 99% rebate from parents to children, or the 25% one for blood siblings and nephews.",
+        },
+        basis: {
+          ca: "Llei valenciana 13/1997, arts. 10 bis a 12 quàter (text consolidat del BOE), i Llei 29/1987 de l'impost sobre successions i donacions.",
+          es: "Ley valenciana 13/1997, arts. 10 bis a 12 quáter (texto consolidado del BOE), y Ley 29/1987 del Impuesto sobre Sucesiones y Donaciones.",
+          en: "Valencian Law 13/1997, arts. 10 bis to 12 quáter (BOE consolidated text), and the Inheritance and Gift Tax Act (Law 29/1987).",
+        },
+        scope: "valencia",
+        checked: GIFT_TAX_AS_OF,
       },
     ],
   },

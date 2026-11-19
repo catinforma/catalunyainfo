@@ -1,5 +1,5 @@
 import { MAX_AMOUNT, groupOf, type Disability, type Relation } from "./engine";
-import type { RegionRules, ScaleRow } from "./regions/types";
+import type { CoefficientRow, RegionRules, ScaleRow } from "./regions/types";
 import type { Group } from "./rules";
 
 /**
@@ -122,13 +122,18 @@ export function regionalQuota(scale: readonly ScaleRow[], base: number): { quota
   return { quota: cents(row.quota + onRest), row: { from: row.from, quota: row.quota, rest, rate: row.rate, onRest } };
 }
 
+/** The coefficient of the group and prior wealth from a coefficient table, and the bracket below for the excess rule (the gift engine reads it too). */
+export function coefficientFor(coefficients: readonly CoefficientRow[], group: Group, priorWealth: number): { coefficient: number; lower: { coefficient: number; upTo: number } | null } {
+  const pick = (row: CoefficientRow) => (group === "III" ? row.groupIII : group === "IV" ? row.groupIV : row.groupsIandII);
+  const index = coefficients.findIndex((row) => row.upTo === null || priorWealth <= row.upTo);
+  const row = coefficients[index]!;
+  const below = index > 0 ? coefficients[index - 1]! : null;
+  return { coefficient: pick(row), lower: below ? { coefficient: pick(below), upTo: below.upTo! } : null };
+}
+
 /** The coefficient of the group and prior wealth, and the bracket below for the excess rule. */
 export function regionalCoefficient(rules: RegionRules, group: Group, priorWealth: number): { coefficient: number; lower: { coefficient: number; upTo: number } | null } {
-  const pick = (row: RegionRules["coefficients"][number]) => (group === "III" ? row.groupIII : group === "IV" ? row.groupIV : row.groupsIandII);
-  const index = rules.coefficients.findIndex((row) => row.upTo === null || priorWealth <= row.upTo);
-  const row = rules.coefficients[index]!;
-  const below = index > 0 ? rules.coefficients[index - 1]! : null;
-  return { coefficient: pick(row), lower: below ? { coefficient: pick(below), upTo: below.upTo! } : null };
+  return coefficientFor(rules.coefficients, group, priorWealth);
 }
 
 /** Which rebate the heir gets, and its percentage. */

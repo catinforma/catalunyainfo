@@ -47,6 +47,11 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "inheritance-tax-madrid": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-andalucia": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-valencia": ["widow-pension", "home-purchase-tax"],
+  // A gift of money for a home: the purchase taxes, then the mortgage for the rest of the price.
+  "gift-tax-catalonia": ["home-purchase-tax", "mortgage"],
+  "gift-tax-madrid": ["home-purchase-tax", "mortgage"],
+  "gift-tax-andalucia": ["home-purchase-tax", "mortgage"],
+  "gift-tax-valencia": ["home-purchase-tax", "mortgage"],
   "pensions-2027": ["ipc", "pay-dates"],
   // The retirement date: how much the pension rises next January, then the day each payment arrives.
   "retirement-age": ["pensions-2027", "pay-dates"],

@@ -43,6 +43,7 @@ import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
 import { regionEditions as isdRegionEditions } from "@/lib/programmatic/inheritance-tax/regional-copy";
+import { giftEditions } from "@/lib/programmatic/gift-tax/copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
@@ -392,6 +393,26 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Valencia region inheritance tax calculator (impuesto sobre sucesiones, one heir)",
       hubs: isdRegionEditions("valencia"),
       description: "one heir's inheritance tax in the Comunitat Valenciana under Valencian Law 13/1997 (BOE consolidated text, arts. 10 and 12 bis as worded from 11 August 2026), step by step with each article quoted: kinship reductions for groups I and II (art. 10.1.a: 100,000 euros plus 8,000 per year under 21, up to 156,000; 100,000), the state's 7,993.46 for group III and none for group IV (Law 29/1987 art. 20.2.a, as the ATV's form 650 instructions apply it), disability 120,000 / 240,000 (65%, or intellectual or mental 33%), the state life-insurance reduction up to 9,195.49, 95% of the deceased's habitual home up to 150,000 per heir; the Valencian scale 7.65% to 34% (art. 11) and coefficients with the excess rule (art. 12), and the rebates (art. 12 bis: 99% for groups I and II and for heirs with a 65% or intellectual/mental 33% disability; 25% for blood siblings, nephews, nieces, uncles and aunts for deaths since 1 June 2026, 50% from 1 June 2027). Deadline six months plus a six-month extension (art. 12 ter, RD 1629/1991), form 650 with the Agència Tributària Valenciana's online help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Catalonia gift tax calculator (impost sobre donacions, one gift)",
+      hubs: giftEditions("catalonia"),
+      description: "one gift's tax in Catalonia under book six of the Catalan Tax Code (Legislative Decree 1/2024; consolidated text in force since 14 July 2026), step by step with each article quoted: no kinship reduction and no rebate on gifts; groups I and II (children, grandchildren, spouse or stable partner, parents) pay the reduced scale (art. 633-2: 5% up to 200,000 euros, 7% up to 600,000, 9% above) when the gift is in a public deed, signed within a month of handing over cash, otherwise the general 7% to 32% scale (art. 633-1); coefficients by group and prior wealth (art. 633-3) with the excess rule; the first-habitual-home reduction for descendants aged 36 or under (arts. 632-20 and 632-21: 95%, at most 60,000 euros, 120,000 with a 65% disability; income up to 36,000; buy within six months); earlier gifts from the same donor in three years accumulated at the average rate (Law 29/1987 art. 30). Reproduces nine of the Catalan Tax Agency's eleven worked gift examples to the cent; deadline one month (Decree 414/2011 art. 10.b), form 651 online. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Madrid gift tax calculator (impuesto sobre donaciones, one gift)",
+      hubs: giftEditions("madrid"),
+      description: "one gift's tax in the Comunidad de Madrid under Legislative Decree 1/2010 (BOE consolidated text, last updated 10 July 2026), step by step with each article quoted: no kinship reduction on gifts (Law 29/1987 art. 20.5); 100% reduction of cash that groups I and II or a sibling spend on the habitual home within a year, up to 250,000 euros over three years (art. 22 bis); Madrid's scale 7.65% to 34% and coefficients (arts. 23 and 24); rebates (art. 25.2, from 1 July 2025): 100% when gifts from one donor add up to 1,000 euros or less in three years, 99% for groups I and II, 50% for group III, with a public document above 10,000 euros and, for cash, the origin of the funds justified and stated; earlier gifts accumulated (Law 29/1987 art. 30). Reproduces the Comunidad de Madrid's two worked figures (316.21 and 16.90 euros); deadline 30 working days (RD 1629/1991 art. 67.1.b), form 651. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Andalusia gift tax calculator (impuesto sobre donaciones, one gift)",
+      hubs: giftEditions("andalucia"),
+      description: "one gift's tax in Andalusia under Law 5/2021 on ceded taxes (BOE consolidated text, art. 40 as worded from 1 January 2026), step by step with each article quoted: no kinship reduction on gifts; 99% of cash from parents or grandparents to buy the habitual home in Andalusia, or of the home given, on a base of up to 150,000 euros (250,000 with a disability) for donees under 35 or disabled with prior wealth up to 402,678.11 (arts. 32 and 33); the scale 7% to 26% and coefficients by group only (arts. 37 and 38); the 99% rebate for groups I and II (art. 40), with a public document when gifts from one donor exceed 5,000 euros in three years and, for cash above 5,000, the deed within a month and the origin of the funds stated. Reproduces the Andalusian Tax Agency's guide figures (126.20 and 14.73 euros); deadline two months (art. 68.1), form 651. Re-checked from 1 January 2027. An estimate, not tax advice.",
+    },
+    {
+      name: "Valencia region gift tax calculator (impuesto sobre donaciones, one gift)",
+      hubs: giftEditions("valencia"),
+      description: "one gift's tax in the Comunitat Valenciana under Valencian Law 13/1997 (BOE consolidated text, arts. 10 bis and 12 bis as worded from 11 August 2026), step by step with each article quoted: kinship reductions on gifts (art. 10 bis.2.a: 100,000 euros for children and grandchildren aged 21 or over, the spouse, parents and grandparents; up to 156,000 under 21) and disability ones (240,000 / 120,000), with a public document (or digitally signed documents up to 4,000 euros in cash or a vehicle) and, for cash, the origin of the funds; the Valencian scale 7.65% to 34% and coefficients (arts. 11 and 12) with the excess rule; rebates (art. 12 bis: 99% for those relatives and for donees with a 65% or intellectual/mental 33% disability; 25% for blood siblings, nephews, nieces, uncles and aunts since 1 June 2026, 50% from 1 June 2027); earlier gifts accumulated (Law 29/1987 art. 30). Deadline one month (art. 12 ter), no extension, form 651 with the ATV's help program. Re-checked from 1 January 2027. An estimate, not tax advice.",
     },
     {
       name: "Strikes in Catalonia today",

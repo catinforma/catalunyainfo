@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { calcPath, type CalculatorId } from "@/lib/programmatic/calculators/paths";
+import { GIFT_FAMILY, GIFT_OF_INHERITANCE, GIFT_REGION_IN } from "@/lib/programmatic/gift-tax/copy";
 import type { IsdLocale } from "@/lib/programmatic/inheritance-tax/copy";
 import { INHERITANCE_FAMILY } from "@/lib/programmatic/inheritance-tax/regional-copy";
 
@@ -8,7 +9,9 @@ import { INHERITANCE_FAMILY } from "@/lib/programmatic/inheritance-tax/regional-
  * "Impuesto de sucesiones en otras comunidades": the other inheritance tax
  * calculators (Catalonia, Madrid, Andalucía, Comunitat Valenciana), on each
  * of the four pages. Which community's rules apply depends on where the
- * deceased lived, so a reader on the wrong page finds the right one.
+ * deceased lived, so a reader on the wrong page finds the right one. Then the
+ * same community's gift tax calculator (lib/programmatic/gift-tax), for a
+ * reader weighing a gift in life against an inheritance.
  */
 export function InheritanceByRegion({ current, locale }: { current: CalculatorId; locale: IsdLocale }) {
   const heading = { ca: "L'impost de successions en altres comunitats", es: "El impuesto de sucesiones en otras comunidades", en: "Inheritance tax in other regions" }[locale];
@@ -18,6 +21,8 @@ export function InheritanceByRegion({ current, locale }: { current: CalculatorId
     en: "The rules of the region where the deceased lived the most days of the last five years apply:",
   }[locale];
   const label = { ca: "Calculadora per a", es: "Calculadora para", en: "Calculator for" }[locale];
+  const giftId = GIFT_OF_INHERITANCE[current];
+  const gift = giftId ? GIFT_FAMILY.find((f) => f.id === giftId) : undefined;
   return (
     <section aria-labelledby="successions-comunitats">
       <h2 id="successions-comunitats">{heading}</h2>
@@ -31,6 +36,19 @@ export function InheritanceByRegion({ current, locale }: { current: CalculatorId
           </li>
         ))}
       </ul>
+      {gift ? (
+        <p>
+          <Link href={calcPath(gift.id, locale)}>
+            {
+              {
+                ca: `Si és una donació en vida: calculadora de l'impost de donacions ${GIFT_REGION_IN[gift.region].ca}`,
+                es: `Si es una donación en vida: calculadora del impuesto de donaciones ${GIFT_REGION_IN[gift.region].es}`,
+                en: `If it is a gift during the donor's lifetime: the gift tax calculator ${GIFT_REGION_IN[gift.region].en}`,
+              }[locale]
+            }
+          </Link>
+        </p>
+      ) : null}
     </section>
   );
 }
