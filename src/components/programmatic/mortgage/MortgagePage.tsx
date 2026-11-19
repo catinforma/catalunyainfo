@@ -10,6 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { bareDay, euriborPath } from "@/lib/programmatic/euribor/copy";
 import { boeLink, latestPoint } from "@/lib/programmatic/euribor/series";
 import type { EuriborData } from "@/lib/programmatic/euribor/server";
@@ -173,6 +174,15 @@ export function MortgageRoute({ locale, data }: { locale: MortgageLocale; data: 
                   <p>{item.body}</p>
                 </section>
               ))}
+
+              <p>
+                {L(locale, {
+                  es: "Quién paga la notaría, el Registro y la gestoría de la hipoteca (art. 14.1.e) y cuánto cuestan los de la compraventa:",
+                  ca: "Qui paga la notaria, el Registre i la gestoria de la hipoteca (art. 14.1.e) i quant costen els de la compravenda:",
+                  en: "Who pays the mortgage's notary, registration and gestoría (art. 14.1.e), and what the purchase's cost:",
+                })}{" "}
+                <Link href={calcPath("home-purchase-costs", locale)}>{L(locale, { es: "gastos de compraventa de vivienda", ca: "despeses de compravenda d'habitatge", en: "home buying costs in Spain" })}</Link>.
+              </p>
 
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">

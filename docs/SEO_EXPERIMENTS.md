@@ -9111,3 +9111,77 @@ plus the hub and the inheritance pages that gained the link: `/ca/calculadores/ 
 /en/calculators/madrid-inheritance-tax/ /en/calculators/andalusia-inheritance-tax/ /en/calculators/valencia-inheritance-tax/`.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-19 — "Gastos de compraventa de vivienda: notaría y Registro", calculator es + ca + en (new page; deploy only, no publish group) (review 2026-12-17)
+
+**Why.** Owner brief (19 Nov 2026): "gastos de compraventa de vivienda / gastos de notaría / gastos de registro". The
+home-purchase tax page printed the two aranceles but said "no lo calculamos". Fact pack:
+research_notes/gastos-compraventa-factpack.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/gastos-compraventa-vivienda/` (primary), `/ca/calculadores/despeses-compravenda-habitatge/`,
+  `/en/calculators/spain-home-buying-costs/` (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut
+  "gastos compraventa", "gastos notaria", "notaria", "notario", "registro de la propiedad", "despeses compravenda",
+  "notary fees", "land registry", placed before "itp"; `calculator_use` id `home-purchase-costs`). Registry `CALCULATORS`
+  id `home-purchase-costs`; hub card in `housing` right after the purchase taxes. Next step: purchase taxes, mortgage.
+  The purchase-tax and mortgage next-step boxes now include it (tax: costs + mortgage, was mortgage + Euribor; mortgage:
+  taxes + costs), and both pages gain one body link (no title or description touched).
+- Inputs: region, price (≤ 6.010.121,04 €, the notary's free limit), new/second-hand, folios of the deed (default 20,
+  printed as an example, not an average), simple copies, buyers in pro indiviso (1–4), who pays the deed (legal split /
+  agreed), mortgage yes/no, VPO (+ ≤ 90 m² and only home for a developer's sale), the tax profile (age, habitual, first
+  home, large family, disability). Outputs: notary deed (scale, 50 % VPO, 5 % rebaja, matrix folios), authorised copy,
+  simple copies, registry presentation + registration (shares, 1 % cap, 50 % VPO, two 5 % rebajas), IVA 21 % by payer,
+  the purchase taxes from the home-purchase tax engine (same JSON fetch, no duplication), buyer total, seller share.
+- Rules (read 19 Nov 2026 in the BOE, curl + grep; 65 quotes verbatim, checked by a scratchpad script against the
+  downloaded texts, and the 29 rendered blockquotes of each edition checked again): RD 1426/1989 (BOE-A-1989-28111,
+  consolidated 17/11/2011) números 1.1.f, 2.1 (90,151816 € to 6.010,12; 4,5 / 1,50 / 1 / 0,5 / 0,3 ‰; free above
+  6.010.121,04; 5 % rebaja), 2.2 (25 % loans; 50 % VPO resales, letra e), 2.3, 4 (3,005061 €/folio, half from the 12th;
+  copia simple 0,601012), 7 (3,005061 € per written side from the 5th folio), normas 1ª, 2ª, 6ª, 9ª, 10ª; RD 1427/1989
+  (BOE-A-1989-28112, consolidated 17/11/2011) números 1 (6,010121 €), 2.1 (24,040484 €; 1,75 / 1,25 / 0,75 / 0,30 /
+  0,20 ‰; min 24,040484, max 2.181,673939; 5 % rebaja; 2.1.g cancellations), 2.4.b (50 % VPO resales), 2.5, 3.3, 4.1.f,
+  normas 1ª, 2ª (pro indiviso, 1 % cap; spouses in community one base), 6ª, 8ª; RD 1612/2011 (BOE-A-2011-17962);
+  RDL 8/2010 DA 8ª (BOE-A-2010-8228); RDL 6/2000 (BOE-A-2000-11836) art. 35.1 (optional notary discount up to 10 %, not
+  applied) and art. 36.1 (registry −5 % on "la compraventa de viviendas", after the rebaja); Ley 41/1980 art. 8
+  (BOE-A-1980-15958, wording of RDL 6/2000 art. 37) + DGRN Instruction 22 May 2002 (BOE-A-2002-12290) arts. 5 and 11
+  (60,047119 € / 24,016444 € up to 90 m², only home); Código Civil art. 1455; TRLITP arts. 8 and 29; Ley 5/2019 art.
+  14.1.e (BOE-A-2019-3814, consolidated 07/10/2026); LIVA art. 90 (21 %) and art. 3 (no IVA in Canarias, Ceuta,
+  Melilla: IGIC/IPSI not computed); Reglamento Notarial art. 155 (four planas per pliego: two sides per folio); Código
+  civil de Cataluña art. 231-10.2 (separación de bienes by default → couples buying half each are a pro indiviso).
+  BOE API: none of these norms is repealed (vigencia_agotada N).
+- Readings flagged on the page: folios counted on both sides and copies as long as the matrix (reader's estimate);
+  Ley 41/1980's "derechos de matriz" applied to the scale and first copy, not to matrix folios (estimate on the high
+  side); the VPO fixed amount counted wholly in the buyer's total; presentation entry not reduced. Gestoría and tasación
+  have no official price and are never estimated; the mortgage deed's notary, registration, gestoría and AJD are the
+  bank's (no amount computed: the buyer does not pay them).
+- Worked examples (tests/purchase-costs.test.ts): 250.000 € second-hand Catalonia, 20 folios, 1 simple copy → notary
+  scale 383,44 (364,26 after 5 %), matrix folios 96,16, deed 460,42 (seller), copy 46,58, simple 12,02; registry scale
+  201,21 → 181,59 + 6,01; IVA 51,70 buyer / 96,69 seller; ITP 25.000 (tax engine) → buyer 25.297,90, seller 557,11.
+  Also 200.000 € new Madrid → 21.631,53; 300.000 € two buyers → registration 308,83 vs 195,13; 150.000 € VPO resale →
+  10.671,60; 120.000 € new VPO ≤ 90 m² → 60,05 + 24,02 → 4.901,72.
+
+**Date guard (tests/purchase-costs.test.ts).** From **1 Jan 2027** (re-read the aranceles and the norms above).
+
+**Baseline (GSC, 28 days to 19 Nov).** No page targets the topic: 0 impressions for any "notar", "registr", "gastos
+compraventa" query in `/calculadoras/` (`snapshot.py page /calculadoras/ 28`); the purchase-tax page itself has 0.
+
+**Prediction.** Indexed within 7 days (IndexNow). Heads ("gastos de notaría", "gastos compraventa vivienda") are held by
+notariado.org, registradores.org, banks and portals: no top-3 target. Long tail on page 1–2 by mid-December: "gastos
+notaría compraventa 200.000 euros", "quién paga la notaría comprador o vendedor", "gastos registro propiedad
+compraventa", "arancel notarial compraventa", "despeses notaria compravenda". By 17 Dec: ≥ 1,000 impressions/28 days for
+the three URLs, ≥ 20 % of sessions with `calculator_use`. Wrong if under 300 impressions/28 days by 17 Dec.
+
+**Measure:** 26 Nov URL inspection (the es URL, rendered tables); 17 Dec and 14 Jan 2027 `snapshot.py page
+gastos-compraventa 28` (+ despeses-compravenda, spain-home-buying-costs); `calculator_use` `home-purchase-costs`;
+next-step clicks from and to the purchase-tax and mortgage pages. **Review: 2026-12-17.**
+
+**Confounders.** The purchase-tax and mortgage pages gain a body link and a next-step change the same day; any January
+2027 decree on aranceles moves the figures (the date guard fails on 1 Jan 2027).
+
+**Deploy.** Deploy only (code routes, nothing in the database: no publish group). IndexNow prefixes:
+`/es/calculadoras/gastos-compraventa-vivienda/`, `/ca/calculadores/despeses-compravenda-habitatge/`,
+`/en/calculators/spain-home-buying-costs/`, plus the re-crawl of `/es/calculadoras/impuestos-compra-vivienda/`,
+`/ca/calculadores/impostos-compra-habitatge/`, `/en/calculators/spain-home-purchase-taxes/`, `/es/calculadoras/hipoteca/`,
+`/ca/calculadores/hipoteca/`, `/en/calculators/mortgage-calculator-spain/` and the three calculators hubs.
+
+**Outcome:** _pending_

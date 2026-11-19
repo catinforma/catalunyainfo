@@ -40,8 +40,11 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "zona-tensionada": ["rent-update", "ipc"],
   // Not each other: the Euribor and mortgage pages link each other in the line just above the box.
   euribor: ["home-purchase-tax", "treasury-bills"],
-  mortgage: ["home-purchase-tax"],
-  "home-purchase-tax": ["mortgage", "euribor"],
+  mortgage: ["home-purchase-tax", "home-purchase-costs"],
+  // The taxes, then the notary and Registry on the same purchase (and its split with the seller).
+  "home-purchase-tax": ["home-purchase-costs", "mortgage"],
+  // The fees: the tax in detail (articles, reduced rates), then the mortgage.
+  "home-purchase-costs": ["home-purchase-tax", "mortgage"],
   // An heir: the widow's pension when the spouse died, then the taxes if the inherited home is sold and another bought.
   "inheritance-tax": ["widow-pension", "home-purchase-tax"],
   "inheritance-tax-madrid": ["widow-pension", "home-purchase-tax"],

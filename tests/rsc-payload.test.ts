@@ -44,6 +44,7 @@ const KB = 1024;
 
 const JOBS: Job[] = [
   { name: "home-tax", module: "@/components/programmatic/home-purchase-tax/HomeTaxPage", export: "HomeTaxRoute", props: { locale: "es" } },
+  { name: "purchase-costs", module: "@/components/programmatic/purchase-costs/PurchaseCostsPage", export: "PurchaseCostsRoute", props: { locale: "es" } },
   { name: "salary", module: "@/components/programmatic/average-salary/AverageSalaryPage", export: "AverageSalaryRoute", props: { locale: "es" } },
   { name: "zona", module: "@/components/programmatic/zona-tensionada/ZonaTensionadaPage", export: "ZonaTensionadaRoute", props: { locale: "es" } },
   { name: "local-holidays", module: "@/components/blocks/LocalHolidays", export: "LocalHolidays", props: { locale: "es" }, setup: "tests/rsc/fixtures/local-holidays-fetch.ts" },
@@ -56,6 +57,8 @@ const JOBS: Job[] = [
 const BUDGET: Record<string, { rsc: number; html: number; props: number }> = {
   // 503 → 335 KB: the law's quotes (~145 KB, in <details>) stay server-rendered.
   "home-tax": { rsc: 370 * KB, html: 270 * KB, props: 10 * KB },
+  // New 19 Nov 2026 at 95 KB: the regions' tax data is the tax calculator's fetch, never props.
+  "purchase-costs": { rsc: 115 * KB, html: 90 * KB, props: 10 * KB },
   // 365 → 150 KB.
   salary: { rsc: 175 * KB, html: 230 * KB, props: 32 * KB },
   // 288 → 176 KB.

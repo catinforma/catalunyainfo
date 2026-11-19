@@ -75,10 +75,11 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("gift-tax-madrid"), { ca: "/ca/calculadores/impost-donacions-madrid/", es: "/es/calculadoras/impuesto-donaciones-madrid/", en: "/en/calculators/madrid-gift-tax/" });
   assert.deepEqual(calcEditions("gift-tax-andalucia"), { ca: "/ca/calculadores/impost-donacions-andalusia/", es: "/es/calculadoras/impuesto-donaciones-andalucia/", en: "/en/calculators/andalusia-gift-tax/" });
   assert.deepEqual(calcEditions("gift-tax-valencia"), { ca: "/ca/calculadores/impost-donacions-comunitat-valenciana/", es: "/es/calculadoras/impuesto-donaciones-comunidad-valenciana/", en: "/en/calculators/valencia-gift-tax/" });
+  assert.deepEqual(calcEditions("home-purchase-costs"), { ca: "/ca/calculadores/despeses-compravenda-habitatge/", es: "/es/calculadoras/gastos-compraventa-vivienda/", en: "/en/calculators/spain-home-buying-costs/" });
 });
 
-test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor, home-purchase tax and home-buying costs tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax", "home-purchase-costs"]);
 });
 
 test("hub: the taxes group is 'inheritance and gift tax by community', Catalonia first, with a one-line intro in every language", () => {

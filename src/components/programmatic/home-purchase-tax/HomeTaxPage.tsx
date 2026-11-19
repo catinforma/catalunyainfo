@@ -375,10 +375,12 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
               <h2 id="notaria-registro">{h.fees}</h2>
               <p>
                 {L(locale, {
-                  es: `Los honorarios del notario y del registrador no son libres: los fijan sus aranceles oficiales (Real Decreto 1426/1989 y Real Decreto 1427/1989), con una escala por tramos del valor y una rebaja del ${pct(ARANCEL_REBATE, "es")}. Además se cobran las copias por folio y otros conceptos, y el IVA del 21 % (art. 90 de la Ley del IVA), así que el total depende de cada escritura: no lo calculamos. Pide presupuesto a la notaría.`,
-                  ca: `Els honoraris del notari i del registrador no són lliures: els fixen els aranzels oficials (Reial decret 1426/1989 i Reial decret 1427/1989), amb una escala per trams del valor i una rebaixa del ${pct(ARANCEL_REBATE, "ca")}. A més es cobren les còpies per foli i altres conceptes, i l'IVA del 21 % (art. 90 de la Llei de l'IVA), de manera que el total depèn de cada escriptura: no el calculem. Demana pressupost a la notaria.`,
-                  en: `Notary and registrar fees are not free: their official scales set them (Royal Decrees 1426/1989 and 1427/1989), by slices of the value with a ${pct(ARANCEL_REBATE, "en")} rebate. Copies are charged per page plus other items, and 21% IVA (VAT Act art. 90), so the total depends on each deed: we do not compute it. Ask the notary for a quote.`,
-                })}
+                  es: `Los honorarios del notario y del registrador no son libres: los fijan sus aranceles oficiales (Real Decreto 1426/1989 y Real Decreto 1427/1989), con una escala por tramos del valor y una rebaja del ${pct(ARANCEL_REBATE, "es")}. Además se cobran las copias por folio y otros conceptos, y el IVA del 21 % (art. 90 de la Ley del IVA), así que el total depende de cada escritura.`,
+                  ca: `Els honoraris del notari i del registrador no són lliures: els fixen els aranzels oficials (Reial decret 1426/1989 i Reial decret 1427/1989), amb una escala per trams del valor i una rebaixa del ${pct(ARANCEL_REBATE, "ca")}. A més es cobren les còpies per foli i altres conceptes, i l'IVA del 21 % (art. 90 de la Llei de l'IVA), de manera que el total depèn de cada escriptura.`,
+                  en: `Notary and registrar fees are not free: their official scales set them (Royal Decrees 1426/1989 and 1427/1989), by slices of the value with a ${pct(ARANCEL_REBATE, "en")} rebate. Copies are charged per page plus other items, and 21% IVA (VAT Act art. 90), so the total depends on each deed.`,
+                })}{" "}
+                {L(locale, { es: "Los estimamos con sus escalas, el IVA y quién paga cada parte en la", ca: "Els estimem amb les seves escales, l'IVA i qui paga cada part a la", en: "We estimate them from their scales, with VAT and who pays each part, in the" })}{" "}
+                <Link href={calcPath("home-purchase-costs", locale)}>{L(locale, { es: "calculadora de gastos de compraventa (notaría y Registro)", ca: "calculadora de despeses de compravenda (notaria i Registre)", en: "home buying costs calculator (notary and Land Registry)" })}</Link>.
               </p>
               <Quote>{QUOTE.notaryScale}</Quote>
               <div className="ci-table-scroll mt-4">

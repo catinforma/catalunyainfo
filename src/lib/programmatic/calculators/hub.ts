@@ -33,6 +33,7 @@ import { RULES_AS_OF as TRAFFIC_FINES_AS_OF } from "@/lib/programmatic/traffic-f
 import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
+import { RULES_AS_OF as PURCHASE_COSTS_AS_OF } from "@/lib/programmatic/purchase-costs/rules";
 import { RULES_AS_OF as INHERITANCE_TAX_AS_OF } from "@/lib/programmatic/inheritance-tax/rules";
 import { RULES_AS_OF as REGIONAL_ISD_AS_OF } from "@/lib/programmatic/inheritance-tax/regions/state";
 import { RULES_AS_OF as GIFT_TAX_AS_OF } from "@/lib/programmatic/gift-tax/regions/state";
@@ -447,6 +448,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: HOME_TAX_AS_OF,
+      },
+      {
+        key: "home-purchase-costs",
+        calculator: true,
+        href: calc("home-purchase-costs"),
+        title: { ca: "Despeses de compravenda: notaria i Registre", es: "Gastos de compraventa: notaría y Registro", en: "Home buying costs: notary and Land Registry" },
+        answers: {
+          ca: "Quant costen la notaria i el Registre en comprar un habitatge, amb l'IVA i els impostos, i qui paga cada despesa?",
+          es: "¿Cuánto cuestan la notaría y el Registro al comprar una vivienda, con el IVA y los impuestos, y quién paga cada gasto?",
+          en: "What the notary and the Land Registry cost when you buy a home, with VAT and taxes, and who pays each cost.",
+        },
+        basis: {
+          ca: "Aranzels dels notaris i registradors (Reials decrets 1426/1989 i 1427/1989, BOE), Reial decret llei 6/2000, Llei 41/1980 art. 8, Codi civil espanyol art. 1455 i Llei 5/2019 art. 14.",
+          es: "Aranceles de notarios y registradores (Reales Decretos 1426/1989 y 1427/1989, BOE), Real Decreto-ley 6/2000, Ley 41/1980 art. 8, Código Civil art. 1455 y Ley 5/2019 art. 14.",
+          en: "The notaries' and registrars' scales (Royal Decrees 1426/1989 and 1427/1989, BOE), Royal Decree-law 6/2000, Ley 41/1980 art. 8, Civil Code art. 1455 and Ley 5/2019 art. 14.",
+        },
+        scope: "spain",
+        checked: PURCHASE_COSTS_AS_OF,
       },
     ],
   },

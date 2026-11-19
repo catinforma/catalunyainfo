@@ -41,6 +41,7 @@ import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
+import { pcEditions } from "@/lib/programmatic/purchase-costs/copy";
 import { isdEditions } from "@/lib/programmatic/inheritance-tax/copy";
 import { regionEditions as isdRegionEditions } from "@/lib/programmatic/inheritance-tax/regional-copy";
 import { giftEditions } from "@/lib/programmatic/gift-tax/copy";
@@ -373,6 +374,11 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Spain home purchase taxes calculator (ITP, IVA and AJD by region)",
       hubs: htEditions(),
       description: "the taxes on buying a home in each Spanish region: ITP (transfer tax) on a resale home at the region's general rate or scale, or the reduced rate a buyer qualifies for (young buyers, large families, disability, main or first home, protected housing, price caps, with the income limits and other conditions the law sets), and on a new home IVA 10% (4% for special-regime VPO, VAT Act art. 91; IGIC in the Canary Islands, IPSI in Ceuta and Melilla) plus the AJD on the deed; each rate with the article of the region's consolidated tax law (BOE, regional bulletins, the Basque and Navarre foral norms) and the reading date, the mortgage AJD paid by the lender (TRLITP art. 29, Royal Decree-law 17/2018), and the notary and registry fee scales (RD 1426/1989, RD 1427/1989) without invented totals. Not tax advice.",
+    },
+    {
+      name: "Spain home buying costs calculator (notary and Land Registry fees, gastos de compraventa)",
+      hubs: pcEditions(),
+      description: "the regulated fees of buying a home in Spain, computed from the official scales quoted from the BOE: the notary (Royal Decree 1426/1989, item 2.1: 90.15 euros up to 6,010.12 then 4.5, 1.5, 1, 0.5 and 0.3 per thousand by slices up to 6,010,121.04, free above, less a compulsory 5% rebate; matrix folios from the fifth at 3.005061 euros per written side, item 7; the authorised copy at 3.005061 euros a folio and half from the twelfth, simple copies 0.601012, item 4; an optional discount of up to 10%, Royal Decree-law 6/2000 art. 35) and the Land Registry (Royal Decree 1427/1989, item 2.1: 24.04 euros then 1.75, 1.25, 0.75, 0.30 and 0.20 per thousand, never below 24.04 or above 2,181.67, less the 5% rebate and another 5% on a home sale, Royal Decree-law 6/2000 art. 36; presentation entry 6.01; buyers in pro indiviso pay the scale on each share up to 1% of the value, spouses under community property one base); protected housing (VPO): 50% off on later sales (items 2.2.e and 2.4.b), 50% off the first sale and fixed 60.05 / 24.02 euros up to 90 m2 when it is the buyer's only home (Ley 41/1980 art. 8, DGRN Instruction of 22 May 2002); 21% VAT on the fees (IGIC or IPSI in the Canaries, Ceuta and Melilla, not computed); who pays (Civil Code art. 1455: the deed the seller, the first copy and registration the buyer unless agreed; the taxes always the buyer, ITPAJD act arts. 8 and 29; with a mortgage the bank pays its notary, registration, gestoria and AJD, the borrower the valuation, Ley 5/2019 art. 14.1.e); the purchase taxes for the chosen region from the home purchase tax calculator's engine; a fee table by price and worked examples. Gestoria and valuation have no official price and are never estimated; folios and copies are the reader's estimate and the final invoice may differ. Not legal or tax advice.",
     },
     {
       name: "Catalonia inheritance tax calculator (impost sobre successions, one heir)",

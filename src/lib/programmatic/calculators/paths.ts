@@ -44,6 +44,8 @@ export const CALCULATORS = [
   { id: "mortgage", slugs: { es: "hipoteca", ca: "hipoteca", en: "mortgage-calculator-spain" } },
   // Housing (hub group "housing"): ITP or IVA + AJD on buying a home, by community (lib/programmatic/home-purchase-tax).
   { id: "home-purchase-tax", slugs: { es: "impuestos-compra-vivienda", ca: "impostos-compra-habitatge", en: "spain-home-purchase-taxes" } },
+  // Housing: the notary's and the Land Registry's fees on buying a home (RD 1426/1989, RD 1427/1989), who pays each, plus the taxes above (lib/programmatic/purchase-costs).
+  { id: "home-purchase-costs", slugs: { es: "gastos-compraventa-vivienda", ca: "despeses-compravenda-habitatge", en: "spain-home-buying-costs" } },
   // Housing and taxes: one heir's Catalan inheritance tax (Codi tributari de Catalunya, llibre sisè, arts. 631-2 to 633-4; lib/programmatic/inheritance-tax).
   { id: "inheritance-tax", slugs: { es: "impuesto-sucesiones-cataluna", ca: "impost-successions-catalunya", en: "catalonia-inheritance-tax" } },
   // The same tax in three more communities (lib/programmatic/inheritance-tax/regions/): Madrid (DL 1/2010 arts. 21-26), Andalucía (Ley 5/2021 arts. 26-39), Comunitat Valenciana (Ley 13/1997 arts. 10-12 quáter).
