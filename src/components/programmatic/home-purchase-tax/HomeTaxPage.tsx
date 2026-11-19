@@ -11,7 +11,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
-import { COMMUNITIES, COMMUNITIES_AS_OF, clientCommunities } from "@/lib/programmatic/home-purchase-tax/communities";
+import { COMMUNITIES, COMMUNITIES_AS_OF, HT_DATA_PATH, clientCommunity, communityOptions } from "@/lib/programmatic/home-purchase-tax/communities";
 import { EXAMPLE, bareDay, benefitRate, euros, htEditions, htPath, pct, rateText, wholeEuros, type HtLocale } from "@/lib/programmatic/home-purchase-tax/copy";
 import { calculate } from "@/lib/programmatic/home-purchase-tax/engine";
 import { htMeta } from "@/lib/programmatic/home-purchase-tax/page";
@@ -181,7 +181,7 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              <HomeTaxCalculator locale={locale} communities={clientCommunities()} />
+              <HomeTaxCalculator locale={locale} options={communityOptions(locale)} initial={clientCommunity(EXAMPLE.community)} dataUrl={HT_DATA_PATH} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="home-purchase-tax" locale={locale} />
 

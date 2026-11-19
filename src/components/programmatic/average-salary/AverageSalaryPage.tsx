@@ -59,6 +59,7 @@ import { absoluteUrl } from "@/lib/site";
 import { breadcrumbSchema, datasetSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+import { GridRows, type GridRow } from "./GridRows";
 import { RegionChart } from "./RegionChart";
 import { WageFinder } from "./WageFinder";
 
@@ -144,20 +145,8 @@ function Grid({ caption, first, cols, rows, locale, decimals = 2, flags = true }
               ))}
             </tr>
           </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.key}>
-                <th scope="row" className={r.strong ? "font-semibold" : "font-normal"}>
-                  {r.label}
-                </th>
-                {r.cells.map((c, i) => (
-                  <td key={cols[i]} data-label={cols[i]} className="whitespace-nowrap text-right tabular-nums">
-                    {cellText(c, locale, decimals)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          {/* The rows come as text from compact props (GridRows.tsx): ~1,300 cells on this page. */}
+          <GridRows cols={cols} rows={rows.map((r): GridRow => [r.label, r.strong ? 1 : 0, ...r.cells.map((c) => cellText(c, locale, decimals))])} />
         </table>
       </div>
       {flags ? <Flags cells={rows.flatMap((r) => r.cells)} locale={locale} /> : null}

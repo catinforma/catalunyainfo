@@ -163,6 +163,9 @@ export interface HtCalcCopy {
   invalid: Record<"price" | "age" | "community", string>;
   example: string;
   share: string;
+  /** While the rates of every community load (the first interaction fetches them). */
+  loading: string;
+  loadError: string;
 }
 
 export const CALC_COPY: Record<HtLocale, HtCalcCopy> = {
@@ -200,6 +203,8 @@ export const CALC_COPY: Record<HtLocale, HtCalcCopy> = {
     invalid: { price: "Escribe un precio mayor que 0.", age: "Escribe una edad entre 18 y 120 años.", community: "Elige una comunidad." },
     example: "Ejemplo: vivienda de segunda mano de 250.000 € en Cataluña. Cambia los datos para tu caso.",
     share: "Enlace a este cálculo",
+    loading: "Cargando los tipos de todas las comunidades…",
+    loadError: "No se han podido cargar los tipos de las comunidades. Comprueba la conexión y vuelve a cambiar un dato.",
   },
   ca: {
     title: "Calcula els impostos de la teva compra",
@@ -235,6 +240,8 @@ export const CALC_COPY: Record<HtLocale, HtCalcCopy> = {
     invalid: { price: "Escriu un preu més gran que 0.", age: "Escriu una edat entre 18 i 120 anys.", community: "Tria una comunitat." },
     example: "Exemple: habitatge de segona mà de 250.000 € a Catalunya. Canvia les dades per al teu cas.",
     share: "Enllaç a aquest càlcul",
+    loading: "Carregant els tipus de totes les comunitats…",
+    loadError: "No s'han pogut carregar els tipus de les comunitats. Comprova la connexió i torna a canviar una dada.",
   },
   en: {
     title: "Work out the taxes on your purchase",
@@ -270,5 +277,7 @@ export const CALC_COPY: Record<HtLocale, HtCalcCopy> = {
     invalid: { price: "Enter a price above 0.", age: "Enter an age between 18 and 120.", community: "Pick a region." },
     example: "Example: a €250,000 second-hand home in Catalonia. Change the figures to your case.",
     share: "Link to this calculation",
+    loading: "Loading the rates of every region…",
+    loadError: "The regions' rates could not be loaded. Check your connection and change any field to try again.",
   },
 };

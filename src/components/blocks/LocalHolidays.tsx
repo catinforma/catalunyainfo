@@ -1,9 +1,11 @@
 import { shortDate, todayInCatalonia, weekdayIndex } from "@/lib/content/holidays/calendar";
 import { LOCAL_SOURCE, loadLocalCalendar } from "@/lib/content/holidays/local";
+import { LabelList, type LocalHolidayRow } from "@/lib/content/packed-rows";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 import { LocalHolidaysFilter } from "./LocalHolidaysFilter";
+import { LocalHolidayRows } from "./PlaceRows";
 
 /**
  * Every municipality's local holidays, as one table.
@@ -45,7 +47,9 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
   }
 
   const day = (iso: string) => `${shortDate(iso, locale)} (${WEEKDAY_SHORT[locale][weekdayIndex(iso)]})`;
-
+  // Each distinct day label once; rows point at it (PlaceRows.tsx explains why).
+  const days = new LabelList();
+  const rows: LocalHolidayRow[] = calendar.places.map((place) => [place.name, place.isNucleus ? 1 : 0, ...place.dates.map((d) => days.of(day(d)))]);
 
   return (
     <section className="ci-local" aria-label={t.title}>
@@ -59,9 +63,10 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
 
       {/*
         A plain two-column table, without the stacked-card markup the general
-        table block uses. Every attribute here is repeated 1,400 times and
-        then again in the server-component payload, so the per-row markup is
-        kept to what the reader and the filter actually need.
+        table block uses. Every attribute here is repeated 1,400 times, so the
+        per-row markup is kept to what the reader and the filter actually
+        need; the rows come from compact props (PlaceRows.tsx), not from
+        server-component elements, so the RSC payload does not repeat them.
       */}
       <table className="ci-local-table">
         <thead>
@@ -70,19 +75,7 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
             <th scope="col">{t.colDates}</th>
           </tr>
         </thead>
-        <tbody>
-          {/* No key-derived or data attributes per row: everything here is
-              repeated ~1,400 times in the HTML and again in the RSC payload. */}
-          {calendar.places.map((place) => (
-            <tr key={place.key}>
-              <td>
-                {place.name}
-                {place.isNucleus ? <small> {t.nucleus}</small> : null}
-              </td>
-              <td>{place.dates.map(day).join(" · ")}</td>
-            </tr>
-          ))}
-        </tbody>
+        <LocalHolidayRows rows={rows} days={days.labels} nucleus={t.nucleus} />
       </table>
 
       <p className="ci-calc-note">

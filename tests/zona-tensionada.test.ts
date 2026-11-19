@@ -6,7 +6,7 @@ import { test } from "node:test";
 import { HUB_GROUPS } from "../src/lib/programmatic/calculators/hub.ts";
 import { CALCULATOR_NEXT } from "../src/lib/engagement/next-step-calculators.ts";
 import { CHECKER_COPY, COMMUNITY_IDS, COMMUNITY_LABEL, GRAN_LABEL, ZT_LOCALES, matchTowns, townAnswer, ztEditions } from "../src/lib/programmatic/zona-tensionada/copy.ts";
-import { DATA, checkerContext, checkerTown, checkerTowns, counts, expiries, listByCommunity } from "../src/lib/programmatic/zona-tensionada/data.ts";
+import { DATA, ZT_DATA_PATH, checkerContext, checkerTown, checkerTowns, counts, expiries, listByCommunity, ztClientData } from "../src/lib/programmatic/zona-tensionada/data.ts";
 import { ztFaq, ztMeta, ztSitemapEntries } from "../src/lib/programmatic/zona-tensionada/page.ts";
 import { QUOTE, RECHECK_BY, RULES_AS_OF, RULES_UNTIL, SOURCES, UPDATE_RULE } from "../src/lib/programmatic/zona-tensionada/rules.ts";
 
@@ -215,7 +215,11 @@ test("page: one static route per language, a 404 in the others, one page (no pag
   assert.match(page, /<MoreCalculators current="zona-tensionada" locale=\{locale\} \/>/);
   assert.match(page, /<CalculatorNextStep current="zona-tensionada" locale=\{locale\} \/>/);
   assert.match(page, /hubCrumb\(locale\)/);
-  assert.match(page, /<ZonaTensionadaChecker locale=\{locale\} towns=\{towns\} ctx=\{ctx\} initial=\{INITIAL_TOWN\} \/>/);
+  // The example town as a prop; the town list is fetched on the first focus (tests/rsc-payload.test.ts).
+  assert.match(page, /<ZonaTensionadaChecker locale=\{locale\} initial=\{checkerTown\(INITIAL_TOWN\)\} ctx=\{ctx\} dataUrl=\{ZT_DATA_PATH\} \/>/);
+  assert.match(read("src/app/data/zona-tensionada.json/route.ts"), /export const dynamic = "force-static";[\s\S]*ztClientData\(\)/);
+  assert.equal(ZT_DATA_PATH, "/data/zona-tensionada.json");
+  assert.deepEqual(ztClientData().towns, checkerTowns());
   // The answer is in the HTML: the full list by region and the large-landlord table render on the server.
   assert.match(page, /listByCommunity\(\)\.map/);
   assert.match(page, /granTable\(\)\.map/);

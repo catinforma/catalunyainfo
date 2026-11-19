@@ -5,7 +5,7 @@ import { test } from "node:test";
 
 import { HUB_GROUPS } from "../src/lib/programmatic/calculators/hub.ts";
 import { CALCULATORS_ROOT, calculatorSlugs } from "../src/lib/programmatic/calculators/paths.ts";
-import { COMMUNITIES, COMMUNITIES_AS_OF, COMMUNITIES_REREAD_BY, clientCommunities } from "../src/lib/programmatic/home-purchase-tax/communities.ts";
+import { COMMUNITIES, COMMUNITIES_AS_OF, COMMUNITIES_REREAD_BY, HT_DATA_PATH, clientCommunities, htClientData } from "../src/lib/programmatic/home-purchase-tax/communities.ts";
 import { CALC_COPY, EXAMPLE, HT_LOCALES, htEditions, pct, rateText, readHash, writeHash } from "../src/lib/programmatic/home-purchase-tax/copy.ts";
 import { calculate, meets, taxOn } from "../src/lib/programmatic/home-purchase-tax/engine.ts";
 import { htMeta, htSitemapEntries } from "../src/lib/programmatic/home-purchase-tax/page.ts";
@@ -399,7 +399,11 @@ test("routes, metadata, sitemap, llms.txt and the hub card (housing group)", () 
   const page = read("src/components/programmatic/home-purchase-tax/HomeTaxPage.tsx");
   assert.match(page, /<MoreCalculators current="home-purchase-tax" locale=\{locale\} \/>/);
   assert.match(page, /hubCrumb\(locale\)/);
-  assert.match(page, /clientCommunities\(\)/);
+  // The calculator gets the example's community and the names; the rest is fetched (tests/rsc-payload.test.ts).
+  assert.match(page, /initial=\{clientCommunity\(EXAMPLE\.community\)\} dataUrl=\{HT_DATA_PATH\}/);
+  assert.match(read("src/app/data/impuestos-compra-vivienda.json/route.ts"), /export const dynamic = "force-static";[\s\S]*htClientData\(\)/);
+  assert.equal(HT_DATA_PATH, "/data/impuestos-compra-vivienda.json");
+  assert.deepEqual(htClientData().communities, clientCommunities());
   // No new dependency: the calculator only imports the project's modules and React.
   const calc = read("src/components/programmatic/home-purchase-tax/HomeTaxCalculator.tsx");
   for (const m of calc.matchAll(/from "([^"]+)"/g)) assert.ok(m[1] === "react" || m[1]!.startsWith("@/"), m[1]);

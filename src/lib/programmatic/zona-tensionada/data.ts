@@ -1,14 +1,15 @@
 import declarationsJson from "./declarations.json" with { type: "json" };
 
-import type { CheckerTown, CommunityId, Context, Extension, GranRule, ZoneDecl } from "./copy";
+import type { CheckerTown, CommunityId, Context, Extension, GranRule, ZoneDecl, ZtClientData } from "./copy";
 import { RULES_AS_OF } from "./rules";
 
 /**
  * The declared zones (declarations.json, built by
  * scripts/zonas-tensionadas-snapshot.ts from the Ministry of Housing's lists in
  * the BOE and the Generalitat's DOGC resolutions of 19 Oct 2026) and what the
- * page and the checker read from them. Server-side: the checker gets
- * `checkerTowns()` and `checkerContext()` as props.
+ * page and the checker read from them. Server-side: the checker gets the
+ * example town and `checkerContext()` as props and fetches `checkerTowns()`
+ * from ZT_DATA_PATH.
  */
 
 interface RawDeclaration {
@@ -95,6 +96,18 @@ export function checkerTown(ine: string): CheckerTown {
   const t = checkerTowns().find((x) => x.ine === ine);
   if (!t) throw new Error(`no town ${ine}`);
   return t;
+}
+
+/**
+ * Where the checker fetches checkerTowns() from on its first focus
+ * (app/data/zona-tensionada.json/route.ts). The page carries only the
+ * example town and the context: as props, the ~1,000 towns were ~110 KB of
+ * every page's RSC payload.
+ */
+export const ZT_DATA_PATH = "/data/zona-tensionada.json";
+
+export function ztClientData(): ZtClientData {
+  return { schema: 1, towns: checkerTowns() };
 }
 
 /** Rows in a BOE list (the measures apply) and rows only declared by the Generalitat, per community. */

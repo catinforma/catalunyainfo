@@ -1,6 +1,8 @@
 import { renderInline } from "@/lib/content/inline";
 import type { PollingModel } from "@/lib/programmatic/elections/polling";
 
+import { PollingPlaces, type PollingPlaceRow } from "./PollingPlaces";
+
 /**
  * The polling places of 29N, server-rendered from the committed BOP snapshot.
  * Towns with more than a handful of places fold them into native <details>
@@ -16,19 +18,8 @@ export function PollingSection({ polling, headingId }: { polling: PollingModel; 
       {polling.intro ? <p>{polling.intro}</p> : null}
       <p>{renderInline(polling.find)}</p>
       {polling.groups?.map((group, i) => {
-        const list = (
-          <ul className="m-0 list-none p-0 text-sm [&>li]:border-t [&>li]:border-[var(--color-rule)] [&>li]:py-2 [&>li:first-child]:border-t-0 [&_span]:block [&_span]:text-[var(--color-muted)]">
-            {group.places.map((place, j) => (
-              <li key={j} className="!mt-0">
-                <strong>{place.name}</strong>
-                <span>{place.address}</span>
-                {place.lines.map((line) => (
-                  <span key={line}>{line}</span>
-                ))}
-              </li>
-            ))}
-          </ul>
-        );
+        // Compact props, not server elements: the list is the page's biggest part (PollingPlaces.tsx).
+        const list = <PollingPlaces places={group.places.map((place): PollingPlaceRow => [place.name, place.address, ...place.lines])} />;
         return group.label ? (
           <details key={group.label} className="mt-2 rounded border border-[var(--color-rule)] px-3 py-2">
             <summary className="cursor-pointer font-semibold">{group.label}</summary>
