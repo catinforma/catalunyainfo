@@ -15,7 +15,7 @@ process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 type Region = import("../src/lib/programmatic/holidays/boe-2027.ts").Region;
 const { CITY_ROWS, CORE_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-data.ts");
 const { COUNCIL_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-council.ts");
-const { GSC_SMALL_TOWNS, MORE_CITY_ROWS, MORE_MIN_POPULATION, MORE_READ_ON, WAITING_RECHECK_BY, WAITING_TOWNS } = await import(
+const { GSC_SMALL_TOWNS, LIST_READ_ON, MORE_CITY_ROWS, MORE_MIN_POPULATION, MORE_READ_ON, WAITING_RECHECK_BY, WAITING_TOWNS } = await import(
   "../src/lib/programmatic/spain-2027/cities-more.ts"
 );
 const { CITIES, cityBySlug, cityReadOn, localDays, nonLocalDates } = await import("../src/lib/programmatic/spain-2027/cities.ts");
@@ -74,7 +74,9 @@ test("rows: each from its community's official 2027 list, read on MORE_READ_ON, 
     assert.equal(r.status2027, "published", r.slug);
     assert.equal(s.status, "published", `${r.slug}: the community list must be out`);
     assert.equal(r.local2026, null, r.slug);
-    assert.equal(r.readOn, MORE_READ_ON, r.slug);
+    // A community published after MORE_READ_ON keeps the day its list was read (Cantabria, 20 Nov 2026).
+    assert.equal(r.readOn, LIST_READ_ON[r.region] ?? MORE_READ_ON, r.slug);
+    if (LIST_READ_ON[r.region]) assert.ok(r.local2027!.source.date <= LIST_READ_ON[r.region]!, `${r.slug}: read before its bulletin came out`);
     const list = r.local2027!;
     assert.equal(list.year, 2027);
     const official = [s.y2027, ...(s.parts ?? []).map((p) => p.text)].filter((t) => t !== null);
@@ -93,7 +95,7 @@ test("rows: each from its community's official 2027 list, read on MORE_READ_ON, 
     assert.ok(c, "every row has a city");
     const boe = new Set(nonLocalDates(c));
     for (const d of localDays(c)) assert.ok(!boe.has(d.date), `${c.slug}: ${d.date} is already a holiday of ${c.region}`);
-    assert.equal(cityReadOn(c), MORE_READ_ON);
+    assert.equal(cityReadOn(c), LIST_READ_ON[c.region] ?? MORE_READ_ON);
   }
   // The core rows keep their own reading date.
   assert.notEqual(cityReadOn(CITIES.find((c) => c.slug === "sevilla")!), MORE_READ_ON);
@@ -114,6 +116,19 @@ test("rows: a sample transcribed by hand from each bulletin", () => {
   assert.deepEqual(days("EX", "plasencia"), [["2027-06-10", null], ["2027-06-11", null]]);
   assert.deepEqual(days("GA", "naron"), [["2027-06-24", "San Juan"], ["2027-11-23", "Día de Narón"]]);
   assert.deepEqual(days("RI", "calahorra"), [["2027-03-03", null], ["2027-08-31", null]]);
+  // BOC núm. 224, de 20.11.2026.
+  assert.deepEqual(days("CB", "castro-urdiales"), [["2027-06-24", "San Juan"], ["2027-11-30", "San Andrés"]]);
+  assert.deepEqual(days("CB", "camargo"), [["2027-06-24", "San Juan"], ["2027-07-16", "Virgen del Carmen"]]);
+  assert.deepEqual(days("CB", "pielagos"), [["2027-07-16", "Virgen del Carmen"], ["2027-09-08", "Virgen de Valencia"]]);
+  // The three Valencian BOPs; the towns that had a page from their council's minutes keep the same days.
+  assert.deepEqual(days("VC", "alzira"), [["2027-04-05", "Sant Vicent Ferrer"], ["2027-07-23", "Sant Bernat"]]);
+  assert.deepEqual(days("VC", "burriana"), [["2027-02-03", "Festividad de San Blas"], ["2027-09-08", "Festividad de la Virgen de la Misericordia"]]);
+  assert.deepEqual(days("VC", "oliva"), [["2027-05-03", "Festes del Crist"], ["2027-07-16", "Moros i Cristians"]]);
+  assert.deepEqual(days("VC", "burjassot"), [["2027-08-16", "Sant Roc"], ["2027-09-30", "La Virgen de la Cabeza"]]);
+  assert.deepEqual(days("VC", "crevillent"), [["2027-03-25", "Jueves Santo"], ["2027-10-04", "Fiestas Patronales"]]);
+  assert.equal(cityBySlug("VC", "burjassot")!.status2027, "published");
+  // Dénia: the BOP gives its two EATIM their own days.
+  assert.deepEqual(cityBySlug("VC", "denia")!.local2027!.zones!.map((z) => z.days.map((x) => x.date)), [["2027-09-03", "2027-09-21"], ["2027-04-05", "2027-05-17"]]);
   // Split municipalities keep the bulletin's areas.
   assert.equal(cityBySlug("AS", "mieres")!.local2027!.zones![0]!.place, "Valle de Turón");
   assert.equal(cityBySlug("IB", "santa-eularia-des-riu")!.local2027!.zones!.length, 3);
@@ -187,6 +202,7 @@ test("waiting towns: no page until their community publishes; each says why", ()
       assert.ok(t.note && t.note.length > 20, `${t.slug}: say what the list does with the town`);
     }
   }
-  const valencian = WAITING_TOWNS.filter((t) => t.region === "VC");
-  assert.ok(valencian.length >= 40, "the Valencian 20,000+ towns wait for the DOGV");
+  // 20 Nov 2026: the Valencian lists are out (three BOPs), so no Valencian or Cantabrian town waits any more.
+  assert.deepEqual(WAITING_TOWNS.filter((t) => t.region === "VC" || t.region === "CB"), []);
+  assert.ok(MORE_CITY_ROWS.filter((r) => r.region === "VC").length >= 50, "the Valencian 20,000+ towns, from their BOP");
 });

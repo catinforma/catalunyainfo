@@ -22,26 +22,32 @@ export const SOURCES_READ_ON = "2026-11-06";
 export const STATUS_RECHECK_BY = "2026-11-27";
 
 /**
- * The six lists still pending, read again on 18 Nov 2026: every issue of each
- * bulletin since the 13 Nov reading (and since 1 Oct for the BOCM and the BOC,
- * 26 Oct for the BOA, 30 Oct for the BON, 2 Nov for the DOCM) through that
- * day's, by each bulletin's own summary (DOGV API `dogv-portal/dogv?date=`,
- * BOA open data `OPENDATABOAJSONAPP`, BON `/boletin/-/sumario/2026/<n>`, BOC
+ * The lists still pending, read again on 20 Nov 2026: every issue of each
+ * bulletin since the 18 Nov reading (that one went back to 13 Nov, and to
+ * 1 Oct for the BOCM and the BOC, 26 Oct for the BOA, 30 Oct for the BON,
+ * 2 Nov for the DOCM) through that day's, by each bulletin's own summary
+ * (DOGV API `dogv-portal/dogv?date=<ISO>&lang=es`, BOA open data
+ * `OPENDATABOAJSONAPP`, BON `/boletin/-/sumario/2026/<n>`, BOC
  * `busquedaBoletines.do` + `verBoletin.do`, DOCM `cambiarBoletin.do`, BOCM
- * summary XML), searched for "fiestas locales", "fiestas laborales" and
- * "calendario de fiestas". The same search finds each 2026 list on its day
- * (DOGV 14.11.2025, BOA 20.11.2025, BON 2.12.2025, BOC 11.12.2025, DOCM and
- * BOCM 12.12.2025). `through` is the last issue read; none has the 2027 list.
+ * summary XML), searched for "fiestas locales", "fiestas laborales",
+ * "carácter local" and "calendario de fiestas". The same search finds each
+ * 2026 list on its day (DOGV 14.11.2025, BOA 20.11.2025, BON 2.12.2025, DOCM
+ * and BOCM 12.12.2025). `through` is the last issue read; none of these has
+ * the 2027 list.
+ *
+ * No longer here, both read on 20 Nov 2026: Cantabria's came out that day
+ * (BOC núm. 224, CVE-2026-9104: `CANTABRIA.local.y2027`); the Comunitat
+ * Valenciana's is not in the DOGV (searched through núm. 10498, of that day)
+ * but in the three provincial bulletins, 4, 10 and 20 Nov 2026
+ * (`VALENCIANA.local.parts`).
  */
-export const PENDING_READ_ON = "2026-11-18";
+export const PENDING_READ_ON = "2026-11-20";
 
 export const PENDING_CHECKS = {
-  AR: { through: "BOA núm. 223, de 18.11.2026", date: PENDING_READ_ON },
-  VC: { through: "DOGV núm. 10496, de 18.11.2026", date: PENDING_READ_ON },
-  CB: { through: "BOC núm. 222, de 18.11.2026", date: PENDING_READ_ON },
-  CM: { through: "DOCM núm. 221, de 18.11.2026", date: PENDING_READ_ON },
-  MD: { through: "BOCM núm. 277, de 18.11.2026", date: PENDING_READ_ON },
-  NC: { through: "BON núm. 230, de 18.11.2026", date: PENDING_READ_ON },
+  AR: { through: "BOA núm. 225, de 20.11.2026", date: PENDING_READ_ON },
+  CM: { through: "DOCM núm. 223, de 20.11.2026", date: PENDING_READ_ON },
+  MD: { through: "BOCM núm. 279, de 20.11.2026", date: PENDING_READ_ON },
+  NC: { through: "BON núm. 232, de 20.11.2026", date: PENDING_READ_ON },
 } as const satisfies Record<string, PendingCheck>;
 
 /** The last issue of a bulletin read without the 2027 list, and the day it was read. */
@@ -419,22 +425,53 @@ const VALENCIANA: CommunitySources = {
     quotes: ["Este calendario se completará por las corporaciones locales de la Comunitat Valenciana, a las que corresponde determinar dos fiestas de carácter local."],
     differences: null,
   },
+  // 20 Nov 2026: for 2027 the lists are not in the DOGV (the 2026 one was, DOGV núm. 10238, de 14.11.2025) but in
+  // the three provincial bulletins, one resolution of each Dirección Territorial, each ordering its publication
+  // "en el Boletín Oficial de la Provincia". The Generalitat's labour page lists the three ("Calendario laboral
+  // 2027") with its own copies, read there on 20 Nov 2026 (each 200, PDF). Valencia's came out on 19.11.2026
+  // (BOP núm. 223) without its annex and was published again in full on 20.11.2026 (BOP núm. 224, 2026/14547).
   local: {
-    bulletinName: "Diari Oficial de la Generalitat Valenciana (DOGV)",
-    bulletinShort: "el DOGV",
-    bulletinUrl: "https://dogv.gva.es/es/",
-    how: "En la Comunitat Valenciana los aprueba una resolución de la Conselleria competente en trabajo, con los 2 días de cada uno de los 542 municipios, en el",
-    status: "pending",
-    checked: PENDING_CHECKS.VC,
+    bulletinName: "Calendario laboral de la Generalitat Valenciana (enlaza los 3 boletines provinciales)",
+    bulletinShort: "los boletines oficiales de las 3 provincias",
+    bulletinUrl: "https://habitatge.gva.es/es/web/dg-trabajo/calendario-laboral",
+    how: "En la Comunitat Valenciana los fija para 2027 la Dirección Territorial de Vivienda, Empleo, Juventud e Igualdad de cada provincia, que los publica en su boletín provincial; la Generalitat los reúne en su",
+    status: "published",
     y2027: null,
-    y2026: {
-      title: "Resolución de 12 de noviembre de 2025, por la que se aprueba el calendario de fiestas locales, retribuidas y no recuperables, en el ámbito de la Comunitat Valenciana para el año 2026",
-      ref: "DOGV núm. 10238, de 14.11.2025",
-      date: "2025-11-14",
-      url: "https://dogv.gva.es/datos/2025/11/14/pdf/2025_46326_es.pdf",
-    },
+    y2026: null,
     dataset: null,
-    note: "La lista de 2025 salió el 18 de noviembre de 2024 y la de 2026 el 14 de noviembre de 2025; después se corrigió dos veces (DOGV de 15.1.2026 y 3.3.2026). Algunos ayuntamientos publican antes su acuerdo en el DOGV, pero la lista que vale es la resolución.",
+    note: "Para 2027 la Generalitat no los publica en el DOGV, como en 2026, sino en el boletín de cada provincia: Alicante el 4 de noviembre, Castellón el 10 y Valencia el 20 de noviembre de 2026 (salió el 19 sin el anexo).",
+    parts: [
+      {
+        place: "Alicante",
+        text: {
+          title:
+            "Resolución de 29 de octubre de 2026 de la Dirección Territorial de Vivienda, Empleo, Juventud e Igualdad de Alicante, por la que se aprueba el calendario de fiestas locales, retribuidas y no recuperables, en el ámbito de la provincia de Alicante para el año 2027",
+          ref: "BOP de Alicante núm. 210, de 4.11.2026",
+          date: "2026-11-04",
+          url: "https://habitatge.gva.es/documents/21189/417703197/BOP+ALICANTE.pdf/122e358d-2231-e3fc-2b22-3d0e9bcc4e06",
+        },
+      },
+      {
+        place: "Castellón",
+        text: {
+          title:
+            "Resolución de 29 de octubre de 2026 de la Dirección Territorial de Vivienda, Empleo, Juventud e Igualdad de Castellón, por la que se aprueba el calendario de fiestas locales, retribuidas y no recuperables, en el ámbito de la provincia de Castellón para el año 2027",
+          ref: "BOP de Castellón núm. 136, de 10.11.2026",
+          date: "2026-11-10",
+          url: "https://habitatge.gva.es/documents/21189/417703197/BOP+CASTELL%C3%93N.pdf/8cf34794-cb05-30bc-b3c1-73c5fb732aab",
+        },
+      },
+      {
+        place: "Valencia",
+        text: {
+          title:
+            "Resolución de 10 de noviembre de 2026, de la Dirección Territorial de Vivienda, Empleo, Juventud e Igualdad de Valencia, por la que se aprueba el calendario de fiestas locales, retribuidas y no recuperables, en el ámbito de la provincia de Valencia para el año 2027",
+          ref: "BOP de Valencia núm. 224, de 20.11.2026",
+          date: "2026-11-20",
+          url: "https://habitatge.gva.es/documents/21189/417703197/BOP+VALENCIA+COMPLETO.pdf/a01c23ed-8061-d1fc-9633-0c0e9607c223",
+        },
+      },
+    ],
   },
   boeNote: null,
   subRegional: null,
@@ -533,15 +570,17 @@ const CANTABRIA: CommunitySources = {
     bulletinShort: "el BOC de Cantabria",
     bulletinUrl: "https://boc.cantabria.es/boces/",
     how: "En Cantabria los publica una resolución de la Dirección General de Trabajo, Economía Social y Empleo Autónomo junto con las fiestas nacionales y autonómicas, en el",
-    status: "pending",
-    checked: PENDING_CHECKS.CB,
-    y2027: null,
-    y2026: {
-      title: "Resolución por la que se dispone la publicación del calendario de fiestas nacionales, autonómicas y locales en el ámbito de la Comunidad Autónoma de Cantabria para el año 2026",
-      ref: "BOC núm. 238, de 11.12.2025",
-      date: "2025-12-11",
-      url: "https://boc.cantabria.es/boces/verAnuncioAction.do?idAnuBlob=428192",
+    status: "published",
+    // Read on 20 Nov 2026, the day it came out (CVE-2026-9104, signed in Santander on 16.11.2026): the
+    // annex lists the 12 national and regional days (the decree's, Orden IND/29/2026) and the two
+    // local days of each municipality whose council sent them, as the resolution says.
+    y2027: {
+      title: "Resolución por la que se dispone la publicación del calendario de fiestas nacionales, autonómicas y locales en el ámbito de la Comunidad Autónoma de Cantabria para el año 2027",
+      ref: "BOC núm. 224, de 20.11.2026",
+      date: "2026-11-20",
+      url: "https://boc.cantabria.es/boces/verAnuncioAction.do?idAnuBlob=443286",
     },
+    y2026: null,
     dataset: null,
     note: null,
   },

@@ -161,15 +161,21 @@ test("rows: a sample transcribed by hand from each bulletin", () => {
   assert.deepEqual(days("cartagena"), [["2027-01-07", null], ["2027-09-24", null]]);
   assert.deepEqual(days("bilbao"), [["2027-07-31", "San Ignacio de Loyola"], ["2027-08-27", "Viernes de la Semana Grande"]]);
   assert.deepEqual(days("logrono"), [["2027-06-11", "San Bernabé"], ["2027-09-21", "San Mateo"]]);
+  // BOC núm. 224, de 20.11.2026 (Cantabria's list, out that day).
+  assert.deepEqual(days("santander"), [["2027-05-17", "Virgen del Mar"], ["2027-08-30", "Santos Mártires Emeterio y Celedonio"]]);
+  assert.deepEqual(days("torrelavega"), [["2027-08-16", "San Roque"], ["2027-09-16", "San Cipriano"]]);
+  // The three Valencian BOPs (4, 10 and 20 Nov 2026).
+  assert.deepEqual(days("valencia"), [["2027-01-22", "San Vicente Mártir, patrón de la ciudad de València"], ["2027-04-05", "San Vicente Ferrer, patrón de la Comunidad Valenciana"]]);
+  assert.deepEqual(days("benidorm"), [["2027-11-15", null], ["2027-11-16", null]]);
+  assert.deepEqual(days("gandia"), [["2027-04-05", "Sant Vicent Ferrer"], ["2027-10-04", "Sant Francesc de Borja-Fira de Gandia"]]);
+  assert.deepEqual(days("castellon-de-la-plana"), [["2027-03-01", "Lunes de la Magdalena"], ["2027-06-29", "Festividad de San Pedro"]]);
   // Bizkaia and Gipuzkoa share 31 July, a Saturday in 2027.
   for (const slug of ["bilbao", "barakaldo", "getxo", "san-sebastian", "irun"]) assert.ok(days(slug).some(([d]) => d === "2027-07-31"), slug);
   assert.equal(sakamoto("2027-07-31"), 6);
   // Pending communities: the 2026 days, from the 2026 lists.
   const days26 = (slug: string) => CITIES.find((c) => c.slug === slug)!.local2026!.days.map((d) => d.date);
   assert.deepEqual(days26("madrid"), ["2026-05-15", "2026-11-09"]);
-  assert.deepEqual(days26("valencia"), ["2026-01-22", "2026-04-13"]);
   assert.deepEqual(days26("zaragoza"), ["2026-01-29", "2026-03-05"]);
-  assert.deepEqual(days26("santander"), ["2026-05-25", "2026-07-25"]);
   assert.deepEqual(days26("toledo"), ["2026-01-23", "2026-11-26"]);
   assert.deepEqual(days26("pamplona"), ["2026-11-30", "2026-12-03"]);
   // Navarra's 3 December 2027 is already fixed for every municipality: Pamplona's page counts it.
@@ -274,7 +280,9 @@ test("FAQ: '¿es festivo…?' for each local day, with the answer and its effect
       }
       assert.ok(faq[0]!.answer.includes(c.local2027!.source.title));
     } else {
-      assert.match(faq[0]!.answer, /^No\. Las fiestas locales de 2027/);
+      // 20 Nov 2026: the question as people type it, answered first (pendingFaqAnswer).
+      assert.equal(faq[0]!.question, `¿Cuáles son los festivos locales de ${c.name} en 2027?`, c.slug);
+      assert.match(faq[0]!.answer, /^(Aún no son oficiales: |Una ya es oficial: |La lista oficial de 2027 no las da\. )/, c.slug);
     }
   }
 });

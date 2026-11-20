@@ -10017,4 +10017,103 @@ postal-vote 7`). No revert rule for titles (the phase switch is scheduled). **20
 **Go-live.** Deploy (the strip line and the page code), then publish `vot-correu`. IndexNow prefixes `/ca/guies/vot-per-correu`,
 `/es/guias/voto-por-correo`, `/en/guides/postal-vote-spain`.
 
+## 2026-11-20 — Calendario laboral 2027, Spain cities: Cantabria's list (BOC núm. 224) and the Comunitat Valenciana's three provincial lists (BOP Alicante, Castellón, Valencia) are in, Parla and Fuenlabrada from their Pleno minutes, the four other lists re-read; pending pages answer "¿cuáles son los festivos locales de <ciudad> en 2027?" (deploy; group `calendario-2027-espana`)
+
+**Why.** GSC 7–20 Nov (`snapshot.py gaps 14 400`, `page /es/festivos/2027/ 14`, `pages 14 3000`): every city query of the family
+sits at 8.5–11, page one but not top 3 — "festivos vigo 2027" 136 at 10.8, "calendario laboral torrelavega 2027" 122 at 8.6,
+"calendario laboral marbella 2027" 103 at 8.9, "festivos alcobendas 2027" 92 at 9.4, "calendario laboral alcobendas 2027" 80 at
+8.9, "calendario laboral gandia 2027" 59 at 8.8, "calendario laboral benidorm 2027" 58 at 9.3, "festivos parla 2027" 54 at 9.1,
+"festivos marbella 2027" 54 at 9.3, "festivos locales alcobendas 2027" 50 at 9.2, "festivos alcorcón 2027" 47 at 10.1. People
+want the city's two local days, which local media print the day the bulletin does. ES city-page impressions by community (14 d):
+Andalucía 4,406, Madrid 3,853, Comunitat Valenciana 2,674, Canarias 1,955, Galicia 1,211, Cantabria 307.
+
+**Facts read 20 Nov (official sources only; fact pack `research_notes/spain-2027-local-lists-2026-11-20.md`; every URL with curl, 200).**
+1. **Cantabria, out today**: BOC núm. 224, de 20.11.2026, CVE-2026-9104, "Resolución por la que se dispone la publicación del
+   calendario de fiestas nacionales, autonómicas y locales … para el año 2027" (boc.cantabria.es `verAnuncioAction.do?idAnuBlob=443286`).
+   Its 12 national + regional days match the BOE column day by day. Torrelavega «SAN ROQUE 16 AGOSTO / SAN CIPRIANO 16 SEPTIEMBRE»;
+   Santander «VIRGEN DEL MAR 17 MAYO / SANTOS MÁRTIRES EMETERIO Y CELEDONIO 30 AGOSTO»; Castro-Urdiales 24 Jun and 30 Nov; Camargo
+   24 Jun and 16 Jul; Piélagos 16 Jul and 8 Sep.
+2. **Comunitat Valenciana, out in the provincial bulletins, not the DOGV** (the 18 Nov reading searched only the DOGV, where the 2026
+   list was): each Dirección Territorial de Vivienda, Empleo, Juventud e Igualdad approved its province's 2027 calendar and ordered
+   it published "en el Boletín Oficial de la Provincia" — BOP de Alicante nº 210, de 4.11.2026 (edicto 8352); BOP de Castellón núm.
+   136, de 10.11.2026 (04772-2026); BOP de Valencia núm. 224, de 20.11.2026 (2026/14547: the 19 Nov issue, núm. 223, omitted the
+   annex). The Generalitat's labour page (habitatge.gva.es/es/web/dg-trabajo/calendario-laboral, "Calendario laboral 2027") lists
+   the three with its own copies, which the pages cite (as Castilla y León's cite the Junta's copies). All 68 towns with a page
+   transcribed and cross-checked by script against the parsed annexes: 0 differences. E.g. Gandia «5 de abril, Sant Vicent Ferrer;
+   4 de octubre, Sant Francesc de Borja-Fira de Gandia»; Benidorm «15 y 16 de noviembre»; Paterna 5 Apr and 30 Aug; San Vicente del
+   Raspeig 5–6 Apr; Orihuela 17 Jul and 8 Sep; Elda 8–9 Sep; Alcoy 24 and 26 Apr; Valencia 22 Jan and 5 Apr. The 10 towns that had a
+   page from their council's minutes (18 Nov) get exactly the council's days. Dénia: the BOP gives the EATIM of La Xara and Jesús
+   Pobre their own days (zoned row). Not yet re-checked on the BOP portals themselves.
+3. **Madrid, council minutes** (rule of `cities-council.ts`: the Pleno's own minutes on the council's site, both dates and the vote;
+   never press, news posts or agendas). Parla: acta del Pleno ordinario de 8.10.2026, punto 2, p. 7, unanimidad — «FIESTAS DEL AGUA:
+   … lunes 14 de junio. FIESTAS PATRONALES: … lunes 13 de septiembre.» (sede.ayuntamientoparla.es). Fuenlabrada: acta del Pleno
+   de 1.10.2026, punto 4º, pp. 38-39, unanimidad (26) — «el martes 9 de marzo y el martes 14 de septiembre» (plenos.ayto-fuenlabrada.es).
+   Printed "aprobadas por el Ayuntamiento, pendientes del BOCM"; .ics, widget and working-days calculator leave them out. **Not
+   enough, still pending**: Madrid city (the Pleno's "Acuerdos" of 29.9.2026 give 15 May and 9 Nov but no vote), San Sebastián de
+   los Reyes (unsigned minutes behind a browser check), Pozuelo (signed extract, not minutes), Torrejón (Junta de Gobierno), Las Rozas
+   (video-acta machine transcript); Alcobendas, Alcorcón, Pinto (council sites block or time out), Valdemoro, Tres Cantos, Coslada,
+   Rivas, Aranjuez, Collado Villalba (agenda or "aprobada" only, no dates online).
+4. **Still pending** — every issue since 18 Nov through today's, by each bulletin's own summary, searched for "fiestas locales /
+   laborales / carácter local / calendario de fiestas" (each 2026 list found by the same search on its day): BOCM núm. 279, BOA núm.
+   225 (past its 20 Nov 2025 precedent), DOCM núm. 223, BON núm. 232, all of 20.11.2026; DOGV núm. 10498 has nothing either.
+5. **Re-read**: Vigo, DOG núm. 204 «57. Vigo: 29 de marzo, 16 de agosto.»; Marbella, BOJA núm. 210 «MARBELLA 11 DE JUNIO 19 DE
+   OCTUBRE» (rows `readOn` 20 Nov); the 11 council minutes on pages (all 200, both dates) → `COUNCIL_READ_ON` 20 Nov.
+
+**What changed.**
+1. Data (`sources.ts`, `cities-data.ts`, `cities-more.ts`, `cities-council.ts`): Cantabria `local` → published (BOC 224); the
+   Comunitat Valenciana `local` → published with three `parts` (bulletin link → the Generalitat's labour page; `how` and `note`
+   rewritten in es/ca/en: "for 2027 not in the DOGV but in each province's bulletin"). 17 core cities pending → published (Santander,
+   Torrelavega, and the 15 Valencian ones); Parla, Fuenlabrada pending → "council" (new `councilCity`, same rule and labelling as the
+   20,000+ towns). 20,000+ rows: + Castro-Urdiales, Camargo, Piélagos and 43 Valencian towns that were in `WAITING_TOWNS` (no page
+   until today, as the file's own publication-day procedure says), + the 10 Valencian council towns moved to the bulletin
+   (`LIST_READ_ON`). **46 new city pages × es/ca/en** (ca/en noindex by `spain-2027-ca`/`-en`). `PENDING_CHECKS`/`PENDING_READ_ON`
+   → 20 Nov (four lists); `WAITING_RECHECK_BY` 25 → 27 Nov. Nothing taken from 2026 or from press.
+2. **Titles, descriptions, leads and answer lines change by data, not by code**, on the 19 core pages whose status moved (as the
+   18 Nov entry anticipated: a list coming out flips the page). E.g. Torrelavega "Calendario laboral Torrelavega 2027: festivos" →
+   "Festivos locales Torrelavega 2027: 16 ago y 16 sep" (from 2 Dec "Festivos Torrelavega 2027: 16 ago y 16 sep": the 60-char limit
+   drops "calendario laboral", the top query; H1 and description keep it — owner may want to look at it on 2 Dec); Benidorm →
+   "Festivos locales Benidorm 2027: 15 y 16 de noviembre"; Gandia → "Festivos locales Gandia 2027: 5 de abril y 4 de octubre";
+   Parla → "Festivos locales Parla 2027: 14 de junio y 13 de septiembre" with "(aprobadas por el Ayuntamiento)" in the description.
+   No title/description/lead template touched.
+3. Pending city pages (es/ca/en; 32 ES pages + 2 "missing"), body only: the first FAQ question is the searched one — "¿Cuáles son
+   los festivos locales de Alcobendas en 2027?" / "Quins són els festius locals d'Alcobendas el 2027?" / "What are Alcobendas's
+   local holidays in 2027?" — answered first: "Aún no son oficiales: el BOCM todavía no ha publicado la lista de 2027 (consultado
+   hasta el BOCM núm. 279, de 20.11.2026). La de 2026 salió el 12 de diciembre de 2025 (BOCM núm. 296, de 12.12.2025). Cuando se
+   publiquen, esta página dará las fechas con su fuente." (Navarra: 3 Dec known, the other pending; Burgos/Valladolid: the list
+   leaves them out.) Replaces "¿Se conocen ya…? No. …". The local section's H2 names the city: "Fiestas locales de Alcobendas en
+   2027: aún no publicadas" (ca/en alike). Answer line, lead, layers block, titles and descriptions of these pages untouched.
+4. `low-demand.ts` `spain-2027-en` keep list (same bar as 18 Nov, city pages with their 2027 days): + Santander (12 impr. at 5.2),
+   Benidorm (15 at 8.7, held on 18 Nov), Castellón de la Plana (12 at 11.8), Torrevieja (11 at 6.2).
+5. Tests: new `tests/spain-2027-laboral-20nov.test.ts`; `spain-2027-laboral-18nov`, `spain-cities-2027`, `spain-cities-2027-more`,
+   `spain-2027-council-towns`, `spain-holidays-2027` moved to the 20 Nov reading.
+
+**Baseline (GSC 7–20 Nov, 14 d; 20 Nov partial), ES city pages** (impressions / clicks / position): Torrelavega 263 / 2 / 8.7;
+Santander 44 / 0 / 22.6; Paterna 322 / 4 / 7.2; Benidorm 275 / 5 / 8.5; Gandia 273 / 8 / 8.1; Vila-real 256 / 11 / 6.7; Sagunto
+247 / 3 / 6.9; San Vicente del Raspeig 242 / 3 / 8.1; Orihuela 212 / 4 / 8.1; Elda 169 / 2 / 8.0; Torrent 153 / 3 / 7.3; Alicante
+136 / 1 / 17.3; Valencia 84 / 0 / 21.1; Parla 268 / 1 / 8.4; Fuenlabrada 37 / 1 / 12.7; Alcobendas 575 / 5 / 9.3; Alcorcón 348 / 1 /
+18.6; Pinto 327 / 2 / 7.2; Valdemoro 317 / 4 / 7.6; Vigo 368 / 1 / 11.4; Marbella 372 / 1 / 8.6. Groups: the 15 Valencian core
+pages 2,674 / 46 / 9.0; Cantabria's two 307 / 2 / 10.7; Parla + Fuenlabrada 305 / 2 / 8.9; still pending (29 with impressions)
+4,071 / 53 / 10.3; already published before today (188) 11,490 / 63 / 8.9. EN Santander 12 / 0 / 5.2, EN Benidorm 15 / 0 / 8.7.
+
+**Prediction.** By 4 Dec at equal query: the flipped pages' "festivos|calendario laboral <ciudad> 2027" queries (Torrelavega, Gandia,
+Benidorm, Paterna, San Vicente, Orihuela, Elda, Parla) median position from ~8.6 to ≤ 5, at least three ≤ 3, CTR ≥ 3 %; Santander,
+Alicante, Valencia, Elche pages (now 14–23) ≤ 10. Pending pages: "festivos locales <ciudad> 2027" queries ≥ 1 position better
+than now (Alcobendas 50 at 9.2), from the FAQ and H2 alone.
+
+**Review 2026-12-04** (14 days; the 2 Dec title switch falls inside, so read 20 Nov–1 Dec separately):
+`snapshot.py page /es/festivos/2027/comunidad-valenciana/ 14`, `page /es/festivos/2027/cantabria/ 14`, `page /es/festivos/2027/madrid/ 14`,
+`gaps 14 400 | grep 2027`. **Revert rule (FAQ question):** if pending pages lose ≥ 1 position on "festivos <ciudad> 2027" at equal
+query while published ones hold, put back "¿Se conocen ya los festivos locales de 2027 de <ciudad>?".
+
+**Confounders.** 13 Nov first-line change (read 20 Nov and 1 Dec); the 2 Dec title switch (`CITY_TITLES_FROM`); the four lists
+still to come (BON ~2 Dec, BOCM/DOCM ~11–12 Dec, BOA any day); seasonal demand rising into December.
+
+**Go-live.** Deploy (data is code; 46 new city routes × 3), then publish `calendario-2027-espana`. IndexNow prefixes
+`/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`. Next re-read of the four lists by 27 Nov (`WAITING_RECHECK_BY`;
+`STATUS_RECHECK_BY`, `CITIES_RECHECK_BY` also 27 Nov). When the BOCM list is out, Parla and Fuenlabrada go back to `published`.
+
+**Tests.** `npx tsc --noEmit -p .` clean; the 19 holiday-family test files 234/234; `npm test` 2842/2848 — the 6 failures are
+date guards outside this change that fired today (`postal-vote` POSTAL_AS_OF; `strike-days-1920n` ×3 incl. the strikes as-of
+discipline, `strikes-hub`, `strikes-spain`), same 6 before this change.
+
 **Outcome:** _pending_

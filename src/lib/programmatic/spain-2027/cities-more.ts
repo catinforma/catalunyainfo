@@ -33,8 +33,9 @@ import { SOURCES, type OfficialText } from "./sources";
  *  4. Otherwise the town waits in `WAITING_TOWNS`, with no page: its
  *     community has not published (reason "pending": Aragón, Cantabria,
  *     Castilla-La Mancha, Madrid, Navarra, Comunitat Valenciana as of
- *     13 Nov 2026, still so on 18 Nov), or the published list leaves it out
- *     (reason "missing").
+ *     13 Nov 2026, still so on 18 Nov; by 20 Nov Cantabria's list and the
+ *     Comunitat Valenciana's three provincial ones were out, and their towns
+ *     are rows now), or the published list leaves it out (reason "missing").
  *     Unlike the core rows, a waiting town never gets a page with its 2026
  *     days: no page until its 2027 days are official. The one exception
  *     before the bulletin is the council's own act (the published minutes
@@ -43,21 +44,31 @@ import { SOURCES, type OfficialText } from "./sources";
  *     "pendientes de <boletín>" on their pages.
  *
  * Adding a community the day it publishes: put its 2027 text in sources.ts
- * (`local.y2027`, status "published"), move its towns from `WAITING_TOWNS`
- * and from `cities-council.ts` to rows here with the days, the bulletin line
- * and `MORE_READ_ON` of that day; tests/spain-cities-2027-more.test.ts and
+ * (`local.y2027`, or `local.parts` per province, status "published"), move
+ * its towns from `WAITING_TOWNS` and from `cities-council.ts` to rows here
+ * with the days, the bulletin line and the reading day (`LIST_READ_ON`);
+ * tests/spain-cities-2027-more.test.ts and
  * tests/spain-2027-council-towns.test.ts fail until both are done.
  */
 
-/** The day every row below was read on its bulletin. */
+/** The day the rows below were read on their bulletin (a community published later has its own day in `LIST_READ_ON`). */
 export const MORE_READ_ON = "2026-11-13";
 /**
- * A test fails from this day until the pending communities are read again.
- * Read again on 18 Nov 2026 (`PENDING_CHECKS`, sources.ts): still none out.
- * Next by 25 Nov: the DOGV is past its 2026 precedent (14 Nov), the BOA
- * reaches its own on 20 Nov, the BON on 2 Dec.
+ * Communities whose 2027 list came out after `MORE_READ_ON`: the day their
+ * rows were transcribed (Cantabria: BOC núm. 224, de 20.11.2026, read that
+ * day; Comunitat Valenciana: the three provincial bulletins of 4, 10 and
+ * 20 Nov 2026, read on 20 Nov).
  */
-export const WAITING_RECHECK_BY = "2026-11-25";
+export const LIST_READ_ON: Partial<Record<Region, string>> = { CB: "2026-11-20", VC: "2026-11-20" };
+/**
+ * A test fails from this day until the pending communities are read again.
+ * Read again on 18 Nov 2026 and on 20 Nov 2026 (`PENDING_CHECKS`,
+ * sources.ts): Cantabria's list came out on the 20th and the Valencian ones
+ * were found in the three provincial bulletins (their towns are rows now);
+ * the other four still none. Next by 27 Nov: the BOA is past its 2026
+ * precedent (20 Nov), the BON's is 2 Dec, the BOCM's and DOCM's 12 Dec.
+ */
+export const WAITING_RECHECK_BY = "2026-11-27";
 export const MORE_MIN_POPULATION = 20_000;
 
 /** Smaller municipalities selected by a real Search Console query (rule 2): 1 Aug – 12 Nov 2026, impressions summed over pages. */
@@ -83,7 +94,7 @@ const y27 = (source: OfficialText, days: LocalDay[], more: Partial<LocalList> = 
 type Base = Omit<CityRow, "status2027" | "local2027" | "local2026" | "region" | "province" | "readOn">;
 
 function row(region: Region, province: string, base: Base, local: LocalList): CityRow {
-  return { ...base, region, province, status2027: "published", local2027: local, local2026: null, readOn: MORE_READ_ON };
+  return { ...base, region, province, status2027: "published", local2027: local, local2026: null, readOn: LIST_READ_ON[region] ?? MORE_READ_ON };
 }
 
 const BOJA = list2027("AN");
@@ -94,6 +105,7 @@ const DOE = list2027("EX");
 const DOG = list2027("GA");
 const BORM = list2027("MC");
 const BOR = list2027("RI");
+const BOC_CB = list2027("CB");
 
 /* -------------------------------------------------------------------------- */
 /* The rows: one per town, the bulletin's line above it                       */
@@ -293,6 +305,16 @@ const CANARIAS: CityRow[] = [
   row("CN", "Santa Cruz de Tenerife", { ine: "38024", slug: "los-llanos-de-aridane", name: "Los Llanos de Aridane", short: "Los Llanos", ineName: "Llanos de Aridane, Los", population: 20582, ineTable: 2892, capital: false, island: "La Palma" }, y27(BOC_CANARIAS, [d("2027-02-09", "Martes de Carnaval"), d("2027-07-02", "Festividad de Nuestra Señora de los Remedios")])),
 ];
 
+/** BOC núm. 224, de 20.11.2026 (CVE-2026-9104), read on `LIST_READ_ON.CB`; the annex prints the names in capitals. */
+const CANTABRIA: CityRow[] = [
+  // BOC: «CASTRO URDIALES | SAN JUAN | 24 | JUNIO; SAN ANDRES | 30 | NOVIEMBRE» (accent as in the annex's other "SAN ANDRÉS" rows)
+  row("CB", "Cantabria", { ine: "39020", slug: "castro-urdiales", name: "Castro-Urdiales", ineName: "Castro-Urdiales", population: 33450, ineTable: 2893, capital: false }, y27(BOC_CB, [d("2027-06-24", "San Juan"), d("2027-11-30", "San Andrés")])),
+  // BOC: «CAMARGO | SAN JUAN | 24 | JUNIO; VIRGEN DEL CARMEN | 16 | JULIO»
+  row("CB", "Cantabria", { ine: "39016", slug: "camargo", name: "Camargo", ineName: "Camargo", population: 30577, ineTable: 2893, capital: false }, y27(BOC_CB, [d("2027-06-24", "San Juan"), d("2027-07-16", "Virgen del Carmen")])),
+  // BOC: «PIÉLAGOS | VIRGEN DEL CARMEN | 16 | JULIO; VIRGEN DE VALENCIA | 08 | SEPTIEMBRE»
+  row("CB", "Cantabria", { ine: "39052", slug: "pielagos", name: "Piélagos", ineName: "Piélagos", population: 26901, ineTable: 2893, capital: false }, y27(BOC_CB, [d("2027-07-16", "Virgen del Carmen"), d("2027-09-08", "Virgen de Valencia")])),
+];
+
 const CASTILLA_Y_LEON: CityRow[] = [
   // BOP de Burgos: «MIRANDA DE EBRO | 17/05/2027 | SAN JUAN DEL MONTE; MIRANDA DE EBRO | 13/09/2027 | NUESTRA SEÑORA DE ALTAMIRA»
   row("CL", "Burgos", { ine: "09219", slug: "miranda-de-ebro", name: "Miranda de Ebro", ineName: "Miranda de Ebro", population: 36622, ineTable: 2862, capital: false }, y27(part("CL", "Burgos"), [d("2027-05-17", "San Juan del Monte"), d("2027-09-13", "Nuestra Señora de Altamira")])),
@@ -423,8 +445,150 @@ const LA_RIOJA: CityRow[] = [
   row("RI", "La Rioja", { ine: "26036", slug: "calahorra", name: "Calahorra", ineName: "Calahorra", population: 25367, ineTable: 2879, capital: false }, y27(BOR, [d("2027-03-03", null), d("2027-08-31", null)])),
 ];
 
+/**
+ * The three provincial bulletins (sources.ts `VALENCIANA.local.parts`), read on `LIST_READ_ON.VC`: the 43 towns
+ * that waited for the list and the 10 that had a page from their council's minutes (cities-council.ts until
+ * 20 Nov 2026; every bulletin day is the council's, none differs). Names as printed, capitalised.
+ */
+const VC_ALICANTE = part("VC", "Alicante");
+const VC_CASTELLON = part("VC", "Castellón");
+const VC_VALENCIA = part("VC", "Valencia");
+const va = (base: Omit<Base, "capital">, days: LocalDay[], more: Partial<LocalList> = {}) => row("VC", "Valencia", { ...base, capital: false }, y27(VC_VALENCIA, days, more));
+const al = (base: Omit<Base, "capital">, days: LocalDay[], more: Partial<LocalList> = {}) => row("VC", "Alicante", { ...base, capital: false }, y27(VC_ALICANTE, days, more));
+const cs = (base: Omit<Base, "capital">, days: LocalDay[]) => row("VC", "Castellón", { ...base, capital: false }, y27(VC_CASTELLON, days));
+
+const VALENCIANA: CityRow[] = [
+  // BOP Valencia: «ALZIRA: 5 de abril, Sant Vicent Ferrer; 23 de julio, Sant Bernat.»
+  va({ ine: "46017", slug: "alzira", name: "Alzira", ineName: "Alzira", population: 48236, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-07-23", "Sant Bernat")]),
+  // BOP Alicante: «DÉNIA: 7 de julio, miércoles, Festividad de la Santísima Sangre; 16 de agosto, lunes, festividad de San Roque. • Eatim de La Xara,
+  // dependiente de Dènia : 3 de septiembre, viernes, fiestas patronales ; 21 de septiembre, martes, San Mateo. • Eatim de Jesús Pobre, dependiente
+  // de Dènia : 5 de abril, lunes, San Vicente Ferrer ; 17 de mayo, lunes de Pentecostés.»
+  al({ ine: "03063", slug: "denia", name: "Dénia", ineName: "Dénia", population: 47261, ineTable: 2856 }, [d("2027-07-07", "Festividad de la Santísima Sangre"), d("2027-08-16", "Festividad de San Roque")], {
+    mainArea: "Dénia",
+    zones: [
+      { place: "EATIM de La Xara, dependiente de Dénia", days: [d("2027-09-03", "Fiestas patronales"), d("2027-09-21", "San Mateo")] },
+      { place: "EATIM de Jesús Pobre, dependiente de Dénia", days: [d("2027-04-05", "San Vicente Ferrer"), d("2027-05-17", "Lunes de Pentecostés")] },
+    ],
+  }),
+  // BOP Valencia: «MISLATA: 5 de abril, San Vicente Ferrer; 30 de agosto, Nuestra Señora de los Ángeles.»
+  va({ ine: "46169", slug: "mislata", name: "Mislata", ineName: "Mislata", population: 47079, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-08-30", "Nuestra Señora de los Ángeles")]),
+  // BOP Valencia: «BURJASSOT: 16 de agosto, Sant Roc; 30 de septiembre, La Virgen de la Cabeza.» (the council's minutes of 31.3.2026: the same days)
+  va({ ine: "46078", slug: "burjassot", name: "Burjassot", ineName: "Burjassot", population: 41299, ineTable: 2903 }, [d("2027-08-16", "Sant Roc"), d("2027-09-30", "La Virgen de la Cabeza")]),
+  // BOP Alicante: «SANTA POLA: 16 de julio, viernes, Virgen del Carmen; 8 de septiembre, miércoles, Virgen de Loreto.» (council, 28.5.2026: the same)
+  al({ ine: "03121", slug: "santa-pola", name: "Santa Pola", ineName: "Santa Pola", population: 39709, ineTable: 2856 }, [d("2027-07-16", "Virgen del Carmen"), d("2027-09-08", "Virgen de Loreto")]),
+  // BOP Castellón: «BORRIANA: 3 de febrero, festividad de San Blas, y 8 de septiembre, festividad de la Virgen de la Misericordia.»
+  cs({ ine: "12032", slug: "burriana", name: "Burriana", ineName: "Borriana/Burriana", population: 37915, ineTable: 2865 }, [d("2027-02-03", "Festividad de San Blas"), d("2027-09-08", "Festividad de la Virgen de la Misericordia")]),
+  // BOP Alicante: «VILLAJOYOSA: 29 de julio, jueves, Festividad de Santa Marta; 29 de septiembre, miércoles, Festividad de San Miguel.»
+  al({ ine: "03139", slug: "villajoyosa", name: "Villajoyosa", ineName: "Vila Joiosa, la/Villajoyosa", population: 37449, ineTable: 2856 }, [d("2027-07-29", "Festividad de Santa Marta"), d("2027-09-29", "Festividad de San Miguel")]),
+  // BOP Valencia: «ONTINYENT: 23 de agosto, Dilluns de Festes de Moros i Cristians; 22 de noviembre, Dilluns de Fira.» (council, 28.5.2026: the same)
+  va({ ine: "46184", slug: "ontinyent", name: "Ontinyent", ineName: "Ontinyent", population: 37012, ineTable: 2903 }, [d("2027-08-23", "Dilluns de Festes de Moros i Cristians"), d("2027-11-22", "Dilluns de Fira")]),
+  // BOP Alicante: «VILLENA: 5 de abril, lunes, San Vicente; 10 de septiembre, viernes, día posterior a la celebración de las Fiestas Patronales.» (council, 25.6.2026: the same)
+  al({ ine: "03140", slug: "villena", name: "Villena", ineName: "Villena", population: 34712, ineTable: 2856 }, [d("2027-04-05", "San Vicente"), d("2027-09-10", "Día posterior a la celebración de las Fiestas Patronales")]),
+  // BOP Valencia: «ALDAIA: 5 de abril, San Vicente Ferrer; 6 de agosto, El Santísimo Cristo de los Necesitados.»
+  va({ ine: "46021", slug: "aldaia", name: "Aldaia", ineName: "Aldaia", population: 34630, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-08-06", "El Santísimo Cristo de los Necesitados")]),
+  // BOP Alicante: «PETRER: lunes 17 de mayo, fiesta de Moros y Cristianos; jueves, 7 de octubre, Fiesta Patronal en honor a la Virgen del Remedio.»
+  al({ ine: "03104", slug: "petrer", name: "Petrer", ineName: "Petrer", population: 34022, ineTable: 2856 }, [d("2027-05-17", "Fiesta de Moros y Cristianos"), d("2027-10-07", "Fiesta Patronal en honor a la Virgen del Remedio")]),
+  // BOP Valencia: «MANISES: 5 de abril, San Vicente Ferrer; 19 de julio, las patronas de la ciudad, Santas Justa y Rufina.» (council, 30.7.2026: the same)
+  va({ ine: "46159", slug: "manises", name: "Manises", ineName: "Manises", population: 32609, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-07-19", "Las patronas de la ciudad, Santas Justa y Rufina")]),
+  // BOP Castellón: «LA VALL D’UIXÓ: 5 de abril, festividad de San Vicente Ferrer y 11 de octubre, festividad de la Sagrada Familia.»
+  cs({ ine: "12126", slug: "la-vall-d-uixo", name: "La Vall d'Uixó", ineName: "Vall d'Uixó, la", population: 32242, ineTable: 2865 }, [d("2027-04-05", "Festividad de San Vicente Ferrer"), d("2027-10-11", "Festividad de la Sagrada Familia")]),
+  // BOP Valencia: «XIRIVELLA: 05 de abril, San Vicente Ferrer; 8 de septiembre, Mare de Déu de la Salut.»
+  va({ ine: "46110", slug: "xirivella", name: "Xirivella", ineName: "Xirivella", population: 32093, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-09-08", "Mare de Déu de la Salut")]),
+  // BOP Alicante: «CAMPELLO (EL): 16 de julio, viernes, Festividad de la Virgen del Carmen; 15 de octubre, viernes, Festividad de Santa Teresa de Jesús.»
+  al({ ine: "03050", slug: "el-campello", name: "El Campello", ineName: "Campello, el", population: 31419, ineTable: 2856 }, [d("2027-07-16", "Festividad de la Virgen del Carmen"), d("2027-10-15", "Festividad de Santa Teresa de Jesús")]),
+  // BOP Valencia: «XÀTIVA: 05 de abril Pasqua de Sant Vicent Ferrer; 5 de agosto, Mare de Déu.»
+  va({ ine: "46145", slug: "xativa", name: "Xàtiva", ineName: "Xàtiva", population: 31008, ineTable: 2903 }, [d("2027-04-05", "Pasqua de Sant Vicent Ferrer"), d("2027-08-05", "Mare de Déu")]),
+  // BOP Alicante: «CREVILLENT: 25 de marzo, Jueves Santo; 4 de octubre, lunes, Fiestas Patronales.» (council, 28.7.2026: the same)
+  al({ ine: "03059", slug: "crevillent", name: "Crevillent", ineName: "Crevillent", population: 30921, ineTable: 2856 }, [d("2027-03-25", "Jueves Santo"), d("2027-10-04", "Fiestas Patronales")]),
+  // BOP Alicante: «JÁVEA: 24 de junio, jueves, fiesta de San Juan; 8 de septiembre, miércoles, Fiesta de Ntra. Sra. de Loreto.»
+  al({ ine: "03082", slug: "javea", name: "Jávea", ineName: "Xàbia/Jávea", population: 30642, ineTable: 2856 }, [d("2027-06-24", "Fiesta de San Juan"), d("2027-09-08", "Fiesta de Ntra. Sra. de Loreto")]),
+  // BOP Valencia: «CATARROJA: 5 de abril, Sant Vicent Ferrer; 29 de septiembre, Sant Miquel.»
+  va({ ine: "46094", slug: "catarroja", name: "Catarroja", ineName: "Catarroja", population: 30604, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-09-29", "Sant Miquel")]),
+  // BOP Castellón: «VINARÒS: 20 de enero, San Sebastián y 24 de junio, San Juan» (council, 18.6.2026: the same days)
+  cs({ ine: "12138", slug: "vinaros", name: "Vinaròs", ineName: "Vinaròs", population: 30529, ineTable: 2865 }, [d("2027-01-20", "San Sebastián"), d("2027-06-24", "San Juan")]),
+  // BOP Castellón: «BENICARLÓ: 18 de marzo, y 24 de agosto festividad de San Bartolomé.»
+  cs({ ine: "12027", slug: "benicarlo", name: "Benicarló", ineName: "Benicarló", population: 30296, ineTable: 2865 }, [d("2027-03-18", null), d("2027-08-24", "Festividad de San Bartolomé")]),
+  // BOP Valencia: «ALAQUÀS: 8 de septiembre, Virgen del Olivar; 9 de septiembre, El Cristo de la Buena Muerte.»
+  va({ ine: "46005", slug: "alaquas", name: "Alaquàs", ineName: "Alaquàs", population: 30166, ineTable: 2903 }, [d("2027-09-08", "Virgen del Olivar"), d("2027-09-09", "El Cristo de la Buena Muerte")]),
+  // BOP Valencia: «SUECA: 5 de abril, Sant Vicent Ferrer; 8 de septiembre, Mare de Déu de Sales.»
+  va({ ine: "46235", slug: "sueca", name: "Sueca", ineName: "Sueca", population: 29194, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-09-08", "Mare de Déu de Sales")]),
+  // BOP Castellón: «ALMASSORA: 5 de abril y 22 de mayo.»
+  cs({ ine: "12009", slug: "almassora", name: "Almassora", ineName: "Almassora", population: 29159, ineTable: 2865 }, [d("2027-04-05", null), d("2027-05-22", null)]),
+  // BOP Alicante: «MUTXAMEL: 1 de marzo, lunes, Festividad del Milagro de la Lágrima de la Mare de Déu de Loreto; 9 de septiembre, jueves, Festividad de la Mare de Déu de Loreto.»
+  al({ ine: "03090", slug: "mutxamel", name: "Mutxamel", ineName: "Mutxamel", population: 28621, ineTable: 2856 }, [d("2027-03-01", "Festividad del Milagro de la Lágrima de la Mare de Déu de Loreto"), d("2027-09-09", "Festividad de la Mare de Déu de Loreto")]),
+  // BOP Valencia: «BÉTERA: 5 de abril, San Vicente; 16 de agosto, San Roque.»
+  va({ ine: "46070", slug: "betera", name: "Bétera", ineName: "Bétera", population: 28560, ineTable: 2903 }, [d("2027-04-05", "San Vicente"), d("2027-08-16", "San Roque")]),
+  // BOP Valencia: «ALGEMESÍ: 8 de septiembre, Mare de Déu de la Salut; 1 de octubre de 2027 divendres de la setmana de bous.»
+  va({ ine: "46029", slug: "algemesi", name: "Algemesí", ineName: "Algemesí", population: 28306, ineTable: 2903 }, [d("2027-09-08", "Mare de Déu de la Salut"), d("2027-10-01", "Divendres de la setmana de bous")]),
+  // BOP Valencia: «PAIPORTA: 05 de abril, Sant Vicent Ferrer; 16 de agosto, Sant Roc.»
+  va({ ine: "46186", slug: "paiporta", name: "Paiporta", ineName: "Paiporta", population: 28136, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-08-16", "Sant Roc")]),
+  // BOP Alicante: «CALP: 5 de agosto, jueves, Madre de Dios de las Nieves; 22 de octubre, viernes, Santísimo Cristo del Sudor.»
+  al({ ine: "03047", slug: "calp", name: "Calp", ineName: "Calp", population: 27616, ineTable: 2856 }, [d("2027-08-05", "Madre de Dios de las Nieves"), d("2027-10-22", "Santísimo Cristo del Sudor")]),
+  // BOP Valencia: «POBLA DE VALLBONA, LA: 20 de enero, Patró Sant Sebastiá; 7 de octubre, Patrona Verge del Rosari.»
+  va({ ine: "46202", slug: "la-pobla-de-vallbona", name: "La Pobla de Vallbona", ineName: "Pobla de Vallbona, la", population: 27471, ineTable: 2903 }, [d("2027-01-20", "Patró Sant Sebastiá"), d("2027-10-07", "Patrona Verge del Rosari")]),
+  // BOP Valencia: «QUART DE POBLET: 5 de abril, San Vicente Ferrer; 6 de septiembre, la Virgen de la Luz.»
+  va({ ine: "46102", slug: "quart-de-poblet", name: "Quart de Poblet", ineName: "Quart de Poblet", population: 26967, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-09-06", "La Virgen de la Luz")]),
+  // BOP Alicante: «SANT JOAN D´ALACANT: 24 de junio, jueves; 14 de septiembre, martes.»
+  al({ ine: "03119", slug: "sant-joan-d-alacant", name: "Sant Joan d'Alacant", ineName: "Sant Joan d'Alacant", population: 26834, ineTable: 2856 }, [d("2027-06-24", null), d("2027-09-14", null)]),
+  // BOP Valencia: «OLIVA: 16 de julio, Moros i Cristians; 3 de mayo, Festes del Crist.»
+  va({ ine: "46181", slug: "oliva", name: "Oliva", ineName: "Oliva", population: 26813, ineTable: 2903 }, [d("2027-05-03", "Festes del Crist"), d("2027-07-16", "Moros i Cristians")]),
+  // BOP Alicante: «NOVELDA: 5 de abril, Segundo Lunes de Pascua, fiesta tradicional de carácter local; 22 de julio, jueves, festividad de Santa María Magdalena Patrona de Novelda.» (council, 7.5.2026: the same)
+  al({ ine: "03093", slug: "novelda", name: "Novelda", ineName: "Novelda", population: 26606, ineTable: 2856 }, [d("2027-04-05", "Segundo Lunes de Pascua"), d("2027-07-22", "Festividad de Santa María Magdalena Patrona de Novelda")]),
+  // BOP Valencia: «ALBORAIA/ALBORAYA: 5 de abril, Sant Vicent Ferrer; 10 de julio, día de Sant Cristòfol.» (council, 25.6.2026: the same)
+  va({ ine: "46013", slug: "alboraya", name: "Alboraya", ineName: "Alboraia/Alboraya", population: 26273, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-07-10", "Día de Sant Cristòfol")]),
+  // BOP Castellón: «ONDA: 6 de agosto y 25 de octubre.»
+  cs({ ine: "12084", slug: "onda", name: "Onda", ineName: "Onda", population: 26190, ineTable: 2865 }, [d("2027-08-06", null), d("2027-10-25", null)]),
+  // BOP Valencia: «LLÍRIA: 5 de abril, San Vicente Ferrer; 29 de septiembre, San Miguel Arcángel.» (council, 26.3.2026: the same)
+  va({ ine: "46147", slug: "lliria", name: "Llíria", ineName: "Llíria", population: 25333, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-09-29", "San Miguel Arcángel")]),
+  // BOP Valencia: «CULLERA: 5 de abril, San Vicente Ferrer; 9 de abril, Fiestas Mayores.»
+  va({ ine: "46105", slug: "cullera", name: "Cullera", ineName: "Cullera", population: 24702, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-04-09", "Fiestas Mayores")]),
+  // BOP Valencia: «RIBA-ROJA DE TÚRIA: 5 de abril, San Vicente Ferrer; 14 de septiembre, Santísimo Cristo de los Afligidos.»
+  va({ ine: "46214", slug: "riba-roja-de-turia", name: "Riba-roja de Túria", ineName: "Riba-roja de Túria", population: 24616, ineTable: 2903 }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-09-14", "Santísimo Cristo de los Afligidos")]),
+  // BOP Alicante: «ALTEA: 27 y 28 de septiembre, lunes y martes, respectivamente.»
+  al({ ine: "03018", slug: "altea", name: "Altea", ineName: "Altea", population: 24592, ineTable: 2856 }, [d("2027-09-27", null), d("2027-09-28", null)]),
+  // BOP Alicante: «IBI: 10 de septiembre, viernes; 13 de septiembre, lunes.»
+  al({ ine: "03079", slug: "ibi", name: "Ibi", ineName: "Ibi", population: 24500, ineTable: 2856 }, [d("2027-09-10", null), d("2027-09-13", null)]),
+  // BOP Alicante: «PILAR DE LA HORADADA: 30 de julio, viernes, aniversario de la Segregación; 13 de octubre miércoles, día posterior a la festividad de la Virgen del Pilar.»
+  al({ ine: "03902", slug: "pilar-de-la-horadada", name: "Pilar de la Horadada", ineName: "Pilar de la Horadada", population: 24316, ineTable: 2856 }, [d("2027-07-30", "Aniversario de la Segregación"), d("2027-10-13", "Día posterior a la festividad de la Virgen del Pilar")]),
+  // BOP Valencia: «PICASSENT: 10 de julio, Sant Cristòfol; 8 de septiembre, La Virgen de Vallivana.»
+  va({ ine: "46194", slug: "picassent", name: "Picassent", ineName: "Picassent", population: 23202, ineTable: 2903 }, [d("2027-07-10", "Sant Cristòfol"), d("2027-09-08", "La Virgen de Vallivana")]),
+  // BOP Alicante: «ALMORADÍ: 30 de julio, viernes, festividad de los Santicos de la Piedra; 30 de noviembre, martes, festividad de San Andrés.»
+  al({ ine: "03015", slug: "almoradi", name: "Almoradí", ineName: "Almoradí", population: 22965, ineTable: 2856 }, [d("2027-07-30", "Festividad de los Santicos de la Piedra"), d("2027-11-30", "Festividad de San Andrés")]),
+  // BOP Alicante: «ASPE: 4 de febrero, jueves, Día de la Jira; 5 de agosto, jueves, Festividad de la Virgen de las Nieves.»
+  al({ ine: "03019", slug: "aspe", name: "Aspe", ineName: "Aspe", population: 22397, ineTable: 2856 }, [d("2027-02-04", "Día de la Jira"), d("2027-08-05", "Festividad de la Virgen de las Nieves")]),
+  // BOP Valencia: «ALFAFAR: 5 de abril, Sant Vicent Ferrer; 8 de septiembre, Mare de Déu del Do.»
+  va({ ine: "46022", slug: "alfafar", name: "Alfafar", ineName: "Alfafar", population: 22270, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-09-08", "Mare de Déu del Do")]),
+  // BOP Valencia: «MONTCADA/MONCADA: 10 de septiembre, San Jaime Apóstol; 4 de diciembre, Santa Bárbara.»
+  va({ ine: "46171", slug: "moncada", name: "Moncada", ineName: "Montcada/Moncada", population: 22213, ineTable: 2903 }, [d("2027-09-10", "San Jaime Apóstol"), d("2027-12-04", "Santa Bárbara")]),
+  // BOP Valencia: «CARCAIXENT: 5 de abril, Sant Vicent Ferrer; 16 de octubre, Mare de Déu d’Aigües Vives.»
+  va({ ine: "46083", slug: "carcaixent", name: "Carcaixent", ineName: "Carcaixent", population: 21934, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-10-16", "Mare de Déu d'Aigües Vives")]),
+  // BOP Valencia: «PUÇOL: 24 de junio, San Juan; 8 de septiembre, Patrona de Puçol.»
+  va({ ine: "46205", slug: "pucol", name: "Puçol", ineName: "Puçol", population: 21659, ineTable: 2903 }, [d("2027-06-24", "San Juan"), d("2027-09-08", "Patrona de Puçol")]),
+  // BOP Alicante: «ALFÀS DEL PÍ (L’): 09 de noviembre, martes; 10 de noviembre, miércoles.»
+  al({ ine: "03011", slug: "l-alfas-del-pi", name: "L'Alfàs del Pi", ineName: "Alfàs del Pi, l'", population: 21080, ineTable: 2856 }, [d("2027-11-09", null), d("2027-11-10", null)]),
+  // BOP Valencia: «REQUENA: 18 de marzo, día previo a Viernes de Dolores; 5 de abril, Lunes de Pascua de San Vicente Ferrer.»
+  va({ ine: "46213", slug: "requena", name: "Requena", ineName: "Requena", population: 20982, ineTable: 2903 }, [d("2027-03-18", "Día previo a Viernes de Dolores"), d("2027-04-05", "Lunes de Pascua de San Vicente Ferrer")]),
+  // BOP Castellón: «BENICASIM: 22 de enero, San Antonio Abad y Santa Águeda y 22 de septiembre, Santo Tomás de Villanueva.»
+  cs({ ine: "12028", slug: "benicasim", name: "Benicasim", ineName: "Benicàssim/Benicasim", population: 20539, ineTable: 2865 }, [d("2027-01-22", "San Antonio Abad y Santa Águeda"), d("2027-09-22", "Santo Tomás de Villanueva")]),
+  // BOP Valencia: «SILLA: 05 de abril, Sant Vicent Ferrer; 06 de agosto, Santíssim Crist de Silla.»
+  va({ ine: "46230", slug: "silla", name: "Silla", ineName: "Silla", population: 20482, ineTable: 2903 }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-08-06", "Santíssim Crist de Silla")]),
+];
+
 /** The 20,000+ wave, by community in the BOE's order, most populous first. */
-export const MORE_CITY_ROWS: readonly CityRow[] = [...ANDALUCIA, ...ASTURIAS, ...BALEARES, ...CANARIAS, ...CASTILLA_Y_LEON, ...EXTREMADURA, ...GALICIA, ...MURCIA, ...PAIS_VASCO, ...LA_RIOJA];
+export const MORE_CITY_ROWS: readonly CityRow[] = [
+  ...ANDALUCIA,
+  ...ASTURIAS,
+  ...BALEARES,
+  ...CANARIAS,
+  ...CANTABRIA,
+  ...CASTILLA_Y_LEON,
+  ...EXTREMADURA,
+  ...GALICIA,
+  ...MURCIA,
+  ...PAIS_VASCO,
+  ...LA_RIOJA,
+  ...VALENCIANA,
+];
 
 /* -------------------------------------------------------------------------- */
 /* Towns in scope with no page yet                                            */
@@ -464,9 +628,6 @@ function missingTown(region: Region, province: string, base: WaitBase, note: str
  */
 export const WAITING_TOWNS: readonly WaitingTown[] = [
   wait("AR", "Zaragoza", { ine: "50067", slug: "calatayud", name: "Calatayud", ineName: "Calatayud", population: 20158, ineTable: 2907 }),
-  wait("CB", "Cantabria", { ine: "39020", slug: "castro-urdiales", name: "Castro-Urdiales", ineName: "Castro-Urdiales", population: 33450, ineTable: 2893 }),
-  wait("CB", "Cantabria", { ine: "39016", slug: "camargo", name: "Camargo", ineName: "Camargo", population: 30577, ineTable: 2893 }),
-  wait("CB", "Cantabria", { ine: "39052", slug: "pielagos", name: "Piélagos", ineName: "Piélagos", population: 26901, ineTable: 2893 }),
   wait("CM", "Ciudad Real", { ine: "13082", slug: "tomelloso", name: "Tomelloso", ineName: "Tomelloso", population: 37060, ineTable: 2866 }),
   wait("CM", "Guadalajara", { ine: "19046", slug: "azuqueca-de-henares", name: "Azuqueca de Henares", ineName: "Azuqueca de Henares", population: 35924, ineTable: 2872 }),
   wait("CM", "Toledo", { ine: "45081", slug: "illescas", name: "Illescas", ineName: "Illescas", population: 33301, ineTable: 2902 }),
@@ -492,49 +653,6 @@ export const WAITING_TOWNS: readonly WaitingTown[] = [
   wait("NC", "Navarra", { ine: "31232", slug: "tudela", name: "Tudela", ineName: "Tudela", population: 38903, ineTable: 2884 }),
   wait("NC", "Navarra", { ine: "31086", slug: "valle-de-egues", name: "Valle de Egüés", ineName: "Valle de Egüés/Eguesibar", population: 22825, ineTable: 2884 }),
   wait("NC", "Navarra", { ine: "31060", slug: "burlada", name: "Burlada", ineName: "Burlada/Burlata", population: 21280, ineTable: 2884 }),
-  wait("VC", "Valencia", { ine: "46017", slug: "alzira", name: "Alzira", ineName: "Alzira", population: 48236, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03063", slug: "denia", name: "Dénia", ineName: "Dénia", population: 47261, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46169", slug: "mislata", name: "Mislata", ineName: "Mislata", population: 47079, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12032", slug: "burriana", name: "Burriana", ineName: "Borriana/Burriana", population: 37915, ineTable: 2865 }),
-  wait("VC", "Alicante", { ine: "03139", slug: "villajoyosa", name: "Villajoyosa", ineName: "Vila Joiosa, la/Villajoyosa", population: 37449, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46021", slug: "aldaia", name: "Aldaia", ineName: "Aldaia", population: 34630, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03104", slug: "petrer", name: "Petrer", ineName: "Petrer", population: 34022, ineTable: 2856 }),
-  wait("VC", "Castellón", { ine: "12126", slug: "la-vall-d-uixo", name: "La Vall d'Uixó", ineName: "Vall d'Uixó, la", population: 32242, ineTable: 2865 }),
-  wait("VC", "Valencia", { ine: "46110", slug: "xirivella", name: "Xirivella", ineName: "Xirivella", population: 32093, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03050", slug: "el-campello", name: "El Campello", ineName: "Campello, el", population: 31419, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46145", slug: "xativa", name: "Xàtiva", ineName: "Xàtiva", population: 31008, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03082", slug: "javea", name: "Jávea", ineName: "Xàbia/Jávea", population: 30642, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46094", slug: "catarroja", name: "Catarroja", ineName: "Catarroja", population: 30604, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12027", slug: "benicarlo", name: "Benicarló", ineName: "Benicarló", population: 30296, ineTable: 2865 }),
-  wait("VC", "Valencia", { ine: "46005", slug: "alaquas", name: "Alaquàs", ineName: "Alaquàs", population: 30166, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46235", slug: "sueca", name: "Sueca", ineName: "Sueca", population: 29194, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12009", slug: "almassora", name: "Almassora", ineName: "Almassora", population: 29159, ineTable: 2865 }),
-  wait("VC", "Alicante", { ine: "03090", slug: "mutxamel", name: "Mutxamel", ineName: "Mutxamel", population: 28621, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46070", slug: "betera", name: "Bétera", ineName: "Bétera", population: 28560, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46029", slug: "algemesi", name: "Algemesí", ineName: "Algemesí", population: 28306, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46186", slug: "paiporta", name: "Paiporta", ineName: "Paiporta", population: 28136, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03047", slug: "calp", name: "Calp", ineName: "Calp", population: 27616, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46202", slug: "la-pobla-de-vallbona", name: "La Pobla de Vallbona", ineName: "Pobla de Vallbona, la", population: 27471, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46102", slug: "quart-de-poblet", name: "Quart de Poblet", ineName: "Quart de Poblet", population: 26967, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03119", slug: "sant-joan-d-alacant", name: "Sant Joan d'Alacant", ineName: "Sant Joan d'Alacant", population: 26834, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46181", slug: "oliva", name: "Oliva", ineName: "Oliva", population: 26813, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12084", slug: "onda", name: "Onda", ineName: "Onda", population: 26190, ineTable: 2865 }),
-  wait("VC", "Valencia", { ine: "46105", slug: "cullera", name: "Cullera", ineName: "Cullera", population: 24702, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46214", slug: "riba-roja-de-turia", name: "Riba-roja de Túria", ineName: "Riba-roja de Túria", population: 24616, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03018", slug: "altea", name: "Altea", ineName: "Altea", population: 24592, ineTable: 2856 }),
-  wait("VC", "Alicante", { ine: "03079", slug: "ibi", name: "Ibi", ineName: "Ibi", population: 24500, ineTable: 2856 }),
-  wait("VC", "Alicante", { ine: "03902", slug: "pilar-de-la-horadada", name: "Pilar de la Horadada", ineName: "Pilar de la Horadada", population: 24316, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46194", slug: "picassent", name: "Picassent", ineName: "Picassent", population: 23202, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03015", slug: "almoradi", name: "Almoradí", ineName: "Almoradí", population: 22965, ineTable: 2856 }),
-  wait("VC", "Alicante", { ine: "03019", slug: "aspe", name: "Aspe", ineName: "Aspe", population: 22397, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46022", slug: "alfafar", name: "Alfafar", ineName: "Alfafar", population: 22270, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46171", slug: "moncada", name: "Moncada", ineName: "Montcada/Moncada", population: 22213, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46083", slug: "carcaixent", name: "Carcaixent", ineName: "Carcaixent", population: 21934, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46205", slug: "pucol", name: "Puçol", ineName: "Puçol", population: 21659, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03011", slug: "l-alfas-del-pi", name: "L'Alfàs del Pi", ineName: "Alfàs del Pi, l'", population: 21080, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46213", slug: "requena", name: "Requena", ineName: "Requena", population: 20982, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12028", slug: "benicasim", name: "Benicasim", ineName: "Benicàssim/Benicasim", population: 20539, ineTable: 2865 }),
-  wait("VC", "Valencia", { ine: "46230", slug: "silla", name: "Silla", ineName: "Silla", population: 20482, ineTable: 2903 }),
   missingTown("AN", "Cádiz", { ine: "11006", slug: "arcos-de-la-frontera", name: "Arcos de la Frontera", ineName: "Arcos de la Frontera", population: 31267, ineTable: 2864 }, "La lista de 2027 de Andalucía (BOJA núm. 210, de 29.10.2026) no incluye Arcos de la Frontera: recoge las fiestas «que constan comunicadas hasta la fecha»."),
   missingTown("GA", "Pontevedra", { ine: "36008", slug: "cangas", name: "Cangas", ineName: "Cangas", population: 26711, ineTable: 2890 }, "El DOG núm. 204, de 26.10.2026, da a Cangas («Cangas de Morrazo») el 19 de marzo, viernes de los Dolores, que ya es festivo autonómico en Galicia, y el 30 de agosto; los datos abiertos de la Xunta solo recogen el 30 de agosto. Sin página hasta que se aclare el segundo día."),
 ];

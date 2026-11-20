@@ -22,17 +22,21 @@ import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
  * four more ca/en city pages kept in the index.
  */
 
-const PENDING = ["AR", "VC", "CB", "CM", "MD", "NC"] as const;
-const BULLETIN = { AR: "BOA", VC: "DOGV", CB: "BOC", CM: "DOCM", MD: "BOCM", NC: "BON" } as const;
+// Cantabria (BOC núm. 224) and the Comunitat Valenciana (three provincial BOPs) left this list on 20 Nov 2026:
+// tests/spain-2027-laboral-20nov.test.ts.
+const PENDING = ["AR", "CM", "MD", "NC"] as const;
+const BULLETIN = { AR: "BOA", CM: "DOCM", MD: "BOCM", NC: "BON" } as const;
+/** PENDING_READ_ON as the bulletins print it: "20.11.2026". */
+const READ_DOTTED = PENDING_READ_ON.split("-").reverse().map(Number).join("\\.");
 
-test("pending lists: the six read again on PENDING_READ_ON, each with the last issue searched", () => {
+test("pending lists: read again on PENDING_READ_ON, each with the last issue searched", () => {
   for (const r of PENDING) {
     const local = SOURCES[r].local;
     assert.equal(local.status, "pending", r);
     assert.ok(local.checked, r);
     assert.equal(local.checked, PENDING_CHECKS[r], r);
     assert.equal(local.checked!.date, PENDING_READ_ON, r);
-    assert.match(local.checked!.through, new RegExp(`^${BULLETIN[r]} núm\\. \\d+, de 18\\.11\\.2026$`), r);
+    assert.match(local.checked!.through, new RegExp(`^${BULLETIN[r]} núm\\. \\d+, de ${READ_DOTTED}$`), r);
     assert.ok(local.y2026 && local.checked!.date > local.y2026.date, r);
   }
   // Only a pending list carries a check; every pending one does (Catalonia's DOGC order has its own engine).
@@ -55,7 +59,8 @@ test("status lines name the last issue searched (es, ca, en)", () => {
 
 test("pending cities: read on the day their bulletin was searched, and the answer says up to which issue", () => {
   const pending = CITIES.filter((c) => c.status2027 === "pending");
-  assert.ok(pending.length >= 40);
+  // 49 on 18 Nov; 32 from 20 Nov 2026 (Cantabria's and the Valencian lists out, Parla and Fuenlabrada by their council's minutes).
+  assert.ok(pending.length >= 25, `${pending.length}`);
   for (const c of pending) {
     const check = SOURCES[c.region].local.checked;
     assert.ok(check, c.slug);
@@ -64,8 +69,8 @@ test("pending cities: read on the day their bulletin was searched, and the answe
     assert.ok(cityAnswerIntl(c, "ca").rest.includes(`(fins al ${check!.through})`), c.slug);
     assert.ok(cityAnswerIntl(c, "en").rest.includes(`(up to ${check!.through})`), c.slug);
   }
-  // A published city keeps the day its own list was read.
-  assert.notEqual(cityReadOn(cityBySlug("GA", "vigo")!), PENDING_READ_ON);
+  // A published city keeps the day its own list was read (Vigo was read again on 20 Nov 2026: the 20 Nov test).
+  assert.notEqual(cityReadOn(cityBySlug("GA", "ourense")!), PENDING_READ_ON);
 });
 
 test("layers: every 2027 day of the city in exactly one layer, each layer with its source", () => {
@@ -92,7 +97,7 @@ test("layers: every 2027 day of the city in exactly one layer, each layer with i
   assert.equal(vigo.find((x) => x.id === "local")!.days.startsWith("lun 29 mar"), true, vigo.find((x) => x.id === "local")!.days);
   const alcobendas = cityLayerLines(cityBySlug("MD", "alcobendas")!).find((x) => x.id === "local")!;
   assert.equal(alcobendas.days, "pendientes de publicación en el BOCM");
-  assert.equal(alcobendas.source, "consultado hasta el BOCM núm. 277, de 18.11.2026");
+  assert.equal(alcobendas.source, `consultado hasta el ${PENDING_CHECKS.MD.through}`);
   // Navarra: the shared 3 December is known; the town's own day is pending.
   const pamplona = cityLayerLines(cityBySlug("NC", "pamplona")!).find((x) => x.id === "local")!;
   assert.match(pamplona.days, /^vie 3 dic \(San Francisco Javier.*\) y otra pendiente de publicación en el BON$/);
@@ -114,7 +119,8 @@ test("titles from CITY_TITLES_FROM: 'Festivos <Ciudad> 2027: calendario laboral�
   assert.ok(CITIES.filter((c) => cityTitle(c, "2026-12-01") !== cityTitle(c, CITY_TITLES_FROM)).length > CITIES.length * 0.9);
   assert.equal(cityTitle(cityBySlug("GA", "vigo")!, CITY_TITLES_FROM), "Festivos Vigo 2027: calendario laboral, 29 mar y 16 ago");
   assert.equal(cityTitle(cityBySlug("MD", "alcobendas")!, CITY_TITLES_FROM), "Festivos Alcobendas 2027: calendario laboral");
-  assert.equal(cityTitle(cityBySlug("CB", "torrelavega")!, CITY_TITLES_FROM), "Festivos Torrelavega 2027: calendario laboral");
+  // Torrelavega's and Benidorm's days came out on 20 Nov 2026 (BOC núm. 224, BOP de Alicante): their titles take them; Getafe still waits for the BOCM.
+  assert.equal(cityTitle(cityBySlug("MD", "getafe")!, CITY_TITLES_FROM), "Festivos Getafe 2027: calendario laboral");
 });
 
 test("community pages: the searched-cities line resolves every slug, most searched first", () => {
@@ -144,8 +150,8 @@ test("low-demand keep lists: the four ca/en city pages over the bar with their 2
   ]) {
     assert.equal(isLowDemandPath(p, "2026-11-18"), false, p);
   }
-  // Over the bar but without 2027 local days yet: held.
-  for (const p of ["/en/holidays/2027/navarre/pamplona/", "/en/holidays/2027/valencian-community/benidorm/", "/en/holidays/2027/castile-and-leon/burgos/"]) {
+  // Over the bar but without 2027 local days yet: held (Benidorm joined on 20 Nov 2026 with its BOP days).
+  for (const p of ["/en/holidays/2027/navarre/pamplona/", "/en/holidays/2027/castile-and-leon/burgos/"]) {
     assert.equal(isLowDemandPath(p, "2026-11-18"), true, p);
   }
 });

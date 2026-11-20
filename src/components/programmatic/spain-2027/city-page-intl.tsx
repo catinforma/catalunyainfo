@@ -312,7 +312,8 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             </>
           ) : (
             <>
-              <h2 id="locales">{tr(locale, `Festes locals del ${YEAR}: encara sense publicar`, `${YEAR} local holidays: not yet published`)}</h2>
+              {/* The city in the heading (20 Nov 2026): "festivos locales <ciudad> 2027" is the query. */}
+              <h2 id="locales">{tr(locale, `Festes locals ${caOf(name)} el ${YEAR}: encara sense publicar`, `${Name}'s ${YEAR} local holidays: not yet published`)}</h2>
               <p>
                 {prose.how}{" "}
                 <a href={s.local.bulletinUrl} rel="noopener nofollow" target="_blank">
