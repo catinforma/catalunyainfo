@@ -35,6 +35,14 @@ import {
 import { buildMesaDuty, type MesaDutyModel } from "./mesa-duty";
 import { electionDayBlock, INE_29N_URL, type ElectionDayBlock, type ElectionDayPhase } from "./election-day";
 import { INE_MESA_URL, buildPolling, type PollingModel } from "./polling";
+
+/**
+ * 20 Nov 2026: "censo electoral <town>" queries (e.g. Mataró 33 impressions at 5.9, Badalona 31 at 7.5, no clicks, GSC
+ * 7-20 Nov) want to check their own entry. INE cid=1700, read 20 Nov: "Para realizar la consulta, se exige identificarse
+ * por el sistema Cl@ve. Quien no pueda identificarse por este sistema podrá consultar sus datos en su Ayuntamiento ... o
+ * llamando al teléfono 900.343.232"; the certificación censal específica can be issued "hasta el mismo día de la votación".
+ */
+const INE_ROLL_URL = "https://sede.ine.gob.es/ce-internet1/?lang=es_ES";
 import { RESULTS_SITE_CHECKED, resultsNightLine } from "./results-night";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
@@ -715,6 +723,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         title: `Cens electoral ${ofCa(place)}`,
         md: [
           `A les generals del ${dates.congress}, el cens electoral ${ofCa(place)} era de **${f.n(m.congress.electorate)} persones**; a les municipals del 2023, de ${f.n(m.municipal.electorate)}. On votes el 29 de novembre (secció, mesa i local) ho diuen la targeta censal i la [consulta oficial de mesa i local de l'INE](${INE_MESA_URL}).`,
+          `**Com comprovar si ets al cens:** amb Cl@ve, a la [consulta d'inscripció al cens de l'INE](${INE_ROLL_URL}); sense Cl@ve, a l'ajuntament ${ofCa(place)} o al telèfon gratuït de l'Oficina del Cens Electoral, 900 343 232. Si el dia de la votació no surts a la llista de la teva mesa, la delegació provincial de l'Oficina del Cens Electoral pot emetre fins aquell mateix dia una certificació censal específica, que prova que hi ets inscrit.`,
           // 18 Nov 2026: the "censo electoral <town>" queries ask about inclusion too (INE cid=1700 and LOREG 35.3, 85.2, read that day).
           `El cens del 29N és el tancat l'**1 d'agost de 2026**, amb els canvis que els ajuntaments havien comunicat fins al 30 de juliol ([INE](${INE_29N_URL})): un canvi de domicili comunicat després no hi és, i votes on diuen la targeta censal i la consulta de l'INE. Si fas 18 anys fins al 29 de novembre, el cens ja et té (hi entren per endavant els residents que faran 18 anys durant l'any) i la llista de la mesa inclou tothom que és major d'edat el dia de la votació (LOREG, articles 35.3 i 85.2).`,
           `El cens electoral és la llista de les persones amb dret a vot ([LOREG, article 31](${LOREG_URL})). No és la població: no hi ha els menors de 18 anys ni els estrangers sense dret a vot. Per això ${place} té ${f.n(m.population)} habitants i a les municipals del 2023 tenia un cens de ${f.n(m.municipal.electorate)} persones.`,
@@ -905,6 +914,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         title: `Censo electoral de ${place}`,
         md: [
           `En las generales del ${dates.congress}, el censo electoral de ${place} era de **${f.n(m.congress.electorate)} personas**; en las municipales de 2023, de ${f.n(m.municipal.electorate)}. Dónde votas el 29 de noviembre (sección, mesa y local) lo dicen la tarjeta censal y la [consulta oficial de mesa y local del INE](${INE_MESA_URL}).`,
+          `**Cómo comprobar si estás en el censo:** con Cl@ve, en la [consulta de inscripción en el censo del INE](${INE_ROLL_URL}); sin Cl@ve, en el Ayuntamiento de ${place} o en el teléfono gratuito de la Oficina del Censo Electoral, 900 343 232. Si el día de la votación no apareces en la lista de tu mesa, la delegación provincial de la Oficina del Censo Electoral puede emitir hasta ese mismo día una certificación censal específica, que prueba que estás inscrito.`,
           `El censo del 29N es el cerrado el **1 de agosto de 2026**, con los cambios que los ayuntamientos habían comunicado hasta el 30 de julio ([INE](${INE_29N_URL})): un cambio de domicilio comunicado después no está, y votas donde dicen la tarjeta censal y la consulta del INE. Si cumples 18 años hasta el 29 de noviembre, el censo ya te tiene (entran por adelantado los residentes que cumplirán 18 años durante el año) y la lista de la mesa incluye a todos los mayores de edad el día de la votación (LOREG, artículos 35.3 y 85.2).`,
           `El censo electoral es la lista de las personas con derecho a voto ([LOREG, artículo 31](${LOREG_URL})). No es la población: no están los menores de 18 años ni los extranjeros sin derecho a voto. Por eso ${place} tiene ${f.n(m.population)} habitantes y en las municipales de 2023 tenía un censo de ${f.n(m.municipal.electorate)} personas.`,
           "En las municipales, el censo también incluye a los ciudadanos de la Unión Europea y de los países con tratado de reciprocidad que residen allí y se han inscrito (artículo 176). En las generales y en las del Parlament, el voto de las personas inscritas en el extranjero (CERA) se cuenta por provincias y no aparece en las cifras del municipio.",
@@ -1093,6 +1103,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
       title: `Electoral roll (censo electoral) of ${place}`,
       md: [
         `At the general election of ${dates.congress}, ${place}'s electoral roll had **${f.n(m.congress.electorate)} people**; at the 2023 local election, ${f.n(m.municipal.electorate)}. Where you vote on 29 November (section, table and polling place) is on your census card and in the [INE's official polling place and table lookup](${INE_MESA_URL}) (in Spanish).`,
+        `**How to check you are on the roll:** with Cl@ve, on the [INE's electoral-roll lookup](${INE_ROLL_URL}) (in Spanish); without Cl@ve, at ${place} town hall or on the census office's free line, 900 343 232. If on polling day you are missing from your table's list, the census office's provincial branch can issue a specific census certificate (certificación censal específica) up to that same day, which proves you are on the roll.`,
         `The roll used on 29 November is the one closed on **1 August 2026**, with the changes town halls had reported up to 30 July ([INE](${INE_29N_URL})): a change of address reported later is not on it, so you vote where your census card and the INE lookup say. If you turn 18 on or before 29 November, you are already on it (residents who come of age during the year are added in advance) and the list at your table includes everyone who is of age on polling day (LOREG, articles 35.3 and 85.2).`,
         `The electoral roll (_censo electoral_) lists everyone entitled to vote ([LOREG, article 31](${LOREG_URL})). It is not the population: under-18s and foreign residents without voting rights are not on it. That is why ${place} has ${f.n(m.population)} residents and had an electorate of ${f.n(m.municipal.electorate)} at the 2023 local election.`,
         "For local elections the roll also includes citizens of other EU countries, and of countries with a reciprocity treaty, who live there and have registered (article 176). In general and Catalan elections, votes from people registered abroad (CERA) are counted by province and do not appear in the municipality's figures.",

@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
+import { b2href } from "../src/lib/content/batch02/shared.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
+import { buildElectionPage } from "../src/lib/programmatic/elections/model.ts";
+import { municipalitiesFor } from "../src/lib/programmatic/elections/pages.ts";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 
@@ -246,6 +250,55 @@ test("voting: MiDNI valid since the JEC's Acuerdo 334/2026 of 5 Nov; MiDGT still
     assert.doesNotMatch(text, /MiDNI[^.]*(no sirve|no serveix|not accepted for now|està suspesa|está suspendida|is suspended)/i, `${locale}: stale suspension copy`);
   }
   assert.ok(VOTING.sources.some((s) => s.url.includes("idacuerdoinstruccion=155594")), "Acuerdo 334/2026 in sources");
+});
+
+/* -------------------------------------------------------------------------- */
+/* 20 Nov 2026: postal closed, hand-in 26 Nov 14:00; dates; Parliament term   */
+/* -------------------------------------------------------------------------- */
+
+test("20 Nov: how-to-vote says requests closed and hand-in by 26 Nov at 14:00 (JEC 418/2026) outside the lead", () => {
+  const warn: Record<Locale, RegExp> = { ca: /es va acabar el 19 de novembre.*dijous 26 de novembre, com a molt a les 14 h/, es: /terminó el 19 de noviembre.*jueves 26 de noviembre, como máximo a las 14 h/, en: /closed on 19 November.*Thursday 26 November, 14:00 at the latest/ };
+  for (const locale of LOCALES) {
+    const box = blocks(VOTING, locale).find((b) => b.type === "callout" && (b as { tone?: string }).tone === "warning");
+    assert.match(String(box?.text), warn[locale], `${locale}: warning box`);
+    const body = blocks(VOTING, locale).slice(1);
+    assert.doesNotMatch(JSON.stringify(body), /dimecres 25|miércoles 25|Wednesday 25|by 25 November|hasta el 25 de noviembre|fins al 25 de novembre/, `${locale}: the old hand-in day outside the lead`);
+    assert.ok(VOTING.sources.some((s) => s.url.includes("idacuerdoinstruccion=156427")), "JEC 418/2026 in sources");
+  }
+});
+
+test("20 Nov: the Parliament's term ends on 12 May 2028 (Statute art. 66), in the table and a FAQ", () => {
+  const q: Record<Locale, string> = { ca: "Quan són les properes eleccions al Parlament de Catalunya?", es: "¿Cuándo son las próximas elecciones catalanas al Parlament?", en: "When is the next Catalan parliament election?" };
+  for (const locale of LOCALES) {
+    assert.ok(faqQuestions(VOTING, locale).includes(q[locale]), `${locale}: FAQ`);
+    const row = blocks(VOTING, locale).flatMap((b) => b.rows ?? []).find((r) => /Parlament|Parliament/.test(r[0] ?? ""));
+    assert.match(row?.[2] ?? "", /12 (de )?(maig|mayo|May) (de )?2028/, `${locale}: table`);
+    assert.match(row?.[2] ?? "", /66/, `${locale}: legal basis`);
+  }
+  assert.ok(VOTING.sources.some((s) => s.url === "https://www.boe.es/buscar/act.php?id=BOE-A-2006-13087"));
+});
+
+test("20 Nov: election night answers 'when is the election' with a link to how-to-vote, and 'where to see the results'", () => {
+  const when: Record<Locale, string> = { ca: "Quan són les eleccions generals del 2026?", es: "¿Cuándo son las elecciones generales de 2026?", en: "When is the Spanish general election?" };
+  const where: Record<Locale, RegExp> = { ca: /^On es poden veure els resultats/, es: /^¿Dónde se pueden ver los resultados/, en: /^Where can I see the 2026 Spain general election results/ };
+  for (const locale of LOCALES) {
+    const items = blocks(ELECTION_NIGHT, locale).filter((b) => b.type === "faq").flatMap((b) => b.items as Item[]);
+    const date = items.find((i) => i.question === when[locale]);
+    assert.ok(date, `${locale}: date FAQ`);
+    assert.match(date!.answer, /29/);
+    assert.ok(date!.answer.includes(`](${b2href("voting", locale)})`), `${locale}: links how-to-vote`);
+    assert.ok(items.some((i) => where[locale].test(i.question)), `${locale}: where FAQ`);
+  }
+});
+
+test("20 Nov: every town page says how to check you are on the roll (INE with Cl@ve, town hall, 900 343 232)", () => {
+  for (const locale of LOCALES) {
+    for (const m of municipalitiesFor(locale).slice(0, 25)) {
+      const md = buildElectionPage(m, locale).census.md.join("\n");
+      assert.ok(md.includes("](https://sede.ine.gob.es/ce-internet1/?lang=es_ES)"), `${locale}/${m.slug}: INE roll lookup`);
+      assert.match(md, /900 343 232/, `${locale}/${m.slug}: help line`);
+    }
+  }
 });
 
 /* -------------------------------------------------------------------------- */
