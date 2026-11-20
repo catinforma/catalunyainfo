@@ -514,9 +514,9 @@ function renfeLeadLine(locale: Locale): string {
     }[locale];
   }
   return {
-    ca: " **El dijous 12 de novembre no hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF va desconvocar les aturades parcials d'aquell dia i les ha substituïdes per una nova vaga el dilluns 23 de novembre.",
-    es: " **El jueves 12 de noviembre no hay huelga en Renfe:** el sindicato de maquinistas SEMAF desconvocó los paros parciales de ese día y los ha sustituido por una nueva huelga el lunes 23 de noviembre.",
-    en: " **No Renfe strike on Thursday 12 November:** the train drivers' union SEMAF withdrew that day's partial stoppages and replaced them with a new strike on Monday 23 November.",
+    ca: " **El dijous 12 de novembre no hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF va desconvocar les aturades parcials d'aquell dia i les ha substituïdes per una nova vaga el dilluns 23 de novembre, que SEMAF també va desconvocar el 20 de novembre.",
+    es: " **El jueves 12 de noviembre no hay huelga en Renfe:** el sindicato de maquinistas SEMAF desconvocó los paros parciales de ese día y los ha sustituido por una nueva huelga el lunes 23 de noviembre, que SEMAF también desconvocó el 20 de noviembre.",
+    en: " **No Renfe strike on Thursday 12 November:** the train drivers' union SEMAF withdrew that day's partial stoppages and replaced them with a new strike on Monday 23 November, which SEMAF also withdrew on 20 November.",
   }[locale];
 }
 
@@ -529,9 +529,9 @@ function renfeKeyFact(locale: Locale): { label: string; value: string } {
     }[locale];
   }
   return {
-    ca: { label: "Renfe (SEMAF)", value: "Aturada total el dimarts 10 de novembre, que afecta Rodalies. Les aturades del 12 es van desconvocar: SEMAF ha convocat una nova vaga el 23 de novembre" },
-    es: { label: "Renfe (SEMAF)", value: "Paro total el martes 10 de noviembre, que afecta a Rodalies. Los paros del 12 se desconvocaron: SEMAF ha convocado una nueva huelga el 23 de noviembre" },
-    en: { label: "Renfe (SEMAF)", value: "A full stoppage on Tuesday 10 November, which affects Rodalies. The 12th's stoppages were withdrawn: SEMAF has called a new strike on 23 November" },
+    ca: { label: "Renfe (SEMAF)", value: "Aturada total el dimarts 10 de novembre, que afecta Rodalies. Les aturades del 12 es van desconvocar: SEMAF les va traslladar al 23 de novembre i el 20 de novembre també va desconvocar aquesta vaga" },
+    es: { label: "Renfe (SEMAF)", value: "Paro total el martes 10 de noviembre, que afecta a Rodalies. Los paros del 12 se desconvocaron: SEMAF los trasladó al 23 de noviembre y el 20 de noviembre desconvocó también esa huelga" },
+    en: { label: "Renfe (SEMAF)", value: "A full stoppage on Tuesday 10 November, which affects Rodalies. The 12th's stoppages were withdrawn: SEMAF moved them to 23 November, then withdrew that strike too on 20 November" },
   }[locale];
 }
 

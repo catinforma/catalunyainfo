@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
-import { DAY_URLS, MADRID_SOURCES, STRIKE_DAYS_VERIFIED, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
+import { DAY_URLS, MADRID_SOURCES, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
 import { STRIKE_GUIDE_SPECS } from "./strike-guides";
 import { STRIKES, STRIKES_AS_OF, STRIKE_DAY_PAGES, STRIKE_URLS, isOnDay, type Strike } from "./strikes";
 import { SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF } from "./strikes-spain-data";
@@ -39,36 +39,40 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * conflictividad"), the Basque Government's list (no order for the 23rd yet),
  * the table of what runs in Catalonia on the 26th and CSIF's stoppage days.
  *
- * Pending on 19 Nov 2026, printed as pending: the Ministry of Transport's
- * resolution for Grupo Renfe on the 23rd (`MINISTRY_23N_PUBLISHED`) and the
- * Generalitat's order for the 26th (the Catalan entry's status). A test keeps
- * both flags in step with the entries, so an update to the entries that drops
- * "por confirmar" / "pending" fails until this copy is rewritten.
+ * Pending, printed as pending: the Generalitat's order for the 26th (the
+ * Catalan entry's status; a test keeps the copy in step with it). The 19 Nov
+ * flag for the Ministry's resolution on the 23rd (MINISTRY_23N_PUBLISHED) went
+ * with the call-off of 20 Nov: no resolution is due for a strike that is off.
  *
  * Dates: before / eve / on the day / after from STRIKES_SPAIN_AS_OF only (no
  * clock). The `strikes` and `huelgas-espana` groups republish both, and
  * `huelga-23-26n` both on their own.
+ *
+ * 20 Nov 2026: SEMAF called off the 23rd ("SEMAF ha procedido a la
+ * desconvocatoria de la jornada de huelga prevista para el próximo 23 de
+ * noviembre tras alcanzar un acuerdo", nº 2026-38, 20/11/2026; nº 2026-39 calls
+ * it an "Acuerdo de fin de huelga"). Its Spain and Catalan entries are gone;
+ * the 23rd's page now opens with the call-off, printed from SPAIN_NOT_HAPPENING
+ * through `calledOffOnDay` (strike-days-1920n.ts, as the 19th did for Adif),
+ * says trains run to the usual timetable unless Renfe says otherwise (no
+ * notice from Renfe or Rodalies yet on the 20th), then what still happens:
+ * Correos, the doctors, Madrid's schools, the airports. Titles, descriptions,
+ * leads, table and FAQ rewritten; URL kept. The 19 Nov measurement window
+ * (docs/SEO_EXPERIMENTS.md) is overridden by this factual change, logged there.
  */
 
 export const STRIKE_DAY_2326 = { strike23n: "2026-11-23", strike26n: "2026-11-26" } as const;
 export type StrikeDay2326Key = keyof typeof STRIKE_DAY_2326;
 
-/**
- * 19 Nov 2026 (23:10 CET): the Ministry of Transport's rail list's newest entry
- * is still its resolution of 12 Nov for the 17th; nothing for the 23rd. Set to
- * true only with the resolution in hand, and rewrite the 23rd's copy (lead,
- * descriptions, table, FAQ) with its figures.
- */
-export const MINISTRY_23N_PUBLISHED = false;
-
-const RENFE_ID = "huelga-renfe-2026-11-23";
 const CORREOS_ID = "huelga-correos-2026-11-23";
 const SMU_ID = "huelga-medicos-smu-2026-11-16";
 const EDUCATION_CAT_ID = "vaga-educacio-2026-11-26";
-const RENFE_CAT_ID = "vaga-renfe-2026-11-23";
+/** 20 Nov 2026: SEMAF's strike of the 23rd, called off: in SPAIN_NOT_HAPPENING and in the Catalan hub's STRIKES_CALLED_OFF. */
+const RENFE_OFF_ID = "renfe-23-noviembre-desconvocada";
+const RENFE_OFF_CAT_ID = "vaga-renfe-2026-11-23-desconvocada";
 
 /** The ids this module expects in the entries (a test checks them). */
-export const STRIKE_DAY_2326_IDS = { renfe: RENFE_ID, correos: CORREOS_ID, smu: SMU_ID, education: EDUCATION_CAT_ID, renfeCatalan: RENFE_CAT_ID } as const;
+export const STRIKE_DAY_2326_IDS = { renfeCalledOff: RENFE_OFF_ID, renfeCalledOffCatalan: RENFE_OFF_CAT_ID, correos: CORREOS_ID, smu: SMU_ID, education: EDUCATION_CAT_ID } as const;
 
 export function strikeDay2326Phase(key: StrikeDay2326Key, asOf: string = STRIKES_SPAIN_AS_OF): StrikeDayPhase {
   const day = STRIKE_DAY_2326[key];
@@ -83,15 +87,15 @@ export function strikeDay2326Phase(key: StrikeDay2326Key, asOf: string = STRIKES
 /* -------------------------------------------------------------------------- */
 
 export const DAY2326_URLS = {
-  // SEMAF nº 2026-36, 19 Nov 2026: "Al mismo tiempo que permanece vigente la conflictividad, desde SEMAF estamos trabajando y negociando".
-  semaf36: "https://www.semaf.org/informaciones/protocolo-actuacion-fenomenos-meteorologicos/",
-  // Ministry of Transport's rail list: newest entry on 19 Nov 2026 the resolution of 12 Nov (Grupo Renfe, 17 Nov).
+  // SEMAF nº 2026-38 and nº 2026-39, 20 Nov 2026 (read that day): the 23rd called off, "Acuerdo de fin de huelga (art. 8.2 RDLRT)".
+  semaf38: SPAIN_URLS.semaf38,
+  semaf39: SPAIN_URLS.semaf39,
+  // Ministry of Transport's rail list: newest entry on 20 Nov 2026 still the resolution of 12 Nov (Grupo Renfe, 17 Nov); none for the 23rd.
   ministryRail: SPAIN_URLS.ministryRail,
-  // Basque Government's list of minimum-services orders: on 19 Nov 2026 none for 23 Nov (its order of 13 Nov covered Renfe's Cercanías on the 17th).
-  euskadiList: SPAIN_URLS.euskadiList,
-  euskadi17: SPAIN_URLS.euskadi17,
-  // The Departament d'Empresa i Treball's list: newest entry on 19 Nov 2026 the 23rd's Rodalies order (17/11); none for the 26th.
+  // The Departament d'Empresa i Treball's list: newest entry on 20 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th.
   treballMs: STRIKE_URLS.treballMs,
+  rodaliesStatus: STRIKE_URLS.rodaliesStatus,
+  renfe: STRIKE_URLS.renfe,
   csifMadrid: DAY_URLS.csifMadrid,
   ccooMadridCall: DAY_URLS.ccooMadridCall,
   ccooMadridMs: DAY_URLS.ccooMadridMs,
@@ -104,10 +108,10 @@ const MINISTRY = "Ministerio de Transportes y Movilidad Sostenible";
 
 const EXTRA_SOURCES: Record<StrikeDay2326Key, B2Source[]> = {
   strike23n: [
-    { name: "Aprobado el protocolo de actuación ante fenómenos meteorológicos adversos (nº 2026-36, 19 de noviembre de 2026)", url: U.semaf36, publisher: "SEMAF" },
     { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: MINISTRY },
-    { name: "Órdenes de servicios mínimos", url: U.euskadiList, publisher: "Gobierno Vasco, Departamento de Trabajo" },
-    { name: "Orden de 13 de noviembre de 2026: servicios mínimos del Grupo Renfe (Cercanías de Bilbao y San Sebastián) el 17 de noviembre", url: U.euskadi17, publisher: "Gobierno Vasco, Departamento de Trabajo" },
+    { name: "Informació de vagues amb serveis mínims", url: U.treballMs, publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball" },
+    { name: "Alteracions del servei", url: U.rodaliesStatus, publisher: "Rodalies de Catalunya" },
+    { name: "Renfe", url: U.renfe, publisher: "Renfe" },
   ],
   strike26n: [
     { name: "Informació de vagues amb serveis mínims", url: U.treballMs, publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball" },
@@ -132,6 +136,8 @@ interface DayCopy {
   seoTitle: string;
   description: Record<StrikeDayPhase, string>;
   excerpt: string;
+  /** 20 Nov 2026: the key fact for a strike called off that day (the 23rd: Renfe), first in the facts box. */
+  callOffFact?: { label: string; value: string };
   /** Day-only section (the 23rd: the trains; the 26th: is there school in Catalonia?). */
   extraHeading: string;
   extraId: string;
@@ -203,58 +209,59 @@ const COPY: Record<Locale, Copy> = {
     checked: (checked) => `Fuentes revisadas: ${checked}.`,
     days: {
       strike23n: {
+        // 20 Nov 2026: SEMAF called off the 23rd (nº 2026-38). The first thing the page says is that there is no Renfe strike that day.
         lead: (phase, checked) => {
-          const what = `huelga de todos los maquinistas del Grupo Renfe (SEMAF), de 0.01 a 23.59 h. En Rodalies de Catalunya y los regionales, la Generalitat fija el 66% del servicio habitual en hora punta (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el 33% el resto del día; los servicios mínimos de Cercanías fuera de Cataluña, Media Distancia, AVE y Larga Distancia los fija el Ministerio de Transportes, que el ${checked} aún no los había publicado. Empieza además la huelga de Correos en la Comunidad de Madrid (hasta el 27) y en Cádiz, Córdoba, Huelva, Málaga y Sevilla (hasta el 25), con las oficinas abiertas para el voto por correo, y sigue la de médicos del Sindicato Médicos Unidos. No es una huelga general.`;
-          if (phase === "after") return "**El lunes 23 de noviembre de 2026 hubo huelga de maquinistas en el Grupo Renfe (SEMAF),** con el 66% del servicio en hora punta y el 33% el resto del día en Rodalies; empezó la huelga de Correos en Madrid y en cinco provincias andaluzas y siguió la de médicos. No fue una huelga general. Más abajo, quién convocó cada una y sus servicios mínimos.";
-          if (phase === "today") return `**Hoy, lunes 23 de noviembre, hay** ${what}`;
-          if (phase === "eve") return `**Mañana, lunes 23 de noviembre, hay** ${what}`;
-          return `**Sí: el lunes 23 de noviembre de 2026 hay** ${what}`;
+          const rest = `SEMAF la desconvocó el 20 de noviembre tras alcanzar un acuerdo, así que Rodalies, Cercanías, Media Distancia, AVE y Larga Distancia circulan con su horario habitual, salvo aviso de Renfe; ningún otro sindicato tiene huelga de trenes convocada ese día en las fuentes revisadas el ${checked}. Lo que sí hay: empieza la huelga de Correos en la Comunidad de Madrid (hasta el 27) y en Cádiz, Córdoba, Huelva, Málaga y Sevilla (hasta el 25), con las oficinas abiertas para el voto por correo, y sigue la de médicos del Sindicato Médicos Unidos. No es una huelga general.`;
+          if (phase === "after") return "**El lunes 23 de noviembre de 2026 no hubo huelga de Renfe:** el sindicato de maquinistas SEMAF la desconvocó el 20 de noviembre tras alcanzar un acuerdo. Empezó la huelga de Correos en Madrid y en cinco provincias andaluzas y siguió la de médicos. No fue una huelga general. Más abajo, quién convocó cada una y sus servicios mínimos.";
+          if (phase === "today") return `**Hoy, lunes 23 de noviembre, no hay huelga de Renfe ni de Rodalies.** ${rest}`;
+          if (phase === "eve") return `**Mañana, lunes 23 de noviembre, no hay huelga de Renfe ni de Rodalies.** ${rest}`;
+          return `**No: la huelga de maquinistas de Renfe del lunes 23 de noviembre de 2026 está desconvocada.** ${rest}`;
         },
         firstQuestion: { eve: "¿Hay huelga mañana, lunes 23 de noviembre de 2026?", today: "¿Hay huelga hoy, lunes 23 de noviembre de 2026?" },
-        // 19 Nov 2026 (new page, docs/SEO_EXPERIMENTS.md): the H1 and the title open with the searched words, "huelga 23 noviembre 2026", "huelga renfe 23 noviembre".
-        title: "Huelga 23 de noviembre de 2026: Renfe y Rodalies (SEMAF), Correos y médicos",
-        seoTitle: "Huelga 23 de noviembre de 2026: Renfe, Rodalies y Correos",
+        // 20 Nov 2026 (docs/SEO_EXPERIMENTS.md): rewritten for SEMAF's call-off; the searched words stay first ("huelga 23 noviembre 2026", "huelga renfe 23 noviembre").
+        title: "Huelga 23 de noviembre de 2026: la de Renfe y Rodalies, desconvocada; Correos y médicos",
+        seoTitle: "Huelga 23 de noviembre de 2026: Renfe desconvocada, Correos",
         description: {
-          before: "Lunes 23: huelga de maquinistas de Renfe (SEMAF), 0.01-23.59 h. Rodalies, 66% en hora punta y 33%; AVE y Cercanías, por confirmar. Y Correos.",
-          eve: "Mañana lunes 23: huelga de maquinistas de Renfe (SEMAF). Rodalies, 66% en hora punta y 33% el resto; AVE y Cercanías, por confirmar. Y Correos.",
-          today: "Hoy lunes 23: huelga de maquinistas de Renfe (SEMAF). Rodalies, 66% en hora punta y 33% el resto; AVE y Cercanías, por confirmar. Y Correos.",
-          after: "El 23 de noviembre de 2026 hubo huelga de maquinistas de Renfe (SEMAF), con el 66% en hora punta en Rodalies, y empezó la de Correos en Madrid y Andalucía.",
+          before: "Lunes 23: SEMAF desconvocó la huelga de maquinistas de Renfe. Rodalies, AVE y Cercanías, con su horario habitual. Sí hay huelga de Correos y de médicos.",
+          eve: "Mañana lunes 23 no hay huelga de Renfe: SEMAF la desconvocó. Rodalies, AVE y Cercanías, horario habitual. Sí hay huelga de Correos y de médicos.",
+          today: "Hoy lunes 23 no hay huelga de Renfe: SEMAF la desconvocó. Rodalies, AVE y Cercanías, horario habitual. Sí hay huelga de Correos y de médicos.",
+          after: "El 23 de noviembre de 2026 no hubo huelga de Renfe: SEMAF la desconvocó el 20. Empezó la huelga de Correos en Madrid y Andalucía y siguió la de médicos.",
         },
-        excerpt: "Las huelgas del lunes 23 de noviembre de 2026: maquinistas de Renfe (SEMAF), con los servicios mínimos de Rodalies, Correos en Madrid y Andalucía, médicos y aeropuertos.",
-        extraHeading: "Trenes el lunes 23: qué circula",
+        excerpt: "Las huelgas del lunes 23 de noviembre de 2026: la de maquinistas de Renfe (SEMAF), desconvocada; Correos en Madrid y Andalucía, médicos y aeropuertos.",
+        callOffFact: { label: "Renfe y Rodalies (SEMAF)", value: "Huelga desconvocada: trenes con su horario habitual, salvo aviso de Renfe." },
+        extraHeading: "Trenes el lunes 23: sin huelga",
         extraId: "trenes",
         extra: (checked) => [
           ...paras(
-            `La huelga es de todo el colectivo de maquinistas del Grupo Renfe, de 0.01 a 23.59 h, según la orden de servicios mínimos de la Generalitat del 16 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). Cada administración fija los servicios mínimos de los trenes que le tocan:`,
+            `**La huelga de maquinistas está desconvocada.** SEMAF lo anunció el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables», según ${link(U.semaf38, "su comunicado 2026-38")}. En ${link(U.semaf39, "el 2026-39")} llama a ese texto «Acuerdo de fin de huelga (art. 8.2 RDLRT)».`,
           ),
           table(
-            "Servicios mínimos de los trenes del Grupo Renfe el lunes 23 de noviembre de 2026",
-            ["Servicio", "Servicios mínimos", "Quién los fija"],
+            "Trenes del lunes 23 de noviembre de 2026, tras la desconvocatoria de SEMAF",
+            ["Servicio", "El lunes 23", "Servicios mínimos"],
             [
-              ["Rodalies de Catalunya y regionales de Cataluña", "66% del servicio habitual de 6.00 a 9.30 h y de 17.00 a 20.30 h; 33% el resto del día", "Generalitat (orden del 16 de noviembre)"],
-              ["Cercanías fuera de Cataluña", "Pendientes de publicar", "Ministerio de Transportes; en Bilbao y San Sebastián, el Gobierno Vasco (así fue el 17)"],
-              ["AVE, Larga Distancia y Media Distancia de Renfe", "Pendientes de publicar", "Ministerio de Transportes"],
-              ["Iryo y Ouigo", "Sin convocatoria para el 23 en las fuentes revisadas: la huelga de SEMAF es en el Grupo Renfe", "—"],
-              ["Metro, autobuses, tranvías y FGC", "No forman parte de esta huelga", "—"],
+              ["Rodalies de Catalunya y regionales de Cataluña", "Horario habitual, salvo aviso de Renfe: no hay huelga", "Ninguno: el 66% en hora punta y el 33% que había fijado la Generalitat eran para esta huelga"],
+              ["Cercanías fuera de Cataluña", "Horario habitual, salvo aviso de Renfe: no hay huelga", "Ninguno: el Ministerio de Transportes no había publicado resolución para el 23"],
+              ["AVE, Larga Distancia y Media Distancia de Renfe", "Horario habitual, salvo aviso de Renfe: no hay huelga", "Ninguno"],
+              ["Iryo y Ouigo", "Sin huelga convocada en las fuentes revisadas", "—"],
+              ["Metro, autobuses, tranvías y FGC", "No forman parte de ninguna huelga ese día", "—"],
             ],
             `Revisado el ${checked}.`,
           ),
           ...paras(
-            `**Lo que falta:** el ${checked}, el Ministerio de Transportes aún no tenía resolución para el 23 en ${link(U.ministryRail, "su lista")}; para la huelga de SEMAF del 10 de noviembre la publicó el 6, y para la del 17, el 12. El Gobierno Vasco tampoco tenía orden para el 23 en ${link(U.euskadiList, "su lista")}; la del 17 la fijó por ${link(U.euskadi17, "orden del 13 de noviembre")}.`,
-            `**¿Se mantiene?** Sí. SEMAF sustituyó por esta huelga los paros del 12 de noviembre y el 17 escribía «afrontamos el 23 de noviembre como la próxima jornada de movilización» (${link(SPAIN_URLS.semaf35, "comunicado 2026-35")}). El 19, tras aprobar con el Ministerio, Adif y Renfe un protocolo ante fenómenos meteorológicos adversos, seguía en conflicto: «Al mismo tiempo que permanece vigente la conflictividad, desde SEMAF estamos trabajando y negociando» (${link(U.semaf36, "comunicado 2026-36")}).`,
-            "**Qué hacer:** mira tu tren la víspera y el mismo día, porque los servicios mínimos no se reparten igual a todas las horas. Si tienes billete de AVE, Larga o Media Distancia, el cambio o la devolución depende de Renfe: sigue lo que publique en renfe.com o te envíe por correo.",
+            `**Ninguna otra huelga de trenes ese día:** el ${checked}, el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos para el 23 en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}, cuya última es la del 12 de noviembre para el 17, y la orden de la Generalitat para Rodalies del 16 de noviembre, en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}, era para la huelga de SEMAF.`,
+            `**Qué hacer:** el ${checked}, Renfe y Rodalies aún no habían publicado ningún aviso sobre la decisión de SEMAF. Antes de salir, mira ${link(U.rodaliesStatus, "el estado del servicio de Rodalies")}; si tienes billete de AVE, Larga o Media Distancia, sigue lo que publique ${link(U.renfe, "Renfe")} o te envíe por correo.`,
           ),
         ],
         madridDay: "**El lunes 23:** no es uno de los días de paros parciales de CSIF (los siguientes son el martes 24 y el jueves 26, de 9.00 a 11.00 y de 17.00 a 19.00 h, según su calendario); la huelga indefinida sigue convocada.",
         madridValue: "Huelga indefinida desde el 14 de octubre (sin paros de CSIF ese día)",
         notCalled:
-          "No es una huelga general. Iryo y Ouigo no tienen convocatoria para el lunes 23 en las fuentes revisadas, y el metro, los autobuses, los tranvías y FGC no forman parte de ninguna. En Andalucía, la huelga de Correos es solo en Cádiz, Córdoba, Huelva, Málaga y Sevilla.",
-        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Huelga de Renfe y Rodalies del 23 de noviembre: líneas y servicios mínimos"),
+          "No es una huelga general ni de trenes: la de maquinistas de Renfe está desconvocada, Iryo y Ouigo no tienen convocatoria en las fuentes revisadas, y el metro, los autobuses, los tranvías y FGC no forman parte de ninguna. En Andalucía, la huelga de Correos es solo en Cádiz, Córdoba, Huelva, Málaga y Sevilla.",
+        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Huelga de Renfe y Rodalies del 23 de noviembre: desconvocada"),
         faq: (checked) => [
-          { question: "¿Hay huelga el lunes 23 de noviembre de 2026?", answer: "Sí, pero no general: huelga de todos los maquinistas del Grupo Renfe (SEMAF) de 0.01 a 23.59 h, que afecta a Rodalies, Cercanías, Media Distancia, AVE y Larga Distancia; empieza la huelga de Correos en Madrid y en cinco provincias andaluzas, y sigue la de médicos del Sindicato Médicos Unidos." },
-          { question: "¿Hay huelga de Renfe el 23 de noviembre?", answer: "Sí: el sindicato de maquinistas SEMAF convoca a todo el colectivo de maquinistas del Grupo Renfe el lunes 23, de 0.01 a 23.59 h. Sustituye a los paros del 12 de noviembre, que desconvocó, y el 19 de noviembre el sindicato mantenía el conflicto abierto." },
-          { question: "¿Qué servicios mínimos hay en Rodalies el 23 de noviembre?", answer: "La orden de la Generalitat del 16 de noviembre fija en Rodalies de Catalunya y los regionales el 66% del servicio habitual en hora punta, de 6.00 a 9.30 h y de 17.00 a 20.30 h, y el 33% el resto del día." },
-          { question: "¿Funcionan el AVE y los Cercanías de Madrid el 23 de noviembre?", answer: `Con servicios mínimos, que aún no se conocen: los fija el Ministerio de Transportes, que el ${checked} todavía no había publicado su resolución. Para la huelga de SEMAF del 10 de noviembre la publicó el 6, y para la del 17, el 12.` },
+          { question: "¿Hay huelga el lunes 23 de noviembre de 2026?", answer: "Sí, pero ni de trenes ni general: SEMAF desconvocó el 20 de noviembre la huelga de maquinistas de Renfe. Ese día empieza la huelga de Correos en la Comunidad de Madrid y en cinco provincias andaluzas, y sigue la de médicos del Sindicato Médicos Unidos." },
+          { question: "¿Hay huelga de Renfe el 23 de noviembre?", answer: "No. El sindicato de maquinistas SEMAF la desconvocó el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», según su comunicado 2026-38." },
+          { question: "¿Funciona Rodalies el 23 de noviembre?", answer: `Sí, con su horario habitual salvo aviso de Renfe: sin huelga no hay servicios mínimos, y el 66% en hora punta y el 33% que había fijado la Generalitat eran para la huelga de SEMAF. El ${checked}, Rodalies aún no había publicado ningún aviso: mira el estado del servicio antes de salir.` },
+          { question: "¿Funcionan el AVE y los Cercanías de Madrid el 23 de noviembre?", answer: `Sí, sin huelga: SEMAF la desconvocó el 20 de noviembre y el ${checked} el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos para ese día. Con cualquier duda sobre tu billete, sigue lo que publique Renfe.` },
           { question: "¿Afecta la huelga de Correos al voto por correo?", answer: "La orden del Ministerio del Interior obliga a abrir las oficinas de Correos en su horario habitual para el voto por correo, con 1, 2 o 3 empleados por turno según su plantilla, y fija el reparto de los envíos electorales con hasta el 50% de la plantilla del 23 al 25 de noviembre, «coincidiendo con la admisión del voto por correo»." },
         ],
       },
@@ -301,7 +308,7 @@ const COPY: Record<Locale, Copy> = {
         madridDay: "**El jueves 26:** CSIF convoca paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h, según su calendario.",
         madridValue: "Huelga indefinida desde el 14 de octubre; CSIF, paros de 9.00 a 11.00 y de 17.00 a 19.00 h",
         notCalled:
-          "No es una huelga general ni de trenes: la huelga de maquinistas de SEMAF es solo el lunes 23 y el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el jueves 26. La huelga de Correos en Andalucía terminó el 25; en Madrid sigue hasta el 27.",
+          "No es una huelga general ni de trenes: SEMAF desconvocó la huelga de maquinistas de Renfe del lunes 23 y el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el jueves 26. La huelga de Correos en Andalucía terminó el 25; en Madrid sigue hasta el 27.",
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "¿Hay huelga el jueves 26 de noviembre de 2026?", answer: "Sí, pero no general: huelga en la educación en Cataluña, toda la jornada; siguen la huelga de médicos del Sindicato Médicos Unidos y la de Correos en la Comunidad de Madrid, y en Madrid CSIF convoca paros en la enseñanza pública. No hay huelga de trenes." },
@@ -344,56 +351,56 @@ const COPY: Record<Locale, Copy> = {
     days: {
       strike23n: {
         lead: (phase, checked) => {
-          const what = `vaga de tots els maquinistes del Grup Renfe (SEMAF), de 0.01 a 23.59 h. A Rodalies de Catalunya i els regionals, la Generalitat fixa el 66% del servei habitual en hora punta (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el 33% la resta del dia; els serveis mínims de Cercanías fora de Catalunya, Mitja Distància, AVE i Llarga Distància els fixa el Ministeri de Transports, que el ${checked} encara no els havia publicat. Comença a més la vaga de Correus a la Comunitat de Madrid (fins al 27) i a Cadis, Còrdova, Huelva, Màlaga i Sevilla (fins al 25), amb les oficines obertes per al vot per correu, i continua la de metges del Sindicato Médicos Unidos. No és una vaga general.`;
-          if (phase === "after") return "**El dilluns 23 de novembre de 2026 hi va haver vaga de maquinistes al Grup Renfe (SEMAF),** amb el 66% del servei en hora punta i el 33% la resta del dia a Rodalies; va començar la vaga de Correus a Madrid i a cinc províncies andaluses i va continuar la de metges. No va ser una vaga general. Més avall, qui va convocar cadascuna i els seus serveis mínims.";
-          if (phase === "today") return `**Avui, dilluns 23 de novembre, hi ha** ${what}`;
-          if (phase === "eve") return `**Demà, dilluns 23 de novembre, hi ha** ${what}`;
-          return `**Sí: el dilluns 23 de novembre de 2026 hi ha** ${what}`;
+          const rest = `SEMAF la va desconvocar el 20 de novembre després d'arribar a un acord, de manera que Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància circulen amb l'horari habitual, llevat que Renfe avisi del contrari; cap altre sindicat no té vaga de trens convocada aquell dia a les fonts revisades el ${checked}. El que sí hi ha: comença la vaga de Correus a la Comunitat de Madrid (fins al 27) i a Cadis, Còrdova, Huelva, Màlaga i Sevilla (fins al 25), amb les oficines obertes per al vot per correu, i continua la de metges del Sindicato Médicos Unidos. No és una vaga general.`;
+          if (phase === "after") return "**El dilluns 23 de novembre de 2026 no hi va haver vaga de Renfe:** el sindicat de maquinistes SEMAF la va desconvocar el 20 de novembre després d'arribar a un acord. Va començar la vaga de Correus a Madrid i a cinc províncies andaluses i va continuar la de metges. No va ser una vaga general. Més avall, qui va convocar cadascuna i els seus serveis mínims.";
+          if (phase === "today") return `**Avui, dilluns 23 de novembre, no hi ha vaga de Renfe ni de Rodalies.** ${rest}`;
+          if (phase === "eve") return `**Demà, dilluns 23 de novembre, no hi ha vaga de Renfe ni de Rodalies.** ${rest}`;
+          return `**No: la vaga de maquinistes de Renfe del dilluns 23 de novembre de 2026 està desconvocada.** ${rest}`;
         },
         firstQuestion: { eve: "Hi ha vaga demà, dilluns 23 de novembre de 2026?", today: "Hi ha vaga avui, dilluns 23 de novembre de 2026?" },
-        title: "Vaga 23 de novembre de 2026: Renfe i Rodalies (SEMAF), Correus i metges",
-        seoTitle: "Vaga 23 de novembre de 2026: Renfe, Rodalies i Correus",
+        title: "Vaga 23 de novembre de 2026: la de Renfe i Rodalies, desconvocada; Correus i metges",
+        seoTitle: "Vaga 23 de novembre de 2026: Renfe i Rodalies, desconvocada",
         description: {
-          before: "Dilluns 23: vaga de maquinistes de Renfe (SEMAF), 0.01-23.59 h. Rodalies, 66% en hora punta i 33%; AVE i Cercanías, per confirmar. I Correus.",
-          eve: "Demà dilluns 23: vaga de maquinistes de Renfe (SEMAF). Rodalies, 66% en hora punta i 33% la resta; AVE i Cercanías, per confirmar. I Correus.",
-          today: "Avui dilluns 23: vaga de maquinistes de Renfe (SEMAF). Rodalies, 66% en hora punta i 33% la resta; AVE i Cercanías, per confirmar. I Correus.",
-          after: "El 23 de novembre de 2026 hi va haver vaga de maquinistes de Renfe (SEMAF), amb el 66% en hora punta a Rodalies, i va començar la de Correus.",
+          before: "Dilluns 23: SEMAF ha desconvocat la vaga de maquinistes de Renfe. Rodalies, AVE i Cercanías, amb l'horari habitual. Però hi ha vaga de Correus i de metges.",
+          eve: "Demà dilluns 23 no hi ha vaga de Renfe: SEMAF la va desconvocar. Rodalies, AVE i Cercanías, horari habitual. Sí que hi ha vaga de Correus i de metges.",
+          today: "Avui dilluns 23 no hi ha vaga de Renfe: SEMAF la va desconvocar. Rodalies, AVE i Cercanías, horari habitual. Sí que hi ha vaga de Correus i de metges.",
+          after: "El 23 de novembre de 2026 no hi va haver vaga de Renfe: SEMAF la va desconvocar el 20. Sí que n'hi va haver a Correus (Madrid i Andalusia) i de metges.",
         },
-        excerpt: "Les vagues del dilluns 23 de novembre de 2026: maquinistes de Renfe (SEMAF), amb els serveis mínims de Rodalies, Correus a Madrid i Andalusia, metges i aeroports.",
-        extraHeading: "Trens el dilluns 23: què circula",
+        excerpt: "Les vagues del dilluns 23 de novembre de 2026: la de maquinistes de Renfe (SEMAF), desconvocada; Correus a Madrid i Andalusia, metges i aeroports.",
+        callOffFact: { label: "Renfe i Rodalies (SEMAF)", value: "Vaga desconvocada: trens amb l'horari habitual, llevat que Renfe avisi del contrari." },
+        extraHeading: "Trens el dilluns 23: sense vaga",
         extraId: "trens",
         extra: (checked) => [
           ...paras(
-            `La vaga és de tot el col·lectiu de maquinistes del Grup Renfe, de 0.01 a 23.59 h, segons l'ordre de serveis mínims de la Generalitat del 16 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). Cada administració fixa els serveis mínims dels trens que li toquen:`,
+            `**La vaga de maquinistes està desconvocada.** SEMAF ho va anunciar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables», segons ${link(U.semaf38, "el seu comunicat 2026-38")}. En ${link(U.semaf39, "el 2026-39")} qualifica aquest text d'«Acuerdo de fin de huelga (art. 8.2 RDLRT)».`,
           ),
           table(
-            "Serveis mínims dels trens del Grup Renfe el dilluns 23 de novembre de 2026",
-            ["Servei", "Serveis mínims", "Qui els fixa"],
+            "Trens del dilluns 23 de novembre de 2026, després de la desconvocatòria de SEMAF",
+            ["Servei", "El dilluns 23", "Serveis mínims"],
             [
-              ["Rodalies de Catalunya i regionals de Catalunya", "66% del servei habitual de 6.00 a 9.30 h i de 17.00 a 20.30 h; 33% la resta del dia", "Generalitat (ordre del 16 de novembre)"],
-              ["Cercanías fora de Catalunya", "Pendents de publicar", "Ministeri de Transports; a Bilbao i Sant Sebastià, el Govern Basc (així va ser el 17)"],
-              ["AVE, Llarga Distància i Mitja Distància de Renfe", "Pendents de publicar", "Ministeri de Transports"],
-              ["Iryo i Ouigo", "Sense convocatòria per al 23 a les fonts revisades: la vaga de SEMAF és al Grup Renfe", "—"],
-              ["Metro, autobusos, tramvies i FGC", "No formen part d'aquesta vaga", "—"],
+              ["Rodalies de Catalunya i regionals de Catalunya", "Horari habitual, llevat d'avís de Renfe: no hi ha vaga", "Cap: el 66% en hora punta i el 33% que havia fixat la Generalitat eren per a aquesta vaga"],
+              ["Cercanías fora de Catalunya", "Horari habitual, llevat d'avís de Renfe: no hi ha vaga", "Cap: el Ministeri de Transports no havia publicat cap resolució per al 23"],
+              ["AVE, Llarga Distància i Mitja Distància de Renfe", "Horari habitual, llevat d'avís de Renfe: no hi ha vaga", "Cap"],
+              ["Iryo i Ouigo", "Sense vaga convocada a les fonts revisades", "—"],
+              ["Metro, autobusos, tramvies i FGC", "No formen part de cap vaga aquell dia", "—"],
             ],
             `Revisat el ${checked}.`,
           ),
           ...paras(
-            `**El que falta:** el ${checked}, el Ministeri de Transports encara no tenia resolució per al 23 a ${link(U.ministryRail, "la seva llista")}; per a la vaga de SEMAF del 10 de novembre la va publicar el 6, i per a la del 17, el 12. El Govern Basc tampoc no tenia ordre per al 23 a ${link(U.euskadiList, "la seva llista")}; la del 17 la va fixar per ${link(U.euskadi17, "ordre del 13 de novembre")}.`,
-            `**Es manté?** Sí. SEMAF va substituir per aquesta vaga les aturades del 12 de novembre i el 17 escrivia «afrontamos el 23 de noviembre como la próxima jornada de movilización» (${link(SPAIN_URLS.semaf35, "comunicat 2026-35")}). El 19, després d'aprovar amb el Ministeri, Adif i Renfe un protocol davant fenòmens meteorològics adversos, continuava en conflicte: «Al mismo tiempo que permanece vigente la conflictividad, desde SEMAF estamos trabajando y negociando» (${link(U.semaf36, "comunicat 2026-36")}).`,
-            "**Què fer:** mira el teu tren el vespre abans i el mateix dia, perquè els serveis mínims no es reparteixen igual a totes les hores. Si tens bitllet d'AVE, Llarga o Mitja Distància, el canvi o la devolució depèn de Renfe: segueix el que publiqui a renfe.com o t'enviï per correu.",
+            `**Cap altra vaga de trens aquell dia:** el ${checked}, el Ministeri de Transports no tenia cap resolució de serveis mínims per al 23 a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}, que acaba amb la del 12 de novembre per al 17, i l'ordre de la Generalitat per a Rodalies del 16 de novembre, a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}, era per a la vaga de SEMAF.`,
+            `**Què fer:** el ${checked}, Renfe i Rodalies encara no havien publicat cap avís sobre la decisió de SEMAF. Abans de sortir, mira ${link(U.rodaliesStatus, "l'estat del servei de Rodalies")}; si tens bitllet d'AVE, Llarga o Mitja Distància, segueix el que publiqui ${link(U.renfe, "Renfe")} o t'enviï per correu.`,
           ),
         ],
         madridDay: "**El dilluns 23:** no és un dels dies d'aturades parcials de CSIF (els següents són el dimarts 24 i el dijous 26, de 9.00 a 11.00 i de 17.00 a 19.00 h, segons el seu calendari); la vaga indefinida continua convocada.",
         madridValue: "Vaga indefinida des del 14 d'octubre (sense aturades de CSIF aquell dia)",
         notCalled:
-          "No és una vaga general. Iryo i Ouigo no tenen convocatòria per al dilluns 23 a les fonts revisades, i el metro, els autobusos, els tramvies i FGC no formen part de cap. A Andalusia, la vaga de Correus és només a Cadis, Còrdova, Huelva, Màlaga i Sevilla.",
-        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Vaga de Renfe i Rodalies del 23 de novembre: línies i serveis mínims"),
+          "No és una vaga general ni de trens: la de maquinistes de Renfe està desconvocada, Iryo i Ouigo no tenen convocatòria a les fonts revisades, i el metro, els autobusos, els tramvies i FGC no formen part de cap. A Andalusia, la vaga de Correus és només a Cadis, Còrdova, Huelva, Màlaga i Sevilla.",
+        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Vaga de Renfe i Rodalies del 23 de novembre: desconvocada"),
         faq: (checked) => [
-          { question: "Hi ha vaga el dilluns 23 de novembre de 2026?", answer: "Sí, però no general: vaga de tots els maquinistes del Grup Renfe (SEMAF) de 0.01 a 23.59 h, que afecta Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància; comença la vaga de Correus a Madrid i a cinc províncies andaluses, i continua la de metges del Sindicato Médicos Unidos." },
-          { question: "Hi ha vaga de Rodalies el 23 de novembre?", answer: "Sí: el sindicat de maquinistes SEMAF convoca tot el col·lectiu de maquinistes del Grup Renfe, que opera Rodalies, el dilluns 23, de 0.01 a 23.59 h. Substitueix les aturades del 12 de novembre, que va desconvocar, i el 19 de novembre el sindicat mantenia el conflicte obert." },
-          { question: "Quins serveis mínims hi ha a Rodalies el 23 de novembre?", answer: "L'ordre de la Generalitat del 16 de novembre fixa a Rodalies de Catalunya i els regionals el 66% del servei habitual en hora punta, de 6.00 a 9.30 h i de 17.00 a 20.30 h, i el 33% la resta del dia." },
-          { question: "Funcionen l'AVE i la Llarga Distància el 23 de novembre?", answer: `Amb serveis mínims, que encara no es coneixen: els fixa el Ministeri de Transports, que el ${checked} encara no havia publicat la seva resolució. Per a la vaga de SEMAF del 10 de novembre la va publicar el 6, i per a la del 17, el 12.` },
+          { question: "Hi ha vaga el dilluns 23 de novembre de 2026?", answer: "Sí, però ni de trens ni general: SEMAF va desconvocar el 20 de novembre la vaga de maquinistes de Renfe. Aquell dia comença la vaga de Correus a la Comunitat de Madrid i a cinc províncies andaluses, i continua la de metges del Sindicato Médicos Unidos." },
+          { question: "Hi ha vaga de Rodalies el 23 de novembre?", answer: "No. El sindicat de maquinistes SEMAF la va desconvocar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», segons el seu comunicat 2026-38. Rodalies, que opera el Grup Renfe, circula amb l'horari habitual, llevat que Renfe avisi del contrari." },
+          { question: "Hi ha serveis mínims a Rodalies el 23 de novembre?", answer: `No: sense vaga no n'hi ha, i el 66% en hora punta i el 33% que havia fixat la Generalitat eren per a la vaga de SEMAF. El ${checked}, Rodalies encara no havia publicat cap avís: mira l'estat del servei abans de sortir.` },
+          { question: "Funcionen l'AVE i la Llarga Distància el 23 de novembre?", answer: `Sí, sense vaga: SEMAF la va desconvocar el 20 de novembre i el ${checked} el Ministeri de Transports no tenia cap resolució de serveis mínims per a aquell dia. Amb qualsevol dubte sobre el bitllet, segueix el que publiqui Renfe.` },
           { question: "La vaga de Correus afecta el vot per correu?", answer: "L'ordre del Ministeri de l'Interior obliga a obrir les oficines de Correus en el seu horari habitual per al vot per correu, amb 1, 2 o 3 treballadors per torn segons la plantilla, i fixa el repartiment dels enviaments electorals amb fins al 50% de la plantilla del 23 al 25 de novembre, «coincidiendo con la admisión del voto por correo». Aquesta vaga no és a Catalunya: és a Madrid i a cinc províncies andaluses." },
         ],
       },
@@ -439,7 +446,7 @@ const COPY: Record<Locale, Copy> = {
         madridDay: "**El dijous 26:** CSIF hi convoca aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h, segons el seu calendari.",
         madridValue: "Vaga indefinida des del 14 d'octubre; CSIF, aturades de 9.00 a 11.00 i de 17.00 a 19.00 h",
         notCalled:
-          "No és una vaga general ni de trens: la vaga de maquinistes de SEMAF és només el dilluns 23 i el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al dijous 26. La vaga de Correus a Andalusia es va acabar el 25; a Madrid continua fins al 27.",
+          "No és una vaga general ni de trens: SEMAF va desconvocar la vaga de maquinistes de Renfe del dilluns 23 i el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al dijous 26. La vaga de Correus a Andalusia es va acabar el 25; a Madrid continua fins al 27.",
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "Hi ha vaga el dijous 26 de novembre de 2026?", answer: "Sí, però no general: vaga a l'educació a Catalunya, tota la jornada; continuen la vaga de metges del Sindicato Médicos Unidos i la de Correus a la Comunitat de Madrid, i a Madrid CSIF convoca aturades a l'ensenyament públic. No hi ha vaga de trens." },
@@ -482,56 +489,56 @@ const COPY: Record<Locale, Copy> = {
     days: {
       strike23n: {
         lead: (phase, checked) => {
-          const what = `a strike by every Renfe Group train driver (SEMAF), 00:01 to 23:59. On Rodalies de Catalunya and regional trains, the Generalitat sets 66% of the usual service at peak times (06:00 to 09:30 and 17:00 to 20:30) and 33% the rest of the day; minimum services for Cercanías outside Catalonia, Media Distancia, AVE and long-distance trains are set by the Ministry of Transport, which had not published them by ${checked}. Correos (the Spanish post office) also goes on strike in the Community of Madrid (to the 27th) and in Cádiz, Córdoba, Huelva, Málaga and Seville (to the 25th), with post offices open for postal votes, and the Sindicato Médicos Unidos doctors' strike goes on. It is not a general strike.`;
-          if (phase === "after") return "**On Monday 23 November 2026 the Renfe Group's train drivers were on strike (SEMAF),** with 66% of the usual Rodalies service at peak times and 33% the rest of the day; Correos' strike began in Madrid and five Andalusian provinces and the doctors' strike went on. It was not a general strike. Who called each one and its minimum services are below.";
-          if (phase === "today") return `**Today, Monday 23 November, there is** ${what}`;
-          if (phase === "eve") return `**Tomorrow, Monday 23 November, there is** ${what}`;
-          return `**Yes: on Monday 23 November 2026 there is** ${what}`;
+          const rest = `SEMAF called it off on 20 November after reaching an agreement, so Rodalies, Cercanías, Media Distancia, AVE and long-distance trains run to their usual timetable unless Renfe says otherwise; no other union has a rail strike called that day in the sources checked on ${checked}. What does happen: Correos (the Spanish post office) goes on strike in the Community of Madrid (to the 27th) and in Cádiz, Córdoba, Huelva, Málaga and Seville (to the 25th), with post offices open for postal votes, and the Sindicato Médicos Unidos doctors' strike goes on. It is not a general strike.`;
+          if (phase === "after") return "**There was no Renfe strike on Monday 23 November 2026:** the train drivers' union SEMAF called it off on 20 November after reaching an agreement. Correos' strike began in Madrid and five Andalusian provinces and the doctors' strike went on. It was not a general strike. Who called each one and its minimum services are below.";
+          if (phase === "today") return `**Today, Monday 23 November, there is no Renfe or Rodalies strike.** ${rest}`;
+          if (phase === "eve") return `**Tomorrow, Monday 23 November, there is no Renfe or Rodalies strike.** ${rest}`;
+          return `**No: the Renfe train drivers' strike on Monday 23 November 2026 is called off.** ${rest}`;
         },
         firstQuestion: { eve: "Is there a strike in Spain tomorrow, Monday 23 November 2026?", today: "Is there a strike in Spain today, Monday 23 November 2026?" },
-        title: "Strike in Spain on 23 November 2026: Renfe and Rodalies drivers (SEMAF), Correos, doctors",
-        seoTitle: "Spain strike 23 November 2026: Renfe, Rodalies, Correos",
+        title: "Strike in Spain on 23 November 2026: Renfe and Rodalies drivers' strike called off; Correos, doctors",
+        seoTitle: "Spain strike 23 November 2026: Renfe strike called off",
         description: {
-          before: "Monday 23: Renfe train drivers' strike (SEMAF), 00:01-23:59. Rodalies 66% at peak, 33% otherwise; AVE and Cercanías to be confirmed. Correos too.",
-          eve: "Tomorrow, Monday 23: Renfe drivers' strike (SEMAF). Rodalies 66% at peak, 33% otherwise; AVE and Cercanías to be confirmed. Correos too.",
-          today: "Today, Monday 23: Renfe drivers' strike (SEMAF). Rodalies 66% at peak, 33% otherwise; AVE and Cercanías to be confirmed. Correos too.",
-          after: "On 23 November 2026 Renfe's train drivers struck (SEMAF), with 66% of Rodalies at peak times, and Correos' strike began in Madrid and Andalusia.",
+          before: "Monday 23: SEMAF has called off the Renfe train drivers' strike. Rodalies, AVE and Cercanías run to the usual timetable. Correos and doctors do strike.",
+          eve: "Tomorrow, Monday 23: no Renfe strike, SEMAF called it off. Rodalies, AVE and Cercanías run as usual. Correos and doctors do strike.",
+          today: "Today, Monday 23: no Renfe strike, SEMAF called it off. Rodalies, AVE and Cercanías run as usual. Correos and doctors do strike.",
+          after: "There was no Renfe strike on 23 November 2026: SEMAF called it off on the 20th. Correos' strike began in Madrid and Andalusia; the doctors' went on.",
         },
-        excerpt: "Strikes in Spain on Monday 23 November 2026: Renfe train drivers (SEMAF) with Rodalies minimum services, Correos in Madrid and Andalusia, doctors and airports.",
-        extraHeading: "Trains on Monday 23: what runs",
+        excerpt: "Strikes in Spain on Monday 23 November 2026: the Renfe train drivers' strike (SEMAF) is called off; Correos in Madrid and Andalusia, doctors and airports.",
+        callOffFact: { label: "Renfe and Rodalies (SEMAF)", value: "Strike called off: trains run to the usual timetable unless Renfe says otherwise." },
+        extraHeading: "Trains on Monday 23: no strike",
         extraId: "trains",
         extra: (checked) => [
           ...paras(
-            `Every Renfe Group train driver is called out, 00:01 to 23:59, according to the Generalitat's minimum-services order of 16 November (${link(U.treballMs, "the Catalan labour department's list")}). Each authority sets the minimum services for its own trains:`,
+            `**The drivers' strike is called off.** SEMAF announced it on 20 November: "SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables" (SEMAF has called off the strike day planned for 23 November after reaching an agreement that turns the drivers' demands into regulatory, operational and verifiable facts), according to ${link(U.semaf38, "its notice 2026-38")}. ${link(U.semaf39, "Notice 2026-39")} calls the text an "Acuerdo de fin de huelga (art. 8.2 RDLRT)" (an agreement ending the strike).`,
           ),
           table(
-            "Minimum services on Renfe Group trains on Monday 23 November 2026",
-            ["Service", "Minimum services", "Set by"],
+            "Trains on Monday 23 November 2026, after SEMAF's call-off",
+            ["Service", "On Monday 23", "Minimum services"],
             [
-              ["Rodalies de Catalunya and Catalan regional trains", "66% of the usual service 06:00-09:30 and 17:00-20:30; 33% the rest of the day", "Generalitat (order of 16 November)"],
-              ["Cercanías outside Catalonia", "Not published yet", "Ministry of Transport; in Bilbao and San Sebastián, the Basque Government (as on the 17th)"],
-              ["Renfe AVE, long-distance and Media Distancia trains", "Not published yet", "Ministry of Transport"],
-              ["Iryo and Ouigo", "No call for the 23rd in the sources checked: SEMAF's strike is at the Renfe Group", "—"],
-              ["Metro, buses, trams and FGC", "Not part of this strike", "—"],
+              ["Rodalies de Catalunya and Catalan regional trains", "Usual timetable unless Renfe says otherwise: no strike", "None: the 66% at peak and 33% the Generalitat had set were for this strike"],
+              ["Cercanías outside Catalonia", "Usual timetable unless Renfe says otherwise: no strike", "None: the Ministry of Transport had published no resolution for the 23rd"],
+              ["Renfe AVE, long-distance and Media Distancia trains", "Usual timetable unless Renfe says otherwise: no strike", "None"],
+              ["Iryo and Ouigo", "No strike called in the sources checked", "—"],
+              ["Metro, buses, trams and FGC", "Not part of any strike that day", "—"],
             ],
             `Checked on ${checked}.`,
           ),
           ...paras(
-            `**Still to come:** on ${checked}, the Ministry of Transport had no resolution for the 23rd on ${link(U.ministryRail, "its list")} yet; for SEMAF's strike of 10 November it published one on the 6th, and for the 17th, on the 12th. Nor did the Basque Government have an order for the 23rd on ${link(U.euskadiList, "its list")}; it set the 17th's by ${link(U.euskadi17, "an order of 13 November")}.`,
-            `**Is it still on?** Yes. SEMAF replaced the 12 November stoppages with this strike, and on the 17th wrote "afrontamos el 23 de noviembre como la próxima jornada de movilización" (we face 23 November as the next day of action; ${link(SPAIN_URLS.semaf35, "notice 2026-35")}). On the 19th, after agreeing a bad-weather protocol with the Ministry, Adif and Renfe, the dispute was still on: "Al mismo tiempo que permanece vigente la conflictividad, desde SEMAF estamos trabajando y negociando" (while the dispute stays in force, SEMAF is working and negotiating; ${link(U.semaf36, "notice 2026-36")}).`,
-            "**What to do:** check your train the evening before and on the day, because minimum services are not spread evenly over the day. If you hold an AVE, long-distance or Media Distancia ticket, changes and refunds depend on Renfe: follow what it publishes on renfe.com or emails you.",
+            `**No other rail strike that day:** on ${checked}, the Ministry of Transport had no minimum-services resolution for the 23rd on ${link(U.ministryRail, "its list of rail resolutions")}, whose newest is the one of 12 November for the 17th, and the Generalitat's Rodalies order of 16 November, on ${link(U.treballMs, "the Catalan labour department's list")}, was for SEMAF's strike.`,
+            `**What to do:** on ${checked}, Renfe and Rodalies had not yet published a notice about SEMAF's decision. Before you set off, check ${link(U.rodaliesStatus, "the Rodalies live service status")}; if you hold an AVE, long-distance or Media Distancia ticket, follow what ${link(U.renfe, "Renfe")} publishes or emails you.`,
           ),
         ],
         madridDay: "**On Monday 23:** not one of CSIF's partial-stoppage days (the next are Tuesday 24 and Thursday 26, 09:00 to 11:00 and 17:00 to 19:00, according to its calendar); the open-ended strike stays called.",
         madridValue: "Open-ended strike since 14 October (no CSIF stoppage that day)",
         notCalled:
-          "It is not a general strike. Iryo and Ouigo have no call for Monday 23 in the sources checked, and metros, buses, trams and FGC are not part of any. In Andalusia, Correos' strike is only in Cádiz, Córdoba, Huelva, Málaga and Seville.",
-        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Renfe and Rodalies strike on 23 November: lines and minimum services"),
+          "It is not a general strike or a rail strike: the Renfe drivers' strike is called off, Iryo and Ouigo have no call in the sources checked, and metros, buses, trams and FGC are not part of any. In Andalusia, Correos' strike is only in Cádiz, Córdoba, Huelva, Málaga and Seville.",
+        catalanGuide: (locale) => b2link("strikeRenfe", locale, "Renfe and Rodalies strike on 23 November: called off"),
         faq: (checked) => [
-          { question: "Is there a strike in Spain on Monday 23 November 2026?", answer: "Yes, but not a general strike: every Renfe Group train driver is called out (SEMAF) from 00:01 to 23:59, which hits Rodalies, Cercanías, Media Distancia, AVE and long-distance trains; Correos' strike begins in Madrid and five Andalusian provinces, and the Sindicato Médicos Unidos doctors' strike goes on." },
-          { question: "Is there a Renfe strike on 23 November?", answer: "Yes: the train drivers' union SEMAF calls out every Renfe Group train driver on Monday 23, 00:01 to 23:59. It replaces the 12 November stoppages, which it called off, and on 19 November the union was keeping the dispute open." },
-          { question: "What are the Rodalies minimum services on 23 November?", answer: "The Generalitat's order of 16 November sets 66% of the usual service on Rodalies de Catalunya and regional trains at peak times, 06:00 to 09:30 and 17:00 to 20:30, and 33% the rest of the day." },
-          { question: "Do AVE and Madrid's Cercanías run on 23 November?", answer: `With minimum services that are not known yet: the Ministry of Transport sets them and had not published its resolution by ${checked}. For SEMAF's strike of 10 November it published one on the 6th, and for the 17th, on the 12th.` },
+          { question: "Is there a strike in Spain on Monday 23 November 2026?", answer: "Yes, but not a rail strike or a general strike: SEMAF called off the Renfe train drivers' strike on 20 November. That day Correos' strike begins in the Community of Madrid and five Andalusian provinces, and the Sindicato Médicos Unidos doctors' strike goes on." },
+          { question: "Is there a Renfe strike on 23 November?", answer: "No. The train drivers' union SEMAF called it off on 20 November: \"SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo\" (SEMAF has called off the strike day planned for 23 November after reaching an agreement), according to its notice 2026-38." },
+          { question: "Does Rodalies run on 23 November?", answer: `Yes, to its usual timetable unless Renfe says otherwise: with no strike there are no minimum services, and the 66% at peak and 33% the Generalitat had set were for SEMAF's strike. On ${checked}, Rodalies had not yet published a notice: check the live service status before you set off.` },
+          { question: "Do AVE and Madrid's Cercanías run on 23 November?", answer: `Yes, with no strike: SEMAF called it off on 20 November, and on ${checked} the Ministry of Transport had no minimum-services resolution for that day. If in doubt about your ticket, follow what Renfe publishes.` },
           { question: "Does the Correos strike affect postal voting?", answer: "The Interior Ministry's order makes Correos open its post offices at their usual hours for postal votes, with 1, 2 or 3 staff per shift depending on the office's size, and sets delivery of election mail with up to 50% of staff from 23 to 25 November, \"coincidiendo con la admisión del voto por correo\" (while postal votes are being accepted)." },
         ],
       },
@@ -577,7 +584,7 @@ const COPY: Record<Locale, Copy> = {
         madridDay: "**On Thursday 26:** CSIF calls partial stoppages from 09:00 to 11:00 and from 17:00 to 19:00, according to its calendar.",
         madridValue: "Open-ended strike since 14 October; CSIF stoppages 09:00-11:00 and 17:00-19:00",
         notCalled:
-          "There is no general strike and no rail strike: SEMAF's drivers' strike is on Monday 23 only, and the Ministry of Transport has no rail minimum-services resolution for Thursday 26. Correos' strike in Andalusia ended on the 25th; in Madrid it runs to the 27th.",
+          "There is no general strike and no rail strike: SEMAF called off the Renfe drivers' strike of Monday 23, and the Ministry of Transport has no rail minimum-services resolution for Thursday 26. Correos' strike in Andalusia ended on the 25th; in Madrid it runs to the 27th.",
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "Is there a strike in Spain on Thursday 26 November 2026?", answer: "Yes, but not a general strike: an education strike in Catalonia for the whole day; the Sindicato Médicos Unidos doctors' strike and Correos' strike in the Community of Madrid go on, and in Madrid CSIF calls stoppages in state schools. There is no rail strike." },
@@ -662,7 +669,9 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
   const checkedDay = dayDate(checkedOn, locale);
   const education = key === "strike26n" ? educationEntry() : undefined;
 
+  const calledOff = calledOffOnDay(key);
   const facts = [
+    ...(d.callOffFact && calledOff.length > 0 ? [d.callOffFact] : []),
     ...(education ? [{ label: cap(education.title[locale]), value: `${education.minimumServices.msShort[locale]}.` }] : []),
     ...spain.map((strike) => ({ label: cap(strike.title[locale]), value: `${strike.minimumServices.short[locale]}.` })),
     { label: t.madridLabel, value: `${d.madridValue}.` },
@@ -691,6 +700,8 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
     ...paras(`${d.catalanGuide(locale)} · ${t.catalanHub(b2link("strikes", locale, B2_TITLES.strikes[locale]))}`),
     heading(2, t.notHeading, t.notId),
     ...paras(`${d.notCalled} ${t.checked(checked)}`),
+    // 20 Nov 2026: the 23rd's Renfe strike, called off, from SPAIN_NOT_HAPPENING (as the 19th printed Adif's).
+    ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
     list(
       b2link("strikesSpain", locale, t.spainLink),
       ...(dayPageOver(other, asOf) ? [] : [b2link(other, locale, B2_TITLES[other][locale])]),
@@ -713,6 +724,7 @@ export function strikeDay2326Sources(key: StrikeDay2326Key): B2Source[] {
     if (!all.some((s) => s.url === source.url)) all.push({ name: source.name, url: source.url, publisher: source.publisher });
   };
   if (key === "strike26n") educationEntry().sources.forEach(add);
+  for (const item of calledOffOnDay(key)) item.sources.forEach(add);
   for (const strike of spainStrikesOn2326(key)) strike.sources.forEach(add);
   EXTRA_SOURCES[key].forEach(add);
   for (const strike of SPAIN_OPEN_STRIKES) strike.sources.forEach(add);

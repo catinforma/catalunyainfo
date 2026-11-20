@@ -4,10 +4,9 @@ import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { B2_PATHS, B2_TITLES } from "../src/lib/content/batch02/shared.ts";
-import { STRIKE_19N_GUIDE, STRIKE_20N_GUIDE, STRIKE_DAYS_VERIFIED, strikeDaysCheckedOn } from "../src/lib/content/batch02/strike-days-1920n.ts";
+import { STRIKE_19N_GUIDE, STRIKE_20N_GUIDE, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn } from "../src/lib/content/batch02/strike-days-1920n.ts";
 import {
   DAY2326_URLS,
-  MINISTRY_23N_PUBLISHED,
   STRIKE_23N_GUIDE,
   STRIKE_26N_GUIDE,
   STRIKE_DAY_2326,
@@ -23,9 +22,9 @@ import {
 } from "../src/lib/content/batch02/strike-days-2326n.ts";
 import { dayDate } from "../src/lib/content/batch02/festive.ts";
 import { buildStrikeGuideBody, guideStrikeId } from "../src/lib/content/batch02/strike-guides.ts";
-import { STRIKES, STRIKES_GUIDE, STRIKE_DAY_PAGES, buildStrikesBody } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES, STRIKES_CALLED_OFF, STRIKES_GUIDE, STRIKE_DAY_PAGES, buildStrikesBody } from "../src/lib/content/batch02/strikes.ts";
 import { STRIKES_SPAIN_GUIDE, buildStrikesSpainBody } from "../src/lib/content/batch02/strikes-spain.ts";
-import { SPAIN_STRIKES } from "../src/lib/content/batch02/strikes-spain-data.ts";
+import { SPAIN_NOT_HAPPENING, SPAIN_STRIKES } from "../src/lib/content/batch02/strikes-spain-data.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { NEWS_CYCLE_ENTRY_KEYS } from "../src/lib/seo/news-cycle.ts";
@@ -88,6 +87,8 @@ test("two pages, three native editions each, at the registered paths with the da
     }
   }
   // The searched words of the 23rd's rail queries are in its titles: "huelga renfe 23 noviembre", "vaga rodalies 23 novembre".
+  // 20 Nov 2026: with the call-off ("desconvocada", "called off") right after them.
+  for (const locale of LOCALES) assert.match(STRIKE_23N_GUIDE.editions[locale].seoTitle, /desconvocada|called off/, locale);
   assert.match(STRIKE_23N_GUIDE.editions.es.seoTitle, /Renfe/);
   assert.match(STRIKE_23N_GUIDE.editions.ca.seoTitle, /Rodalies/);
   assert.match(STRIKE_26N_GUIDE.editions.es.seoTitle, /educación/);
@@ -96,12 +97,13 @@ test("two pages, three native editions each, at the registered paths with the da
 
 test("the first line answers the question, in the tense of the as-of date", () => {
   const first = (key: StrikeDay2326Key, locale: Locale, asOf: string) => text([buildStrikeDay2326Body(key, locale, asOf)[0]!]);
-  assert.match(first("strike23n", "es", "2026-11-19"), /^Sí: el lunes 23 de noviembre de 2026 hay huelga de todos los maquinistas del Grupo Renfe \(SEMAF\), de 0\.01 a 23\.59 h\./);
-  assert.match(first("strike23n", "es", "2026-11-22"), /^Mañana, lunes 23 de noviembre, hay huelga de todos los maquinistas/);
-  assert.match(first("strike23n", "es", "2026-11-23"), /^Hoy, lunes 23 de noviembre, hay huelga/);
-  assert.match(first("strike23n", "es", "2026-11-24"), /^El lunes 23 de noviembre de 2026 hubo huelga de maquinistas/);
-  assert.match(first("strike23n", "ca", "2026-11-19"), /^Sí: el dilluns 23 de novembre de 2026 hi ha vaga de tots els maquinistes del Grup Renfe/);
-  assert.match(first("strike23n", "en", "2026-11-19"), /^Yes: on Monday 23 November 2026 there is a strike by every Renfe Group train driver/);
+  // 20 Nov 2026: SEMAF called off the 23rd (nº 2026-38): the first thing the page says.
+  assert.match(first("strike23n", "es", "2026-11-20"), /^No: la huelga de maquinistas de Renfe del lunes 23 de noviembre de 2026 está desconvocada\./);
+  assert.match(first("strike23n", "es", "2026-11-22"), /^Mañana, lunes 23 de noviembre, no hay huelga de Renfe ni de Rodalies\./);
+  assert.match(first("strike23n", "es", "2026-11-23"), /^Hoy, lunes 23 de noviembre, no hay huelga de Renfe/);
+  assert.match(first("strike23n", "es", "2026-11-24"), /^El lunes 23 de noviembre de 2026 no hubo huelga de Renfe/);
+  assert.match(first("strike23n", "ca", "2026-11-20"), /^No: la vaga de maquinistes de Renfe del dilluns 23 de novembre de 2026 està desconvocada\./);
+  assert.match(first("strike23n", "en", "2026-11-20"), /^No: the Renfe train drivers' strike on Monday 23 November 2026 is called off\./);
   assert.match(first("strike26n", "es", "2026-11-19"), /^Sí: el jueves 26 de noviembre de 2026 hay huelga en la educación en toda Cataluña/);
   assert.match(first("strike26n", "es", "2026-11-25"), /^Mañana, jueves 26 de noviembre, hay huelga en la educación/);
   assert.match(first("strike26n", "ca", "2026-11-26"), /^Avui, dijous 26 de novembre, hi ha vaga a l'educació/);
@@ -111,14 +113,16 @@ test("the first line answers the question, in the tense of the as-of date", () =
   assert.equal(strikeDay2326Phase("strike23n", "2026-11-23"), "today");
   assert.equal(strikeDay2326Phase("strike23n", "2026-11-24"), "after");
   assert.equal(strikeDay2326Phase("strike26n", "2026-11-25"), "eve");
-  // The lead names the minimum services: Rodalies' figures on the 23rd, the pending school order on the 26th.
+  // The lead says who called it off and what still happens (Correos, doctors); the 26th's, the pending school order.
   for (const locale of LOCALES) {
-    assert.match(first("strike23n", locale, "2026-11-19"), /66%.*6\.00 a 9\.30|66%.*06:00 to 09:30/, locale);
+    assert.match(first("strike23n", locale, "2026-11-20"), /SEMAF.*(desconvoc|called it off).*(Correos|Correus)/, locale);
+    assert.match(first("strike23n", locale, "2026-11-20"), /(salvo aviso de Renfe|llevat que Renfe avisi del contrari|unless Renfe says otherwise)/, locale);
+    assert.doesNotMatch(first("strike23n", locale, "2026-11-20"), /66%/, `${locale}: no minimum-service figure for a strike that is off`);
     assert.match(first("strike26n", locale, "2026-11-19"), /(pendent|publicad|publicat|published)/, locale);
   }
-  // The check date beside "aún no" is the day the sources were re-read, never a later as-of day.
+  // The check date is the day the sources were re-read, never a later as-of day.
   const checked = dayDate(strikeDaysCheckedOn("2026-11-22"), "es");
-  assert.ok(first("strike23n", "es", "2026-11-22").includes(`que el ${checked} aún no los había publicado`), first("strike23n", "es", "2026-11-22"));
+  assert.ok(first("strike23n", "es", "2026-11-22").includes(`en las fuentes revisadas el ${checked}`), first("strike23n", "es", "2026-11-22"));
   const faqOf = (key: StrikeDay2326Key, locale: Locale, asOf: string) =>
     (buildStrikeDay2326Body(key, locale, asOf).find((b) => b.type === "faq") as unknown as { items: { question: string }[] }).items[0]?.question;
   assert.equal(faqOf("strike23n", "es", "2026-11-22"), "¿Hay huelga mañana, lunes 23 de noviembre de 2026?");
@@ -132,11 +136,17 @@ test("the first line answers the question, in the tense of the as-of date", () =
 });
 
 test("the day's strikes come from the entries and every one is named and has its section", () => {
-  assert.deepEqual(spainStrikesOn2326("strike23n").map((s) => s.id).sort(), [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.renfe, STRIKE_DAY_2326_IDS.smu].sort());
+  // 20 Nov 2026: SEMAF's strike of the 23rd is called off: not in the entries, in SPAIN_NOT_HAPPENING and STRIKES_CALLED_OFF.
+  assert.deepEqual(spainStrikesOn2326("strike23n").map((s) => s.id).sort(), [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu].sort());
   assert.deepEqual(spainStrikesOn2326("strike26n").map((s) => s.id).sort(), [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu].sort());
-  assert.ok(catalanStrikesOn2326("strike23n").some((s) => s.id === STRIKE_DAY_2326_IDS.renfeCatalan));
+  assert.ok(!SPAIN_STRIKES.some((s) => s.id === "huelga-renfe-2026-11-23"));
+  assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"));
+  assert.ok(SPAIN_NOT_HAPPENING.some((s) => s.id === STRIKE_DAY_2326_IDS.renfeCalledOff));
+  assert.equal(STRIKES_CALLED_OFF.find((s) => s.id === STRIKE_DAY_2326_IDS.renfeCalledOffCatalan)?.day, STRIKE_DAY_2326.strike23n);
+  assert.deepEqual(calledOffOnDay("strike23n").map((s) => s.id), [STRIKE_DAY_2326_IDS.renfeCalledOff]);
+  assert.deepEqual(calledOffOnDay("strike26n"), []);
   assert.ok(catalanStrikesOn2326("strike26n").some((s) => s.id === STRIKE_DAY_2326_IDS.education));
-  for (const id of [STRIKE_DAY_2326_IDS.renfe, STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu]) assert.ok(SPAIN_STRIKES.some((s) => s.id === id), id);
+  for (const id of [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu]) assert.ok(SPAIN_STRIKES.some((s) => s.id === id), id);
   assert.equal(educationEntry().dates[0], STRIKE_DAY_2326.strike26n);
   for (const key of KEYS) {
     for (const locale of LOCALES) {
@@ -148,7 +158,7 @@ test("the day's strikes come from the entries and every one is named and has its
       }
       for (const strike of catalanStrikesOn2326(key)) assert.ok(text(blocks).includes(strike.minimumServices.msShort[locale]), `${key}/${locale}: ${strike.id} not in the Catalonia list`);
       const facts = blocks.find((b) => b.type === "keyFacts") as unknown as { items: { label: string }[] };
-      assert.equal(facts.items.length, spainStrikesOn2326(key).length + 1 + (key === "strike26n" ? 1 : 0), `${key}/${locale}: one fact per strike plus Madrid (plus education on the 26th)`);
+      assert.equal(facts.items.length, spainStrikesOn2326(key).length + 1 + (key === "strike26n" ? 1 : 0) + calledOffOnDay(key).length, `${key}/${locale}: one fact per strike plus Madrid (plus education on the 26th, the call-off on the 23rd)`);
     }
   }
   // The 26th: the education entry's own facts and minimum services, as on the Catalan hub.
@@ -159,36 +169,35 @@ test("the day's strikes come from the entries and every one is named and has its
   }
 });
 
-test("pending stays pending exactly while the entries say so; the trains of the 23rd and no rail strike on the 26th", () => {
-  const renfe = SPAIN_STRIKES.find((s) => s.id === STRIKE_DAY_2326_IDS.renfe)!;
-  assert.deepEqual(renfe.dates, [STRIKE_DAY_2326.strike23n]);
-  // 19 Nov 2026: the Ministry's part is "por confirmar" in the entry; the day page says "pendientes" for it. Both change together.
-  assert.equal(MINISTRY_23N_PUBLISHED, !/por confirmar/.test(renfe.minimumServices.short.es), "the 23N entry and the day page disagree on the Ministry's resolution: rewrite strike-days-2326n.ts");
-  if (!MINISTRY_23N_PUBLISHED) {
-    for (const locale of LOCALES) {
-      const page = text(STRIKE_23N_GUIDE.editions[locale].blocks);
-      assert.match(page, { ca: /Pendents de publicar/, es: /Pendientes de publicar/, en: /Not published yet/ }[locale], locale);
-      assert.match(strikeDay2326Description("strike23n", locale, "2026-11-19"), /(por confirmar|per confirmar|to be confirmed)/, locale);
-    }
+test("the 23rd: called off, said from SEMAF's notice; the 26th's school order pending exactly while the entry says so; no rail strike either day", () => {
+  // 20 Nov 2026: SEMAF nº 2026-38 is quoted and linked, on the page and in its sources.
+  assert.ok(strikeDay2326Sources("strike23n").some((s) => s.url === DAY2326_URLS.semaf38));
+  assert.ok(strikeDay2326Sources("strike23n").some((s) => s.url === DAY2326_URLS.semaf39));
+  for (const locale of LOCALES) {
+    const page = text(STRIKE_23N_GUIDE.editions[locale].blocks);
+    assert.match(page, /SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre/, locale);
+    assert.ok(page.includes(calledOffOnDay("strike23n")[0]!.title[locale]), `${locale}: the call-off is printed under "what is not on that day"`);
+    assert.match(strikeDay2326Description("strike23n", locale, "2026-11-20"), /SEMAF/, locale);
+    assert.doesNotMatch(page, /Pendents de publicar|Pendientes de publicar|Not published yet/, `${locale}: nothing pending for a strike that is off`);
   }
   const education = educationEntry();
   assert.equal(education.minimumServices.status === "pending", /pendientes/.test(strikeDay2326Description("strike26n", "es", "2026-11-19")), "the 26N entry and the day page disagree on the school order: rewrite strike-days-2326n.ts");
-  // Rodalies on the 23rd: the Generalitat's 66 % / 33 % with its hours, in the table.
+  // The trains of the 23rd: usual timetable, and the Generalitat's 66 % / 33 % named as this strike's, in the table.
   for (const locale of LOCALES) {
     const tables = STRIKE_23N_GUIDE.editions[locale].blocks.filter((b) => b.type === "table") as unknown as { rows: string[][] }[];
     assert.equal(tables.length, 1, locale);
-    assert.match(tables[0]!.rows[0]![1]!, /66%.*33%/, locale);
+    assert.match(tables[0]!.rows[0]![1]!, /habitual|usual/i, locale);
+    assert.match(tables[0]!.rows[0]![2]!, /66%.*33%/, locale);
     const tables26 = STRIKE_26N_GUIDE.editions[locale].blocks.filter((b) => b.type === "table") as unknown as { rows: string[][] }[];
     assert.equal(tables26.length, 1, locale);
   }
-  // Only Renfe on the 23rd and no rail strike on the 26th.
-  assert.deepEqual(SPAIN_STRIKES.filter((s) => s.sector === "rail" && s.dates.includes(STRIKE_DAY_2326.strike23n)).map((s) => s.id), [STRIKE_DAY_2326_IDS.renfe]);
-  assert.ok(!SPAIN_STRIKES.some((s) => s.sector === "rail" && s.dates.includes(STRIKE_DAY_2326.strike26n)), "a rail strike on the 26th: rewrite the 26N page");
-  assert.ok(!STRIKES.some((s) => s.scope === "rail" && s.dates.includes(STRIKE_DAY_2326.strike26n)), "a Catalan rail strike on the 26th: rewrite the 26N page");
+  // No rail strike left on the 23rd, none on the 26th.
+  for (const day of [STRIKE_DAY_2326.strike23n, STRIKE_DAY_2326.strike26n]) {
+    assert.ok(!SPAIN_STRIKES.some((s) => s.sector === "rail" && s.dates.includes(day)), `a rail strike on ${day}: rewrite the day page`);
+    assert.ok(!STRIKES.some((s) => s.scope === "rail" && s.dates.includes(day)), `a Catalan rail strike on ${day}: rewrite the day page`);
+  }
   assert.match(text(STRIKE_26N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
-  // SEMAF's notice of 19 Nov is quoted and linked.
-  assert.ok(strikeDay2326Sources("strike23n").some((s) => s.url === DAY2326_URLS.semaf36));
-  assert.match(text(STRIKE_23N_GUIDE.editions.es.blocks), /permanece vigente la conflictividad/);
+  assert.match(text(STRIKE_23N_GUIDE.editions.es.blocks), /No es una huelga general ni de trenes/);
 });
 
 test("links: external ones are named https non-press sources; internal ones are registered paths in the page's language", () => {
@@ -234,13 +243,12 @@ test("links in: both hubs, the Renfe and education guides and the 19N/20N pages,
     }
     // The 19N and 20N pages (which rank for "huelga 20 noviembre") hand on to the 23rd.
     for (const guide of [STRIKE_19N_GUIDE, STRIKE_20N_GUIDE]) assert.ok(json(guide.editions[locale].blocks).includes(`](/${locale}/${B2_PATHS.strike23n[locale]}/)`), `${guide.key}/${locale} → 23N`);
-    // The Spain hub's Renfe section links the 23N page while the day is to come.
-    const spain = buildStrikesSpainBody(locale, "2026-11-19");
-    const section = (id: string) => json([spain[spain.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === id) + 1]!]);
-    assert.ok(section(STRIKE_DAY_2326_IDS.renfe).includes(`](/${locale}/${B2_PATHS.strike23n[locale]}/)`), `${locale}: Renfe section → 23N`);
-    // The Renfe guide (covering the 23rd) links its day page right under the answer, with "Renfe" and "23" in the anchor; the education guide the 26th's.
-    assert.equal(guideStrikeId("strikeRenfe", "2026-11-19"), STRIKE_DAY_2326_IDS.renfeCatalan);
-    const renfe = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-19");
+    // 20 Nov 2026: the Spain hub lists the 23rd's Renfe strike as called off.
+    const spain = text(buildStrikesSpainBody(locale, "2026-11-20"));
+    assert.ok(spain.includes(calledOffOnDay("strike23n")[0]!.title[locale]), `${locale}: Spain hub → the call-off`);
+    // The Renfe guide (its 23 Nov strike called off) links the day page right under the answer, with "Renfe" and "23" in the anchor; the education guide the 26th's.
+    assert.equal(guideStrikeId("strikeRenfe", "2026-11-20"), "vaga-ferroviaria-2026-11-17");
+    const renfe = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-20");
     assert.match(json([renfe[4]!]), new RegExp(`\\[[^\\]]*Renfe[^\\]]*23[^\\]]*\\]\\(/${locale}/${B2_PATHS.strike23n[locale]}/\\)`), `${locale}: Renfe guide → 23N`);
     assert.equal(guideStrikeId("strikeEducation", "2026-11-19"), STRIKE_DAY_2326_IDS.education);
     const education = buildStrikeGuideBody("strikeEducation", locale, "2026-11-19");

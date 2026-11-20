@@ -162,7 +162,8 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
     assert.match(STRIKE_19N_GUIDE.editions[locale].seoTitle, /desconvocada|called off/, locale);
   }
   assert.match(text(STRIKE_19N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
-  assert.match(text(STRIKE_19N_GUIDE.editions.es.blocks), /Renfe no estaba convocada/);
+  // Said before and on the day (20 Nov 2026: the published page is past by now, so built as of the 18th).
+  assert.match(text(buildStrikeDayBody("strike19n", "es", "2026-11-18")), /Renfe no estaba convocada/);
   assert.match(text(STRIKE_20N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
   // The Rodalies figures of the 17th are never printed as the 19th's.
   for (const locale of LOCALES) {
@@ -224,8 +225,9 @@ test("links in: both hubs and the 17N page, while the day is to come", () => {
   for (const locale of LOCALES) {
     for (const key of KEYS) {
       const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
-      assert.ok(json(STRIKES_SPAIN_GUIDE.editions[locale].blocks).includes(target), `${locale}: Spain hub → ${key}`);
-      assert.ok(json(STRIKES_GUIDE.editions[locale].blocks).includes(target), `${locale}: Catalan hub → ${key}`);
+      // 20 Nov 2026: built as of the 18th, when both days were still to come (the published hubs are past the 19th by now).
+      assert.ok(json(buildStrikesSpainBody(locale, "2026-11-18")).includes(target), `${locale}: Spain hub → ${key}`);
+      assert.ok(json(buildStrikesBody(locale, "2026-11-18")).includes(target), `${locale}: Catalan hub → ${key}`);
       assert.ok(json(buildRail17nBody(locale, "2026-11-17")).includes(target), `${locale}: 17N page → ${key}`);
       assert.ok(!json(buildStrikesSpainBody(locale, "2026-11-23")).includes(target), `${locale}: Spain hub still links ${key} the week after`);
       assert.ok(!json(buildStrikesBody(locale, "2026-11-23")).includes(target), `${locale}: Catalan hub still links ${key} after the day`);
@@ -249,7 +251,8 @@ test("links in: both hubs and the 17N page, while the day is to come", () => {
       const opening = text([blocks[0]!]);
       assert.doesNotMatch(opening, /^(Mañana|Demà|Tomorrow), (jueves|dijous|Thursday) 19/, `${locale}: ${opening.slice(0, 80)}`);
     }
-    assert.match(text([buildStrikeGuideBody("strikeRenfe", locale, "2026-11-18")[0]!]), /23/, locale);
+    // 20 Nov 2026: SEMAF called off the 23rd; from that day the Renfe guide's answer opens with the call-off.
+    assert.match(text([buildStrikeGuideBody("strikeRenfe", locale, "2026-11-20")[0]!]), /23/, locale);
   }
 });
 

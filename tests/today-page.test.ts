@@ -401,8 +401,9 @@ test("strikes: today, tomorrow and next from the embedded dates; the list's age"
   assert.equal(nextStrike("2026-11-11", STRIKE_FIXTURE), null);
   assert.equal(strikesListStale("2026-11-06", "2026-10-30"), false);
   assert.equal(strikesListStale("2026-11-07", "2026-10-30"), true);
-  // On the real list: the next rail strike is on 23 November (18 Nov 2026: the 17th is past and SCF called off the 19th).
-  assert.ok(strikesOn("2026-11-23", todayStrikes("ca")).some((s) => s.id === "vaga-renfe-2026-11-23"));
+  // On the real list: no rail strike on 23 November (20 Nov 2026: SEMAF called it off, nº 2026-38); the education strike of the 26th is on.
+  assert.ok(!strikesOn("2026-11-23", todayStrikes("ca")).some((s) => s.id === "vaga-renfe-2026-11-23"));
+  assert.ok(strikesOn("2026-11-26", todayStrikes("ca")).some((s) => s.id === "vaga-educacio-2026-11-26"));
   assert.ok(!todayStrikes("ca").some((s) => s.id === "vaga-general-2026-11-11" || s.id === "vaga-ferroviaria-2026-11-17"));
 });
 

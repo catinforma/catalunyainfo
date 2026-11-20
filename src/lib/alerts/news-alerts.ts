@@ -1,6 +1,6 @@
 import { b2href, type B2Key } from "@/lib/content/batch02/shared";
 import { POSTAL_29N } from "@/lib/content/batch02/postal-vote";
-import { STRIKES, andList, lastDay, type Strike } from "@/lib/content/batch02/strikes";
+import { STRIKES, STRIKES_CALLED_OFF, andList, lastDay, type CalledOffStrike, type Strike } from "@/lib/content/batch02/strikes";
 import { WEEKDAY_NAMES, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { GENERAL_ELECTION_DAY } from "@/lib/programmatic/elections/today";
@@ -46,9 +46,17 @@ import { GENERAL_ELECTION_DAY } from "@/lib/programmatic/elections/today";
  * and the 29 Nov election. The same lines, as of a page's own date, make the
  * "upcoming strikes and dates" block of the 11N pages (`nextDateLinks`).
  *
+ * 20 Nov 2026: SEMAF called off the 23 Nov strike (nº 2026-38). Its entry left
+ * STRIKES, so its line went; in its place, from the day of the call-off to the
+ * end of the 23rd, a line saying it is called off, to the 23 Nov page (which
+ * opens with the call-off, then what still happens that day: Correos, doctors).
+ * Built from STRIKES_CALLED_OFF in strikes.ts (`calledOffAlert`).
+ *
  * HOW TO UPDATE:
  *  - A strike called off: remove its entry from STRIKES or set the alert's
- *    `end` by hand; a day called off: remove it from the entry's `dates`.
+ *    `end` by hand; a day called off: remove it from the entry's `dates`. A
+ *    strike called off before its day that people still search for: add it
+ *    to STRIKES_CALLED_OFF and a `calledOffAlert` line here.
  *  - A new alert: add it to `buildNewsAlerts`, pointing at a B2 guide that is
  *    published in every language (tests/news-alerts.test.ts checks the paths).
  *    Its id must be [a-z0-9-] (it goes into a CSS selector).
@@ -98,7 +106,8 @@ function previousDay(isoDate: string): string {
 export const STRIKE_11N_ID = "vaga-general-2026-11-11";
 export const STRIKE_RENFE_ID = "vaga-renfe-2026-11-10";
 export const STRIKE_RAIL_ID = "vaga-ferroviaria-2026-11-17";
-export const STRIKE_RENFE_23_ID = "vaga-renfe-2026-11-23";
+/** 20 Nov 2026: SEMAF called the 23rd off; this is its STRIKES_CALLED_OFF entry. */
+export const STRIKE_RENFE_23_OFF_ID = "vaga-renfe-2026-11-23-desconvocada";
 export const STRIKE_EDUCATION_ID = "vaga-educacio-2026-11-26";
 
 export const NEWS_ALERTS_LABEL: Record<Locale, string> = {
@@ -200,6 +209,20 @@ function strikeAlert(
   return [{ id: alertId, start: from, end, target, text: text(days) }];
 }
 
+/** 20 Nov 2026: "called off" line for a STRIKES_CALLED_OFF entry, from the day it was called off to the end of its day. */
+function calledOffAlert(
+  list: readonly CalledOffStrike[],
+  id: string,
+  alertId: string,
+  target: B2Key,
+  text: (days: Record<Locale, string>) => Record<Locale, string>,
+): NewsAlert[] {
+  const item = list.find((s) => s.id === id);
+  if (!item) return [];
+  const days = { ca: daysPhrase([item.day], "ca"), es: daysPhrase([item.day], "es"), en: daysPhrase([item.day], "en") };
+  return [{ id: alertId, start: madridMidnight(item.calledOffOn), end: endOfMadridDay(item.day), target, text: text(days) }];
+}
+
 /** The later of two ISO instants. */
 const later = (a: string, b: string) => (Date.parse(a) >= Date.parse(b) ? a : b);
 
@@ -222,6 +245,7 @@ export function buildNewsAlerts(
   strikes: readonly Strike[] = STRIKES,
   electionDay: string = GENERAL_ELECTION_DAY,
   postal: { requestBy: string; deliverBy: string } = POSTAL_29N,
+  calledOff: readonly CalledOffStrike[] = STRIKES_CALLED_OFF,
 ): NewsAlert[] {
   const next = madridMidnight(NEXT_ALERTS_FROM);
   return chained([
@@ -247,18 +271,12 @@ export function buildNewsAlerts(
       }),
       next,
     ),
-    ...strikeAlert(
-      strikes,
-      STRIKE_RENFE_23_ID,
-      "strike-renfe-23n",
-      "strikeRenfe",
-      (d) => ({
-        ca: `Vaga de maquinistes ${d.ca}: Renfe, Rodalies i serveis mínims`,
-        es: `Huelga de maquinistas ${d.es}: Renfe, Rodalies y servicios mínimos`,
-        en: `Train drivers' strike ${d.en}: Renfe, Rodalies and minimum services`,
-      }),
-      next,
-    ),
+    // 20 Nov 2026: SEMAF called off the 23rd (nº 2026-38); the line says so, to the 23 Nov page.
+    ...calledOffAlert(calledOff, STRIKE_RENFE_23_OFF_ID, "strike-renfe-23n-off", "strike23n", (d) => ({
+      ca: `Vaga de Renfe i Rodalies ${d.ca}: desconvocada`,
+      es: `Huelga de Renfe y Rodalies ${d.es}: desconvocada`,
+      en: `Renfe and Rodalies strike ${d.en}: called off`,
+    })),
     ...strikeAlert(
       strikes,
       STRIKE_EDUCATION_ID,
@@ -347,7 +365,8 @@ export const DECEMBER_BRIDGE_MONDAY = "2026-12-07";
 export const DECEMBER_BRIDGE_LAST_DAY = "2026-12-08";
 
 /** The lines about what comes after 11N, in the order they run. */
-export const NEXT_ALERT_IDS = ["strike-rail-17n", "strike-renfe-23n", "strike-education-26n", "election-29n"] as const;
+// 20 Nov 2026: "strike-renfe-23n" went with SEMAF's call-off; the call-off line is not one of the 11N pages' "next dates".
+export const NEXT_ALERT_IDS = ["strike-rail-17n", "strike-education-26n", "election-29n"] as const;
 
 /**
  * The "upcoming strikes and dates" links of the 11N pages (11 Nov 2026): the
