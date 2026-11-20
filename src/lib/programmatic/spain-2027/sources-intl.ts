@@ -246,14 +246,14 @@ export const SOURCE_PROSE: Record<Region, Record<IntlLocale, SourceProse>> = {
   },
   VC: {
     ca: {
-      how: "A la Comunitat Valenciana els aprova una resolució de la conselleria competent en treball, amb els 2 dies de cadascun dels 542 municipis, al",
-      note: "La llista del 2025 va sortir el 18 de novembre de 2024 i la del 2026, el 14 de novembre de 2025; després es va corregir dues vegades (DOGV de 15.1.2026 i 3.3.2026). Alguns ajuntaments publiquen abans el seu acord al DOGV, però la llista que val és la resolució.",
-      bulletinShort: "el DOGV",
+      how: "A la Comunitat Valenciana, per al 2027 els fixa la Direcció Territorial d'Habitatge, Ocupació, Joventut i Igualtat de cada província, que els publica al seu butlletí provincial; la Generalitat els reuneix al seu",
+      note: "Per al 2027 la Generalitat no els publica al DOGV, com el 2026, sinó al butlletí de cada província: Alacant el 4 de novembre, Castelló el 10 i València el 20 de novembre de 2026 (va sortir el 19 sense l'annex).",
+      bulletinShort: "els butlletins oficials de les 3 províncies",
     },
     en: {
-      how: "In the Valencian Community a resolution of the regional ministry responsible for labour approves them, with the 2 days of each of the 542 municipalities, in the",
-      note: "The 2025 list came out on 18 November 2024 and the 2026 one on 14 November 2025; it was then corrected twice (DOGV of 15.1.2026 and 3.3.2026). Some councils publish their own agreement in the DOGV earlier, but the list that counts is the resolution.",
-      bulletinShort: "the DOGV",
+      how: "In the Valencian Community, for 2027 the Territorial Directorate for Housing, Employment, Youth and Equality of each province sets them and publishes them in its provincial bulletin; the Generalitat gathers them on its",
+      note: "For 2027 the Generalitat does not publish them in the DOGV, as it did for 2026, but in each province's bulletin: Alicante on 4 November, Castellón on 10 November and Valencia on 20 November 2026 (it came out on the 19th without its annex).",
+      bulletinShort: "the official bulletins of the 3 provinces",
     },
   },
   CE: {
@@ -335,6 +335,10 @@ export const PLACE_NAME: Record<string, Record<IntlLocale, string>> = {
   Palencia: { ca: "Palència", en: "Palencia" },
   León: { ca: "Lleó", en: "León" },
   Zamora: { ca: "Zamora", en: "Zamora" },
+  // The Comunitat Valenciana's three provinces (2027 lists in each BOP).
+  Alicante: { ca: "Alacant", en: "Alicante" },
+  Castellón: { ca: "Castelló", en: "Castellón" },
+  Valencia: { ca: "València", en: "Valencia" },
 };
 
 /** The place in the reader's language; the Spanish when it is the same. */

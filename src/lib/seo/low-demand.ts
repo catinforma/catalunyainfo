@@ -79,7 +79,10 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
     // 2027 local days yet (pending or left out of the list): Pamplona (11),
     // Benidorm (10), Burgos (10); they join when their list is out. Not city
     // pages, left for the 10 Dec review: the day pages 8 and 6 December,
-    // 29 and 19 March, and the Andalusia page.
+    // 29 and 19 March, and the Andalusia page. 20 Nov 2026: + Santander (12
+    // impr. at 5.2 in GSC 7-20 Nov), its 2027 days out that day (BOC núm. 224),
+    // and, with their days in the Valencian BOPs, Benidorm (15 at 8.7, held on
+    // 18 Nov), Castellón de la Plana (12 at 11.8) and Torrevieja (11 at 6.2).
     id: "spain-2027-en",
     pattern: /^\/en\/holidays\/2027\/(?!(?:long-weekends|for-your-website|leave-planner|catalonia)\/)[a-z0-9-]+\/(?:[a-z0-9-]+\/)?$/,
     keep: [
@@ -96,12 +99,16 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
       "/en/holidays/2027/basque-country/bilbao/",
       "/en/holidays/2027/basque-country/san-sebastian/",
       "/en/holidays/2027/canary-islands/las-palmas-de-gran-canaria/",
+      "/en/holidays/2027/cantabria/santander/",
       "/en/holidays/2027/castile-and-leon/salamanca/",
       "/en/holidays/2027/day/8-september/",
       "/en/holidays/2027/extremadura/merida/",
       "/en/holidays/2027/melilla/",
       "/en/holidays/2027/murcia/mazarron/",
       "/en/holidays/2027/valencian-community/alicante/",
+      "/en/holidays/2027/valencian-community/benidorm/",
+      "/en/holidays/2027/valencian-community/castellon-de-la-plana/",
+      "/en/holidays/2027/valencian-community/torrevieja/",
     ],
   },
   {

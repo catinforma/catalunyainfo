@@ -1,6 +1,6 @@
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 
-import { COUNCIL_CITY_ROWS } from "./cities-council";
+import { COUNCIL_CITY_ROWS, COUNCIL_READ_ON } from "./cities-council";
 import { MORE_CITY_ROWS } from "./cities-more";
 import { SOURCES, type OfficialText } from "./sources";
 
@@ -142,6 +142,7 @@ const DOE = list2027("EX");
 const DOG = list2027("GA");
 const BORM = list2027("MC");
 const BOR = list2027("RI");
+const BOC_CB = list2027("CB");
 
 /** Castilla y León's open data (CC BY 4.0, Junta de Castilla y León): the 2026 days of the cities the 2027 lists leave out. */
 const JCYL_OPEN_DATA: OfficialText = {
@@ -188,7 +189,8 @@ const ANDALUCIA: CityRow[] = [
   published("AN", "Málaga", { ine: "29051", slug: "estepona", name: "Estepona", ineName: "Estepona", population: 79621, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-05-15", null), d("2027-07-16", null)])),
   published("AN", "Málaga", { ine: "29054", slug: "fuengirola", name: "Fuengirola", ineName: "Fuengirola", population: 85211, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-07-16", null), d("2027-10-07", null)])),
   published("AN", "Málaga", { ine: "29067", slug: "malaga", name: "Málaga", ineName: "Málaga", population: 599063, ineTable: 2882, capital: true }, y27(BOJA, [d("2027-08-19", null), d("2027-09-08", null)])),
-  published("AN", "Málaga", { ine: "29069", slug: "marbella", name: "Marbella", ineName: "Marbella", population: 159786, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-06-11", null), d("2027-10-19", null)])),
+  // Read again on the BOJA page on 20 Nov 2026: «MARBELLA | 11 DE JUNIO | 19 DE OCTUBRE».
+  published("AN", "Málaga", { ine: "29069", slug: "marbella", name: "Marbella", ineName: "Marbella", population: 159786, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-06-11", null), d("2027-10-19", null)]), { readOn: "2026-11-20" }),
   published("AN", "Málaga", { ine: "29070", slug: "mijas", name: "Mijas", ineName: "Mijas", population: 95104, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-09-08", null), d("2027-10-15", null)])),
   published("AN", "Málaga", { ine: "29082", slug: "rincon-de-la-victoria", name: "Rincón de la Victoria", ineName: "Rincón de la Victoria", population: 52454, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-07-16", null), d("2027-10-07", null)])),
   published("AN", "Málaga", { ine: "29094", slug: "velez-malaga", name: "Vélez-Málaga", ineName: "Vélez-Málaga", population: 86048, ineTable: 2882, capital: false }, y27(BOJA, [d("2027-07-26", null), d("2027-10-01", null)])),
@@ -301,7 +303,8 @@ const GALICIA: CityRow[] = [
   published("GA", "Lugo", { ine: "27028", slug: "lugo", name: "Lugo", ineName: "Lugo", population: 100143, ineTable: 2880, capital: true }, y27(DOG, [d("2027-02-09", "Martes de Carnaval"), d("2027-10-05", "San Froilán")])),
   published("GA", "Ourense", { ine: "32054", slug: "ourense", name: "Ourense", ineName: "Ourense", population: 105769, ineTable: 2885, capital: true }, y27(DOG, [d("2027-02-09", "Martes de Carnaval"), d("2027-11-11", "San Martín")])),
   published("GA", "Pontevedra", { ine: "36038", slug: "pontevedra", name: "Pontevedra", ineName: "Pontevedra", population: 83316, ineTable: 2890, capital: true }, y27(DOG, [d("2027-02-10", "Miércoles de Ceniza"), d("2027-03-29", "San Cibrán")])),
-  published("GA", "Pontevedra", { ine: "36057", slug: "vigo", name: "Vigo", ineName: "Vigo", population: 294489, ineTable: 2890, capital: false }, y27(DOG, [d("2027-03-29", null), d("2027-08-16", null)])),
+  // Read again on the DOG page on 20 Nov 2026: «57. Vigo: 29 de marzo, 16 de agosto.»
+  published("GA", "Pontevedra", { ine: "36057", slug: "vigo", name: "Vigo", ineName: "Vigo", population: 294489, ineTable: 2890, capital: false }, y27(DOG, [d("2027-03-29", null), d("2027-08-16", null)]), { readOn: "2026-11-20" }),
 ];
 
 const MURCIA: CityRow[] = [
@@ -343,6 +346,25 @@ function pending(region: Region, province: string, base: Base, days: LocalDay[])
   return { ...base, region, province, status2027: "pending", local2027: null, local2026: y26(list2026(region), days) };
 }
 
+/**
+ * A core city whose community has not published its list but whose Pleno's own minutes fix both 2027 days
+ * (20 Nov 2026: Parla and Fuenlabrada). Same rule and same labelling as the 20,000+ towns of
+ * `cities-council.ts` ("aprobadas por el Ayuntamiento, pendientes de <boletín>"; the counting tools leave
+ * them out); read on `COUNCIL_READ_ON`. The day the community's list is out, the row goes back to
+ * `published` with the bulletin's days.
+ */
+function councilCity(region: Region, province: string, base: Base, days: LocalDay[], source: OfficialText): CityRow {
+  return {
+    ...base,
+    region,
+    province,
+    status2027: "council",
+    local2027: { year: 2027, days, source, act: { kind: "pleno", date: source.date } },
+    local2026: null,
+    readOn: COUNCIL_READ_ON,
+  };
+}
+
 const ARAGON: CityRow[] = [
   // BOA núm. 225, de 20.11.2025 (the capitals are in the main list, not in the complementary one of 23.3.2026).
   pending("AR", "Zaragoza", { ine: "50297", slug: "zaragoza", name: "Zaragoza", ineName: "Zaragoza", population: 693091, ineTable: 2907, capital: true }, [d("2026-01-29", "San Valero"), d("2026-03-05", "Cincomarzada")]),
@@ -350,10 +372,27 @@ const ARAGON: CityRow[] = [
   pending("AR", "Teruel", { ine: "44216", slug: "teruel", name: "Teruel", ineName: "Teruel", population: 36655, ineTable: 2899, capital: true }, [d("2026-04-07", null), d("2026-07-13", null)]),
 ];
 
+/** Cantabria's 2027 list came out on 20 Nov 2026 (BOC núm. 224); its rows were read that day. */
+export const CANTABRIA_READ_ON = "2026-11-20";
+
 const CANTABRIA: CityRow[] = [
-  // BOC núm. 238, de 11.12.2025 (the table prints "SAN CIRPIANO" for 16 September).
-  pending("CB", "Cantabria", { ine: "39075", slug: "santander", name: "Santander", ineName: "Santander", population: 175425, ineTable: 2893, capital: true }, [d("2026-05-25", "Virgen del Mar"), d("2026-07-25", "Apóstol Santiago")]),
-  pending("CB", "Cantabria", { ine: "39087", slug: "torrelavega", name: "Torrelavega", ineName: "Torrelavega", population: 51796, ineTable: 2893, capital: false }, [d("2026-08-17", "San Roque"), d("2026-09-16", "San Cipriano")]),
+  // BOC núm. 224, de 20.11.2026 (CVE-2026-9104), annex "FIESTAS LOCALES", in capitals as printed:
+  // «SANTANDER | VIRGEN DEL MAR | 17 | MAYO» and «SANTOS MÁRTIRES EMETERIO Y CELEDONIO | 30 | AGOSTO».
+  published(
+    "CB",
+    "Cantabria",
+    { ine: "39075", slug: "santander", name: "Santander", ineName: "Santander", population: 175425, ineTable: 2893, capital: true },
+    y27(BOC_CB, [d("2027-05-17", "Virgen del Mar"), d("2027-08-30", "Santos Mártires Emeterio y Celedonio")]),
+    { readOn: CANTABRIA_READ_ON },
+  ),
+  // «TORRELAVEGA | SAN ROQUE | 16 | AGOSTO» and «SAN CIPRIANO | 16 | SEPTIEMBRE».
+  published(
+    "CB",
+    "Cantabria",
+    { ine: "39087", slug: "torrelavega", name: "Torrelavega", ineName: "Torrelavega", population: 51796, ineTable: 2893, capital: false },
+    y27(BOC_CB, [d("2027-08-16", "San Roque"), d("2027-09-16", "San Cipriano")]),
+    { readOn: CANTABRIA_READ_ON },
+  ),
 ];
 
 const CASTILLA_LA_MANCHA: CityRow[] = [
@@ -373,10 +412,37 @@ const MADRID: CityRow[] = [
   pending("MD", "Madrid", { ine: "28005", slug: "alcala-de-henares", name: "Alcalá de Henares", ineName: "Alcalá de Henares", population: 203208, ineTable: 2881, capital: false }, [d("2026-08-06", null), d("2026-10-09", null)]),
   pending("MD", "Madrid", { ine: "28074", slug: "leganes", name: "Leganés", ineName: "Leganés", population: 195734, ineTable: 2881, capital: false }, [d("2026-08-14", null), d("2026-10-09", null)]),
   pending("MD", "Madrid", { ine: "28065", slug: "getafe", name: "Getafe", ineName: "Getafe", population: 193238, ineTable: 2881, capital: false }, [d("2026-05-14", null), d("2026-05-25", null)]),
-  pending("MD", "Madrid", { ine: "28058", slug: "fuenlabrada", name: "Fuenlabrada", ineName: "Fuenlabrada", population: 190076, ineTable: 2881, capital: false }, [d("2026-09-14", null), d("2026-12-26", null)]),
+  // «Único. - Que las fiestas locales del municipio de Fuenlabrada para el próximo año 2027 se celebren el martes 9 de marzo y el martes
+  // 14 de septiembre.» (Punto 4º, "EL AYUNTAMIENTO PLENO acordó, por unanimidad de los Concejales presentes (con 26 votos a favor …)")
+  councilCity(
+    "MD",
+    "Madrid",
+    { ine: "28058", slug: "fuenlabrada", name: "Fuenlabrada", ineName: "Fuenlabrada", population: 190076, ineTable: 2881, capital: false },
+    [d("2027-03-09", null, { printedWeekday: "martes" }), d("2027-09-14", null, { printedWeekday: "martes" })],
+    {
+      title: "Acta de la sesión ordinaria del Pleno Municipal de Fuenlabrada celebrada el 1 de octubre de 2026, punto 4º: propuesta para determinar los días de fiestas locales para el año 2027",
+      ref: "acta del Pleno de Fuenlabrada de 1.10.2026, pp. 38-39",
+      date: "2026-10-01",
+      url: "https://plenos.ayto-fuenlabrada.es/session/downloadItem/8a818085a1e22efd01a1e95a7ae40004",
+    },
+  ),
   pending("MD", "Madrid", { ine: "28007", slug: "alcorcon", name: "Alcorcón", ineName: "Alcorcón", population: 175719, ineTable: 2881, capital: false }, [d("2026-04-06", null), d("2026-09-08", null)]),
   pending("MD", "Madrid", { ine: "28148", slug: "torrejon-de-ardoz", name: "Torrejón de Ardoz", short: "Torrejón", ineName: "Torrejón de Ardoz", population: 143526, ineTable: 2881, capital: false }, [d("2026-06-22", null), d("2026-06-23", null)]),
-  pending("MD", "Madrid", { ine: "28106", slug: "parla", name: "Parla", ineName: "Parla", population: 137471, ineTable: 2881, capital: false }, [d("2026-06-15", null), d("2026-09-14", null)]),
+  // «… vengo a proponer que se fijen como festividades locales para el año dos mil veintisiete, las siguientes fechas: FIESTAS DEL AGUA: Día de
+  // la festividad local lunes 14 de junio. FIESTAS PATRONALES: Día de la festividad local lunes 13 de septiembre.» (punto 2, "La Corporación
+  // por unanimidad, acuerda: Aprobar la Propuesta …")
+  councilCity(
+    "MD",
+    "Madrid",
+    { ine: "28106", slug: "parla", name: "Parla", ineName: "Parla", population: 137471, ineTable: 2881, capital: false },
+    [d("2027-06-14", "Fiestas del Agua", { printedWeekday: "lunes" }), d("2027-09-13", "Fiestas Patronales", { printedWeekday: "lunes" })],
+    {
+      title: "Acta de la sesión ordinaria del Pleno del Ayuntamiento de Parla celebrada el día 8 de octubre de 2026 (núm. 2026000017), punto 2: aprobación de fiestas locales para el año 2027",
+      ref: "acta del Pleno de Parla de 8.10.2026, p. 7",
+      date: "2026-10-08",
+      url: "https://sede.ayuntamientoparla.es/sta/docs/GetDocumentServlet?CUD=16350102260353336754&HASH_CUD=52841f09d2f3000f1812e4e06407e88cb36f11d7&APP_CODE=STA",
+    },
+  ),
   pending("MD", "Madrid", { ine: "28006", slug: "alcobendas", name: "Alcobendas", ineName: "Alcobendas", population: 123342, ineTable: 2881, capital: false }, [d("2026-01-24", null), d("2026-05-15", null)]),
   pending("MD", "Madrid", { ine: "28123", slug: "rivas-vaciamadrid", name: "Rivas-Vaciamadrid", short: "Rivas", ineName: "Rivas-Vaciamadrid", population: 103148, ineTable: 2881, capital: false }, [d("2026-05-14", null), d("2026-05-15", null)]),
   pending("MD", "Madrid", { ine: "28127", slug: "las-rozas", name: "Las Rozas de Madrid", short: "Las Rozas", ineName: "Rozas de Madrid, Las", population: 99037, ineTable: 2881, capital: false }, [d("2026-05-04", null), d("2026-09-29", null)]),
@@ -399,23 +465,50 @@ const NAVARRA: CityRow[] = [
   pending("NC", "Navarra", { ine: "31201", slug: "pamplona", name: "Pamplona", ineName: "Pamplona/Iruña", population: 209094, ineTable: 2884, capital: true }, [d("2026-11-30", null), d("2026-12-03", "San Francisco Javier, Día de Navarra", { note: "común a toda Navarra" })]),
 ];
 
+/**
+ * The Comunitat Valenciana's 2027 lists came out in the three provincial bulletins (sources.ts,
+ * `VALENCIANA.local.parts`): Alicante 4.11.2026, Castellón 10.11.2026, Valencia 20.11.2026. Its rows were
+ * read on the Generalitat's copies on 20 Nov 2026; the bulletin's line is the comment above each row.
+ */
+export const VALENCIANA_READ_ON = "2026-11-20";
+
+const BOP_ALICANTE = part("VC", "Alicante");
+const BOP_CASTELLON = part("VC", "Castellón");
+const BOP_VALENCIA = part("VC", "Valencia");
+const vc = (province: "Alicante" | "Castellón" | "Valencia", base: Base, days: LocalDay[]): CityRow =>
+  published("VC", province, base, y27(province === "Alicante" ? BOP_ALICANTE : province === "Castellón" ? BOP_CASTELLON : BOP_VALENCIA, days), { readOn: VALENCIANA_READ_ON });
+
 const VALENCIANA: CityRow[] = [
-  // DOGV núm. 10238, de 14.11.2025; its correction of 15.1.2026 (DOGV núm. 10281) changes none of these.
-  pending("VC", "Valencia", { ine: "46250", slug: "valencia", name: "Valencia", ineName: "València", population: 840792, ineTable: 2903, capital: true }, [d("2026-01-22", "San Vicente Mártir, patrón de la ciudad de València"), d("2026-04-13", "San Vicente Ferrer, patrón de la Comunidad Valenciana")]),
-  pending("VC", "Alicante", { ine: "03014", slug: "alicante", name: "Alicante", ineName: "Alacant/Alicante", population: 366221, ineTable: 2856, capital: true }, [d("2026-04-16", "Festividad de Santa Faz"), d("2026-06-23", "Fogueres de Sant Joan")]),
-  pending("VC", "Alicante", { ine: "03065", slug: "elche", name: "Elche", ineName: "Elx/Elche", population: 245557, ineTable: 2856, capital: false }, [d("2026-04-13", "Festividad de San Vicente Ferrer"), d("2026-12-29", "Festividad de la Venida de la Virgen")]),
-  pending("VC", "Castellón", { ine: "12040", slug: "castellon-de-la-plana", name: "Castellón de la Plana", short: "Castellón", ineName: "Castelló de la Plana/Castellón de la Plana", population: 183711, ineTable: 2865, capital: true }, [d("2026-03-09", "Lunes de la Magdalena"), d("2026-06-29", "Festividad de San Pedro")]),
-  pending("VC", "Alicante", { ine: "03133", slug: "torrevieja", name: "Torrevieja", ineName: "Torrevieja", population: 98533, ineTable: 2856, capital: false }, [d("2026-04-13", "San Vicente Ferrer"), d("2026-07-16", "Virgen del Carmen")]),
-  pending("VC", "Valencia", { ine: "46244", slug: "torrent", name: "Torrent", ineName: "Torrent", population: 90928, ineTable: 2903, capital: false }, [d("2026-04-13", "San Vicente Ferrer"), d("2026-07-30", "Santos Patrones")]),
-  pending("VC", "Alicante", { ine: "03099", slug: "orihuela", name: "Orihuela", ineName: "Orihuela", population: 84560, ineTable: 2856, capital: false }, [d("2026-07-17", "Gloriosa Enseña del Oriol y Fiestas de la Reconquista"), d("2026-09-08", "Festividad de Ntra. Sra. Virgen de Monserrate Patrona de Orihuela")]),
-  pending("VC", "Valencia", { ine: "46131", slug: "gandia", name: "Gandia", ineName: "Gandia", population: 83135, ineTable: 2903, capital: false }, [d("2026-04-13", "San Vicente Ferrer"), d("2026-10-05", "San Francisco de Borja-Feria de Gandía")]),
-  pending("VC", "Alicante", { ine: "03031", slug: "benidorm", name: "Benidorm", ineName: "Benidorm", population: 77327, ineTable: 2856, capital: false }, [d("2026-11-09", null), d("2026-11-10", null)]),
-  pending("VC", "Valencia", { ine: "46190", slug: "paterna", name: "Paterna", ineName: "Paterna", population: 76019, ineTable: 2903, capital: false }, [d("2026-04-13", "San Vicente Ferrer"), d("2026-08-31", "Santísimo Cristo de la Fe")]),
-  pending("VC", "Valencia", { ine: "46220", slug: "sagunto", name: "Sagunto", ineName: "Sagunt/Sagunto", population: 73031, ineTable: 2903, capital: false }, [d("2026-04-13", "San Vicente Ferrer"), d("2026-07-30", "Santos Abdón y Senén")]),
-  pending("VC", "Alicante", { ine: "03009", slug: "alcoy", name: "Alcoy", ineName: "Alcoi/Alcoy", population: 61468, ineTable: 2856, capital: false }, [d("2026-04-25", null), d("2026-04-27", null)]),
-  pending("VC", "Alicante", { ine: "03122", slug: "san-vicente-del-raspeig", name: "San Vicente del Raspeig", short: "San Vicente", ineName: "Sant Vicent del Raspeig/San Vicente del Raspeig", population: 60247, ineTable: 2856, capital: false }, [d("2026-04-13", "Fiestas Patronales y de Moros y Cristianos"), d("2026-04-14", "Fiestas Patronales y de Moros y Cristianos")]),
-  pending("VC", "Alicante", { ine: "03066", slug: "elda", name: "Elda", ineName: "Elda", population: 55222, ineTable: 2856, capital: false }, [d("2026-09-08", "Fiestas Patronales"), d("2026-09-09", "Fiestas Patronales")]),
-  pending("VC", "Castellón", { ine: "12135", slug: "vila-real", name: "Vila-real", ineName: "Vila-real", population: 53623, ineTable: 2865, capital: false }, [d("2026-05-18", "Festividad de San Pascual"), d("2026-12-26", "San Esteban")]),
+  // BOP Valencia: «VALÈNCIA: 22 de enero, San Vicente Mártir, patrón de la ciudad de València; 05 de abril, San Vicente Ferrer, patrón de la Comunidad Valenciana.»
+  vc("Valencia", { ine: "46250", slug: "valencia", name: "Valencia", ineName: "València", population: 840792, ineTable: 2903, capital: true }, [d("2027-01-22", "San Vicente Mártir, patrón de la ciudad de València"), d("2027-04-05", "San Vicente Ferrer, patrón de la Comunidad Valenciana")]),
+  // BOP Alicante: «ALICANTE: 8 de abril, jueves, Festividad de Santa Faz; 24 de junio, jueves, Fogueres de Sant Joan.»
+  vc("Alicante", { ine: "03014", slug: "alicante", name: "Alicante", ineName: "Alacant/Alicante", population: 366221, ineTable: 2856, capital: true }, [d("2027-04-08", "Festividad de Santa Faz"), d("2027-06-24", "Fogueres de Sant Joan")]),
+  // BOP Alicante: «ELCHE: 5 de abril, lunes festividad de San Vicente; 29 de diciembre, miércoles, Festividad de la Venida de la Virgen.»
+  vc("Alicante", { ine: "03065", slug: "elche", name: "Elche", ineName: "Elx/Elche", population: 245557, ineTable: 2856, capital: false }, [d("2027-04-05", "Festividad de San Vicente"), d("2027-12-29", "Festividad de la Venida de la Virgen")]),
+  // BOP Castellón: «CASTELLÓN DE LA PLANA: 1 de marzo, lunes de la Magdalena y 29 de junio, festividad de San Pedro.»
+  vc("Castellón", { ine: "12040", slug: "castellon-de-la-plana", name: "Castellón de la Plana", short: "Castellón", ineName: "Castelló de la Plana/Castellón de la Plana", population: 183711, ineTable: 2865, capital: true }, [d("2027-03-01", "Lunes de la Magdalena"), d("2027-06-29", "Festividad de San Pedro")]),
+  // BOP Alicante: «TORREVIEJA: 5 de abril, lunes, San Vicente Ferrer; 16 de julio, viernes, Virgen del Carmen.»
+  vc("Alicante", { ine: "03133", slug: "torrevieja", name: "Torrevieja", ineName: "Torrevieja", population: 98533, ineTable: 2856, capital: false }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-07-16", "Virgen del Carmen")]),
+  // BOP Valencia: «TORRENT: 05 de abril, Sant Vicent Ferrer; 30 de julio, Sants Patrons.»
+  vc("Valencia", { ine: "46244", slug: "torrent", name: "Torrent", ineName: "Torrent", population: 90928, ineTable: 2903, capital: false }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-07-30", "Sants Patrons")]),
+  // BOP Alicante: «ORIHUELA: 17 de julio, sábado, Gloriosa Enseña del Oriol y Fiestas de la Reconquista; 8 de septiembre, miércoles, Festividad de Ntra. Sra. Virgen de Monserrate Patrona de Orihuela.»
+  vc("Alicante", { ine: "03099", slug: "orihuela", name: "Orihuela", ineName: "Orihuela", population: 84560, ineTable: 2856, capital: false }, [d("2027-07-17", "Gloriosa Enseña del Oriol y Fiestas de la Reconquista"), d("2027-09-08", "Festividad de Ntra. Sra. Virgen de Monserrate Patrona de Orihuela")]),
+  // BOP Valencia: «GANDIA: 5 de abril, Sant Vicent Ferrer; 4 de octubre, Sant Francesc de Borja-Fira de Gandia.»
+  vc("Valencia", { ine: "46131", slug: "gandia", name: "Gandia", ineName: "Gandia", population: 83135, ineTable: 2903, capital: false }, [d("2027-04-05", "Sant Vicent Ferrer"), d("2027-10-04", "Sant Francesc de Borja-Fira de Gandia")]),
+  // BOP Alicante: «BENIDORM: 15 y 16 de noviembre, lunes y martes respectivamente.»
+  vc("Alicante", { ine: "03031", slug: "benidorm", name: "Benidorm", ineName: "Benidorm", population: 77327, ineTable: 2856, capital: false }, [d("2027-11-15", null), d("2027-11-16", null)]),
+  // BOP Valencia: «PATERNA: 5 de abril, San Vicente Ferrer; 30 de agosto, Santísimo Cristo de la Fe.»
+  vc("Valencia", { ine: "46190", slug: "paterna", name: "Paterna", ineName: "Paterna", population: 76019, ineTable: 2903, capital: false }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-08-30", "Santísimo Cristo de la Fe")]),
+  // BOP Valencia: «SAGUNT/SAGUNTO: 5 de abril, San Vicente Ferrer; 30 de julio, Santos Abdón y Senén.»
+  vc("Valencia", { ine: "46220", slug: "sagunto", name: "Sagunto", ineName: "Sagunt/Sagunto", population: 73031, ineTable: 2903, capital: false }, [d("2027-04-05", "San Vicente Ferrer"), d("2027-07-30", "Santos Abdón y Senén")]),
+  // BOP Alicante: «ALCOY: 24 de abril, sábado; 26 de abril, lunes.»
+  vc("Alicante", { ine: "03009", slug: "alcoy", name: "Alcoy", ineName: "Alcoi/Alcoy", population: 61468, ineTable: 2856, capital: false }, [d("2027-04-24", null), d("2027-04-26", null)]),
+  // BOP Alicante: «SAN VICENTE DEL RASPEIG: 5 y 6 de abril, lunes y martes respectivamente, Fiestas Patronales y de Moros y Cristianos.»
+  vc("Alicante", { ine: "03122", slug: "san-vicente-del-raspeig", name: "San Vicente del Raspeig", short: "San Vicente", ineName: "Sant Vicent del Raspeig/San Vicente del Raspeig", population: 60247, ineTable: 2856, capital: false }, [d("2027-04-05", "Fiestas Patronales y de Moros y Cristianos"), d("2027-04-06", "Fiestas Patronales y de Moros y Cristianos")]),
+  // BOP Alicante: «ELDA: 8 y 9 de septiembre, miércoles y jueves respectivamente, Fiestas Patronales.»
+  vc("Alicante", { ine: "03066", slug: "elda", name: "Elda", ineName: "Elda", population: 55222, ineTable: 2856, capital: false }, [d("2027-09-08", "Fiestas Patronales"), d("2027-09-09", "Fiestas Patronales")]),
+  // BOP Castellón: «VILA-REAL: 5 de abril y 17 de mayo.»
+  vc("Castellón", { ine: "12135", slug: "vila-real", name: "Vila-real", ineName: "Vila-real", population: 53623, ineTable: 2865, capital: false }, [d("2027-04-05", null), d("2027-05-17", null)]),
 ];
 
 /** The first two waves: every provincial capital and 50,000+ municipality, by community in the BOE's order, then as listed. */

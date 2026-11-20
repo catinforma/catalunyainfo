@@ -32,18 +32,9 @@ const { cityFeed } = await import("../src/lib/programmatic/ics/feeds.ts");
 const { embedModel } = await import("../src/lib/programmatic/embed-2027/render.ts");
 
 /** The council's own site (or the video-acta platform its site links to) for each town: never a newspaper or an aggregator. */
+// The 10 Valencian towns of 18 Nov 2026 moved to cities-more.ts on 20 Nov, when their provincial BOPs listed them.
 const COUNCIL_HOSTS: Record<string, string> = {
   "13071": "www.puertollano.es",
-  "46078": "carpeta.burjassot.org",
-  "46184": "www.ontinyent.es",
-  "46159": "actasesionesdigital.simply-winspace.es",
-  "46013": "videoactas.alboraya.com",
-  "46147": "www.lliria.es",
-  "03121": "gobiernoabierto.santapola.es",
-  "03059": "crevillent.es",
-  "12138": "www.vinaros.es",
-  "03140": "www.villena.es",
-  "03093": "www.novelda.es",
 };
 
 const PROVINCE_REGION: Record<string, Region> = { "02": "CM", "03": "VC", "12": "VC", "13": "CM", "16": "CM", "19": "CM", "22": "AR", "28": "MD", "31": "NC", "39": "CB", "44": "AR", "45": "CM", "46": "VC", "50": "AR" };
@@ -51,7 +42,7 @@ const PROVINCE_REGION: Record<string, Region> = { "02": "CM", "03": "VC", "12": 
 const towns = COUNCIL_CITY_ROWS.map((r) => cityBySlug(r.region, r.slug)!);
 
 test("council towns: each cites the council's own act, with its date, read on COUNCIL_READ_ON", () => {
-  assert.ok(COUNCIL_CITY_ROWS.length >= 10, `${COUNCIL_CITY_ROWS.length} towns`);
+  assert.ok(COUNCIL_CITY_ROWS.length >= 1, `${COUNCIL_CITY_ROWS.length} towns`);
   assert.equal(COUNCIL_READ_ON, PENDING_READ_ON, "the acts were read the day the bulletins were searched");
   for (const r of COUNCIL_CITY_ROWS) {
     assert.equal(r.status2027, "council", r.slug);
@@ -118,10 +109,6 @@ test("council towns: two different 2027 days, none already a holiday of the comm
   // Transcribed by hand from the minutes.
   const pair = (region: Region, slug: string) => localDays(cityBySlug(region, slug)!).map((d) => [d.date, d.name]);
   assert.deepEqual(pair("CM", "puertollano"), [["2027-05-13", "Santo Voto"], ["2027-09-08", "Virgen de Gracia"]]);
-  assert.deepEqual(pair("VC", "burjassot"), [["2027-08-16", "Sant Roc"], ["2027-09-30", "Virgen de la Cabeza"]]);
-  assert.deepEqual(pair("VC", "ontinyent"), [["2027-08-23", "Dilluns de Festes de Moros i Cristians"], ["2027-11-22", "Dilluns de Fira"]]);
-  assert.deepEqual(pair("VC", "vinaros"), [["2027-01-20", "Sant Sebastià"], ["2027-06-24", "Sant Joan"]]);
-  assert.deepEqual(pair("VC", "crevillent"), [["2027-03-25", "Jueves Santo"], ["2027-10-04", "Fiestas Patronales"]]);
 });
 
 test("council towns: the page prints the days as the council's, pending the bulletin (es, ca, en)", () => {
@@ -200,5 +187,6 @@ test("council towns: in the sitemap; indexable in Spanish, ca/en under the famil
       assert.ok(intl.has(`https://www.catalunyainfo.com${q}`), `${q}: no edition entry (with hreflang)`);
     }
   }
-  assert.equal(CITIES.filter((c) => c.status2027 === "council").length, COUNCIL_CITY_ROWS.length);
+  // The core cities with a council act (cities-data.ts `councilCity`) are held in tests/spain-2027-laboral-20nov.test.ts.
+  assert.equal(CITIES.filter((c) => c.status2027 === "council" && c.population < 50_000).length, COUNCIL_CITY_ROWS.length);
 });

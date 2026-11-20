@@ -241,7 +241,10 @@ export function CityPage({ c }: { c: City }) {
             </>
           ) : (
             <>
-              <h2 id="locales">Fiestas locales de {YEAR}: aún no publicadas</h2>
+              {/* The city in the heading (20 Nov 2026): "festivos locales <ciudad> 2027" is the query. */}
+              <h2 id="locales">
+                Fiestas locales de {c.name} en {YEAR}: aún no publicadas
+              </h2>
               <p>
                 {s.local.how}{" "}
                 <a href={s.local.bulletinUrl} rel="noopener nofollow" target="_blank">

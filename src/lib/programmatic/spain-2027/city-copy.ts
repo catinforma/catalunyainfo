@@ -404,6 +404,28 @@ export function pendingLine(c: City): string {
 
 /* ------------------------------------------------------------------ FAQ --- */
 
+/**
+ * 20 Nov 2026: a city whose 2027 days are not out answers the question as
+ * people type it ("¿cuáles son los festivos locales de Alcobendas en 2027?"):
+ * not official yet, the last issue of the bulletin searched, the day the 2026
+ * list came out (when to expect it) and what is already fixed. Nothing is
+ * filled in from 2026; the 2026 days have their own question.
+ */
+export function pendingFaqAnswer(c: City): string {
+  const s = SOURCES[c.region].local;
+  if (c.status2027 === "missing") return `La lista oficial de ${YEAR} no las da. ${pendingLine(c)}`;
+  const check = pendingCheck(c);
+  const searched = check ? ` (consultado hasta el ${check.through})` : "";
+  const notOut = `${s.bulletinShort} todavía no ha publicado la lista de ${YEAR}${searched}`;
+  const common = commonLocalDays(c);
+  const head = common.length
+    ? `Una ya es oficial: el ${weekdayDate(common[0]!.date)} (${common[0]!.name}), ${common[0]!.note ?? "común"}. La otra, la propia de ${c.name}, aún no: ${notOut}.`
+    : `Aún no son oficiales: ${notOut}.`;
+  const precedent = s.y2026 ? ` La de 2026 salió el ${dayMonthYear(s.y2026.date, "es")} (${s.y2026.ref}).` : "";
+  const then = common.length ? "Cuando se publique, esta página dará la fecha con su fuente." : "Cuando se publiquen, esta página dará las fechas con su fuente.";
+  return `${capitalise(head)}${precedent} ${then}`;
+}
+
 export function cityFaq(c: City): Faq[] {
   const list = local2027(c);
   const total = holidayCount(c);
@@ -442,7 +464,7 @@ export function cityFaq(c: City): Faq[] {
     return faq;
   }
   return [
-    { question: `¿Se conocen ya los festivos locales de ${YEAR} de ${c.name}?`, answer: `No. ${pendingLine(c)}` },
+    { question: `¿Cuáles son los festivos locales de ${c.name} en ${YEAR}?`, answer: pendingFaqAnswer(c) },
     {
       question: `¿Cuántos festivos tiene ${c.name} en ${YEAR}?`,
       answer:

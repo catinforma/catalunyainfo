@@ -36,7 +36,7 @@ import {
 import { decreeShort, type LayerLine } from "./city-copy";
 import { editionCityName, editionCityShort, editionNames, type Edition, type EditionNames } from "./editions";
 import { BOE_REF, SOURCES } from "./sources";
-import { CITY_NOTE, LOCAL_DAY_NOTE, placeName } from "./sources-intl";
+import { CITY_NOTE, LOCAL_DAY_NOTE, SOURCE_PROSE, placeName } from "./sources-intl";
 
 /**
  * Catalan and English words for the city pages: the same facts as the
@@ -587,6 +587,41 @@ export function cityLeadIntl(c: City, locale: Edition): string {
 
 /* ------------------------------------------------------------------ FAQ --- */
 
+/**
+ * `pendingFaqAnswer` (city-copy.ts) in Catalan and English (20 Nov 2026): not
+ * official yet, the last issue searched, when the 2026 list came out, what is
+ * already fixed. Same facts as the Spanish.
+ */
+export function pendingFaqAnswerIntl(c: City, locale: Edition): string {
+  const s = SOURCES[c.region].local;
+  const name = nameOf(c, locale);
+  if (c.status2027 === "missing") {
+    return `${tr(locale, `La llista oficial del ${YEAR} no les dona.`, `The official ${YEAR} list does not give them.`)} ${pendingLineIntl(c, locale)}`;
+  }
+  const b = SOURCE_PROSE[c.region][locale].bulletinShort;
+  const check = pendingCheck(c);
+  const common = commonLocalDays(c);
+  const y2026 = s.y2026;
+  if (locale === "ca") {
+    const searched = check ? ` (consultat fins al ${check.through})` : "";
+    const notOut = `${b} encara no ha publicat la llista del ${YEAR}${searched}`;
+    const head = common.length
+      ? `Una ja és oficial: el ${weekdayDateIntl(common[0]!.date, "ca")} (${common[0]!.name}), ${localNoteIntl(common[0]!.note, "ca") ?? "comuna"}. L'altra, la pròpia ${caOf(name)}, encara no: ${notOut}.`
+      : `Encara no són oficials: ${notOut}.`;
+    const precedent = y2026 ? ` La del 2026 va sortir el ${dayMonthYear(y2026.date, "ca")} (${y2026.ref}).` : "";
+    const then = common.length ? "Quan es publiqui, aquesta pàgina en donarà la data amb la font." : "Quan es publiquin, aquesta pàgina en donarà les dates amb la font.";
+    return `${cap(head)}${precedent} ${then}`;
+  }
+  const searched = check ? ` (read up to ${check.through})` : "";
+  const notOut = `${b} has not published the ${YEAR} list yet${searched}`;
+  const head = common.length
+    ? `One is already official: ${weekdayDateIntl(common[0]!.date, "en")} (${common[0]!.name}), ${localNoteIntl(common[0]!.note, "en") ?? "shared"}. The other, ${cap(name)}'s own, is not: ${notOut}.`
+    : `They are not official yet: ${notOut}.`;
+  const precedent = y2026 ? ` The 2026 list came out on ${dayMonthYear(y2026.date, "en")} (${y2026.ref}).` : "";
+  const then = common.length ? "Once it is published, this page will give the date with its source." : "Once they are published, this page will give the dates with their source.";
+  return `${head}${precedent} ${then}`;
+}
+
 export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
   const list = local2027(c);
   const total = holidayCount(c);
@@ -634,7 +669,7 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
       ];
     }
     return [
-      { question: `Ja se saben els festius locals del ${YEAR} ${caOf(name)}?`, answer: `No. ${pendingLineIntl(c, "ca")}` },
+      { question: `Quins són els festius locals ${caOf(name)} el ${YEAR}?`, answer: pendingFaqAnswerIntl(c, "ca") },
       {
         question: `Quants festius té ${name} el ${YEAR}?`,
         answer:
@@ -689,7 +724,7 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
     ];
   }
   return [
-    { question: `Are ${Name}'s ${YEAR} local holidays known yet?`, answer: `No. ${pendingLineIntl(c, "en")}` },
+    { question: `What are ${Name}'s local holidays in ${YEAR}?`, answer: pendingFaqAnswerIntl(c, "en") },
     {
       question: `How many public holidays does ${Name} have in ${YEAR}?`,
       answer:
