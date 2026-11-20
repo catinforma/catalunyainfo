@@ -9957,3 +9957,7 @@ and **2026-12-04** (14 d).
 - **Owner only:** a licensed photo of the Canyelles fair (its Event has no `image`); the Espinelves decision above.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — Espinelves hold closed early (body + lead now ship; title kept)
+
+The 13 Nov title test on `/ca/fires-de-nadal/espinelves/` and `/es/mercados-navidad/espinelves/` ("…2026: 28 nov. – 8 des./dic.", body and description unchanged) can't be read any more: from 16 Nov the espinelves queries moved from ~9 to 13–30 and impressions fell from 300–600/day (7–15 Nov) to 3–58/day (16–20 Nov) (`snapshot.py page espinelves 14`). ES 12 / 2,481 / 0.5 % / 8.7, CA 5 / 875 / 0.6 % / 9.3 (GSC 7–20 Nov), against the 13 Nov baselines of 15 / 1,852 / 0.8 % / 8.2 (ES) and 6 / 1,127 / 0.5 % / 8.8 (CA). The fair opens on 28 Nov, so waiting for the 27 Nov read would leave one day of demand. `BODY_HOLDS` (organisers.ts) and `LEAD_HOLDS` (copy.ts) are emptied, so the organiser's programme, the same-weekend links and the dated lead (written 20 Nov, see the fairs entry above) go out with this deploy. The dated title stays: it is the answer to "fira espinelves 2026". **Review 27 Nov and 4 Dec** (`snapshot.py page espinelves 7`): if positions haven't come back to ≤ 10, look at the SERP for what wins and rework the page. IndexNow `/ca/fires-de-nadal/espinelves/ /es/mercados-navidad/espinelves/`.

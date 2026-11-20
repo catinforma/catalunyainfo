@@ -198,9 +198,9 @@ export function confirmationNote(fairs: readonly Pick<Fair, "checked" | "unconfi
  * the dated lead; Espinelves' test reads again on 27 Nov, so its hold is
  * renewed to that day (docs/SEO_EXPERIMENTS.md, 20 Nov).
  */
-export const LEAD_HOLDS: Readonly<Record<string, string>> = {
-  "17063": "2026-11-27",
-};
+// 20 Nov 2026: Espinelves' hold closed early (docs/SEO_EXPERIMENTS.md, 20 Nov, "Espinelves hold closed"):
+// its positions fell from ~9 to 13-30 from 16 Nov, so the title test can no longer be read, and the fair opens on 28 Nov.
+export const LEAD_HOLDS: Readonly<Record<string, string>> = {};
 
 /**
  * The first sentence under the H1 gives the days (16 Nov 2026): the queries

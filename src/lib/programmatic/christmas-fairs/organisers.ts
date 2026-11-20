@@ -72,9 +72,9 @@ export const HTTP_ONLY_HOSTS: readonly string[] = ["www.firadenadal.cat"];
  * fails the day after, until the entry is removed (or renewed and logged).
  * Espinelves: the title test reads again on 27 Nov; the fair opens on 28.
  */
-export const BODY_HOLDS: Readonly<Record<string, string>> = {
-  "17063": "2026-11-27",
-};
+// 20 Nov 2026: Espinelves' hold closed early (docs/SEO_EXPERIMENTS.md, 20 Nov, "Espinelves hold closed"):
+// its positions fell from ~9 to 13-30 from 16 Nov, so the title test can no longer be read, and the fair opens on 28 Nov.
+export const BODY_HOLDS: Readonly<Record<string, string>> = {};
 
 const CANYELLES = "https://www.canyelles.cat";
 const CANYELLES_APP = "https://www.santalluciacanyelles.cat";
