@@ -92,10 +92,25 @@ export async function loadTotalPercent(): Promise<number | null> {
   return report.error || report.reservoirs.length === 0 ? null : report.total.percent;
 }
 
+/** The newest date among the readings a page would print. Pure. */
+export function newestDate(readings: readonly Reading[]): string {
+  return readings.reduce((max, r) => (r.date > max ? r.date : max), RESERVOIR_DATA[0]?.trend.latest.date ?? "");
+}
+
+/**
+ * For the sitemap: the date of the reading the pages print now (the ACA's
+ * latest, else the snapshot's). Same request and data cache as the pages, so
+ * it costs no extra read of the ACA within the three hours. Never throws.
+ */
+export async function loadLatestReadingDate(now: Date = new Date()): Promise<string> {
+  const latest = await fetchLatest(now);
+  return newestDate(freshReadings(latest ? liveReadings(latest.rows) : null).readings);
+}
+
 export async function loadServerReservoirs(now: Date = new Date()): Promise<ServerReservoirs> {
   const latest = await fetchLatest(now);
   const { readings, live } = freshReadings(latest ? liveReadings(latest.rows) : null);
-  const latestDate = readings.reduce((max, r) => (r.date > max ? r.date : max), RESERVOIR_DATA[0]?.trend.latest.date ?? "");
+  const latestDate = newestDate(readings);
   const yearAgo = live ? yearAgoBySlug(await loadReservoirsYearAgo(latestDate, now)) : {};
   return { readings, live, fetchedAt: live ? (latest?.fetchedAt ?? null) : null, latestDate, yearAgo };
 }

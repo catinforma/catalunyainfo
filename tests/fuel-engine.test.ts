@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { GET } from "../src/app/api/fuel/catalonia/route.ts";
-import { DESCRIPTION_LIMIT, GEOPORTAL_HOME, TITLE_LIMIT, fuelDescription, fuelH1, fuelTitle, guidance, hubMeta, liveLabels, placeLead } from "../src/lib/programmatic/fuel/copy.ts";
+import { DESCRIPTION_LIMIT, GEOPORTAL_HOME, TITLE_LIMIT, areaLabels, fuelDescription, fuelH1, fuelTitle, guidance, hubMeta, liveLabels, placeLead } from "../src/lib/programmatic/fuel/copy.ts";
 import {
   CHAINS,
   CITY_MIN_STATIONS,
@@ -21,7 +21,8 @@ import {
   stationsOf,
   type Place,
 } from "../src/lib/programmatic/fuel/data.ts";
-import { FRESH_HOURS, MAX_SHOWN_HOURS, freshness, initialPrices, matches, median, ministryTimestampToIso, parseCoordinate, parsePrice, rank, type LiveStation } from "../src/lib/programmatic/fuel/live.ts";
+import { FRESH_HOURS, MAX_SHOWN_HOURS, freshness, initialPrices, matches, median, ministryTimestampToIso, parseCoordinate, parsePrice, rank, splitFecha, type LiveStation } from "../src/lib/programmatic/fuel/live.ts";
+import { areaSummary, hubAreas, placeFilter } from "../src/lib/programmatic/fuel/areas.ts";
 import { SERVER_REVALIDATE_SECONDS as FUEL_SERVER_REVALIDATE } from "../src/lib/programmatic/fuel/server.ts";
 import { fromIdescat, fromMinistry } from "../src/lib/programmatic/fuel/names.ts";
 import { FUEL_LOCALES, fuelHubPath, fuelPath, fuelTranslations, type FuelLocale } from "../src/lib/programmatic/fuel/paths.ts";
@@ -262,6 +263,11 @@ test("metadata: titles <= 60, descriptions <= 155, H1 present, never a price", (
     const hub = hubMeta(locale, STATIONS.stations.length);
     assert.ok(hub.title.length <= TITLE_LIMIT && hub.description.length <= DESCRIPTION_LIMIT, `${locale} hub`);
   }
+  // The English hub (20 Nov 2026), within the same limits and never a price.
+  const en = hubMeta("en", STATIONS.stations.length);
+  assert.ok(en.title.length <= TITLE_LIMIT, `en hub title ${en.title.length}`);
+  assert.ok(en.description.length <= DESCRIPTION_LIMIT, `en hub description ${en.description.length}`);
+  assert.doesNotMatch(en.title + en.description + en.h1, PRICE_LIKE);
   const manresa = resolveCityOrChain("es", "es", "manresa")!;
   assert.equal(fuelTitle(manresa, "es"), "Gasolineras baratas en Manresa hoy: precio gasolina y diésel");
   assert.equal(fuelTitle(manresa, "ca"), "Benzineres barates a Manresa avui: preu gasolina i dièsel");
@@ -558,17 +564,17 @@ test("pages: station lists match the counts; siblings stay in the family", () =>
 
 test("sitemap: every page in both languages, dated by the station list, hreflang to the other edition", () => {
   const entries = fuelFamilyPaths();
-  assert.equal(entries.length, 2 * (1 + pages().length));
+  assert.equal(entries.length, 3 + 2 * pages().length, "three hubs (ca, es, en since 20 Nov 2026), every place page in ca and es");
   assert.equal(new Set(entries.map((e) => e.path)).size, entries.length);
   for (const e of entries) {
     assert.equal(e.lastModified, MUNICIPALITIES.readOn);
     assert.ok(Object.values(e.translations).includes(e.path));
   }
   const paths = entries.map((e) => e.path);
-  for (const p of ["/es/gasolineras/", "/ca/benzineres/", "/es/gasolineras/manresa/", "/ca/benzineres/comarca/osona/", "/es/gasolineras/provincia/tarragona/", "/ca/benzineres/esclatoil/"]) {
+  for (const p of ["/es/gasolineras/", "/ca/benzineres/", "/en/fuel-prices-catalonia/", "/es/gasolineras/manresa/", "/ca/benzineres/comarca/osona/", "/es/gasolineras/provincia/tarragona/", "/ca/benzineres/esclatoil/"]) {
     assert.ok(paths.includes(p), p);
   }
-  assert.ok(!paths.some((p) => p.startsWith("/en/")));
+  assert.deepEqual(paths.filter((p) => p.startsWith("/en/")), ["/en/fuel-prices-catalonia/"], "English has the hub only");
 
   assert.deepEqual(fuelSitemapEntries(), [], "nothing on a deployment that may not be indexed");
   const env = { ...process.env };
@@ -581,7 +587,20 @@ test("sitemap: every page in both languages, dated by the station list, hreflang
     assert.ok(osona, "absolute production URL");
     assert.equal(osona.alternates?.languages?.ca, "https://www.catalunyainfo.com/ca/benzineres/comarca/osona/");
     assert.equal(osona.alternates?.languages?.["x-default"], "https://www.catalunyainfo.com/ca/benzineres/comarca/osona/");
-    assert.equal((osona.lastModified as Date).toISOString().slice(0, 10), MUNICIPALITIES.readOn);
+    assert.equal(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(osona.lastModified as Date), MUNICIPALITIES.readOn);
+    // 20 Nov 2026: dated by the render day, since the prices are read at render.
+    const today = fuelSitemapEntries("2026-11-20");
+    assert.ok(today.every((e) => (e.lastModified as Date).toISOString() === "2026-11-19T23:00:00.000Z"));
+    assert.equal(fuelSitemapEntries("2020-01-01")[0]!.lastModified?.valueOf(), live[0]!.lastModified?.valueOf(), "never older than the station list");
+    // The three hubs name each other, x-default to English as buildAlternates does.
+    const enHub = live.find((e) => e.url === "https://www.catalunyainfo.com/en/fuel-prices-catalonia/")!;
+    assert.deepEqual(enHub.alternates?.languages, {
+      ca: "https://www.catalunyainfo.com/ca/benzineres/",
+      es: "https://www.catalunyainfo.com/es/gasolineras/",
+      en: "https://www.catalunyainfo.com/en/fuel-prices-catalonia/",
+      "x-default": "https://www.catalunyainfo.com/en/fuel-prices-catalonia/",
+    });
+    assert.equal(osona.alternates?.languages?.en, undefined, "place pages: ca and es only");
   } finally {
     process.env.VERCEL_ENV = env.VERCEL_ENV;
     process.env.NEXT_PUBLIC_ALLOW_INDEXING = env.NEXT_PUBLIC_ALLOW_INDEXING;
@@ -593,7 +612,7 @@ test("sitemap: every page in both languages, dated by the station list, hreflang
 test("sitemap: the site sitemap includes the family with one import and one spread", () => {
   const source = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(source, /import \{ fuelSitemapEntries \} from "@\/lib\/programmatic\/fuel\/sitemap";/);
-  assert.match(source, /\.\.\.fuelSitemapEntries\(\)/);
+  assert.match(source, /\.\.\.fuelSitemapEntries\(madridDate\(Date\.now\(\)\)\)/);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -612,6 +631,13 @@ test("routes: half-hourly ISR with dynamicParams, one locale each, the list read
     ["(public)/[locale]/benzineres/provincia/[provincia]/page.tsx", "ca"],
     ["(public)/[locale]/benzineres/comarca/[comarca]/page.tsx", "ca"],
   ];
+  // The English hub (20 Nov 2026): same timer and rules, English only.
+  const en = read("(public)/[locale]/fuel-prices-catalonia/page.tsx");
+  assert.match(en, new RegExp(`export const revalidate = ${FUEL_SERVER_REVALIDATE};`));
+  assert.match(en, /export const dynamicParams = true;/);
+  assert.match(en, /fuelHubAllowed\("en", locale\)/);
+  assert.match(en, /<FuelHubRoute locale="en" \/>/);
+  assert.doesNotMatch(en, /"(ca|es)"/);
   for (const [file, locale] of pagesFiles) {
     const source = read(file);
     // Since 13 Nov 2026 the HTML carries the prices: every route regenerates
@@ -658,5 +684,63 @@ test("answer labels: cheapest 95 and diesel first, with the price slot and the s
     assert.match(l.cheapestGoa, /\{price\}.*\{station\}/, locale);
   }
   const client = readFileSync(join(ROOT, "src/components/programmatic/fuel/FuelPrices.tsx"), "utf8");
-  assert.doesNotMatch(client, /^import (?!type )[^;]*from "@\/lib\/programmatic\/fuel\/(server|upstream|data)";/m, "no server code or snapshot in the browser bundle");
+  assert.doesNotMatch(client, /^import (?!type )[^;]*from "@\/lib\/programmatic\/fuel\/(server|upstream|data|areas)";/m, "no server code or snapshot in the browser bundle");
+});
+
+/* -------------------------------------------------------------------------- */
+/* 20 Nov 2026: the Ministry's clock, and the hub's price in every area       */
+/* -------------------------------------------------------------------------- */
+
+test("splitFecha: the Ministry's Fecha for display, the hour padded before 10:00 (it printed \"9:27:\" until 20 Nov)", () => {
+  assert.deepEqual(splitFecha("28/10/2026 11:36:05"), { date: "28/10/2026", time: "11:36" });
+  assert.deepEqual(splitFecha("13/11/2026 0:54:13"), { date: "13/11/2026", time: "00:54" });
+  assert.deepEqual(splitFecha("20/11/2026 9:27:12"), { date: "20/11/2026", time: "09:27" });
+  assert.deepEqual(splitFecha("20/11/2026"), { date: "20/11/2026", time: "" });
+  const prices = readFileSync(join(ROOT, "src/components/programmatic/fuel/FuelPrices.tsx"), "utf8");
+  assert.doesNotMatch(prices, /slice\(0, 5\)/);
+  assert.match(prices, /splitFecha,/);
+});
+
+test("areaSummary: cheapest and median 95 and diesel per province, city page and chain, from the Ministry's list (fixture of 28 Oct 2026)", () => {
+  const payload = compactPayload(FIXTURE, 1)!;
+  const now = Date.parse(payload.updated!) + 60_000;
+  const summary = areaSummary(payload, now)!;
+  assert.equal(summary.fresh, "fresh");
+  assert.equal(summary.fecha, payload.fecha);
+  assert.deepEqual(summary.groups.map((g) => g.kind), ["province", "city", "chain"]);
+  const city = summary.groups.find((g) => g.kind === "city")!;
+  const manresa = city.rows.find((r) => r.place.slug === "manresa")!;
+  // The same figures as Manresa's own page (known answer above).
+  assert.deepEqual([manresa.prices.e95?.min, manresa.prices.e95?.median, manresa.prices.e95?.count, manresa.prices.e95?.station.b], [1.499, 1.709, 15, "BONAREA"]);
+  assert.deepEqual([manresa.prices.goa?.min, manresa.prices.goa?.median, manresa.prices.goa?.count, manresa.prices.goa?.station.b], [1.719, 1.844, 16, "GM OIL"]);
+  // A city with no station in the 26-station fixture is left out, never shown as 0.
+  assert.ok(!city.rows.some((r) => r.place.slug === "barcelona"));
+  for (const group of summary.groups) {
+    for (const row of group.rows) {
+      for (const p of Object.values(row.prices)) {
+        assert.ok(p && p.min <= p.median && p.count >= 1, row.place.slug);
+        assert.ok(payload.stations.some((s) => s.b === p.station.b && s.a === p.station.a), "the cheapest is a real station of the list");
+      }
+    }
+  }
+  // Every area of the hub is a page of the family, filtered as that page filters.
+  const areas = hubAreas().flatMap((g) => g.places);
+  assert.equal(areas.filter((p) => p.kind === "province").length, 4);
+  assert.equal(areas.filter((p) => p.kind === "chain").length, 2);
+  assert.equal(areas.filter((p) => p.kind === "city").length, pages().filter((p) => p.kind === "city").length);
+  assert.deepEqual(placeFilter(areas.find((p) => p.kind === "chain")!), { brands: ["BONAREA"] });
+  assert.equal(areaSummary(payload, Date.parse(payload.updated!) + 5 * 3_600_000)!.fresh, "old");
+  assert.equal(areaSummary(payload, Date.parse(payload.updated!) + 25 * 3_600_000), null, "a list over a day old is never shown");
+  assert.equal(areaSummary(null, now), null);
+});
+
+test("hub: the area table sits right after the live prices, server-rendered, with its labels in both editions", () => {
+  const hub = readFileSync(join(ROOT, "src/components/programmatic/fuel/FuelHubPage.tsx"), "utf8");
+  assert.ok(hub.indexOf("<AreaTable") > hub.indexOf("<FuelPrices") && hub.indexOf("<AreaTable") < hub.indexOf('id="zones"'));
+  assert.doesNotMatch(hub, /^"use client"/);
+  for (const locale of FUEL_LOCALES) {
+    const l = areaLabels(locale);
+    assert.match(l.intro, /\{time\}.*\{date\}/, locale);
+    assert.ok(l.title.length > 20 && l.groups.city && l.province("Girona").endsWith("Girona"), locale);
+  }
 });

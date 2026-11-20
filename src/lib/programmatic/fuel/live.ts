@@ -114,6 +114,18 @@ export function ministryTimestampToIso(fecha: unknown): string | null {
   return null;
 }
 
+/**
+ * The Ministry's `Fecha` split for display: "28/10/2026 11:36:05" -> { date:
+ * "28/10/2026", time: "11:36" }. Before 10:00 the Ministry writes the hour
+ * without its zero ("13/11/2026 0:54:13"): that is "00:54", not "0:54:" (what
+ * the pages printed until 20 Nov 2026, from a five-character cut).
+ */
+export function splitFecha(fecha: string): { date: string; time: string } {
+  const [date = fecha, clock = ""] = fecha.trim().split(/\s+/);
+  const m = /^(\d{1,2}):(\d{2})/.exec(clock);
+  return { date, time: m ? `${m[1]!.padStart(2, "0")}:${m[2]}` : "" };
+}
+
 /* -------------------------------------------------------------------------- */
 /* Filtering and ranking (browser)                                            */
 /* -------------------------------------------------------------------------- */

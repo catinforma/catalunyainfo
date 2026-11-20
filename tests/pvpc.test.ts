@@ -12,7 +12,7 @@ import { pvpcPath, pvpcTranslations, resolvePvpc } from "../src/lib/programmatic
 import { hoursOf, isValleDay, periodOf, summarize } from "../src/lib/programmatic/pvpc/periods.ts";
 import { SERVER_REVALIDATE_SECONDS, readSnapshot } from "../src/lib/programmatic/pvpc/server.ts";
 import { addDays, currentHourIndex, hourLabels, hourStarts, hoursInDay, madridDate, madridMidnight } from "../src/lib/programmatic/pvpc/time.ts";
-import { esiosUrl, loadPvpc, redataUrl, type FetchLike } from "../src/lib/programmatic/pvpc/upstream.ts";
+import { answeredAt, esiosUrl, loadPvpc, redataUrl, type FetchLike } from "../src/lib/programmatic/pvpc/upstream.ts";
 import { buildView, mergeDays, pruneDays, publishedYesterdayAt, type PvpcSnapshot } from "../src/lib/programmatic/pvpc/view.ts";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -327,6 +327,18 @@ test("loadPvpc: REData down, timing out or garbled → null (never throws); e·s
   const noEsios = await loadPvpc(fakeFetch({ "https://apidatos": NOV, "https://api.esios": new Error("down") }), "2026-11-13", NOV13_1600);
   assert.equal(noEsios?.days.length, 2);
   assert.ok(noEsios?.days.every((d) => d.hours.every((h) => h.cym === undefined)));
+});
+
+test("answeredAt: REE's Date header is the read time, but never later than our clock (REData ran an hour ahead on 20 Nov 2026)", () => {
+  const at = (date: string | null) => ({ headers: new Headers(date ? { date } : {}) });
+  const now = Date.parse("2026-11-20T17:58:36Z");
+  assert.equal(answeredAt(at("Fri, 20 Nov 2026 17:51:00 GMT"), now), "2026-11-20T17:51:00.000Z", "a past answer keeps its own time");
+  assert.equal(answeredAt(at("Fri, 20 Nov 2026 18:58:36 GMT"), now), "2026-11-20T17:58:36.000Z", "an hour ahead: our clock");
+  assert.equal(answeredAt(at("Fri, 20 Nov 2026 17:59:06 GMT"), now), "2026-11-20T17:58:36.000Z", "within the minute of skew: still not after now");
+  assert.equal(answeredAt(at(null), now), "2026-11-20T17:58:36.000Z");
+  assert.equal(answeredAt(at("garbage"), now), "2026-11-20T17:58:36.000Z");
+  const line = readLine(answeredAt(at("Fri, 20 Nov 2026 18:58:36 GMT"), now), "2026-11-19T20:46:10.000+01:00", "es");
+  assert.match(line, /leídos el 20\/11\/2026 a las 18:58 /, "17:58 UTC is 18:58 in Madrid");
 });
 
 test("server: one memoised read; when REE then fails, the last good prices (memory, then the kept file after a restart) are served with their read time", async () => {

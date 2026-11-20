@@ -16,6 +16,7 @@ import { hubPhoto, photoMetaImage, reservoirPhoto } from "@/lib/content/place-ph
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
+import { madridMidnight } from "@/lib/programmatic/pvpc/time";
 
 import { hubCopy, reservoirDescription, reservoirTitle } from "./copy";
 import { RESERVOIR_DATA, SNAPSHOT } from "./data";
@@ -100,19 +101,29 @@ export function reservoirFamilyPaths(): ReservoirFamilyPath[] {
   return [...hubs, ...pages];
 }
 
-/** Sitemap entries with hreflang alternates; nothing on a deployment that may not be indexed. */
-export function reservoirSitemapEntries(): MetadataRoute.Sitemap {
+/**
+ * Sitemap entries with hreflang alternates; nothing on a deployment that may
+ * not be indexed.
+ *
+ * `latestReading` is the date of the ACA reading the pages print now
+ * (`loadLatestReadingDate` in server.ts, the same request as the pages): since
+ * 13 Nov 2026 the HTML carries the ACA's latest reading, regenerated every
+ * three hours, and the page changes with it every day. Until 20 Nov the
+ * sitemap still gave the snapshot's date (28 Oct): Search Console's URL
+ * inspection on 20 Nov showed /es/embalses/ last crawled on 1 Nov and
+ * /es/embalses/sau/ on 2 Nov, before the live reading reached the HTML.
+ * Without it (tests, scripts, or the ACA not answering) the snapshot's date.
+ */
+export function reservoirSitemapEntries(latestReading?: string): MetadataRoute.Sitemap {
   if (!indexingAllowed()) return [];
   return reservoirFamilyPaths().map((entry) => {
     const languages: Record<string, string> = {};
     for (const locale of LOCALES) languages[HTML_LANG[locale]] = absoluteUrl(entry.translations[locale]);
     languages["x-default"] = absoluteUrl(entry.translations[X_DEFAULT_LOCALE]);
+    const day = latestReading && latestReading > entry.lastModified ? latestReading : entry.lastModified;
     return {
       url: absoluteUrl(entry.path),
-      // The snapshot's date: the facts change with it. Since 13 Nov 2026 the
-      // reading in the HTML is the ACA's latest (routes regenerate every three
-      // hours, server.ts), which the sitemap has no date for without a fetch.
-      lastModified: new Date(`${entry.lastModified}T00:00:00Z`),
+      lastModified: new Date(madridMidnight(day)),
       changeFrequency: "daily" as const,
       priority: 0.6,
       alternates: { languages },

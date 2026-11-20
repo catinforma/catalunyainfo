@@ -9,7 +9,7 @@
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
-import { liveStamp } from "@/lib/programmatic/live-stamp";
+import { caDel, liveStamp } from "@/lib/programmatic/live-stamp";
 
 import { LINES, SNAPSHOT, accessibleCount, linesInGroup, siblings } from "./data";
 import { LINE_OFFICIAL, OFFICIAL_VERIFIED, PHONE, linePageUrl, officialUrl, xUrl, type ServiceGroup } from "./official";
@@ -733,6 +733,29 @@ export function hubCopy(locale: Locale): HubCopy {
  * page. Always with the time the notices were read (`payload.fetchedAt`, the
  * source's own answer time), never "now". Null without a readable time.
  */
+/**
+ * The hub's line list (20 Nov 2026): each line's count of the notices read at
+ * render, so "is my line OK?" is answered for all 19 lines at a glance. Same
+ * notices and the same rule as the line pages (a notice counts for every line
+ * it names). Null without a read: the list then shows the routes only.
+ */
+export function lineStatus(locale: Locale, payload: AlertsOk | null, id: LineId): string | null {
+  if (!payload || !liveStamp(payload.fetchedAt, locale)) return null;
+  const n = payload.alerts.filter((a) => a.lines.includes(id)).length;
+  if (locale === "ca") return n === 0 ? "cap avís" : n === 1 ? "1 avís" : `${n} avisos`;
+  if (locale === "en") return n === 0 ? "no notices" : n === 1 ? "1 notice" : `${n} notices`;
+  return n === 0 ? "sin avisos" : n === 1 ? "1 aviso" : `${n} avisos`;
+}
+
+/** The sentence above the list that says when those counts were read. */
+export function lineStatusNote(locale: Locale, payload: AlertsOk | null): string | null {
+  const stamp = payload ? liveStamp(payload.fetchedAt, locale) : null;
+  if (!stamp) return null;
+  if (locale === "ca") return `Entre parèntesis, els avisos actius de cada línia a les ${stamp.time} h ${caDel(stamp.date)}; el text de cada avís és a dalt.`;
+  if (locale === "en") return `In brackets, each line's active notices at ${stamp.time} on ${stamp.date}; the text of each notice is above.`;
+  return `Entre paréntesis, los avisos activos de cada línea a las ${stamp.time} h del ${stamp.date}; el texto de cada aviso está arriba.`;
+}
+
 export function alertsAnswer(locale: Locale, payload: AlertsOk, line: SnapshotLine | null): string | null {
   const stamp = liveStamp(payload.fetchedAt, locale);
   if (!stamp) return null;

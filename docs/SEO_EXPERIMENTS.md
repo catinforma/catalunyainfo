@@ -10256,3 +10256,126 @@ education guides, Spain hub, 17N, 19N, 20N, 23N, 26N), `huelgas-espana`, `huelga
 `/en/guides/general-strike-11-november`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
 
 **Outcome:** _pending_
+
+## 20 Nov 2026 — Live-data pages: Google still ranks their pre-13 Nov copies; sitemap dated by the live figure, a sitewide "live data" footer column, the area price table on the fuel hubs, an English fuel hub, two clock bugs (deploy only; no publish group; no title, description or lead touched)
+
+**Why they rank low (evidence, 20 Nov).**
+1. **Google has not seen the live HTML.** URL inspection (GSC API): `/es/rodalies/r1/` and `/es/rodalies/r4/` last crawled
+   30 Oct, `/ca/rodalies/` 29 Oct, `/es/embalses/` 1 Nov, `/es/embalses/sau/` 2 Nov, `/es/gasolineras/` and `/ca/benzineres/`
+   6 Nov: all before the 13 Nov entry put the notices, the ACA reading and the prices in the server HTML. Google ranks the
+   copies with "los avisos se cargan cuando el navegador tiene JavaScript", the 28 Oct reading and "0,000 €/l". `/es/avisos/` and
+   `/en/warnings/` (live since 18 Nov, in the sitemap): **"URL is unknown to Google"**.
+2. **The sitemap told Google they had not changed since 28 Oct.** Live sitemap, 20 Nov: the 41 Rodalies URLs `lastmod
+   2026-10-28` + `weekly` (comment: "the live notices are fetched by the browser", untrue since 13 Nov); the 30 reservoir URLs
+   and both fuel hubs `2026-10-28`. The PVPC, warnings, today and reservoir-guide URLs were already dated daily.
+3. **Nothing links them.** The three home pages have no link to any live page (the "Útil ara mateix" grid left on 12 Nov,
+   owner); header and footer had none either. The fuel hubs were linked only from the today page, the calculators hub and the
+   butane page.
+4. **The queries go to noindex pages.** The fuel searches are about one town or chain ("gasolineras bonarea", "preu gasolina
+   esclat avui", "precio gasolina terrassa", "gasolineras baratas barcelona"): those pages are noindex since 11 Nov (AdSense,
+   owner). The indexable hubs had 9 and 8 impressions in 14 days.
+5. **Two wrong clocks in the HTML.** PVPC: "leídos el 20/11/2026 a las 18:58" printed at 17:58: REData's `Date` header runs an
+   hour ahead (`curl` at 17:07 UTC: `date: Fri, 20 Nov 2026 18:08:08 GMT`; ACA, Rodalies, AEMET, the Ministry and e·sios were
+   correct). Fuel: the Ministry writes the hour without its zero before 10:00 ("20/11/2026 9:27:12"); the pages cut five
+   characters and printed "a las 9:27: del…".
+6. No English fuel page (owner rule: every page in ca, es and en).
+
+Query fit and leads were checked and are not the problem where Google has the current copy: every lead already answers with
+the live figure and its time (Rodalies "5 avisos activos … a las 17:58 h del 20 de noviembre", Sau "73,6 % (dato de la ACA del
+20/11/2026)", fuel "Gasolina 95 más barata de Cataluña: 1,258 €/l…", PVPC cheapest/dearest hour, butane 19,55 €). Titles,
+descriptions and leads are inside the windows of 13 Nov (live data, PVPC, butane), 18 Nov (warnings, R2 family): untouched.
+
+**Baseline (GSC API, 7–20 Nov, 14 days, page dimension, `snapshot.py`'s `gsc()`; clicks / impressions / position).** All
+live pages together: 55 / 8,302.
+
+| URL | 14 d | URL | 14 d |
+| --- | --- | --- | --- |
+| /es/rodalies/ | 3 / 225 / 18.3 | /es/embalses/ | 2 / 132 / 12.4 |
+| /ca/rodalies/ | 0 / 97 / 16.4 | /ca/embassaments/ | 1 / 261 / 12.9 |
+| /en/rodalies/ | 1 / 121 / 8.7 | /en/reservoirs/ | 8 / 73 / 5.2 |
+| /es/rodalies/r1/ | 2 / 391 / 13.0 | /es/embalses/sau/ | 0 / 401 / 15.1 |
+| /es/rodalies/r4/ | 2 / 320 / 15.2 | /es/embalses/susqueda/ | 0 / 191 / 12.4 |
+| /es/rodalies/r8/ | 2 / 196 / 9.4 | /ca/embassaments/la-baells/ | 0 / 139 / 10.1 |
+| /es/rodalies/r2-nord/ (18 Nov window) | 5 / 500 / 12.5 | /es/gasolineras/ | 0 / 9 / 10.0 |
+| /ca/rodalies/r1/ | 2 / 138 / 17.8 | /ca/benzineres/ | 0 / 8 / 13.2 |
+| /es/precio-luz/ | 0 / 42 / 46.7 | /es/precio-butano/ | 2 / 231 / 8.5 |
+| /es/precio-luz/manana/ | 0 / 37 / 10.5 | /ca/preu-buta/ | 0 / 14 / 6.4 |
+| /ca/preu-llum/ | 0 / 29 / 20.6 | /en/butane-price-spain/ | 0 / 19 / 5.7 |
+| /en/electricity-price-spain/ | 0 / 31 / 43.1 | /es/avisos/, /ca/avisos/, /en/warnings/ | 0 / 0 (unknown to Google) |
+
+Queries: "embalses cataluña" 87 @ 11.9, "pantano de susqueda hoy" 68 @ 10.5, "pantano de sau hoy" 64 @ 11.2 (hub/reservoir
+pages); "preu gasolina esclat avui" 47 @ 11.2 (`/ca/benzineres/esclatoil/`, noindex); "r2 sud" 70 @ 8.7 (`/es/rodalies/r2-sud/`).
+Noindex fuel place pages, 28 days (24 Oct–20 Nov): 125 with impressions, 2,737 impr. / 12 clicks; 51 clear the 17 Nov bar (a
+click or ≥ 10 impr.): bonarea ES 451 @ 21.2, esclatoil CA 306 @ 10.2 (4 clicks), terrassa 183, barcelona 169, girona 130,
+esclatoil ES 129 @ 9.3, provincia/barcelona 123, sabadell 105, comarca/valles-occidental 69 (1 click), sant-boi 52, maresme 51…
+
+**What changed (code only; ships with the deploy).**
+1. **Sitemap dates** (`rodalies/pages.ts`, `reservoirs/pages.ts` + `server.ts loadLatestReadingDate`, `fuel/sitemap.ts`,
+   `app/sitemap.ts`): Rodalies = today 00:00 Madrid + `hourly` (the notices are read at render); reservoirs = the date of the
+   ACA reading the pages print (same request and data cache as the pages; the snapshot's date if the ACA does not answer); fuel
+   hubs = today 00:00 Madrid. Never older than the snapshot's date. Tests: `tests/rodalies.test.ts`, `reservoirs-engine`,
+   `fuel-engine`.
+2. **Footer column "Dades en directe / Datos en directo / Live data"** on every page (`lib/nav/footer.ts liveFooterLinks`,
+   `SiteFooter.tsx`, 5 columns on wide screens, `prefetch={false}`): Rodalies hoy: incidencias · Precio de la luz hoy ·
+   Gasolineras baratas hoy · Embalses de Cataluña hoy · Avisos hoy: AEMET y tráfico · Precio de la bombona de butano · Hoy en
+   Cataluña (ca and en in their own words). Puts each hub one click and each line/reservoir/area page two clicks from any page,
+   the homepage included, without touching the homepage's first screen. The reservoirs link goes to the hub (`/es/embalses/`),
+   the URL Google already prefers for "embalses cataluña" (11.9 vs the guide's 17–45): **this bears on the 25 Nov hub-vs-guide
+   review of the 13 Nov entry**; if that review keeps the guide as owner, swap the href in `liveHref`.
+3. **Fuel hubs: "Precio de la gasolina y el diésel hoy en cada provincia, ciudad y cadena"** (`fuel/areas.ts`,
+   `FuelHubPage.tsx AreaTable`, ca/es/en), right after the live table: for the 4 provinces, the 29 city pages and bonÀrea and
+   Esclatoil, the cheapest 95 and diesel (with the brand, town or both) and the median, from the list the route read, with the
+   Ministry's time; nothing from a list over a day old. Each row links its (noindex, follow) page. The indexable hub now
+   answers "precio gasolina hoy terrassa / girona / sabadell", "gasolineras bonarea", "preu gasolina esclat avui". Same figures as
+   each area page (`rank`, test on the 28 Oct fixture: Manresa 1,499 BONAREA, median 1,709).
+4. **English fuel hub `/en/fuel-prices-catalonia/`** (new route; `FuelHubLocale`, English copy for the hub, live table, area
+   table, guidance and sources; place pages stay ca/es and the English hub links the Spanish ones, marked "(pages in
+   Spanish)"). Hreflang: the three hubs name each other, x-default English. In the sitemap and llms.txt; the today page, the
+   calculators hub and the butane page now link it instead of the Spanish hub.
+5. **Rodalies hub line list**: each line shows its notice count at the read time ("R2 (1 aviso): Castelldefels – Granollers
+   Centre"), the sentence above says when ("Entre paréntesis, los avisos activos de cada línea a las 17:58 h del 20/11/2026").
+   Same notices and counting as the line pages. Line pages untouched (the R2 family is in the 18 Nov window).
+6. **Clocks**: PVPC `answeredAt` never later than our clock (a header more than a minute ahead is ignored); fuel
+   `splitFecha` pads the hour ("09:27") and is shared by the live table and the area table.
+7. **PVPC "Qué es el PVPC"**: one sentence that the PVPC is the same in all of the Peninsula, Balearics and Canaries
+   (Barcelona, the rest of Catalonia, Madrid…), whichever reference supplier bills it; only Ceuta and Melilla differ (from the data
+   itself: e·sios `PCB` = REData, `CYM` separate). ca/es/en. "precio luz hoy barcelona" 9 impr. @ 74. No ads or commercial
+   element added to any PVPC page (REE reuse terms).
+
+**Not changed, on purpose.** Titles, descriptions, H1s and leads (windows above). The fuel noindex (owner decision, AdSense).
+The R2 pages (18 Nov window, revert rule). Guides that could link the live pages (ZBE, parking, Barcelona hub) were
+republished today by another wave (`parking`, `barcelona-hub`): the footer link covers them. The reservoir snapshot (28 Oct)
+still feeds the "El último año" section of each reservoir page; `npm run reservoirs:snapshot -- build` is due with the monthly
+refresh (its pinned tests move with it).
+
+**Prediction.** Within 14 days, Google recrawls the live pages (URL inspection "last crawled" after 20 Nov for the Rodalies,
+reservoir and fuel URLs above) and indexes `/es/avisos/`, `/ca/avisos/`, `/en/warnings/` and `/en/fuel-prices-catalonia/`.
+Then: reservoir pages from 12–15 to ≤ 9 on "pantano de X hoy" (the dated figure in the snippet), Rodalies hubs from 16–18 to
+≤ 12, fuel hubs from ~10 impressions a fortnight to ≥ 150 as they pick up town and chain queries. Live pages together from
+55 / 8,302 to ≥ 120 clicks / 14 days. Wrong if on 4 Dec the URLs above still show a last crawl before 20 Nov, or if the
+pages' positions are unchanged (± 1) on 18 Dec.
+
+**Confounders.** The 13 Nov live-data entry (reviews 27 Nov, 11 Dec) measures the same pages: its change only starts to count
+once Google recrawls, which this entry is meant to bring forward, so read both together. 25 Nov hub-vs-guide review (above). 29N
+elections and the 26N strike (Rodalies traffic). Rain (reservoir news). The core update still rolling out (18 Nov entry).
+
+**Review 2026-12-04 (14 days) and 2026-12-18 (28 days).** `batch_url_inspection` on the URLs of the baseline table (last
+crawl, indexed); `snapshot.py page rodalies 14`, `page embal 14`, `page reservoirs 14`, `page gasolin 14`, `page benziner 14`,
+`page fuel-prices 14`, `page precio-luz 14`, `page preu-llum 14`, `page avisos 14`, `page warnings 14`, and the same URLs at page
+level as in the table; the live sitemap's `lastmod` for
+`/es/rodalies/r1/`, `/es/embalses/sau/`, `/es/gasolineras/` is today's; HTML of `/es/precio-luz/` shows "leídos … a las" ≤ the
+current time.
+
+**Go-live.** Deploy only (all code routes, the footer is sitewide); **no publish group**. IndexNow prefixes after the deploy:
+`/es/rodalies/ /ca/rodalies/ /en/rodalies/ /es/embalses/ /ca/embassaments/ /en/reservoirs/ /es/gasolineras/
+/ca/benzineres/ /en/fuel-prices-catalonia/ /es/precio-luz/ /ca/preu-llum/ /en/electricity-price-spain/ /es/precio-butano/
+/ca/preu-buta/ /en/butane-price-spain/ /es/avisos/ /ca/avisos/ /en/warnings/ /es/hoy/ /ca/avui/ /en/today/ /en/calculators/`
+(the noindex fuel place pages are not in the sitemap, so the fuel prefixes send the hubs only).
+
+**Owner.** (a) Search Console "Request indexing" (no API for it) for `/es/avisos/`, `/en/warnings/`, `/ca/avisos/`,
+`/en/fuel-prices-catalonia/`, `/es/rodalies/r1/`, `/es/rodalies/r4/`, `/ca/rodalies/`, `/es/embalses/`, `/es/embalses/sau/`,
+`/es/gasolineras/`, `/ca/benzineres/`. (b) Fuel place and chain pages: 51 clear the bar applied to every other family on
+17 Nov; re-indexing them (or the chains and the ten biggest cities first) is the fuel lever, held for AdSense. (c) REE's written
+permission before any ad on the six PVPC URLs (unchanged).
+
+**Outcome:** _pending_

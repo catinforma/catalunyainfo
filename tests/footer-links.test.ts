@@ -60,3 +60,51 @@ test("footer: the seasonal links and the legal index are rendered", () => {
     assert.ok(allSystemPaths(locale).includes(sectionPath("legal", locale)), `${locale}: the legal index is a real system page`);
   }
 });
+
+/**
+ * 20 Nov 2026: the live-data pages were linked from no header, footer or
+ * homepage since 12 Nov; Google had never seen /es/avisos/ (URL inspection).
+ * The footer's "live data" column links each hub from every page.
+ */
+test("footer: the live-data column links every live hub that exists in that language, with searched anchors", async () => {
+  const { LIVE_FOOTER_TITLE, liveFooterLinks } = await import("../src/lib/nav/footer.ts");
+  const { rodaliesSitemap } = await import("../src/lib/programmatic/rodalies/pages.ts");
+  const { reservoirSitemapEntries } = await import("../src/lib/programmatic/reservoirs/pages.ts");
+  const { fuelSitemapEntries } = await import("../src/lib/programmatic/fuel/sitemap.ts");
+  const { pvpcSitemapEntries } = await import("../src/lib/programmatic/pvpc/pages.ts");
+  const { butaneSitemapEntries } = await import("../src/lib/programmatic/butane/page.ts");
+  const { warningsSitemapEntries } = await import("../src/lib/programmatic/warnings/page.ts");
+  const { todaySitemapEntries } = await import("../src/lib/programmatic/today/page.ts");
+  const { isLowDemandPath } = await import("../src/lib/seo/low-demand.ts");
+  const listed = new Set(
+    [
+      ...rodaliesSitemap(),
+      ...reservoirSitemapEntries(),
+      ...fuelSitemapEntries(),
+      ...pvpcSitemapEntries("2026-11-20"),
+      ...butaneSitemapEntries("2026-11-20"),
+      ...warningsSitemapEntries(Date.parse("2026-11-20T12:00:00Z")),
+      ...todaySitemapEntries(),
+    ].map((e) => e.url),
+  );
+  const expected = { ca: 7, es: 7, en: 7 } as const;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const links = liveFooterLinks(locale);
+    assert.equal(links.length, expected[locale], locale);
+    assert.ok(LIVE_FOOTER_TITLE[locale], locale);
+    for (const link of links) {
+      assert.ok(link.href.startsWith(`/${locale}/`), link.href);
+      assert.ok(listed.has(`${ORIGIN}${link.href}`), `${link.href} is a sitemap URL`);
+      assert.ok(!isLowDemandPath(link.href), `${link.href} is indexable`);
+      assert.ok(link.label.length >= 8, link.label);
+    }
+  }
+  assert.equal(liveFooterLinks("en").find((l) => l.key === "fuel")?.href, "/en/fuel-prices-catalonia/", "the English fuel hub");
+  assert.deepEqual(
+    liveFooterLinks("es").map((l) => l.href),
+    ["/es/rodalies/", "/es/precio-luz/", "/es/gasolineras/", "/es/embalses/", "/es/avisos/", "/es/precio-butano/", "/es/hoy/"],
+  );
+  const footer = readFileSync("src/components/SiteFooter.tsx", "utf8");
+  assert.match(footer, /liveFooterLinks\(locale\)\.map/);
+  assert.match(footer, /lg:grid-cols-5/, "five columns on wide screens");
+});

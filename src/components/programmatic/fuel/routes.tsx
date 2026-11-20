@@ -7,7 +7,7 @@ import { fuelDescription, fuelTitle, hubMeta } from "@/lib/programmatic/fuel/cop
 import type { Place } from "@/lib/programmatic/fuel/data";
 import { freshness, type LivePayload } from "@/lib/programmatic/fuel/live";
 import { loadServerPrices } from "@/lib/programmatic/fuel/server";
-import { fuelHubPath, fuelHubTranslations, fuelPath, fuelTranslations, type FuelLocale } from "@/lib/programmatic/fuel/paths";
+import { fuelHubPath, fuelHubTranslations, fuelPath, fuelTranslations, type FuelHubLocale, type FuelLocale } from "@/lib/programmatic/fuel/paths";
 import { fuelHubDataset, fuelPlaceDataset } from "@/lib/programmatic/fuel/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -23,7 +23,7 @@ import { FuelPlacePage, placeCrumbs } from "./FuelPlacePage";
 
 export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: false } };
 
-export function fuelHubMetadata(locale: FuelLocale): Metadata {
+export function fuelHubMetadata(locale: FuelHubLocale): Metadata {
   const meta = hubMeta(locale, hubTotals().stations);
   return buildMetadata({ locale, path: fuelHubPath(locale), title: meta.title, description: meta.description, translations: fuelHubTranslations() });
 }
@@ -36,7 +36,7 @@ async function pricesForRender(): Promise<{ prices: LivePayload | null; now: num
   return { prices: usable, now, dateModified: usable?.updated ?? undefined };
 }
 
-export async function FuelHubRoute({ locale }: { locale: FuelLocale }) {
+export async function FuelHubRoute({ locale }: { locale: FuelHubLocale }) {
   const { prices, now, dateModified } = await pricesForRender();
   return (
     <>

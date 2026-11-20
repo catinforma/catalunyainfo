@@ -109,7 +109,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     rodaliesOfficial: "Official service status",
     reservoirsHub: "Each reservoir",
     reservoirsGuide: "Reservoir levels today: the total and Ter-Llobregat",
-    fuelHub: "Cheapest fuel by town (in Spanish)",
+    fuelHub: "Cheapest petrol and diesel today, by province, city and chain",
     electricityToday: "Electricity price today, hour by hour",
     electricityTomorrow: "Electricity price tomorrow",
     weekendAgenda: "Things to do this weekend",

@@ -986,9 +986,8 @@ export const HUB_GROUPS: HubGroup[] = [
       {
         key: "fuel",
         calculator: false,
-        // No English edition: the English hub links the Spanish one, marked as such.
-        href: { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("es") },
-        hrefLang: { en: "es" },
+        // Every edition has its hub since 20 Nov 2026 (/en/fuel-prices-catalonia/).
+        href: { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("en") },
         title: { ca: "Benzineres més barates avui", es: "Gasolineras más baratas hoy", en: "Cheapest petrol stations today" },
         answers: {
           ca: "On és avui la benzina i el gasoil més barat, per província, comarca, municipi i cadena?",

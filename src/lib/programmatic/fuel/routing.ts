@@ -1,5 +1,5 @@
 import { cities, cityOrChainBySlug, comarques, placeBySlug, provinces, type ChainPlace, type CityPlace, type ComarcaPlace, type ProvincePlace } from "./data";
-import type { FuelLocale } from "./paths";
+import type { FuelHubLocale, FuelLocale } from "./paths";
 
 /**
  * Which request each fuel route answers. Every route folder serves one locale
@@ -7,7 +7,7 @@ import type { FuelLocale } from "./paths";
  * slug that is not a page, resolves to null and the page calls `notFound()`.
  */
 
-export function fuelHubAllowed(route: FuelLocale, locale: string): boolean {
+export function fuelHubAllowed(route: FuelHubLocale, locale: string): boolean {
   return route === locale;
 }
 

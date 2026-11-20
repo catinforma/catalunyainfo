@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
-import { alertsAnswer, hubCopy } from "@/lib/programmatic/rodalies/copy";
+import { alertsAnswer, hubCopy, lineStatus, lineStatusNote } from "@/lib/programmatic/rodalies/copy";
 import type { AlertsOk } from "@/lib/programmatic/rodalies/types";
 import { SNAPSHOT } from "@/lib/programmatic/rodalies/data";
 import { officialUrl } from "@/lib/programmatic/rodalies/official";
@@ -31,6 +31,7 @@ export function HubPage({ locale, initial = null }: { locale: Locale; initial?: 
   const t = hubCopy(locale);
   const crumbs = hubCrumbs(locale);
   const answer = initial ? alertsAnswer(locale, initial, null) : null;
+  const statusNote = lineStatusNote(locale, initial);
 
   return (
     <>
@@ -73,16 +74,23 @@ export function HubPage({ locale, initial = null }: { locale: Locale; initial?: 
             ) : null}
 
             <h2 id="linies">{t.linesTitle}</h2>
-            <p className="text-sm text-[var(--color-muted)]">{t.linesNote}</p>
+            <p className="text-sm text-[var(--color-muted)]">
+              {t.linesNote}
+              {statusNote ? ` ${statusNote}` : null}
+            </p>
             {t.groups.map((group) => (
               <section key={group.label} aria-label={group.label}>
                 <h3>{group.label}</h3>
                 <ul>
-                  {group.lines.map((line) => (
-                    <li key={line.id}>
-                      {line.href ? <Link href={line.href}>{line.name}</Link> : <strong>{line.name}</strong>}: {line.journey}
-                    </li>
-                  ))}
+                  {group.lines.map((line) => {
+                    const status = lineStatus(locale, initial, line.id);
+                    return (
+                      <li key={line.id}>
+                        {line.href ? <Link href={line.href}>{line.name}</Link> : <strong>{line.name}</strong>}
+                        {status ? ` (${status})` : null}: {line.journey}
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
             ))}

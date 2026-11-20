@@ -12,6 +12,7 @@ import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
 import { fuelSitemapEntries } from "@/lib/programmatic/fuel/sitemap";
 import { rodaliesSitemap } from "@/lib/programmatic/rodalies/pages";
 import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
+import { loadLatestReadingDate } from "@/lib/programmatic/reservoirs/server";
 import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
@@ -276,9 +277,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...trafficFinesSitemapEntries(),
     // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
     ...ztSitemapEntries(),
-    ...fuelSitemapEntries(),
-    ...rodaliesSitemap(),
-    ...reservoirSitemapEntries(),
+    // The live pages are dated by what they print now: today for the fuel prices and the
+    // Rodalies notices (both read at render), the ACA's latest reading for the reservoirs.
+    ...fuelSitemapEntries(madridDate(Date.now())),
+    ...rodaliesSitemap(madridDate(Date.now())),
+    ...reservoirSitemapEntries(await loadLatestReadingDate()),
     ...weekendSitemapEntries(),
     ...todaySitemapEntries(),
     ...christmasFairsSitemapEntries(),

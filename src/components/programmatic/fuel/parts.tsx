@@ -3,11 +3,11 @@ import Link from "next/link";
 import { renderInline } from "@/lib/content/inline";
 import { attribution, BOE_ORDER_URL, driverGuides, guidance, sectionTitles } from "@/lib/programmatic/fuel/copy";
 import { MUNICIPALITIES } from "@/lib/programmatic/fuel/data";
-import type { FuelLocale } from "@/lib/programmatic/fuel/paths";
+import type { FuelHubLocale } from "@/lib/programmatic/fuel/paths";
 
 /** Shared pieces of the fuel pages, all server-rendered and price-free. */
 
-export function Guidance({ locale }: { locale: FuelLocale }) {
+export function Guidance({ locale }: { locale: FuelHubLocale }) {
   return (
     <>
       {guidance(locale).map((section, i) => (
@@ -39,18 +39,18 @@ export function LinkList({ title, links, id }: { title: string; id: string; link
   );
 }
 
-export function DriverGuides({ locale }: { locale: FuelLocale }) {
+export function DriverGuides({ locale }: { locale: FuelHubLocale }) {
   const t = sectionTitles(locale);
   return <LinkList title={t.guides} id="ci-fuel-guides" links={driverGuides(locale)} />;
 }
 
-export function Sources({ locale }: { locale: FuelLocale }) {
+export function Sources({ locale }: { locale: FuelHubLocale }) {
   const t = sectionTitles(locale);
   const { prices, comarques } = MUNICIPALITIES.sources;
   const items = [
     { name: prices.name, publisher: prices.publisher, url: prices.url },
     {
-      name: locale === "es" ? "Servicio REST de precios de carburantes (Comunidad Autónoma 09, Cataluña)" : "Servei REST de preus de carburants (comunitat autònoma 09, Catalunya)",
+      name: { es: "Servicio REST de precios de carburantes (Comunidad Autónoma 09, Cataluña)", ca: "Servei REST de preus de carburants (comunitat autònoma 09, Catalunya)", en: "Fuel price REST service (autonomous community 09, Catalonia)" }[locale],
       publisher: prices.publisher,
       url: prices.api,
     },

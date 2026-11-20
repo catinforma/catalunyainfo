@@ -476,6 +476,7 @@ export function whatParagraphs(locale: Locale): string[] {
   if (locale === "ca") {
     return [
       `El **PVPC** (preu voluntari per al petit consumidor) és la tarifa regulada de la llum: el preu canvia cada hora i el fixa la norma, no l'empresa. Només el poden tenir els subministraments de fins a **10 kW** de potència i 1 kV, de persones físiques i microempreses, i només el venen les **comercialitzadores de referència** ([Reial decret 216/2014, art. 5](${URLS.rd216})).`,
+      "És el **mateix preu a tota la Península, les Balears i les Canàries**: una hora costa igual a Barcelona, a Girona, a Lleida, a Tarragona o a Madrid, i no depèn de la comercialitzadora de referència que el factura. Només Ceuta i Melilla tenen un preu propi, que REE publica a part.",
       `Des del 2024 una part del cost de l'energia es lliga als mercats a termini: el 55 % als futurs i el 45 % al mercat diari i intradiari (art. 9, redacció del Reial decret 446/2023). Per això el preu de cada hora es mou menys que el del mercat diari.`,
       "Si tens un contracte del **mercat lliure**, pagues el preu que diu el teu contracte: aquests preus horaris no són els teus (tret que el contracte s'indexi al mercat). Si tens PVPC, la factura ho diu a les dades del contracte.",
     ];
@@ -483,12 +484,14 @@ export function whatParagraphs(locale: Locale): string[] {
   if (locale === "en") {
     return [
       `The **PVPC** (voluntary price for small consumers) is Spain's regulated electricity tariff: the price changes every hour and is set by the rules, not by the supplier. Only supplies up to **10 kW** of contracted power at no more than 1 kV, held by individuals or micro-enterprises, can have it, and only the **reference suppliers** (comercializadoras de referencia) sell it ([Royal Decree 216/2014, art. 5](${URLS.rd216})).`,
+      "It is the **same price across mainland Spain, the Balearic and the Canary Islands**: an hour costs the same in Barcelona, Madrid or Seville, whichever reference supplier bills it. Only Ceuta and Melilla have a price of their own, which REE publishes separately.",
       "Since 2024 part of the energy cost is tied to forward markets: 55% to futures and 45% to the day-ahead and intraday markets (art. 9, as amended by Royal Decree 446/2023). That is why each hour's price moves less than the day-ahead market.",
       "On a **free-market** contract (mercado libre) you pay what your contract says: these hourly prices are not yours unless your contract is indexed to the market. If you are on the PVPC, the contract details on your bill say so.",
     ];
   }
   return [
     `El **PVPC** (precio voluntario para el pequeño consumidor) es la tarifa regulada de la luz: el precio cambia cada hora y lo fija la norma, no la empresa. Solo pueden tenerlo los suministros de hasta **10 kW** de potencia y 1 kV, de personas físicas y microempresas, y solo lo venden las **comercializadoras de referencia** ([Real Decreto 216/2014, art. 5](${URLS.rd216})).`,
+    "Es el **mismo precio en toda la Península, Baleares y Canarias**: una hora cuesta lo mismo en Barcelona, en el resto de Cataluña, en Madrid o en Sevilla, y no depende de la comercializadora de referencia que lo factura. Solo Ceuta y Melilla tienen un precio propio, que REE publica aparte.",
     "Desde 2024 una parte del coste de la energía se liga a los mercados a plazo: el 55 % a los futuros y el 45 % al mercado diario e intradiario (art. 9, redacción del Real Decreto 446/2023). Por eso el precio de cada hora se mueve menos que el del mercado diario.",
     "Si tienes un contrato del **mercado libre**, pagas el precio que dice tu contrato: estos precios horarios no son los tuyos (salvo que el contrato esté indexado al mercado). Si tienes PVPC, la factura lo indica en los datos del contrato.",
   ];

@@ -498,7 +498,27 @@ test("sitemap: 30 URLs, unique, dated with the snapshot's reading, every edition
   assert.deepEqual(reservoirSitemapEntries(), [], "nothing on a deployment that may not be indexed");
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /import \{ reservoirSitemapEntries \} from "@\/lib\/programmatic\/reservoirs\/pages";/);
-  assert.match(sitemap, /\.\.\.reservoirSitemapEntries\(\)/);
+  assert.match(sitemap, /\.\.\.reservoirSitemapEntries\(await loadLatestReadingDate\(\)\)/, "dated by the ACA reading the pages print");
+  assert.match(sitemap, /import \{ loadLatestReadingDate \} from "@\/lib\/programmatic\/reservoirs\/server";/);
+});
+
+test("sitemap (20 Nov 2026): dated by the ACA reading the pages print (00:00 Madrid), never older than the snapshot's", () => {
+  const env = { ...process.env };
+  process.env.VERCEL_ENV = "production";
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
+  try {
+    const live = reservoirSitemapEntries("2026-11-20");
+    assert.equal(live.length, 3 + 9 * 3);
+    for (const e of live) assert.equal((e.lastModified as Date).toISOString(), "2026-11-19T23:00:00.000Z", e.url);
+    const undated = reservoirSitemapEntries();
+    assert.equal(reservoirSitemapEntries("2020-01-01")[0]!.lastModified?.valueOf(), undated[0]!.lastModified?.valueOf());
+    assert.equal(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(undated[0]!.lastModified as Date), SNAPSHOT.latestDate);
+  } finally {
+    process.env.VERCEL_ENV = env.VERCEL_ENV;
+    process.env.NEXT_PUBLIC_ALLOW_INDEXING = env.NEXT_PUBLIC_ALLOW_INDEXING;
+    if (env.VERCEL_ENV === undefined) delete process.env.VERCEL_ENV;
+    if (env.NEXT_PUBLIC_ALLOW_INDEXING === undefined) delete process.env.NEXT_PUBLIC_ALLOW_INDEXING;
+  }
 });
 
 /* -------------------------------------------------------------------------- */
