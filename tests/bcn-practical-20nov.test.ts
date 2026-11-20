@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { bodyToPlainText } from "../src/lib/content/blocks.ts";
+import { bodyToPlainText, type Body } from "../src/lib/content/blocks.ts";
 import { PARKING, TRANSPORT } from "../src/lib/content/batch02/barcelona-practical.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { SITGES, TARRAGONA } from "../src/lib/content/batch02/coast-trips.ts";
@@ -46,7 +46,7 @@ test("transport: where to buy, the airport by train or bus, Sitges zones, and th
   const asOf = { ca: /a 20 de novembre de 2026/, es: /a 20 de noviembre de 2026/, en: /as of 20 November 2026/ } as const;
   for (const locale of LOCALES) {
     const blocks = TRANSPORT.editions[locale].blocks as B[];
-    const text = bodyToPlainText(blocks);
+    const text = bodyToPlainText(blocks as unknown as Body);
     assert.ok(blocks.some((b) => b.type === "heading" && b.text === buy[locale]), `${locale}: where-to-buy H2`);
     assert.match(text, asOf[locale], `${locale}: as-of date`);
     assert.match(text, /Rodalies/, `${locale}: airport by Rodalies`);
@@ -65,7 +65,7 @@ test("tourist tax: re-read 20 Nov, three FAQs in the searchers' words, links to 
   } as const;
   for (const locale of LOCALES) {
     const blocks = buildBody(locale);
-    const text = bodyToPlainText(blocks);
+    const text = bodyToPlainText(blocks as unknown as Body);
     for (const question of q[locale]) assert.ok(text.includes(question), `${locale}: ${question}`);
     assert.doesNotMatch(text, /\{[a-zA-Z0-9]+\}/, `${locale}: every placeholder filled`);
     for (const key of ["transport", "airport", "sitges"] as const) {
@@ -80,7 +80,7 @@ test("sitges: every train by direction and day type, re-read 20 Nov; Tarragona k
   const how = { ca: "Com anar de Barcelona a Sitges?", es: "¿Cómo ir de Barcelona a Sitges?", en: "How do I get from Barcelona to Sitges?" } as const;
   for (const locale of LOCALES) {
     const blocks = SITGES.editions[locale].blocks as B[];
-    const text = bodyToPlainText(blocks);
+    const text = bodyToPlainText(blocks as unknown as Body);
     const all = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
     assert.ok(all, `${locale}: the all-trains table`);
     assert.equal(all?.rows?.[0]?.[1], "5:45", `${locale}: first train from Sants`);
