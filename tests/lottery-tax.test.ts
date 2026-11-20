@@ -204,13 +204,16 @@ test("page: one static route per language, a 404 in the others, server-rendered 
   assert.equal(h.share5.total.net, 82_000);
 });
 
-test("FAQ: seven questions per language, the real queries, every figure from the engine", () => {
+test("FAQ: eight questions per language, the real queries, every figure from the engine", () => {
   const es = lotteryTaxFaq("es");
   assert.deepEqual(es.map((f) => f.q).slice(0, 3), ["¿Cuánto se queda Hacienda del Gordo?", "¿Cuánto cobra un décimo del Gordo?", "¿Cuánto paga a Hacienda una participación de 5 €?"]);
+  // 20 Nov 2026: El Niño (6 Jan), from the nino-primero preset: 200,000 € a décimo, 32,000 € withheld.
+  assert.equal(es[7]!.q, "¿Cuánto se queda Hacienda del Niño?");
+  assert.match(es[7]!.a, /200\.000 € por décimo de 20 €, paga 32\.000 € y deja 168\.000 €/);
   for (const l of LT_LOCALES) {
     const faq = lotteryTaxFaq(l);
-    assert.equal(faq.length, 7, l);
-    assert.equal(new Set(faq.map((f) => f.q)).size, 7, l);
+    assert.equal(faq.length, 8, l);
+    assert.equal(new Set(faq.map((f) => f.q)).size, 8, l);
     const all = faq.map((f) => f.a).join(" ");
     for (const n of [72_000, 328_000, 82_000, 3_280_000, 656_000, 168_000]) assert.ok(all.includes(money(n, l)), `${l}: ${n}`);
     assert.doesNotMatch(all, /undefined|NaN/, l);

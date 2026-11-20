@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcelona.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
-import { GROSSA } from "../src/lib/content/batch02/grossa.ts";
+import { GROSSA, eur, levy } from "../src/lib/content/batch02/grossa.ts";
 import {
   BILLETE_PRICE,
   DECIMO_PRICE,
@@ -55,6 +55,7 @@ import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { SNAPSHOT as ELECTIONS } from "../src/lib/programmatic/elections/snapshot.ts";
+import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { GORDO_ROUTE } from "../src/lib/programmatic/gordo/paths.ts";
 import { CHECK_ROUTE } from "../src/lib/programmatic/lottery-check/paths.ts";
 import { GROSSA_CHECK_ROUTE } from "../src/lib/programmatic/grossa-check/paths.ts";
@@ -82,7 +83,8 @@ const sentences = (plain: string) => plain.split(/\n|(?<=[.!?])\s+/);
 // CHECK_ROUTE: the number checker (a code route), linked from "how to check".
 // GROSSA_CHECK_ROUTE, NINO_CHECK_ROUTE: the La Grossa and El Niño checkers, linked from the El Niño paragraph.
 const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GORDO_ROUTE, CHECK_ROUTE, GROSSA_CHECK_ROUTE, NINO_CHECK_ROUTE];
-const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
+// The prize tax calculator (a code route, calculators family), linked from the tax section since 20 Nov 2026.
+const PUBLISHED = new Set([...ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)), ...LOCALES.map((locale) => calcPath("lottery-tax", locale))]);
 
 /** A made-up result (not real numbers), with every kind of Catalan line. */
 const FAKE: NadalResults = {
@@ -448,6 +450,36 @@ test("the FAQ asks in the searched words and answers in plain text", () => {
   }
 });
 
+test("20 Nov 2026: the time and per-décimo questions, the Gordo's tax in the tax answer, and the calculator in the tax section", () => {
+  const asks: Record<Locale, { time: string; perDecimo: string; tax: string }> = {
+    ca: { time: "A quina hora és el sorteig de la loteria de Nadal 2026?", perDecimo: "Quant toca per dècim a la loteria de Nadal?", tax: "Quants impostos paga la loteria de Nadal?" },
+    es: { time: "¿A qué hora es el sorteo de la Lotería de Navidad 2026?", perDecimo: "¿Cuánto toca por décimo en la Lotería de Navidad?", tax: "¿Cuánto paga a Hacienda la Lotería de Navidad?" },
+    en: { time: "What time is the Spanish Christmas Lottery draw in 2026?", perDecimo: "How much does each Christmas Lottery prize pay per décimo?", tax: "Is the Spanish Christmas Lottery taxed?" },
+  };
+  const items = (blocks: Block[]) => (blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+  for (const locale of LOCALES) {
+    const faqNow = items(LOTERIA_NADAL.editions[locale].blocks);
+    const answer = (q: string) => faqNow.find((i) => i.question === q)?.answer ?? "";
+    // No 2026 time yet: the answer says so and gives 2025's, with its year.
+    if (!DRAW_TIME_2026) assert.match(answer(asks[locale].time), /2025.*8:30.*8:00/, locale);
+    // An announced time takes over; after the draw, no promise of a future time.
+    const timed = items(buildNadalBody(locale, null, FAKE_TIME)).find((i) => i.question === asks[locale].time)!.answer;
+    assert.match(timed, /8:30/, locale);
+    assert.doesNotMatch(timed, /2025/, locale);
+    assert.doesNotMatch(items(buildNadalBody(locale, FAKE, null)).find((i) => i.question === asks[locale].time)!.answer, /\d{1,2}:\d{2}/, locale);
+    // Every per-décimo amount comes from the programme (a tenth of the billete).
+    const per = answer(asks[locale].perDecimo);
+    for (const key of ["first", "second", "third", "fourth", "fifth", "approxFirst", "approxSecond", "approxThird", "pedrea", "reintegro"] as const) {
+      assert.ok(per.includes(eur(perDecimo(key), locale)), `${locale}: ${key} missing from "${per}"`);
+    }
+    // "Cuánto se lleva Hacienda del Gordo": the tax answer leads with it.
+    assert.ok(answer(asks[locale].tax).includes(eur(levy(perDecimo("first")), locale)), `${locale}: the Gordo's levy`);
+    assert.ok(answer(asks[locale].tax).includes(eur(perDecimo("first") - levy(perDecimo("first")), locale)), `${locale}: the Gordo's net`);
+    // The prize tax calculator is linked from the body, once.
+    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 1, `${locale}: calculator link`);
+  }
+});
+
 test("every weekday printed next to a date matches that date", () => {
   const weekdays: Record<Locale, string[]> = {
     ca: ["diumenge", "dilluns", "dimarts", "dimecres", "dijous", "divendres", "dissabte"],
@@ -671,7 +703,8 @@ test("participaciones: the exemption is split by share, with a quarter-share Gor
     const plain = body(locale);
     assert.match(plain, figures[locale], locale);
     assert.match(plain, /titulars de les participacions|titulares de las participaciones|holders of the participaciones/, locale);
-    assert.match(plain, /13 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the tax re-read is dated`);
+    // TAX_CHECKED: first read 13 Nov 2026, re-read 20 Nov 2026 (BOE consolidated text of 18 Nov, same AEAT notice).
+    assert.match(plain, /20 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the tax re-read is dated`);
   }
 });
 

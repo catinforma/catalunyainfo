@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
 import { checkPath } from "@/lib/programmatic/lottery-check/paths";
 import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
@@ -79,6 +80,16 @@ import { SHOPS } from "./shops";
  * Catalunya's site answered 403 to the server that day. SELAE's whole site
  * (pages, PDFs and the buscadorSorteos API) also answered 403 (Akamai) to
  * the server on 13 Nov: see docs/GORDO_NAVIDAD_RUNBOOK.md before 22 Dec.
+ *
+ * 20 Nov 2026 (query wave, body only; goes out with `loteria-nadal` after the
+ * 1 Dec review): FAQ items in the searched words for the time ("a qué hora
+ * es el sorteo", 2025's time labelled while 2026's is unannounced) and for
+ * what each prize pays per décimo (from PROGRAMME); the tax answer now leads
+ * with the Gordo's 72,000 €; "how to check" names our checker; the claim H2
+ * says "cómo y dónde cobrar un décimo premiado"; the tax section links the
+ * prize tax calculator. No new fact: SELAE still answered 403 on 20 Nov, and
+ * the BOE (DA 33ª re-read 20 Nov, consolidated text of 18 Nov 2026) is
+ * unchanged.
  *
  * HOW TO UPDATE (the lead):
  *  - SELAE's 2026 Christmas dossier (the 2025 one is dated 16 Dec) states the
@@ -625,9 +636,51 @@ const QUARTER_NET = QUARTER_FIRST - QUARTER_LEVY;
  * AEAT notice of 17 Dec 2024 (shared prizes, "titulares de participaciones",
  * no other return, non-residents' treaty refund). SELAE's site answered 403
  * to the server that day, so the SELAE facts keep their 31 Oct reading.
+ * Re-read on 20 Nov 2026: the BOE's consolidated text (updated 18 Nov 2026;
+ * the DA 33ª block still dated 4 Jul 2018, "la cuantía exenta ... se
+ * prorrateará entre los cotitulares") and the same AEAT notice ("titulares de
+ * participaciones", "no tendrán que presentar ninguna otra autoliquidación").
  */
-export const TAX_CHECKED = "2026-11-13";
-const TAX_CHECKED_TEXT: Record<Locale, string> = { ca: "13 de novembre de 2026", es: "13 de noviembre de 2026", en: "13 November 2026" };
+export const TAX_CHECKED = "2026-11-20";
+const TAX_CHECKED_TEXT: Record<Locale, string> = { ca: "20 de novembre de 2026", es: "20 de noviembre de 2026", en: "20 November 2026" };
+
+/**
+ * "A quina hora és el sorteig?" (20 Nov 2026): its own FAQ item, because the
+ * December searches ask for the time apart from the date. With no 2026 time
+ * announced it gives 2025's, from SELAE's dossier and RTVE, always with the year.
+ */
+function timeAnswer(c: Ctx): string {
+  if (c.time) {
+    const by = c.time.source.publisher ?? c.time.source.name;
+    return {
+      ca: `${c.results ? "Va començar" : "Comença"} a les ${c.time.time}, segons ${by}, al Teatro Real de Madrid.`,
+      es: `${c.results ? "Empezó" : "Empieza"} a las ${c.time.time}, según ${by}, en el Teatro Real de Madrid.`,
+      en: `${c.results ? "It began" : "It starts"} at ${c.time.time}, according to ${by}, at the Teatro Real in Madrid.`,
+    }[c.locale];
+  }
+  if (c.results) {
+    return {
+      ca: `Es va fer el ${c.day} al Teatro Real de Madrid; els números premiats són al principi d'aquesta pàgina.`,
+      es: `Se celebró el ${c.day} en el Teatro Real de Madrid; los números premiados están al principio de esta página.`,
+      en: `It took place on ${c.day} at the Teatro Real in Madrid; the winning numbers are at the top of this page.`,
+    }[c.locale];
+  }
+  return {
+    ca: "SELAE encara no ha anunciat l'hora del 2026. El 2025, segons el dossier de premsa de SELAE, la mesa del sorteig es constituïa a les 8:30 i el sorteig durava unes quatre hores, i RTVE l'emetia en directe a La 1 des de les 8:00.",
+    es: "SELAE aún no ha anunciado la hora de 2026. En 2025, según el dosier de prensa de SELAE, la mesa del sorteo se constituía a las 8:30 y el sorteo duraba unas cuatro horas, y RTVE lo emitía en directo en La 1 desde las 8:00.",
+    en: "SELAE has not announced the 2026 start time yet. In 2025, according to SELAE's press dossier, the presiding table was constituted at 8:30 and the draw took about four hours, and RTVE broadcast it live on La 1 from 8:00.",
+  }[c.locale];
+}
+
+/** "Quant toca per dècim?" (20 Nov 2026): every prize of SELAE's 2026 programme for one 20 € décimo. */
+function perDecimoAnswer(locale: Locale): string {
+  const d = (key: PrizeKey) => D(key, locale);
+  return {
+    ca: `Per dècim de 20 €, segons el programa de SELAE del 2026: el Gordo, ${d("first")}; el segon, ${d("second")}; el tercer, ${d("third")}; cada quart, ${d("fourth")}; cada cinquè, ${d("fifth")}; cada número de la pedrea, ${d("pedrea")}; l'anterior i el posterior del Gordo, ${d("approxFirst")} (del segon, ${d("approxSecond")}, i del tercer, ${d("approxThird")}); la resta de la centena i les dues últimes xifres, ${d("hundreds")}, i el reintegrament, ${d("reintegro")}. Un bitllet sencer, de 10 dècims, cobra deu vegades més.`,
+    es: `Por décimo de 20 €, según el programa de SELAE de 2026: el Gordo, ${d("first")}; el segundo, ${d("second")}; el tercero, ${d("third")}; cada cuarto, ${d("fourth")}; cada quinto, ${d("fifth")}; cada número de la pedrea, ${d("pedrea")}; el anterior y el posterior al Gordo, ${d("approxFirst")} (al segundo, ${d("approxSecond")}, y al tercero, ${d("approxThird")}); el resto de la centena y las dos últimas cifras, ${d("hundreds")}, y el reintegro, ${d("reintegro")}. Un billete entero, de 10 décimos, cobra diez veces más.`,
+    en: `Per €20 décimo, under SELAE's 2026 programme: El Gordo ${d("first")}; second ${d("second")}; third ${d("third")}; each fourth prize ${d("fourth")}; each fifth ${d("fifth")}; each pedrea number ${d("pedrea")}; the numbers just before and after El Gordo ${d("approxFirst")} (the second's ${d("approxSecond")}, the third's ${d("approxThird")}); the rest of the hundred and the last two digits ${d("hundreds")}; and the money back (reintegro) ${d("reintegro")}. A full ticket of 10 décimos wins ten times as much.`,
+  }[locale];
+}
 
 const R25 = RESULTS_2025;
 const SOLD25 = R25.soldInCatalonia as { first: CatalanSale[]; second: CatalanSale[]; third: CatalanSale[]; fourth: CatalanSale[] };
@@ -759,7 +812,7 @@ const COPY: Record<Locale, Copy> = {
       `**A la llista oficial de premis:** és l'única que val per cobrar, i el 2025 SELAE la va penjar al seu web la mateixa tarda del sorteig. Hi surten la pedrea, les aproximacions (marcades amb una a), les centenes (c) i les terminacions (t).`,
       `**Si l'has comprat per internet,** SELAE t'avisa per correu electrònic i SMS, i els premis de menys de 2.000 € s'ingressen sols al moneder del teu compte (${link(U.notify, "SELAE")}).`,
     ],
-    claimHeading: "On es cobren els premis de la loteria de Nadal",
+    claimHeading: "Com i on es cobra un dècim premiat de la loteria de Nadal",
     claim: [
       "**Menys de 2.000 € per dècim:** a qualsevol punt de venda de SELAE. El 2025 es podien cobrar en efectiu o per Bizum.",
       "**2.000 € o més:** només a les oficines de BBVA i de CaixaBank. No cal ser-ne client, no es paga comissió i cal el document d'identitat original i vigent; SELAE recomana demanar cita prèvia.",
@@ -783,6 +836,7 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
+      `**Per a un cas concret** (diversos dècims, una participació, un dècim compartit o els premis de La Grossa i del Nen), la ${link(calcPath("lottery-tax", "ca"), "calculadora de premis de loteria")} aplica aquesta mateixa regla i et diu quant et queda.`,
       `El gravamen es calcula per dècim. Si un dècim és de diverses persones, els ${eur(LEVY_EXEMPT, "ca")} exempts es reparteixen segons la part de cadascuna. Les persones que no resideixen a Espanya tenen el mateix gravamen i la mateixa exempció, segons l'${link(U.aeatNonResidents, "Agència Tributària")}, i si un conveni per evitar la doble imposició els ho permet poden demanar la devolució que els correspongui.`,
       `**Exemple de dècim compartit:** si dues persones tenen a mitges un dècim del segon premi (${D("second", "ca")}), cadascuna en cobra ${eur(HALF_SECOND, "ca")}, en té ${eur(HALF_EXEMPT, "ca")} exempts i paga ${eur(HALF_LEVY, "ca")} de gravamen. Qui cobri el premi per a tots ha de poder demostrar a Hisenda com s'ha repartit, amb la identificació de cada guanyador i la seva part, segons l'${link(U.aeatPrizes, "Agència Tributària")}.`,
       `**Participacions** (d'una colla d'amics o de família, d'una penya, d'una confraria, d'una entitat...): per a Hisenda el premi també és compartit. Els ${eur(LEVY_EXEMPT, "ca")} exempts del dècim es reparteixen entre tots els titulars segons el seu percentatge de participació, i qui cobri el dècim com a beneficiari únic o gestor del cobrament ha de poder acreditar davant l'Agència Tributària que l'ha repartit entre els titulars de les participacions (${link(U.aeatPrizes, "nota de l'Agència Tributària")}). Per exemple, qui tingui una quarta part d'un dècim del Gordo en cobra ${eur(QUARTER_FIRST, "ca")}, en té ${eur(QUARTER_EXEMPT, "ca")} exempts i paga ${eur(QUARTER_LEVY, "ca")} de gravamen: n'hi queden ${eur(QUARTER_NET, "ca")}.`,
@@ -802,6 +856,7 @@ const COPY: Record<Locale, Copy> = {
           ? `Es va fer el ${c.day} al Teatro Real de Madrid${c.time ? `, a les ${c.time.time}` : ""}.`
           : `El ${c.day}, al Teatro Real de Madrid. ${c.time ? `Comença a les ${c.time.time}.` : "L'hora del 2026 encara no s'ha anunciat; el 2025, RTVE l'emetia a La 1 des de les 8:00."}`,
       },
+      { question: "A quina hora és el sorteig de la loteria de Nadal 2026?", answer: timeAnswer(c) },
       {
         question: "On ha tocat la loteria de Nadal a Catalunya?",
         answer: c.results
@@ -819,9 +874,10 @@ const COPY: Record<Locale, Copy> = {
         answer: `${D("first", "ca")} per dècim de 20 €, 4 milions per bitllet. Hisenda en reté ${eur(levy(perDecimo("first")), "ca")}: per dècim en cobres ${eur(NET_FIRST, "ca")}.`,
       },
       { question: "Quant val un dècim de la loteria de Nadal?", answer: "20 €. El bitllet sencer, de 10 dècims, en val 200." },
+      { question: "Quant toca per dècim a la loteria de Nadal?", answer: perDecimoAnswer("ca") },
       {
         question: "Quants impostos paga la loteria de Nadal?",
-        answer: `Res fins a 40.000 € per dècim; del que passa, el 20%, que es reté en cobrar. El segon premi (${D("second", "ca")}) en paga ${eur(levy(perDecimo("second")), "ca")} i el tercer (${D("third", "ca")}), ${eur(levy(perDecimo("third")), "ca")}.`,
+        answer: `Res fins a 40.000 € per dècim; del que passa, el 20%, que es reté en cobrar. Del Gordo (${D("first", "ca")}), Hisenda se'n queda ${eur(levy(perDecimo("first")), "ca")} i en cobres ${eur(NET_FIRST, "ca")}; el segon premi (${D("second", "ca")}) en paga ${eur(levy(perDecimo("second")), "ca")} i el tercer (${D("third", "ca")}), ${eur(levy(perDecimo("third")), "ca")}. Del quart premi cap avall no es paga res.`,
       },
       {
         question: "On es cobren els premis de la loteria de Nadal?",
@@ -833,7 +889,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "Com sé si m'ha tocat la loteria de Nadal?",
-        answer: "Amb el comprovador de la pàgina de la Loteria Nacional del web de SELAE o a la llista oficial de premis, que és l'única que val per cobrar.",
+        answer: "Amb el comprovador de la pàgina de la Loteria Nacional del web de SELAE, amb el nostre comprovador de la Loteria de Nadal (tots els premis del número, per dècim i després d'Hisenda) o a la llista oficial de premis, que és l'única que val per cobrar.",
       },
       {
         question: "La Grossa de Nadal i la loteria de Nadal són el mateix?",
@@ -972,7 +1028,7 @@ const COPY: Record<Locale, Copy> = {
       "**En la lista oficial de premios:** es la única que vale para cobrar, y en 2025 SELAE la colgó en su web la misma tarde del sorteo. Ahí están la pedrea, las aproximaciones (marcadas con una a), las centenas (c) y las terminaciones (t).",
       `**Si lo compraste por internet,** SELAE te avisa por correo electrónico y SMS, y los premios de menos de 2.000 € se ingresan solos en el monedero de tu cuenta (${link(U.notify, "SELAE")}).`,
     ],
-    claimHeading: "Dónde se cobran los premios de la Lotería de Navidad",
+    claimHeading: "Cómo y dónde cobrar un décimo premiado de la Lotería de Navidad",
     claim: [
       "**Menos de 2.000 € por décimo:** en cualquier punto de venta de SELAE. En 2025 se podían cobrar en efectivo o por Bizum.",
       "**2.000 € o más:** solo en las oficinas de BBVA y de CaixaBank. No hace falta ser cliente, no se paga comisión y hay que llevar el documento de identidad original y en vigor; SELAE recomienda pedir cita previa.",
@@ -996,6 +1052,7 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
+      `**Para un caso concreto** (varios décimos, una participación, un décimo compartido o los premios de La Grossa y de El Niño), la ${link(calcPath("lottery-tax", "es"), "calculadora de premios de lotería")} aplica esta misma regla y te dice cuánto te queda.`,
       `El gravamen se calcula por décimo. Si un décimo es de varias personas, los ${eur(LEVY_EXEMPT, "es")} exentos se reparten según la parte de cada una. Las personas que no residen en España tienen el mismo gravamen y la misma exención, según la ${link(U.aeatNonResidents, "Agencia Tributaria")}, y si un convenio para evitar la doble imposición se lo permite pueden pedir la devolución que les corresponda.`,
       `**Ejemplo de décimo compartido:** si dos personas llevan a medias un décimo del segundo premio (${D("second", "es")}), cada una cobra ${eur(HALF_SECOND, "es")}, tiene ${eur(HALF_EXEMPT, "es")} exentos y paga ${eur(HALF_LEVY, "es")} de gravamen. Quien cobre el premio para todos debe poder acreditar ante Hacienda cómo se ha repartido, con la identificación de cada ganador y su parte, según la ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
       `**Participaciones** (de un grupo de amigos o parientes, una peña, una cofradía, una entidad...): para Hacienda el premio también es compartido. Los ${eur(LEVY_EXEMPT, "es")} exentos del décimo se reparten entre todos los titulares en proporción a su porcentaje de participación, y quien cobre el décimo como beneficiario único o gestor de cobro debe poder acreditar ante la Agencia Tributaria que lo ha repartido entre los titulares de las participaciones (${link(U.aeatPrizes, "nota de la Agencia Tributaria")}). Por ejemplo, quien tenga una cuarta parte de un décimo del Gordo cobra ${eur(QUARTER_FIRST, "es")}, tiene ${eur(QUARTER_EXEMPT, "es")} exentos y paga ${eur(QUARTER_LEVY, "es")} de gravamen: le quedan ${eur(QUARTER_NET, "es")}.`,
@@ -1015,6 +1072,7 @@ const COPY: Record<Locale, Copy> = {
           ? `Se celebró el ${c.day} en el Teatro Real de Madrid${c.time ? `, a las ${c.time.time}` : ""}.`
           : `El ${c.day}, en el Teatro Real de Madrid. ${c.time ? `Empieza a las ${c.time.time}.` : "La hora de 2026 aún no se ha anunciado; en 2025, RTVE lo emitía en La 1 desde las 8:00."}`,
       },
+      { question: "¿A qué hora es el sorteo de la Lotería de Navidad 2026?", answer: timeAnswer(c) },
       {
         question: "¿Dónde ha tocado el Gordo en Cataluña?",
         answer: c.results
@@ -1032,9 +1090,10 @@ const COPY: Record<Locale, Copy> = {
         answer: `${D("first", "es")} por décimo de 20 €, 4 millones por billete. Hacienda retiene ${eur(levy(perDecimo("first")), "es")}: por décimo cobras ${eur(NET_FIRST, "es")}.`,
       },
       { question: "¿Cuánto cuesta un décimo de Lotería de Navidad?", answer: "20 €. El billete entero, de 10 décimos, cuesta 200." },
+      { question: "¿Cuánto toca por décimo en la Lotería de Navidad?", answer: perDecimoAnswer("es") },
       {
         question: "¿Cuánto paga a Hacienda la Lotería de Navidad?",
-        answer: `Nada hasta 40.000 € por décimo; de lo que pasa, el 20%, que se retiene al cobrar. El segundo premio (${D("second", "es")}) paga ${eur(levy(perDecimo("second")), "es")} y el tercero (${D("third", "es")}), ${eur(levy(perDecimo("third")), "es")}.`,
+        answer: `Nada hasta 40.000 € por décimo; de lo que pasa, el 20%, que se retiene al cobrar. Del Gordo (${D("first", "es")}), Hacienda se queda ${eur(levy(perDecimo("first")), "es")} y cobras ${eur(NET_FIRST, "es")}; el segundo premio (${D("second", "es")}) paga ${eur(levy(perDecimo("second")), "es")} y el tercero (${D("third", "es")}), ${eur(levy(perDecimo("third")), "es")}. Del cuarto premio para abajo no se paga nada.`,
       },
       {
         question: "¿Dónde se cobran los premios de la Lotería de Navidad?",
@@ -1046,7 +1105,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "¿Cómo sé si me ha tocado la Lotería de Navidad?",
-        answer: "Con el comprobador de la página de la Lotería Nacional de la web de SELAE o en la lista oficial de premios, que es la única que vale para cobrar.",
+        answer: "Con el comprobador de la página de la Lotería Nacional de la web de SELAE, con nuestro comprobador de la Lotería de Navidad (todos los premios del número, por décimo y después de Hacienda) o en la lista oficial de premios, que es la única que vale para cobrar.",
       },
       {
         question: "¿La Grossa de Navidad es lo mismo que la Lotería de Navidad?",
@@ -1185,7 +1244,7 @@ const COPY: Record<Locale, Copy> = {
       "**On the official prize list:** the only one that counts for payment; in 2025 SELAE posted it on its website on the afternoon of the draw. It includes the pedrea, the numbers next to the big prizes (marked a), the hundreds (c) and the endings (t).",
       `**If you bought online,** SELAE tells you by email and SMS, and prizes under €2,000 are paid into your account's wallet automatically (${link(U.notify, "SELAE")}).`,
     ],
-    claimHeading: "Where to collect a Christmas Lottery prize",
+    claimHeading: "How and where to collect a winning Christmas Lottery décimo",
     claim: [
       "**Under €2,000 per décimo:** at any SELAE outlet. In 2025 they could be paid in cash or by Bizum.",
       "**€2,000 or more:** only at BBVA and CaixaBank branches. You do not need to be a customer, there is no fee, and you must bring a valid original ID; SELAE recommends booking an appointment.",
@@ -1209,6 +1268,7 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
+      `**For your own case** (several décimos, a share, a shared décimo, or La Grossa and El Niño prizes), the ${link(calcPath("lottery-tax", "en"), "Spanish lottery prize tax calculator")} applies the same rule and shows what you keep.`,
       `The levy is worked out per décimo. If a décimo belongs to several people, the ${eur(LEVY_EXEMPT, "en")} exemption is split according to each one's share. People who are not resident in Spain pay the same levy with the same exemption, according to the ${link(U.aeatNonResidents, "Agencia Tributaria")} (Spain's tax agency), and where a double taxation treaty allows it they can ask for a refund.`,
       `**Example of a shared décimo:** if two people share a second-prize décimo (${D("second", "en")}) half and half, each collects ${eur(HALF_SECOND, "en")}, has ${eur(HALF_EXEMPT, "en")} tax-free and pays ${eur(HALF_LEVY, "en")} in levy. Whoever collects the prize for everyone must be able to show the tax office how it was split, identifying each winner and their share, according to the ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
       `**Participaciones** (shares of a décimo held by a group of friends or relatives, a club, a brotherhood or an association): for the tax office the prize is shared too. The décimo's ${eur(LEVY_EXEMPT, "en")} exemption is split between all the holders in proportion to their share, and whoever collects the décimo as sole winner or collecting agent must be able to show the Agencia Tributaria that it was shared out among the holders of the participaciones (${link(U.aeatPrizes, "Agencia Tributaria notice")}). For example, a quarter share of a Gordo décimo is ${eur(QUARTER_FIRST, "en")}, with ${eur(QUARTER_EXEMPT, "en")} tax-free and ${eur(QUARTER_LEVY, "en")} in levy: ${eur(QUARTER_NET, "en")} left.`,
@@ -1228,6 +1288,7 @@ const COPY: Record<Locale, Copy> = {
           ? `It took place on ${c.day} at the Teatro Real in Madrid${c.time ? `, starting at ${c.time.time}` : ""}.`
           : `On ${c.day}, at the Teatro Real in Madrid. ${c.time ? `It starts at ${c.time.time}.` : "The 2026 start time has not been announced yet; in 2025 RTVE broadcast it on La 1 from 8:00."}`,
       },
+      { question: "What time is the Spanish Christmas Lottery draw in 2026?", answer: timeAnswer(c) },
       {
         question: "Where did El Gordo fall in Catalonia?",
         answer: c.results
@@ -1245,9 +1306,10 @@ const COPY: Record<Locale, Copy> = {
         answer: `${D("first", "en")} per €20 décimo, €4 million per full ticket. The tax office withholds ${eur(levy(perDecimo("first")), "en")}, so a décimo pays ${eur(NET_FIRST, "en")}.`,
       },
       { question: "How much is a Spanish Christmas Lottery ticket?", answer: "€20 for a décimo (one tenth of a ticket). A full ticket (billete) of ten décimos costs €200." },
+      { question: "How much does each Christmas Lottery prize pay per décimo?", answer: perDecimoAnswer("en") },
       {
         question: "Is the Spanish Christmas Lottery taxed?",
-        answer: `Nothing up to €40,000 per décimo; 20% of anything above, withheld when you collect. The second prize (${D("second", "en")}) pays ${eur(levy(perDecimo("second")), "en")} and the third (${D("third", "en")}) ${eur(levy(perDecimo("third")), "en")}.`,
+        answer: `Nothing up to €40,000 per décimo; 20% of anything above, withheld when you collect. From El Gordo (${D("first", "en")}) the tax office keeps ${eur(levy(perDecimo("first")), "en")} and you receive ${eur(NET_FIRST, "en")}; the second prize (${D("second", "en")}) pays ${eur(levy(perDecimo("second")), "en")} and the third (${D("third", "en")}) ${eur(levy(perDecimo("third")), "en")}. The fourth prize and below pay nothing.`,
       },
       {
         question: "Where do I collect a Christmas Lottery prize?",
@@ -1259,7 +1321,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "How do I check my décimo?",
-        answer: "With the checker on the Lotería Nacional page of SELAE's website, or on the official prize list, the only one that counts for payment.",
+        answer: "With the checker on the Lotería Nacional page of SELAE's website, with our Spanish Christmas Lottery checker (every prize your number wins, per décimo and after tax), or on the official prize list, the only one that counts for payment.",
       },
       {
         question: "Do non-residents pay the same tax?",

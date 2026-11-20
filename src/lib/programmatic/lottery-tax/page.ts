@@ -111,6 +111,8 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
   const billete = calculateOk(presetInput("gordo", 20, 10)).total;
   const two = calculateOk(presetInput("gordo", 20, 2)).total;
   const gr = h.grossa.total;
+  // El Niño 2027's first prize (SELAE's Lotería Nacional page, read 31 Oct 2026): the January query, 20 Nov 2026.
+  const nino = calculateOk(presetInput("nino-primero")).total;
   const fourth = presetInput("cuarto").prize;
   const fifth = presetInput("quinto").prize;
   const ex = M(EXEMPT_PER_TICKET);
@@ -123,6 +125,7 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "¿Hay que declarar el premio de la lotería en la Renta?", a: "No. El gravamen se retiene al cobrar el premio y el premio no se integra en la base del IRPF; si te lo han retenido, no tienes que presentar ninguna otra declaración por él." },
       { q: "Si tengo varios décimos premiados, ¿se suman?", a: `No: cada décimo tiene sus propios ${ex} exentos. Dos décimos del Gordo cobran ${M(two.net)} en total y Hacienda retiene ${M(two.withholding)}.` },
       { q: "¿La Grossa de Cap d'Any paga a Hacienda?", a: `Sí, igual: es una lotería de la Generalitat y la ley incluye las de las comunidades autónomas. El primer premio, ${M(gr.gross)} por billete de 10 €, paga ${M(gr.withholding)} y deja ${M(gr.net)}.` },
+      { q: "¿Cuánto se queda Hacienda del Niño?", a: `Lo mismo que en Navidad: el 20 % de lo que pasa de ${ex} por décimo. El primer premio del Niño 2027, ${M(nino.gross)} por décimo de 20 €, paga ${M(nino.withholding)} y deja ${M(nino.net)}.` },
     ],
     ca: [
       { q: "Quant se'n queda Hisenda del Gordo?", a: `${M(g.withholding)} per dècim: el 20 % del que passa de ${ex} (${M(g.gross)} − ${ex} = ${M(g.base)}). Del dècim del Gordo en cobres ${M(g.net)}.` },
@@ -132,6 +135,7 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "S'ha de declarar el premi de la loteria a la Renda?", a: "No. El gravamen es reté en cobrar el premi i el premi no s'integra a la base de l'IRPF; si te l'han retingut, no has de presentar cap altra declaració per aquest premi." },
       { q: "Si tinc diversos dècims premiats, se sumen?", a: `No: cada dècim té els seus propis ${ex} exempts. Dos dècims del Gordo cobren ${M(two.net)} en total i Hisenda en reté ${M(two.withholding)}.` },
       { q: "La Grossa de Cap d'Any paga a Hisenda?", a: `Sí, igual: és una loteria de la Generalitat i la llei hi inclou les de les comunitats autònomes. El primer premi, ${M(gr.gross)} per bitllet de 10 €, paga ${M(gr.withholding)} i en deixa ${M(gr.net)}.` },
+      { q: "Quant se'n queda Hisenda del Nen (El Niño)?", a: `El mateix que a Nadal: el 20 % del que passa de ${ex} per dècim. El primer premi del Nen 2027, ${M(nino.gross)} per dècim de 20 €, paga ${M(nino.withholding)} i en deixa ${M(nino.net)}.` },
     ],
     en: [
       { q: "How much tax is taken from El Gordo?", a: `${M(g.withholding)} per décimo: 20% of the part above ${ex} (${M(g.gross)} − ${ex} = ${M(g.base)}). You keep ${M(g.net)} from an El Gordo décimo.` },
@@ -141,6 +145,7 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "Do I have to declare a lottery prize on my Spanish tax return?", a: "No. The levy is withheld when the prize is paid and the prize is not part of the income tax base; once it has been withheld, there is nothing else to file for it." },
       { q: "If I have several winning décimos, are they added up?", a: `No: each décimo has its own ${ex} tax-free. Two El Gordo décimos pay ${M(two.net)} in all, with ${M(two.withholding)} withheld.` },
       { q: "Is La Grossa de Cap d'Any taxed the same way?", a: `Yes: it is the Catalan government's lottery, and the law covers the regions' lotteries. Its first prize, ${M(gr.gross)} per €10 ticket, pays ${M(gr.withholding)} and leaves ${M(gr.net)}.` },
+      { q: "How much tax is taken from El Niño's first prize?", a: `The same as at Christmas: 20% of the part above ${ex} per décimo. El Niño 2027's first prize, ${M(nino.gross)} per €20 décimo, pays ${M(nino.withholding)} and leaves ${M(nino.net)}.` },
     ],
   }[locale];
 }

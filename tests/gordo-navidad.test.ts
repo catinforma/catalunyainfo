@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodyToPlainText, bodySchema, type Block } from "../src/lib/content/blocks.ts";
+import { DRAW_TIME_2026 } from "../src/lib/content/batch02/loteria-nadal.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { calcEditions } from "../src/lib/programmatic/calculators/paths.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
@@ -15,6 +16,7 @@ import {
   caA,
   gordoSources,
   hubBlocks,
+  hubFaq,
   hubMeta,
   municipalityBlocks,
   municipalityMeta,
@@ -285,6 +287,26 @@ test("province and municipality pages list SELAE's addresses, numbers and prize 
     for (const g of provinceGroups(S)) {
       checkLinks(provinceBlocks(locale, S, g), locale, gordoSources(S).map((s) => s.url));
       for (const m of g.municipalities) checkLinks(municipalityBlocks(locale, S, m), locale, gordoSources(S).map((s) => s.url));
+    }
+  }
+});
+
+test("20 Nov 2026: the hub FAQ asks the time and the claim deadline; after the draw, no 'not announced' line", () => {
+  const timeQ: Record<Locale, RegExp> = { ca: /^A quina hora/, es: /^¿A qué hora/, en: /^What time/ };
+  const deadlineQ: Record<Locale, RegExp> = { ca: /^Fins quan es pot cobrar/, es: /^¿Hasta cuándo se puede cobrar/, en: /^How long do I have to claim/ };
+  for (const locale of LOCALES) {
+    const before = hubFaq(locale, null);
+    assert.equal(before.length, 6, locale);
+    const time = before.find((f) => timeQ[locale].test(f.question))!.answer;
+    // Pre-draw with no 2026 time: 2025's table time, with its year.
+    if (!DRAW_TIME_2026) assert.match(time, /2025.*8:30/, locale);
+    const deadline = before.find((f) => deadlineQ[locale].test(f.question))!.answer;
+    assert.match(deadline, /2025/, locale);
+    assert.doesNotMatch(deadline, /2027/, `${locale}: no computed 2026 deadline`);
+    // With the (test) snapshot and no announced time: the draw happened, nothing about an announcement.
+    if (!DRAW_TIME_2026) {
+      const after = hubFaq(locale, S).find((f) => timeQ[locale].test(f.question))!.answer;
+      assert.doesNotMatch(after, /anunciat|anunciado|announced|\d{1,2}:\d{2}/, locale);
     }
   }
 });

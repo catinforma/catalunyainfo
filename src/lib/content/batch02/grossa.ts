@@ -1,6 +1,8 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
+import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 
 import { dateYear, dayDate } from "./festive";
 import {
@@ -76,6 +78,18 @@ import { SHOPS } from "./shops";
  *    numbers and unofficial sources), deploy, publish `?only=grossa`.
  *  - From 1 Jan 2027 the test "the results are in after the draw" fails while
  *    RESULTS_2026 is still null.
+ *
+ * 20 Nov 2026 (query wave, body only; goes out with `grossa` after the 8 Dec
+ * review of the 17 Nov title): FAQ items in the searched words for the claim
+ * deadline ("fins quan es pot cobrar", 90 days, 2025's last day) and for
+ * participacions ("participacions de la grossa", the game page's 18 Dec rule
+ * and the shared exemption already in the tax section); the tax section links
+ * the prize tax calculator; "what is La Grossa" points on to El Niño (6 Jan
+ * 2027) and its checker. No new fact. The press notes list
+ * (loteriesdecatalunya.info, 200 from the server) still had no 2026 Cap d'Any
+ * note on 20 Nov (newest "La Grossa de La Diada 2026: Números premiats");
+ * DRAW_TIME_CHECKED stays 17 Nov because it prints in the lead, which is in
+ * the 17 Nov window: move it when `grossa` is published.
  *
  * No new photograph: the hero is the shops guide's second picture (also the
  * December bridge's hero), with its exact alt text and caption, because media
@@ -646,6 +660,7 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `El gravamen es calcula per bitllet. Si un bitllet és de diverses persones, els 40.000 € exempts es reparteixen segons la part de cadascuna. Com que es reté en cobrar el premi, no cal fer cap declaració a part, i aquests premis no s'afegeixen a la declaració de la renda. Les persones que no resideixen a Espanya tenen el mateix gravamen i la mateixa exempció, segons l'${link(U.aeatNonResidents, "Agència Tributària")}.`,
+      `Per a un cas concret (un bitllet compartit, una participació o diversos bitllets), la ${link(calcPath("lottery-tax", "ca"), "calculadora de premis de loteria")} té els premis de La Grossa de Cap d'Any i hi aplica aquesta mateixa regla.`,
     ],
     nightHeading: "La Grossa i la nit de Cap d'Any: què passa el 31 i l'1 de gener",
     night: (c) => [
@@ -657,7 +672,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "És el sorteig de final d'any de Loteries de Catalunya, la societat pública que gestiona la loteria de la Generalitat (al DOGC, els seus anuncis surten dins del Departament d'Economia i Finances). El 2024 se'n va fer la dotzena edició i el 2025, la tretzena, que va repartir 14.087.610 € en premis i va premiar 273.242 bitllets.",
       "Segons Loteries de Catalunya, els ingressos de la loteria són de la Generalitat i es destinen a programes socials: ha transferit més de 307 milions d'euros al Departament de Drets Socials i Inclusió per a la infància vulnerable, la gent gran i les persones amb discapacitat.",
-      `No s'ha de confondre amb la loteria de Nadal de l'Estat, que se sorteja el 22 de desembre a Madrid: els premis i on toquen a Catalunya són a ${b2link("loteriaNadal", "ca", "la guia de la loteria de Nadal")}.`,
+      `No s'ha de confondre amb la loteria de Nadal de l'Estat, que se sorteja el 22 de desembre a Madrid: els premis i on toquen a Catalunya són a ${b2link("loteriaNadal", "ca", "la guia de la loteria de Nadal")}. I el dimecres 6 de gener de 2027 hi ha el sorteig del Nen (El Niño), també de l'Estat: ${link(ninoCheckPath("ca"), "comprovador de la Loteria del Nen")}.`,
     ],
     responsibleTitle: "Joc responsable",
     responsible: "Com recomana Loteries de Catalunya: juga només si ets major d'edat, fixa't un pressupost abans i practica altres activitats d'oci. Loteries de Catalunya té un servei d'atenció a la ciutadania al 93 707 60 01.",
@@ -684,12 +699,20 @@ const COPY: Record<Locale, Copy> = {
         answer: "Als punts de venda de Loteries de Catalunya (estancs, llibreries, quioscos, bars...), a la seva xarxa complementària, sobretot supermercats, i al web i l'app de Loteries de Catalunya, fins a les 11:00 del 31 de desembre.",
       },
       {
+        question: "Com funcionen les participacions de La Grossa de Cap d'Any?",
+        answer: "Les entitats les fan a través d'un punt de venda, que els dona els talonaris sense cost; segons el web del joc, abans del 18 de desembre han de pagar la loteria venuda i tornar les participacions que no hagin venut. Si el bitllet premiat és de diverses persones, els 40.000 € exempts d'Hisenda es reparteixen segons la part de cadascuna.",
+      },
+      {
         question: "Com sé si m'ha tocat La Grossa?",
         answer: "Amb el comprovador de la pàgina de resultats del web de Loteries de Catalunya, o a qualsevol punt de venda amb terminal.",
       },
       {
         question: "On es cobren els premis de La Grossa de Cap d'Any?",
         answer: "Fins a 120 €, a qualsevol punt de venda amb terminal; a partir de 50 €, a CaixaBank; de qualsevol import, a l'oficina de Loteries de Catalunya del carrer d'Enric Granados, 33, de Barcelona. El termini és de 90 dies.",
+      },
+      {
+        question: "Fins quan es pot cobrar La Grossa de Cap d'Any?",
+        answer: "90 dies naturals comptats des del dia del sorteig, segons Loteries de Catalunya. Per al sorteig del 2025, l'últim dia va ser el 30 de març de 2026.",
       },
       {
         question: "Quants impostos paga el primer premi de La Grossa?",
@@ -836,6 +859,7 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `El gravamen se calcula por billete. Si un billete es de varias personas, los 40.000 € exentos se reparten según la parte de cada una. Como se retiene al cobrar el premio, no hay que hacer ninguna declaración aparte, y estos premios no se suman a la declaración de la renta. Los no residentes en España tienen el mismo gravamen y la misma exención, según la ${link(U.aeatNonResidents, "Agencia Tributaria")}.`,
+      `Para un caso concreto (un billete compartido, una participación o varios billetes), la ${link(calcPath("lottery-tax", "es"), "calculadora de premios de lotería")} tiene los premios de La Grossa de Cap d'Any y les aplica esta misma regla.`,
     ],
     nightHeading: "La Grossa y la Nochevieja: qué pasa el 31 y el 1 de enero",
     night: (c) => [
@@ -847,7 +871,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "Es el sorteo de fin de año de Loteries de Catalunya, la sociedad pública que gestiona la lotería de la Generalitat (en el DOGC, sus anuncios salen dentro del Departament d'Economia i Finances). En 2024 se celebró la duodécima edición y en 2025, la decimotercera, que repartió 14.087.610 € en premios y premió 273.242 billetes.",
       "Según Loteries de Catalunya, los ingresos de la lotería son de la Generalitat y se destinan a programas sociales: ha transferido más de 307 millones de euros al Departament de Drets Socials i Inclusió para la infancia vulnerable, las personas mayores y las personas con discapacidad.",
-      `No hay que confundirla con la Lotería de Navidad del Estado, que se sortea el 22 de diciembre en Madrid: los premios y dónde tocan en Cataluña están en ${b2link("loteriaNadal", "es", "la guía de la Lotería de Navidad")}.`,
+      `No hay que confundirla con la Lotería de Navidad del Estado, que se sortea el 22 de diciembre en Madrid: los premios y dónde tocan en Cataluña están en ${b2link("loteriaNadal", "es", "la guía de la Lotería de Navidad")}. Y el miércoles 6 de enero de 2027 llega el sorteo de El Niño, también del Estado: ${link(ninoCheckPath("es"), "comprobador de la Lotería del Niño")}.`,
     ],
     responsibleTitle: "Juego responsable",
     responsible: "Como recomienda Loteries de Catalunya: juega solo si eres mayor de edad, fíjate un presupuesto antes y practica otras actividades de ocio. Loteries de Catalunya tiene un servicio de atención a la ciudadanía en el 93 707 60 01.",
@@ -874,12 +898,20 @@ const COPY: Record<Locale, Copy> = {
         answer: "En los puntos de venta de Loteries de Catalunya (estancos, librerías, quioscos, bares...), en su red complementaria, sobre todo supermercados, y en la web y la app de Loteries de Catalunya, hasta las 11:00 del 31 de diciembre.",
       },
       {
+        question: "¿Cómo funcionan las participaciones de La Grossa de Cap d'Any?",
+        answer: "Las entidades las hacen a través de un punto de venta, que les entrega los talonarios sin coste; según la web del juego, antes del 18 de diciembre deben pagar la lotería vendida y devolver las participaciones que no hayan vendido. Si el billete premiado es de varias personas, los 40.000 € exentos de Hacienda se reparten según la parte de cada una.",
+      },
+      {
         question: "¿Cómo sé si me ha tocado La Grossa?",
         answer: "Con el comprobador de la página de resultados de la web de Loteries de Catalunya, o en cualquier punto de venta con terminal.",
       },
       {
         question: "¿Dónde se cobran los premios de La Grossa de Cap d'Any?",
         answer: "Hasta 120 €, en cualquier punto de venta con terminal; a partir de 50 €, en CaixaBank; de cualquier importe, en la oficina de Loteries de Catalunya de la calle Enric Granados, 33, de Barcelona. El plazo es de 90 días.",
+      },
+      {
+        question: "¿Hasta cuándo se puede cobrar La Grossa de Cap d'Any?",
+        answer: "90 días naturales contados desde el día del sorteo, según Loteries de Catalunya. Para el sorteo de 2025, el último día fue el 30 de marzo de 2026.",
       },
       {
         question: "¿Cuánto se lleva Hacienda del primer premio de La Grossa?",
@@ -1026,6 +1058,7 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `The levy is worked out per ticket. If several people own a ticket, the €40,000 exemption is split according to each person's share. Because it is withheld when the prize is paid, no separate return is needed, and these prizes are not added to the Spanish income tax return. People who are not resident in Spain pay the same levy with the same exemption, and may be able to reclaim it under a tax treaty, according to the ${link(U.aeatNonResidents, "Spanish Tax Agency")}.`,
+      `For your own case (a shared ticket, a share or several tickets), the ${link(calcPath("lottery-tax", "en"), "Spanish lottery prize tax calculator")} has the La Grossa de Cap d'Any prizes and applies the same rule.`,
     ],
     nightHeading: "La Grossa and New Year's Eve: what happens on the 31st and 1 January",
     night: (c) => [
@@ -1037,7 +1070,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "It is the year-end draw of Loteries de Catalunya, the public company that runs the Catalan government's lottery (the DOGC lists its notices under the Department of the Economy and Finance). The 2024 draw was the twelfth and the 2025 draw the thirteenth, which paid out €14,087,610 in prizes on 273,242 winning tickets.",
       "According to Loteries de Catalunya, lottery income belongs to the Generalitat and funds social programmes: it has transferred more than €307 million to the Department of Social Rights and Inclusion for vulnerable children, older people and people with disabilities.",
-      `It is not the Spanish state's Christmas Lottery (El Gordo), drawn in Madrid on 22 December: its prizes and where they fall in Catalonia are in ${b2link("loteriaNadal", "en", "our Spanish Christmas Lottery guide")}.`,
+      `It is not the Spanish state's Christmas Lottery (El Gordo), drawn in Madrid on 22 December: its prizes and where they fall in Catalonia are in ${b2link("loteriaNadal", "en", "our Spanish Christmas Lottery guide")}. And on Wednesday 6 January 2027 comes El Niño, another Spanish state draw: ${link(ninoCheckPath("en"), "El Niño lottery checker")}.`,
     ],
     responsibleTitle: "Play responsibly",
     responsible: "As Loteries de Catalunya advises: only play if you are over 18, set yourself a budget beforehand and make time for other pastimes. Loteries de Catalunya's public helpline is 93 707 60 01 (Catalan and Spanish).",
@@ -1064,12 +1097,20 @@ const COPY: Record<Locale, Copy> = {
         answer: "At Loteries de Catalunya outlets (tobacconists, bookshops, kiosks, bars...), in its complementary network, mostly supermarkets, and on the Loteries de Catalunya website and app, until 11:00 on 31 December.",
       },
       {
+        question: "How do La Grossa de Cap d'Any shares (participacions) work?",
+        answer: "Clubs and associations sell them through an outlet, which supplies the books free of charge; according to the game page, they must pay for what they sold and return unsold shares before 18 December. If several people own a winning ticket, the €40,000 tax exemption is split according to each person's share.",
+      },
+      {
         question: "How do I check my La Grossa ticket?",
         answer: "With the number checker on the results page of the Loteries de Catalunya website, or at any outlet with a terminal.",
       },
       {
         question: "Where do I collect a La Grossa prize?",
         answer: "Up to €120 at any outlet with a terminal; from €50 at CaixaBank; any amount at the Loteries de Catalunya office, Carrer d'Enric Granados 33, Barcelona. You have 90 days.",
+      },
+      {
+        question: "How long do I have to collect a La Grossa prize?",
+        answer: "90 calendar days from the day of the draw, according to Loteries de Catalunya. For the 2025 draw, the last day was 30 March 2026.",
       },
       {
         question: "Is the La Grossa first prize taxed?",
