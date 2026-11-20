@@ -10183,3 +10183,7 @@ prefixes `/ca/guies/com-votar-eleccions-catalunya`, `/es/guias/como-votar-elecci
 `/en/guides/spain-election-night-results`, `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — How-to-vote leads: postal hand-in 25 → 26 Nov, 14:00 (factual correction inside the window)
+
+JEC Acuerdo 418/2026 (session of 19 Nov) extended the postal-vote deposit "hasta el 26 de noviembre de 2026 … y como máximo hasta las 14:00 horas" (re-read 20 Nov on juntaelectoralcentral.es). The three how-to-vote leads (`/ca/guies/com-votar-eleccions-catalunya/`, `/es/guias/como-votar-elecciones-cataluna/`, `/en/guides/how-to-vote-catalonia/`) still said "fins al 25 / hasta el 25 / by 25 November". A wrong deadline overrides the lead window: only that clause changes ("fins al 26 a les 14 h / hasta el 26 a las 14 h / by 26 November at 14:00"); title, description and the rest of the lead untouched. Read the open lead/title tests on these pages with this one-clause change noted. Publish group `voting`.
