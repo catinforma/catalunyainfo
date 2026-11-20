@@ -169,9 +169,9 @@ test("the page is honest about the towns: 'dates' in the title only when a town 
 /* -------------------------------------------------------------------------- */
 
 test("with no 2026 date, the lead says so with the check date and gives 2025 and 2024 with their years", () => {
-  // 12 Nov 2026: the City Council's note of 9 Nov was read; the check date moved with it.
-  const checked: Record<Locale, string> = { ca: "comprovat el 12 de novembre de 2026", es: "comprobado el 12 de noviembre de 2026", en: "checked on 12 November 2026" };
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-12");
+  // 20 Nov 2026: the City Council's mobility note of that day was read; the check date moved with it.
+  const checked: Record<Locale, string> = { ca: "comprovat el 20 de novembre de 2026", es: "comprobado el 20 de noviembre de 2026", en: "checked on 20 November 2026" };
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-20");
   for (const locale of LOCALES) {
     const first = (buildChristmasLightsBody(locale, NONE)[0] as { text: string }).text;
     assert.ok(first.includes(checked[locale]), `${locale}: ${first}`);
@@ -358,7 +358,8 @@ test("every Barcelona or town 2024/2025 date in the prose sits in a sentence tha
     const prose = text(CHRISTMAS_LIGHTS.editions[locale].blocks.filter((b) => b.type !== "table"));
     for (const iso of past) {
       const day = shortDate(iso, locale);
-      assert.ok(!new RegExp(`\\b${day} (de )?2026`).test(prose), `${locale}: ${day} printed as 2026`);
+      // A past day that is also an official 2026 date of this page (Girona 27 Nov 2026, L'Hospitalet 27 Nov 2025) may be printed with 2026.
+      if (!official2026.has(iso.slice(5))) assert.ok(!new RegExp(`\\b${day} (de )?2026`).test(prose), `${locale}: ${day} printed as 2026`);
       for (const sentence of sentences(prose).filter((s) => new RegExp(`(^|\\D)${day}(?!\\d)`).test(s))) {
         // The same day can be an official 2026 date of this page (Santa Llúcia opens on 27 November 2026,
         // Reus switched on on 27 November 2025): such a sentence prints it with 2026, which is right.

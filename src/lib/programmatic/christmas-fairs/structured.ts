@@ -44,10 +44,12 @@ export function christmasFairEvents(fairs: readonly Fair[], path: string, locale
           startDate: d?.times ? winterDateTime(f.start, d.times.opens) : f.start,
           endDate: d?.times ? winterDateTime(f.end, d.times.closes) : f.end,
           ...(d?.snippet ? { description: d.snippet[locale] } : {}),
-          ...(d && f.checked ? { organizer: { name: f.checked.publisher, url: f.checked.url } } : {}),
+          // Only an organiser its own pages name (a listing such as the Guia BCN is not the organiser).
+          ...(d?.organizer ? { organizer: d.organizer } : {}),
           town: townName(m.name, locale),
           region: PROVINCE[m.province] ?? "Catalunya",
-          url: f.webReplaced ? null : f.web,
+          // With details read, the organiser's own page for this edition rather than the calendar's website.
+          url: d?.organizer?.url ?? (d && f.checked ? f.checked.url : f.webReplaced ? null : f.web),
           // The same Place as the town's holiday and election pages (INE code).
           placeId: townPlaceId(f.ine),
           ...(image ? { image } : {}),

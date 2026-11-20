@@ -8,6 +8,7 @@
  * organiser's announcement). Every other place stays on the hub.
  */
 
+import { addDays, daysBetween, holidayOn, weekdayIndex } from "@/lib/content/holidays/calendar";
 import { municipalities as holidayTowns } from "@/lib/programmatic/holidays/data";
 import { DATE_PAGES, type DatePage } from "@/lib/programmatic/holidays/paths";
 import { slugify } from "@/lib/programmatic/holidays/slug";
@@ -18,7 +19,7 @@ import type { RegisterMunicipality } from "@/lib/programmatic/weekend/types";
 import { zoneFilter, type ZoneDef } from "@/lib/programmatic/weekend/zones";
 
 import { SEASON, inSeason } from "./classify";
-import { ORGANISER_FAIRS, PENDING_MARKETS, UNCONFIRMED_FAIRS } from "./organisers";
+import { BODY_HOLDS, ORGANISER_FAIRS, PENDING_MARKETS, UNCONFIRMED_FAIRS } from "./organisers";
 import { EN_TOWNS } from "./paths";
 import snapshotJson from "./snapshot.json" with { type: "json" };
 import type { ChristmasSnapshot, Fair, OrganiserFair, PendingMarket, UnconfirmedFair } from "./types";
@@ -82,7 +83,10 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
   return out.filter((f) => inSeason(f.start, f.end, snapshot.season)).sort(byDate);
 }
 
-export const FAIRS: readonly Fair[] = mergeFairs(SNAPSHOT, ORGANISER_FAIRS, UNCONFIRMED_FAIRS);
+/** Organiser entries as the pages use them: a town under a body hold (organisers.ts `BODY_HOLDS`) gets no `details` yet. */
+export const SHOWN_ORGANISER_FAIRS: readonly OrganiserFair[] = ORGANISER_FAIRS.map((o) => (BODY_HOLDS[o.ine] && o.details ? { ...o, details: undefined } : o));
+
+export const FAIRS: readonly Fair[] = mergeFairs(SNAPSHOT, SHOWN_ORGANISER_FAIRS, UNCONFIRMED_FAIRS);
 
 /** A fair that can give its town a page: dated, placed in a known municipality. */
 export function qualifies(f: Fair): boolean {
@@ -163,6 +167,56 @@ export function nearbyTowns(town: Town, limit = 6): Town[] {
   return [...sameComarca, ...sameProvince].slice(0, limit);
 }
 
+/** Saturdays, Sundays and Catalonia-wide holidays from start to end: the days people go to a fair (all its days when it has none). */
+export function outingDays(start: string, end: string): string[] {
+  const all: string[] = [];
+  for (let d = start; d <= end && all.length < 70; d = addDays(d, 1)) all.push(d);
+  const out = all.filter((d) => weekdayIndex(d) === 0 || weekdayIndex(d) === 6 || holidayOn(d)?.scope === "catalonia");
+  return out.length > 0 ? out : all;
+}
+
+export interface SameWeekend {
+  town: Town;
+  fair: Fair;
+  /** The first outing day both fairs are open. */
+  first: string;
+}
+
+/**
+ * Other towns' fairs open on one of this town's fair days out (Saturday,
+ * Sunday or holiday; `outingDays`), for the "same weekend" links (20 Nov
+ * 2026): by the first shared day, then fairs of a few days before the
+ * month-long markets, then the nearer town (comarca, province), then the
+ * larger. One entry per town, at most
+ * `limit`. Closed days (Girona's 25-26 Dec) do not count.
+ */
+export function sameWeekendFairs(town: Town, limit = 8): SameWeekend[] {
+  const mine = new Set(town.fairs.filter(qualifies).flatMap((f) => outingDays(f.start, f.end).filter((d) => !f.closed.includes(d))));
+  const best = new Map<string, SameWeekend & { long: boolean }>();
+  for (const other of TOWNS) {
+    if (other.ine === town.ine) continue;
+    for (const fair of other.fairs.filter(qualifies)) {
+      const shared = outingDays(fair.start, fair.end).filter((d) => mine.has(d) && !fair.closed.includes(d));
+      if (shared.length === 0) continue;
+      const entry = { town: other, fair, first: shared[0]!, long: daysBetween(fair.start, fair.end) > 4 };
+      const kept = best.get(other.ine);
+      if (!kept || entry.first < kept.first || (entry.first === kept.first && kept.long && !entry.long)) best.set(other.ine, entry);
+    }
+  }
+  // Nearer first on the same day: same comarca, then same province.
+  const distance = (t: Town) => (t.comarca === town.comarca ? 0 : t.province === town.province ? 1 : 2);
+  return [...best.values()]
+    .sort(
+      (a, b) =>
+        a.first.localeCompare(b.first) ||
+        Number(a.long) - Number(b.long) ||
+        distance(a.town) - distance(b.town) ||
+        populationRank(a.town.ine) - populationRank(b.town.ine),
+    )
+    .slice(0, limit)
+    .map(({ town: t, fair, first }) => ({ town: t, fair, first }));
+}
+
 export function comarcaOf(town: Pick<Town, "comarca">): string {
   return comarcaName(town.comarca);
 }
@@ -236,11 +290,12 @@ export function weekendZoneFor(town: Pick<Town, "ine" | "comarca" | "province">)
 
 /** The last day anything on the town's page was read: the snapshot, or an organiser's page. */
 export function lastChecked(town: Pick<Town, "fairs">): string {
-  const read = (f: Fair) => [f.checked?.readOn, f.unconfirmed?.readOn, f.details?.readOn].filter((d): d is string => Boolean(d));
+  // `details.readOn` is not counted: the lead's check date is the dates' (each programme prints its own read date).
+  const read = (f: Fair) => [f.checked?.readOn, f.unconfirmed?.readOn].filter((d): d is string => Boolean(d));
   return town.fairs.flatMap(read).reduce((latest, d) => (d > latest ? d : latest), SNAPSHOT.readOn);
 }
 
 /** The latest date anything in the family was read (hub and sitemap). */
 export function familyLastChecked(): string {
-  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.flatMap((o) => [o.readOn, ...(o.details ? [o.details.readOn] : [])]), ...UNCONFIRMED_FAIRS.map((u) => u.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
+  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.map((o) => o.readOn), ...UNCONFIRMED_FAIRS.map((u) => u.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
 }

@@ -147,7 +147,7 @@ export function FairProgramme({ fair, locale, heading }: { fair: Fair; locale: F
           </li>
         ))}
       </ul>
-      <p className="ci-agenda-meta">{t.detailsFrom(fair.checked?.publisher ?? fair.organiser ?? "", fullDate(d.readOn, locale))}</p>
+      <p className="ci-agenda-meta">{t.detailsFrom(d.organizer?.name ?? fair.checked?.publisher ?? fair.organiser ?? "", fullDate(d.readOn, locale))}</p>
     </section>
   );
 }
@@ -188,6 +188,13 @@ export function FairRows({ fairs, locale }: { fairs: readonly Fair[]; locale: Fa
             <p className="ci-agenda-meta">
               {name} ({m ? comarcaOf(m) : ""}) · <time dateTime={f.start}>{shortRange(f.start, f.end, locale)}</time>
               {f.place ? ` · ${f.place}` : ""}
+              {/* The organiser's programme and how to get there, on the town page (organisers.ts `details`, 20 Nov 2026). */}
+              {linked && f.details ? (
+                <>
+                  {" · "}
+                  <Link href={`${townPath(locale, town.slug)}#com-arribar`}>{labels(locale).programmeLink}</Link>
+                </>
+              ) : null}
             </p>
           </li>
         );

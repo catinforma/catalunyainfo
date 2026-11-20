@@ -140,7 +140,7 @@ export interface FairDetails {
   /** What the organiser presents as new this year. */
   news?: readonly Localized[];
   /** Getting there: shuttle buses, parking, one paragraph each. */
-  access: readonly Localized[];
+  access?: readonly Localized[];
   /** The "how to get there" heading, in the query's words, when `access` is given. */
   accessTitle?: Localized;
   /** Tickets, as the organiser states them (which spaces need one). */
@@ -158,6 +158,8 @@ export interface FairDetails {
   times?: { opens: string; closes: string };
   /** The official pages these lines come from (programme, map, timetables). */
   links: readonly DetailLink[];
+  /** Who organises it, as its own site names itself, when that is not the page the dates come from (`OrganiserFair.publisher`). */
+  organizer?: { name: string; url: string };
 }
 
 /**

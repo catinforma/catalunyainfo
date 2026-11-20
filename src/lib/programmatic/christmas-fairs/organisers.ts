@@ -63,6 +63,19 @@ import type { FairDetails, OrganiserFair, PendingMarket, UnconfirmedFair } from 
  */
 export const HTTP_ONLY_HOSTS: readonly string[] = ["www.firadenadal.cat"];
 
+/**
+ * Towns whose page body stays as it was while their title test reads
+ * (docs/SEO_EXPERIMENTS.md, 13 Nov 2026: "Body and description unchanged on
+ * these pages"). INE -> last day of the hold. Their `details` stay in the
+ * entry below but are not merged (data.ts), and their page leaves out the
+ * blocks added since (the same-weekend links). tests/christmas-fairs.test.ts
+ * fails the day after, until the entry is removed (or renewed and logged).
+ * Espinelves: the title test reads again on 27 Nov; the fair opens on 28.
+ */
+export const BODY_HOLDS: Readonly<Record<string, string>> = {
+  "17063": "2026-11-27",
+};
+
 const CANYELLES = "https://www.canyelles.cat";
 const CANYELLES_APP = "https://www.santalluciacanyelles.cat";
 
@@ -94,6 +107,7 @@ const CANYELLES_APP = "https://www.santalluciacanyelles.cat";
  */
 const CANYELLES_DETAILS: FairDetails = {
   readOn: "2026-11-20",
+  organizer: { name: "Ajuntament de Canyelles", url: `${CANYELLES}/promocio-economica-i-turisme/la-fira-de-santa-llucia` },
   times: { opens: "09:00", closes: "21:00" },
   why: {
     ca: "L'Ajuntament ha avançat la fira una setmana respecte de les dates previstes per les eleccions al Congrés del 29 de novembre; el calendari oficial de fires encara dona el 28 i el 29 de novembre.",
@@ -190,6 +204,305 @@ const CANYELLES_DETAILS: FairDetails = {
   ],
 };
 
+const SANTA_LLUCIA_SITE = "https://firadesantallucia.cat";
+
+/**
+ * Barcelona, Fira de Santa Llúcia (27 Nov - 23 Dec 2026), the organiser's own
+ * site, read on 20 Nov 2026 (it now shows "© Associació Fira de Santa Llúcia
+ * 2026"; on 13 Nov it still showed 2025): home ("un total de 211 parades",
+ * "181 parades dedicades exclusivament als productes nadalencs", "30 parades
+ * d'artesania i articles de regal", "240 anys des de la primera data
+ * documentada de la seva celebració, l'any 1786"), the calendar ("Laborables:
+ * de 10:00 a 21:00 · Festius i vigílies: de 10:00 a 21:00"), the news (the
+ * new star on the tree, "que supera els 14 metres d'alçada"), the activities
+ * page ("Programació provisional a 2 de novembre": the giant tió's days and
+ * hours, the Diada on 12 December) and "Com arribar" (metro L1 Catalunya or
+ * Urquinaona, L3 Liceu or Catalunya, L4 Jaume I; buses 17, 19, 40, 45 and
+ * 120; Bicing on the Avinguda; car parks on the Avinguda de la Catedral and
+ * Avinguda de Francesc Cambó, "Entrada des de la Via Laietana"). The dates
+ * stay credited to the Agenda Cultural entry below, as before.
+ */
+const SANTA_LLUCIA_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  times: { opens: "10:00", closes: "21:00" },
+  organizer: { name: "Associació Fira de Santa Llúcia", url: `${SANTA_LLUCIA_SITE}/` },
+  programme: [
+    {
+      ca: "**Cada dia, de 10 a 21 h**, feiners, festius i vigílies, a l'avinguda de la Catedral: 211 parades, 181 de pessebres, figures, molsa, arbres i guarniments de Nadal i 30 d'artesania i regals.",
+      es: "**Todos los días, de 10 a 21 h**, laborables, festivos y vísperas, en la avenida de la Catedral: 211 paradas, 181 de belenes, figuras, musgo, árboles y adornos de Navidad y 30 de artesanía y regalos.",
+      en: "**Every day, 10:00 to 21:00**, weekdays, holidays and eves alike, on Avinguda de la Catedral: 211 stalls, 181 with nativity scenes, figures, moss, trees and decorations, and 30 with crafts and gifts.",
+    },
+    {
+      ca: "**Tió gegant** per a infants de menys de 12 anys: els dies 5, 6, 7, 8, 12, 13 i 19 de desembre, d'11 a 13.30 h i de 16.30 a 19.30 h; els dies 4, 11, 14, 15, 16, 17 i 18, només de 16.30 a 19.30 h.",
+      es: "**Tió gigante** para niños de menos de 12 años: los días 5, 6, 7, 8, 12, 13 y 19 de diciembre, de 11 a 13.30 h y de 16.30 a 19.30 h; los días 4, 11, 14, 15, 16, 17 y 18, solo de 16.30 a 19.30 h.",
+      en: "**Giant tió** (the Catalan Christmas log) for children under 12: on 5, 6, 7, 8, 12, 13 and 19 December, 11:00 to 13:30 and 16:30 to 19:30; on 4, 11, 14, 15, 16, 17 and 18 December, 16:30 to 19:30 only.",
+    },
+    {
+      ca: "**Dissabte 12 de desembre, la Diada:** presentació a les 11 h, sortida de la Carassa a les 12 h, titelles de Nadal a les 12.05 h i lliurament del guardó de Firaire d'Honor a les 13.15 h (programa provisional del 2 de novembre).",
+      es: "**Sábado 12 de diciembre, la Diada:** presentación a las 11 h, salida de la Carassa a las 12 h, títeres de Navidad a las 12.05 h y entrega del premio Firaire d'Honor a las 13.15 h (programa provisional del 2 de noviembre).",
+      en: "**Saturday 12 December, the fair's Diada:** opening words at 11:00, the Carassa sets off at 12:00, Christmas puppets at 12:05 and the Firaire d'Honor award at 13:15 (provisional programme of 2 November).",
+    },
+  ],
+  news: [
+    {
+      ca: "La fira celebra els 240 anys de la primera data documentada, el 1786, i estrena un estel que corona l'arbre de Nadal de la fira, de més de 14 metres d'alçada.",
+      es: "La feria celebra los 240 años de la primera fecha documentada, 1786, y estrena una estrella que corona su árbol de Navidad, de más de 14 metros de altura.",
+      en: "The fair marks 240 years since its first documented date, 1786, and its Christmas tree, over 14 metres tall, gets a new star on top.",
+    },
+  ],
+  access: [
+    {
+      ca: "**Santa Llúcia, en transport públic** (l'organització el recomana, sobretot els caps de setmana i festius): metro L1 (Catalunya o Urquinaona), L3 (Liceu o Catalunya) i L4 (Jaume I); autobusos 17, 19, 40, 45 i 120; estació de Bicing a l'avinguda de la Catedral, davant dels números 4-6. **En cotxe:** aparcaments a l'avinguda de la Catedral i a l'avinguda de Francesc Cambó, amb entrada per la Via Laietana.",
+      es: "**Santa Llúcia, en transporte público** (la organización lo recomienda, sobre todo los fines de semana y festivos): metro L1 (Catalunya o Urquinaona), L3 (Liceu o Catalunya) y L4 (Jaume I); autobuses 17, 19, 40, 45 y 120; estación de Bicing en la avenida de la Catedral, delante de los números 4-6. **En coche:** aparcamientos en la avenida de la Catedral y en la avenida de Francesc Cambó, con entrada por la Via Laietana.",
+      en: "**Santa Llúcia by public transport** (the organisers recommend it, especially at weekends and on holidays): metro L1 (Catalunya or Urquinaona), L3 (Liceu or Catalunya) and L4 (Jaume I); buses 17, 19, 40, 45 and 120; a Bicing station on Avinguda de la Catedral, opposite numbers 4-6. **By car:** car parks on Avinguda de la Catedral and Avinguda de Francesc Cambó, entered from Via Laietana.",
+    },
+  ],
+  links: [
+    { label: { ca: "Fira de Santa Llúcia (web oficial)", es: "Fira de Santa Llúcia (web oficial)", en: "Fira de Santa Llúcia (official website)" }, url: `${SANTA_LLUCIA_SITE}/` },
+    { label: { ca: "Horaris", es: "Horarios", en: "Opening hours" }, url: `${SANTA_LLUCIA_SITE}/calendari.php` },
+    { label: { ca: "Activitats (programa provisional)", es: "Actividades (programa provisional)", en: "Activities (provisional programme)" }, url: `${SANTA_LLUCIA_SITE}/activitats.php` },
+    { label: { ca: "Com arribar-hi", es: "Cómo llegar", en: "Getting there" }, url: `${SANTA_LLUCIA_SITE}/com_arribar.php` },
+  ],
+};
+
+/**
+ * Barcelona, Sagrada Família fair, the council's Guia BCN entry re-read on 20
+ * Nov 2026: "reuneix més de 70 parades" (trees, decorations, nativity scenes,
+ * gifts, food) and "Com a novetat, la fira incorpora la primera edició de la
+ * Firetaventura Solidària, un espai amb entrada lliure destinat als infants".
+ * No organiser site, programme or transport advice on that page.
+ */
+const SAGRADA_FAMILIA_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  times: { opens: "10:00", closes: "21:00" },
+  programme: [
+    {
+      ca: "**Cada dia, de 10 a 21 h**, a la plaça de la Sagrada Família: més de 70 parades d'avets i guarniments, pessebres i figures, regals i productes com mel, torrons, formatges i embotits.",
+      es: "**Todos los días, de 10 a 21 h**, en la plaza de la Sagrada Família: más de 70 paradas de abetos y adornos, belenes y figuras, regalos y productos como miel, turrones, quesos y embutidos.",
+      en: "**Every day, 10:00 to 21:00**, on Plaça de la Sagrada Família: over 70 stalls with Christmas trees and decorations, nativity scenes and figures, gifts and food such as honey, turrón, cheese and cured meats.",
+    },
+  ],
+  news: [
+    {
+      ca: "Primera edició de la Firetaventura Solidària, un espai per als infants i les famílies on, segons la Guia BCN, l'entrada és lliure.",
+      es: "Primera edición de la Firetaventura Solidària, un espacio para niños y familias donde, según la Guia BCN, la entrada es libre.",
+      en: "First edition of the Firetaventura Solidària, a space for children and families which, according to the Guia BCN, anyone can enter.",
+    },
+  ],
+  links: [{ label: { ca: "Guia BCN: Fira de Nadal de la Sagrada Família", es: "Guia BCN: Fira de Nadal de la Sagrada Família", en: "Guia BCN: Sagrada Família Christmas fair" }, url: "https://guia.barcelona.cat/detall/fira-de-nadal-a-la-sagrada-familia_99400017122.html" }],
+};
+
+/**
+ * Cardedeu, 31a Fira de Nadal i del Torró Artesà (11-13 Dec 2026), read on 20
+ * Nov 2026 on the organiser's site (http only, see HTTP_ONLY_HOSTS): the
+ * programme PDF ("PROGRAMA D'ACTIVITATS FIRA 2026", created 16 Nov 2026) and
+ * the booklet PDF (created 12 Nov). They disagree on Friday's opening: the
+ * home page and the booklet say "19:00 h", the programme "18:00 h Obertura del
+ * recinte firal"; the page gives both. No parking, shuttle or transport
+ * advice is published; the station section below comes from the Rodalies data.
+ */
+const CARDEDEU_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  why: {
+    ca: "Divendres, el web i el llibret de la fira diuen que el recinte obre a les 19 h, i el programa del 16 de novembre, a les 18 h.",
+    es: "El viernes, la web y el librito de la feria dicen que el recinto abre a las 19 h, y el programa del 16 de noviembre, a las 18 h.",
+    en: "On Friday, the fair's website and booklet say the grounds open at 19:00; the programme of 16 November says 18:00.",
+  },
+  programme: [
+    {
+      ca: "**Dimarts 8 de desembre, a les 8.30 h:** encesa i benedicció del Foc de la Fira a l'ermita de Sant Hilari, i a les 12 h, baixada del Foc a l'església de Santa Maria.",
+      es: "**Martes 8 de diciembre, a las 8.30 h:** encendido y bendición del Foc de la Fira en la ermita de Sant Hilari, y a las 12 h, bajada del fuego a la iglesia de Santa Maria.",
+      en: "**Tuesday 8 December, 8:30:** the Fair's Fire is lit and blessed at the Sant Hilari hermitage, and at 12:00 carried down to the church of Santa Maria.",
+    },
+    {
+      ca: "**Divendres 11, a les 19.30 h:** inauguració de la 31a fira, amb la convidada d'honor Queralt Albiñana i el pregó de Rosa Vila.",
+      es: "**Viernes 11, a las 19.30 h:** inauguración de la 31.ª feria, con la invitada de honor Queralt Albiñana y el pregón de Rosa Vila.",
+      en: "**Friday 11, 19:30:** the 31st fair opens, with guest of honour Queralt Albiñana and a speech by Rosa Vila.",
+    },
+    {
+      ca: "**Dissabte 12**, obertura a les 10 h: gòspel a la plaça Sant Joan (12 h), xocolatada popular (17 h) i l'escudella de la fira a la plaça Sant Corneli (20 h).",
+      es: "**Sábado 12**, apertura a las 10 h: góspel en la plaza Sant Joan (12 h), chocolatada popular (17 h) y la escudella de la feria en la plaza Sant Corneli (20 h).",
+      en: "**Saturday 12**, open from 10:00: gospel in Plaça Sant Joan (12:00), hot chocolate for all (17:00) and the fair's escudella stew in Plaça Sant Corneli (20:00).",
+    },
+    {
+      ca: "**Diumenge 13**, obertura a les 10 h: sardanes a la plaça Sant Joan (12.15 h), fer cagar el tió al carrer Cervantes, darrere el Mercat Municipal (17 h), màgia (18.30 h) i cloenda amb la retirada del foc (20.30 h).",
+      es: "**Domingo 13**, apertura a las 10 h: sardanas en la plaza Sant Joan (12.15 h), hacer cagar el tió en la calle Cervantes, detrás del Mercat Municipal (17 h), magia (18.30 h) y clausura con la retirada del fuego (20.30 h).",
+      en: "**Sunday 13**, open from 10:00: sardanes in Plaça Sant Joan (12:15), tió-beating for children in Carrer Cervantes, behind the Mercat Municipal (17:00), a magic show (18:30) and the closing, when the fire is taken down (20:30).",
+    },
+  ],
+  tickets: {
+    ca: "Les demostracions d'elaboració de torrons, amb reserva a l'estand de l'associació: 4 € per persona (6 € dues persones); la xerrada i tast «Els secrets de la xocolata», diumenge a les 11 h, 3 € (4 € dues persones).",
+    es: "Las demostraciones de elaboración de turrones, con reserva en el estand de la asociación: 4 € por persona (6 € dos personas); la charla y cata «Els secrets de la xocolata», el domingo a las 11 h, 3 € (4 € dos personas).",
+    en: "The turrón-making demonstrations, booked at the association's stand: 4 € per person (6 € for two); the chocolate talk and tasting on Sunday at 11:00, 3 € (4 € for two).",
+  },
+  after: {
+    ca: "**Pessebre** a la capella de Sant Corneli, del 12 de desembre al 5 de gener de 2027.",
+    es: "**Belén** en la capilla de Sant Corneli, del 12 de diciembre al 5 de enero de 2027.",
+    en: "**Nativity scene** in the Sant Corneli chapel, 12 December to 5 January 2027.",
+  },
+  links: [
+    { label: { ca: "Programa d'activitats 2026 (PDF)", es: "Programa de actividades 2026 (PDF)", en: "2026 programme (PDF, Catalan)" }, url: "http://www.firadenadal.cat/programa.pdf" },
+    { label: { ca: "Llibret de la 31a fira (PDF)", es: "Librito de la 31.ª feria (PDF)", en: "31st fair booklet (PDF, Catalan)" }, url: "http://www.firadenadal.cat/llibret.pdf" },
+  ],
+};
+
+/**
+ * Arbúcies, Fira del Tió (5-6 Dec 2026): the 2026 programme leaflet the
+ * council's tourism site links as "Programa de la Fira del Tió 2026" (PDF
+ * created 18 Nov 2026; its cover: "5 i 6 de desembre de 2026"), read on 20
+ * Nov from the rendered pages (the text layer is garbled): "Dissabte de 10 a
+ * 19 h · Diumenge de 10 a 18 h · Carrer Camprodon i plaça de la Vila". The
+ * 2026 stallholder rules say Sunday's closing "serà a les 15:00 … (l'horari de
+ * tancament pot variar…)": the page gives the programme's hours and the
+ * difference. The map marks parking with "P" but gives no text on it.
+ */
+const ARBUCIES_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  why: {
+    ca: "Horari del programa: dissabte de 10 a 19 h i diumenge de 10 a 18 h, al carrer Camprodon i la plaça de la Vila. Les normes per als paradistes fixen el tancament del diumenge a les 15 h, «pot variar».",
+    es: "Horario del programa: sábado de 10 a 19 h y domingo de 10 a 18 h, en la calle Camprodon y la plaza de la Vila. Las normas para los paradistas fijan el cierre del domingo a las 15 h, «puede variar».",
+    en: "Programme hours: Saturday 10:00 to 19:00 and Sunday 10:00 to 18:00, in Carrer Camprodon and Plaça de la Vila. The stallholders' rules set Sunday's closing at 15:00, \"subject to change\".",
+  },
+  programme: [
+    {
+      ca: "**Divendres 4, a les 19.30 h:** inauguració del Pessebre Gegant d'Arbúcies (carrer Camprodon, 71), obert fins al 31 de gener (excepte el 26 de desembre) i, durant la fira, de 16 a 20 h.",
+      es: "**Viernes 4, a las 19.30 h:** inauguración del Pessebre Gegant d'Arbúcies (calle Camprodon, 71), abierto hasta el 31 de enero (excepto el 26 de diciembre) y, durante la feria, de 16 a 20 h.",
+      en: "**Friday 4, 19:30:** the giant nativity scene opens (Carrer Camprodon, 71); open until 31 January (except 26 December) and, during the fair, 16:00 to 20:00.",
+    },
+    {
+      ca: "**Dissabte 5:** «Anem a buscar el tió!» a les 11 h, des de la plaça de la Vila; concert de Joan Pinós i les Bestioles a les 12 h, i a les 18.15 h, a la plaça de la Vila, l'encesa dels llums de Nadal amb l'espectacle Correllums (làser, fum, música i dansa).",
+      es: "**Sábado 5:** «Anem a buscar el tió!» a las 11 h, desde la plaza de la Vila; concierto de Joan Pinós i les Bestioles a las 12 h, y a las 18.15 h, en la plaza de la Vila, el encendido de las luces de Navidad con el espectáculo Correllums (láser, humo, música y danza).",
+      en: "**Saturday 5:** \"Anem a buscar el tió!\" (go and find your tió) at 11:00 from Plaça de la Vila; Joan Pinós i les Bestioles in concert at 12:00, and at 18:15 in Plaça de la Vila the Christmas lights switch-on with the Correllums show (lasers, smoke, music and dance).",
+    },
+    {
+      ca: "**Diumenge 6:** gimcana tionera d'11 a 13 h i concert i vermut tioner a les 12.30 h, a la plaça de la Vila; tots dos dies, mercat de Nadal d'artesania i regal i tallers per a infants.",
+      es: "**Domingo 6:** gincana tionera de 11 a 13 h y concierto y vermut tioner a las 12.30 h, en la plaza de la Vila; los dos días, mercado de Navidad de artesanía y regalo y talleres para niños.",
+      en: "**Sunday 6:** a tió treasure hunt 11:00 to 13:00 and a concert with vermouth at 12:30, in Plaça de la Vila; both days, a Christmas craft and gift market and children's workshops.",
+    },
+  ],
+  tickets: {
+    ca: "«Anem a buscar el tió!» demana reserva amb el codi QR del programa: 5 € amb el teu tió, 25 € amb tió inclòs.",
+    es: "«Anem a buscar el tió!» pide reserva con el código QR del programa: 5 € con tu tió, 25 € con tió incluido.",
+    en: "\"Anem a buscar el tió!\" needs booking with the QR code in the programme: 5 € with your own tió, 25 € with a tió included.",
+  },
+  access: [
+    {
+      ca: "**Aparcament:** el plànol del programa marca diverses zones d'aparcament al voltant del centre; no n'indica el preu.",
+      es: "**Aparcamiento:** el plano del programa marca varias zonas de aparcamiento alrededor del centro; no indica el precio.",
+      en: "**Parking:** the programme's map marks several parking areas around the centre; it gives no price.",
+    },
+  ],
+  links: [
+    { label: { ca: "Programa de la Fira del Tió 2026 (PDF)", es: "Programa de la Fira del Tió 2026 (PDF)", en: "Fira del Tió 2026 programme (PDF, Catalan)" }, url: "https://www.visitarbucies.com/uploads/files/entradas/fira-del-tio/diptic-fira-del-tio-sense-marques.pdf" },
+    { label: { ca: "Fira del Tió (turisme d'Arbúcies)", es: "Fira del Tió (turismo de Arbúcies)", en: "Fira del Tió (Arbúcies tourism)" }, url: "https://www.visitarbucies.com/ca/activitats-i-esdeveniments/fires-i-festes/fira-del-tio.html" },
+  ],
+};
+
+/**
+ * Caldes de Montbui, Mercat de Nadal (4-8 Dec 2026): the programme PDF linked
+ * from visiteucaldes.cat ("PROGRAMA MERCAT DE NADAL", PROGRAMA_MERCAT_NADAL_2026.pdf,
+ * created 30 Oct 2026; "DEL 4 AL 8 DE DESEMBRE", Friday 4 as in 2026), read
+ * on 20 Nov: "HORARI De 10 a 20 h · Divendres 4 de desembre, només de 18 a
+ * 20 h", the opening with "primer tast del tradicional caldo de Nadal,
+ * gratuït per a tothom" and "els 40 anys del Mercat", the caldo times and
+ * prices, the children's programme and the rain plan. The council's tourism
+ * page "Com arribar" gives the Sagalés buses from Barcelona ("e9 (per
+ * autopista) · 202 i 203 (per carretera)").
+ */
+const CALDES_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  programme: [
+    {
+      ca: "**Divendres 4, a les 18 h**, a la plaça de la Font del Lleó: obertura del mercat amb el primer tast de caldo de Nadal, gratuït, i el Ball de Diables de Caldes, que celebra els 40 anys del mercat.",
+      es: "**Viernes 4, a las 18 h**, en la plaza de la Font del Lleó: apertura del mercado con la primera cata de caldo de Navidad, gratuita, y el Ball de Diables de Caldes, que celebra los 40 años del mercado.",
+      en: "**Friday 4, 18:00**, in Plaça de la Font del Lleó: the market opens with a first free tasting of Christmas broth and the Caldes devils' dance, marking the market's 40th year.",
+    },
+    {
+      ca: "**Del 5 al 8, de 10 a 20 h**, al centre històric: casetes de fusta d'alimentació, artesania, antiguitats i brocanteria, cuina sobre rodes i activitats infantils. El caldo i la carn d'olla es fan amb aigua termal de la Font del Lleó: dissabte, llenties a les 12 h i caldo a les 17.30 h; diumenge i dilluns, a les 12 h i a les 17.30 h; dimarts, a les 12 h.",
+      es: "**Del 5 al 8, de 10 a 20 h**, en el centro histórico: casetas de madera de alimentación, artesanía, antigüedades y brocante, cocina sobre ruedas y actividades infantiles. El caldo y la carn d'olla se hacen con agua termal de la Font del Lleó: sábado, lentejas a las 12 h y caldo a las 17.30 h; domingo y lunes, a las 12 h y a las 17.30 h; martes, a las 12 h.",
+      en: "**5 to 8 December, 10:00 to 20:00**, in the old town: wooden huts with food, crafts, antiques and bric-a-brac, food trucks and children's activities. The broth and carn d'olla are made with thermal water from the Font del Lleó: Saturday, lentils at 12:00 and broth at 17:30; Sunday and Monday, at 12:00 and 17:30; Tuesday, at 12:00.",
+    },
+    {
+      ca: "**Diumenge 6:** sardanes de Nadal a la plaça de l'Àngel (11.30 h) i fer cagar el tió a l'escenari de la plaça de Can Rius (12 h). Tallers i titelles a la plaça de Can Rius; si plou, les activitats infantils es fan a l'Espai Can Rius.",
+      es: "**Domingo 6:** sardanas de Navidad en la plaza de l'Àngel (11.30 h) y hacer cagar el tió en el escenario de la plaza de Can Rius (12 h). Talleres y títeres en la plaza de Can Rius; si llueve, las actividades infantiles se hacen en el Espai Can Rius.",
+      en: "**Sunday 6:** Christmas sardanes in Plaça de l'Àngel (11:30) and tió-beating on the Plaça de Can Rius stage (12:00). Workshops and puppet shows in Plaça de Can Rius; if it rains, the children's activities move to Espai Can Rius.",
+    },
+  ],
+  news: [
+    {
+      ca: "El mercat fa 40 anys.",
+      es: "El mercado cumple 40 años.",
+      en: "The market turns 40.",
+    },
+  ],
+  tickets: {
+    ca: "Preus del programa: ració de caldo 1 €, de llenties 1 €, de carn d'olla 2 €, got 1 € (recomanen portar-ne un); el primer tast del divendres és gratuït.",
+    es: "Precios del programa: ración de caldo 1 €, de lentejas 1 €, de carn d'olla 2 €, vaso 1 € (recomiendan llevar uno); la primera cata del viernes es gratuita.",
+    en: "Programme prices: a serving of broth 1 €, lentils 1 €, carn d'olla 2 €, a cup 1 € (they suggest bringing your own); Friday's first tasting is free.",
+  },
+  access: [
+    {
+      ca: "**Des de Barcelona en autobús:** línies de Sagalés e9 (per autopista) i 202 i 203 (per carretera), segons el web de turisme de l'Ajuntament.",
+      es: "**Desde Barcelona en autobús:** líneas de Sagalés e9 (por autopista) y 202 y 203 (por carretera), según la web de turismo del Ayuntamiento.",
+      en: "**From Barcelona by bus:** Sagalés lines e9 (by motorway) and 202 and 203 (by the old road), according to the council's tourism website.",
+    },
+  ],
+  links: [
+    { label: { ca: "Programa del Mercat de Nadal 2026 (PDF)", es: "Programa del Mercat de Nadal 2026 (PDF)", en: "2026 Christmas market programme (PDF, Catalan)" }, url: "https://www.visiteucaldes.cat/wp-content/uploads/PROGRAMA_MERCAT_NADAL_2026.pdf" },
+    { label: { ca: "Com arribar a Caldes", es: "Cómo llegar a Caldes", en: "Getting to Caldes" }, url: "https://www.visiteucaldes.cat/turisme/com-arribar/" },
+  ],
+};
+
+/**
+ * Espinelves, 45a Fira de l'Avet (28 Nov - 8 Dec 2026): the fair's own site,
+ * firadelavet.cat ("ORGANITZA: Ajuntament d'Espinelves, Plaça de l'Església,
+ * 1"; modified 12 Nov 2026), read on 20 Nov 2026: "Dissabtes, festius i dilluns
+ * 7 de desembre: de 10h a 20h · Feiners: de 10h a 18h", the programme and the
+ * 2026 map (parking "P" signs around the village towards the Arboretum
+ * Masjoan and the Coll de Ravell, and a "PEATGE" barrier on the access road;
+ * no price on the site). Held by BODY_HOLDS until its title test reads on 27
+ * Nov: not shown before then.
+ */
+const ESPINELVES_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  organizer: { name: "Ajuntament d'Espinelves (Fira de l'Avet)", url: "https://www.firadelavet.cat/" },
+  programme: [
+    {
+      ca: "**Horari:** dissabtes, festius i el dilluns 7 de desembre, de 10 a 20 h; la resta de dies feiners, de 10 a 18 h.",
+      es: "**Horario:** sábados, festivos y el lunes 7 de diciembre, de 10 a 20 h; el resto de días laborables, de 10 a 18 h.",
+      en: "**Hours:** Saturdays, holidays and Monday 7 December, 10:00 to 20:00; other weekdays, 10:00 to 18:00.",
+    },
+    {
+      ca: "**Dissabte 28 de novembre, a les 16.30 h:** inauguració i lliurament de l'Avet d'Or a l'arqueòleg Eudald Carbonell. **Diumenge 29, a les 12 h:** concert dels Atrapasomnis. **Dimarts 8 de desembre, a les 19 h:** Cursa de l'Avet.",
+      es: "**Sábado 28 de noviembre, a las 16.30 h:** inauguración y entrega del Avet d'Or al arqueólogo Eudald Carbonell. **Domingo 29, a las 12 h:** concierto de los Atrapasomnis. **Martes 8 de diciembre, a las 19 h:** Cursa de l'Avet.",
+      en: "**Saturday 28 November, 16:30:** opening and the Golden Fir award to the archaeologist Eudald Carbonell. **Sunday 29, 12:00:** Atrapasomnis in concert. **Tuesday 8 December, 19:00:** the Fir Tree race.",
+    },
+    {
+      ca: "**Caps de setmana i pont:** xarangues pels carrers a les 11, a les 13 i a les 17 h; tallers i jocs per a la mainada el 28 i el 29 de novembre i del 5 al 8 de desembre, i del 5 al 8, d'11 a 13 h, màgia, pintacares, ponis i tir amb arc.",
+      es: "**Fines de semana y puente:** charangas por las calles a las 11, a las 13 y a las 17 h; talleres y juegos para niños el 28 y el 29 de noviembre y del 5 al 8 de diciembre, y del 5 al 8, de 11 a 13 h, magia, pintacaras, ponis y tiro con arco.",
+      en: "**Weekends and the December long weekend:** street bands at 11:00, 13:00 and 17:00; children's workshops and games on 28-29 November and 5-8 December, and on 5-8 December, 11:00 to 13:00, magic, face painting, ponies and archery.",
+    },
+  ],
+  news: [
+    {
+      ca: "Exposició «45 anys de la Fira de l'Avet».",
+      es: "Exposición «45 anys de la Fira de l'Avet» (45 años de la feria).",
+      en: "An exhibition on the fair's 45 years.",
+    },
+  ],
+  access: [
+    {
+      ca: "**En cotxe:** el plànol del 2026 marca diversos aparcaments al voltant del poble, cap a l'Arboretum Masjoan i el Coll de Ravell, i un peatge a la carretera d'accés; el web no en publica el preu.",
+      es: "**En coche:** el plano de 2026 marca varios aparcamientos alrededor del pueblo, hacia el Arboretum Masjoan y el Coll de Ravell, y un peaje en la carretera de acceso; la web no publica el precio.",
+      en: "**By car:** the 2026 map shows several car parks around the village, towards the Arboretum Masjoan and Coll de Ravell, and a toll barrier on the access road; the website gives no price.",
+    },
+  ],
+  links: [
+    { label: { ca: "Fira de l'Avet (web oficial)", es: "Fira de l'Avet (web oficial)", en: "Fira de l'Avet (official website)" }, url: "https://www.firadelavet.cat/" },
+    { label: { ca: "Plànol 2026", es: "Plano 2026", en: "2026 map" }, url: "https://www.firadelavet.cat/wp-content/uploads/2026/11/mapa-2026-opt.png" },
+  ],
+};
+
 export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   {
     id: "org:canyelles-santa-llucia",
@@ -211,6 +524,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:barcelona-sagrada-familia",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: SAGRADA_FAMILIA_DETAILS,
     ine: "08019",
     name: "Fira de Nadal de la Sagrada Família",
     start: "2026-11-21",
@@ -224,6 +539,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:barcelona-santa-llucia",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: SANTA_LLUCIA_DETAILS,
     ine: "08019",
     name: "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona",
     start: "2026-11-27",
@@ -307,6 +624,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:espinelves-fira-de-l-avet",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: ESPINELVES_DETAILS,
     ine: "17063",
     name: "45a Fira de l'Avet",
     start: "2026-11-28",
@@ -320,6 +639,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:caldes-de-montbui-mercat-de-nadal",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: CALDES_DETAILS,
     ine: "08033",
     name: "Mercat de Nadal",
     start: "2026-12-04",
@@ -351,6 +672,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:arbucies-fira-del-tio",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: ARBUCIES_DETAILS,
     ine: "17009",
     name: "Fira del Tió",
     start: "2026-12-05",
@@ -455,6 +778,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:cardedeu-fira-de-nadal",
+    // Programme and practical information, read 20 Nov 2026 (above).
+    details: CARDEDEU_DETAILS,
     ine: "08046",
     name: "Fira de Nadal i del Torró Artesà de Cardedeu",
     start: "2026-12-11",

@@ -327,6 +327,9 @@ export interface Labels {
   holidays: string;
   weekend: string;
   nearby: string;
+  /** Other towns' fairs on the same Saturday, Sunday or holiday (one weekend / several). */
+  sameWeekend: string;
+  sameDays: string;
   guides: string;
   sources: string;
   howToRead: string;
@@ -355,6 +358,8 @@ export interface Labels {
   tickets: string;
   officialLinks: string;
   detailsFrom: (publisher: string, date: string) => string;
+  /** The hub's link to a town page's programme and directions. */
+  programmeLink: string;
 }
 
 export function labels(locale: FairsLocale): Labels {
@@ -371,6 +376,8 @@ export function labels(locale: FairsLocale): Labels {
       holidays: "Festius i botigues aquells dies",
       weekend: "La resta del cap de setmana",
       nearby: "Altres fires de Nadal a prop",
+      sameWeekend: "Altres fires de Nadal el mateix cap de setmana",
+      sameDays: "Altres fires de Nadal els mateixos caps de setmana i festius",
       guides: "Per seguir llegint",
       sources: "Fonts",
       howToRead: "Com llegir aquesta pàgina",
@@ -395,6 +402,7 @@ export function labels(locale: FairsLocale): Labels {
       news: "Novetats d'aquest any",
       tickets: "Entrades",
       officialLinks: "Programa, plànol i horaris oficials",
+      programmeLink: "programa i com arribar-hi",
       detailsFrom: (publisher, date) => `Programa i informació pràctica dels webs oficials de la fira (${publisher}), llegits el ${date}.`,
     };
   }
@@ -411,6 +419,8 @@ export function labels(locale: FairsLocale): Labels {
       holidays: "Festivos y tiendas esos días",
       weekend: "El resto del fin de semana",
       nearby: "Otras ferias de Navidad cerca",
+      sameWeekend: "Otras ferias de Navidad el mismo fin de semana",
+      sameDays: "Otras ferias de Navidad los mismos fines de semana y festivos",
       guides: "Para seguir leyendo",
       sources: "Fuentes",
       howToRead: "Cómo leer esta página",
@@ -435,6 +445,7 @@ export function labels(locale: FairsLocale): Labels {
       news: "Novedades de este año",
       tickets: "Entradas",
       officialLinks: "Programa, plano y horarios oficiales",
+      programmeLink: "programa y cómo llegar",
       detailsFrom: (publisher, date) => `Programa e información práctica de las webs oficiales de la feria (${publisher}), leídas el ${date}.`,
     };
   }
@@ -450,6 +461,8 @@ export function labels(locale: FairsLocale): Labels {
     holidays: "Holidays and shops on those days",
     weekend: "The rest of the weekend",
     nearby: "Other Christmas markets nearby",
+    sameWeekend: "Other Christmas markets the same weekend",
+    sameDays: "Other Christmas markets on the same weekends and holidays",
     guides: "Read next",
     sources: "Sources",
     howToRead: "How to read this page",
@@ -474,6 +487,7 @@ export function labels(locale: FairsLocale): Labels {
     news: "New this year",
     tickets: "Tickets",
     officialLinks: "Official programme, map and timetables",
+    programmeLink: "programme and getting there",
     detailsFrom: (publisher, date) => `Programme and practical information from the fair's official websites (${publisher}), read on ${date}.`,
   };
 }
