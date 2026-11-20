@@ -5,7 +5,7 @@ import { bodyToPlainText, type Block } from "../src/lib/content/blocks.ts";
 import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcelona.ts";
 import { CHRISTMAS_LIGHTS } from "../src/lib/content/batch02/christmas-lights.ts";
 import { LIGHTS_TOWNS, LIGHTS_TOWNS_AS_OF, LIGHTS_TOWNS_NOT_REREAD, switchOnProblems } from "../src/lib/content/batch02/christmas-lights-towns.ts";
-import { ANNOUNCED_2026, LIGHTS_SWITCH_ON_CHECKED, announcementProblems, dayDate, placePhrase } from "../src/lib/content/batch02/festive.ts";
+import { ANNOUNCED_2026, LIGHTS_SWITCH_ON_CHECKED, MOBILITY_2026, announcementProblems, dayDate, placePhrase } from "../src/lib/content/batch02/festive.ts";
 import type { Locale } from "../src/lib/i18n/config.ts";
 
 /**
@@ -28,7 +28,7 @@ test("Barcelona 2026: Thursday 26 November, show 18:00, lights 18:30, Passeig de
   assert.equal(a.km, 140);
   assert.equal(a.who, undefined, "the note names nobody");
   assert.match(a.url, /^https:\/\/ajuntament\.barcelona\.cat\/premsa\/2026\/11\/09\//);
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-12");
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-20");
   assert.equal(dayDate(a.date, "ca"), "dijous 26 de novembre de 2026");
   for (const locale of LOCALES) {
     assert.match(placePhrase(a, locale), /^(al passeig|en el paseo|on Passeig) de Gràcia/, locale);
@@ -63,23 +63,39 @@ test("the lights page and the Christmas hub give the date in title, snippet and 
   for (const article of [CHRISTMAS_LIGHTS, CHRISTMAS_BARCELONA]) assert.doesNotMatch(text(article.editions.ca.blocks as Block[]), /\ba (el )?passeig de Gràcia, entre el carrer de Rosselló/);
 });
 
-test("four towns published their 2026 switch-on on their own sites (read 12 Nov 2026)", () => {
+test("twelve towns published their 2026 switch-on on their own sites (read 12 and 20 Nov 2026)", () => {
   const dated = Object.fromEntries(LIGHTS_TOWNS.filter((t) => t.y2026).map((t) => [t.key, `${t.y2026!.date} ${t.y2026!.time ?? "-"} ${t.y2026!.place ?? "-"}`]));
   assert.deepEqual(dated, {
     terrassa: "2026-11-28 18:00 Raval de Montserrat",
     badalona: "2026-11-20 18:00 -",
     rubi: "2026-11-27 - -",
     igualada: "2026-11-27 - plaça de l'Ajuntament",
+    // 20 Nov 2026 (each council's own page or document, the sentence grepped).
+    girona: "2026-11-27 - plaça de Catalunya",
+    olot: "2026-11-28 18:30 plaça Major",
+    granollers: "2026-11-27 18:30 plaça de la Porxada",
+    hospitalet: "2026-11-26 18:00 plaça de l'Ajuntament",
+    "el-prat": "2026-11-21 18:30 plaça de Catalunya",
+    mataro: "2026-11-27 18:30 Espai Firal del Nou Parc Central",
+    manresa: "2026-11-27 17:30 Plaça de Nadal",
+    castelldefels: "2026-11-21 18:00 plaça de l'Església",
   });
   for (const t of LIGHTS_TOWNS) assert.deepEqual(switchOnProblems(t, 2026), [], t.key);
-  assert.equal(LIGHTS_TOWNS_AS_OF, "2026-11-12");
-  // The two councils whose sites did not answer keep their 4 Nov check, printed under the table.
-  assert.deepEqual(LIGHTS_TOWNS_NOT_REREAD.map((u) => `${u.key} ${u.read}`), ["santa-coloma 2026-11-04", "vilanova 2026-11-04"]);
+  assert.equal(LIGHTS_TOWNS_AS_OF, "2026-11-20");
+  // The councils whose sites did not answer keep their last check, printed under the table.
+  assert.deepEqual(LIGHTS_TOWNS_NOT_REREAD.map((u) => `${u.key} ${u.read}`), ["sabadell 2026-11-12", "reus 2026-11-12", "santa-coloma 2026-11-04"]);
   for (const u of LIGHTS_TOWNS_NOT_REREAD) assert.equal(LIGHTS_TOWNS.find((t) => t.key === u.key)?.y2026, null, u.key);
   const note: Record<Locale, RegExp> = {
-    ca: /Santa Coloma de Gramenet i Vilanova i la Geltrú: comprovat el 4 de novembre de 2026/,
-    es: /Santa Coloma de Gramenet y Vilanova i la Geltrú: comprobado el 4 de noviembre de 2026/,
-    en: /Santa Coloma de Gramenet and Vilanova i la Geltrú: checked on 4 November 2026/,
+    ca: /Sabadell i Reus \(12 de novembre\); Santa Coloma de Gramenet \(4 de novembre\)/,
+    es: /Sabadell y Reus \(12 de noviembre\); Santa Coloma de Gramenet \(4 de noviembre\)/,
+    en: /Sabadell and Reus \(12 November\); Santa Coloma de Gramenet \(4 November\)/,
   };
   for (const locale of LOCALES) assert.match(JSON.stringify(CHRISTMAS_LIGHTS.editions[locale].blocks), note[locale], locale);
+});
+
+/** Date guard: the 2026 mobility paragraph speaks of the days before and on 26 Nov; after the switch-on it must go or turn past. */
+test("date guard: Barcelona's 2026 mobility paragraph is removed or rewritten after the switch-on", () => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  assert.ok(today <= "2026-11-26", "26 Nov is past: drop MOBILITY_2026 from showParagraphs (christmas-lights.ts) or rewrite it in the past tense, deploy, publish llums-nadal");
+  for (const locale of LOCALES) assert.ok(JSON.stringify(CHRISTMAS_LIGHTS.editions[locale].blocks).includes(MOBILITY_2026.url), locale);
 });

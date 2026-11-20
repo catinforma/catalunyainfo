@@ -35,9 +35,11 @@ import {
   linesFor,
   mergeFairs,
   nearbyTowns,
+  outingDays,
   pendingFor,
   pendingMarkets,
   qualifies,
+  sameWeekendFairs,
   shippedTowns,
   townBySlug,
   towns,
@@ -45,7 +47,7 @@ import {
 } from "../src/lib/programmatic/christmas-fairs/data.ts";
 import { onDate, rangeText, shortRange, untilDate } from "../src/lib/programmatic/christmas-fairs/format.ts";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "../src/lib/programmatic/christmas-fairs/guide.ts";
-import { HTTP_ONLY_HOSTS, ORGANISER_FAIRS, PENDING_MARKETS, UNCONFIRMED_FAIRS } from "../src/lib/programmatic/christmas-fairs/organisers.ts";
+import { BODY_HOLDS, HTTP_ONLY_HOSTS, ORGANISER_FAIRS, PENDING_MARKETS, UNCONFIRMED_FAIRS } from "../src/lib/programmatic/christmas-fairs/organisers.ts";
 import { EN_TOWNS, FAIRS_LOCALES, FAIRS_ROUTE, agendaActivityUrl, fairsHubPath, hubTranslations, townPath, townTranslations } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { PRERENDER, hubAllowed, resolveTown, townStaticParams } from "../src/lib/programmatic/christmas-fairs/routing.ts";
 import { WEB_REPLACEMENTS, agendaFairs, fairFromRow, organiserWeb } from "../src/lib/programmatic/christmas-fairs/rows.ts";
@@ -406,6 +408,99 @@ test("town lead: the first sentence gives the fair's days", () => {
   for (const ine of Object.keys(LEAD_HOLDS)) {
     const town = towns().find((t) => t.ine === ine)!;
     assert.ok(!townLead({ ...town, comarcaName: "x" }, "ca", "2026-11-13").startsWith(townDatesLine(town, "ca")), `${ine} keeps the held lead`);
+  }
+});
+
+/**
+ * 20 Nov 2026: the organisers' programmes. Each `details` is dated, in the
+ * three languages, sourced on official https pages, and only says what those
+ * pages print (no price, no "free entry" unless the page says it).
+ */
+test("details: every organiser programme is dated, trilingual and sourced", () => {
+  const withDetails = ORGANISER_FAIRS.filter((o) => o.details);
+  assert.ok(withDetails.length >= 1);
+  for (const o of withDetails) {
+    const d = o.details!;
+    assert.match(d.readOn, ISO);
+    assert.ok(d.readOn >= o.readOn || d.readOn === o.readOn, `${o.id}: details read on or after the dates`);
+    const lines = [...d.programme, ...(d.news ?? []), ...(d.access ?? []), ...[d.tickets, d.after, d.why, d.snippet, d.accessTitle].filter((x) => x !== undefined)];
+    assert.ok(d.programme.length > 0, o.id);
+    if (d.accessTitle) assert.ok((d.access ?? []).length > 0, `${o.id}: a "how to get there" heading needs its lines`);
+    for (const line of lines) for (const locale of FAIRS_LOCALES) assert.ok(line![locale].length > 3 && !/undefined|\$\{/.test(line![locale]), `${o.id} ${locale}: ${line!.ca}`);
+    for (const line of lines) assert.ok(!/entrada (lliure|gratuïta)|entrada (libre|gratuita)|free entry|free admission/i.test(Object.values(line!).join(" ")), `${o.id}: no free-entry claim the pages do not make`);
+    assert.ok(d.links.length > 0);
+    for (const l of d.links) assert.match(l.url, HTTP_ONLY_HOSTS.includes(new URL(l.url).hostname) ? /^http:\/\// : /^https:\/\//, l.url);
+    if (d.times) {
+      assert.match(d.times.opens, /^\d{2}:\d{2}$/);
+      assert.match(d.times.closes, /^\d{2}:\d{2}$/);
+      // winterDateTime's +01:00 holds from the last Sunday of October 2026 to the last Sunday of March 2027.
+      assert.ok(o.start >= "2026-10-25" && o.end < "2027-03-28", o.id);
+    }
+    if (d.snippet) for (const locale of FAIRS_LOCALES) assert.ok(d.snippet[locale].length <= 85, `${o.id} ${locale}: snippet fits the description`);
+  }
+});
+
+test("Canyelles (20 Nov 2026): hours, programme, shuttle buses and parking from the council's pages", () => {
+  const town = townBySlug("canyelles")!;
+  const fair = town.fairs.find((f) => f.id === "vm32:24033377")!;
+  assert.equal(fair.hours?.ca, "dissabte i diumenge, de 9 a 21 h");
+  assert.equal(fair.details?.readOn, "2026-11-20");
+  assert.ok(fair.details!.links.every((l) => /^https:\/\/www\.(canyelles\.cat|santalluciacanyelles\.cat)\//.test(l.url)));
+  const text = (locale: "ca" | "es" | "en") => [...fair.details!.programme, ...(fair.details!.access ?? [])].map((l) => l[locale]).join(" ");
+  assert.match(text("ca"), /350 parades/);
+  assert.match(text("ca"), /Vilanova.*9, 11, 13, 15, 17 i 19 h/);
+  assert.match(text("es"), /Sitges \(Parc de Can Robert/);
+  assert.match(text("en"), /free parking/i);
+  // The lead hold ended with the 20 Nov review: the first sentence gives the days.
+  assert.ok(!("08043" in LEAD_HOLDS));
+  for (const locale of ["ca", "es"] as const) {
+    assert.ok(townLead({ ...town, comarcaName: "Garraf" }, locale, "2026-11-20").startsWith(townDatesLine(town, locale)), locale);
+    const description = townDescription(town, locale);
+    assert.ok(description.length <= DESCRIPTION_LIMIT && /9 a 21 h/.test(description) && /Vilafranca/.test(description), description);
+  }
+  // The title test (13 Nov) keeps its dated title.
+  assert.equal(townTitle(town, "ca"), "Fira de Santa Llúcia de Canyelles 2026: 21 i 22 de novembre");
+  // Event: the day's times (winter time), the organiser, a description.
+  const event = christmasFairEvents(town.fairs, townPath("es", town.slug), "es")[0] as Record<string, unknown>;
+  assert.equal(event.startDate, "2026-11-21T09:00:00+01:00");
+  assert.equal(event.endDate, "2026-11-22T21:00:00+01:00");
+  assert.equal((event.organizer as { name: string }).name, "Ajuntament de Canyelles");
+  assert.match(String(event.description), /9 a 21 h/);
+  assert.equal(event.eventStatus, "https://schema.org/EventScheduled");
+});
+
+test("same weekend (20 Nov 2026): other towns' fairs open on one of this town's Saturdays, Sundays or holidays", () => {
+  assert.deepEqual(outingDays("2026-12-11", "2026-12-13"), ["2026-12-12", "2026-12-13"]);
+  assert.deepEqual(outingDays("2026-12-04", "2026-12-08"), ["2026-12-05", "2026-12-06", "2026-12-08"]);
+  // A weekday-only fair counts all its days.
+  assert.deepEqual(outingDays("2026-12-09", "2026-12-10"), ["2026-12-09", "2026-12-10"]);
+  for (const town of towns()) {
+    const list = sameWeekendFairs(town);
+    assert.ok(list.length <= 8);
+    assert.equal(new Set(list.map((s) => s.town.ine)).size, list.length, `${town.slug}: one entry per town`);
+    const mine = new Set(town.fairs.filter(qualifies).flatMap((f) => outingDays(f.start, f.end)));
+    for (const s of list) {
+      assert.notEqual(s.town.ine, town.ine);
+      assert.ok(mine.has(s.first) && s.first >= s.fair.start && s.first <= s.fair.end, `${town.slug} -> ${s.town.slug} on ${s.first}`);
+    }
+  }
+  // Canyelles (21-22 Nov): the Sagrada Família fair opens on the 21st.
+  const canyelles = sameWeekendFairs(townBySlug("canyelles")!);
+  assert.ok(canyelles.some((s) => s.fair.id === "org:barcelona-sagrada-familia"), canyelles.map((s) => s.fair.id).join(", "));
+  // Short fairs come before the month-long markets on the same first day.
+  const cardedeu = sameWeekendFairs(townBySlug("cardedeu")!);
+  const firstLong = cardedeu.findIndex((s) => s.first === "2026-12-12" && s.fair.end > "2026-12-20");
+  const lastShort = cardedeu.map((s) => s.first === "2026-12-12" && s.fair.end <= "2026-12-20").lastIndexOf(true);
+  if (firstLong >= 0 && lastShort >= 0) assert.ok(lastShort < firstLong, "short fairs first");
+});
+
+/** Date guard: a body hold (organisers.ts BODY_HOLDS) ends with its title test's read; the held town shows no details. */
+test("date guard: body holds end on their date, and a held town shows no organiser details", () => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  for (const [ine, until] of Object.entries(BODY_HOLDS)) {
+    assert.ok(today <= until, `${ine}: the body hold ended ${until}; read the title test, remove the hold (its details and same-weekend links then show), deploy and log it`);
+    const town = towns().find((t) => t.ine === ine)!;
+    assert.ok(town.fairs.every((f) => f.details === null), `${ine}: held, so no details yet`);
   }
 });
 

@@ -73,7 +73,8 @@ export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
  * next to its "not announced yet". The Christmas hub and the New Year's Eve
  * page keep ANNOUNCEMENTS_CHECKED. Move it on every re-read.
  */
-export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-12";
+// 20 Nov 2026: the press room's mobility note of that day (MOBILITY_2026) confirms 26 Nov, 18:00; still no name for who switches them on.
+export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-20";
 
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {
@@ -380,6 +381,31 @@ export const SWITCH_ON_HISTORY: readonly PastSwitchOn[] = [
     reportUrl: "https://ajuntament.barcelona.cat/premsa/2023/11/23/barcelona-encen-els-llums-de-nadal-2023/",
   },
 ];
+
+/**
+ * The 2026 mobility note, City Council press room, 20 Nov 2026 (read with curl
+ * that day): "el 26 de novembre a les 18.00 hores al passeig de Gràcia entre el
+ * carrer de Provença i l'avinguda Diagonal"; from Monday 23 the central
+ * carriageway is cut between Diagonal and Provença (towards the sea) and
+ * Aragó and Diagonal (towards the mountain), and Rosselló; on the 26th "a
+ * partir de les 14.00 hores i fins a l'evacuació del públic, el tall s'estendrà
+ * a tot el passeig de Gràcia, entre l'avinguda Diagonal i la Gran Via … en tots
+ * dos sentits", every cross street too except Diagonal, Aragó, Diputació and
+ * Gran Via; "els accessos del metro a la zona afectada quedaran tancats el dia
+ * 26 a partir de les 17.00 hores", with Catalunya (L1, L3), Fontana (L3) or
+ * Verdaguer (L4, L5) suggested; TMB buses 22 and 24 (both ways), 7 and V15
+ * (towards the mountain), Nitbus and Bus Turístic diverted from the 23rd
+ * until 8.00 on Friday 27. Who switches the lights on is still not named.
+ */
+export const MOBILITY_2026 = {
+  published: "2026-11-20",
+  url: "https://ajuntament.barcelona.cat/premsa/2026/11/20/afectacions-a-la-mobilitat-per-lacte-dencesa-de-llums-de-nadal-del-proper-dijous-26-de-novembre/",
+  text: {
+    ca: "**Com arribar-hi el dijous 26.** Segons l'[avís de mobilitat de l'Ajuntament del 20 de novembre de 2026](URL), a partir de les 14 h i fins que el públic hagi marxat es talla tot el passeig de Gràcia, entre la Diagonal i la Gran Via, en tots dos sentits, i també els carrers transversals, excepte la Diagonal, Aragó, Diputació i la Gran Via. Els accessos del metro de la zona tanquen a partir de les 17 h: l'Ajuntament recomana baixar a estacions més allunyades, com Catalunya (L1, L3), Fontana (L3) o Verdaguer (L4, L5). Des del dilluns 23 i fins al divendres 27 a les 8 h, els autobusos 22 i 24 (tots dos sentits) i 7 i V15 (sentit muntanya), el Nitbus i el Bus Turístic es desvien.",
+    es: "**Cómo llegar el jueves 26.** Según el [aviso de movilidad del Ayuntamiento del 20 de noviembre de 2026](URL), a partir de las 14 h y hasta que el público se haya ido se corta todo el paseo de Gràcia, entre la Diagonal y la Gran Via, en los dos sentidos, y también las calles transversales, excepto la Diagonal, Aragó, Diputació y la Gran Via. Los accesos del metro de la zona cierran a partir de las 17 h: el Ayuntamiento recomienda bajar en estaciones más alejadas, como Catalunya (L1, L3), Fontana (L3) o Verdaguer (L4, L5). Desde el lunes 23 y hasta el viernes 27 a las 8 h, los autobuses 22 y 24 (los dos sentidos) y 7 y V15 (sentido montaña), el Nitbus y el Bus Turístic se desvían.",
+    en: "**Getting there on Thursday 26.** According to the [City Council's mobility notice of 20 November 2026](URL), from 14:00 until the crowd has left the whole of Passeig de Gràcia is closed between Diagonal and Gran Via in both directions, and so are the cross streets except Diagonal, Aragó, Diputació and Gran Via. Metro entrances in the area close from 17:00: the council suggests getting off at stations further away, such as Catalunya (L1, L3), Fontana (L3) or Verdaguer (L4, L5). From Monday 23 until 8:00 on Friday 27, buses 22 and 24 (both directions), 7 and V15 (uphill), the Nitbus and the Bus Turístic are diverted.",
+  },
+} as const;
 
 /** The 2025 traffic notice: Passeig de Gràcia closed from 17:30 between Gran Via and Aragó. */
 export const MOBILITY_2025 = {

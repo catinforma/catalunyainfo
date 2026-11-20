@@ -442,7 +442,7 @@ export interface TownEventInput {
   /** Stable id in the official dataset, for the node's `@id`. */
   id: string;
   name: string;
-  /** ISO dates, as the official calendar gives them. */
+  /** ISO dates, as the official calendar gives them (or date-times with the offset, when the organiser gives the hours). */
   startDate: string;
   endDate: string;
   /** Municipality where it is held: the most precise place the source gives. */
@@ -455,6 +455,10 @@ export interface TownEventInput {
   placeId?: string;
   /** Absolute URLs of a licensed photograph of the event itself (its crops); never a picture of something else. */
   image?: string[];
+  /** One plain sentence on the event, from the organiser's own page (no Markdown). */
+  description?: string;
+  /** The organiser, as its own page names it, and that page. */
+  organizer?: { name: string; url: string };
 }
 
 /**
@@ -485,6 +489,8 @@ export function townEventSchema(input: TownEventInput): Json {
     },
     ...(input.url ? { url: input.url } : {}),
     ...(input.image && input.image.length > 0 ? { image: input.image } : {}),
+    ...(input.description ? { description: input.description } : {}),
+    ...(input.organizer ? { organizer: { "@type": "Organization", name: input.organizer.name, url: input.organizer.url } } : {}),
   };
 }
 

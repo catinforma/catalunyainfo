@@ -104,6 +104,67 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
   );
 }
 
+/**
+ * The organiser's programme for one edition (`FairDetails`, 20 Nov 2026):
+ * why the dates moved, the day-by-day highlights, what is new, tickets, what
+ * stays on afterwards, and the official files it was read in.
+ */
+export function FairProgramme({ fair, locale, heading }: { fair: Fair; locale: FairsLocale; heading: boolean }) {
+  const d = fair.details;
+  if (!d) return null;
+  const t = labels(locale);
+  return (
+    <section aria-labelledby={`ci-xmas-programme-${fair.id.replace(/[^a-z0-9-]+/gi, "-")}`}>
+      <h2 id={`ci-xmas-programme-${fair.id.replace(/[^a-z0-9-]+/gi, "-")}`}>{heading ? t.programme : `${fair.name}: ${t.programme.toLowerCase()}`}</h2>
+      {d.why ? <p>{renderInline(d.why[locale])}</p> : null}
+      <ul>
+        {d.programme.map((line) => (
+          <li key={line.ca}>{renderInline(line[locale])}</li>
+        ))}
+      </ul>
+      {d.news && d.news.length > 0 ? (
+        <>
+          <h3>{t.news}</h3>
+          {d.news.map((line) => (
+            <p key={line.ca}>{renderInline(line[locale])}</p>
+          ))}
+        </>
+      ) : null}
+      {d.tickets ? (
+        <>
+          <h3>{t.tickets}</h3>
+          <p>{renderInline(d.tickets[locale])}</p>
+        </>
+      ) : null}
+      {d.after ? <p>{renderInline(d.after[locale])}</p> : null}
+      <h3>{t.officialLinks}</h3>
+      <ul>
+        {d.links.map((l) => (
+          <li key={l.url}>
+            <a href={l.url} rel="noopener nofollow" target="_blank">
+              {l.label[locale]}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p className="ci-agenda-meta">{t.detailsFrom(d.organizer?.name ?? fair.checked?.publisher ?? fair.organiser ?? "", fullDate(d.readOn, locale))}</p>
+    </section>
+  );
+}
+
+/** The organiser's own "how to get there" (shuttle buses, parking), before the generic train and bus guidance. */
+export function FairAccess({ fairs, locale }: { fairs: readonly Fair[]; locale: FairsLocale }) {
+  const lines = fairs.flatMap((f) => f.details?.access ?? []);
+  if (lines.length === 0) return null;
+  return (
+    <>
+      {lines.map((line) => (
+        <p key={line.ca}>{renderInline(line[locale])}</p>
+      ))}
+    </>
+  );
+}
+
 /** Fairs in date order, one line each, each linked to its town's page where that page exists in this locale. */
 export function FairRows({ fairs, locale }: { fairs: readonly Fair[]; locale: FairsLocale }) {
   return (
@@ -127,6 +188,13 @@ export function FairRows({ fairs, locale }: { fairs: readonly Fair[]; locale: Fa
             <p className="ci-agenda-meta">
               {name} ({m ? comarcaOf(m) : ""}) · <time dateTime={f.start}>{shortRange(f.start, f.end, locale)}</time>
               {f.place ? ` · ${f.place}` : ""}
+              {/* The organiser's programme and how to get there, on the town page (organisers.ts `details`, 20 Nov 2026). */}
+              {linked && f.details ? (
+                <>
+                  {" · "}
+                  <Link href={`${townPath(locale, town.slug)}#com-arribar`}>{labels(locale).programmeLink}</Link>
+                </>
+              ) : null}
             </p>
           </li>
         );

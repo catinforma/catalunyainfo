@@ -22,16 +22,19 @@ import {
   lastChecked,
   linesFor,
   nearbyTowns,
+  outingDays,
   pendingFor,
+  sameWeekendFairs,
   towns,
   weekendZoneFor,
   type Town,
 } from "@/lib/programmatic/christmas-fairs/data";
+import { BODY_HOLDS } from "@/lib/programmatic/christmas-fairs/organisers";
 import { shortRange } from "@/lib/programmatic/christmas-fairs/format";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "@/lib/programmatic/christmas-fairs/guide";
 import { fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 
-import { FairCard, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
+import { FairAccess, FairCard, FairProgramme, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
 import { FairStatus } from "./FairStatus";
 
 export function townCrumbs(town: Town, locale: FairsLocale): Crumb[] {
@@ -71,8 +74,22 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
     locale,
   );
   const zone = locale === "en" ? null : weekendZoneFor(town);
+  // Other towns' fairs on the same days out (20 Nov 2026), except on a town whose body is held for a title test.
+  const held = Boolean(BODY_HOLDS[town.ine]);
+  const sameWeekend = held
+    ? []
+    : sameWeekendFairs(town, 16)
+        .filter((s) => locale !== "en" || hasEnglish(s.town))
+        .slice(0, 8);
+  const sameWeekendLinks = sameWeekend.map((s) => ({
+    label: townName(s.town.name, locale),
+    href: townPath(locale, s.town.slug),
+    note: `${s.fair.name} · ${shortRange(s.fair.start, s.fair.end, locale)}`,
+  }));
+  const sameWeekendIne = new Set(sameWeekend.map((s) => s.town.ine));
   const nearby = nearbyTowns(town, 12)
     .filter((n) => locale !== "en" || hasEnglish(n))
+    .filter((n) => !sameWeekendIne.has(n.ine))
     .slice(0, 6)
     .map((n) => ({
       label: townName(n.name, locale),
@@ -81,6 +98,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
     }));
   const guideKeys = town.ine === BARCELONA_INE ? (["barcelonaDecember", ...GUIDES] as const) : GUIDES;
   const guides = guideKeys.map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
+  const withDetails = town.fairs.filter((f) => f.details);
+  const accessTitle = withDetails.length === 1 ? (withDetails[0]!.details!.accessTitle?.[locale] ?? null) : null;
 
   return (
     <article>
@@ -111,6 +130,11 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
             </>
           ) : null}
 
+          {/* The organiser's programme, when its pages were read for this edition (organisers.ts `details`). */}
+          {withDetails.map((f) => (
+            <FairProgramme key={f.id} fair={f} locale={locale} heading={withDetails.length === 1} />
+          ))}
+
           {/* The next useful step (lib/engagement/next-step.ts): the lights switch-on and the December holidays (Barcelona: December's agenda).
               Dated by the day the fairs were last read, like the rest of the page: the server render stays clock-free. */}
           <NextStep
@@ -122,7 +146,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
               the next step, so the dates keep their place; lazy-loaded. */}
           <PlacePhoto photo={fairPagePhoto(town.slug, locale)} locale={locale} />
 
-          <h2 id="com-arribar">{t.getThere}</h2>
+          <h2 id="com-arribar">{accessTitle ?? t.getThere}</h2>
+          <FairAccess fairs={withDetails} locale={locale} />
           <p>{renderInline(trains.intro)}</p>
           {trains.items.length > 0 ? (
             <ul>
@@ -151,6 +176,9 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
           <TownHub hub={townHub(town.slug, locale, "fair", checked)} />
         </div>
 
+        {sameWeekendLinks.length > 0 ? (
+          <LinkList title={town.fairs.some((f) => outingDays(f.start, f.end).length > 3) ? t.sameDays : t.sameWeekend} id="ci-xmas-same-weekend" links={sameWeekendLinks} />
+        ) : null}
         <LinkList title={t.nearby} id="ci-xmas-nearby" links={nearby} />
         <p className="mt-4 text-sm">
           <Link href={fairsHubPath(locale)}>{t.allFairs}</Link>

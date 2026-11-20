@@ -61,7 +61,7 @@ export function fairShortName(f: Pick<Fair, "name" | "nameEs">, locale: FairsLoc
 
 interface TownLike {
   name: string;
-  fairs: (Pick<Fair, "name" | "nameEs" | "start" | "end" | "place"> & { id?: string })[];
+  fairs: (Pick<Fair, "name" | "nameEs" | "start" | "end" | "place"> & { id?: string; details?: Fair["details"] })[];
 }
 
 /**
@@ -151,7 +151,9 @@ export function townDescription(subject: TownLike & { ine?: string }, locale: Fa
           ? ["Fechas oficiales, cómo llegar y qué abre esos días.", "Fechas oficiales y cómo llegar.", ""]
           : ["Official dates, how to get there and what is open.", "Official dates and how to get there.", ""];
     const lead = locale === "en" ? `${h} ${SEASON_YEAR}: ${fairShortName(f, "en")}, ${when}` : `${h}: ${when}`;
-    const options = tail.flatMap((t) => [`${lead}${placeNote(f.place)}. ${t}`.trim(), `${lead}. ${t}`.trim()]);
+    // The organiser's own line (hours, shuttle buses: `FairDetails.snippet`, 20 Nov 2026) comes before the generic tails.
+    const own = f.details?.snippet ? [f.details.snippet[locale]] : [];
+    const options = [...own, ...tail].flatMap((t) => [`${lead}${placeNote(f.place)}. ${t}`.trim(), `${lead}. ${t}`.trim()]);
     return first(options, DESCRIPTION_LIMIT);
   }
   const list = town.fairs.map((f) => `${fairShortName(f, locale)} (${shortRange(f.start, f.end, locale)})`);
@@ -190,13 +192,14 @@ export function confirmationNote(fairs: readonly Pick<Fair, "checked" | "unconfi
 /**
  * Towns whose lead stays as it was while their title test runs
  * (docs/SEO_EXPERIMENTS.md, 13 Nov 2026: "Body and description unchanged on
- * these pages"; review 20 Nov). INE -> last day of the hold. The dated lead
- * reaches them after the review; tests/christmas-fairs.test.ts fails from
- * 21 Nov 2026 until this list is emptied (or the hold renewed and logged).
+ * these pages"). INE -> last day of the hold; tests/christmas-fairs.test.ts
+ * fails the day after, until the entry is removed (or renewed and logged).
+ * 20 Nov 2026: Canyelles' review is done (its fair is 21-22 Nov), so it gets
+ * the dated lead; Espinelves' test reads again on 27 Nov, so its hold is
+ * renewed to that day (docs/SEO_EXPERIMENTS.md, 20 Nov).
  */
 export const LEAD_HOLDS: Readonly<Record<string, string>> = {
-  "08043": "2026-11-20",
-  "17063": "2026-11-20",
+  "17063": "2026-11-27",
 };
 
 /**
@@ -324,6 +327,9 @@ export interface Labels {
   holidays: string;
   weekend: string;
   nearby: string;
+  /** Other towns' fairs on the same Saturday, Sunday or holiday (one weekend / several). */
+  sameWeekend: string;
+  sameDays: string;
   guides: string;
   sources: string;
   howToRead: string;
@@ -346,6 +352,14 @@ export interface Labels {
   readOn: (date: string) => string;
   allFairs: string;
   provinces: Record<string, string>;
+  /** The organiser's programme (`FairDetails`, 20 Nov 2026). */
+  programme: string;
+  news: string;
+  tickets: string;
+  officialLinks: string;
+  detailsFrom: (publisher: string, date: string) => string;
+  /** The hub's link to a town page's programme and directions. */
+  programmeLink: string;
 }
 
 export function labels(locale: FairsLocale): Labels {
@@ -362,6 +376,8 @@ export function labels(locale: FairsLocale): Labels {
       holidays: "Festius i botigues aquells dies",
       weekend: "La resta del cap de setmana",
       nearby: "Altres fires de Nadal a prop",
+      sameWeekend: "Altres fires de Nadal el mateix cap de setmana",
+      sameDays: "Altres fires de Nadal els mateixos caps de setmana i festius",
       guides: "Per seguir llegint",
       sources: "Fonts",
       howToRead: "Com llegir aquesta pàgina",
@@ -382,6 +398,12 @@ export function labels(locale: FairsLocale): Labels {
       readOn: (date) => `Dades llegides el ${date}.`,
       allFairs: "Totes les fires de Nadal de Catalunya",
       provinces: { "08": "Província de Barcelona", "17": "Província de Girona", "25": "Província de Lleida", "43": "Província de Tarragona" },
+      programme: `Programa i horaris ${SEASON_YEAR}`,
+      news: "Novetats d'aquest any",
+      tickets: "Entrades",
+      officialLinks: "Programa, plànol i horaris oficials",
+      programmeLink: "programa i com arribar-hi",
+      detailsFrom: (publisher, date) => `Programa i informació pràctica dels webs oficials de la fira (${publisher}), llegits el ${date}.`,
     };
   }
   if (locale === "es") {
@@ -397,6 +419,8 @@ export function labels(locale: FairsLocale): Labels {
       holidays: "Festivos y tiendas esos días",
       weekend: "El resto del fin de semana",
       nearby: "Otras ferias de Navidad cerca",
+      sameWeekend: "Otras ferias de Navidad el mismo fin de semana",
+      sameDays: "Otras ferias de Navidad los mismos fines de semana y festivos",
       guides: "Para seguir leyendo",
       sources: "Fuentes",
       howToRead: "Cómo leer esta página",
@@ -417,6 +441,12 @@ export function labels(locale: FairsLocale): Labels {
       readOn: (date) => `Datos leídos el ${date}.`,
       allFairs: "Todas las ferias de Navidad de Cataluña",
       provinces: { "08": "Provincia de Barcelona", "17": "Provincia de Girona", "25": "Provincia de Lleida", "43": "Provincia de Tarragona" },
+      programme: `Programa y horarios ${SEASON_YEAR}`,
+      news: "Novedades de este año",
+      tickets: "Entradas",
+      officialLinks: "Programa, plano y horarios oficiales",
+      programmeLink: "programa y cómo llegar",
+      detailsFrom: (publisher, date) => `Programa e información práctica de las webs oficiales de la feria (${publisher}), leídas el ${date}.`,
     };
   }
   return {
@@ -431,6 +461,8 @@ export function labels(locale: FairsLocale): Labels {
     holidays: "Holidays and shops on those days",
     weekend: "The rest of the weekend",
     nearby: "Other Christmas markets nearby",
+    sameWeekend: "Other Christmas markets the same weekend",
+    sameDays: "Other Christmas markets on the same weekends and holidays",
     guides: "Read next",
     sources: "Sources",
     howToRead: "How to read this page",
@@ -451,6 +483,12 @@ export function labels(locale: FairsLocale): Labels {
     readOn: (date) => `Data read on ${date}.`,
     allFairs: "All Christmas markets in Catalonia",
     provinces: { "08": "Province of Barcelona", "17": "Province of Girona", "25": "Province of Lleida", "43": "Province of Tarragona" },
+    programme: `Programme and times ${SEASON_YEAR}`,
+    news: "New this year",
+    tickets: "Tickets",
+    officialLinks: "Official programme, map and timetables",
+    programmeLink: "programme and getting there",
+    detailsFrom: (publisher, date) => `Programme and practical information from the fair's official websites (${publisher}), read on ${date}.`,
   };
 }
 

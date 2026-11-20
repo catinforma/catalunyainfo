@@ -109,10 +109,58 @@ export interface OrganiserFair {
    * fair is shown once.
    */
   alsoReplaces?: readonly string[];
+  /**
+   * What the organiser's own pages say about this edition beyond the dates
+   * (programme, getting there, tickets), read on `details.readOn`. Only for
+   * the most-searched fairs, and only facts those pages print for this year.
+   */
+  details?: FairDetails;
 }
 
 /** One short sentence per locale. */
 export type Localized = { ca: string; es: string; en: string };
+
+/** One official page the details were read on, as the page links it. */
+export interface DetailLink {
+  label: Localized;
+  url: string;
+}
+
+/**
+ * The organiser's programme and practical information for one edition, as
+ * its official pages print them (20 Nov 2026: Canyelles). Every line is one
+ * fact from `links`, written per locale; inline Markdown links allowed. No
+ * prices unless the page gives them, no "free entry" unless the page says so.
+ */
+export interface FairDetails {
+  /** Day these pages were read (Europe/Madrid). */
+  readOn: string;
+  /** Programme highlights, one line each (time, act, place). */
+  programme: readonly Localized[];
+  /** What the organiser presents as new this year. */
+  news?: readonly Localized[];
+  /** Getting there: shuttle buses, parking, one paragraph each. */
+  access?: readonly Localized[];
+  /** The "how to get there" heading, in the query's words, when `access` is given. */
+  accessTitle?: Localized;
+  /** Tickets, as the organiser states them (which spaces need one). */
+  tickets?: Localized;
+  /** What stays on after the fair (a second weekend, an exhibition). */
+  after?: Localized;
+  /** Why the dates differ from the official calendar's, when the organiser says. */
+  why?: Localized;
+  /**
+   * The description's second sentence for this town (replaces "Dates
+   * oficials, com arribar-hi…"): what the programme adds, in the query's words.
+   */
+  snippet?: Localized;
+  /** Daily opening and closing time ("09:00", "21:00"), when the pages give the same for every day: the Event's start and end times. */
+  times?: { opens: string; closes: string };
+  /** The official pages these lines come from (programme, map, timetables). */
+  links: readonly DetailLink[];
+  /** Who organises it, as its own site names itself, when that is not the page the dates come from (`OrganiserFair.publisher`). */
+  organizer?: { name: string; url: string };
+}
 
 /**
  * A fairs-calendar row whose organiser's own page was read and does not
@@ -167,4 +215,6 @@ export interface Fair {
   closed: readonly string[];
   /** Set when the organiser's page was read and does not carry the 2026 edition yet. */
   unconfirmed: Omit<UnconfirmedFair, "fairId"> | null;
+  /** The organiser's programme and practical information, when read (`OrganiserFair.details`). */
+  details: FairDetails | null;
 }

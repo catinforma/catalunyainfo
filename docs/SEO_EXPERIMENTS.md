@@ -9786,4 +9786,174 @@ and its end date). Updated: `december-bridge-spain.test.ts` (check date 20 Nov, 
 ten, official links, La Rioja on the BOE list, Asturias "silent"; new FAQ questions; date pages published), `december-pages.test.ts`
 (date pages published), `school-calendar-spain-i18n.test.ts` (bridge link allowed and required, "en los colegios" question).
 
+## 2026-11-20 — Christmas fairs and seasonal events: Canyelles' programme, shuttle buses and parking before its weekend; the 13 Nov title test read; organisers' programmes on five more fair pages, same-weekend links, twelve towns' lights dates (deploy; then group `llums-nadal`) (review 2026-11-23, 2026-11-27, 2026-12-04)
+
+**Why.** The fair pages sit at position 8–11 with almost no clicks on the date queries, and the sub-queries Google now
+shows for them are "cómo llegar", "cómo llegar y aparcar", "horarios exactos", "como llegar desde barcelona". The
+pages gave the dates and the Rodalies stations; local media and the councils give hours, programme, buses and parking.
+
+### 1. Canyelles (`/ca/fires-de-nadal/canyelles/`, `/es/mercados-navidad/canyelles/`; no English page: Canyelles is not in `EN_TOWNS`)
+
+**Baseline (GSC, `snapshot.py page <path> 14`, 7–20 Nov; the last two days partial).**
+
+| Page | 7–13 Nov (old title) | 14–20 Nov (dated title) | 14 d |
+| --- | --- | --- | --- |
+| `/es/mercados-navidad/canyelles/` | 27 / 1,347 / 2.0 % / 8.2 | 11 / 971 / 1.1 % / 8.2 | 38 / 2,318 / 1.6 % / 8.2 |
+| `/ca/fires-de-nadal/canyelles/` | 2 / 307 / 0.7 % / 8.9 | 8 / 413 / 1.9 % / 8.0 | 10 / 720 / 1.4 % / 8.4 |
+
+Queries (14 d): fira santa llucia canyelles 2026 630 / 0 / 10.4 (ES) and 112 / 0 / 9.7 (CA); fira canyelles 2026 67 / 0
+/ 10.0; feria canyelles 2026 64 / 2 / 6.7; santa llucia canyelles 2026 62 / 0 / 7.1; fira de santa llucia canyelles 2026
+54 / 0 / 9.5 (ES) and 103 / 0 / 9.4 (CA); fira de nadal canyelles 2026 60 / 0 / 9.3 (CA); fira santa llúcia canyelles
+como llegar 11 / 0 / 7.4.
+
+**The 13 Nov title test, day-7 read (due today).** ES: 2.0 % → 1.1 % at the same position (8.2); CA: 0.7 % → 1.9 % at
+8.9 → 8.0. Against the 28-day baseline the ES page is below (1.9 %) but at a worse position (7.9 → 8.2), so the revert
+rule ("below baseline at the same or better position") does not fire; CA beats it. **Decision: titles kept** (the fair
+is tomorrow; the dated title is the answer to the query). Canyelles' test is closed; Espinelves' reads again on 27 Nov.
+
+**Data checked (20 Nov 2026, curl with a browser user agent; every linked file opened; quotes and file list in
+`christmas-fairs/organisers.ts`, `CANYELLES_DETAILS`).** Ajuntament de Canyelles: the fair page ("La 24a edició de la Fira
+de Santa Llúcia se celebra el 21 i 22 de novembre de 2026"; agenda "Dis. 21 Nov, 2026 (9:00 - 21:00)", "Diu. 22 Nov,
+2026 (9:00 - 21:00)"), the news of 16 Nov (more than 350 stalls; new: a mapping on the castle front and a magic games
+area), the presentation of 11 Nov (brought forward a week because of the 29 Nov general election; La Petita Santa
+Llúcia 28–29 Nov; parking areas and the free shuttle), the carols news (17 h, Santa Magdalena), the programme leaflet
+(PDF), the map and the two bus timetables (PNG). The fair's web app, linked from the council's page: "Aparcaments
+gratuïts", the same shuttle times, advance tickets (entradium.com) for Park Noël, the Castell dels Contes Màgics and the
+Patge Reial Vibó only; no price anywhere, and no page says entry is free, so the page says neither.
+
+**What changed.**
+- Fair card: hours "dissabte i diumenge, de 9 a 21 h"; read date 20 Nov.
+- New section "Programa i horaris 2026" (es "Programa y horarios", en "Programme and times"): why the dates differ from
+  the calendar (the election), the day-by-day programme (opening 9 h, welcome and the Ambaixador del Nadal at 12 h,
+  piromusical 20 h on Saturday; tions and drawing prizes 11.30 h on Sunday; carols 17 h and live music both days; the
+  children's spaces 9–20 h), what is new, tickets, La Petita Santa Llúcia, and the seven official files.
+- "Com arribar-hi" becomes "Com arribar a la fira: bus llançadora gratuït i aparcament" and opens with the two free
+  shuttle lines (Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès, every two hours 9–19 h; Sitges – Sant Pere
+  de Ribes – Canyelles, 10, 13, 16 h, back 13.30, 16.30, 21 h), the train from Barcelona to the shuttle stops (R2 Sud to
+  Vilanova, R4 to Vilafranca: repo Rodalies snapshot), free parking around the old town (castle, school, C-15z),
+  accessible parking (Av. del Raval, C-15z) and the urban minibus. The station/Mou-te paragraph follows.
+- Lead: `LEAD_HOLDS` drops Canyelles (its review is done), so the first sentence gives the days ("Fira de Santa Llúcia
+  de Canyelles 2026: dissabte 21 i diumenge 22 de novembre, Nucli i casc antic."). Espinelves' hold is renewed to 27 Nov.
+- Description (ca/es; outside any window since today's review): "Fira de Santa Llúcia de Canyelles: 21 i 22 de novembre
+  de 2026. De 9 a 21 h, amb bus llançadora gratuït des de Vilanova, Vilafranca i Sitges." (es "…De 9 a 21 h, con bus
+  lanzadera gratis desde Vilanova, Vilafranca y Sitges."). Was "…(Nucli i casc antic). Dates oficials, com arribar-hi i
+  què obre aquells dies." Title unchanged.
+- Event JSON-LD: `startDate` 2026-11-21T09:00:00+01:00, `endDate` 2026-11-22T21:00:00+01:00, `organizer` Ajuntament de
+  Canyelles (its fair page), `description`; `eventStatus` stays EventScheduled (Google's EventRescheduled means "to a
+  later date"; this one moved earlier). No `image`: there is no licensed photo of the fair (owner photo needed).
+
+**Prediction.** The ES page's clicks on 21–22 Nov exceed its 14–15 Nov (0 clicks on 522 impressions) at equal position,
+and "como llegar" / "aparcar" sub-queries get clicks. **Review 2026-11-23** (`snapshot.py page /mercados-navidad/canyelles/
+3`, the fair weekend) and **2026-12-04** (14 days; demand ends with the fair, so this read is for the 2027 template).
+
+**Go-live (Canyelles, ship before Saturday 21 Nov).** Town pages are static code routes: deploy only, no publish group.
+IndexNow prefixes `/ca/fires-de-nadal/canyelles/ /es/mercados-navidad/canyelles/`. The hubs' "revisat el" date moves to
+20 Nov with the same deploy (data date, not a copy change).
+
+### 2. Reads due in this cluster, and pages re-read with nothing new
+
+**Christmas lights, the 12 Nov retitle (day-7 read, due 19 Nov; `snapshot.py page <path> 14`, 13–19 Nov vs the 5–11 Nov
+baseline).** CA 3.1 % at 6.7 (was 1.9 % at 6.3); ES 0.8 % at 7.3 (1.4 % at 7.0); EN 1.5 % at 7.5 (2.2 % at 7.0). ES and EN
+lost CTR but also position, so the 12 Nov rule ("CTR falls at equal or better position") does not fire; CA doubled. **Titles
+kept.** 14 d (7–20 Nov): CA 24 / 1,209 / 2.0 % / 6.8, ES 37 / 2,884 / 1.3 % / 7.1, EN 7 / 390 / 1.8 % / 7.3. Queries: encesa
+de llums barcelona 2026 152 / 1 / 7.7, encesa llums nadal barcelona 2026 109 / 0 / 9.8, encendido luces barcelona 2026 94 / 0
+/ 9.5, encendido luces navidad hospitalet 2026 34 / 4 / 7.9.
+
+**La Marató** (`/ca/guies/la-marato-tv3-3cat/`, 14 d 17 / 2,108 / 0.8 % / 6.8; "marató tv3 2026 data" 280 / 0 / 7.3, "marato
+tv3 2026" 76 / 1 / 9.2; title window 18 Nov → reads 25 Nov and 2 Dec). Re-read 20 Nov with curl: the 2026 hub (13 December,
+35th edition, 271.9 M€ since 1992, unchanged) and the volunteering site ("Tancat el període de preinscripcions", no direct
+registration announced). Nothing new to print: no change.
+
+**Gran Recapte** (ES 40 / 2,647 / 1.5 % / 6.3, CA 35 / 1,784 / 2.0 % / 6.5; "gran recapte 2026" 231 / 2 / 8.4 ES and 128 / 1 /
+10.4 CA; title window to 2 Dec). Re-read 20 Nov: granrecapte.org home and 2026 page (no results), acatbal.org/el-gran-recapte/
+(its counters are still headed "Dades del 2025"; online donations "fins a mitjans de desembre"). No
+2026 figures published: no change; `GRAN_RECAPTE_RESULTS_RECHECK_BY` (30 Nov) stands.
+
+### 3. Every fair town page: "the same weekend" links; the hub links the programmes (ca/es/en)
+
+- New list on each town page, above "Altres fires de Nadal a prop": "Altres fires de Nadal el mateix cap de setmana" (es "Otras
+  ferias de Navidad el mismo fin de semana", en "Other Christmas markets the same weekend"; towns whose fairs span several weekends:
+  "…els mateixos caps de setmana i festius"). Other towns' fairs open on one of this town's Saturdays, Sundays or Catalonia-wide
+  holidays (`outingDays`, closed days excluded), first shared day first, short fairs before the month-long markets, then same
+  comarca, same province, larger town; one per town, at most 8 (English: English towns only). Towns in that list leave the
+  "a prop" list, so no link appears twice. Examples: Canyelles → Barcelona (Sagrada Família opens 21 Nov); Cardedeu → Sant Pere
+  de Vilamajor, Manresa, Valls, Banyoles, Tàrrega…; Arbúcies → Olot, Sant Feliu de Guíxols, Ripoll, Sant Celoni, Caldes…
+- Hub, "Totes les fires, per data": a fair whose organiser programme was read gets "· programa i com arribar-hi" linking to its
+  town page's `#com-arribar` (today Canyelles; the others below as they get `details`).
+- Not on Espinelves: `BODY_HOLDS` (organisers.ts) keeps its body as it was until its 27 Nov title read (see 4).
+- No title, description or lead changes from this item.
+
+### 4. Organisers' programmes on the most-searched fair pages (body only; titles, descriptions and leads untouched)
+
+Each read on 20 Nov 2026 with curl (browser user agent) on the organiser's own pages, programme PDFs rendered to images where
+the text layer is garbled; quotes and file lists in `christmas-fairs/organisers.ts` above each `*_DETAILS`. Same blocks as
+Canyelles ("Programa i horaris 2026", what is new, tickets, official files; "Com arribar-hi" opens with the organiser's own
+access lines when it gives any). No snippet line: these towns' descriptions and leads are in the 16 Nov lead test, so the
+programme read date is not counted in the lead's "revisat el" (`lastChecked`), which stays 13 Nov.
+
+| Page (14 d, 7–20 Nov: clicks / impr. / CTR / pos) | Source | Added |
+| --- | --- | --- |
+| Barcelona `/es/mercados-navidad/barcelona/` 3 / 364 / 0.8 % / 8.8; `/ca/fires-de-nadal/barcelona/` 0 / 65 / 7.7 (both shown from 16 Nov). "fira santa llucia barcelona 2026" 90 / 1 / 10.1 on the ES markets guide and 35 / 0 / 10.0 here | firadesantallucia.cat (now "© … 2026"): home, calendari, activitats ("Programació provisional a 2 de novembre"), noticies, com_arribar; Guia BCN (Sagrada Família) | Santa Llúcia: 211 stalls (181 Christmas, 30 crafts), daily 10–21 h, 240 years since 1786, the new star on the 14 m tree, the giant tió's days and hours, the Diada on 12 Dec; metro L1/L3/L4 stops, buses 17, 19, 40, 45, 120, Bicing, the two car parks. Sagrada Família: 70+ stalls, daily 10–21 h, the new Firetaventura Solidària. Event: times 10:00–21:00 (+01:00); Santa Llúcia's organiser and URL = the Associació's site. Title and description still held on Santa Llúcia by `SNIPPET_HOLDS` (to 1 Dec) |
+| Cardedeu CA 2 / 506 / 0.4 % / 8.2, ES 4 / 252 / 1.6 % / 7.3; "fira nadal cardedeu 2026" 159 / 0 / 9.2, "fira de nadal cardedeu 2026" 140 / 1 / 8.7 | firadenadal.cat (http only) `programa.pdf` (16 Nov) and `llibret.pdf` (12 Nov) | Fire lit at Sant Hilari on 8 Dec; inauguration Fri 11 at 19.30 h; Sat/Sun from 10 h, gospel, xocolatada, escudella, sardanes, tió, magic, closing 20.30 h; torró demos 4 € (6 € for two), chocolate talk 3 € (4 €); nativity scene to 5 Jan. **Conflict printed:** Friday opening 19 h (home page, booklet) vs 18 h (programme) |
+| Arbúcies ES 5 / 304 / 1.6 % / 6.9 (CA no impressions); "fira del tio arbucies 2026" 128 / 0 / 8.6 | Programme leaflet linked by visitarbucies.com as "Programa de la Fira del Tió 2026" (PDF, 18 Nov); 2026 stallholder rules | Sat 10–19 h, Sun 10–18 h (rules: stalls close Sun 15 h, "pot variar": both printed); giant nativity scene from Fri 4, 19.30 h; "Anem a buscar el tió!" 11 h (5 € / 25 € with tió, QR booking); concerts; lights switch-on Correllums Sat 18.15 h; gimcana; parking marked on the map, no price |
+| Caldes de Montbui ES 24 / 602 / 4.0 % / 6.0, CA 9 / 292 / 3.1 % / 5.9; "fira nadal caldes de montbui 2026" 126 / 4 / 8.0 | visiteucaldes.cat `PROGRAMA_MERCAT_NADAL_2026.pdf` (30 Oct) and "Com arribar" | Opening Fri 4 at 18 h with the free first caldo and the devils, the market's 40th year; 5–8 Dec 10–20 h; caldo / lentils / carn d'olla times and prices (1 €, 1 €, 2 €, cup 1 €); sardanes, tió, workshops, rain plan; Sagalés e9, 202, 203 from Barcelona |
+| Espinelves ES 12 / 2,481 / 0.5 % / 8.7, CA 5 / 875 / 0.6 % / 9.3 (positions 10 → 13–30 on the espinelves queries from 16 Nov) | firadelavet.cat ("ORGANITZA: Ajuntament d'Espinelves"), map 2026 | **Written but held** (`BODY_HOLDS`, to 27 Nov, "body unchanged" in the 13 Nov entry): hours (Saturdays, holidays and Mon 7 Dec 10–20 h, weekdays 10–18 h), opening 28 Nov 16.30 h (Avet d'Or to Eudald Carbonell), concert 29 Nov, Cursa de l'Avet 8 Dec, street bands 11/13/17 h, children's programme, the 45-years exhibition, parking areas and the toll barrier on the map (no price published) |
+
+**Espinelves, for the owner.** The 13 Nov title test has lost its basis: since 16 Nov both Espinelves pages fell from ~9.7 to
+13–30 on every espinelves query (ES 288 and 232 impressions on 14–15 Nov, 1–12 a day since; no other URL of ours took them), so a 27 Nov CTR read "at
+equal position" is not possible. The fair opens on 28 Nov. Recommendation: close the test now, delete the one `BODY_HOLDS`
+line and the `LEAD_HOLDS` line for 17063 (the tests say exactly that), deploy; then the dated lead, the programme and the
+same-weekend links go live before the opening. Left held here because the entry says "body unchanged" and that is the
+owner's call.
+
+**Prediction.** By 4 Dec, at equal position, the town queries with "como llegar", "horario", "programa" start taking clicks on
+the five pages, and "fira santa llucia barcelona 2026" moves to the Barcelona fair page (title already names it).
+**Review 2026-12-04** (`snapshot.py page /mercados-navidad/<town>/ 14` and `page /fires-de-nadal/<town>/ 14`); Cardedeu and
+Arbúcies also the Monday after their fair (7 and 14 Dec).
+
+### 5. Christmas lights page: eight more towns dated, Barcelona's 26 Nov closures and metro (ca/es/en; group `llums-nadal`)
+
+The 12 Nov entry's pre-registered re-read ("around 18–20 Nov … fill `y2026`, move `LIGHTS_TOWNS_AS_OF`, deploy and publish
+`llums-nadal`"). Titles kept after the read in 2; the description and lead list the dated towns by design, so they now name
+twelve instead of four ("Ja tenen data Badalona, Castelldefels i més").
+
+- **Towns (each council's own page, the date sentence grepped, 20 Nov 2026):** Girona 27 Nov, plaça de Catalunya (council
+  traffic notice; no time for the act); Olot 28 Nov, plaça Major, 18:30 (lights 19 h); Granollers 27 Nov 18:30, plaça de la
+  Porxada (note of 17 Nov); L'Hospitalet 26 Nov 18 h, plaça de l'Ajuntament (council flyer on lh-on.cat, linked from l-h.cat's
+  home page, so `hosts` accepts lh-on.cat and the row cites both); El Prat 21 Nov 18:30, plaça de Catalunya; Mataró 27 Nov
+  18:30, Espai Firal del Nou Parc Central; Manresa 27 Nov 17:30, Plaça de Nadal; Castelldefels Sat 21 Nov 18 h, plaça de
+  l'Església. No 2026 date yet: Figueres, Blanes, Vic, Sant Cugat, Tarragona, Tortosa, Lleida, Sitges, Cornellà, Vilanova (read
+  with its invalid certificate accepted). Not readable: Sabadell (404 on its Christmas pages), Reus (Cloudflare), Santa Coloma
+  (403): `LIGHTS_TOWNS_NOT_REREAD` keeps 12 Nov, 12 Nov and 4 Nov; the table note now lists them in one shorter clause (the
+  400-character note limit). `LIGHTS_TOWNS_AS_OF` 20 Nov.
+- **Barcelona:** City Council press note of 20 Nov 2026, "Afectacions a la mobilitat per l'acte d'encesa de llums de Nadal del
+  proper dijous, 26 de novembre" (`MOBILITY_2026`): new paragraph "Com arribar-hi el dijous 26" (whole Passeig de Gràcia closed
+  Diagonal–Gran Via from 14 h, cross streets too except Diagonal, Aragó, Diputació, Gran Via; metro entrances in the area closed
+  from 17 h, the council suggests Catalunya (L1, L3), Fontana (L3) or Verdaguer (L4, L5); buses 22, 24, 7, V15, Nitbus and Bus
+  Turístic diverted 23–27 Nov). The note puts the act "entre el carrer de Provença i l'avinguda Diagonal"; the 9 Nov note's
+  stage "entre Rosselló i Diagonal" stays in the lead (the stage is inside that stretch). Still nobody named who switches them
+  on. `LIGHTS_SWITCH_ON_CHECKED` 20 Nov. A test fails from 27 Nov: the paragraph must go or turn past tense.
+- Tests: `tests/christmas-lights-2026.test.ts` (twelve towns, the note, the date guard), `tests/christmas-lights.test.ts` (check
+  date; the "2025 day printed as 2026" guard now skips a day that is also an official 2026 date, e.g. 27 Nov is L'Hospitalet
+  2025 and Girona 2026).
+
+**Prediction.** By 27 Nov the town queries land ("encendido luces navidad hospitalet 2026" 34 / 4 / 7.9 already; El Prat,
+Girona, Granollers, Mataró), and "encesa llums nadal barcelona 2026" (109 / 0 / 9.8) gets clicks with the closures and metro
+answer. **Review 2026-11-27** (`snapshot.py page encesa-llums 7`, `page encendido-luces 7`, `page barcelona-christmas-lights 7`)
+and **2026-12-04** (14 d).
+
+### Go-live (items 3–5) and tests
+
+- **Deploy** (town pages, hub and Event markup are code routes), then **publish group `llums-nadal`** (the lights page is a
+  published article). No other group: the markets guide, Christmas in Barcelona, Barcelona in December, La Marató and Gran
+  Recapte are not changed.
+- **IndexNow prefixes:** `/ca/fires-de-nadal/canyelles/ /es/mercados-navidad/canyelles/ /ca/fires-de-nadal/barcelona/
+  /es/mercados-navidad/barcelona/ /en/christmas-markets/barcelona/ /ca/fires-de-nadal/cardedeu/ /es/mercados-navidad/cardedeu/
+  /ca/fires-de-nadal/arbucies/ /es/mercados-navidad/arbucies/ /ca/fires-de-nadal/caldes-de-montbui/
+  /es/mercados-navidad/caldes-de-montbui/ /ca/guies/encesa-llums-nadal-barcelona/ /es/guias/encendido-luces-navidad-barcelona/
+  /en/guides/barcelona-christmas-lights/` (every other town page only gains the same-weekend list: let the sitemap carry them).
+- **Date guards added:** `BODY_HOLDS` (fails from 28 Nov), `LEAD_HOLDS` Espinelves renewed to 27 Nov (fails from 28 Nov), the
+  lights mobility paragraph (fails from 27 Nov).
+- **Owner only:** a licensed photo of the Canyelles fair (its Event has no `image`); the Espinelves decision above.
+
 **Outcome:** _pending_

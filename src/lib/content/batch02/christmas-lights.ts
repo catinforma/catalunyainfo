@@ -10,6 +10,7 @@ import {
   LIGHTS_PLAN_2026,
   LIGHTS_SWITCH_ON_CHECKED,
   MOBILITY_2025,
+  MOBILITY_2026,
   PAST,
   SWITCH_ON_HISTORY,
   SWITCH_ON_HISTORY_CHECKED,
@@ -352,6 +353,8 @@ function switchOnSection(locale: Locale, facts: Announcements): string[] {
 
 function showParagraphs(locale: Locale): string[] {
   return [
+    // The 2026 mobility note (festive.ts MOBILITY_2026, 20 Nov 2026): closures, metro and buses on the day.
+    MOBILITY_2026.text[locale].replace("(URL)", `(${MOBILITY_2026.url})`),
     {
       ca: `El 2025 l'acte va durar uns vint minuts i va acabar amb un compte enrere que va encendre alhora els llums de tots els barris. El passeig de Gràcia es va tancar al trànsit entre la Gran Via i el carrer d'Aragó des de les 17:30, segons l'[avís de mobilitat de l'Ajuntament](${MOBILITY_2025.url}).`,
       es: `En 2025 el acto duró unos veinte minutos y acabó con una cuenta atrás que encendió a la vez las luces de todos los barrios. El paseo de Gràcia se cerró al tráfico entre la Gran Via y la calle Aragó desde las 17:30, según el [aviso de movilidad del Ayuntamiento](${MOBILITY_2025.url}).`,
@@ -473,9 +476,10 @@ function townTable(locale: Locale, towns: readonly LightsTown[], facts: Announce
   const byDate = [...new Set(unread.map((u) => u.read))].map((read) => ({ read, names: joinNames(unread.filter((u) => u.read === read).map((u) => u.name), locale) }));
   const exceptions = byDate.length
     ? {
-        ca: ` ${byDate.map((g) => `${g.names}: comprovat el ${dateYear(g.read, "ca")} (la web no ha respost després)`).join("; ")}.`,
-        es: ` ${byDate.map((g) => `${g.names}: comprobado el ${dateYear(g.read, "es")} (la web no ha respondido después)`).join("; ")}.`,
-        en: ` ${byDate.map((g) => `${g.names}: checked on ${dateYear(g.read, "en")} (the website has not answered since)`).join("; ")}.`,
+        // One clause per reading date; short, so the table note stays under the 400 characters a note may have.
+        ca: ` Webs que no han respost després (darrera lectura): ${byDate.map((g) => `${g.names} (${shortDate(g.read, "ca")})`).join("; ")}.`,
+        es: ` Webs que no han respondido después (última lectura): ${byDate.map((g) => `${g.names} (${shortDate(g.read, "es")})`).join("; ")}.`,
+        en: ` Websites that have not answered since (last read): ${byDate.map((g) => `${g.names} (${shortDate(g.read, "en")})`).join("; ")}.`,
       }[locale]
     : "";
   const note = {
@@ -733,6 +737,7 @@ export function lightsSources(facts: Announcements = ANNOUNCED_2026, towns: read
     add(`Encesa de llums de Nadal ${year}: convocatòria`, s.callUrl, "Ajuntament de Barcelona");
     add(`Encesa de llums de Nadal ${year}: crònica`, s.reportUrl, "Ajuntament de Barcelona");
   }
+  add("Afectacions a la mobilitat per l'acte d'encesa de llums de Nadal del dijous 26 de novembre (2026)", MOBILITY_2026.url, "Ajuntament de Barcelona");
   add("Afectacions de la mobilitat per l'encesa de llums de Nadal 2025", MOBILITY_2025.url, "Ajuntament de Barcelona");
   add("Barcelona prepara un Nadal amb més llums (2024)", PAST.lights2024.url, "Ajuntament de Barcelona");
   add("Fira de Santa Llúcia 2026", SANTA_LLUCIA_2026.url, "Generalitat de Catalunya");
