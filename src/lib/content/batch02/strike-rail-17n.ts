@@ -17,7 +17,7 @@ import {
   type B2Source,
 } from "./shared";
 import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, type Strike } from "./strikes";
-import { STRIKES_SPAIN_VERIFIED, SPAIN_STRIKES } from "./strikes-spain-data";
+import { SPAIN_NOT_HAPPENING, STRIKES_SPAIN_VERIFIED, SPAIN_STRIKES } from "./strikes-spain-data";
 import { fillChecked, spainCheckedOn } from "./strikes-spain";
 import type { SpainStrike } from "./strikes-spain-model";
 import { TRAINS } from "@/lib/content/features/trains";
@@ -53,7 +53,9 @@ import { TRAINS } from "@/lib/content/features/trains";
  * strike watch that moves the as-of moves this page too.
  */
 
-export const RAIL_17N_ID = { spain: "huelga-ferroviaria-2026-11-17", catalan: "vaga-ferroviaria-2026-11-17", next: "huelga-renfe-2026-11-23" } as const;
+// 20 Nov 2026: SEMAF called off the 23rd (nº 2026-38): `next` is now its SPAIN_NOT_HAPPENING entry, shown until the 23rd has passed.
+export const RAIL_17N_ID = { spain: "huelga-ferroviaria-2026-11-17", catalan: "vaga-ferroviaria-2026-11-17", next: "renfe-23-noviembre-desconvocada" } as const;
+const NEXT_DAY = "2026-11-23";
 
 /** Renfe's Cercanías networks outside Catalonia, as renfe.com/es/es/cercanias lists them (read 13 Nov 2026). */
 export const CERCANIAS_NETWORKS = [
@@ -97,7 +99,6 @@ export const ADIF_MS_PUBLISHED = false;
 const CALLED_OFF_DAY = "2026-11-19";
 const U = STRIKE_URLS;
 const link = (href: string, label: string) => `[${label}](${href})`;
-const lowerFirst = (s: string) => `${s.charAt(0).toLowerCase()}${s.slice(1)}`;
 const heading = (level: 2 | 3, text: string, id?: string): Block => ({ type: "heading", level, text, ...(id ? { id } : {}) }) as Block;
 
 export type Rail17nPhase = "before" | "during" | "after";
@@ -172,18 +173,17 @@ interface Copy {
   ticketsHeading: string;
   tickets: string[];
   nextHeading: string;
-  /** The 23 Nov section's heading, while that strike is listed. */
+  /** The 23 Nov section's heading, while that day is to come (20 Nov 2026: the strike is called off). */
   next23Heading: string;
   nextId: string;
-  next23: (title: string, scope: string) => string;
-  next23Ms: (ms: string) => string;
+  next23: (title: string, text: string) => string;
   /** The 19 Nov section: SCF's Adif strike, called off on the 17th (SCFCOM 38). */
   day19Heading: string;
   day19Id: string;
   day19: (calledOff: string) => string;
-  /** FAQ for the 23 Nov strike, from its Spain entry (scope and minimum-services status). */
+  /** FAQ for 23 Nov: SEMAF called its strike off (20 Nov 2026). */
   q23: string;
-  a23: (scope: string, ms: string) => string;
+  a23: string;
   nextLinks: (locale: Locale) => string[];
   faq: (msState: string, rodalies: string, today: boolean, msPending: boolean) => { question: string; answer: string }[];
 }
@@ -238,14 +238,13 @@ const COPY: Record<Locale, Copy> = {
       "**Mira tu tren la víspera y la misma mañana:** con servicios mínimos no circulan todos los trenes de tu hora.",
     ],
     nextHeading: "Después del 17",
-    next23Heading: "Lunes 23 de noviembre: huelga de maquinistas (SEMAF)",
+    next23Heading: "Lunes 23 de noviembre: huelga de maquinistas (SEMAF), desconvocada",
     nextId: "despues",
-    next23: (title, scope) => `**Lunes 23 de noviembre: ${title}.** ${scope}`,
-    next23Ms: (ms) => `**Servicios mínimos del 23:** ${ms}.`,
+    next23: (title, text) => `**${title}.** ${text}`,
     day19Heading: "Jueves 19 de noviembre: huelga en Adif, desconvocada",
     day19Id: "19-noviembre",
     q23: "¿Hay huelga de trenes el 23 de noviembre?",
-    a23: (scope, ms) => `Sí: el sindicato de maquinistas SEMAF la ha convocado para el lunes 23 de noviembre. ${scope} Servicios mínimos: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    a23: "No: el sindicato de maquinistas SEMAF desconvocó el 20 de noviembre la huelga del Grupo Renfe prevista para el lunes 23, tras alcanzar un acuerdo. Ese día no queda ninguna huelga de trenes convocada en las fuentes revisadas.",
     day19: (calledOff) =>
       `El sindicato SCF desconvocó el 17 de noviembre el paro de 24 horas del personal de circulación de Adif previsto para el jueves 19: «SCF ha acordado la desconvocatoria para el día 19», después de que Adif aceptara sus reivindicaciones (${link(calledOff, "comunicado 38 del SCF")}). Ese día no había convocatoria en Renfe, Iryo ni Ouigo, así que no queda ninguna huelga de trenes convocada.`,
     nextLinks: (locale) => [
@@ -314,14 +313,13 @@ const COPY: Record<Locale, Copy> = {
       "**Mira el teu tren la vigília i el mateix matí:** amb serveis mínims no circulen tots els trens de la teva hora.",
     ],
     nextHeading: "Després del 17",
-    next23Heading: "Dilluns 23 de novembre: vaga de maquinistes (SEMAF)",
+    next23Heading: "Dilluns 23 de novembre: vaga de maquinistes (SEMAF), desconvocada",
     nextId: "despres",
-    next23: (title, scope) => `**Dilluns 23 de novembre: ${title}.** ${scope}`,
-    next23Ms: (ms) => `**Serveis mínims del 23:** ${ms}.`,
+    next23: (title, text) => `**${title}.** ${text}`,
     day19Heading: "Dijous 19 de novembre: vaga a Adif, desconvocada",
     day19Id: "19-novembre",
     q23: "Hi ha vaga de trens el 23 de novembre?",
-    a23: (scope, ms) => `Sí: el sindicat de maquinistes SEMAF l'ha convocada per al dilluns 23 de novembre. ${scope} Serveis mínims: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    a23: "No: el sindicat de maquinistes SEMAF va desconvocar el 20 de novembre la vaga del Grup Renfe prevista per al dilluns 23, després d'arribar a un acord. Aquell dia no queda cap vaga de trens convocada a les fonts revisades.",
     day19: (calledOff) =>
       `El sindicat SCF va desconvocar el 17 de novembre l'aturada de 24 hores del personal de circulació d'Adif prevista per al dijous 19: «SCF ha acordado la desconvocatoria para el día 19», després que Adif acceptés les seves reivindicacions (${link(calledOff, "comunicat 38 de l'SCF")}). Aquell dia no hi havia cap convocatòria a Renfe, Iryo ni Ouigo, de manera que no queda cap vaga de trens convocada.`,
     nextLinks: (locale) => [
@@ -390,14 +388,13 @@ const COPY: Record<Locale, Copy> = {
       "**Check your train the evening before and that morning:** under minimum services not every train at your usual time runs.",
     ],
     nextHeading: "After the 17th",
-    next23Heading: "Monday 23 November: train drivers' strike (SEMAF)",
+    next23Heading: "Monday 23 November: train drivers' strike (SEMAF) called off",
     nextId: "after",
-    next23: (title, scope) => `**Monday 23 November: ${title}.** ${scope}`,
-    next23Ms: (ms) => `**Minimum services on the 23rd:** ${ms}.`,
+    next23: (title, text) => `**${title}.** ${text}`,
     day19Heading: "Thursday 19 November: Adif strike called off",
     day19Id: "19-november",
     q23: "Is there a rail strike on 23 November?",
-    a23: (scope, ms) => `Yes: the train drivers' union SEMAF has called one for Monday 23 November. ${scope} Minimum services: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    a23: "No: on 20 November the train drivers' union SEMAF called off the Renfe Group strike planned for Monday 23, after reaching an agreement. No rail strike is left on that day in the sources checked.",
     day19: (calledOff) =>
       `On 17 November the SCF union called off the 24-hour stoppage by Adif's traffic-control staff planned for Thursday 19: "SCF ha acordado la desconvocatoria para el día 19" (SCF has agreed to call off the 19th), after Adif accepted its demands (${link(calledOff, "SCF's notice 38")}). There was no call at Renfe, Iryo or Ouigo that day, so no rail strike is left on the 19th.`,
     nextLinks: (locale) => [
@@ -437,7 +434,7 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
   const rodaliesText = catalan.minimumServices.text[locale];
   const stateCell = msPending ? t.pending : t.stateRow;
   const rodaliesCell = catalan.minimumServices.status === "published" ? t.rodaliesRow : t.pending;
-  const next = SPAIN_STRIKES.find((s) => s.id === RAIL_17N_ID.next);
+  const next = asOf <= NEXT_DAY ? SPAIN_NOT_HAPPENING.find((s) => s.id === RAIL_17N_ID.next) : undefined;
   const renfeGuide = `/${locale}/${B2_PATHS.strikeRenfe[locale]}/`;
 
   const rows = [
@@ -472,11 +469,11 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
     list(...t.tickets),
     heading(2, next ? t.next23Heading : t.nextHeading, t.nextId),
     list(
-      ...(next ? [t.next23(next.title[locale], next.scope[locale]), t.next23Ms(lowerFirst(next.minimumServices.short[locale]))] : []),
+      ...(next ? [t.next23(next.title[locale], fillChecked(next.text, locale, spainCheckedOn())), b2link("strike23n", locale, B2_TITLES.strike23n[locale])] : []),
       ...t.nextLinks(locale),
       b2link("strike20n", locale, B2_TITLES.strike20n[locale]),
     ),
-    faq([...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23(next.scope[locale], next.minimumServices.short[locale]) }] : [])]),
+    faq([...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23 }] : [])]),
     ...paras(verifiedLine(locale, RAIL_17N_VERIFIED)),
     ...b2Related(["strikeRenfe", "strikesSpain", "strikes"], locale),
   ];
@@ -547,7 +544,7 @@ export function rail17nSources(): B2Source[] {
   add({ name: "Establecidos los servicios mínimos para la huelga convocada por SEMAF (06/11/2026)", url: RENFE_PRECEDENT, publisher: "Renfe" });
   add({ name: "Cercanías: redes y horarios", url: RENFE_CERCANIAS, publisher: "Renfe" });
   add({ name: "Renfe", url: U.renfe, publisher: "Renfe" });
-  for (const next of SPAIN_STRIKES.filter((s) => s.id === RAIL_17N_ID.next)) for (const source of next.sources) add(source);
+  for (const next of SPAIN_NOT_HAPPENING.filter((s) => s.id === RAIL_17N_ID.next)) for (const source of next.sources) add(source);
   return all;
 }
 

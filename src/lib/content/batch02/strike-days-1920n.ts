@@ -6,6 +6,7 @@ import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, isOnDay, type Strike } from "./strikes";
+import type { StrikeDay2326Key } from "./strike-days-2326n";
 import { SPAIN_NOT_HAPPENING, SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF, STRIKES_SPAIN_VERIFIED } from "./strikes-spain-data";
 import type { L, SpainStrike } from "./strikes-spain-model";
 import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
@@ -71,6 +72,10 @@ const RAIL_ID = "huelga-ferroviaria-2026-11-17";
 const STUDENTS_ID = "huelga-estudiantil-2026-11-20";
 /** 18 Nov 2026: the 19th's Adif strike, called off (SPAIN_NOT_HAPPENING). */
 const CALLED_OFF_19N_ID = "adif-19-noviembre-desconvocada";
+/** 20 Nov 2026: the 23rd's Renfe strike (SEMAF), called off (SPAIN_NOT_HAPPENING); printed by the 23 Nov page (strike-days-2326n.ts). */
+const CALLED_OFF_23N_ID = "renfe-23-noviembre-desconvocada";
+/** The day pages and the call-off each prints under "what is not on that day". */
+const CALLED_OFF_BY_PAGE: Partial<Record<StrikeDayKey | StrikeDay2326Key, string>> = { strike19n: CALLED_OFF_19N_ID, strike23n: CALLED_OFF_23N_ID };
 
 /** The earlier of the two hubs' verification dates: the page never claims a re-check it did not get. */
 export const STRIKE_DAYS_VERIFIED = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STRIKES_VERIFIED : STRIKES_SPAIN_VERIFIED;
@@ -80,9 +85,10 @@ export function strikeDaysCheckedOn(asOf: string = STRIKES_SPAIN_AS_OF): string 
   return STRIKE_DAYS_VERIFIED < asOf ? STRIKE_DAYS_VERIFIED : asOf;
 }
 
-/** The Spain-wide strikes searched for on the day that are not happening (the 19th: Adif, called off). */
-export function calledOffOnDay(key: StrikeDayKey) {
-  return key === "strike19n" ? SPAIN_NOT_HAPPENING.filter((item) => item.id === CALLED_OFF_19N_ID) : [];
+/** The Spain-wide strikes searched for on the day that are not happening (the 19th: Adif; the 23rd: Renfe, both called off). */
+export function calledOffOnDay(key: StrikeDayKey | StrikeDay2326Key) {
+  const id = CALLED_OFF_BY_PAGE[key];
+  return id ? SPAIN_NOT_HAPPENING.filter((item) => item.id === id) : [];
 }
 
 export function strikeDayPhase(key: StrikeDayKey, asOf: string = STRIKES_SPAIN_AS_OF): StrikeDayPhase {
@@ -350,7 +356,7 @@ const COPY: Record<Locale, Copy> = {
           { question: "¿Hay huelga de estudiantes el 20 de noviembre?", answer: "Sí: el Sindicato de Estudiantes la convoca en toda la jornada lectiva del viernes 20, desde 3.º de ESO, con movilizaciones a las 12 h, dentro de una jornada estudiantil europea contra las guerras y el militarismo. No es una huelga laboral." },
           { question: "¿Dónde son las manifestaciones de estudiantes del 20 de noviembre?", answer: "A las 12 h, en casi una treintena de ciudades. En Madrid, en Sol; en Barcelona, en la plaça Universitat; en Sevilla, en la plaza San Francisco; en València, en la Facultat d'Història; en Bilbao, en el Ayuntamiento." },
           { question: "¿Hay clase el viernes 20 de noviembre?", answer: "Sí: los centros abren y el profesorado no está convocado, salvo en Madrid, donde la enseñanza pública está en huelga indefinida y CSIF convoca paros de 9.00 a 11.00 y de 17.00 a 19.00 h." },
-          { question: "¿Hay huelga de trenes el viernes 20?", answer: "No: el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el 20 y ningún sindicato ferroviario ha convocado ese día. La próxima huelga de trenes es la de los maquinistas del Grupo Renfe (SEMAF), el lunes 23, de 0.01 a 23.59 h." },
+          { question: "¿Hay huelga de trenes el viernes 20?", answer: "No: el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el 20 y ningún sindicato ferroviario ha convocado ese día. Tampoco el lunes 23: SEMAF desconvocó el 20 de noviembre la huelga de maquinistas del Grupo Renfe de ese día." },
         ],
       },
     },
@@ -462,7 +468,7 @@ const COPY: Record<Locale, Copy> = {
           { question: "Hi ha vaga d'estudiants el 20 de novembre?", answer: "Sí: el Sindicato de Estudiantes la convoca tota la jornada lectiva del divendres 20, des de 3r d'ESO, amb mobilitzacions a les 12 h, dins una jornada estudiantil europea contra les guerres i el militarisme. No és una vaga laboral." },
           { question: "On són les manifestacions d'estudiants del 20 de novembre?", answer: "A les 12 h, en gairebé una trentena de ciutats. A Barcelona, a la plaça Universitat; a Tarragona, a la plaça Imperial Tàrraco; a Madrid, a Sol; a València, a la Facultat d'Història; a Sevilla, a la plaza San Francisco." },
           { question: "Hi ha classe el divendres 20 de novembre?", answer: "Sí: els centres obren i el professorat no hi està convocat, llevat de Madrid, on l'ensenyament públic és en vaga indefinida i CSIF hi convoca aturades de 9.00 a 11.00 i de 17.00 a 19.00 h." },
-          { question: "Hi ha vaga de trens el divendres 20?", answer: "No: el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al 20 i cap sindicat ferroviari hi ha convocat. La propera vaga de trens és la dels maquinistes del Grup Renfe (SEMAF), el dilluns 23, de 0.01 a 23.59 h." },
+          { question: "Hi ha vaga de trens el divendres 20?", answer: "No: el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al 20 i cap sindicat ferroviari hi ha convocat. Tampoc el dilluns 23: SEMAF va desconvocar el 20 de novembre la vaga de maquinistes del Grup Renfe d'aquell dia." },
         ],
       },
     },
@@ -574,7 +580,7 @@ const COPY: Record<Locale, Copy> = {
           { question: "Is there a student strike on 20 November?", answer: "Yes: Sindicato de Estudiantes calls it for the whole school day on Friday 20, from the third year of secondary school, with demonstrations at 12:00, as part of a European student day against war and militarism. It is not a labour strike." },
           { question: "Where are the students' demonstrations on 20 November?", answer: "At 12:00, in almost thirty cities. In Madrid, at Sol; in Barcelona, at Plaça Universitat; in Seville, at Plaza San Francisco; in Valencia, at the Facultat d'Història; in Bilbao, at the city hall (Ayuntamiento)." },
           { question: "Is there school on Friday 20 November?", answer: "Yes: schools open and teachers are not called out, except in Madrid, where state schools are on an open-ended strike and CSIF calls stoppages from 09:00 to 11:00 and 17:00 to 19:00." },
-          { question: "Is there a rail strike on Friday 20?", answer: "No: the Ministry of Transport has no rail minimum-services resolution for the 20th and no rail union has called that day. The next rail strike is the Renfe Group train drivers' strike (SEMAF) on Monday 23, 00:01 to 23:59." },
+          { question: "Is there a rail strike on Friday 20?", answer: "No: the Ministry of Transport has no rail minimum-services resolution for the 20th and no rail union has called that day. Nor on Monday 23: on 20 November SEMAF called off that day's Renfe Group train drivers' strike." },
         ],
       },
     },
@@ -652,7 +658,7 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     heading(2, t.notHeading, t.notId),
     ...paras(`${d.notCalled} ${t.checked(checked)}`),
     ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
-    // 19 Nov 2026: and the next strike day with a page of its own, the 23rd (SEMAF at Renfe; strike-days-2326n.ts).
+    // 19 Nov 2026: and the next strike day with a page of its own, the 23rd (strike-days-2326n.ts; SEMAF's strike there called off on 20 Nov).
     list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale]), b2link("strike23n", locale, B2_TITLES.strike23n[locale])),
     ...(phase === "after" ? [] : [faq(faqItems)]),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),

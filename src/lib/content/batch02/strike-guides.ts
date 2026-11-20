@@ -36,6 +36,7 @@ import {
   STRIKES_VERIFIED,
   STRIKE_URLS,
   andList,
+  calledOffStrikes,
   checkedOn,
   guideEntry,
   isOnDay,
@@ -47,6 +48,7 @@ import {
   STRIKE_DAY_PAGES,
   strikeDayNote,
   upcomingStrikes,
+  type CalledOffStrike,
   type ServiceKey,
   type Strike,
 } from "./strikes";
@@ -892,6 +894,26 @@ const EDUCATION: GuideSpec = {
 
 export const STRIKE_GUIDE_SPECS: GuideSpec[] = [RENFE, EDUCATION];
 
+/**
+ * 20 Nov 2026: a strike this guide followed that was called off before its
+ * day (STRIKES_CALLED_OFF in strikes.ts, guide = this guide), while that day
+ * is still to come on `asOf`. Its words, heading and titles are the entry's.
+ */
+function calledOffFor(spec: GuideSpec, asOf: string): CalledOffStrike | undefined {
+  return calledOffStrikes(asOf).find((item) => item.guide === spec.key);
+}
+
+/** The call-off's titles replace the guide's while the entry the guide covers is past. */
+function calledOffMeta(spec: GuideSpec, strike: Strike, asOf: string, locale: Locale) {
+  const item = calledOffFor(spec, asOf);
+  return item && !isUpcoming(strike, asOf) ? item.guideMeta?.[locale] : undefined;
+}
+
+/** Its own section: the heading, the organiser's words and what they mean for travellers. */
+function calledOffSection(item: CalledOffStrike | undefined, locale: Locale): Block[] {
+  return item ? [heading(2, item.heading[locale], item.id), ...paras(item.text[locale])] : [];
+}
+
 /* -------------------------------------------------------------------------- */
 /* Rendering                                                                  */
 /* -------------------------------------------------------------------------- */
@@ -967,9 +989,12 @@ export function buildStrikeGuideBody(
   // 17 Nov 2026: the eve of a strike day says "tomorrow" with the check date; a day with a note of its own (19 Nov: Adif only) says what that day is.
   const tomorrow = addDays(asOf, 1);
   const eve = !isOnDay(strike, asOf) && strike.dates.includes(tomorrow);
+  // 20 Nov 2026: a strike this guide followed that was called off before its day opens the answer (its section below has the organiser's words).
+  const off = calledOffFor(spec, asOf);
   blocks.push(
     lead(
       [
+        off ? `**${off.title[locale]}.**` : "",
         isOnDay(strike, asOf) ? t.today(dayDate(asOf, locale), strikeDayNote(strike, asOf, locale)) : "",
         eve ? t.tomorrow(dayDate(tomorrow, locale), c.checked, strikeDayNote(strike, tomorrow, locale)) : "",
         `**${cap(c.days)}: ${strike.short[locale]}.**`,
@@ -1006,6 +1031,12 @@ export function buildStrikeGuideBody(
   blocks.push(callout("official", verifiedLine(locale, STRIKES_VERIFIED), t.data(hub)));
   // 19 Nov 2026: the covered entry's one-day page (23 or 26 Nov), right under the answer.
   blocks.push(...entryDayPageParas(c));
+  // 20 Nov 2026: a called-off strike: the line to its day's page (strike-day-links.ts), then its own section.
+  if (off) {
+    const line = entryDayPageLine(off.id, locale, asOf);
+    if (line) blocks.push(...paras(line));
+  }
+  blocks.push(...calledOffSection(off, locale));
 
   // 3. Minimum services: the entry's own text, then who sets them and where.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));
@@ -1071,6 +1102,8 @@ export function strikeGuideMeta(
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const strike = strikeFor(spec, strikes, asOf);
+  const off = calledOffMeta(spec, strike, asOf, locale);
+  if (off) return { title: off.title, seoTitle: off.seoTitle, excerpt: off.excerpt };
   const parts = titleParts(strike, locale);
   const copy = copyFor(spec, strike, locale);
   return { title: copy.title(parts), seoTitle: firstFit(copy.seoTitles(parts), SEO_TITLE_LIMIT), excerpt: copy.excerpt(parts) };
@@ -1084,6 +1117,8 @@ export function strikeGuideDescription(key: StrikeGuideKey, locale: Locale, asOf
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const strike = strikeFor(spec, strikes, asOf);
+  const off = calledOffMeta(spec, strike, asOf, locale);
+  if (off) return off.description;
   const copy = copyFor(spec, strike, locale);
   const parts = titleParts(strike, locale);
   const withYear = locale === "en" ? `${parts.days} ${parts.year}` : `${parts.days} de ${parts.year}`;
@@ -1145,6 +1180,7 @@ export function strikeGuideSources(key: StrikeGuideKey, editions: Block[][], str
     all.push({ name: source.name, url: source.url, publisher: source.publisher });
   };
   for (const source of strikeFor(spec, strikes, asOf).sources) add(source);
+  for (const source of calledOffFor(spec, asOf)?.sources ?? []) add(source);
   for (const source of KNOWN_SOURCES) if (linked.has(source.url)) add(source);
   // A link nobody named (a new URL in the entry's text): listed under its host, which the tests flag.
   for (const url of linked) add({ name: new URL(url).host, url, publisher: new URL(url).host });

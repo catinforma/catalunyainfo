@@ -175,7 +175,8 @@ test("links in: the Renfe guide while it covers 17 Nov, and the 11N pages for th
   for (const locale of LOCALES) {
     const target = `](/${locale}/${B2_PATHS.railStrike17n[locale]}/)`;
     assert.ok(json(buildStrikeGuideBody("strikeRenfe", locale, "2026-11-13")).includes(target), `${locale}: Renfe guide on 13 Nov`);
-    assert.ok(!json(buildStrikeGuideBody("strikeRenfe", locale, "2026-11-20")).includes(target), `${locale}: Renfe guide covering 23 Nov`);
+    // 20 Nov 2026: SEMAF called off the 23rd, so the Renfe guide stays on the 17 Nov strike (with the call-off on top) and keeps the link.
+    assert.ok(json(buildStrikeGuideBody("strikeRenfe", locale, "2026-11-20")).includes(target), `${locale}: Renfe guide on 20 Nov (17 Nov entry, 23rd called off)`);
     assert.ok(json(buildSpainBody(STRIKE_11N_CITIES_AS_OF, locale)).includes(target), `${locale}: 11N Spain page`);
     const catalanPage = json(buildStrike11nBody(locale));
     assert.ok(!catalanPage.includes(target), `${locale}: the Catalan 11N page keeps the Rodalies guide`);
@@ -208,10 +209,12 @@ test("16 Nov: the lead answers first with the official figures; the 17th says 'h
     const headings = body.filter((b) => b.type === "heading").map((b) => (b as unknown as { text: string }).text);
     assert.ok(headings.some((h) => /19/.test(h) && /Adif/.test(h)), `${locale}: 19 Nov section`);
     assert.ok(headings.some((h) => /23/.test(h) && /SEMAF/.test(h)), `${locale}: 23 Nov section`);
-    // The 19th: SCF's call-off, linked; the 23rd: the Ministry's figures still to be confirmed.
+    // The 19th: SCF's call-off, linked; the 23rd (20 Nov 2026): SEMAF's call-off, in its words, linked.
     assert.match(text(body), /desconvocad|desconvocó|called off/, locale);
     assert.ok(json(body).includes(`](${STRIKE_URLS.scf38})`), `${locale}: links SCFCOM 38`);
-    assert.match(text(body), /por confirmar|per confirmar|to be confirmed/, locale);
+    assert.match(text(body), /SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre/, locale);
+    assert.ok(json(body).includes(`](${STRIKE_URLS.semaf38})`), `${locale}: links SEMAF nº 2026-38`);
+    assert.doesNotMatch(text(body), /por confirmar|per confirmar|to be confirmed/, locale);
     assert.notEqual(rail17nDescription(locale, "2026-11-16"), rail17nDescription(locale, "2026-11-17"));
     assert.ok(rail17nDescription(locale, "2026-11-17").length <= 155, locale);
   }

@@ -11,6 +11,7 @@ import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
 import {
   STRIKES,
+  STRIKES_CALLED_OFF,
   STRIKES_AS_OF,
   STRIKES_GUIDE,
   STRIKES_META,
@@ -325,7 +326,6 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-general-2026-11-11",
     "vaga-metges-smu-2026-11-16",
     "vaga-ferroviaria-2026-11-17",
-    "vaga-renfe-2026-11-23",
     "vaga-educacio-2026-11-26",
   ]);
   assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), [
@@ -335,13 +335,12 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-general-2026-11-11",
     "vaga-metges-smu-2026-11-16",
     "vaga-ferroviaria-2026-11-17",
-    "vaga-renfe-2026-11-23",
     "vaga-educacio-2026-11-26",
   ]);
   // Saturday 31 Oct to Monday 2 Nov: the all-day Ouigo strike is still to come (2 Nov); from the 3rd it is past.
   assert.deepEqual(upcomingStrikes("2026-11-02").map((s) => s.id).slice(0, 3), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-11-10"]);
   assert.deepEqual(pastStrikes("2026-11-03").map((s) => s.id), ["vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
-  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-metges-smu-2026-11-16", "vaga-ferroviaria-2026-11-17", "vaga-renfe-2026-11-23", "vaga-educacio-2026-11-26"]);
+  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-metges-smu-2026-11-16", "vaga-ferroviaria-2026-11-17", "vaga-educacio-2026-11-26"]);
   assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-general-2026-11-11", "vaga-renfe-2026-11-10", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
   for (const day of ["2026-10-27", "2026-11-05", "2026-12-01", "2026-12-09"]) {
     assert.equal(upcomingStrikes(day).length + pastStrikes(day).length, STRIKES.length, day);
@@ -454,8 +453,7 @@ test("after the last strike the page renders every strike as past, with a 'none 
       [
         "vaga-metges-smu-2026-11-16",
         "vaga-educacio-2026-11-26",
-        "vaga-renfe-2026-11-23",
-        "vaga-metges-2026-10-28",
+            "vaga-metges-2026-10-28",
         "vaga-ferroviaria-2026-11-17",
         "vaga-general-2026-11-11",
         "vaga-renfe-2026-11-10",
@@ -570,7 +568,9 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
   assert.deepEqual(renfeNov.dates, ["2026-11-10"]);
   assert.deepEqual(renfeNov.dates.map(weekdayIndex), [2]); // Tuesday
   assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf23 && s.publisher === "SEMAF"));
-  assert.deepEqual(byId("vaga-renfe-2026-11-23").dates, ["2026-11-23"]);
+  // 20 Nov 2026: SEMAF called off its 23 Nov strike (nº 2026-38): it left STRIKES for STRIKES_CALLED_OFF.
+  assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"));
+  assert.equal(STRIKES_CALLED_OFF.find((c) => c.id === "vaga-renfe-2026-11-23-desconvocada")?.day, "2026-11-23");
   assert.equal(weekdayIndex("2026-11-23"), 1); // Monday
   assert.deepEqual(renfeNov.affects, ["rodalies", "longDistance"]);
   // 5 Nov 2026: Ordre del Departament d'Empresa i Treball (e-Tauler 657097): Rodalies 66% at peak (06:00-09:30, 17:00-20:30), 33% off peak.
@@ -709,8 +709,8 @@ test("the 'what runs' table has one row per service and lists exactly the strike
     assert.match(rows.rodalies ?? "", /^Dimarts 17 de novembre de 2026: vaga ferroviària/);
     assert.ok(!(rows.metroBus ?? "").includes("11 de novembre"), rows.metroBus);
   } else if (STRIKES_AS_OF <= "2026-11-23") {
-    // 18 Nov 2026: SCF called off the 19th (SCFCOM 38), so the 17 Nov strike is past and the next rail strike is the 23rd's.
-    assert.match(rows.rodalies ?? "", /^Dilluns 23 de novembre de 2026: vaga de maquinistes del Grup Renfe/);
+    // 20 Nov 2026: SCF called off the 19th and SEMAF the 23rd, so no rail strike is left in the table.
+    assert.equal(rows.rodalies, "Cap vaga anunciada");
     assert.ok(!(rows.metroBus ?? "").includes("11 de novembre"), rows.metroBus);
   }
   assert.equal(whatRunsRows("ca", "2026-11-12")[1]?.[1], "Cap vaga anunciada");
@@ -854,27 +854,26 @@ test("a strike added by the lead renders without touching the template", () => {
   }
 });
 
-test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for 23 Nov, the 21N march; 18 Nov: the 19th called off", async () => {
-  const { SPAIN_STRIKES } = await import("../src/lib/content/batch02/strikes-spain-data.ts");
-  const drivers = byId("vaga-renfe-2026-11-23");
-  const spain = SPAIN_STRIKES.find((s) => s.id === "huelga-renfe-2026-11-23");
-  assert.ok(spain, "Spain entry for 23 Nov");
+test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for 23 Nov, the 21N march; 18 Nov: the 19th called off; 20 Nov: the 23rd called off", async () => {
+  const { SPAIN_STRIKES, SPAIN_NOT_HAPPENING } = await import("../src/lib/content/batch02/strikes-spain-data.ts");
   // Ordre EMT/ /2026 of 16 Nov (e-Tauler 659191, Treball's list 17 Nov): SEMAF at Grupo Renfe, 0.01-23.59, all drivers, 66 % / 33 %.
   assert.equal(STRIKE_URLS.ordreRenfe23, "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=659191");
-  assert.deepEqual(drivers.dates, ["2026-11-23"]);
-  assert.equal(drivers.minimumServices.status, "published");
-  assert.equal(spain.status, "official");
-  assert.equal(spain.minimumServices.status, "published");
-  const peak = /66% .*\((de 6\.00 a 9\.30 h [iy] de 17\.00 a 20\.30 h|06:00 to 09:30 and 17:00 to 20:30)\)/;
+  // 20 Nov 2026: SEMAF nº 2026-38 called the 23rd off. Both hubs drop the entry and say so in SEMAF's words, linked.
+  assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"));
+  assert.ok(!SPAIN_STRIKES.some((s) => s.id === "huelga-renfe-2026-11-23"));
+  assert.ok(SPAIN_NOT_HAPPENING.some((s) => s.id === "renfe-23-noviembre-desconvocada"));
+  const off = STRIKES_CALLED_OFF.find((c) => c.id === "vaga-renfe-2026-11-23-desconvocada")!;
+  assert.equal(off.calledOffOn, "2026-11-20");
+  assert.equal(STRIKE_URLS.semaf38, "https://www.semaf.org/informaciones/desconvocamos-la-huelga-del-23-de-noviembre-tras-conseguir-todas-las-reivindicaciones/");
   for (const locale of LOCALES) {
-    assert.match(drivers.minimumServices.text[locale], peak, locale);
-    assert.match(drivers.minimumServices.text[locale], /33%/, locale);
-    assert.ok(drivers.minimumServices.text[locale].includes(`](${STRIKE_URLS.ordreRenfe23})`), `${locale}: links the order`);
-    assert.match(drivers.facts[locale].join(" "), /0\.01 a 23\.59|00:01 to 23:59/, locale);
-    // The rest of Renfe: the Ministry's resolution is still to come, said as such, with no figure for it.
-    assert.match(spain.minimumServices.short[locale], /confirmar|to be confirmed/i, locale);
-    assert.match(spain.minimumServices.text[locale], /Cercanías.*(per confirmar|por confirmar|to be confirmed)/, locale);
+    assert.ok(off.text[locale].includes("SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre"), locale);
+    assert.ok(off.text[locale].includes(`](${STRIKE_URLS.semaf38})`), `${locale}: links the notice`);
+    // The lead says it while the 23rd is to come, and not after.
+    assert.ok(text(buildStrikesBody(locale, "2026-11-20").slice(0, 1)).includes(off.title[locale]), `${locale}: in the lead on the 20th`);
+    assert.ok(!text(buildStrikesBody(locale, "2026-11-24").slice(0, 1)).includes(off.title[locale]), `${locale}: gone after the 23rd`);
+    assert.ok(!text(buildStrikesBody(locale, "2026-11-19").slice(0, 1)).includes(off.title[locale]), `${locale}: not before the call-off`);
   }
+  assert.ok(STRIKES_GUIDE.sources.some((s) => s.url === STRIKE_URLS.semaf38));
   // The 21N march (USTEC·STEs, 17 Nov): 12:00, plaça d'Urquinaona.
   const schools = byId("vaga-educacio-2026-11-26");
   for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /Urquinaona/, locale);

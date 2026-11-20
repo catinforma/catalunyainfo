@@ -964,10 +964,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Strikes on 20 November 2026 in Spain: students, doctors, Madrid",
   },
   // 19 Nov 2026: link labels in the searched words ("huelga 23 noviembre 2026", "huelga renfe 23 noviembre", "vaga 26 novembre").
+  // 20 Nov 2026: SEMAF called off the 23rd's Renfe strike (nº 2026-38); the label says so.
   strike23n: {
-    ca: "Vaga del 23 de novembre de 2026: Renfe i Rodalies (SEMAF), Correus i metges",
-    es: "Huelga del 23 de noviembre de 2026: Renfe y Rodalies (SEMAF), Correos y médicos",
-    en: "Strikes on 23 November 2026 in Spain: Renfe and Rodalies drivers, Correos, doctors",
+    ca: "Vaga del 23 de novembre de 2026: la de Renfe (SEMAF), desconvocada; Correus i metges",
+    es: "Huelga del 23 de noviembre de 2026: la de Renfe (SEMAF), desconvocada; Correos y médicos",
+    en: "Strikes on 23 November 2026 in Spain: Renfe strike (SEMAF) called off; Correos, doctors",
   },
   strike26n: {
     ca: "Vaga del 26 de novembre de 2026: educació a Catalunya, metges i Madrid",

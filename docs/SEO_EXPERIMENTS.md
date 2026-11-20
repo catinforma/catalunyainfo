@@ -9541,3 +9541,72 @@ Before the 23rd: re-read the Ministry's rail list and Renfe daily; when the reso
 files, set `MINISTRY_23N_PUBLISHED`, rewrite the 23N copy, publish `strikes`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — Correction: SEMAF called off the 23 Nov Renfe strike. 23N page, Renfe guide, both hubs, 17N rail page, sitewide strip rewritten, es + ca + en (deploy; groups `strikes`, `huelgas-espana`, `huelga-23-26n`, `strike-11n`, `strike-11n-cities`)
+
+**Why (factual, not an experiment).** SEMAF nº 2026-38, 20/11/2026 (datePublished 2026-11-20T01:04:56+01:00): «SEMAF ha
+procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo»;
+nº 2026-39 (same day) calls it an «Acuerdo de fin de huelga (art. 8.2 RDLRT)». Every page that said "huelga de maquinistas de
+Renfe el lunes 23" was wrong from that moment. **This overrides the 19 Nov measurement window of the 23N page** (entry
+"2026-11-19 (night) — New pages: Huelga 23 de noviembre…"): its titles, descriptions, leads, table and FAQ are rewritten, so
+the 24 Nov review measures a different page. The 26N page keeps its titles (only one "not that day" sentence changed).
+
+**Sources re-read 20 Nov 2026 (afternoon)** (curl with a browser UA; fact pack `research_notes/x10/strikes-20nov-factpack.md`):
+SEMAF 2026-38/39 (above); Ministry of Transport rail list (newest still the 12 Nov resolution for the 17th: nothing for the
+23rd) and air list (unchanged; SAERCO/Groundforce/Outsmart to 30 Nov); Treball's list (newest 17/11, the 23N Rodalies order;
+e-Tauler 659191 still ACTIU, not amended; newest 100 edicts 18–20 Nov: no strike order, so none yet for 26N); SCF (SCFCOM 39,
+20 Nov: back to the collective agreement), CCOO rail (Adif works council ended the dispute, 18 Nov), SFF-CGT (18 Nov:
+agreement "insuficiente", no date), ALFERRO (83/2026, no strike), Basque list (no order for Renfe on the 23rd); BOE-A-2026-24259
+(Correos 23–27 Nov Madrid, 23–25 Nov five Andalusian provinces) stands, BOE of 20 Nov has no strike order; SMU ("legalmente
+convocada del 16 al 27 de noviembre"); education 26N (CGT call of 18 Nov; USTEC·STEs 20 Nov: the 19 Nov mediation failed);
+Metges de Catalunya (no call-off), CSIF Madrid, Sindicato de Estudiantes (20N on), CESM (still postponed). **Renfe / Rodalies:
+no notice about the call-off found** (Renfe's press room is a script page; Rodalies' unlisted 23N page still showed the strike,
+updated 19.11): the pages say "horario habitual, salvo aviso de Renfe" and that neither had published a notice by the 20th.
+`STRIKES_VERIFIED` and `STRIKES_SPAIN_VERIFIED` = 2026-11-20.
+
+**What changed.**
+- Data: `huelga-renfe-2026-11-23` removed from `SPAIN_STRIKES`, new `SPAIN_NOT_HAPPENING` entry `renfe-23-noviembre-desconvocada`
+  ("Maquinistas de Renfe (SEMAF), 23 de noviembre: desconvocada", quote + link, as `adif-19-noviembre-desconvocada`); the 12 Nov
+  item says the 23rd was called off too. `vaga-renfe-2026-11-23` removed from `STRIKES`; the Catalan hub had no whole-strike
+  call-off mechanism (earlier call-offs were facts inside an entry that kept other days), so new `STRIKES_CALLED_OFF`
+  (`vaga-renfe-2026-11-23-desconvocada`, shown from the call-off day to the end of the 23rd): the hub's lead prints it, the Renfe
+  guide prints it and takes its titles from it, the strip builds a line from it.
+- 23N page (`strike-days-2326n.ts`, URL kept): title "Huelga 23 de noviembre de 2026: la de Renfe y Rodalies, desconvocada;
+  Correos y médicos" (seoTitle "Huelga 23 de noviembre de 2026: Renfe desconvocada, Correos"; ca "Vaga 23 de novembre de 2026:
+  Renfe i Rodalies, desconvocada"; en "Spain strike 23 November 2026: Renfe strike called off"). Lead (before/eve/today/after)
+  opens with the call-off, then trains on the usual timetable unless Renfe says otherwise, then Correos and the doctors. Key fact
+  "Renfe y Rodalies (SEMAF): huelga desconvocada" first; "Trenes el lunes 23: sin huelga" section quotes 2026-38/39, table says
+  usual timetable and that the Generalitat's 66 %/33 % were for this strike; FAQ rewritten; the call-off is listed under "Lo que no
+  hay ese día" through `calledOffOnDay` (strike-days-1920n.ts, generalised to the 23rd). `MINISTRY_23N_PUBLISHED` removed.
+- Renfe guide (strike-guides.ts): covers the 17 Nov entry (past) again; until the 23rd its titles come from the call-off
+  ("Huelga Renfe y Rodalies 23 de noviembre: desconvocada", ca "Vaga Renfe i Rodalies 23 novembre 2026: desconvocada", en "Renfe
+  and Rodalies strike 23 November 2026: called off"), the answer opens with it, then a line to the 23N page and a section with
+  SEMAF's words. After the 23rd it falls back to the 17N titles.
+- Catalan hub: the lead adds the call-off until the 23rd; "what runs" has no rail strike. Spain hub: the call-off in "no
+  convocado". 17N rail page: "Lunes 23: huelga de maquinistas (SEMAF), desconvocada" section and FAQ. 19N/20N pages: "¿Hay
+  huelga de trenes el viernes 20?" answer no longer says the next is the 23rd. 26N page: "SEMAF desconvocó la huelga… del lunes
+  23". 11N page: the 12 Nov line adds that SEMAF also called off the 23rd. `B2_TITLES.strike23n` (anchor everywhere): "Huelga del
+  23 de noviembre de 2026: la de Renfe (SEMAF), desconvocada; Correos y médicos".
+- Sitewide strip (`news-alerts.ts`): "Vaga de maquinistes el dilluns 23 de novembre: Renfe, Rodalies i serveis mínims" replaced by
+  "Vaga de Renfe i Rodalies el dilluns 23 de novembre: desconvocada" / "Huelga de Renfe y Rodalies el lunes 23 de noviembre:
+  desconvocada" / "Renfe and Rodalies strike on Monday 23 November: called off", 20 Nov 00:00 to the end of the 23rd, to the 23N
+  page; it is not one of the 11N pages' "next dates" (those now go 17N rail, 26N education, 29N). The today page drops the 23rd.
+
+**Baseline** (`snapshot.py page huelga-23 7`, 14–20 Nov): 19 Nov 1 click / 2 impr (pos 2.5); 20 Nov 2 / 16 (12.5 %, pos 6.9).
+Renfe guide ES (`page huelga-renfe-rodalies 7`): 16 Nov 202/3,100, 17 Nov 393/4,448, 18 Nov 47/1,042, 19 Nov 17/291, 20 Nov 0/23
+(the "19 noviembre" family moving to the 19N page).
+
+**Prediction.** "huelga renfe 23 noviembre" / "huelga 23 noviembre" land on the 23N page or the Renfe guide with the call-off in
+the snippet; CTR on those queries ≥ the 19 Nov call-off page's (19N: "desconvocada" in the title).
+
+**Review 2026-11-24** (`snapshot.py page huelga-23 3`, `page vaga-23 3`, `page huelga-renfe-rodalies 3`). After the 23rd the
+call-off leaves the hubs, the Renfe guide (back to 17N titles) and the strip by itself.
+
+**Go-live.** Code routes changed (sitewide strip in the layout, today page): **deploy**, then publish `strikes` (hub, Renfe and
+education guides, Spain hub, 17N, 19N, 20N, 23N, 26N), `huelgas-espana`, `huelga-23-26n`, `strike-11n` (11N page) and
+`strike-11n-cities` (Spain and city 11N pages: their "next dates" list lost the 23N line). IndexNow prefixes `/es/guias/huelga-`,
+`/ca/guies/vaga-`, `/en/guides/spain-strike-`, `/en/guides/spain-rail-strike-17-november`, `/en/guides/renfe-rodalies-strike-november`,
+`/en/guides/catalonia-teachers-strike-november`, `/en/guides/strike-barcelona-catalonia-today`,
+`/en/guides/general-strike-11-november`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
+
+**Outcome:** _pending_

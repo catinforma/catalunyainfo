@@ -12,7 +12,7 @@ import {
   STRIKE_11N_ID,
   STRIKE_EDUCATION_ID,
   STRIKE_RAIL_ID,
-  STRIKE_RENFE_23_ID,
+  STRIKE_RENFE_23_OFF_ID,
   STRIKE_RENFE_ID,
   activeNewsAlerts,
   alertHref,
@@ -29,8 +29,9 @@ import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { POSTAL_29N, POSTAL_VOTE } from "../src/lib/content/batch02/postal-vote.ts";
 import { B2_PATHS, type B2Article, type B2Key } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N } from "../src/lib/content/batch02/strike-11n.ts";
+import { STRIKE_23N_GUIDE } from "../src/lib/content/batch02/strike-days-2326n.ts";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
-import { STRIKES, lastDay, type Strike } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES, STRIKES_CALLED_OFF, lastDay, type Strike } from "../src/lib/content/batch02/strikes.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 import { GENERAL_ELECTION_DAY } from "../src/lib/programmatic/elections/today.ts";
@@ -82,8 +83,8 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       ["strike-renfe", "strikeRenfe", "2026-11-04T00:00:00+01:00", "2026-11-11T00:00:00+01:00"],
       // 18 Nov 2026: SCF called off the 19th (SCFCOM 38), so the rail line ends with the 17th.
       ["strike-rail-17n", "strikeRenfe", "2026-11-12T00:00:00+01:00", "2026-11-18T00:00:00+01:00"],
-      // Same guide as the 17 Nov line: it starts when that one ends.
-      ["strike-renfe-23n", "strikeRenfe", "2026-11-18T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
+      // 20 Nov 2026: SEMAF called off the 23rd (nº 2026-38): its line says so, to the 23 Nov page, from the call-off to the end of the 23rd.
+      ["strike-renfe-23n-off", "strike23n", "2026-11-20T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
       ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
       // 13 Nov 2026: the postal vote's two deadlines, one after the other (same guide).
       ["postal-vote-request", "postalVote", "2026-11-13T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
@@ -103,7 +104,10 @@ test("the ends are derived from the source modules, not typed in", () => {
   assert.equal(byId("strike-11n").end, endOfMadridDay(lastDay(strike(STRIKE_11N_ID))));
   assert.equal(byId("strike-renfe").end, endOfMadridDay(lastDay(strike(STRIKE_RENFE_ID))));
   assert.equal(byId("strike-rail-17n").end, endOfMadridDay(lastDay(strike(STRIKE_RAIL_ID))));
-  assert.equal(byId("strike-renfe-23n").end, endOfMadridDay(lastDay(strike(STRIKE_RENFE_23_ID))));
+  const off = STRIKES_CALLED_OFF.find((s) => s.id === STRIKE_RENFE_23_OFF_ID)!;
+  assert.equal(byId("strike-renfe-23n-off").start, madridMidnight(off.calledOffOn));
+  assert.equal(byId("strike-renfe-23n-off").end, endOfMadridDay(off.day));
+  assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"), "the called-off strike is not in STRIKES");
   assert.equal(byId("strike-education-26n").end, endOfMadridDay(lastDay(strike(STRIKE_EDUCATION_ID))));
   assert.equal(byId("election-29n").end, endOfMadridDay(GENERAL_ELECTION_DAY));
   assert.equal(byId("december-bridge").start, endOfMadridDay(GENERAL_ELECTION_DAY));
@@ -138,11 +142,11 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
   assert.equal(rail.end, "2026-11-18T00:00:00+01:00");
   assert.equal(rail.text.ca, "Vaga de trens el dimarts 17 de novembre: Renfe, Adif i serveis mínims");
   assert.doesNotMatch(rail.text.es, /19/);
-  // The next line to the same guide starts when it ends.
-  assert.equal(byId("strike-renfe-23n", buildNewsAlerts(edited)).start, "2026-11-18T00:00:00+01:00");
+  // 20 Nov 2026: the 23 Nov line (same guide, chained after this one) went with SEMAF's call-off.
+  assert.ok(!buildNewsAlerts(edited).some((a) => a.id === "strike-renfe-23n"));
 
   const without = buildNewsAlerts(STRIKES.filter((s) => s.id !== STRIKE_11N_ID && s.id !== STRIKE_EDUCATION_ID));
-  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "postal-vote-request", "postal-vote-deliver", "election-29n", "election-results-29n", "december-bridge"]);
+  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n-off", "postal-vote-request", "postal-vote-deliver", "election-29n", "election-results-29n", "december-bridge"]);
   // A strike whose days are all before the line's start drops its line.
   const early: Strike[] = STRIKES.map((s) => (s.id === STRIKE_EDUCATION_ID ? { ...s, dates: ["2026-11-11"] } : s));
   assert.ok(!buildNewsAlerts(early).some((a) => a.id === "strike-education-26n"));
@@ -170,11 +174,11 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   assert.deepEqual(ids("2026-11-12T23:59:59+01:00"), next);
   assert.deepEqual(ids("2026-11-13T00:00:00+01:00"), nextPostal);
   assert.deepEqual(ids("2026-11-17T23:59:59+01:00"), nextPostal);
-  // 18 Nov 2026: the 19th was called off, so the 23 Nov line takes over on the 18th.
-  assert.deepEqual(ids("2026-11-18T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-request", "election-29n"]);
-  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-request", "election-29n"]);
-  assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
-  assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  // 20 Nov 2026: the 23 Nov strike was called off, so its line is gone; from the 20th a line says it is called off.
+  assert.deepEqual(ids("2026-11-18T00:00:00+01:00"), ["strike-education-26n", "postal-vote-request", "election-29n"]);
+  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), ["strike-education-26n", "postal-vote-request", "election-29n"]);
+  assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n-off", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n-off", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-25T23:59:59+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-26T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
@@ -213,8 +217,8 @@ test("the 11N pages' upcoming block: the strip's next lines, as of the page's da
       assert.ok(links[i]?.endsWith(`](/${locale}/${B2_PATHS[key][locale]}/)`), `${locale} ${key}: ${links[i]}`);
     }
   }
-  // After the 19th the Renfe guide's item is the 23 Nov strike; each item goes after its day.
-  assert.match(nextDateLinks("es", "2026-11-20")[0] ?? "", /^\[Huelga de maquinistas el lunes 23 de noviembre/);
+  // 20 Nov 2026: the 23 Nov strike was called off, so after the 17th the first item is the education strike; each item goes after its day.
+  assert.match(nextDateLinks("es", "2026-11-20")[0] ?? "", /^\[Huelga educativa en Cataluña el jueves 26 de noviembre/);
   assert.equal(nextDateLinks("en", "2026-11-27").length, 1);
   assert.deepEqual(nextDateLinks("en", "2026-11-30"), []);
 });
@@ -232,6 +236,8 @@ const ARTICLES: Partial<Record<B2Key, { article: B2Article; constName: string }>
   postalVote: { article: POSTAL_VOTE, constName: "POSTAL_VOTE" },
   electionNight: { article: ELECTION_NIGHT, constName: "ELECTION_NIGHT" },
   decemberBridgeSpain: { article: DECEMBER_BRIDGE_SPAIN, constName: "DECEMBER_BRIDGE_SPAIN" },
+  // 20 Nov 2026: the 23 Nov call-off line links the 23 Nov page.
+  strike23n: { article: STRIKE_23N_GUIDE, constName: "STRIKE_23N_GUIDE" },
 };
 
 test("every line links to its guide's real path in the reader's language", () => {
@@ -265,7 +271,7 @@ test("a line is not shown on the page it links to (with or without the trailing 
   assert.deepEqual(ids(t, "ca", "/ca/guies/vaga-renfe-rodalies-novembre"), ["strike-11n"]);
   // Another language's page is not this page.
   assert.deepEqual(ids(t, "ca", "/es/guias/huelga-general-11-noviembre/"), ["strike-11n", "strike-renfe"]);
-  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver"]);
+  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), ["strike-renfe-23n-off", "strike-education-26n", "postal-vote-deliver"]);
   assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "ca", "/ca/guies/vaga-educacio-novembre/"), ["strike-rail-17n", "postal-vote-request", "election-29n"]);
   // The postal lines are not on the postal-vote guide itself.
   assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "es", "/es/guias/voto-por-correo/"), ["strike-rail-17n", "strike-education-26n", "election-29n"]);
@@ -286,7 +292,10 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("strike-rail-17n").text.ca, "Vaga de trens el dimarts 17 de novembre: Renfe, Adif i serveis mínims");
   assert.equal(byId("strike-rail-17n").text.es, "Huelga de trenes el martes 17 de noviembre: Renfe, Adif y servicios mínimos");
   assert.equal(byId("strike-rail-17n").text.en, "Rail strike on Tuesday 17 November: Renfe, Adif and minimum services");
-  assert.equal(byId("strike-renfe-23n").text.ca, "Vaga de maquinistes el dilluns 23 de novembre: Renfe, Rodalies i serveis mínims");
+  // 20 Nov 2026: SEMAF called off the 23rd.
+  assert.equal(byId("strike-renfe-23n-off").text.ca, "Vaga de Renfe i Rodalies el dilluns 23 de novembre: desconvocada");
+  assert.equal(byId("strike-renfe-23n-off").text.es, "Huelga de Renfe y Rodalies el lunes 23 de noviembre: desconvocada");
+  assert.equal(byId("strike-renfe-23n-off").text.en, "Renfe and Rodalies strike on Monday 23 November: called off");
   assert.equal(byId("strike-education-26n").text.ca, "Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?");
   assert.equal(byId("strike-education-26n").text.es, "Huelga educativa en Cataluña el jueves 26 de noviembre: ¿hay colegio?");
   assert.equal(byId("strike-education-26n").text.en, "Catalonia education strike on Thursday 26 November: is there school?");

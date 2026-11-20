@@ -699,7 +699,9 @@ test("upcoming strikes and dates: the 11N page, every city and the Spain page li
     return list.items.join(" ");
   };
   const expectLinks = (items: string, locale: (typeof LOCALES)[number], hub: "strikes" | "strikesSpain", where: string) => {
-    for (const key of ["strikeRenfe", "strikeEducation", "voting", hub] as const) {
+    // 20 Nov 2026: SEMAF called off the 23rd, so the Rodalies guide's line (23 Nov) left the strip; the pages for the rest of Spain
+    // link the Spain-wide rail page (17 Nov) instead, the Catalan ones the Rodalies guide (17 Nov).
+    for (const key of [hub === "strikesSpain" ? "railStrike17n" : "strikeRenfe", "strikeEducation", "voting", hub] as const) {
       const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
       assert.equal(items.split(target).length - 1, 1, `${where}/${locale}: ${key} once`);
     }
