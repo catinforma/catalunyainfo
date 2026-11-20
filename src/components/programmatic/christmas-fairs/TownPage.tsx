@@ -31,7 +31,7 @@ import { shortRange } from "@/lib/programmatic/christmas-fairs/format";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "@/lib/programmatic/christmas-fairs/guide";
 import { fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 
-import { FairCard, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
+import { FairAccess, FairCard, FairProgramme, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
 import { FairStatus } from "./FairStatus";
 
 export function townCrumbs(town: Town, locale: FairsLocale): Crumb[] {
@@ -81,6 +81,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
     }));
   const guideKeys = town.ine === BARCELONA_INE ? (["barcelonaDecember", ...GUIDES] as const) : GUIDES;
   const guides = guideKeys.map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
+  const withDetails = town.fairs.filter((f) => f.details);
+  const accessTitle = withDetails.length === 1 ? (withDetails[0]!.details!.accessTitle?.[locale] ?? null) : null;
 
   return (
     <article>
@@ -111,6 +113,11 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
             </>
           ) : null}
 
+          {/* The organiser's programme, when its pages were read for this edition (organisers.ts `details`). */}
+          {withDetails.map((f) => (
+            <FairProgramme key={f.id} fair={f} locale={locale} heading={withDetails.length === 1} />
+          ))}
+
           {/* The next useful step (lib/engagement/next-step.ts): the lights switch-on and the December holidays (Barcelona: December's agenda).
               Dated by the day the fairs were last read, like the rest of the page: the server render stays clock-free. */}
           <NextStep
@@ -122,7 +129,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
               the next step, so the dates keep their place; lazy-loaded. */}
           <PlacePhoto photo={fairPagePhoto(town.slug, locale)} locale={locale} />
 
-          <h2 id="com-arribar">{t.getThere}</h2>
+          <h2 id="com-arribar">{accessTitle ?? t.getThere}</h2>
+          <FairAccess fairs={withDetails} locale={locale} />
           <p>{renderInline(trains.intro)}</p>
           {trains.items.length > 0 ? (
             <ul>

@@ -17,6 +17,15 @@ import type { Fair } from "./types";
 
 const PROVINCE: Record<string, string> = { "08": "Barcelona", "17": "Girona", "25": "Lleida", "43": "Tarragona" };
 
+/**
+ * "2026-11-21" + "09:00" -> "2026-11-21T09:00:00+01:00". The season (November
+ * to mid-January) is all winter time in Catalonia, so the offset is always
+ * +01:00 (tests/christmas-fairs.test.ts checks every fair given times falls in it).
+ */
+export function winterDateTime(date: string, time: string): string {
+  return `${date}T${time}:00+01:00`;
+}
+
 /** `image`: the crops of a photograph of the fair itself (place-photos.ts `fairEventImages`), when there is one. */
 export function christmasFairEvents(fairs: readonly Fair[], path: string, locale: FairsLocale, image?: string[]) {
   return fairs
@@ -24,13 +33,18 @@ export function christmasFairEvents(fairs: readonly Fair[], path: string, locale
     .flatMap((f) => {
       const m = municipality(f.ine);
       if (!m) return [];
+      // With the organiser's programme read (organisers.ts `details`): the day's opening and closing
+      // times, its own one-line summary and the organiser's page.
+      const d = f.details;
       return [
         townEventSchema({
           path,
           id: f.id.replace(/[^a-z0-9-]+/gi, "-"),
           name: f.name,
-          startDate: f.start,
-          endDate: f.end,
+          startDate: d?.times ? winterDateTime(f.start, d.times.opens) : f.start,
+          endDate: d?.times ? winterDateTime(f.end, d.times.closes) : f.end,
+          ...(d?.snippet ? { description: d.snippet[locale] } : {}),
+          ...(d && f.checked ? { organizer: { name: f.checked.publisher, url: f.checked.url } } : {}),
           town: townName(m.name, locale),
           region: PROVINCE[m.province] ?? "Catalunya",
           url: f.webReplaced ? null : f.web,

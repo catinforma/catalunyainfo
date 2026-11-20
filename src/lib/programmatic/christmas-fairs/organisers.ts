@@ -1,4 +1,4 @@
-import type { OrganiserFair, PendingMarket, UnconfirmedFair } from "./types";
+import type { FairDetails, OrganiserFair, PendingMarket, UnconfirmedFair } from "./types";
 
 /**
  * What organisers have published on their own official pages and the open
@@ -63,6 +63,133 @@ import type { OrganiserFair, PendingMarket, UnconfirmedFair } from "./types";
  */
 export const HTTP_ONLY_HOSTS: readonly string[] = ["www.firadenadal.cat"];
 
+const CANYELLES = "https://www.canyelles.cat";
+const CANYELLES_APP = "https://www.santalluciacanyelles.cat";
+
+/**
+ * Canyelles, 24a Fira de Santa Llúcia (21-22 Nov 2026), read on 20 Nov 2026
+ * with curl (browser user agent), every file opened:
+ *   - the council's fair page (agenda: "Dis. 21 Nov, 2026 (9:00 - 21:00)",
+ *     "Diu. 22 Nov, 2026 (9:00 - 21:00)") and its news of 16 Nov ("més de 350
+ *     parades", the new mapping on the castle and the "nou espai de jocs
+ *     màgics"; Gerard Romero, Ambaixador del Nadal; Manuel López, Escudellaire
+ *     d'Honor);
+ *   - the presentation of 11 Nov: the fair "s'ha avançat una setmana … a causa
+ *     de la convocatòria d'eleccions al Congrés del pròxim 29 de novembre"; La
+ *     Petita Santa Llúcia "els dies 28 i 29 de novembre", with "la Haima del
+ *     Patge Reial Vibó, el Castell dels Contes Màgics, el Parc Noel i diverses
+ *     exposicions"; "diverses zones d'aparcament" and the free shuttle "des de
+ *     Vilanova i la Geltrú, Vilafranca del Penedès, Sitges i Sant Pere de Ribes";
+ *   - the carols news of 16 Nov (17 h, Santa Magdalena: Saturday the Àuria
+ *     flute quartet, Sunday Coral Pla del Bosc and Coral Flor d'Espígol);
+ *   - the programme leaflet (PDF, created 6 Nov 2026), the fair map, the
+ *     shuttle and the urban minibus timetables (PNG, "21 i 22 de novembre",
+ *     "Els horaris poden veure's afectats per la situació del trànsit");
+ *   - the fair's web app (linked from the council's page as "WEBAPP FIRA DE
+ *     SANTA LLÚCIA"): "Aparcaments gratuïts. Hi ha diversos aparcaments
+ *     habilitats al voltant del nucli antic", the same shuttle times, and
+ *     "Compra les entrades anticipades a entradium.com" under the Park Nöel, the
+ *     Castell dels Contes Màgics and the Patge Reial Vibó only. No page gives a
+ *     price, or says entry to the fair is free: the page says neither.
+ */
+const CANYELLES_DETAILS: FairDetails = {
+  readOn: "2026-11-20",
+  times: { opens: "09:00", closes: "21:00" },
+  why: {
+    ca: "L'Ajuntament ha avançat la fira una setmana respecte de les dates previstes per les eleccions al Congrés del 29 de novembre; el calendari oficial de fires encara dona el 28 i el 29 de novembre.",
+    es: "El Ayuntamiento ha adelantado la feria una semana respecto a las fechas previstas por las elecciones al Congreso del 29 de noviembre; el calendario oficial de ferias aún da el 28 y el 29 de noviembre.",
+    en: "The council has brought the fair forward a week from the planned dates because of the general election on 29 November; the official fairs calendar still gives 28 and 29 November.",
+  },
+  programme: [
+    {
+      ca: "**Dissabte i diumenge, de 9 a 21 h:** més de 350 parades pels carrers del nucli antic, l'Arbre dels Desitjos, degustació d'escudella de Nadal (lateral de la Sala Multicultural) i de vi calent (carrer Major), la Botiga del Nadal, el pessebre de l'Ajuntament, el Pessebre Solidari del Casal i l'exposició de diorames (Ca la Pintora, carrer Major, 29).",
+      es: "**Sábado y domingo, de 9 a 21 h:** más de 350 paradas por las calles del casco antiguo, el Arbre dels Desitjos (árbol de los deseos), degustación de escudella de Navidad (lateral de la Sala Multicultural) y de vino caliente (carrer Major), la Botiga del Nadal, el belén del Ayuntamiento, el Pessebre Solidari del Casal y la exposición de dioramas (Ca la Pintora, carrer Major, 29).",
+      en: "**Saturday and Sunday, 9:00 to 21:00:** over 350 stalls in the streets of the old town, the Wishing Tree, tastings of Christmas escudella (beside the Sala Multicultural) and mulled wine (carrer Major), the Christmas shop, the nativity scene in the town hall, the charity nativity at the Casal and the diorama exhibition (Ca la Pintora, carrer Major, 29).",
+    },
+    {
+      ca: "**Per als infants, de 9 a 20 h:** el Park Noël i la casa del Pare Noel (Pol Nord, pujada a l'església), el Castell dels Contes Màgics (dins del castell), el Patge Reial Vibó (jardins del castell), el Tió Gegant (plaça de l'Ajuntament), tallers de Nadal, la Casa de la Xocolata Calenta, l'exposició de Playmobil i el carrusel.",
+      es: "**Para los niños, de 9 a 20 h:** el Park Noël y la casa de Papá Noel (Pol Nord, subida a la iglesia), el Castell dels Contes Màgics (dentro del castillo), el Paje Real Vibó (jardines del castillo), el Tió Gigante (plaza del Ayuntamiento), talleres de Navidad, la Casa de la Xocolata Calenta, la exposición de Playmobil y el carrusel.",
+      en: "**For children, 9:00 to 20:00:** Park Noël and Father Christmas's house (Pol Nord, on the way up to the church), the Castle of Magic Tales (inside the castle), the Royal Page Vibó (castle gardens), the giant tió (town hall square), Christmas workshops, the hot chocolate house, a Playmobil exhibition and the carousel.",
+    },
+    {
+      ca: "**Dissabte 21, a les 9 h**, obertura; **a les 12 h**, a la plaça de l'Onze de Setembre, benvinguda i proclamació de l'Ambaixador del Nadal (el periodista Gerard Romero) i de l'Escudellaire d'Honor (Manuel López); **a les 20 h**, piromusical nadalenc de Pirotècnia Igual.",
+      es: "**Sábado 21, a las 9 h**, apertura; **a las 12 h**, en la plaza de l'Onze de Setembre, bienvenida y proclamación del Embajador de la Navidad (el periodista Gerard Romero) y del Escudellaire d'Honor (Manuel López); **a las 20 h**, piromusical navideño de Pirotècnia Igual.",
+      en: "**Saturday 21:** opening at 9:00; **at 12:00**, in Plaça de l'Onze de Setembre, the welcome and the naming of the Christmas Ambassador (the journalist Gerard Romero) and the Escudellaire d'Honor (Manuel López); **at 20:00**, the Christmas fireworks-and-music show by Pirotècnia Igual.",
+    },
+    {
+      ca: "**Diumenge 22, a les 11.30 h**, a la plaça de l'Onze de Setembre: lliurament de tions als nadons nascuts l'últim any i premis del concurs de dibuix «Viu la màgia del Nadal».",
+      es: "**Domingo 22, a las 11.30 h**, en la plaza de l'Onze de Setembre: entrega de tions a los bebés nacidos el último año y premios del concurso de dibujo «Viu la màgia del Nadal».",
+      en: "**Sunday 22, at 11:30**, in Plaça de l'Onze de Setembre: a tió (the Catalan Christmas log) for each baby born in the town in the last year, and the prizes of the children's drawing contest.",
+    },
+    {
+      ca: "**Tots dos dies, a les 17 h**, nadales a l'església de Santa Magdalena (dissabte, el quartet de flautes travesseres Àuria; diumenge, la Coral Pla del Bosc i la Coral Flor d'Espígol), i música en directe a la plaça de l'Onze de Setembre, de 13 a 14.30 h i de 17.30 a 19 h.",
+      es: "**Los dos días, a las 17 h**, villancicos en la iglesia de Santa Magdalena (sábado, el cuarteto de flautas traveseras Àuria; domingo, la Coral Pla del Bosc y la Coral Flor d'Espígol), y música en directo en la plaza de l'Onze de Setembre, de 13 a 14.30 h y de 17.30 a 19 h.",
+      en: "**Both days, at 17:00**, carols in the church of Santa Magdalena (Saturday, the Àuria flute quartet; Sunday, the Pla del Bosc and Flor d'Espígol choirs), and live music in Plaça de l'Onze de Setembre, 13:00 to 14:30 and 17:30 to 19:00.",
+    },
+  ],
+  news: [
+    {
+      ca: "Un mapping sobre la façana del castell, els dos dies de fira, i un espai nou de jocs màgics als jardins del castell.",
+      es: "Un mapping sobre la fachada del castillo, los dos días de feria, y un espacio nuevo de juegos mágicos en los jardines del castillo.",
+      en: "Projection mapping on the castle front on both days, and a new magic games area in the castle gardens.",
+    },
+  ],
+  tickets: {
+    ca: "El web de la fira ven entrades anticipades, a entradium.com, per a tres espais: el Park Noël, el Castell dels Contes Màgics i el Patge Reial Vibó. No hi indica el preu.",
+    es: "La web de la feria vende entradas anticipadas, en entradium.com, para tres espacios: el Park Noël, el Castell dels Contes Màgics y el Paje Real Vibó. No indica el precio.",
+    en: "The fair's website sells advance tickets, on entradium.com, for three spaces: Park Noël, the Castle of Magic Tales and the Royal Page Vibó. It does not give the price.",
+  },
+  after: {
+    ca: "**La Petita Santa Llúcia, 28 i 29 de novembre:** el cap de setmana següent continuen oberts alguns espais, com la Haima del Patge Reial Vibó, el Castell dels Contes Màgics, el Parc Noel i diverses exposicions.",
+    es: "**La Petita Santa Llúcia, 28 y 29 de noviembre:** el fin de semana siguiente siguen abiertos algunos espacios, como la Haima del Paje Real Vibó, el Castell dels Contes Màgics, el Parc Noel y varias exposiciones.",
+    en: "**La Petita Santa Llúcia, 28 and 29 November:** the following weekend some spaces stay open, such as the Royal Page Vibó's tent, the Castle of Magic Tales, Parc Noel and several exhibitions.",
+  },
+  access: [
+    {
+      ca: "**Bus llançadora gratuït Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, dissabte i diumenge: surt de Vilanova (parada: Estació) a les 9, 11, 13, 15, 17 i 19 h, i de Vilafranca (estació d'autobusos) a les 10, 12, 14, 16, 18 i 20 h. De Canyelles cap a Vilafranca, a les 9.30, 11.30, 13.30, 15.30, 17.30 i 19.30 h; cap a Vilanova, a les 10.30, 12.30, 14.30, 16.30, 18.30 i 20.30 h.",
+      es: "**Bus lanzadera gratuito Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, sábado y domingo: sale de Vilanova (parada: Estació) a las 9, 11, 13, 15, 17 y 19 h, y de Vilafranca (estación de autobuses) a las 10, 12, 14, 16, 18 y 20 h. De Canyelles hacia Vilafranca, a las 9.30, 11.30, 13.30, 15.30, 17.30 y 19.30 h; hacia Vilanova, a las 10.30, 12.30, 14.30, 16.30, 18.30 y 20.30 h.",
+      en: "**Free shuttle bus Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, Saturday and Sunday: from Vilanova (stop: Estació) at 9:00, 11:00, 13:00, 15:00, 17:00 and 19:00, and from Vilafranca (bus station) at 10:00, 12:00, 14:00, 16:00, 18:00 and 20:00. From Canyelles to Vilafranca at 9:30, 11:30, 13:30, 15:30, 17:30 and 19:30; to Vilanova at 10:30, 12:30, 14:30, 16:30, 18:30 and 20:30.",
+    },
+    {
+      ca: "**Bus llançadora gratuït Sitges – Sant Pere de Ribes – Canyelles:** surt de Sitges (Parc de Can Robert, costat Oasis) a les 10, 13 i 16 h i passa per Sant Pere de Ribes (plaça de Catalunya) deu minuts després; torna de Canyelles a les 13.30, 16.30 i 21 h.",
+      es: "**Bus lanzadera gratuito Sitges – Sant Pere de Ribes – Canyelles:** sale de Sitges (Parc de Can Robert, junto a Oasis) a las 10, 13 y 16 h y pasa por Sant Pere de Ribes (plaza de Catalunya) diez minutos después; vuelve de Canyelles a las 13.30, 16.30 y 21 h.",
+      en: "**Free shuttle bus Sitges – Sant Pere de Ribes – Canyelles:** from Sitges (Parc de Can Robert, next to Oasis) at 10:00, 13:00 and 16:00, calling at Sant Pere de Ribes (Plaça de Catalunya) ten minutes later; back from Canyelles at 13:30, 16:30 and 21:00.",
+    },
+    {
+      ca: "**Des de Barcelona en tren:** l'R2 Sud para a Vilanova i la Geltrú, on el bus llançadora surt de l'Estació, i l'R4 a Vilafranca del Penedès, on surt de l'estació d'autobusos. L'Ajuntament avisa que els horaris dels autobusos poden variar pel trànsit.",
+      es: "**Desde Barcelona en tren:** la R2 Sud para en Vilanova i la Geltrú, donde el bus lanzadera sale de la Estació, y la R4 en Vilafranca del Penedès, donde sale de la estación de autobuses. El Ayuntamiento avisa de que los horarios de los autobuses pueden variar por el tráfico.",
+      en: "**From Barcelona by train:** the R2 Sud stops at Vilanova i la Geltrú, where the shuttle leaves from the Estació stop, and the R4 at Vilafranca del Penedès, where it leaves from the bus station. The council warns that bus times may vary with traffic.",
+    },
+    {
+      ca: "**En cotxe:** aparcament gratuït en diverses zones habilitades al voltant del nucli antic (el plànol de la fira en marca al castell, a l'escola i al llarg de la C-15z); aparcament accessible a l'avinguda del Raval i al lateral de la C-15z. Dins del municipi, un minibús urbà gratuït enllaça els barris i les urbanitzacions amb el Poble.",
+      es: "**En coche:** aparcamiento gratuito en varias zonas habilitadas alrededor del casco antiguo (el plano de la feria las marca en el castillo, en la escuela y a lo largo de la C-15z); aparcamiento accesible en la avenida del Raval y en el lateral de la C-15z. Dentro del municipio, un minibús urbano gratuito une los barrios y las urbanizaciones con el Poble (el centro).",
+      en: "**By car:** free parking in several areas set up around the old town (the fair map shows them by the castle, at the school and along the C-15z); accessible parking on Avinguda del Raval and beside the C-15z. Within the municipality, a free minibus links the outlying districts and estates with the Poble (the centre).",
+    },
+  ],
+  accessTitle: {
+    ca: "Com arribar a la fira: bus llançadora gratuït i aparcament",
+    es: "Cómo llegar a la feria: bus lanzadera gratis y aparcamiento",
+    en: "Getting to the fair: free shuttle buses and parking",
+  },
+  snippet: {
+    ca: "De 9 a 21 h, amb bus llançadora gratuït des de Vilanova, Vilafranca i Sitges.",
+    es: "De 9 a 21 h, con bus lanzadera gratis desde Vilanova, Vilafranca y Sitges.",
+    en: "9:00 to 21:00, with free shuttle buses from Vilanova, Vilafranca and Sitges.",
+  },
+  links: [
+    { label: { ca: "Programa 2026 (PDF)", es: "Programa 2026 (PDF)", en: "2026 programme (PDF, Catalan)" }, url: `${CANYELLES}/documents/2026/2026_programa%20FSL_tr%C3%ADptic.pdf` },
+    { label: { ca: "Plànol de la fira", es: "Plano de la feria", en: "Fair map" }, url: `${CANYELLES}/documents/2026/2026_11_21_planolfira.png` },
+    { label: { ca: "Horaris del bus llançadora", es: "Horarios del bus lanzadera", en: "Shuttle bus timetable" }, url: `${CANYELLES}/documents/2026/2026_11_21_horaris_fsl_busllan%C3%A7adora.png` },
+    { label: { ca: "Horaris del minibús urbà", es: "Horarios del minibús urbano", en: "Town minibus timetable" }, url: `${CANYELLES}/documents/2026/2026_11_21_horaris_fsl_minibusurba.png` },
+    { label: { ca: "Activitats i entrades (web de la fira)", es: "Actividades y entradas (web de la feria)", en: "Activities and tickets (fair website)" }, url: `${CANYELLES_APP}/activitats` },
+    { label: { ca: "Com arribar (web de la fira)", es: "Cómo llegar (web de la feria)", en: "Getting there (fair website)" }, url: `${CANYELLES_APP}/com-arribar` },
+    {
+      label: { ca: "Presentació de la 24a fira (Ajuntament)", es: "Presentación de la 24.ª feria (Ayuntamiento)", en: "Presentation of the 24th fair (council)" },
+      url: `${CANYELLES}/fira-de-santa-llucia/presentacio-de-la-24a-fira-de-santa-llucia-i-el-programa-canyelles-es-nadal`,
+    },
+  ],
+};
+
 export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   {
     id: "org:canyelles-santa-llucia",
@@ -73,11 +200,14 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.canyelles.cat/promocio-economica-i-turisme/la-fira-de-santa-llucia",
     publisher: "Ajuntament de Canyelles",
-    readOn: "2026-11-13",
-    quote: "La 24a edició de la Fira de Santa Llúcia se celebra el 21 i 22 de novembre de 2026.",
+    readOn: "2026-11-20",
+    quote:
+      "La 24a edició de la Fira de Santa Llúcia se celebra el 21 i 22 de novembre de 2026. … 24a Fira de Santa Llúcia Dis. 21 Nov, 2026 (9:00 - 21:00) 24a Fira de Santa Llúcia Diu. 22 Nov, 2026 (9:00 - 21:00)",
     replaces: "vm32:24033377",
     // The cultural agenda's listing (3 Nov 2026), with the council's dates.
     alsoReplaces: ["agenda:2026110300050"],
+    hours: { ca: "dissabte i diumenge, de 9 a 21 h", es: "sábado y domingo, de 9 a 21 h", en: "Saturday and Sunday, 9:00 to 21:00" },
+    details: CANYELLES_DETAILS,
   },
   {
     id: "org:barcelona-sagrada-familia",

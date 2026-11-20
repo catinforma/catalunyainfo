@@ -9541,3 +9541,67 @@ Before the 23rd: re-read the Ministry's rail list and Renfe daily; when the reso
 files, set `MINISTRY_23N_PUBLISHED`, rewrite the 23N copy, publish `strikes`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — Christmas fairs and seasonal events: Canyelles' programme, shuttle buses and parking before its weekend; the 13 Nov title test read; organisers' details on the most-searched fair pages (deploy; no publish group for the town pages)
+
+**Why.** The fair pages sit at position 8–11 with almost no clicks on the date queries, and the sub-queries Google now
+shows for them are "cómo llegar", "cómo llegar y aparcar", "horarios exactos", "como llegar desde barcelona". The
+pages gave the dates and the Rodalies stations; local media and the councils give hours, programme, buses and parking.
+
+### 1. Canyelles (`/ca/fires-de-nadal/canyelles/`, `/es/mercados-navidad/canyelles/`; no English page: Canyelles is not in `EN_TOWNS`)
+
+**Baseline (GSC, `snapshot.py page <path> 14`, 7–20 Nov; the last two days partial).**
+
+| Page | 7–13 Nov (old title) | 14–20 Nov (dated title) | 14 d |
+| --- | --- | --- | --- |
+| `/es/mercados-navidad/canyelles/` | 27 / 1,347 / 2.0 % / 8.2 | 11 / 971 / 1.1 % / 8.2 | 38 / 2,318 / 1.6 % / 8.2 |
+| `/ca/fires-de-nadal/canyelles/` | 2 / 307 / 0.7 % / 8.9 | 8 / 413 / 1.9 % / 8.0 | 10 / 720 / 1.4 % / 8.4 |
+
+Queries (14 d): fira santa llucia canyelles 2026 630 / 0 / 10.4 (ES) and 112 / 0 / 9.7 (CA); fira canyelles 2026 67 / 0
+/ 10.0; feria canyelles 2026 64 / 2 / 6.7; santa llucia canyelles 2026 62 / 0 / 7.1; fira de santa llucia canyelles 2026
+54 / 0 / 9.5 (ES) and 103 / 0 / 9.4 (CA); fira de nadal canyelles 2026 60 / 0 / 9.3 (CA); fira santa llúcia canyelles
+como llegar 11 / 0 / 7.4.
+
+**The 13 Nov title test, day-7 read (due today).** ES: 2.0 % → 1.1 % at the same position (8.2); CA: 0.7 % → 1.9 % at
+8.9 → 8.0. Against the 28-day baseline the ES page is below (1.9 %) but at a worse position (7.9 → 8.2), so the revert
+rule ("below baseline at the same or better position") does not fire; CA beats it. **Decision: titles kept** (the fair
+is tomorrow; the dated title is the answer to the query). Canyelles' test is closed; Espinelves' reads again on 27 Nov.
+
+**Data checked (20 Nov 2026, curl with a browser user agent; every linked file opened; quotes and file list in
+`christmas-fairs/organisers.ts`, `CANYELLES_DETAILS`).** Ajuntament de Canyelles: the fair page ("La 24a edició de la Fira
+de Santa Llúcia se celebra el 21 i 22 de novembre de 2026"; agenda "Dis. 21 Nov, 2026 (9:00 - 21:00)", "Diu. 22 Nov,
+2026 (9:00 - 21:00)"), the news of 16 Nov (more than 350 stalls; new: a mapping on the castle front and a magic games
+area), the presentation of 11 Nov (brought forward a week because of the 29 Nov general election; La Petita Santa
+Llúcia 28–29 Nov; parking areas and the free shuttle), the carols news (17 h, Santa Magdalena), the programme leaflet
+(PDF), the map and the two bus timetables (PNG). The fair's web app, linked from the council's page: "Aparcaments
+gratuïts", the same shuttle times, advance tickets (entradium.com) for Park Noël, the Castell dels Contes Màgics and the
+Patge Reial Vibó only; no price anywhere, and no page says entry is free, so the page says neither.
+
+**What changed.**
+- Fair card: hours "dissabte i diumenge, de 9 a 21 h"; read date 20 Nov.
+- New section "Programa i horaris 2026" (es "Programa y horarios", en "Programme and times"): why the dates differ from
+  the calendar (the election), the day-by-day programme (opening 9 h, welcome and the Ambaixador del Nadal at 12 h,
+  piromusical 20 h on Saturday; tions and drawing prizes 11.30 h on Sunday; carols 17 h and live music both days; the
+  children's spaces 9–20 h), what is new, tickets, La Petita Santa Llúcia, and the seven official files.
+- "Com arribar-hi" becomes "Com arribar a la fira: bus llançadora gratuït i aparcament" and opens with the two free
+  shuttle lines (Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès, every two hours 9–19 h; Sitges – Sant Pere
+  de Ribes – Canyelles, 10, 13, 16 h, back 13.30, 16.30, 21 h), the train from Barcelona to the shuttle stops (R2 Sud to
+  Vilanova, R4 to Vilafranca: repo Rodalies snapshot), free parking around the old town (castle, school, C-15z),
+  accessible parking (Av. del Raval, C-15z) and the urban minibus. The station/Mou-te paragraph follows.
+- Lead: `LEAD_HOLDS` drops Canyelles (its review is done), so the first sentence gives the days ("Fira de Santa Llúcia
+  de Canyelles 2026: dissabte 21 i diumenge 22 de novembre, Nucli i casc antic."). Espinelves' hold is renewed to 27 Nov.
+- Description (ca/es; outside any window since today's review): "Fira de Santa Llúcia de Canyelles: 21 i 22 de novembre
+  de 2026. De 9 a 21 h, amb bus llançadora gratuït des de Vilanova, Vilafranca i Sitges." (es "…De 9 a 21 h, con bus
+  lanzadera gratis desde Vilanova, Vilafranca y Sitges."). Was "…(Nucli i casc antic). Dates oficials, com arribar-hi i
+  què obre aquells dies." Title unchanged.
+- Event JSON-LD: `startDate` 2026-11-21T09:00:00+01:00, `endDate` 2026-11-22T21:00:00+01:00, `organizer` Ajuntament de
+  Canyelles (its fair page), `description`; `eventStatus` stays EventScheduled (Google's EventRescheduled means "to a
+  later date"; this one moved earlier). No `image`: there is no licensed photo of the fair (owner photo needed).
+
+**Prediction.** The ES page's clicks on 21–22 Nov exceed its 14–15 Nov (0 clicks on 522 impressions) at equal position,
+and "como llegar" / "aparcar" sub-queries get clicks. **Review 2026-11-23** (`snapshot.py page /mercados-navidad/canyelles/
+3`, the fair weekend) and **2026-12-04** (14 days; demand ends with the fair, so this read is for the 2027 template).
+
+**Go-live (Canyelles, ship before Saturday 21 Nov).** Town pages are static code routes: deploy only, no publish group.
+IndexNow prefixes `/ca/fires-de-nadal/canyelles/ /es/mercados-navidad/canyelles/`. The hubs' "revisat el" date moves to
+20 Nov with the same deploy (data date, not a copy change).

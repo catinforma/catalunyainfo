@@ -40,7 +40,7 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
   const pending = new Map(unconfirmed.map(({ fairId, ...rest }) => [fairId, rest]));
   const out: Fair[] = snapshot.fairs.filter((f) => !duplicates.has(f.id)).map((f) => {
     const o = corrections.get(f.id);
-    const base: Fair = { ...f, checked: null, datasetDates: null, hours: null, closed: [], unconfirmed: o ? null : (pending.get(f.id) ?? null) };
+    const base: Fair = { ...f, checked: null, datasetDates: null, hours: null, closed: [], unconfirmed: o ? null : (pending.get(f.id) ?? null), details: null };
     if (!o) return base;
     const changed = o.start !== f.start || o.end !== f.end;
     return {
@@ -52,6 +52,7 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
       datasetDates: changed ? { start: f.start, end: f.end } : null,
       hours: o.hours ?? null,
       closed: o.closed ?? [],
+      details: o.details ?? null,
     };
   });
   for (const o of organisers) {
@@ -75,6 +76,7 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
       hours: o.hours ?? null,
       closed: o.closed ?? [],
       unconfirmed: null,
+      details: o.details ?? null,
     });
   }
   return out.filter((f) => inSeason(f.start, f.end, snapshot.season)).sort(byDate);
@@ -234,11 +236,11 @@ export function weekendZoneFor(town: Pick<Town, "ine" | "comarca" | "province">)
 
 /** The last day anything on the town's page was read: the snapshot, or an organiser's page. */
 export function lastChecked(town: Pick<Town, "fairs">): string {
-  const read = (f: Fair) => [f.checked?.readOn, f.unconfirmed?.readOn].filter((d): d is string => Boolean(d));
+  const read = (f: Fair) => [f.checked?.readOn, f.unconfirmed?.readOn, f.details?.readOn].filter((d): d is string => Boolean(d));
   return town.fairs.flatMap(read).reduce((latest, d) => (d > latest ? d : latest), SNAPSHOT.readOn);
 }
 
 /** The latest date anything in the family was read (hub and sitemap). */
 export function familyLastChecked(): string {
-  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.map((o) => o.readOn), ...UNCONFIRMED_FAIRS.map((u) => u.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
+  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.flatMap((o) => [o.readOn, ...(o.details ? [o.details.readOn] : [])]), ...UNCONFIRMED_FAIRS.map((u) => u.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
 }

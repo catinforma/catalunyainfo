@@ -409,6 +409,63 @@ test("town lead: the first sentence gives the fair's days", () => {
   }
 });
 
+/**
+ * 20 Nov 2026: the organisers' programmes. Each `details` is dated, in the
+ * three languages, sourced on official https pages, and only says what those
+ * pages print (no price, no "free entry" unless the page says it).
+ */
+test("details: every organiser programme is dated, trilingual and sourced", () => {
+  const withDetails = ORGANISER_FAIRS.filter((o) => o.details);
+  assert.ok(withDetails.length >= 1);
+  for (const o of withDetails) {
+    const d = o.details!;
+    assert.match(d.readOn, ISO);
+    assert.ok(d.readOn >= o.readOn || d.readOn === o.readOn, `${o.id}: details read on or after the dates`);
+    const lines = [...d.programme, ...(d.news ?? []), ...d.access, ...[d.tickets, d.after, d.why, d.snippet, d.accessTitle].filter((x) => x !== undefined)];
+    assert.ok(d.programme.length > 0 && d.access.length > 0, o.id);
+    for (const line of lines) for (const locale of FAIRS_LOCALES) assert.ok(line![locale].length > 3 && !/undefined|\$\{/.test(line![locale]), `${o.id} ${locale}: ${line!.ca}`);
+    for (const line of lines) assert.ok(!/entrada (lliure|gratuïta)|entrada (libre|gratuita)|free entry|free admission/i.test(Object.values(line!).join(" ")), `${o.id}: no free-entry claim the pages do not make`);
+    assert.ok(d.links.length > 0);
+    for (const l of d.links) assert.match(l.url, /^https:\/\//, l.url);
+    if (d.times) {
+      assert.match(d.times.opens, /^\d{2}:\d{2}$/);
+      assert.match(d.times.closes, /^\d{2}:\d{2}$/);
+      // winterDateTime's +01:00 holds from the last Sunday of October 2026 to the last Sunday of March 2027.
+      assert.ok(o.start >= "2026-10-25" && o.end < "2027-03-28", o.id);
+    }
+    if (d.snippet) for (const locale of FAIRS_LOCALES) assert.ok(d.snippet[locale].length <= 85, `${o.id} ${locale}: snippet fits the description`);
+  }
+});
+
+test("Canyelles (20 Nov 2026): hours, programme, shuttle buses and parking from the council's pages", () => {
+  const town = townBySlug("canyelles")!;
+  const fair = town.fairs.find((f) => f.id === "vm32:24033377")!;
+  assert.equal(fair.hours?.ca, "dissabte i diumenge, de 9 a 21 h");
+  assert.equal(fair.details?.readOn, "2026-11-20");
+  assert.ok(fair.details!.links.every((l) => /^https:\/\/www\.(canyelles\.cat|santalluciacanyelles\.cat)\//.test(l.url)));
+  const text = (locale: "ca" | "es" | "en") => [...fair.details!.programme, ...fair.details!.access].map((l) => l[locale]).join(" ");
+  assert.match(text("ca"), /350 parades/);
+  assert.match(text("ca"), /Vilanova.*9, 11, 13, 15, 17 i 19 h/);
+  assert.match(text("es"), /Sitges \(Parc de Can Robert/);
+  assert.match(text("en"), /free parking/i);
+  // The lead hold ended with the 20 Nov review: the first sentence gives the days.
+  assert.ok(!("08043" in LEAD_HOLDS));
+  for (const locale of ["ca", "es"] as const) {
+    assert.ok(townLead({ ...town, comarcaName: "Garraf" }, locale, "2026-11-20").startsWith(townDatesLine(town, locale)), locale);
+    const description = townDescription(town, locale);
+    assert.ok(description.length <= DESCRIPTION_LIMIT && /9 a 21 h/.test(description) && /Vilafranca/.test(description), description);
+  }
+  // The title test (13 Nov) keeps its dated title.
+  assert.equal(townTitle(town, "ca"), "Fira de Santa Llúcia de Canyelles 2026: 21 i 22 de novembre");
+  // Event: the day's times (winter time), the organiser, a description.
+  const event = christmasFairEvents(town.fairs, townPath("es", town.slug), "es")[0] as Record<string, unknown>;
+  assert.equal(event.startDate, "2026-11-21T09:00:00+01:00");
+  assert.equal(event.endDate, "2026-11-22T21:00:00+01:00");
+  assert.equal((event.organizer as { name: string }).name, "Ajuntament de Canyelles");
+  assert.match(String(event.description), /9 a 21 h/);
+  assert.equal(event.eventStatus, "https://schema.org/EventScheduled");
+});
+
 /** Date guard: the lead holds end with the Canyelles/Espinelves title review (20 Nov 2026). */
 test("date guard: lead holds end on their date", () => {
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
