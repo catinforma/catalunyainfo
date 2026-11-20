@@ -144,7 +144,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * Dec) and Bizkaia's (17 Dec, 21 Jan 2027) on the Basque list; CSIF Educación
  * Madrid; CESM (newest 12 Nov, still postponed).
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-20";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-21";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.

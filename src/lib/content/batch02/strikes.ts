@@ -327,7 +327,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * Catalunya (newest item 18 Nov, indefinite strike, no call-off); SMU
  * ("legalmente convocada del 16 al 27 de noviembre", no call-off).
  */
-export const STRIKES_AS_OF: string = "2026-11-20";
+export const STRIKES_AS_OF: string = "2026-11-21";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
