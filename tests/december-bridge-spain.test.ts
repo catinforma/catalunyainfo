@@ -10,6 +10,8 @@ import {
   COLUMN_DAYS,
   DECEMBER_BRIDGE_SPAIN,
   MONDAY_7,
+  MONDAY_7_RULES,
+  MONDAY_7_RULES_READ_ON,
   MONDAY_7_WORKING,
   SPAIN_BRIDGE_EXPIRES,
   SPAIN_BRIDGE_VERIFIED,
@@ -21,6 +23,7 @@ import {
   isHolidayIn,
   isOffIn,
   leaveWords,
+  monday7RuleRows,
   nextDecemberRun,
   optionGroups,
   optionRows,
@@ -36,6 +39,7 @@ import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { BOE_2026, BOE_2026_ROWS, REGION_WIDE_LOCAL, boeRegionsOn2026 } from "../src/lib/programmatic/holidays/boe-2026.ts";
 import { BOE_2027_ROWS, REGIONS, REGION_NAME, boeRegionsOn, type BoeCode, type Region } from "../src/lib/programmatic/holidays/boe-2027.ts";
+import { DATE_PAGES, datePath } from "../src/lib/programmatic/holidays/paths.ts";
 import { spainPaths } from "../src/lib/programmatic/spain-2027/paths.ts";
 import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { leavePath } from "../src/lib/programmatic/leave-2027/copy.ts";
@@ -199,6 +203,8 @@ const PUBLISHED = new Set([
   // 16 Nov 2026: the 2027 leave planner and the working-days calculator (code routes).
   ...LOCALES.map((locale) => leavePath(locale)),
   ...LOCALES.map((locale) => calcPath("working-days", locale)),
+  // 20 Nov 2026: Catalonia's readers go on to the 7 and 8 December date pages (code routes).
+  ...DATE_PAGES.flatMap((iso) => LOCALES.map((locale) => datePath(locale, iso))),
 ]);
 
 test("three valid editions on the registry paths, the Spanish one the fullest", () => {
@@ -243,15 +249,52 @@ test("titles: the year, the day and the answer in under 60 characters; descripti
 
 test("sources are https and official, and the reader sees the check date", () => {
   assert.equal(DECEMBER_BRIDGE_SPAIN.verifiedAt, SPAIN_BRIDGE_VERIFIED);
-  assert.equal(SPAIN_BRIDGE_VERIFIED, "2026-11-06");
+  // 20 Nov 2026: both BOE lists re-read, plus the regional calendars (MONDAY_7_RULES).
+  assert.equal(SPAIN_BRIDGE_VERIFIED, "2026-11-20");
   const urls = DECEMBER_BRIDGE_SPAIN.sources.map((s) => s.url);
   assert.ok(urls.includes("https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21667"));
   assert.ok(urls.includes("https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21254"));
   for (const url of urls) {
-    assert.match(url, /^https:\/\/(www\.boe\.es|bon\.navarra\.es|bomemelilla\.es|portaldogc\.gencat\.cat|transit\.gencat\.cat|www\.dgt\.es)\//, url); // traffic operations (10 Nov 2026)
+    assert.match(url, OFFICIAL_HOSTS, url); // traffic operations (10 Nov 2026); regional bulletins (20 Nov 2026)
     assert.ok(!/[?&]utm_/.test(url), url);
   }
-  for (const locale of LOCALES) assert.match(body(locale), /6 (de novembre|de noviembre|November) (de )?2026/, locale);
+  for (const locale of LOCALES) assert.match(body(locale), /20 (de novembre|de noviembre|November) (de )?2026/, locale);
+});
+
+/** The state and regional official hosts the page may cite. */
+const OFFICIAL_HOSTS =
+  /^https:\/\/(www\.boe\.es|bon\.navarra\.es|bomemelilla\.es|portaldogc\.gencat\.cat|transit\.gencat\.cat|www\.dgt\.es|cdn\.juntadeandalucia\.es|www\.boa\.aragon\.es|www\.asturias\.es|boc\.cantabria\.es|bocyl\.jcyl\.es|doe\.juntaex\.es|www\.bocm\.es|www\.borm\.es)\//;
+
+test("which communities move 6 December to Monday 7: the BOE's ten, each with its own bulletin or the BOE list", () => {
+  assert.equal(MONDAY_7_RULES_READ_ON, "2026-11-20");
+  // Only places where the BOE marks Monday 7 carry a rule, and every one of them is in the table.
+  for (const region of Object.keys(MONDAY_7_RULES) as Region[]) assert.ok(MONDAY_7.includes(region), `${region} has a rule but no Monday 7`);
+  for (const locale of LOCALES) {
+    const rows = monday7RuleRows(locale);
+    assert.deepEqual(rows.map((r) => r[0]), MONDAY_7.map((r) => shortName(r, locale)), locale);
+    for (const row of rows) {
+      const url = /\]\((https:[^)]+)\)/.exec(row[1] ?? "")?.[1] ?? "";
+      assert.match(url, OFFICIAL_HOSTS, `${locale} ${row[0]}`);
+    }
+    // La Rioja's bulletin could not be read (403 to the server): its row cites the BOE list only.
+    const rioja = rows.find((r) => r[0] === shortName("RI", locale))!;
+    assert.ok(rioja[1]!.includes(BOE_2026.url), locale);
+    // The table sits in the section that asks the question, in each language.
+    const blocks = DECEMBER_BRIDGE_SPAIN.editions[locale].blocks;
+    const heading = blocks.findIndex((b) => b.type === "heading" && /qué comunidades lo pasan al lunes|quines comunitats el passen al dilluns|which regions move it to Monday/.test((b as { text: string }).text));
+    assert.ok(heading > 0, `${locale}: no Monday-7 heading`);
+    const tableAt = blocks.findIndex((b, i) => i > heading && b.type === "table");
+    assert.ok(JSON.stringify(blocks[tableAt]).includes(MONDAY_7_RULES.MD!.url), `${locale}: the table after the heading is the rules table`);
+  }
+  // Asturias' decree does not name 7 December: the cell says the day comes from the BOE list.
+  assert.equal(MONDAY_7_RULES.AS?.silent, true);
+  assert.match(monday7RuleRows("es").find((r) => r[0] === "Asturias")![1]!, /figura en la relación del BOE/);
+});
+
+test("cluster links (20 Nov 2026): Catalonia's readers get the 7 and 8 December date pages", () => {
+  for (const locale of LOCALES) {
+    for (const iso of [SPAIN_DAYS.monday, SPAIN_DAYS.immaculada]) assert.ok(json(locale).includes(`](${datePath(locale, iso)})`), `${locale} -> ${iso}`);
+  }
 });
 
 test("internal links stay in their language, end in a slash and point at a published path", () => {
@@ -322,9 +365,26 @@ test("the FAQ answers the searched questions (FAQPage), in the page's words", ()
       "¿Es festivo el 6 de enero de 2027?",
       "¿Hay puente de Reyes en 2027?",
       "¿Cuántos días hay que pedir para el puente de diciembre?",
+      // 20 Nov 2026: "7 y 8 de diciembre es festivo", "que comunidades pasan el 6 de diciembre al lunes", "festivos puente diciembre".
+      "¿Son festivos el 7 y el 8 de diciembre de 2026?",
+      "¿Qué comunidades pasan el 6 de diciembre al lunes?",
+      "¿Qué días son festivos en el puente de diciembre de 2026?",
     ],
-    ca: ["El 7 de desembre de 2026 és festiu?", "El 26 de desembre de 2026 és festiu?"],
-    en: ["Is 7 December 2026 a holiday in Spain?", "Is 26 December a holiday in Spain?", "Is 6 January 2027 a holiday in Spain?"],
+    ca: [
+      "El 7 de desembre de 2026 és festiu?",
+      "El 26 de desembre de 2026 és festiu?",
+      "El 7 i el 8 de desembre de 2026 són festius?",
+      "Quines comunitats passen el 6 de desembre al dilluns?",
+      "Quins dies són festius al pont de desembre del 2026?",
+    ],
+    en: [
+      "Is 7 December 2026 a holiday in Spain?",
+      "Is 26 December a holiday in Spain?",
+      "Is 6 January 2027 a holiday in Spain?",
+      "Are 7 and 8 December 2026 public holidays in Spain?",
+      "Which regions move 6 December to the Monday?",
+      "Which days are holidays over the December 2026 bridge?",
+    ],
   };
   for (const locale of LOCALES) {
     const items = (DECEMBER_BRIDGE_SPAIN.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;

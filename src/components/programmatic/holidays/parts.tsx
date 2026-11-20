@@ -24,7 +24,8 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   localHolidays: { ca: "Festius locals de tots els municipis", es: "Festivos locales de todos los municipios", en: "Local holidays in every town" },
   shops: { ca: "Botigues obertes en diumenges i festius", es: "Tiendas abiertas en domingos y festivos", en: "Shops open on Sundays and holidays" },
   school: { ca: `Calendari escolar ${SCHOOL_LABEL}`, es: `Calendario escolar ${SCHOOL_LABEL}`, en: `Catalonia school calendar ${SCHOOL_LABEL}` },
-  decemberBridge: { ca: "El pont de desembre del 2026", es: "El puente de diciembre de 2026", en: "The December 2026 long weekend" },
+  // 20 Nov 2026: Catalonia in the anchor (the Spain-wide page owns the national bridge queries).
+  decemberBridge: { ca: "El pont de desembre del 2026 a Catalunya", es: "El puente de diciembre de 2026 en Cataluña", en: "The December 2026 long weekend in Catalonia" },
   metroHours: { ca: "Horaris del metro de Barcelona", es: "Horarios del metro de Barcelona", en: "Barcelona metro hours" },
   christmasTraditions: { ca: "Tradicions de Nadal a Catalunya", es: "Tradiciones de Navidad en Cataluña", en: "Catalan Christmas traditions" },
   christmasBarcelona: { ca: "Nadal a Barcelona", es: "Navidad en Barcelona", en: "Christmas in Barcelona" },

@@ -71,6 +71,8 @@ import {
 import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 import { SOURCE_PROSE, placeName } from "@/lib/programmatic/spain-2027/sources-intl";
 
+import { DecemberBridgeLine } from "./DecemberBridgeLine";
+
 /**
  * The Catalan and English editions of the Spain-wide 2027 pages (pages.tsx
  * is the Spanish one): the same sections and facts, every link to a page of
@@ -441,6 +443,7 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
             ))}
           </ul>
           <p className="text-sm text-[var(--color-muted)]">{computedNote(locale)}</p>
+          <DecemberBridgeLine locale={locale} region={c.region} inPlace={c.in} />
 
           <h2 id="locals">{tr(locale, `Festius locals del ${YEAR} ${c.in}`, `Local holidays ${c.in} in ${YEAR}`)}</h2>
           <p>
@@ -707,6 +710,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
             <Link href={editionBridgesPath(locale)}>{tr(locale, `Tots els ponts del ${YEAR}, comunitat per comunitat`, `Every long weekend of ${YEAR}, region by region`)}</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{computedNote(locale)}</p>
+          <DecemberBridgeLine locale={locale} />
 
           <h2 id="locals">{tr(locale, `Festius locals del ${YEAR}`, `Local holidays in ${YEAR}`)}</h2>
           <p>

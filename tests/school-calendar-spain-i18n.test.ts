@@ -30,8 +30,27 @@ const PREFIX: Record<Locale, string> = { ca: "guies/", es: "guias/", en: "guides
 
 /** Every page of the family in one language, Catalonia's own guide included (the hub links it). */
 function familyPaths(locale: Locale): Set<string> {
-  return new Set([HUB_PATHS[locale], ...SPAIN_REGIONS.map((r) => regionPath(r.slug, locale)), SIBLING_PATHS.school[locale]].map((p) => `/${locale}/${p}/`));
+  // 20 Nov 2026: the "is there school on 7 December?" answers hand on to the Spain-wide December bridge page.
+  return new Set(
+    [HUB_PATHS[locale], ...SPAIN_REGIONS.map((r) => regionPath(r.slug, locale)), SIBLING_PATHS.school[locale], B2_PATHS.decemberBridgeSpain[locale]].map((p) => `/${locale}/${p}/`),
+  );
 }
+
+test("the December bridge cluster (20 Nov 2026): every community page and the hub link the Spain-wide bridge page; the FAQ asks 'en los colegios'", () => {
+  for (const locale of LOCALES) {
+    const bridge = `](/${locale}/${B2_PATHS.decemberBridgeSpain[locale]}/)`;
+    assert.ok(JSON.stringify(buildHubBody(locale)).includes(bridge), `${locale} hub`);
+    for (const r of SPAIN_REGIONS) {
+      const region = localizeRegion(r, locale);
+      const blocks = buildRegionBody(region);
+      assert.ok(JSON.stringify(blocks).includes(bridge), `${locale} ${r.slug}`);
+      const faq = blocks.find((b) => b.type === "faq") as { items: { question: string }[] };
+      const first = faq.items[0]!.question;
+      if (locale === "es") assert.ok(first.includes(`en los colegios ${region.deName}`), first);
+      if (locale === "ca") assert.ok(first.includes(`a les escoles ${region.deName}`), first);
+    }
+  }
+});
 
 test("three editions per page on unique paths, each in its locale's section, none colliding with another page", () => {
   for (const locale of LOCALES) {

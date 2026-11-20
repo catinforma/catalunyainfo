@@ -1,3 +1,4 @@
+import { b2href } from "@/lib/content/batch02/shared";
 import type { Block } from "@/lib/content/blocks";
 import { weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
@@ -479,8 +480,26 @@ function daysOffSection(region: RegionCalendar): Block[] {
   ];
 }
 
+/**
+ * 20 Nov 2026: the December bridge cluster. The school answer for the 7th, then
+ * the Spain-wide page that owns "¿el lunes 7 de diciembre es festivo?" for
+ * every community (the community pages had no link to it).
+ */
+function bridgeLink(locale: Locale): string {
+  return t(
+    locale,
+    ` Dónde es festivo el lunes 7 en cada comunidad, y cuántos días de puente salen, está en [los festivos del puente de diciembre 2026 por comunidad](${b2href("decemberBridgeSpain", "es")}).`,
+    ` On és festiu el dilluns 7 a cada comunitat, i quants dies de pont surten, és a [els festius del pont de desembre 2026 per comunitats](${b2href("decemberBridgeSpain", "ca")}).`,
+    ` Where Monday the 7th is a public holiday in each region, and how long the bridge is, is in [the December 2026 bridge holidays by region](${b2href("decemberBridgeSpain", "en")}).`,
+  );
+}
+
 /** "¿Hay clase el 7 de diciembre?": the question of the December long weekend. */
 function sevenDecember(region: RegionCalendar): string {
+  return sevenDecemberAnswer(region) + bridgeLink(lang(region));
+}
+
+function sevenDecemberAnswer(region: RegionCalendar): string {
   const L = lang(region);
   const day = schoolDayIn(region, "2026-12-07");
   const inName = region.inName;
@@ -761,11 +780,13 @@ function regionFaq(region: RegionCalendar): Block {
     );
   const items = [
     {
+      // 20 Nov 2026: in the searched words ("cuando empiezan las vacaciones de navidad en
+      // los colegios": Madrid 50 impressions at 8.6, Andalucía 20 at 7.9, Valenciana 13 at 7.5).
       question: t(
         L,
-        `¿Cuándo empiezan las vacaciones de Navidad ${cy} ${inName}?`,
-        `Quan comencen les vacances de Nadal ${cy} ${inName}?`,
-        `When do the ${cy} Christmas holidays start ${inName}?`,
+        `¿Cuándo empiezan las vacaciones de Navidad ${cy} en los colegios ${region.deName}?`,
+        `Quan comencen les vacances de Nadal ${cy} a les escoles ${region.deName}?`,
+        `When do the ${cy} Christmas school holidays start ${inName}?`,
       ),
       answer: c.label
         ? t(
@@ -1231,7 +1252,7 @@ function hubFaq(regions: RegionCalendar[], locale: Locale): Block {
           `Depende de la comunidad. No hay clase en ${off}: en unas es festivo, porque se traslada el Día de la Constitución, que cae en domingo, y en otras la orden lo declara no lectivo. En ${on} es día lectivo en el calendario general, salvo que el municipio o el centro lo fije como no lectivo.`,
           `Depèn de la comunitat. No hi ha classe en aquestes: ${off}. En unes és festiu, perquè s'hi trasllada el Dia de la Constitució, que cau en diumenge, i en d'altres el text oficial el declara no lectiu. En aquestes altres és dia lectiu al calendari general, tret que el municipi o el centre el fixi com a no lectiu: ${on}.`,
           `It depends on the region. These have no class: ${off}. In some it is a public holiday, because Constitution Day, which falls on a Sunday, moves to it, and in others the official text makes it a non-teaching day. In these it is a school day in the general calendar, unless the municipality or the school makes it a non-teaching day: ${on}.`,
-        ),
+        ) + bridgeLink(L),
       },
       {
         question: t(L, "¿Por qué mi colegio tiene un día libre que no sale aquí?", "Per què la meva escola té un dia lliure que no surt aquí?", "Why does my school have a day off that is not listed here?"),

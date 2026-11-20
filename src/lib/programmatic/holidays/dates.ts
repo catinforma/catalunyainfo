@@ -62,6 +62,12 @@ export interface DateContent {
   answerNote: string[];
   /** One sentence with one link, after the answer (11 November: the general strike; the others: `noticeFor`). */
   notice?: { before: string; label: string; href: string; after: string };
+  /**
+   * 20 Nov 2026, 7 and 8 December 2026 only: the Spain-wide December bridge
+   * page under the answer, as "¿Y en el resto de España? <label>" (the 2027
+   * pages get the same line to their Spain-wide day page).
+   */
+  restOfSpain?: { label: string; href: string };
   description: string;
   /** Places with a local holiday that day (or on the eve, when the day itself is Catalonia-wide). */
   local: {
@@ -579,6 +585,17 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         ),
       ],
       notice: noticeFor(iso, locale),
+      // 20 Nov 2026: this page answers for Catalonia and its towns; the Spain-wide
+      // yes/no ("el lunes 7 de diciembre es festivo", "7 y 8 de diciembre es
+      // festivo") belongs to the Spain page, one line under the answer.
+      restOfSpain: {
+        label: L(
+          "On és festiu el dilluns 7 de desembre de 2026, comunitat per comunitat",
+          "Dónde es festivo el lunes 7 de diciembre de 2026, comunidad por comunidad",
+          "Where Monday 7 December 2026 is a public holiday, region by region",
+        ),
+        href: GUIDES.decemberBridgeSpain[locale],
+      },
       // CTR sweep, 3 Nov 2026: "donde es festivo el 7 de diciembre de 2026" (26 impressions at
       // 6.0, no click) gets its answer in the snippet, with the largest towns that have the day.
       description: fitDescription(
@@ -654,13 +671,30 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         `Yes. ${long}, the ${name}, is a public holiday across Catalonia (Order EMT/66/2025) and the rest of Spain.`,
       ),
       answerNote: [
+        // 20 Nov 2026: "8 de diciembre es festivo" (265 impressions in 14 days at 8.0, no
+        // click) and "8 diciembre festivo" are Spain-wide questions. BOE-A-2025-21667,
+        // re-read 20 Nov 2026: "8 Inmaculada Concepción" carries "*" ("Fiesta Nacional
+        // no sustituible") in all nineteen columns.
         L(
-          `El dia abans, el dilluns 7, és feiner a Catalunya, tret dels ${placesPhrase(eve, "ca")} que hi tenen festa local.`,
-          `El día antes, el lunes 7, es laborable en Cataluña, salvo en los ${placesPhrase(eve, "es")} que tienen fiesta local.`,
-          `The day before, Monday 7 December, is a working day in Catalonia except in the ${placesPhrase(eve, "en")} with a local holiday.`,
+          "És festa nacional a tot Espanya, que cap comunitat no pot canviar: la llista de festes laborals del 2026 (BOE del 28 d'octubre de 2025) la marca a les disset comunitats autònomes i a Ceuta i Melilla.",
+          "Es fiesta nacional en toda España, que ninguna comunidad puede cambiar: la relación de fiestas laborales de 2026 (BOE del 28 de octubre de 2025) la marca en las diecisiete comunidades autónomas y en Ceuta y Melilla.",
+          "It is a national holiday across Spain that no region can swap: the 2026 list of public holidays (BOE, 28 October 2025) marks it in all seventeen regions and in Ceuta and Melilla.",
+        ),
+        L(
+          `El dia abans, el dilluns 7, és feiner a Catalunya, tret dels ${placesPhrase(eve, "ca")} que hi tenen festa local. En canvi, és festiu a ${joinList(MONDAY_7_REGIONS.ca, "ca")}, que hi passen el diumenge 6: allà el pont va del dissabte 5 al dimarts 8.`,
+          `El día antes, el lunes 7, es laborable en Cataluña, salvo en los ${placesPhrase(eve, "es")} que tienen fiesta local. En cambio, es festivo en ${joinList(MONDAY_7_REGIONS.es, "es")}, que pasan a él el domingo 6: allí el puente va del sábado 5 al martes 8.`,
+          `The day before, Monday 7 December, is a working day in Catalonia except in the ${placesPhrase(eve, "en")} with a local holiday. It is a holiday, though, in ${joinList(MONDAY_7_REGIONS.en, "en")}, which move Sunday the 6th to it: there the long weekend runs from Saturday 5 to Tuesday 8.`,
         ),
       ],
       notice: noticeFor(iso, locale),
+      restOfSpain: {
+        label: L(
+          "Els festius del pont de desembre 2026 a cada comunitat",
+          "Los festivos del puente de diciembre 2026 en cada comunidad",
+          "The December 2026 bridge holidays in every region of Spain",
+        ),
+        href: GUIDES.decemberBridgeSpain[locale],
+      },
       description: L(
         `Sí: el dimarts 8 de desembre de 2026, la Immaculada, és festiu a tot Catalunya. Quines botigues poden obrir, escoles i el dilluns 7.`,
         `Sí: el martes 8 de diciembre de 2026, la Inmaculada, es festivo en toda Cataluña. Qué tiendas pueden abrir, escuelas y el lunes 7.`,

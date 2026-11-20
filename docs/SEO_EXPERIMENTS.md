@@ -9661,4 +9661,129 @@ transport moved to 2026-11-20. `npx tsc --noEmit -p .` clean; eslint clean on th
 new file) 157/157. `npm test` 2838/2844: the 6 failures are date guards outside this change (postal-vote `POSTAL_AS_OF`
 2026-11-05; strike-days-1920n ×3 and strikes-hub / strikes-spain as-of 19 vs 20 Nov), not touched here.
 
+## 20 Nov 2026 — December bridge cluster: one page per question, the Monday-7 table from the regional bulletins, the 7/8 December date pages hand the national question on, shops and school FAQs in the searched words (deploy; groups `puente-diciembre-espana`, `pont-desembre`, `calendario-escolar-espana`; `shops` and `school-calendar` not before 26 Nov)
+
+**Brief.** Owner: top 3 on many non-strike queries. Cluster: the December bridge (5–8 Dec 2026), "¿es festivo el 7/8 de diciembre?",
+shops on December Sundays and holidays, "¿cuándo empiezan las vacaciones de Navidad?". **No title, description or lead touched**:
+every page here is inside a window (Catalan bridge 11 Nov retitle + 17 Nov lead + 18 Nov body, reviews 25 Nov / 1–2 Dec; Spain
+bridge 12 Nov ES title; 7 Dec date title from the 6 Nov sweep, 8 Dec revert 16 Nov → review 30 Nov; shops 25 Nov review and the
+18 Nov entry's "no sixth change inside its window"; CA school title revert 18 Nov → 25 Nov; Spain school leads 13 Nov → 20/27 Nov).
+Body and links only.
+
+**Baseline** (`snapshot.py page <url> 14`, 7–20 Nov 2026, 20 Nov partial; clicks / impressions / CTR / position):
+
+| URL | 14 d | Named queries (impr. at pos., clicks) |
+| --- | --- | --- |
+| /es/guias/puente-diciembre-espana/ | 504 / 16,184 / 3.1 % / 7.6 (8.3–18 a day since 12 Nov) | festivos puente diciembre 530 at 10.6 (2); el 7 de diciembre es festivo 144 at 9.8 (1); 7 de diciembre es festivo 131 at 9.7 (0); el lunes 7 de diciembre es festivo 124 at 8.5 (0); 7 y 8 de diciembre es festivo 104 at 9.2 (2); festivo 7 de diciembre 89 at 8.1 (0); que comunidades pasan el 6 de diciembre al lunes 52 at 8.2 (3); donde es festivo el 7 de diciembre de 2026 733 at 6.6 (48) |
+| /ca/guies/pont-desembre-espanya/ · /en/guides/december-holidays-spain/ | 8 / 223 / 3.6 % / 5.7 · 12 / 544 / 2.2 % / 3.6 | small |
+| /es/guias/puente-diciembre-cataluna/ | 199 / 11,830 / 1.7 % / 6.2 | festivos puente diciembre 689 at 9.3 (2); puente de la purisima 2026 794 at 6.1 (0); puente de diciembre 2026 767 at 7.2 (10); puente de diciembre 246 at 9.1 (3) |
+| /ca/guies/pont-desembre-catalunya/ · /en/guides/december-long-weekend-catalonia/ | 18 / 4,055 / 0.4 % / 6.7 · 0 / 122 / 4.3 | pont de la purissima 2026 1,120 at 6.4 (0) |
+| /es/festivos/dia/7-diciembre-2026/ | 132 / 4,379 / 3.0 % / 4.9 | el 7 de diciembre es festivo en cataluña 132 at 2.1 (14); 7 de diciembre es festivo 131 at 7.4 (3); el 7 de diciembre es festivo 108 at 7.0 (0); lunes 7 de diciembre es festivo 98 at 6.0 (2) |
+| /es/festivos/dia/8-diciembre-2026/ | 6 / 1,699 / 0.4 % / 7.2 | 8 de diciembre es festivo 265 at 8.0 (0); 8 diciembre festivo 189 at 9.0 (0); el 8 de diciembre es festivo 168 at 7.6 (0) |
+| /ca/festius/dia/7-desembre-2026/ · 8-desembre · /en/holidays/day/7-december-2026/ · 8-december | 3 / 113 · 1 / 82 · 2 / 135 · 0 / 21 | small |
+| /es/festivos/2027/ (hub + community + city pages) | 186 / 22,123 / 0.8 % / 9.5 | family; the new line is on the hub and community pages |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ | 159 / 15,072 / 1.1 % / 6.7 | cuando empiezan a abrir las tiendas los domingos 456 at 7.4 (0); cuando abren las tiendas los domingos 287 at 9.8 (0); domingos abiertos 2026 48 at 8.2 (0) |
+| /ca/guies/botigues-obertes-festius-catalunya/ · /en/guides/shops-open-sundays-holidays-catalonia/ | 19 / 1,292 / 1.5 % / 6.4 · 8 / 431 / 1.9 % / 6.4 | |
+| /es/guias/calendario-escolar-andalucia/ | 9 / 4,037 / 0.2 % / 8.3 | cuando dan las vacaciones de navidad 2026 218 at 6.7 (0); cuando son… 2026 145 at 7.8 (0); cuando empiezan… en los colegios 20 at 7.9 |
+| /es/guias/calendario-escolar-madrid/ | 3 / 2,072 / 0.1 % / 10.3 | cuando empiezan las vacaciones de navidad 2026 175 at 7.7 (0); … en los colegios 50 at 8.6 (0) |
+| /es/guias/calendario-escolar-comunidad-valenciana/ | 4 / 1,362 / 0.3 % / 8.9 | cuando empiezan… 2026 115 at 6.6 (0) |
+| /es/guias/calendario-escolar-espana/ (hub) | 6 / 1,055 / 0.6 % / 10.0 | cuando empiezan las vacaciones de navidad 2026 47 at 6.4 (0) |
+| /ca/guies/calendari-escolar-catalunya/ · /es/…-cataluna/ · /en/… | 13 / 2,841 / 0.5 % / 6.1 · 3 / 1,170 / 15.3 · 4 / 322 / 5.4 | vacances de nadal 26 at 7.0; quan comencen les vacances de nadal 17 at 4.5 |
+
+**Cannibalisation, decided.** "festivos puente diciembre" sat on both bridge pages (9.3 Catalan, 10.6 Spain); the yes/no "7 de
+diciembre es festivo" queries on the Spain page (8–10) and on the 7 Dec date page (6–7.4). Intent per page:
+- **Spain page** owns the national questions: "festivos puente diciembre", "¿el (lunes) 7 de diciembre es festivo?", "7 y 8 de
+  diciembre", "qué comunidades pasan el 6 al lunes", "dónde es festivo el 7".
+- **Catalan bridge page** owns Catalonia ("puente de diciembre 2026 cataluña", "pont de la Puríssima"); the **7 Dec date page**
+  owns "¿el 7 de diciembre es festivo en Cataluña / en <town>?" (43 towns + 2 nuclei); the **8 Dec date page** owns "¿el 8 de
+  diciembre es festivo?" (national yes, plus what opens in Catalonia).
+- Fixed by anchors and hand-offs, not by removing content: every internal anchor to the Catalan page now says "en Cataluña / a
+  Catalunya / in Catalonia" (rail label `B2_TITLES.decemberBridge`, date-page guide label, work-calendar link); every anchor to
+  the Spain page says "festivos del puente de diciembre … en cada comunidad"; each page links the one that owns the other question.
+
+**What changed (ca/es/en everywhere).**
+1. **Spain page** (`december-bridge-spain.ts`, group `puente-diciembre-espana`): the "6 de diciembre cae en domingo" H2 now asks
+   "¿qué comunidades lo pasan al lunes?" (ca "quines comunitats el passen al dilluns?", en "which regions move it to Monday?")
+   and is followed by a **table of the ten places with Monday 7 off and the 2026 calendar each published in its own bulletin**
+   (`MONDAY_7_RULES`). FAQ +3 in the searched words: "¿Son festivos el 7 y el 8 de diciembre de 2026?", "¿Qué comunidades pasan
+   el 6 de diciembre al lunes?", "¿Qué días son festivos en el puente de diciembre de 2026?" (ca/en equivalents). "Si vives en
+   Cataluña" links the 7 Dec date page ("la lista de municipios de Cataluña con fiesta el 7 de diciembre") and the 8 Dec one
+   ("qué abre el 8 de diciembre en Cataluña"). Sources +8 regional instruments; check date 6 → 20 Nov.
+2. **Catalan bridge page** (`december-bridge.ts`, group `pont-desembre`): the 7 December section links the 7 Dec date page
+   ("la lista de municipios donde el 7 de diciembre es fiesta local"); the two Spain links read "los festivos del puente de
+   diciembre … comunidad por comunidad". Lead, title, description and the "¿No vives en Cataluña?" box are unchanged.
+3. **7 and 8 December date pages** (`dates.ts`, `DatePage.tsx`, deploy): under the answer, "¿Y en el resto de España?" + the
+   Spain page ("Dónde es festivo el lunes 7 de diciembre de 2026, comunidad por comunidad" / "Los festivos del puente de diciembre
+   2026 en cada comunidad"), the same line the 2027 pages already carry. 8 December: a note under the answer, "Es fiesta nacional
+   en toda España, que ninguna comunidad puede cambiar: la relación … la marca en las diecisiete comunidades autónomas y en Ceuta y
+   Melilla", and where Monday 7 is a holiday. Answers (leads) and titles unchanged.
+4. **Spain 2027 hub and community pages** (`DecemberBridgeLine.tsx` + `decemberBridgeLine()`, deploy; es + ca/en editions): one
+   line "¿Y este diciembre?" with the community's own answer from the 2026 BOE rows (Monday 7 holiday or working day; Navarra's
+   3 December; Catalonia links its own page), linking the Spain page. Returns nothing after 8 Dec 2026; static pages drop it at
+   the next deploy or revalidation after that day.
+5. **Spain school pages** (`school-spain/body.ts`, group `calendario-escolar-espana`; 18 communities + hub × 3): the "¿Hay clase
+   el 7 de diciembre?" answers link the Spain bridge page; the first FAQ question now reads "¿Cuándo empiezan las vacaciones de
+   Navidad 2026 en los colegios de <comunidad>?" (ca "a les escoles de …"). No date changed (13 Nov reading).
+6. **Catalan school guide** (`school/publish.ts`, group `school-calendar`): the "¿Hay cole el lunes 7 de diciembre?" answer links
+   the Catalan bridge page (2026-27 only).
+7. **Shops** (`shops.ts`, group `shops`): FAQ +2 after the December Sundays one: "¿Qué domingos abren las tiendas en 2026?" and
+   "¿Cuándo abren las tiendas los domingos en Cataluña?" (ca/en alike). Same dates as the page's 2026 calendar section.
+
+**Facts read 20 Nov 2026** (curl + grep / pdftotext; skill verify-official-source):
+- BOE-A-2025-21667 (txt.php): row "7 Lunes siguiente al Día de la Constitución Española" "**" in ten columns; "8 Inmaculada
+  Concepción" "*" in all nineteen; legend "Fiesta Nacional no sustituible (*)"; doc.php "Referencias posteriores" empty.
+  BOE-A-2026-21254: "1 Año Nuevo" "*" ×19, "6 Epifanía del Señor" "**" ×19.
+- Regional 2026 calendars (the 7 December line of each is quoted in the `MONDAY_7_RULES` comment): Andalucía Decreto 101/2025
+  (BOJA 93, 19.5.2025), Aragón Decreto 70/2025 (BOA 135, 16.7.2025), Asturias Decreto 35/2025 (BOPA 57, 24.3.2025; **no December
+  line**: it only swaps San José/Santiago for 8 Sept, so the row says the day comes from the BOE list), Cantabria Orden
+  IND/37/2025 (BOC 147, 1.8.2025), Castilla y León Decreto 9/2025 (BOCYL 103, 2.6.2025), Extremadura Decreto 40/2025 (DOE 94,
+  19.5.2025), Madrid Decreto 75/2025 (BOCM 229, 25.9.2025), Murcia Resolución DG Trabajo (BORM 163, 17.7.2025), Melilla Acuerdo of
+  19.9.2025 (BOME 6315, 3.10.2025). **La Rioja not read**: larioja.org answers 403 (Cloudflare challenge) to the server; its row
+  cites the BOE list and the table note says so. A research subagent did the first pass; all nine were re-downloaded and grepped
+  by hand the same day. Also read, not printed: Canarias Decreto 61/2025, Castilla-La Mancha Decreto 44/2025 and Galicia Decreto
+  46/2025 swap the Monday / 6 December for 30 May, Corpus Christi and 24 June.
+- Ordre EMT/77/2025 (DOGC 9421, 27.5.2025) art. 1 "4 de gener. 15 d'agost. 12 d'octubre. 29 de novembre. 6, 13, 20 i 27 de
+  desembre." and art. 6 defaults "11 de gener i … 8 de desembre"; Resolució EMT/4342/2025 (DOGC 9551, 27.11.2025) Barcelona "4 i
+  11 de gener. 15 d'agost. 12 d'octubre. 29 de novembre. 6, 8, 13, 20 i 27 de desembre." The DOGC 2027 municipal shop list was
+  **not** re-read, so the page's "a 5 de noviembre" sentence is untouched.
+- Jaén 2026-27 school calendar (13 Nov date guard, due today): juntadeandalucia.es searched again, still not published; stays
+  "por confirmar".
+
+**Prediction.** By the bridge: "festivos puente diciembre" settles on one URL (the Spain page) at ≤ 7 with CTR > 1 %, the
+Catalan page's share of it below a third; the Spain page's yes/no 7 December queries reach ≤ 7; "que comunidades pasan el 6 de
+diciembre al lunes" ≤ 5; "8 de diciembre es festivo" on the 8 Dec page gets its first clicks at ≤ 7. Shops: "cuando abren las
+tiendas los domingos" from 9.8 to ≤ 7 within 10 days of the publish. School: "cuando empiezan las vacaciones de navidad en los
+colegios" ≤ 7 on Madrid and Andalucía; the hub's share of the national query grows.
+
+**Revert rule.** Revert a body/link item if its page loses > 1.5 positions mix-free (same queries, both windows) with no gain on
+its target query. The anchor relabels and the date-page hand-offs stay unless the 7 Dec date page loses its "en cataluña"
+queries (today 2.1–2.9).
+
+**Confounders.** Core update (from 10 Nov, no completion notice); demand climbing steeply to 4–8 Dec (compare position and CTR at
+equal query, not clicks); the 25 Nov bridge and shops reviews, the 30 Nov 8 Dec title review, the 26 Nov / 3 Dec answer-first
+reviews; the sitewide strip line to the Spain page from 30 Nov.
+
+**Review.** Bridge and date pages: **4 Dec** (14 days) and **8 Dec 2026** (the bridge): `snapshot.py page puente-diciembre 7`,
+`page /es/festivos/dia/7-diciembre-2026/ 7`, `page /es/festivos/dia/8-diciembre-2026/ 7`, plus a query × page split for
+"festivos puente diciembre" and the 7 December yes/no queries. School: **4 Dec** and **18 Dec**. Shops: **10 Dec** (14 days after
+a 26 Nov publish).
+
+**Go-live.** Deploy first (date pages, `DatePage.tsx`, Spain 2027 pages, guide labels; publish reads the deployed modules).
+Then publish **`puente-diciembre-espana`**, **`pont-desembre`** (also republishes the work-calendar guide with the relabelled link)
+and **`calendario-escolar-espana`**. **`shops` and `school-calendar` on or after 26 Nov**, once the 25 Nov shops and CA school
+reviews have read their windows. IndexNow after the deploy and groups: `python scripts/indexnow-sitemap.py /es/guias/puente-diciembre-
+/ca/guies/pont-desembre- /en/guides/december-holidays-spain/ /en/guides/december-long-weekend-catalonia/
+/es/festivos/dia/7-diciembre-2026/ /es/festivos/dia/8-diciembre-2026/ /ca/festius/dia/7-desembre-2026/
+/ca/festius/dia/8-desembre-2026/ /en/holidays/day/7-december-2026/ /en/holidays/day/8-december-2026/ /es/festivos/2027/
+/ca/festius/2027/ /en/holidays/2027/ /es/guias/calendario-escolar- /ca/guies/calendari-escolar- /en/guides/spain-school-calendar/
+/en/guides/andalusia-school-calendar/ /en/guides/madrid-school-calendar/ /en/guides/valencian-community-school-calendar/`; on
+26 Nov add `/es/guias/tiendas-abiertas-festivos-cataluna/ /ca/guies/botigues-obertes-festius-catalunya/
+/en/guides/shops-open-sundays-holidays-catalonia/ /en/guides/catalonia-school-calendar/`.
+
+**Tests.** New `tests/december-cluster-20nov.test.ts` (date-page hand-offs, the 8 Dec national note, anchor wording, Catalan
+page → 7 Dec date page, school guide → bridge, the two shops questions with the order's dates, the 2027-page line per community
+and its end date). Updated: `december-bridge-spain.test.ts` (check date 20 Nov, regional hosts, the Monday-7 table: only the BOE's
+ten, official links, La Rioja on the BOE list, Asturias "silent"; new FAQ questions; date pages published), `december-pages.test.ts`
+(date pages published), `school-calendar-spain-i18n.test.ts` (bridge link allowed and required, "en los colegios" question).
+
 **Outcome:** _pending_
