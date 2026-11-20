@@ -16,7 +16,7 @@ import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { MONTSERRAT_FREE } from "./day-trips";
 import { SIBLING_PATHS, runAround, runWords, type Run } from "./december-bridge";
-import { dayDate, span } from "./festive";
+import { dateYear, dayDate, span } from "./festive";
 import {
   b2Related,
   b2link,
@@ -89,6 +89,21 @@ import { OPENING_2027 } from "./shops";
  */
 export const EASTER_VERIFIED = "2026-10-31";
 
+/**
+ * The day the holiday and school dates were last re-read at their source
+ * (the "where these dates come from" box says so). 20 Nov 2026, curl + grep:
+ * Ordre EMT/52/2026 PDF (DOGC núm. 9637, 1.4.2026) "26 de març, divendres",
+ * "29 de març, dilluns", and Aran's swap of 29 March for 17 June; the same
+ * on treball.gencat.cat's calendari-festes-2027 page; Ordre EDF/66/2026 PDF
+ * (DOGC núm. 9653, 27.4.2026) "Nadal: del 22 de desembre de 2026 al 7 de
+ * gener de 2027, ambdós inclosos" and "Setmana Santa: del 20 de març al 29
+ * de març de 2027, ambdós inclosos"; BOE-A-2026-21254; Barcelona's
+ * calendarifestius page, "el 2027 hi ha 14 festius, entre els quals
+ * s'inclouen el 17 de maig i el 24 de setembre com a festius locals". The
+ * other facts (councils, shops, TMB, the Passions) keep EASTER_VERIFIED.
+ */
+export const EASTER_DATES_REREAD = "2026-11-20";
+
 /** The year this page is about. The URL carries it, so the page never rolls over. */
 export const EASTER_YEAR = 2027;
 
@@ -107,7 +122,9 @@ const EASTER_MONDAY = holiday2027("Easter Monday");
 const WHIT_MONDAY = BARCELONA_LOCAL.find((h) => h.date.startsWith(String(EASTER_YEAR)) && h.name.en.startsWith("Whit Monday"));
 const SCHOOL_YEAR = SCHOOL_YEARS.find((y) => y.easter[0].startsWith(String(EASTER_YEAR)));
 const ARAN = aranSwap(EASTER_YEAR);
-if (!WHIT_MONDAY || !SCHOOL_YEAR || !ARAN) throw new Error("easter page: a shared calendar is missing its 2027 entry");
+/** La Mercè: Barcelona's other 2027 local holiday (for the Barcelona question). */
+const MERCE = BARCELONA_LOCAL.find((h) => h.date.startsWith(String(EASTER_YEAR)) && h.name.en === "La Mercè");
+if (!WHIT_MONDAY || !MERCE || !SCHOOL_YEAR || !ARAN) throw new Error("easter page: a shared calendar is missing its 2027 entry");
 
 export const EASTER = {
   palmSunday: addDays(EASTER_MONDAY.date, -8),
@@ -128,6 +145,24 @@ export const EASTER = {
 
 /** "2026-2027": the school year the break belongs to. */
 export const SCHOOL_LABEL = SCHOOL_YEAR.label;
+
+/** The same school year's Christmas break, both days included (Ordre EDF/66/2026). */
+export const SCHOOL_CHRISTMAS = { from: SCHOOL_YEAR.christmas[0], to: SCHOOL_YEAR.christmas[1] } as const;
+
+/** Barcelona's second 2027 local holiday, La Mercè. */
+export const BCN_MERCE = MERCE.date;
+
+/**
+ * "del 22 de desembre de 2026 al 7 de gener de 2027" / "from 22 December 2026
+ * to 7 January 2027": a range across New Year, with both years and no
+ * weekday (the page's weekday test reads every "weekday + day" as 2027).
+ */
+function yearSpan(from: string, to: string, locale: Locale): string {
+  if (locale === "en") return `from ${dateYear(from, "en")} to ${dateYear(to, "en")}`;
+  if (locale === "es") return `del ${dateYear(from, "es")} al ${dateYear(to, "es")}`;
+  const vowel = (iso: string) => ["01", "11"].includes(iso.slice(8, 10));
+  return `${vowel(from) ? "de l'" : "del "}${dateYear(from, "ca")} ${vowel(to) ? "a l'" : "al "}${dateYear(to, "ca")}`;
+}
 
 /** Weekday with no Catalonia-wide holiday. */
 function isWorkday(iso: string): boolean {
@@ -620,11 +655,11 @@ export function buildEasterBody(locale: Locale): Block[] {
       callout(
         "official",
         "D'on surten aquestes dates",
-        `Els festius, de l'Ordre EMT/52/2026 (DOGC de l'1 d'abril de 2026), que el BOE del 13 d'octubre de 2026 recull a la relació de festes del 2027; les vacances escolars, de l'Ordre EDF/66/2026 (DOGC del 27 d'abril de 2026). Les hem tornat a llegir el 31 d'octubre de 2026.`,
+        `Els festius, de l'Ordre EMT/52/2026 (DOGC de l'1 d'abril de 2026), que el BOE del 13 d'octubre de 2026 recull a la relació de festes del 2027; les vacances escolars, de l'Ordre EDF/66/2026 (DOGC del 27 d'abril de 2026). Les hem tornat a llegir el ${dateYear(EASTER_DATES_REREAD, "ca")}.`,
       ),
       ...h2(
         "Quins dies són festius per Setmana Santa del 2027 a Catalunya?",
-        `Dos: el **Divendres Sant, ${d(E.goodFriday, "ca")}**, i el **Dilluns de Pasqua, ${d(E.easterMonday, "ca")}**. Són dos dels dotze festius del 2027 a tot Catalunya; a l'Aran, el Dilluns de Pasqua no és festiu, perquè el substitueix la Festa d'Aran, el ${d(E.aranDay, "ca")}.`,
+        `Dos: el **Divendres Sant, ${d(E.goodFriday, "ca")}**, i el **Dilluns de Pasqua, ${d(E.easterMonday, "ca")}**. Són dos dels ${b2link("workCalendar", "ca", "dotze festius del 2027 a tot Catalunya")}; a l'Aran, el Dilluns de Pasqua no és festiu, perquè el substitueix la Festa d'Aran, el ${d(E.aranDay, "ca")}.`,
       ),
       dayTable("ca"),
       ...h2(
@@ -645,7 +680,7 @@ export function buildEasterBody(locale: Locale): Block[] {
         "Vacances de Setmana Santa 2027 a les escoles",
         `L'Ordre EDF/66/2026 fixa les vacances de Setmana Santa del curs ${SCHOOL_LABEL} **${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "ca")}, tots dos inclosos**. L'últim dia de classe abans de vacances és el ${d(school.lastClass, "ca")}, el primer dia feiner sense classe és el ${d(school.firstWeekdayOff, "ca")} i es torna a l'escola el **${d(school.back, "ca")}**. Val per a totes les escoles i instituts de Catalunya, públics i privats.`,
         "Els quatre dies de lliure disposició de cada escola no poden caure dins d'aquestes vacances, segons la mateixa ordre. Les dues festes locals del municipi sí que són festiu escolar: on una toca a les vacances, les allarga (a sota, els municipis on passa el 2027).",
-        `Tot el curs, amb el Nadal i els festius, és al ${schoolLink(`calendari escolar ${SCHOOL_LABEL}`)}.`,
+        `Les vacances de Nadal del mateix curs van ${yearSpan(SCHOOL_CHRISTMAS.from, SCHOOL_CHRISTMAS.to, "ca")}, tots dos inclosos. El curs sencer, amb els festius i els dies de lliure disposició, és al ${schoolLink(`calendari escolar ${SCHOOL_LABEL}`)}.`,
       ),
       ...(locals.length
         ? [
@@ -666,6 +701,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       optionTable("ca"),
       ...paras(
         `Amb quatre dies de vacances, ${leaveWords(weekBefore, "ca").replace(/^D/, "d")}, la festa va ${runWords(weekBeforeRun, "ca")}${matchesSchool ? ": exactament les vacances escolars" : ""}. A l'Aran, el ${d(E.easterMonday, "ca")} és feiner (el festiu passa al ${dm(E.aranDay, "ca")}) i aquests càlculs no s'hi apliquen igual.`,
+        `Els altres ponts de l'any, amb els dies que cal demanar per a cadascun i els de les festes locals de les grans ciutats, són a ${b2link("bridges2027", "ca", "ponts 2027 a Catalunya")}.`,
       ),
       ...h2(
         "Obren les botigues el Divendres Sant i el Dilluns de Pasqua?",
@@ -698,10 +734,12 @@ export function buildEasterBody(locale: Locale): Block[] {
         `Si busques una sortida, mira ${montserrat}, ${link("trains", "ca", "les escapades en tren")} o ${link("weekend", "ca", "què fer aquest cap de setmana")}.`,
       ),
       faq([
+        { question: `Quan és la Setmana Santa del ${EASTER_YEAR}?`, answer: `Comença el Diumenge de Rams, ${dm(E.palmSunday, "ca")} de ${EASTER_YEAR}, i acaba el Diumenge de Pasqua, ${dm(E.easterSunday, "ca")}. A Catalunya en són festius el Divendres Sant (${dm(E.goodFriday, "ca")}) i el Dilluns de Pasqua (${dm(E.easterMonday, "ca")}); el Dijous Sant (${dm(E.holyThursday, "ca")}) és feiner.` },
         { question: "Quins dies són festius per Setmana Santa del 2027 a Catalunya?", answer: `El Divendres Sant, ${d(E.goodFriday, "ca")}, i el Dilluns de Pasqua, ${d(E.easterMonday, "ca")}. Amb el cap de setmana fan ${easterRun.days} dies seguits, ${runWords(easterRun, "ca")}. El Dijous Sant és feiner.` },
         { question: "És festiu el Divendres Sant del 2027?", answer: `Sí: el ${d(E.goodFriday, "ca")} és festiu a tot Catalunya i a tota Espanya.` },
         { question: "El Dijous Sant del 2027 és festiu a Catalunya?", answer: `No. El ${d(E.holyThursday, "ca")} és feiner a Catalunya. És festiu a totes les comunitats autònomes llevat de Catalunya i la Comunitat Valenciana.` },
-        { question: "Quan és el Dilluns de Pasqua del 2027?", answer: `El ${d(E.easterMonday, "ca")}. És festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran, el ${dm(E.aranDay, "ca")}.` },
+        { question: `Quan és Pasqua el ${EASTER_YEAR}?`, answer: `El Diumenge de Pasqua és el ${dm(E.easterSunday, "ca")} i el Dilluns de Pasqua, el dia de la mona, el ${d(E.easterMonday, "ca")}. El dilluns és festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran, el ${dm(E.aranDay, "ca")}.` },
+        { question: `Quins dies són festius per Setmana Santa del ${EASTER_YEAR} a Barcelona?`, answer: `Els mateixos que a tot Catalunya: el Divendres Sant, ${dm(E.goodFriday, "ca")}, i el Dilluns de Pasqua, ${dm(E.easterMonday, "ca")}. Les dues festes locals de Barcelona del ${EASTER_YEAR} són més endavant: el ${d(E.whitMonday, "ca")} (Pasqua Granada) i el ${d(BCN_MERCE, "ca")} (la Mercè).` },
         { question: "Quan són les vacances de Setmana Santa 2027 a les escoles?", answer: `${cap(runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "ca"))}, tots dos inclosos. L'últim dia de classe és el ${d(school.lastClass, "ca")} i es torna el ${d(school.back, "ca")}.` },
         { question: "Quin pont es pot fer per Setmana Santa del 2027?", answer: `Sense demanar cap dia, ${easterRun.days} dies (${runWords(easterRun, "ca")}). Demanant el ${thursday}, ${thursdayRun.days} dies (${runWords(thursdayRun, "ca")}). Demanant ${leaveWords(weekBefore, "ca").replace(/^D/, "d")}, ${weekBeforeRun.days} dies, ${runWords(weekBeforeRun, "ca")}${matchesSchool ? ": les mateixes dates que les vacances escolars" : ""}.` },
         { question: "Obren les botigues el Dilluns de Pasqua?", answer: "Les d'horari general, no: el diumenge i el dilluns de Pasqua són dies de tancament obligat. Les pastisseries, fleques, botigues de conveniència i els altres establiments que la llei exclou sí que poden obrir." },
@@ -731,11 +769,11 @@ export function buildEasterBody(locale: Locale): Block[] {
       callout(
         "official",
         "De dónde salen estas fechas",
-        "Los festivos, de la Orden EMT/52/2026 (DOGC del 1 de abril de 2026), que el BOE del 13 de octubre de 2026 recoge en la relación de fiestas de 2027; las vacaciones escolares, de la Orden EDF/66/2026 (DOGC del 27 de abril de 2026). Las hemos vuelto a leer el 31 de octubre de 2026.",
+        `Los festivos, de la Orden EMT/52/2026 (DOGC del 1 de abril de 2026), que el BOE del 13 de octubre de 2026 recoge en la relación de fiestas de 2027; las vacaciones escolares, de la Orden EDF/66/2026 (DOGC del 27 de abril de 2026). Las hemos vuelto a leer el ${dateYear(EASTER_DATES_REREAD, "es")}.`,
       ),
       ...h2(
         "¿Qué días son festivos en Semana Santa de 2027 en Cataluña?",
-        `Dos: el **Viernes Santo, ${d(E.goodFriday, "es")}**, y el **Lunes de Pascua, ${d(E.easterMonday, "es")}**. Son dos de los doce festivos de 2027 en toda Cataluña; en Arán, el Lunes de Pascua no es festivo, porque lo sustituye la Fiesta de Arán, el ${d(E.aranDay, "es")}.`,
+        `Dos: el **Viernes Santo, ${d(E.goodFriday, "es")}**, y el **Lunes de Pascua, ${d(E.easterMonday, "es")}**. Son dos de los ${b2link("workCalendar", "es", "doce festivos de 2027 en toda Cataluña")}; en Arán, el Lunes de Pascua no es festivo, porque lo sustituye la Fiesta de Arán, el ${d(E.aranDay, "es")}.`,
       ),
       dayTable("es"),
       ...h2(
@@ -756,7 +794,7 @@ export function buildEasterBody(locale: Locale): Block[] {
         "Vacaciones de Semana Santa 2027 en los colegios",
         `La Orden EDF/66/2026 fija las vacaciones de Semana Santa del curso ${SCHOOL_LABEL} **${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "es")}, ambos incluidos**. El último día de clase antes de las vacaciones es el ${d(school.lastClass, "es")}, el primer día laborable sin clase es el ${d(school.firstWeekdayOff, "es")} y se vuelve al colegio el **${d(school.back, "es")}**. Vale para todos los colegios e institutos de Cataluña, públicos y privados.`,
         "Los cuatro días de libre disposición de cada colegio no pueden caer dentro de estas vacaciones, según la misma orden. Las dos fiestas locales del municipio sí son festivo escolar: donde una toca a las vacaciones, las alarga (debajo, los municipios donde pasa en 2027).",
-        `Todo el curso, con la Navidad y los festivos, está en el ${schoolLink(`calendario escolar ${SCHOOL_LABEL}`)}.`,
+        `Las vacaciones de Navidad del mismo curso van ${yearSpan(SCHOOL_CHRISTMAS.from, SCHOOL_CHRISTMAS.to, "es")}, ambos incluidos. El curso entero, con los festivos y los días de libre disposición, está en el ${schoolLink(`calendario escolar ${SCHOOL_LABEL}`)}.`,
       ),
       ...(locals.length
         ? [
@@ -777,6 +815,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       optionTable("es"),
       ...paras(
         `Con cuatro días de vacaciones, ${leaveWords(weekBefore, "es").replace(/^D/, "d")}, la fiesta va ${runWords(weekBeforeRun, "es")}${matchesSchool ? ": exactamente las vacaciones escolares" : ""}. En Arán, el ${d(E.easterMonday, "es")} es laborable (el festivo pasa al ${dm(E.aranDay, "es")}) y estos cálculos no se aplican igual.`,
+        `Los demás puentes del año, con los días que hay que pedir en cada uno y los de las fiestas locales de las grandes ciudades, están en ${b2link("bridges2027", "es", "puentes 2027 en Cataluña")}.`,
       ),
       ...h2(
         "¿Abren las tiendas el Viernes Santo y el Lunes de Pascua?",
@@ -809,10 +848,12 @@ export function buildEasterBody(locale: Locale): Block[] {
         `Si buscas una salida, mira ${montserrat}, ${link("trains", "es", "las escapadas en tren")} o ${link("weekend", "es", "qué hacer este fin de semana")}.`,
       ),
       faq([
+        { question: `¿Cuándo es la Semana Santa de ${EASTER_YEAR} en Catalunya?`, answer: `Empieza el Domingo de Ramos, ${dm(E.palmSunday, "es")} de ${EASTER_YEAR}, y acaba el Domingo de Pascua, ${dm(E.easterSunday, "es")}. En Cataluña son festivos el Viernes Santo (${dm(E.goodFriday, "es")}) y el Lunes de Pascua (${dm(E.easterMonday, "es")}); el Jueves Santo (${dm(E.holyThursday, "es")}) es laborable.` },
         { question: "¿Qué días son festivos en Semana Santa de 2027 en Cataluña?", answer: `El Viernes Santo, ${d(E.goodFriday, "es")}, y el Lunes de Pascua, ${d(E.easterMonday, "es")}. Con el fin de semana suman ${easterRun.days} días seguidos, ${runWords(easterRun, "es")}. El Jueves Santo es laborable.` },
         { question: "¿Es festivo el Viernes Santo de 2027?", answer: `Sí: el ${d(E.goodFriday, "es")} es festivo en toda Cataluña y en toda España.` },
         { question: "¿El Jueves Santo de 2027 es festivo en Cataluña?", answer: `No. El ${d(E.holyThursday, "es")} es laborable en Cataluña. Es festivo en todas las comunidades autónomas salvo en Cataluña y en la Comunitat Valenciana.` },
-        { question: "¿Cuándo es el Lunes de Pascua de 2027?", answer: `El ${d(E.easterMonday, "es")}. Es festivo en toda Cataluña salvo en Arán, donde lo sustituye la Fiesta de Arán, el ${dm(E.aranDay, "es")}.` },
+        { question: `¿Cuándo es Pascua en ${EASTER_YEAR}?`, answer: `El Domingo de Pascua es el ${dm(E.easterSunday, "es")} y el Lunes de Pascua (Pascua Florida, el día de la mona), el ${d(E.easterMonday, "es")}. El lunes es festivo en toda Cataluña salvo en Arán, donde lo sustituye la Fiesta de Arán, el ${dm(E.aranDay, "es")}.` },
+        { question: `¿Qué días son festivos en Semana Santa de ${EASTER_YEAR} en Barcelona?`, answer: `Los mismos que en toda Cataluña: el Viernes Santo, ${dm(E.goodFriday, "es")}, y el Lunes de Pascua, ${dm(E.easterMonday, "es")}. Las dos fiestas locales de Barcelona en ${EASTER_YEAR} llegan después: el ${d(E.whitMonday, "es")} (Pascua Granada) y el ${d(BCN_MERCE, "es")} (La Mercè).` },
         { question: "¿Cuándo son las vacaciones de Semana Santa 2027 en los colegios de Cataluña?", answer: `${cap(runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "es"))}, ambos incluidos. El último día de clase es el ${d(school.lastClass, "es")} y se vuelve el ${d(school.back, "es")}.` },
         { question: "¿Qué puente se puede hacer en Semana Santa de 2027?", answer: `Sin pedir ningún día, ${easterRun.days} días (${runWords(easterRun, "es")}). Pidiendo el ${thursday}, ${thursdayRun.days} días (${runWords(thursdayRun, "es")}). Pidiendo ${leaveWords(weekBefore, "es").replace(/^D/, "d")}, ${weekBeforeRun.days} días, ${runWords(weekBeforeRun, "es")}${matchesSchool ? ": las mismas fechas que las vacaciones escolares" : ""}.` },
         { question: "¿Abren las tiendas el Lunes de Pascua?", answer: "Las de horario general, no: el domingo y el lunes de Pascua son días de cierre obligado. Las pastelerías, panaderías, tiendas de conveniencia y los demás establecimientos que la ley excluye sí pueden abrir." },
@@ -841,11 +882,11 @@ export function buildEasterBody(locale: Locale): Block[] {
     callout(
       "official",
       "Where these dates come from",
-      "The holidays come from Order EMT/52/2026 (DOGC, Catalonia's official gazette, 1 April 2026), listed again in the BOE's national list of 2027 holidays on 13 October 2026; the school holidays from Order EDF/66/2026 (DOGC, 27 April 2026). We re-read them on 31 October 2026.",
+      `The holidays come from Order EMT/52/2026 (DOGC, Catalonia's official gazette, 1 April 2026), listed again in the BOE's national list of 2027 holidays on 13 October 2026; the school holidays from Order EDF/66/2026 (DOGC, 27 April 2026). We re-read them on ${dateYear(EASTER_DATES_REREAD, "en")}.`,
     ),
     ...h2(
       "Which days are public holidays over Easter 2027 in Catalonia?",
-      `Two: **Good Friday, ${d(E.goodFriday, "en")}**, and **Easter Monday, ${d(E.easterMonday, "en")}**. They are two of Catalonia's twelve holidays in 2027; in Aran, Easter Monday is not a holiday, because the Festa d'Aran on ${d(E.aranDay, "en")} replaces it.`,
+      `Two: **Good Friday, ${d(E.goodFriday, "en")}**, and **Easter Monday, ${d(E.easterMonday, "en")}**. They are two of ${b2link("workCalendar", "en", "Catalonia's twelve public holidays in 2027")}; in Aran, Easter Monday is not a holiday, because the Festa d'Aran on ${d(E.aranDay, "en")} replaces it.`,
     ),
     dayTable("en"),
     ...h2(
@@ -866,7 +907,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       "School Easter holidays 2027 in Catalonia",
       `Order EDF/66/2026 sets the ${SCHOOL_LABEL} Easter school holidays **from ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "en")}, both included**. The last day of school before the break is ${d(school.lastClass, "en")}, the first weekday off is ${d(school.firstWeekdayOff, "en")} and children go back on **${d(school.back, "en")}**. It applies to every school in Catalonia, state and private.`,
       "Each school's four free-choice days cannot fall inside this break, under the same order. The town's two local holidays are school holidays too: where one sits next to the break, it makes it longer (below, the towns where that happens in 2027).",
-      `The whole year, with Christmas and the public holidays, is in ${schoolLink(`the ${SCHOOL_LABEL} school calendar`)}.`,
+      `The same year's Christmas school holidays run ${yearSpan(SCHOOL_CHRISTMAS.from, SCHOOL_CHRISTMAS.to, "en")}, both included. The whole year, with the public holidays and the free-choice days, is in ${schoolLink(`the ${SCHOOL_LABEL} school calendar`)}.`,
     ),
     ...(locals.length
       ? [
@@ -887,6 +928,7 @@ export function buildEasterBody(locale: Locale): Block[] {
     optionTable("en"),
     ...paras(
       `With four days of leave, ${leaveWords(weekBefore, "en")}, the break runs ${runWords(weekBeforeRun, "en")}${matchesSchool ? ": exactly the school holidays" : ""}. In Aran, ${d(E.easterMonday, "en")} is a working day (the holiday moves to ${dm(E.aranDay, "en")}), so these combinations do not work the same way there.`,
+      `The year's other long weekends, with the days to book for each and those from the big towns' local holidays, are in ${b2link("bridges2027", "en", "long weekends 2027 in Catalonia")}.`,
     ),
     ...h2(
       "Are shops open on Good Friday and Easter Monday?",
@@ -919,10 +961,11 @@ export function buildEasterBody(locale: Locale): Block[] {
       `For a day out, see ${montserrat}, ${link("trains", "en", "day trips by train")} or ${link("weekend", "en", "what's on this weekend")}.`,
     ),
     faq([
+      { question: `When is Holy Week ${EASTER_YEAR}?`, answer: `It starts on Palm Sunday, ${dm(E.palmSunday, "en")} ${EASTER_YEAR}, and ends on Easter Sunday, ${dm(E.easterSunday, "en")}. In Catalonia, Good Friday (${dm(E.goodFriday, "en")}) and Easter Monday (${dm(E.easterMonday, "en")}) are public holidays; Maundy Thursday (${dm(E.holyThursday, "en")}) is a working day.` },
       { question: "Which days are public holidays over Easter 2027 in Catalonia?", answer: `Good Friday, ${d(E.goodFriday, "en")}, and Easter Monday, ${d(E.easterMonday, "en")}. With the weekend that makes ${easterRun.days} days in a row, ${runWords(easterRun, "en")}. Maundy Thursday is a working day.` },
       { question: "Is Good Friday 2027 a public holiday in Barcelona?", answer: `Yes: ${d(E.goodFriday, "en")} is a public holiday in Barcelona, across Catalonia and in the whole of Spain.` },
       { question: "Is Maundy Thursday 2027 a holiday in Catalonia?", answer: `No. ${d(E.holyThursday, "en")} is a working day in Catalonia. It is a holiday in every other autonomous community except the Valencian Community.` },
-      { question: "When is Easter Monday 2027?", answer: `${d(E.easterMonday, "en")}. It is a public holiday across Catalonia except in Aran, where the Festa d'Aran on ${dm(E.aranDay, "en")} replaces it.` },
+      { question: `When is Easter ${EASTER_YEAR}?`, answer: `Easter Sunday is ${dm(E.easterSunday, "en")} and Easter Monday, the day of the mona cake, is ${d(E.easterMonday, "en")}. The Monday is a public holiday across Catalonia except in Aran, where the Festa d'Aran on ${dm(E.aranDay, "en")} replaces it.` },
       { question: "When are the Easter 2027 school holidays in Catalonia?", answer: `From ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "en")}, both included. The last school day is ${d(school.lastClass, "en")} and classes restart on ${d(school.back, "en")}.` },
       { question: "What long weekend can I make over Easter 2027?", answer: `Without booking anything, ${easterRun.days} days (${runWords(easterRun, "en")}). Taking ${thursday} off, ${thursdayRun.days} days (${runWords(thursdayRun, "en")}). Taking ${leaveWords(weekBefore, "en")} off, ${weekBeforeRun.days} days, ${runWords(weekBeforeRun, "en")}${matchesSchool ? ": the same dates as the school holidays" : ""}.` },
       { question: "Are shops open on Easter Monday in Catalonia?", answer: "Shops on general hours are not: Easter Sunday and Easter Monday are compulsory closing days. Cake shops, bakeries, convenience stores and the other businesses the law exempts may open." },

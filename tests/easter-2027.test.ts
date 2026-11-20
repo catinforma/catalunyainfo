@@ -6,14 +6,17 @@ import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/c
 import { MONTSERRAT_FREE } from "../src/lib/content/batch02/day-trips.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import {
+  BCN_MERCE,
   EASTER,
   EASTER_2027,
+  EASTER_DATES_REREAD,
   EASTER_META,
   EASTER_OPTIONS,
   EASTER_VERIFIED,
   EASTER_YEAR,
   LOCAL_WINDOW,
   PASSIONS,
+  SCHOOL_CHRISTMAS,
   SCHOOL_LABEL,
   TABLE_DAYS,
   buildEasterBody,
@@ -427,4 +430,54 @@ test("the publish route has a setmana-santa-2027 group", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ EASTER_2027 \} from "@\/lib\/content\/batch02\/easter-2027";/);
   assert.match(route, /wants\("setmana-santa-2027"\)\) published\.push\(await publishB2Article\(EASTER_2027\)\)/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* 20 Nov 2026: query-worded questions and cluster links (body only)          */
+/* -------------------------------------------------------------------------- */
+
+type FaqItems = { items: { question: string; answer: string }[] };
+const faqOf = (locale: Locale) => EASTER_2027.editions[locale].blocks.find((b) => b.type === "faq") as unknown as FaqItems;
+
+test("the FAQ opens with the searched 'when is Holy Week 2027' and answers Easter Sunday and Monday, all from the calendar", () => {
+  const first: Record<Locale, string> = { ca: "Quan és la Setmana Santa del 2027?", es: "¿Cuándo es la Semana Santa de 2027 en Catalunya?", en: "When is Holy Week 2027?" };
+  const easter: Record<Locale, string> = { ca: "Quan és Pasqua el 2027?", es: "¿Cuándo es Pascua en 2027?", en: "When is Easter 2027?" };
+  for (const locale of LOCALES) {
+    const { items } = faqOf(locale);
+    assert.equal(items[0]!.question, first[locale], locale);
+    for (const iso of [EASTER.palmSunday, EASTER.easterSunday, EASTER.goodFriday, EASTER.easterMonday, EASTER.holyThursday]) {
+      assert.ok(items[0]!.answer.includes(shortDate(iso, locale)), `${locale}: ${iso} in "${items[0]!.answer}"`);
+    }
+    const pasqua = items.find((i) => i.question === easter[locale]);
+    assert.ok(pasqua, `${locale}: no "${easter[locale]}"`);
+    assert.ok(pasqua.answer.includes(shortDate(EASTER.easterSunday, locale)) && pasqua.answer.includes(shortDate(EASTER.easterMonday, locale)), locale);
+    assert.equal(new Set(items.map((i) => i.question)).size, items.length, `${locale}: a question twice`);
+  }
+  // Barcelona (ca/es; the English page already asks it): Holy Week is Catalonia's, the city's two days come later.
+  for (const locale of ["ca", "es"] as const) {
+    const bcn = faqOf(locale).items.find((i) => /Barcelona\?$/.test(i.question));
+    assert.ok(bcn, locale);
+    for (const day of BARCELONA_LOCAL.filter((h) => h.date.startsWith("2027"))) assert.ok(bcn.answer.includes(shortDate(day.date, locale)), `${locale}: ${day.date}`);
+    assert.ok(BARCELONA_LOCAL.some((h) => h.date === BCN_MERCE && h.name.en === "La Mercè"));
+  }
+});
+
+test("the body links the bridges guide and the work calendar in words, and gives the same year's school Christmas", () => {
+  assert.deepEqual(SCHOOL_CHRISTMAS, { from: SCHOOL_YEARS.find((y) => y.label === SCHOOL_LABEL)!.christmas[0], to: SCHOOL_YEARS.find((y) => y.label === SCHOOL_LABEL)!.christmas[1] });
+  assert.deepEqual(SCHOOL_CHRISTMAS, { from: "2026-12-22", to: "2027-01-07" });
+  const reread: Record<Locale, string> = { ca: "20 de novembre de 2026", es: "20 de noviembre de 2026", en: "20 November 2026" };
+  assert.equal(EASTER_DATES_REREAD, "2026-11-20");
+  for (const locale of LOCALES) {
+    const blocks = EASTER_2027.editions[locale].blocks;
+    // Everything but the related rail (the last block).
+    const inBody = JSON.stringify(blocks.slice(0, -1));
+    for (const key of ["bridges2027", "workCalendar"] as const) {
+      assert.ok(inBody.includes(`](/${locale}/${B2_PATHS[key][locale]}/)`), `${locale}: no body link to ${key}`);
+    }
+    const plain = body(locale);
+    const year = (iso: string) => `${shortDate(iso, locale)}${locale === "en" ? " " : " de "}${iso.slice(0, 4)}`;
+    assert.ok(plain.includes(year(SCHOOL_CHRISTMAS.from)) && plain.includes(year(SCHOOL_CHRISTMAS.to)), `${locale}: school Christmas`);
+    const official = blocks.find((b) => b.type === "callout" && (b as { tone?: string }).tone === "official") as unknown as { text: string };
+    assert.ok(official.text.includes(reread[locale]), `${locale}: ${official.text}`);
+  }
 });

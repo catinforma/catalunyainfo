@@ -579,3 +579,39 @@ test("no clock: the modules never read the date, the body is the same on every b
   // The hub sentence is computed from the same dates, not from today.
   assert.doesNotMatch(read("src/lib/programmatic/holidays/copy.ts").slice(read("src/lib/programmatic/holidays/copy.ts").indexOf("export function bridgesLine"), read("src/lib/programmatic/holidays/copy.ts").indexOf("export function hubCopy")), /new Date|Date\.now|today/);
 });
+
+/* -------------------------------------------------------------------------- */
+/* 20 Nov 2026: questions in the searched words                               */
+/* -------------------------------------------------------------------------- */
+
+test("the December question names the Constitution and the Purísima while they are the two December days", () => {
+  const asked: Record<Locale, string> = {
+    ca: "Hi ha pont de la Constitució i la Puríssima el 2027?",
+    es: "¿Hay puente de la Constitución y la Purísima en 2027?",
+    en: "Is there a December 2027 long weekend (Constitution Day and the Immaculate Conception)?",
+  };
+  assert.deepEqual(CATALONIA_HOLIDAYS.filter((h) => h.date.startsWith("2027-12") && h.date !== "2027-12-25").map((h) => h.date), ["2027-12-06", "2027-12-08"]);
+  for (const locale of LOCALES) {
+    const faq = BRIDGES_2027.editions[locale].blocks.find((b) => b.type === "faq") as unknown as { items: { question: string; answer: string }[] };
+    const item = faq.items.find((i) => i.question === asked[locale]);
+    assert.ok(item, `${locale}: no December question`);
+    assert.match(item.answer, /\b6\b/, locale);
+    assert.match(item.answer, /\b8\b/, locale);
+  }
+});
+
+test("the work calendar answers 'Sant Joan 2027' with the day, its one-day bridge and the day's page", () => {
+  const sj = BRIDGES.find((b) => b.id === "sant-joan")!;
+  assert.deepEqual(sj.take, ["2027-06-25"]);
+  assert.ok(CATALONIA_HOLIDAYS.some((h) => h.date === "2027-06-24"));
+  const datePage: Record<Locale, string> = { ca: "/ca/festius/dia/24-juny-2027/", es: "/es/festivos/dia/24-junio-2027/", en: "/en/holidays/day/24-june-2027/" };
+  const weekday: Record<Locale, RegExp> = { ca: /dijous 24 de juny de 2027/, es: /jueves 24 de junio de 2027/, en: /Thursday 24 June 2027/ };
+  for (const locale of LOCALES) {
+    const faq = buildHolidayBody(locale).find((b) => b.type === "faq") as unknown as { items: { question: string; answer: string }[] };
+    const item = faq.items.find((i) => /Sant Joan/.test(i.question) && /2027/.test(i.question));
+    assert.ok(item, `${locale}: no Sant Joan question`);
+    assert.match(item.answer, weekday[locale]);
+    assert.match(item.answer, new RegExp(`\\b${sj.days}\\b`));
+    assert.ok(item.answer.includes(`](${datePage[locale]})`), `${locale}: ${item.answer}`);
+  }
+});

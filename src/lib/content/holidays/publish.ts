@@ -727,12 +727,28 @@ function faqBlock(locale: Locale): Block {
     locale,
   );
 
+  // Sant Joan (20 Nov 2026: "sant joan 2027" at 7-8 on this page, 0 clicks): the day, the one-day bridge from
+  // the same BRIDGES the section above renders, and the day's own page.
+  const santJoan = findHoliday(CATALONIA_HOLIDAYS, "Sant Joan");
+  const santJoanBridge = BRIDGES.find((b) => b.id === "sant-joan");
+  if (!santJoanBridge || santJoanBridge.take.length !== 1) throw new Error("holiday FAQ: no one-day Sant Joan bridge");
+  const sjTake = santJoanBridge.take[0]!;
+  const sjLeave = `${weekdayOf(sjTake, copy)} ${formatDay(sjTake, copy, locale)}`;
+  const sjDay = formatDay(santJoan.date, copy, locale);
+  const sjWhen = `${weekdayOf(santJoan.date, copy)} ${sjDay} ${locale === "en" ? "" : "de "}${YEAR}`;
+  // "del 24 al 27 de juny" / "24 to 27 June": the month once when the run stays in one month.
+  const sjFrom = santJoanBridge.from.slice(0, 7) === santJoanBridge.to.slice(0, 7) ? String(Number(santJoanBridge.from.slice(8))) : formatDay(santJoanBridge.from, copy, locale);
+  const sjTo = formatDay(santJoanBridge.to, copy, locale);
+  const sjRun = locale === "en" ? `${sjFrom} to ${sjTo}` : `${locale === "ca" && /^(1|11)\b/.test(sjFrom) ? "de l'" : "del "}${sjFrom} ${locale === "ca" && /^(1|11)\b/.test(sjTo) ? "a l'" : "al "}${sjTo}`;
+  const sjPage = (lead: string, text: string) => (isDatePage(santJoan.date) ? ` ${lead} ${linkedDay(santJoan.date, text, locale)}.` : "");
+
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
       { question: `Quants festius hi ha a Catalunya el ${YEAR}?`, answer: `${count} festius a tot Catalunya, fixats per la Generalitat, més dues festes locals que tria cada ajuntament: consulta les [festes locals de cada municipi](${path.local}).` },
       { question: `Quan és Divendres Sant el ${YEAR}?`, answer: `${cap(goodFriday)}. És festiu a tot Catalunya.` },
       { question: `Quan és Pasqua Florida el ${YEAR}?`, answer: `El Dilluns de Pasqua Florida és ${easterMonday}, festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran.` },
       { question: "El Dijous Sant és festiu a Catalunya?", answer: `No. El ${YEAR} cau el 25 de març i és festiu a la majoria de comunitats, però no a Catalunya, on el festiu és el Divendres Sant.` },
+      { question: `Quan és Sant Joan el ${YEAR}? És festiu?`, answer: `És el ${sjWhen}, festiu a tot Catalunya. Demanant el ${sjLeave} surten ${copy.efficiencyResult(santJoanBridge.days)} seguits de festa, ${sjRun}.${sjPage("Botigues, escola i festes locals d'aquell dia:", `és festiu el ${sjDay} de ${YEAR}?`)}` },
       { question: "El dilluns 2 de novembre és festiu a Catalunya?", answer: `No. Tots Sants, l'1 de novembre de 2026, cau en diumenge i no és al calendari oficial de Catalunya, i el dilluns 2 tampoc: és feiner, tret dels pocs municipis que el tenen com a festa local (tots a [és festiu l'1 de novembre?](${nov1})). En altres comunitats, com Madrid o Andalusia, el dilluns 2 sí que és festiu.` },
       { question: `Quants dies feiners té el ${YEAR} a Catalunya?`, answer: `${work.working}: el ${YEAR} té ${work.weekdays} dies de dilluns a divendres, i ${work.weekdays - work.working} dels dotze festius hi cauen. Amb les dues festes locals del municipi, si cauen en dia feiner, en queden ${work.working - 2}.` },
       { question: `Quins ponts hi ha el ${YEAR} a Catalunya?`, answer: `Sense gastar vacances: ${free}. Amb un sol dia de vacances, demanant ${oneDay}. Tot plegat, per a una setmana de dilluns a divendres.` },
@@ -746,6 +762,7 @@ function faqBlock(locale: Locale): Block {
       { question: `¿Cuándo es Viernes Santo en ${YEAR}?`, answer: `${cap(goodFriday)}. Es festivo en toda Cataluña.` },
       { question: `¿Cuándo es el Lunes de Pascua en ${YEAR}?`, answer: `${cap(easterMonday)}. Es festivo en toda Cataluña excepto en Arán, donde lo sustituye la Festa d'Aran.` },
       { question: "¿El Jueves Santo es festivo en Cataluña?", answer: `No. En ${YEAR} cae el 25 de marzo y es festivo en la mayoría de comunidades, pero no en Cataluña, donde el festivo es el Viernes Santo.` },
+      { question: `¿Cuándo es Sant Joan (San Juan) en ${YEAR}? ¿Es festivo?`, answer: `Es el ${sjWhen}, festivo en toda Cataluña. Pidiendo el ${sjLeave} salen ${copy.efficiencyResult(santJoanBridge.days)} seguidos de fiesta, ${sjRun}.${sjPage("Tiendas, colegios y fiestas locales de ese día:", `¿es festivo el ${sjDay} de ${YEAR}?`)}` },
       { question: "¿El lunes 2 de noviembre es festivo en Cataluña?", answer: `No. Todos los Santos, el 1 de noviembre de 2026, cae en domingo y no está en el calendario oficial de Cataluña, y el lunes 2 tampoco: es laborable, salvo en los pocos municipios que lo tienen como fiesta local (todos en [¿es festivo el 1 de noviembre?](${nov1})). En otras comunidades, como Madrid o Andalucía, el lunes 2 sí es festivo.` },
       { question: `¿Cuántos días laborables tiene ${YEAR} en Cataluña?`, answer: `${work.working}: ${YEAR} tiene ${work.weekdays} días de lunes a viernes, y ${work.weekdays - work.working} de los doce festivos caen en ellos. Con las dos fiestas locales del municipio, si caen en día laborable, quedan ${work.working - 2}.` },
       { question: `¿Qué puentes hay en ${YEAR} en Cataluña?`, answer: `Sin gastar vacaciones: ${free}. Con un solo día de vacaciones, pidiendo ${oneDay}. Todo ello, para una semana de lunes a viernes.` },
@@ -759,6 +776,7 @@ function faqBlock(locale: Locale): Block {
       { question: `When is Good Friday in ${YEAR}?`, answer: `${cap(goodFriday)}. It is a public holiday across Catalonia.` },
       { question: `When is Easter Monday in ${YEAR}?`, answer: `${cap(easterMonday)}. It is a public holiday across Catalonia except in Aran, where the Festa d'Aran replaces it.` },
       { question: "Is Maundy Thursday a holiday in Catalonia?", answer: `No. In ${YEAR} it falls on 25 March and is a holiday in most of Spain, but not in Catalonia, where the holiday is Good Friday.` },
+      { question: `When is Sant Joan (St John's Day) ${YEAR}, and is it a holiday?`, answer: `It is ${sjWhen}, a public holiday across Catalonia. Taking ${sjLeave} off gives ${copy.efficiencyResult(santJoanBridge.days)} in a row, ${sjRun}.${sjPage("Shops, schools and local holidays that day:", `is ${sjDay} ${YEAR} a holiday?`)}` },
       { question: `How many public holidays does Barcelona have in ${YEAR}?`, answer: `Fourteen: the ${count} Catalonia-wide days plus the city's two local holidays, ${bcnDays}.` },
       { question: `What long weekends are there in ${YEAR}?`, answer: `Without using any leave: ${free}. With a single day of leave, take ${oneDay}. All of this assumes a Monday-to-Friday week.` },
       { question: `When are the ${YEAR} local holidays published?`, answer: `The order is not out yet: the Catalan government sets them in a DOGC order on the town councils' proposals, and the 2026 ones appeared on 17 December 2025. Meanwhile ${approved} town councils have approved theirs, pending the order: the largest towns' are in the table above, and each town's 2026 dates are in [local holidays in Catalonia](${path.local}).` },

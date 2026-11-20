@@ -10256,3 +10256,112 @@ education guides, Spain hub, 17N, 19N, 20N, 23N, 26N), `huelgas-espana`, `huelga
 `/en/guides/general-strike-11-november`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — 2027 planning cluster: why Easter 2027 has 0.1 % CTR at position 7 (mobile), query-worded "when is" questions and cluster links on Easter, the Purísima question on the bridges page, Sant Joan on the work calendar, ca/es/en (body only; deploy, then groups `setmana-santa-2027`, `ponts-2027`, `holidays`)
+
+**Windows respected.** Easter 2027 (ca/es/en): title, description and lead are the 18 Nov restore, under test until the
+26 Nov / 2 Dec reviews; not touched (the test still pins them and forbids "21 al/to 28" there). Bridges 2027 and the work
+calendar: in the 18 Nov answer-first revert review (26 Nov / 3 Dec); title, description, lead and layout untouched. 2027 date
+pages (window to 30 Nov), town pages, Spain 2027 pages, December bridges and school calendars: not touched.
+
+### 1. Easter 2027: where the impressions come from and why nobody clicks
+
+GSC API, 7–20 Nov (20 Nov partial). ES `/es/guias/semana-santa-2027-cataluna/` 8 / 3,385 / 0.2 % / 6.8; CA
+`/ca/guies/setmana-santa-2027-catalunya/` 6 / 2,409 / 0.2 % / 6.9; EN 1 / 30 / 5.1. They are date look-ups: ES "semana santa 2027
+catalunya" 1,165 at 6.6 (2 clicks), "semana santa 2027 cataluña" 299 at 7.0 (1); CA "setmana santa 2027 catalunya" 834 at 6.3
+(1), "setmana santa 2027" 299 at 9.0 (0), "quan es setmana santa 2027" 166 at 7.6 (0), "quan cau setmana santa 2027" 44 at 7.2
+(0). "pasqua 2027" (230 in all) goes to the Easter Monday date page `/ca/festius/dia/29-marc-2027/` (186 at 9.1, 0), not the
+guide (17 at 7.6). Wrong edition: "setmana santa 2027 catalunya" 256 on ES (23 %), "semana santa 2027 catalunya" 215 on CA
+(16 %): under the 18 Nov entry's one-third line.
+
+- **The collapse is on mobile.** `page × device` (a sample: GSC keeps 30–60 % of the clicks in it), 1–5 Nov → 6–18 Nov: ES mobile
+  9 / 616 / 1.5 % / 6.3 → 2 / 1,616 / 0.1 % / 7.3, ES desktop 4 / 396 / 1.0 % / 5.3 → 4 / 784 / 0.5 % / 6.7; CA mobile 6 / 590 /
+  1.0 % / 6.7 → 1 / 1,230 / 0.1 % / 7.0, CA desktop 2 / 450 / 0.4 % → 4 / 716 / 0.6 %. Head queries × device: on mobile "semana
+  santa 2027 catalunya" 2 / 261 at 5.9 → 0 / 998 at 6.9 and "setmana santa 2027 catalunya" 8 / 252 at 4.8 → 0 / 800 at 6.6, i.e.
+  0 clicks on ~2,000 mobile impressions in 13 days, while desktop kept 0.3–0.9 % on the same queries.
+- **The results page answers the date.** Where we rank 2–5 we get almost nothing either: "semana santa cataluña 2027" 36 at 3.8,
+  "dia de la mona 2027" 28 at 4.4 and 11 at 2.6, "pascua florida 2027" 16 at 4.2, "cuando es semana santa en 2027 en cataluña" 16
+  at 4.6, "quins dies son setmana santa 2027" 9 at 4.1: 1 click in ~130 impressions at 2.6–4.6 (the site curve expects 6–8 %).
+- **Diagnosis.** Not a query/snippet mismatch: every snippet we served answered the query, and a wording effect would hit desktop
+  as well. It is a zero-click SERP for "when is Easter 2027" plus a mobile slide from ~5–6 to ~7 (6 Nov, then the core update
+  from 10 Nov): at 7 on mobile, below Google's own date answer, the result is "seen" (impressions ×3) and not reached. The lever
+  is ranking (top 3 on mobile), not another snippet test. This supports the 18 Nov entry's second branch; its 26 Nov / 2 Dec
+  reading decides.
+- **The restore has not reached Google for ES.** URL inspection 20 Nov: ES last crawled **16 Nov** (before the 18 Nov restore),
+  CA 20 Nov, EN 1 Nov. So 18–20 Nov (ES 0 / 375 impressions) is still the old snippet in ES. The 18 Nov reviews must count ES
+  from its first crawl after 18 Nov.
+
+### 2. Changes (body only, ca/es/en)
+
+**Easter 2027** (`easter-2027.ts`, group `setmana-santa-2027`):
+- FAQ opens with the searched question: CA "Quan és la Setmana Santa del 2027?", ES "¿Cuándo es la Semana Santa de 2027 en
+  Catalunya?" (the head ES query spells it so), EN "When is Holy Week 2027?": Palm Sunday 21 Mar to Easter Sunday 28 Mar, the two
+  holidays (26, 29), Holy Thursday 25 a working day. No "del 21 al 28" form.
+- "Quan és el Dilluns de Pasqua del 2027?" (and es/en) → "Quan és Pasqua el 2027?" / "¿Cuándo es Pascua en 2027?" / "When is
+  Easter 2027?": Easter Sunday 28 and Easter Monday 29 (dia de la mona), Aran's swap. For "pasqua 2027", "dia de la mona 2027".
+- CA/ES: "Quins dies són festius per Setmana Santa del 2027 a Barcelona?" / "¿Qué días son festivos en Semana Santa de 2027 en
+  Barcelona?" ("semana santa 2027 barcelona" 49 at 5.4, 0): the Catalonia days, then the city's 17 May and 24 Sept. (EN already
+  had the Barcelona questions.)
+- Links in words: "dotze festius del 2027 a tot Catalunya" → work calendar; after the Easter long-weekend table, "ponts 2027 a
+  Catalunya" → bridges guide (it had no body link to it). School section: the same school year's Christmas, "del 22 de desembre
+  de 2026 al 7 de gener de 2027", before the link to the school calendar.
+- "Where these dates come from" box: re-read date 31 Oct → **20 Nov 2026** (new `EASTER_DATES_REREAD`; `EASTER_VERIFIED`
+  stays 31 Oct, because councils, shops, TMB and the Passions were not re-read).
+
+**Bridges 2027** (`bridges-2027.ts`, group `ponts-2027`): the December question in the searched words while the two December
+days are the 6th and the 8th: "Hi ha pont de la Constitució i la Puríssima el 2027?" / "¿Hay puente de la Constitución y la
+Purísima en 2027?" / "Is there a December 2027 long weekend (Constitution Day and the Immaculate Conception)?" (was "Hi ha pont
+al desembre del 2027?"). Answer unchanged. Baseline "puente purisima 2027" 0 / 10 at 9.6, "puente de la purisima 2027" 0 / 8 at
+6.0 (and 13 at 4.5 on the 8 Dec 2027 date page).
+
+**Work calendar** (`holidays/publish.ts`, group `holidays`): new FAQ after Holy Thursday, "Quan és Sant Joan el 2027? És
+festiu?" / "¿Cuándo es Sant Joan (San Juan) en 2027? ¿Es festivo?" / "When is Sant Joan (St John's Day) 2027, and is it a
+holiday?": Thursday 24 June, the one-day bridge from `BRIDGES` (take Friday 25, 4 days, 24–27 June) and a link to the day's page.
+"sant joan 2027" 16 at 8.3 (CA) and 10 at 7.1 (ES), 0 clicks. No second link to Easter (the one-sentence rule holds).
+
+**No fact is new.** Re-read 20 Nov 2026 (curl + pdftotext/grep): Ordre EMT/52/2026 PDF (DOGC núm. 9637, 1.4.2026) "26 de març,
+divendres", "29 de març, dilluns", "24 de juny, dijous", "6 de desembre, dilluns", "8 de desembre, dimecres", Aran "la festa del
+dia 29 de març (Pasqua Florida) queda substituïda per la de 17 de juny"; treball.gencat.cat calendari-festes-2027 (same list);
+Ordre EDF/66/2026 PDF (DOGC núm. 9653, 27.4.2026) "Nadal: del 22 de desembre de 2026 al 7 de gener de 2027, ambdós inclosos",
+"Setmana Santa: del 20 de març al 29 de març de 2027, ambdós inclosos"; BOE-A-2026-21254 (Orden EMT/52/2026 cited for
+Cataluña, Aran note); ajuntament.barcelona.cat/calendarifestius "el 2027 hi ha 14 festius, entre els quals s'inclouen el 17 de
+maig i el 24 de setembre com a festius locals". Easter Sunday 28 March 2027 is the day before the order's Easter Monday.
+
+**Tests.** `tests/easter-2027.test.ts` (+2: the first FAQ question and its five dates, the Pasqua question, the Barcelona days,
+body links to bridges and work calendar outside the related rail, school Christmas from `SCHOOL_YEARS`, the callout date);
+`tests/bridges-2027.test.ts` (+2: the December question while the days are 6 and 8; the Sant Joan question with weekday, run
+length and the date-page link).
+
+### 3. Baselines, prediction, review
+
+| URL | 7–20 Nov (clicks / impr / CTR / pos) |
+| --- | --- |
+| `/es/guias/semana-santa-2027-cataluna/` | 8 / 3,385 / 0.2 % / 6.8 |
+| `/ca/guies/setmana-santa-2027-catalunya/` | 6 / 2,409 / 0.2 % / 6.9 |
+| `/en/guides/easter-2027-catalonia/` | 1 / 30 / 3.3 % / 5.1 |
+| `/es/guias/puentes-2027-cataluna/` · `/ca/guies/ponts-2027-catalunya/` · `/en/guides/long-weekends-2027-catalonia/` | 8 / 313 / 2.6 % / 7.2 · 9 / 138 / 6.5 % / 4.2 · 0 / 6 / 36.2 |
+| `/es/guias/calendario-laboral-cataluna/` · `/ca/guies/calendari-laboral-catalunya/` · `/en/guides/catalonia-public-holidays/` | 10 / 2,259 / 0.4 % / 30.5 · 5 / 264 / 1.9 % / 10.7 · 0 / 46 / 5.9 |
+
+**Prediction.** By 4 Dec: the CA guide takes "pasqua 2027" from the date page or ranks it ≤ 7; the "quan és / cuando es / when
+is" Easter queries and "semana santa 2027 barcelona" move ≥ 1 position up (mix-free, query × page); "sant joan 2027" ≤ 6 on the
+work calendar. No CTR promise on the head queries (zero-click SERP).
+
+**Confounder for the 18 Nov Easter test.** Google may build the snippet of the "quan és / cuando es" queries from the new first
+FAQ answer (which has the week). At the 26 Nov / 2 Dec reviews, read the head queries ("semana santa 2027 catalunya", "setmana
+santa 2027 catalunya", "semana santa 2027 cataluña") apart from the "quan / cuando / when" ones, and ES from its first post-18 Nov
+crawl.
+
+**Review 2026-12-04** (14 days): `snapshot.py page santa-2027 14`, `page ponts-2027 14`, `page puentes-2027 14`, `page
+calendari-laboral 14`, `page calendario-laboral 14`, plus query × page for the queries above and query × device for the two head
+queries. Keep if positions hold or improve; revert a FAQ change only if its page loses > 2 mix-free positions against the other
+pages of its language over the same days.
+
+**Go-live.** Deploy first (publish reads the deployed modules), then publish `setmana-santa-2027`, `ponts-2027` and `holidays`
+(each republishes only its own guide). None has to wait for a date: titles, descriptions and leads are unchanged. IndexNow:
+`python scripts/indexnow-sitemap.py /ca/guies/setmana-santa-2027-catalunya/ /es/guias/semana-santa-2027-cataluna/
+/en/guides/easter-2027-catalonia/ /ca/guies/ponts-2027-catalunya/ /es/guias/puentes-2027-cataluna/
+/en/guides/long-weekends-2027-catalonia/ /ca/guies/calendari-laboral-catalunya/ /es/guias/calendario-laboral-cataluna/
+/en/guides/catalonia-public-holidays/`. Owner: request indexing in Search Console for the ES Easter URL (last crawled 16 Nov,
+so the 18 Nov restore is not yet in Google for ES); IndexNow does not reach Google.
+
+**Outcome:** _pending_ (4 Dec)

@@ -629,6 +629,16 @@ export function buildBridgesBody(locale: Locale): Block[] {
     ),
     locale,
   );
+  // 20 Nov 2026: the December question in the searched words ("puente (de la) purísima 2027", "pont de la
+  // puríssima 2027"), when the two December holidays are the 6th and the 8th (2027); otherwise the plain one.
+  const constitutionAndImmaculate = x.decemberOn.map((p) => p.date.slice(5)).join(",") === "12-06,12-08";
+  const decemberQuestion = constitutionAndImmaculate
+    ? L(locale, {
+        ca: `Hi ha pont de la Constitució i la Puríssima el ${YEAR}?`,
+        es: `¿Hay puente de la Constitución y la Purísima en ${YEAR}?`,
+        en: `Is there a December ${YEAR} long weekend (Constitution Day and the Immaculate Conception)?`,
+      })
+    : L(locale, { ca: `Hi ha pont al desembre del ${YEAR}?`, es: `¿Hay puente en diciembre de ${YEAR}?`, en: `Is there a long weekend in December ${YEAR}?` });
   const decemberHolidays = joinList(x.decemberOn.map((p) => `${locale === "en" ? "" : "el "}${dayDate(p.date, locale, false)} (${holidayName(p.date, locale)})`), locale);
   const decemberLine = x.decemberBest
     ? L(locale, {
@@ -796,7 +806,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         ...(x.best ? [{ question: `Quin és el millor pont del ${YEAR}?`, answer: `Si només pots demanar un dia, ${dayList(x.best.take, "ca", true)}: ${x.best.days} dies seguits, ${runWords(x.best, "ca")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
         { question: `Quins festius del ${YEAR} cauen ${weekendWord}?`, answer: `${cap(x.lostList)}. Per a qui treballa de dilluns a divendres no sumen cap dia lliure, i el calendari oficial no els passa a cap altre dia.` },
         ...x.saturdayFaq,
-        ...(x.decemberOn.length > 0 ? [{ question: `Hi ha pont al desembre del ${YEAR}?`, answer: `Sí: ${x.decemberOn.length === 1 ? "és festiu" : "són festius"} ${decemberHolidays}.${decemberLine}` }] : []),
+        ...(x.decemberOn.length > 0 ? [{ question: decemberQuestion, answer: `Sí: ${x.decemberOn.length === 1 ? "és festiu" : "són festius"} ${decemberHolidays}.${decemberLine}` }] : []),
         { question: `Quan es publiquen les festes locals del ${YEAR}?`, answer: localFaq },
         { question: `Quins ponts té Barcelona el ${YEAR}?`, answer: `Els de tot Catalunya i ${BARCELONA_PLANS.filter((p) => p.plan).length} més amb les festes locals: ${x.bcnFaq}.` },
         { question: `Quants dies de vacances calen per fer més dies de festa el ${YEAR}?`, answer: `${cap(bestUseShort)}. Totes les combinacions són a la llista de més amunt.` },
@@ -868,7 +878,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         ...(x.best ? [{ question: `¿Cuál es el mejor puente de ${YEAR}?`, answer: `Si solo puedes pedir un día, ${dayList(x.best.take, "es", true)}: ${x.best.days} días seguidos, ${runWords(x.best, "es")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
         { question: `¿Qué festivos de ${YEAR} caen ${weekendWord}?`, answer: `${cap(x.lostList)}. Para quien trabaja de lunes a viernes no suman ningún día libre, y el calendario oficial no los pasa a ningún otro día.` },
         ...x.saturdayFaq,
-        ...(x.decemberOn.length > 0 ? [{ question: `¿Hay puente en diciembre de ${YEAR}?`, answer: `Sí: ${x.decemberOn.length === 1 ? "es festivo" : "son festivos"} ${decemberHolidays}.${decemberLine}` }] : []),
+        ...(x.decemberOn.length > 0 ? [{ question: decemberQuestion, answer: `Sí: ${x.decemberOn.length === 1 ? "es festivo" : "son festivos"} ${decemberHolidays}.${decemberLine}` }] : []),
         { question: `¿Cuándo se publican las fiestas locales de ${YEAR}?`, answer: localFaq },
         { question: `¿Qué puentes tiene Barcelona en ${YEAR}?`, answer: `Los de toda Cataluña y ${BARCELONA_PLANS.filter((p) => p.plan).length} más con las fiestas locales: ${x.bcnFaq}.` },
         { question: `¿Cuántos días de vacaciones hacen falta para tener más días de fiesta en ${YEAR}?`, answer: `${cap(bestUseShort)}. Todas las combinaciones están en la lista de más arriba.` },
@@ -939,7 +949,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ...(x.best ? [{ question: `What is the best long weekend of ${YEAR}?`, answer: `If you can take only one day, make it ${dayList(x.best.take, "en")}: ${x.best.days} days in a row, ${runWords(x.best, "en")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
       { question: `Which ${YEAR} holidays fall ${weekendWord}?`, answer: `${cap(x.lostList)}. For a Monday-to-Friday worker they add no day off, and the official calendar does not move them to another day.` },
       ...x.saturdayFaq,
-      ...(x.decemberOn.length > 0 ? [{ question: `Is there a long weekend in December ${YEAR}?`, answer: `Yes: ${decemberHolidays} ${x.decemberOn.length === 1 ? "is a public holiday" : "are public holidays"}.${decemberLine}` }] : []),
+      ...(x.decemberOn.length > 0 ? [{ question: decemberQuestion, answer: `Yes: ${decemberHolidays} ${x.decemberOn.length === 1 ? "is a public holiday" : "are public holidays"}.${decemberLine}` }] : []),
       { question: `When are the ${YEAR} local holidays published?`, answer: localFaq },
       { question: `What long weekends does Barcelona have in ${YEAR}?`, answer: `The Catalonia-wide ones and ${BARCELONA_PLANS.filter((p) => p.plan).length} more from its local holidays: ${x.bcnFaq}.` },
       { question: `How many days of leave do I need for the most days off in ${YEAR}?`, answer: `${cap(bestUseShort)}. Every combination is in the list above.` },
