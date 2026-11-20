@@ -9961,3 +9961,60 @@ and **2026-12-04** (14 d).
 ## 2026-11-20 — Espinelves hold closed early (body + lead now ship; title kept)
 
 The 13 Nov title test on `/ca/fires-de-nadal/espinelves/` and `/es/mercados-navidad/espinelves/` ("…2026: 28 nov. – 8 des./dic.", body and description unchanged) can't be read any more: from 16 Nov the espinelves queries moved from ~9 to 13–30 and impressions fell from 300–600/day (7–15 Nov) to 3–58/day (16–20 Nov) (`snapshot.py page espinelves 14`). ES 12 / 2,481 / 0.5 % / 8.7, CA 5 / 875 / 0.6 % / 9.3 (GSC 7–20 Nov), against the 13 Nov baselines of 15 / 1,852 / 0.8 % / 8.2 (ES) and 6 / 1,127 / 0.5 % / 8.8 (CA). The fair opens on 28 Nov, so waiting for the 27 Nov read would leave one day of demand. `BODY_HOLDS` (organisers.ts) and `LEAD_HOLDS` (copy.ts) are emptied, so the organiser's programme, the same-weekend links and the dated lead (written 20 Nov, see the fairs entry above) go out with this deploy. The dated title stays: it is the answer to "fira espinelves 2026". **Review 27 Nov and 4 Dec** (`snapshot.py page espinelves 7`): if positions haven't come back to ≤ 10, look at the SERP for what wins and rework the page. IndexNow `/ca/fires-de-nadal/espinelves/ /es/mercados-navidad/espinelves/`.
+
+## 2026-11-20 — Postal vote: "closed" copy on (requests ended 19 Nov) and hand-in deadline moved to Thursday 26 Nov, 14:00 (JEC Acuerdo 418/2026), ca + es + en (deploy, then group `vot-correu`) (review 2026-11-26 with the elections review, then 2026-11-30)
+
+**Why.** `POSTAL_AS_OF` was still 2026-11-05, so the guide kept telling people to apply "fins al dijous 19 de novembre" after the
+deadline. Re-reading the sources today found a real change: the Junta Electoral Central extended the hand-in deadline by one day.
+
+**Sources re-read 20 Nov 2026** (curl; quotes in the original, full list in the header comment of `postal-vote.ts`):
+- JEC Acuerdo 418/2026, session of 19 Nov (expediente 320/518): "esta Junta acuerda ampliar el plazo de depósito del voto por
+  correo hasta el 26 de noviembre de 2026, para todos los electores que se encuentren en España y en los horarios habituales de
+  apertura de las oficinas de Correos, y como máximo hasta las 14:00 horas". It changes nothing else: "no procede adoptar en este
+  momento ninguna otra medida adicional".
+- Correos: "hasta el 26 de noviembre de 2026 a las 14:00h"; the request was "hasta el día 19 de noviembre de 2026".
+- Interior (29N postal page): "(Ampliado hasta el día 26 de noviembre de 2026 por Acuerdo JEC 418/2026, de 19 de noviembre)".
+- INE cid=1700: residents and ERTA "antes de las 14 horas del día 26 de noviembre"; papers still sent 9–22 Nov; CERA voters who
+  are in Spain still "no más tarde del día 25 de noviembre" to the provincial board (the page prints that, the stricter reading);
+  the 900 343 232 line runs "de lunes a viernes, no festivos, de 9:00 a 14:00 horas".
+- Orden INT/1239/2026 (BOE-A-2026-24259, 19 Nov): Correos strike in Madrid 23–27 Nov and in Cádiz, Córdoba, Huelva, Málaga and
+  Sevilla 23–25 Nov; post offices open "en el horario habitual" to accept postal votes and hand out the voting papers.
+- LOREG arts. 72–73 (consolidated text, last update 02/07/2026) and the JEC calendar PDF (5 Oct): unchanged.
+
+**Baseline** (GSC, 14–20 Nov, 20 Nov partial; clicks / impressions / CTR / position):
+- `/ca/guies/vot-per-correu/`: 11 / 1,613 / 0.7 % / 7.5. Queries: "fins quan es pot demanar el vot per correu" 36 at 8.5, "fins
+  quin dia es pot votar per correu" 25 at 8.6, "fins quan es pot votar per correu" 22 at 9.0, "fins quin dia es pot demanar el vot
+  per correu" 14 at 8.1, "termini vot per correu" 9 at 8.6, "fins quan puc votar per correu" 8 at 8.4.
+- `/es/guias/voto-por-correo/`: 2 / 318 / 0.6 % / 9.1 (most impressions come from "cuándo son las elecciones en Cataluña" queries).
+- `/en/guides/postal-vote-spain/`: 2 / 36 / 5.6 % / 6.4.
+
+**What changed** (`src/lib/content/batch02/postal-vote.ts`, ca/es/en):
+- `POSTAL_AS_OF` 2026-11-20: the "closed" copy shows. Its title, description, lead, first step and deadline FAQ were written on
+  5 Nov for this switch (5 Nov entry); the only edits to them are the facts: hand-in "dimecres 25" → "dijous 26 de novembre, com a
+  molt a les 14 h" (es "jueves 26 … como máximo a las 14 h", en "Thursday 26 November, 14:00 at the latest") and "ja no pots /
+  ya no puedes votar en persona" in the second person.
+  - CA title "Vot per correu 29N: lliura'l fins al 26 de novembre"; ES "Voto por correo 29N: entrégalo hasta el 26 de noviembre";
+    EN "Postal vote, Spain 29 Nov election: hand it in by 26 Nov". Descriptions start with "requests closed on 19 Nov" and give
+    "Thursday 26, 14:00 (extended)".
+- `POSTAL_29N.deliverBy` 2026-11-26 (new `deliverByLaw` 2026-11-25 keeps the LOREG day). The sitewide strip's
+  `postal-vote-deliver` line reads it: "Voto por correo: se entrega en Correos hasta el jueves 26 de noviembre", shown to the end of
+  the 26th (`news-alerts.ts` itself not touched; it reaches static pages at the next deploy).
+- Body: the hand-in step, list item, calendar row, FAQ "Fins quan puc enviar el vot per correu?" and the ERTA line say 26 Nov,
+  14:00, with the JEC agreement linked; CERA in Spain: 25 Nov to the provincial board (INE). Closed copy only: a line on the Correos
+  strike in Madrid and Andalusia with Orden INT/1239/2026, and a second FAQ "No m'han arribat les paperetes: què faig?" (Correos
+  notice → collect at the office, INE tracking, 900 343 232 weekdays 9–14 h, no in-person vote once accepted). The INE phone hours
+  are also in the "if they do not arrive" item. Check dates move to 20 Nov; JEC agreement and BOE order join the sources.
+- "Open" copy left as it was live (never renders again for 29N). Tests: `tests/postal-vote.test.ts` (26 Nov Thursday, law day
+  25 Nov, 14:00 allowed as a clock time, new closed-copy test) and `tests/news-alerts.test.ts` (strip window and text).
+
+**Prediction.** CA guide CTR from 0.7 % to ≥ 2 % at similar position on 20–26 Nov: the snippet now answers both "fins quan es pot
+demanar" (closed on the 19th) and "fins quan es pot votar per correu" (26th, 14:00), which no other result says with the hour.
+
+**Review 2026-11-26** (with the elections review: `snapshot.py page vot-per-correu 7`, `page voto-por-correo 7`, `page
+postal-vote 7`). No revert rule for titles (the phase switch is scheduled). **2026-11-30:** `tests/postal-vote.test.ts` fails until
+`POSTAL_AS_OF` moves past polling day (copy "over").
+
+**Go-live.** Deploy (the strip line and the page code), then publish `vot-correu`. IndexNow prefixes `/ca/guies/vot-per-correu`,
+`/es/guias/voto-por-correo`, `/en/guides/postal-vote-spain`.
+
+**Outcome:** _pending_

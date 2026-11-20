@@ -87,7 +87,8 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
       // 13 Nov 2026: the postal vote's two deadlines, one after the other (same guide).
       ["postal-vote-request", "postalVote", "2026-11-13T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
-      ["postal-vote-deliver", "postalVote", "2026-11-20T00:00:00+01:00", "2026-11-26T00:00:00+01:00"],
+      // 20 Nov 2026: JEC Acuerdo 418/2026 moved the hand-in day to Thursday 26 Nov (POSTAL_29N.deliverBy).
+      ["postal-vote-deliver", "postalVote", "2026-11-20T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
       ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
       // 13 Nov 2026: results, from the day of reflection to the end of the day after the vote.
       ["election-results-29n", "electionNight", "2026-11-28T00:00:00+01:00", "2026-12-01T00:00:00+01:00"],
@@ -177,7 +178,7 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-25T23:59:59+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
-  assert.deepEqual(ids("2026-11-26T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-26T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-27T00:00:00+01:00"), ["election-29n"]);
   assert.deepEqual(ids("2026-11-28T00:00:00+01:00"), ["election-29n", "election-results-29n"]);
   assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n", "election-results-29n"]);
@@ -296,9 +297,9 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("postal-vote-request").text.ca, "Vot per correu: es pot demanar fins al dijous 19 de novembre");
   assert.equal(byId("postal-vote-request").text.es, "Voto por correo: se puede pedir hasta el jueves 19 de noviembre");
   assert.equal(byId("postal-vote-request").text.en, "Postal vote: apply by Thursday 19 November");
-  assert.equal(byId("postal-vote-deliver").text.ca, "Vot per correu: es lliura a Correus fins al dimecres 25 de novembre");
-  assert.equal(byId("postal-vote-deliver").text.es, "Voto por correo: se entrega en Correos hasta el miércoles 25 de noviembre");
-  assert.equal(byId("postal-vote-deliver").text.en, "Postal vote: hand it in at Correos by Wednesday 25 November");
+  assert.equal(byId("postal-vote-deliver").text.ca, "Vot per correu: es lliura a Correus fins al dijous 26 de novembre");
+  assert.equal(byId("postal-vote-deliver").text.es, "Voto por correo: se entrega en Correos hasta el jueves 26 de noviembre");
+  assert.equal(byId("postal-vote-deliver").text.en, "Postal vote: hand it in at Correos by Thursday 26 November");
   assert.equal(byId("election-results-29n").text.ca, "Resultats de les eleccions del diumenge 29 de novembre: quan i on surten");
   assert.equal(byId("election-results-29n").text.es, "Resultados de las elecciones del domingo 29 de noviembre: cuándo y dónde salen");
   assert.equal(byId("election-results-29n").text.en, "General election results, Sunday 29 November: when and where");
