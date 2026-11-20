@@ -106,7 +106,8 @@ test("the new paths collide with no registry path, no route folder and no legacy
 });
 
 test("titles fit in 60 characters and descriptions in 155; each phase's snippet gives that phase's deadline", () => {
-  const deadline: Record<PostalPhase, RegExp> = { open: /\b19\b/, closed: /\b25\b/, over: /29N|29 Nov/ };
+  // closed: 26 Nov, JEC Acuerdo 418/2026 (19 Nov) moved the hand-in day from the 25th.
+  const deadline: Record<PostalPhase, RegExp> = { open: /\b19\b/, closed: /\b26\b/, over: /29N|29 Nov/ };
   for (const phase of PHASES) {
     const article = buildPostalVote(AT[phase]);
     for (const locale of LOCALES) {
@@ -128,13 +129,16 @@ test("titles fit in 60 characters and descriptions in 155; each phase's snippet 
 test("the 29N dates follow the law from the 6 Oct call and the 29 Nov vote, with the right weekdays", () => {
   assert.equal(weekdayIndex(POSTAL_29N.election), 0, "29 Nov is a Sunday");
   assert.equal(weekdayIndex(POSTAL_29N.requestBy), 4, "19 Nov is a Thursday");
-  assert.equal(weekdayIndex(POSTAL_29N.deliverBy), 3, "25 Nov is a Wednesday");
+  assert.equal(weekdayIndex(POSTAL_29N.deliverByLaw), 3, "25 Nov is a Wednesday");
+  assert.equal(weekdayIndex(POSTAL_29N.deliverBy), 4, "26 Nov is a Thursday");
   const day = (iso: string) => Date.parse(`${iso}T12:00:00Z`) / 86_400_000;
   // LOREG 72.a: until the tenth day before; 73.2: from day 34 after the call, before the sixth day before; 73.3: before the third day before.
   assert.equal(day(POSTAL_29N.election) - day(POSTAL_29N.requestBy), 10);
   assert.equal(day(POSTAL_29N.sendFrom) - day("2026-10-06"), 34);
   assert.equal(day(POSTAL_29N.election) - day(POSTAL_29N.sendTo), 7);
-  assert.equal(day(POSTAL_29N.election) - day(POSTAL_29N.deliverBy), 4);
+  assert.equal(day(POSTAL_29N.election) - day(POSTAL_29N.deliverByLaw), 4);
+  // JEC Acuerdo 418/2026 (19 Nov): one more day, until 14:00.
+  assert.equal(day(POSTAL_29N.deliverBy) - day(POSTAL_29N.deliverByLaw), 1);
 });
 
 test("every weekday printed next to a day of the month matches the date", () => {
@@ -237,8 +241,8 @@ test("the official steps are there: ID without photocopies, illness, absence, ce
     assert.ok(json(locale).includes(POSTAL_URL.tracking), `${locale}: the INE tracking service`);
     assert.ok(json(locale).includes(POSTAL_URL.ineForm), `${locale}: the INE form`);
     assert.ok(json(locale).includes(POSTAL_URL.correos), `${locale}: Correos`);
-    // No opening hours: Correos only says "usual opening hours".
-    assert.doesNotMatch(b.replace(/\b(0?9|20)[:.]00\b|\b(9|20) ?h\b|\b8[.:]00\b|9 del matí|9 de la mañana/g, ""), /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2} ?h\b/, `${locale}: a clock time other than the polls'`);
+    // No opening hours: Correos only says "usual opening hours". 14:00 is the JEC's cut-off on 26 Nov (and the end of the INE line's hours).
+    assert.doesNotMatch(b.replace(/\b(0?9|20|14)[:.]00\b|\b(9|20|14) ?h\b|\b8[.:]00\b|9 del matí|9 de la mañana/g, ""), /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2} ?h\b/, `${locale}: a clock time other than the polls'`);
   }
 });
 
@@ -259,11 +263,11 @@ test("sources are official, https, listed once, and the reader sees the check da
     assert.ok(OFFICIAL_HOSTS.includes(new URL(source.url).host), `${source.url} is not official`);
   }
   assert.equal(new Set(POSTAL_VOTE.sources.map((s) => s.url)).size, POSTAL_VOTE.sources.length, "a source is listed twice");
-  for (const url of [POSTAL_URL.correos, POSTAL_URL.interior, POSTAL_URL.ine, POSTAL_URL.jec, POSTAL_URL.loreg, "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742"]) {
+  for (const url of [POSTAL_URL.correos, POSTAL_URL.interior, POSTAL_URL.ine, POSTAL_URL.jec, POSTAL_URL.jecExtension, POSTAL_URL.correosStrike, POSTAL_URL.loreg, "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742"]) {
     assert.ok(POSTAL_VOTE.sources.some((s) => s.url === url), `missing ${url}`);
   }
   assert.equal(POSTAL_VOTE.verifiedAt, POSTAL_AS_OF);
-  const checked: Record<Locale, RegExp> = { ca: /5 de novembre de 2026/, es: /5 de noviembre de 2026/, en: /5 November 2026/ };
+  const checked: Record<Locale, RegExp> = { ca: /20 de novembre de 2026/, es: /20 de noviembre de 2026/, en: /20 November 2026/ };
   for (const locale of LOCALES) assert.match(body(locale), checked[locale], locale);
 });
 
@@ -306,6 +310,22 @@ test("the read-next box only repeats links from the related rail", () => {
       assert.ok(related.items?.some((item) => item.includes(link)), `${locale}: ${link}`);
     }
   }
+});
+
+test("closed (20 Nov): hand in by Thursday 26 Nov at 14:00 (JEC 418/2026), the Correos strike order, papers that have not arrived", () => {
+  const article = buildPostalVote(AT.closed);
+  const by: Record<Locale, RegExp> = { ca: /dijous 26 de novembre, com a molt a les 14 h/, es: /jueves 26 de noviembre, como máximo a las 14 h/, en: /Thursday 26 November, 14:00 at the latest/ };
+  const missing: Record<Locale, RegExp> = { ca: /No m'han arribat/, es: /No me ha llegado/, en: /have not arrived/ };
+  for (const locale of LOCALES) {
+    assert.match(leadOf(locale, article), by[locale], `${locale}: lead`);
+    assert.doesNotMatch(body(locale, article), /dimecres 25|miércoles 25|Wednesday 25/, `${locale}: the old hand-in day as the deadline`);
+    assert.ok(json(locale, article).includes(`](${POSTAL_URL.jecExtension})`), `${locale}: links the JEC agreement`);
+    assert.ok(json(locale, article).includes(`](${POSTAL_URL.correosStrike})`), `${locale}: links the strike order`);
+    const faqs = (article.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    assert.match(faqs[1]!.question, missing[locale], `${locale}: second FAQ is the missing papers`);
+    assert.match(faqs[1]!.answer, /900 343 232/);
+  }
+  for (const locale of LOCALES) assert.ok(!json(locale, buildPostalVote(AT.open)).includes(POSTAL_URL.correosStrike), `${locale}: the strike note is only in the closed copy`);
 });
 
 /* -------------------------------------------------------------------------- */

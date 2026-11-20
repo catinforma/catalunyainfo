@@ -104,7 +104,8 @@ import { VOTING } from "./voting";
  *
  * The page changes on its own dates. POSTAL_AS_OF picks the copy:
  *  - "open" up to 19 Nov: apply by 19 November;
- *  - "closed" from 20 Nov to 29 Nov: requests closed, hand it in by 25 Nov;
+ *  - "closed" from 20 Nov to 29 Nov: requests closed, hand it in by 26 Nov,
+ *    14:00 (25 Nov until JEC Acuerdo 418/2026 of 19 Nov);
  *  - "over" from 30 Nov: the 29N postal vote is over; the law's rule for the
  *    next election.
  * tests/postal-vote.test.ts fails from 20 Nov until POSTAL_AS_OF is moved past
@@ -131,7 +132,46 @@ import { VOTING } from "./voting";
  * POSTAL_AS_OF stays 5 Nov: LOREG, the JEC calendar and the mesa manual were
  * not re-read.
  */
-export const POSTAL_AS_OF = "2026-11-05";
+
+/*
+ * 20 Nov 2026: requests closed on the 19th, so the page shows the "closed"
+ * copy. Re-read that day (curl, quotes in the original):
+ *  - JEC Acuerdo 418/2026, session of 19 Nov 2026 (expediente 320/518, asked
+ *    for by the PP): "esta Junta acuerda ampliar el plazo de depósito del voto
+ *    por correo hasta el 26 de noviembre de 2026, para todos los electores que
+ *    se encuentren en España y en los horarios habituales de apertura de las
+ *    oficinas de Correos, y como máximo hasta las 14:00 horas"; on the other
+ *    deadlines (request, dispatch of the papers) "no procede adoptar en este
+ *    momento ninguna otra medida adicional".
+ *  - Correos' postal-vote page: request "hasta el día 19 de noviembre de
+ *    2026"; "El solicitante tiene de plazo para depositar el sobre con su voto
+ *    hasta el 26 de noviembre de 2026 a las 14:00h, en los horarios habituales
+ *    de apertura de las oficinas postales"; online still "un certificado DNI
+ *    Electrónico o un certificado digital válido" (no Cl@ve).
+ *  - Interior's 29N postal page: "Tiene hasta el día 25 de noviembre, para
+ *    entregar ... (Ampliado hasta el día 26 de noviembre de 2026 por Acuerdo
+ *    JEC 418/2026, de 19 de noviembre)"; certificate or DNIe "y Autofirma".
+ *  - INE cid=1700: residents and ERTA "deberán enviar su voto a la mesa
+ *    electoral, por correo certificado, antes de las 14 horas del día 26 de
+ *    noviembre. (Acuerdo de la JEC de 19 de noviembre de 2026)"; papers still
+ *    "entre el 9 de noviembre y el 22 de noviembre"; CERA temporarily in
+ *    Spain send theirs to the provincial board "no más tarde del día 25 de
+ *    noviembre" (not updated by the INE; the page prints that, the stricter
+ *    reading); CERA consulate post "desde el 4 hasta el 24 de noviembre",
+ *    ballot box "desde el 21 hasta el 26 de noviembre"; the 900 343 232 line
+ *    "de lunes a viernes, no festivos, de 9:00 a 14:00 horas".
+ *  - Orden INT/1239/2026 (BOE-A-2026-24259, BOE 19 Nov): Correos strike in
+ *    the Comunidad de Madrid 23-27 Nov and in Cádiz, Córdoba, Huelva, Málaga
+ *    and Sevilla 23-25 Nov; offices open "en el horario habitual, turno de
+ *    mañana, o de mañana y tarde en las que lo tengan establecido" for
+ *    "admisión de solicitudes por voto por correo, entrega de documentación
+ *    electoral y admisión de voto por correo".
+ *  - LOREG arts. 72-73 (consolidated text, last update 02/07/2026) and the JEC
+ *    calendar PDF (created 5 Oct) unchanged: the law's hand-in day is still
+ *    the 25th (`deliverByLaw`); the JEC moved it to the 26th, 14:00.
+ * The "open" copy is left as it was live (it never renders again for 29N).
+ */
+export const POSTAL_AS_OF = "2026-11-20";
 
 export const POSTAL_29N = {
   election: "2026-11-29",
@@ -139,7 +179,10 @@ export const POSTAL_29N = {
   requestBy: "2026-11-19",
   sendFrom: "2026-11-09",
   sendTo: "2026-11-22",
-  deliverBy: "2026-11-25",
+  /** JEC Acuerdo 418/2026: until 14:00 on 26 Nov (the alert strip reads this day). */
+  deliverBy: "2026-11-26",
+  /** LOREG 73.3: "antes del tercer día previo" to polling day. */
+  deliverByLaw: "2026-11-25",
   ceraPostBy: "2026-11-24",
   ceraBoxFrom: "2026-11-21",
   ceraBoxTo: "2026-11-26",
@@ -161,13 +204,17 @@ export const POSTAL_URL = {
   tracking: "https://sede.ine.gob.es/ce-votoxcorreo/?lang=es_ES",
   loreg: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672",
   jec: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf",
+  jecExtension: "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=156427&idsesion=1122&template=Doctrina/JEC_Detalle",
+  correosStrike: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259",
 } as const;
 
 const SOURCES: B2Source[] = [
-  { name: "Voto por correo: solicitud hasta el 19 de noviembre de 2026 y depósito hasta el 25 de noviembre; si lo entrega otra persona, autorización, fotocopia del documento del elector y su propio documento (consultado el 11 de noviembre de 2026)", url: POSTAL_URL.correos, publisher: "Correos" },
-  { name: "Voto presencial: hasta cuatro horas libres retribuidas para votar y, si se trabaja lejos del domicilio, para solicitar el voto por correo (consultado el 11 de noviembre de 2026)", url: "https://29neleccionesgenerales.es/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
-  { name: "Voto por correo desde España, elecciones del 29 de noviembre de 2026", url: POSTAL_URL.interior, publisher: "Ministerio del Interior" },
-  { name: "Elecciones Generales 29 de noviembre de 2026: voto por correo, voto de los residentes temporalmente en el extranjero y CERA, consulta del envío", url: POSTAL_URL.ine, publisher: "INE — Oficina del Censo Electoral" },
+  { name: "Acuerdo 418/2026 de la Junta Electoral Central, de 19 de noviembre: plazo de depósito del voto por correo ampliado hasta el 26 de noviembre de 2026, como máximo hasta las 14:00 horas (consultado el 20 de noviembre de 2026)", url: POSTAL_URL.jecExtension, publisher: "Junta Electoral Central" },
+  { name: "Voto por correo: solicitud hasta el 19 de noviembre de 2026 y depósito hasta el 26 de noviembre a las 14:00 h; si lo entrega otra persona, autorización, fotocopia del documento del elector y su propio documento (consultado el 20 de noviembre de 2026)", url: POSTAL_URL.correos, publisher: "Correos" },
+  { name: "Voto presencial: hasta cuatro horas libres retribuidas para votar y, si se trabaja lejos del domicilio, para solicitar el voto por correo (consultado el 20 de noviembre de 2026)", url: "https://29neleccionesgenerales.es/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
+  { name: "Voto por correo desde España, elecciones del 29 de noviembre de 2026: entrega ampliada hasta el 26 de noviembre (consultado el 20 de noviembre de 2026)", url: POSTAL_URL.interior, publisher: "Ministerio del Interior" },
+  { name: "Elecciones Generales 29 de noviembre de 2026: voto por correo (envío antes de las 14 horas del 26 de noviembre), voto de los residentes temporalmente en el extranjero y CERA, consulta del envío, teléfono 900 343 232 (consultado el 20 de noviembre de 2026)", url: POSTAL_URL.ine, publisher: "INE — Oficina del Censo Electoral" },
+  { name: "Orden INT/1239/2026, de 17 de noviembre: servicios esenciales de Correos durante las huelgas del 23 al 27 de noviembre en Madrid y del 23 al 25 en Cádiz, Córdoba, Huelva, Málaga y Sevilla (voto por correo)", url: POSTAL_URL.correosStrike, publisher: "Boletín Oficial del Estado" },
   { name: "Consulta del estado del voto por correo", url: POSTAL_URL.tracking, publisher: "INE — Oficina del Censo Electoral" },
   { name: "Calendario electoral, elecciones generales 2026", url: POSTAL_URL.jec, publisher: "Junta Electoral Central" },
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General, artículos 72 a 75 (texto consolidado)", url: POSTAL_URL.loreg, publisher: "Boletín Oficial del Estado" },
@@ -185,6 +232,10 @@ type PhaseCopy = {
   stepsTitle: string;
   firstStep: { title: string; text: string };
   deadlineAnswer: string;
+  /** Extra lines at the end of the hand-in list (closed: the Correos strike). */
+  sendExtra?: string[];
+  /** FAQs right after the deadline one (closed: papers that have not arrived). */
+  extraFaq?: { question: string; answer: string }[];
 };
 
 type Copy = {
@@ -238,23 +289,33 @@ const COPY: Record<Locale, Copy> = {
           "Fins al dijous 19 de novembre del 2026, el desè dia abans de la votació (LOREG, article 72): a qualsevol oficina de Correus, en persona amb el document d'identitat original, o per internet al web de Correus amb certificat digital o DNI electrònic.",
       },
       closed: {
-        seoTitle: "Vot per correu 29N: lliura'l fins al 25 de novembre",
+        seoTitle: "Vot per correu 29N: lliura'l fins al 26 de novembre",
         seoDescription:
-          "El termini per demanar-lo es va tancar el 19 de novembre. Si el vas demanar, les paperetes arriben fins al 22 i el vot es lliura a Correus fins al 25.",
-        lead: `**El termini per demanar el vot per correu es va tancar el dijous 19 de novembre.** Si el vas demanar, les paperetes arriben per correu certificat fins al 22 de novembre i has de **lliurar el vot a Correus fins al dimecres 25 de novembre**, amb identificació i sense pagar res; si no ets a casa quan arriben, les has de recollir a l'oficina de Correus. Qui l'ha demanat **ja no pot votar en persona** el diumenge 29. Si no el vas demanar, vota a la teva mesa de 9 a 20 h.`,
+          "Es podia demanar fins al 19 de novembre. Si el vas demanar, lliura el vot a Correus fins al dijous 26 a les 14 h (termini ampliat). Paperetes fins al 22.",
+        lead: `**El termini per demanar el vot per correu es va tancar el dijous 19 de novembre.** Si el vas demanar, les paperetes arriben per correu certificat fins al 22 de novembre i has de **lliurar el vot a Correus fins al dijous 26 de novembre, com a molt a les 14 h**: la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} ha allargat un dia el termini, que era el 25. Cal identificar-se i no costa res; si no eres a casa quan van arribar les paperetes, les has de recollir a l'oficina de Correus. Si el vas demanar, **ja no pots votar en persona** el diumenge 29; si no, vota a la teva mesa de 9 a 20 h.`,
         stepsTitle: "Si el vas demanar: què has de fer ara",
         firstStep: {
           title: "Termini tancat el 19 de novembre",
           text: "Ja no es pot demanar. Si el vas demanar a temps, segueix els passos següents.",
         },
         deadlineAnswer:
-          "Fins al dijous 19 de novembre del 2026, el desè dia abans de la votació (LOREG, article 72). El termini ja s'ha tancat: qui el va demanar ha de lliurar el vot a Correus fins al 25 de novembre.",
+          "Fins al dijous 19 de novembre del 2026, el desè dia abans de la votació (LOREG, article 72). El termini ja s'ha tancat i la Junta Electoral Central no l'ha allargat: qui el va demanar ha de lliurar el vot a Correus fins al dijous 26 de novembre, com a molt a les 14 h.",
+        sendExtra: [
+          `**Vaga de Correus a Madrid (del 23 al 27 de novembre) i a Cadis, Còrdova, Huelva, Màlaga i Sevilla (del 23 al 25):** l'${a("Orden INT/1239/2026", POSTAL_URL.correosStrike)} del Ministeri de l'Interior (BOE del 19 de novembre) obliga a obrir les oficines en l'horari habitual per admetre el vot per correu i lliurar la documentació electoral.`,
+        ],
+        extraFaq: [
+          {
+            question: "No m'han arribat les paperetes del vot per correu: què faig?",
+            answer:
+              "L'Oficina del Cens Electoral les envia fins al 22 de novembre. Mira si a la bústia tens un avís de Correus: si el carter no et va trobar, les has de recollir tu a l'oficina que s'hi indica, amb el document d'identitat. Pots consultar l'estat de l'enviament al web de l'INE amb el número del DNI o del passaport i la data de naixement, o trucar al 900 343 232 (gratuït; de dilluns a divendres feiners, de 9 a 14 h). Si la sol·licitud es va acceptar, la mesa no et deixarà votar en persona, i el vot s'ha de lliurar a Correus fins al dijous 26 a les 14 h.",
+          },
+        ],
       },
       over: {
         seoTitle: "Vot per correu: com funciona i quan es demana",
         seoDescription:
           "El vot per correu del 29N ja s'ha acabat. Com es demana a Correus, què cal portar i quins terminis fixa la llei per a les properes eleccions.",
-        lead: `**El vot per correu de les eleccions generals del 29 de novembre del 2026 ja s'ha acabat:** es podia demanar fins al 19 de novembre i lliurar fins al 25. A les properes eleccions funcionarà igual, perquè ho fixa la llei: es demana a Correus des de la convocatòria fins al desè dia abans de la votació i el vot s'envia abans del tercer dia previ (${a("LOREG, articles 72 i 73", POSTAL_URL.loreg)}). Les municipals estan previstes per al 23 de maig de 2027, però encara no s'han convocat.`,
+        lead: `**El vot per correu de les eleccions generals del 29 de novembre del 2026 ja s'ha acabat:** es podia demanar fins al 19 de novembre i lliurar fins al 26 (la Junta Electoral Central va allargar un dia el termini legal). A les properes eleccions funcionarà igual, perquè ho fixa la llei: es demana a Correus des de la convocatòria fins al desè dia abans de la votació i el vot s'envia abans del tercer dia previ (${a("LOREG, articles 72 i 73", POSTAL_URL.loreg)}). Les municipals estan previstes per al 23 de maig de 2027, però encara no s'han convocat.`,
         stepsTitle: "Com va funcionar el 29N, pas a pas",
         firstStep: {
           title: "Es demanava fins al 19 de novembre",
@@ -274,8 +335,8 @@ const COPY: Record<Locale, Copy> = {
         text: "Papereta del Congrés al sobre blanc; papereta del Senat, marcada seguint les instruccions de la mateixa papereta, al sobre sepia. Posa tots dos sobres i el certificat d'inscripció al cens dins del sobre adreçat a la mesa.",
       },
       {
-        title: "Lliura'l a Correus fins al dimecres 25 de novembre",
-        text: "A qualsevol oficina, en l'horari habitual, identificant-te. No costa res. Si no hi pots anar, ho pot fer una altra persona amb la teva autorització signada i una fotocòpia del teu document.",
+        title: "Lliura'l a Correus fins al dijous 26 de novembre, a les 14 h",
+        text: "A qualsevol oficina, en l'horari habitual i com a molt fins a les 14 h, identificant-te (la Junta Electoral Central ha allargat un dia el termini, que era el 25). No costa res. Si no hi pots anar, ho pot fer una altra persona amb la teva autorització signada i una fotocòpia del teu document.",
       },
       {
         title: "El 29, Correus el porta a la teva mesa",
@@ -298,20 +359,20 @@ const COPY: Record<Locale, Copy> = {
     onlineTitle: "Com demanar-lo per internet",
     online: [
       `Al ${a("web de Correus", POSTAL_URL.correos)}, amb un **certificat digital** o el **DNI electrònic**; el Ministeri de l'Interior indica que també cal tenir instal·lada l'aplicació AutoFirma. Omples les dades, signes electrònicament la petició i, en acabar, descarregues la sol·licitud.`,
-      "**I amb Cl@ve?** Ni Correus, ni el Ministeri de l'Interior, ni l'INE no citen Cl@ve per demanar el vot per correu per internet (consultat el 5 de novembre de 2026): només el certificat digital o el DNI electrònic. Sense certificat, omple el formulari al web de l'INE i porta'l imprès a Correus.",
+      "**I amb Cl@ve?** Ni Correus, ni el Ministeri de l'Interior, ni l'INE no citen Cl@ve per demanar el vot per correu per internet (consultat el 20 de novembre de 2026): només el certificat digital o el DNI electrònic. Sense certificat, omple el formulari al web de l'INE i porta'l imprès a Correus.",
     ],
     arriveTitle: "Quan arriben les paperetes i què fer si no ets a casa",
     arrive: [
       "**Quan:** l'Oficina del Cens Electoral les envia per correu certificat **entre el 9 i el 22 de novembre**, a l'adreça que vas indicar. Segons l'INE, espera que es resolguin els recursos contra les candidatures, que acaben el 12 de novembre.",
       "**Què hi ha al sobre:** les paperetes i els sobres de votació, el certificat d'inscripció al cens, un sobre amb l'adreça de la teva mesa i un full d'instruccions.",
       "**Les has de signar tu:** el carter te les lliura a tu, identificant-te. **Si no ets a casa,** et deixa un avís i les has d'anar a recollir personalment a l'oficina de Correus que s'hi indica. Si estàs malalt, ho pot fer la persona amb autorització notarial.",
-      `**Si no t'arriben:** consulta l'estat de l'enviament al ${a("servei de l'INE", POSTAL_URL.tracking)}, amb el número del DNI o del passaport i la data de naixement, o truca a l'Oficina del Cens Electoral al 900 343 232 (gratuït).`,
+      `**Si no t'arriben:** consulta l'estat de l'enviament al ${a("servei de l'INE", POSTAL_URL.tracking)}, amb el número del DNI o del passaport i la data de naixement, o truca a l'Oficina del Cens Electoral al 900 343 232 (gratuït; de dilluns a divendres feiners, de 9 a 14 h).`,
     ],
     sendTitle: "Com votar i lliurar el vot a Correus",
     send: [
       "**Vota:** posa la papereta de la candidatura que triïs al **Congrés** dins del sobre de votació **blanc**. A la papereta del **Senat**, marca els candidats que triïs seguint les instruccions de la papereta i posa-la al sobre **sepia**.",
       "**Prepara l'enviament:** dins del sobre adreçat a la mesa hi van els sobres de votació i **el certificat d'inscripció al cens**. No te'l deixis: segons el manual oficial de les meses, un sobre sense el certificat es destrueix i no compta ni com a vot nul.",
-      "**Lliura'l fins al dimecres 25 de novembre** en una oficina de Correus, en l'horari habitual, identificant-te. Va per correu certificat i **no cal pagar res**.",
+      `**Lliura'l fins al dijous 26 de novembre, com a molt a les 14 h,** en una oficina de Correus, en l'horari habitual, identificant-te: la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} ho va acordar el 19 de novembre (la llei el fixava el 25). Va per correu certificat i **no cal pagar res**.`,
       "**Si no hi pots anar,** el pot portar una altra persona amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial; aquesta persona hi porta també el seu propi document. Correus té un model d'autorització.",
       "**Avís per correu electrònic:** com a novetat, si dones una adreça electrònica en lliurar el vot, Correus t'avisa quan arriba a la mesa el dia de la votació.",
       "**El dia 29,** Correus porta els vots a les meses a les 9 del matí. A les 20 h, quan ha votat l'última persona, la mesa els obre d'un en un, comprova el certificat i posa els sobres a l'urna.",
@@ -327,25 +388,25 @@ const COPY: Record<Locale, Copy> = {
     calRows: [
       ["Demanar el vot per correu a Correus", "6 d'octubre – dijous 19 de novembre"],
       ["Enviament de les paperetes per correu certificat", "Dilluns 9 – diumenge 22 de novembre"],
-      ["Lliurar el vot a Correus", "Des que reps les paperetes fins al dimecres 25 de novembre"],
+      ["Lliurar el vot a Correus", "Des que reps les paperetes fins al dijous 26 de novembre, a les 14 h (ampliat per la Junta Electoral Central; era el 25)"],
       ["Correus porta els vots a les meses", "Diumenge 29 de novembre, a les 9 h (i fins a les 20 h)"],
       ["La mesa posa els vots per correu a l'urna", "Diumenge 29 de novembre, a les 20 h"],
       ["Residents a l'estranger (CERA): vot per correu al consolat", "Fins al dimarts 24 de novembre"],
       ["Residents a l'estranger (CERA): vot a l'urna del consolat", "Dissabte 21 – dijous 26 de novembre"],
     ],
-    calNote: "Fonts: calendari de la Junta Electoral Central, INE i LOREG (articles 72 a 75), consultats el 5 de novembre de 2026.",
+    calNote: "Fonts: calendari i Acord 418/2026 de la Junta Electoral Central, Correus, INE i LOREG (articles 72 a 75), consultats el 20 de novembre de 2026.",
     abroadTitle: "Si vius o ets a l'estranger",
     abroad: [
-      "**Temporalment a l'estranger (ERTA):** el termini per demanar el vot al consolat va acabar el 31 d'octubre. L'INE envia la documentació entre el 3 i el 9 de novembre (fins al 17 si hi ha recursos) i el vot s'ha de tornar per correu certificat fins al 25 de novembre.",
+      "**Temporalment a l'estranger (ERTA):** el termini per demanar el vot al consolat va acabar el 31 d'octubre. L'INE envia la documentació entre el 3 i el 9 de novembre (fins al 17 si hi ha recursos) i el vot s'ha d'enviar per correu certificat abans de les 14 h del 26 de novembre.",
       "**Residents a l'estranger (CERA):** no cal demanar res, la documentació arriba d'ofici. Pots enviar el vot per correu al consolat fins al **24 de novembre** o dipositar-lo a l'urna del consolat del **21 al 26 de novembre**. No l'enviïs directament a la Junta Electoral Provincial: segons l'INE, els vots que no arriben a través del consolat són nuls.",
-      "**CERA que ets a Espanya:** pots demanar el vot per correu a Correus fins al 19 de novembre, com qualsevol elector resident.",
+      "**CERA que ets a Espanya:** el vot per correu es demanava a Correus fins al 19 de novembre, com qualsevol elector resident; segons l'INE, aquests electors envien el vot a la Junta Electoral Provincial per correu certificat fins al 25 de novembre.",
     ],
     faq: [
       { question: "Es pot demanar el vot per correu amb Cl@ve?", answer: "Correus, el Ministeri de l'Interior i l'INE només citen el certificat digital o el DNI electrònic per demanar-lo per internet, no Cl@ve. Sense certificat, pots omplir el formulari al web de l'INE, imprimir-lo dues vegades i presentar-lo signat a una oficina de Correus, o fer-ho tot a l'oficina amb el DNI." },
       { question: "Si he demanat el vot per correu, puc votar en persona?", answer: "No. Quan la sol·licitud s'accepta, l'Oficina del Cens Electoral ho anota al cens: al costat del teu nom hi surt una «C» i la mesa no et deixarà votar presencialment. Només pots votar per correu." },
       { question: "Quan arriben les paperetes del vot per correu?", answer: "Entre el 9 i el 22 de novembre de 2026, per correu certificat a l'adreça que vas indicar. Les has de signar tu, identificant-te." },
       { question: "Què passa si no soc a casa quan arriba el carter?", answer: "Et deixa un avís i has d'anar a recollir les paperetes personalment a l'oficina de Correus que s'hi indica, amb el document d'identitat. Si estàs malalt, ho pot fer la persona que tingui la teva autorització notarial." },
-      { question: "Fins quan puc enviar el vot per correu?", answer: "Fins al dimecres 25 de novembre de 2026, en una oficina de Correus i en l'horari habitual, identificant-te. Va per correu certificat i és gratuït." },
+      { question: "Fins quan puc enviar el vot per correu?", answer: "Fins al dijous 26 de novembre de 2026, com a molt a les 14 h, en una oficina de Correus i en l'horari habitual, identificant-te. La Junta Electoral Central va allargar un dia el termini el 19 de novembre (Acord 418/2026); la llei el fixava el 25. Va per correu certificat i és gratuït." },
       { question: "Pot portar el vot a Correus una altra persona?", answer: "Sí, amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial; aquesta persona hi porta també el seu propi document. Correus té un model d'autorització. Demanar el vot, en canvi, només ho pot fer una altra persona en cas de malaltia, amb autorització notarial i certificat mèdic oficial." },
       { question: "Costa diners votar per correu?", answer: "No. El sobre adreçat a la mesa no necessita segell (LOREG, article 73): el Ministeri de l'Interior paga l'enviament." },
       { question: "Com sé si el meu vot per correu ha arribat a la mesa?", answer: "Com a novetat, si dones una adreça electrònica quan lliures el vot a Correus, et confirmen per correu electrònic que ha arribat a la mesa el dia de la votació. L'estat de l'enviament de les paperetes es consulta al web de l'INE." },
@@ -372,23 +433,33 @@ const COPY: Record<Locale, Copy> = {
           "Hasta el jueves 19 de noviembre de 2026, el décimo día antes de la votación (LOREG, artículo 72): en cualquier oficina de Correos, en persona con el documento de identidad original, o por internet en la web de Correos con certificado digital o DNI electrónico.",
       },
       closed: {
-        seoTitle: "Voto por correo 29N: entrégalo hasta el 25 de noviembre",
+        seoTitle: "Voto por correo 29N: entrégalo hasta el 26 de noviembre",
         seoDescription:
-          "El plazo para pedirlo cerró el 19 de noviembre. Si lo pediste, la documentación llega hasta el 22 y el voto se entrega en Correos hasta el 25.",
-        lead: `**El plazo para pedir el voto por correo cerró el jueves 19 de noviembre.** Si lo pediste, la documentación llega por correo certificado hasta el 22 de noviembre y tienes que **entregar el voto en Correos hasta el miércoles 25 de noviembre**, identificándote y sin pagar nada; si no estás en casa cuando llega, tienes que recogerla en la oficina de Correos. Quien lo ha pedido **ya no puede votar en persona** el domingo 29. Si no lo pediste, vota en tu mesa de 9 a 20 h.`,
+          "El plazo para pedirlo cerró el 19 de noviembre. Si lo pediste, entrega el voto en Correos hasta el jueves 26 a las 14 h (plazo ampliado por la JEC).",
+        lead: `**El plazo para pedir el voto por correo cerró el jueves 19 de noviembre.** Si lo pediste, la documentación llega por correo certificado hasta el 22 de noviembre y tienes que **entregar el voto en Correos hasta el jueves 26 de noviembre, como máximo a las 14 h**: la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} ha ampliado un día el plazo, que era el 25. Hay que identificarse y no cuesta nada; si no estabas en casa cuando llegó la documentación, tienes que recogerla en la oficina de Correos. Si lo pediste, **ya no puedes votar en persona** el domingo 29; si no, vota en tu mesa de 9 a 20 h.`,
         stepsTitle: "Si lo pediste: qué tienes que hacer ahora",
         firstStep: {
           title: "Plazo cerrado el 19 de noviembre",
           text: "Ya no se puede pedir. Si lo pediste a tiempo, sigue los pasos siguientes.",
         },
         deadlineAnswer:
-          "Hasta el jueves 19 de noviembre de 2026, el décimo día antes de la votación (LOREG, artículo 72). El plazo ya se ha cerrado: quien lo pidió tiene que entregar el voto en Correos hasta el 25 de noviembre.",
+          "Hasta el jueves 19 de noviembre de 2026, el décimo día antes de la votación (LOREG, artículo 72). El plazo ya se ha cerrado y la Junta Electoral Central no lo ha ampliado: quien lo pidió tiene que entregar el voto en Correos hasta el jueves 26 de noviembre, como máximo a las 14 h.",
+        sendExtra: [
+          `**Huelga de Correos en Madrid (del 23 al 27 de noviembre) y en Cádiz, Córdoba, Huelva, Málaga y Sevilla (del 23 al 25):** la ${a("Orden INT/1239/2026", POSTAL_URL.correosStrike)} del Ministerio del Interior (BOE del 19 de noviembre) obliga a abrir las oficinas en su horario habitual para admitir el voto por correo y entregar la documentación electoral.`,
+        ],
+        extraFaq: [
+          {
+            question: "No me ha llegado la documentación del voto por correo: ¿qué hago?",
+            answer:
+              "La Oficina del Censo Electoral la envía hasta el 22 de noviembre. Mira si tienes un aviso de Correos en el buzón: si el cartero no te encontró, tienes que recogerla tú en la oficina que indica, con el documento de identidad. Puedes consultar el estado del envío en la web del INE con el número del DNI o del pasaporte y la fecha de nacimiento, o llamar al 900 343 232 (gratuito; de lunes a viernes no festivos, de 9 a 14 h). Si la solicitud se aceptó, la mesa no te dejará votar en persona, y el voto se entrega en Correos hasta el jueves 26 a las 14 h.",
+          },
+        ],
       },
       over: {
         seoTitle: "Voto por correo: cómo funciona y cuándo se pide",
         seoDescription:
           "El voto por correo del 29N ya terminó. Cómo se pide en Correos, qué hay que llevar y qué plazos fija la ley para las próximas elecciones.",
-        lead: `**El voto por correo de las elecciones generales del 29 de noviembre de 2026 ya ha terminado:** se podía pedir hasta el 19 de noviembre y entregar hasta el 25. En las próximas elecciones funcionará igual, porque lo fija la ley: se pide en Correos desde la convocatoria hasta el décimo día antes de la votación y el voto se envía antes del tercer día previo (${a("LOREG, artículos 72 y 73", POSTAL_URL.loreg)}). Las municipales están previstas para el 23 de mayo de 2027, pero aún no se han convocado.`,
+        lead: `**El voto por correo de las elecciones generales del 29 de noviembre de 2026 ya ha terminado:** se podía pedir hasta el 19 de noviembre y entregar hasta el 26 (la Junta Electoral Central amplió un día el plazo legal). En las próximas elecciones funcionará igual, porque lo fija la ley: se pide en Correos desde la convocatoria hasta el décimo día antes de la votación y el voto se envía antes del tercer día previo (${a("LOREG, artículos 72 y 73", POSTAL_URL.loreg)}). Las municipales están previstas para el 23 de mayo de 2027, pero aún no se han convocado.`,
         stepsTitle: "Cómo funcionó el 29N, paso a paso",
         firstStep: {
           title: "Se pedía hasta el 19 de noviembre",
@@ -408,8 +479,8 @@ const COPY: Record<Locale, Copy> = {
         text: "Papeleta del Congreso en el sobre blanco; papeleta del Senado, marcada según las instrucciones de la propia papeleta, en el sobre sepia. Mete los dos sobres y el certificado de inscripción en el censo en el sobre dirigido a la mesa.",
       },
       {
-        title: "Entrégalo en Correos hasta el miércoles 25 de noviembre",
-        text: "En cualquier oficina, en el horario habitual, identificándote. No cuesta nada. Si no puedes ir, puede hacerlo otra persona con tu autorización firmada y una fotocopia de tu documento.",
+        title: "Entrégalo en Correos hasta el jueves 26 de noviembre, a las 14 h",
+        text: "En cualquier oficina, en el horario habitual y como máximo hasta las 14 h, identificándote (la Junta Electoral Central ha ampliado un día el plazo, que era el 25). No cuesta nada. Si no puedes ir, puede hacerlo otra persona con tu autorización firmada y una fotocopia de tu documento.",
       },
       {
         title: "El 29, Correos lo lleva a tu mesa",
@@ -432,20 +503,20 @@ const COPY: Record<Locale, Copy> = {
     onlineTitle: "Cómo pedirlo por internet",
     online: [
       `En la ${a("web de Correos", POSTAL_URL.correos)}, con un **certificado digital** o el **DNI electrónico**; el Ministerio del Interior indica que además hay que tener instalada la aplicación AutoFirma. Rellenas los datos, firmas electrónicamente la petición y, al terminar, descargas la solicitud.`,
-      "**¿Y con Cl@ve?** Ni Correos, ni el Ministerio del Interior, ni el INE citan Cl@ve para pedir el voto por correo por internet (consultado el 5 de noviembre de 2026): solo el certificado digital o el DNI electrónico. Sin certificado, rellena el formulario en la web del INE y llévalo impreso a Correos.",
+      "**¿Y con Cl@ve?** Ni Correos, ni el Ministerio del Interior, ni el INE citan Cl@ve para pedir el voto por correo por internet (consultado el 20 de noviembre de 2026): solo el certificado digital o el DNI electrónico. Sin certificado, rellena el formulario en la web del INE y llévalo impreso a Correos.",
     ],
     arriveTitle: "Cuándo llega la documentación y qué hacer si no estás en casa",
     arrive: [
       "**Cuándo:** la Oficina del Censo Electoral la envía por correo certificado **entre el 9 y el 22 de noviembre**, a la dirección que indicaste. Según el INE, espera a que se resuelvan los recursos contra las candidaturas, que terminan el 12 de noviembre.",
       "**Qué hay en el sobre:** las papeletas y los sobres de votación, el certificado de inscripción en el censo, un sobre con la dirección de tu mesa y una hoja de instrucciones.",
       "**La tienes que firmar tú:** el cartero te la entrega a ti, identificándote. **Si no estás en casa,** te deja un aviso y tienes que ir a recogerla personalmente a la oficina de Correos que indica. Si estás enfermo, puede hacerlo la persona con autorización notarial.",
-      `**Si no te llega:** consulta el estado del envío en el ${a("servicio del INE", POSTAL_URL.tracking)}, con el número del DNI o del pasaporte y la fecha de nacimiento, o llama a la Oficina del Censo Electoral al 900 343 232 (gratuito).`,
+      `**Si no te llega:** consulta el estado del envío en el ${a("servicio del INE", POSTAL_URL.tracking)}, con el número del DNI o del pasaporte y la fecha de nacimiento, o llama a la Oficina del Censo Electoral al 900 343 232 (gratuito; de lunes a viernes no festivos, de 9 a 14 h).`,
     ],
     sendTitle: "Cómo votar y entregar el voto en Correos",
     send: [
       "**Vota:** mete la papeleta de la candidatura que elijas al **Congreso** en el sobre de votación **blanco**. En la papeleta del **Senado**, marca los candidatos que elijas siguiendo las instrucciones de la papeleta y métela en el sobre **sepia**.",
       "**Prepara el envío:** dentro del sobre dirigido a la mesa van los sobres de votación y **el certificado de inscripción en el censo**. No lo olvides: según el manual oficial de las mesas, un sobre sin el certificado se destruye y no cuenta ni como voto nulo.",
-      "**Entrégalo hasta el miércoles 25 de noviembre** en una oficina de Correos, en el horario habitual, identificándote. Va por correo certificado y **no hay que pagar nada**.",
+      `**Entrégalo hasta el jueves 26 de noviembre, como máximo a las 14 h,** en una oficina de Correos, en el horario habitual, identificándote: lo acordó la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} el 19 de noviembre (la ley lo fijaba el 25). Va por correo certificado y **no hay que pagar nada**.`,
       "**Si no puedes ir,** puede llevarlo otra persona con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial; esa persona lleva también su propio documento. Correos tiene un modelo de autorización.",
       "**Aviso por correo electrónico:** como novedad, si das una dirección de correo electrónico al entregar el voto, Correos te avisa cuando llega a la mesa el día de la votación.",
       "**El día 29,** Correos lleva los votos a las mesas a las 9 de la mañana. A las 20 h, cuando ha votado la última persona, la mesa los abre de uno en uno, comprueba el certificado y mete los sobres en la urna.",
@@ -461,25 +532,25 @@ const COPY: Record<Locale, Copy> = {
     calRows: [
       ["Pedir el voto por correo en Correos", "6 de octubre – jueves 19 de noviembre"],
       ["Envío de la documentación por correo certificado", "Lunes 9 – domingo 22 de noviembre"],
-      ["Entregar el voto en Correos", "Desde que recibes la documentación hasta el miércoles 25 de noviembre"],
+      ["Entregar el voto en Correos", "Desde que recibes la documentación hasta el jueves 26 de noviembre, a las 14 h (ampliado por la Junta Electoral Central; era el 25)"],
       ["Correos lleva los votos a las mesas", "Domingo 29 de noviembre, a las 9 h (y hasta las 20 h)"],
       ["La mesa mete los votos por correo en la urna", "Domingo 29 de noviembre, a las 20 h"],
       ["Residentes en el extranjero (CERA): voto por correo al consulado", "Hasta el martes 24 de noviembre"],
       ["Residentes en el extranjero (CERA): voto en la urna del consulado", "Sábado 21 – jueves 26 de noviembre"],
     ],
-    calNote: "Fuentes: calendario de la Junta Electoral Central, INE y LOREG (artículos 72 a 75), consultados el 5 de noviembre de 2026.",
+    calNote: "Fuentes: calendario y Acuerdo 418/2026 de la Junta Electoral Central, Correos, INE y LOREG (artículos 72 a 75), consultados el 20 de noviembre de 2026.",
     abroadTitle: "Si vives o estás en el extranjero",
     abroad: [
-      "**Temporalmente en el extranjero (ERTA):** el plazo para pedir el voto en el consulado terminó el 31 de octubre. El INE envía la documentación entre el 3 y el 9 de noviembre (hasta el 17 si hay recursos) y el voto se devuelve por correo certificado hasta el 25 de noviembre.",
+      "**Temporalmente en el extranjero (ERTA):** el plazo para pedir el voto en el consulado terminó el 31 de octubre. El INE envía la documentación entre el 3 y el 9 de noviembre (hasta el 17 si hay recursos) y el voto se envía por correo certificado antes de las 14 h del 26 de noviembre.",
       "**Residentes en el extranjero (CERA):** no hay que pedir nada, la documentación llega de oficio. Puedes enviar el voto por correo al consulado hasta el **24 de noviembre** o depositarlo en la urna del consulado del **21 al 26 de noviembre**. No lo envíes directamente a la Junta Electoral Provincial: según el INE, los votos que no llegan a través del consulado son nulos.",
-      "**CERA que estás en España:** puedes pedir el voto por correo en Correos hasta el 19 de noviembre, como cualquier elector residente.",
+      "**CERA que estás en España:** el voto por correo se pedía en Correos hasta el 19 de noviembre, como cualquier elector residente; según el INE, estos electores envían el voto a la Junta Electoral Provincial por correo certificado hasta el 25 de noviembre.",
     ],
     faq: [
       { question: "¿Se puede pedir el voto por correo con Cl@ve?", answer: "Correos, el Ministerio del Interior y el INE solo citan el certificado digital o el DNI electrónico para pedirlo por internet, no Cl@ve. Sin certificado, puedes rellenar el formulario en la web del INE, imprimirlo dos veces y presentarlo firmado en una oficina de Correos, o hacerlo todo en la oficina con el DNI." },
       { question: "Si he pedido el voto por correo, ¿puedo votar en persona?", answer: "No. Cuando la solicitud se acepta, la Oficina del Censo Electoral lo anota en el censo: junto a tu nombre aparece una «C» y la mesa no te dejará votar presencialmente. Solo puedes votar por correo." },
       { question: "¿Cuándo llega la documentación del voto por correo?", answer: "Entre el 9 y el 22 de noviembre de 2026, por correo certificado a la dirección que indicaste. La tienes que firmar tú, identificándote." },
       { question: "¿Qué pasa si no estoy en casa cuando llega el cartero?", answer: "Te deja un aviso y tienes que ir a recoger la documentación personalmente a la oficina de Correos que indica, con el documento de identidad. Si estás enfermo, puede hacerlo la persona que tenga tu autorización notarial." },
-      { question: "¿Hasta cuándo puedo enviar el voto por correo?", answer: "Hasta el miércoles 25 de noviembre de 2026, en una oficina de Correos y en el horario habitual, identificándote. Va por correo certificado y es gratuito." },
+      { question: "¿Hasta cuándo puedo enviar el voto por correo?", answer: "Hasta el jueves 26 de noviembre de 2026, como máximo a las 14 h, en una oficina de Correos y en el horario habitual, identificándote. La Junta Electoral Central amplió un día el plazo el 19 de noviembre (Acuerdo 418/2026); la ley lo fijaba el 25. Va por correo certificado y es gratuito." },
       { question: "¿Puede llevar el voto a Correos otra persona?", answer: "Sí, con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial; esa persona lleva también su propio documento. Correos tiene un modelo de autorización. Pedir el voto, en cambio, solo lo puede hacer otra persona en caso de enfermedad, con autorización notarial y certificado médico oficial." },
       { question: "¿Cuesta dinero votar por correo?", answer: "No. El sobre dirigido a la mesa no necesita franqueo (LOREG, artículo 73): el Ministerio del Interior paga el envío." },
       { question: "¿Cómo sé si mi voto por correo ha llegado a la mesa?", answer: "Como novedad, si das una dirección de correo electrónico al entregar el voto en Correos, te confirman por correo electrónico que ha llegado a la mesa el día de la votación. El estado del envío de la documentación se consulta en la web del INE." },
@@ -506,23 +577,33 @@ const COPY: Record<Locale, Copy> = {
           "Until Thursday 19 November 2026, the tenth day before polling day (electoral law, article 72): at any Correos post office, in person with your original ID, or online on the Correos website with a digital certificate or electronic DNI.",
       },
       closed: {
-        seoTitle: "Postal vote, Spain 29 Nov election: hand it in by 25 Nov",
+        seoTitle: "Postal vote, Spain 29 Nov election: hand it in by 26 Nov",
         seoDescription:
-          "Applications closed on 19 November. If you applied, the papers arrive by 22 November and you hand in your vote at Correos by 25 November.",
-        lead: `**Applications for a postal vote closed on Thursday 19 November.** If you applied, the papers arrive by registered post by 22 November and you must **hand your vote in at Correos by Wednesday 25 November**, showing ID, free of charge; if you are out when they come, you collect them at the post office. Anyone who applied **can no longer vote in person** on Sunday 29 November. If you did not apply, vote at your polling station from 9:00 to 20:00.`,
+          "Applications closed on 19 November. If you applied, hand your vote in at Correos by Thursday 26 November, 14:00 at the latest (deadline extended).",
+        lead: `**Applications for a postal vote closed on Thursday 19 November.** If you applied, the papers arrive by registered post by 22 November and you must **hand your vote in at Correos by Thursday 26 November, 14:00 at the latest**: the ${a("Central Electoral Board", POSTAL_URL.jecExtension)} has added one day to the deadline, which was the 25th. Show ID; it is free. If you were out when the papers came, collect them at the post office. If you applied, you **can no longer vote in person** on Sunday 29 November; if you did not, vote at your polling station from 9:00 to 20:00.`,
         stepsTitle: "If you applied: what to do now",
         firstStep: {
           title: "Applications closed on 19 November",
           text: "You can no longer apply. If you applied in time, follow the steps below.",
         },
         deadlineAnswer:
-          "Until Thursday 19 November 2026, the tenth day before polling day (electoral law, article 72). Applications are now closed: anyone who applied must hand the vote in at Correos by 25 November.",
+          "Until Thursday 19 November 2026, the tenth day before polling day (electoral law, article 72). Applications are now closed and the Central Electoral Board has not extended them: anyone who applied must hand the vote in at Correos by Thursday 26 November, 14:00 at the latest.",
+        sendExtra: [
+          `**Correos strike in Madrid (23 to 27 November) and in Cádiz, Córdoba, Huelva, Málaga and Seville (23 to 25 November):** the Interior Ministry's ${a("Order INT/1239/2026", POSTAL_URL.correosStrike)} (BOE of 19 November) requires post offices to open during their usual hours to accept postal votes and hand out the voting papers.`,
+        ],
+        extraFaq: [
+          {
+            question: "My postal-vote papers have not arrived: what should I do?",
+            answer:
+              "The census office sends them until 22 November. Check your letterbox for a Correos notice: if the postman missed you, you must collect them yourself at the post office it names, with your ID. You can check the status of the mailing on the INE's website with your DNI or passport number and date of birth, or call 900 343 232 (free; Monday to Friday except public holidays, 9:00 to 14:00). If your application was accepted, the polling table will not let you vote in person, and the vote must be handed in at Correos by Thursday 26 November, 14:00.",
+          },
+        ],
       },
       over: {
         seoTitle: "Postal vote in Spain: how it works and when to apply",
         seoDescription:
           "The 29 November postal vote is over. How a postal vote is requested at Correos, what to bring and the deadlines the law sets for the next election.",
-        lead: `**The postal vote for Spain's general election of 29 November 2026 is over:** applications closed on 19 November and votes had to be handed in by 25 November. The next election works the same way, because the law sets it: you apply at Correos from the day the election is called until the tenth day before polling day, and post your vote before the third day before it (${a("electoral law, articles 72 and 73", POSTAL_URL.loreg)}). The municipal elections are expected on 23 May 2027 but have not been called yet.`,
+        lead: `**The postal vote for Spain's general election of 29 November 2026 is over:** applications closed on 19 November and votes had to be handed in by 26 November (the Central Electoral Board added a day to the legal deadline). The next election works the same way, because the law sets it: you apply at Correos from the day the election is called until the tenth day before polling day, and post your vote before the third day before it (${a("electoral law, articles 72 and 73", POSTAL_URL.loreg)}). The municipal elections are expected on 23 May 2027 but have not been called yet.`,
         stepsTitle: "How it worked on 29 November, step by step",
         firstStep: {
           title: "Applications ran until 19 November",
@@ -542,8 +623,8 @@ const COPY: Record<Locale, Copy> = {
         text: "Congress ballot in the white envelope; Senate ballot, marked following the instructions printed on it, in the sepia envelope. Put both envelopes and the census certificate in the envelope addressed to your polling table.",
       },
       {
-        title: "Hand it in at Correos by Wednesday 25 November",
-        text: "At any post office, during normal opening hours, showing ID. It costs nothing. If you cannot go, someone else can, with your signed authorisation and a photocopy of your ID.",
+        title: "Hand it in at Correos by Thursday 26 November, 14:00",
+        text: "At any post office, during normal opening hours and by 14:00 at the latest, showing ID (the Central Electoral Board has added one day to the deadline, which was the 25th). It costs nothing. If you cannot go, someone else can, with your signed authorisation and a photocopy of your ID.",
       },
       {
         title: "On the 29th, Correos takes it to your table",
@@ -566,20 +647,20 @@ const COPY: Record<Locale, Copy> = {
     onlineTitle: "How to apply online",
     online: [
       `On the ${a("Correos website", POSTAL_URL.correos)}, with a **digital certificate** or an **electronic DNI**; the Interior Ministry adds that you need the AutoFirma app installed. You fill in your details, sign the request electronically and, at the end, download the application.`,
-      "**What about Cl@ve?** Neither Correos, the Interior Ministry nor the INE mentions Cl@ve for the online postal-vote application (checked on 5 November 2026): only a digital certificate or electronic DNI. Without a certificate, fill in the form on the INE's website and take the printout to Correos.",
+      "**What about Cl@ve?** Neither Correos, the Interior Ministry nor the INE mentions Cl@ve for the online postal-vote application (checked on 20 November 2026): only a digital certificate or electronic DNI. Without a certificate, fill in the form on the INE's website and take the printout to Correos.",
     ],
     arriveTitle: "When the papers arrive, and what if you are out",
     arrive: [
       "**When:** the census office sends them by registered post **between 9 and 22 November**, to the address you gave. According to the INE, it waits until challenges to the candidate lists are settled, by 12 November.",
       "**What is inside:** the ballot papers and voting envelopes, your census certificate, an envelope addressed to your polling table and an instruction sheet.",
       "**You sign for them yourself:** the postman hands them to you, after checking your ID. **If you are out,** you get a notice and must collect them in person at the post office it names. If you are ill, the person holding your notarised authorisation can do it.",
-      `**If they do not arrive:** check the status of the mailing on the ${a("INE's tracking service", POSTAL_URL.tracking)}, with your DNI or passport number and date of birth, or call the census office's free line, 900 343 232.`,
+      `**If they do not arrive:** check the status of the mailing on the ${a("INE's tracking service", POSTAL_URL.tracking)}, with your DNI or passport number and date of birth, or call the census office's free line, 900 343 232 (Monday to Friday except public holidays, 9:00 to 14:00).`,
     ],
     sendTitle: "How to vote and hand in your vote at Correos",
     send: [
       "**Vote:** put the ballot of the list you choose for **Congress** in the **white** voting envelope. On the **Senate** ballot, mark the candidates you choose, following the instructions printed on it, and put it in the **sepia** envelope.",
       "**Pack it:** the envelope addressed to the table holds the voting envelopes and **your census certificate**. Do not forget it: according to the official manual for polling tables, an envelope without the certificate is destroyed and does not even count as a spoilt vote.",
-      "**Hand it in by Wednesday 25 November** at a Correos post office, during normal opening hours, showing ID. It goes by registered post and **costs nothing**.",
+      `**Hand it in by Thursday 26 November, 14:00 at the latest,** at a Correos post office, during normal opening hours, showing ID: the ${a("Central Electoral Board", POSTAL_URL.jecExtension)} decided this on 19 November (the law said the 25th). It goes by registered post and **costs nothing**.`,
       "**If you cannot go,** someone else can take it with an authorisation signed by you and a photocopy of your DNI, passport or other official ID, plus their own ID. Correos has a model authorisation.",
       "**E-mail confirmation:** new this time, if you give an e-mail address when you hand in your vote, Correos tells you when it reaches the table on polling day.",
       "**On the 29th,** Correos takes the votes to the tables at 9:00. At 20:00, after the last voter, the table opens them one by one, checks the certificate and puts the envelopes in the ballot boxes.",
@@ -595,25 +676,25 @@ const COPY: Record<Locale, Copy> = {
     calRows: [
       ["Apply for a postal vote at Correos", "6 October – Thursday 19 November"],
       ["Papers sent by registered post", "Monday 9 – Sunday 22 November"],
-      ["Hand in your vote at Correos", "From receiving the papers until Wednesday 25 November"],
+      ["Hand in your vote at Correos", "From receiving the papers until Thursday 26 November, 14:00 (extended by the Central Electoral Board; it was the 25th)"],
       ["Correos takes the votes to the tables", "Sunday 29 November, at 9:00 (and until 20:00)"],
       ["The table puts postal votes in the ballot box", "Sunday 29 November, at 20:00"],
       ["Living abroad (CERA): postal vote to the consulate", "Until Tuesday 24 November"],
       ["Living abroad (CERA): ballot box at the consulate", "Saturday 21 – Thursday 26 November"],
     ],
-    calNote: "Sources: Central Electoral Board calendar, INE and electoral law (articles 72 to 75), checked on 5 November 2026.",
+    calNote: "Sources: Central Electoral Board calendar and Agreement 418/2026, Correos, INE and electoral law (articles 72 to 75), checked on 20 November 2026.",
     abroadTitle: "If you live or are abroad",
     abroad: [
-      "**Temporarily abroad (ERTA):** the deadline to request your vote at the consulate was 31 October. The INE sends the papers between 3 and 9 November (until 17 November if lists are challenged) and the vote goes back by registered post by 25 November.",
+      "**Temporarily abroad (ERTA):** the deadline to request your vote at the consulate was 31 October. The INE sends the papers between 3 and 9 November (until 17 November if lists are challenged) and the vote goes back by registered post before 14:00 on 26 November.",
       "**Living abroad (CERA):** no application is needed; the papers are sent automatically. Post your vote to the consulate by **24 November**, or put it in the consulate's ballot box **from 21 to 26 November**. Do not send it straight to the provincial electoral board: according to the INE, votes that do not come through the consulate are void.",
-      "**CERA voters who are in Spain:** you can apply for a postal vote at Correos until 19 November, like any resident voter.",
+      "**CERA voters who are in Spain:** the postal vote could be requested at Correos until 19 November, like any resident voter; according to the INE, these voters send their vote to the provincial electoral board by registered post by 25 November.",
     ],
     faq: [
       { question: "Can I apply for a postal vote with Cl@ve?", answer: "Correos, the Interior Ministry and the INE only mention a digital certificate or an electronic DNI for the online application, not Cl@ve. Without a certificate, you can fill in the form on the INE's website, print it twice and hand it in signed at a Correos post office, or do it all at the office with your DNI." },
       { question: "I applied for a postal vote: can I still vote in person?", answer: "No. Once your application is accepted, the census office marks the electoral roll: a \"C\" appears next to your name and the polling table will not let you vote in person. You can only vote by post." },
       { question: "When do the postal-vote papers arrive?", answer: "Between 9 and 22 November 2026, by registered post to the address you gave. You must sign for them yourself, showing ID." },
       { question: "What if I am out when the postman comes?", answer: "You are left a notice and must collect the papers in person at the post office it names, with your ID. If you are ill, the person holding your notarised authorisation can collect them." },
-      { question: "What is the last day to send my postal vote?", answer: "Wednesday 25 November 2026, at a Correos post office during normal opening hours, showing ID. It goes by registered post, free of charge." },
+      { question: "What is the last day to send my postal vote?", answer: "Thursday 26 November 2026, by 14:00 at the latest, at a Correos post office during normal opening hours, showing ID. The Central Electoral Board added one day to the deadline on 19 November (Agreement 418/2026); the law said the 25th. It goes by registered post, free of charge." },
       { question: "Can someone else hand in my postal vote?", answer: "Yes, with an authorisation signed by you and a photocopy of your DNI, passport or other official ID, plus their own ID; Correos has a model form. Applying for the postal vote on someone else's behalf, by contrast, is only allowed in case of illness, with a notarised authorisation and an official medical certificate." },
       { question: "Does voting by post cost anything?", answer: "No. The envelope addressed to the polling table needs no stamp (electoral law, article 73): the Interior Ministry pays for the mailing." },
       { question: "Can foreigners vote by post in Spain's general election?", answer: "No. Only Spanish citizens aged 18 or over on the electoral roll vote in a general election (electoral law, article 2), by post or in person. EU citizens can vote in municipal elections if they have registered their wish to vote." },
@@ -655,14 +736,14 @@ function body(locale: Locale, phase: PostalPhase): Block[] {
     ...h2(t.arriveTitle),
     list(...t.arrive),
     ...h2(t.sendTitle),
-    list(...t.send),
+    list(...t.send, ...(p.sendExtra ?? [])),
     ...h2(t.calTitle),
     table(t.calCaption, t.calHeaders, t.calRows, t.calNote),
     ...h2(t.whoTitle, ...t.who),
     ...h2(t.abroadTitle),
     list(...t.abroad),
     ...paras(ABROAD_LINK[locale], t.relatedLine + b2link("voting", locale, VOTING_LABEL[locale]) + "."),
-    faq([{ question: DEADLINE_QUESTION[locale], answer: p.deadlineAnswer }, ...t.faq]),
+    faq([{ question: DEADLINE_QUESTION[locale], answer: p.deadlineAnswer }, ...(p.extraFaq ?? []), ...t.faq]),
     ...b2Related(["voting", "mesa", "candidates", "electionNight", "congressResults"], locale),
   ];
 }
