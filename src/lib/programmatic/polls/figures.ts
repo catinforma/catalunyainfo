@@ -256,14 +256,16 @@ export const POLLS: readonly Poll[] = [
       en: "Political Opinion Barometer, 3rd wave 2026, or a pre-electoral survey",
     },
     expectedOn: null,
-    // 18 Nov 2026: no date announced. Re-read by Fri 20 Nov, the last working day before the blackout starts (24 Nov 00:00).
-    recheckBy: "2026-11-20",
+    // 18 Nov 2026: no date announced. 20 Nov 2026: re-read, still none ("Darrers estudis" lists Òmnibus 2026-2 and 2026-1,
+    // BOP 2a and 1a onada; REO register newest entry REO 1172, Òmnibus 2026-2). Last re-read Mon 23 Nov, the day before the
+    // blackout starts (24 Nov 00:00).
+    recheckBy: "2026-11-23",
     note: {
       ca: "La fitxa tècnica del baròmetre preveu tres onades el 2026. El CEO no ha anunciat la data de la tercera. Els seus darrers estudis són dues enquestes Òmnibus (6 i 13 de novembre), que no pregunten la intenció de vot, i el registre d'estudis d'opinió no inclou cap enquesta preelectoral del CEO per al 29N.",
       es: "La ficha técnica del barómetro prevé tres oleadas en 2026. El CEO no ha anunciado la fecha de la tercera. Sus últimos estudios son dos encuestas Òmnibus (6 y 13 de noviembre), que no preguntan la intención de voto, y el registro de estudios de opinión no incluye ninguna encuesta preelectoral del CEO para el 29N.",
       en: "The barometer's technical sheet plans three waves in 2026. The CEO has not announced a date for the third. Its latest studies are two Òmnibus surveys (6 and 13 November), which do not ask about voting intention, and the register of opinion studies lists no CEO pre-electoral survey for 29 November.",
     },
     page: CEO_LATEST,
-    checkedOn: "2026-11-18",
+    checkedOn: "2026-11-20",
   },
 ];
