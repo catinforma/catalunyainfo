@@ -10,6 +10,7 @@ import {
   type PublishResult,
 } from "@/lib/content/publish-article";
 import { link } from "@/lib/content/features/shared";
+import { b2link } from "@/lib/content/batch02/shared";
 import { IMAGES } from "@/lib/content/images";
 import {
   ACCOMMODATION_LABEL,
@@ -491,10 +492,12 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   blocks.push({ type: "heading", level: 2, text: copy.closingTitle });
   for (const text of copy.closing) blocks.push({ type: "paragraph", text });
 
+  // 20 Nov 2026: the guide linked out only to two features; the practical
+  // guides a visitor needs next (transport pass, airport, Sitges) now follow.
   const related: Record<Locale, string> = {
-    ca: `Mentre planifiques: ${link("traps", "ca", "Barcelona sense trampes per a turistes")} i ${link("trains", "ca", "dotze escapades en tren")}.`,
-    es: `Mientras planificas: ${link("traps", "es", "Barcelona sin trampas para turistas")} y ${link("trains", "es", "doce escapadas en tren")}.`,
-    en: `While you plan: ${link("traps", "en", "Barcelona without the tourist traps")} and ${link("trains", "en", "twelve day trips by train")}.`,
+    ca: `Mentre planifiques: ${b2link("transport", "ca", "quina targeta de transport comprar a Barcelona")}, ${b2link("airport", "ca", "com anar de l'aeroport al centre")}, ${b2link("sitges", "ca", "el tren de Barcelona a Sitges")}, ${link("traps", "ca", "Barcelona sense trampes per a turistes")} i ${link("trains", "ca", "dotze escapades en tren")}.`,
+    es: `Mientras planificas: ${b2link("transport", "es", "qué tarjeta de transporte comprar en Barcelona")}, ${b2link("airport", "es", "cómo ir del aeropuerto al centro")}, ${b2link("sitges", "es", "el tren de Barcelona a Sitges")}, ${link("traps", "es", "Barcelona sin trampas para turistas")} y ${link("trains", "es", "doce escapadas en tren")}.`,
+    en: `While you plan: ${b2link("transport", "en", "which Barcelona transport pass to buy")}, ${b2link("airport", "en", "getting from the airport to the city centre")}, ${b2link("sitges", "en", "the Barcelona to Sitges train")}, ${link("traps", "en", "Barcelona without the tourist traps")} and ${link("trains", "en", "twelve day trips by train")}.`,
   };
   blocks.push({ type: "paragraph", text: related[locale] });
 

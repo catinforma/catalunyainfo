@@ -9541,3 +9541,124 @@ Before the 23rd: re-read the Ministry's rail list and Renfe daily; when the reso
 files, set `MINISTRY_23N_PUBLISHED`, rewrite the 23N copy, publish `strikes`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — Barcelona practical evergreen guides: parking rates dated to the 2026 ordinance, T-casual where-to-buy, three tourist-tax FAQs, every Sitges train, the hub links the tourist tax (body only; deploy, then groups `parking`, `transport`, `tourist-tax`, `coast-trips`, `barcelona-hub`) (review 2026-12-04 and 2026-12-18)
+
+Owner goal: top 3 on many non-strike queries, traffic from many pages all year. Inventory: `snapshot.py gaps 14 400`,
+`pages 14 600` and `page <url> 14` (7–20 Nov). Pages picked: the Barcelona/Catalonia practical guides with the most
+impressions at positions 4–15.
+
+**Windows checked (this log), and what that left.**
+- Parking ES title 3 Nov (to 1 Dec; the 3 Nov description and lead open with the hours), CA title 6 Nov (to 4 Dec);
+  transport EN/ES/CA titles 28–30 Oct (measure 27–30 Nov); tourist tax ca/es/en 30 Oct / 6 Nov (measure 30 Nov); Sitges title
+  unchanged since 28 Oct. **No title, description, lead or H1 touched on any page.** Body changes only, as the owner allows:
+  the 30 Nov / 1 Dec / 4 Dec title reads of these pages must use the baseline below and note this body change.
+- **Metro hours (`hours`, ca/es/en) and the zoo (`zoo`) are the control of the 18 Nov position-loss entry ("the 14 Nov step
+  pages left unchanged (metro hours, zoo, R4)"), reviewed 25 Nov and 2 Dec: that window is open, so both are untouched, body
+  included, and no new links point at them.** Queue below.
+- Not touched: `/en/guides/barcelona-weather-by-month/` and the town holiday pages (open windows), strikes files.
+
+**Baseline (GSC 7–20 Nov, clicks / impressions / CTR / position).**
+
+| URL | Baseline | Top queries (impr. at pos., 0 clicks unless noted) |
+| --- | --- | --- |
+| `/es/guias/aparcar-barcelona-zona-azul-verde/` | 27 / 8,060 / 0.3 % / 7.7 | zona verde trinitat vella 81 at 10.3; horario zona azul barcelona 69 at 10.5; zona azul barcelona horario 28 at 11.0; ~50 "zona verde sábado" variants at 8–10; hasta que hora es/se paga la zona azul 16 at 13–17 |
+| `/ca/guies/aparcar-barcelona-zona-blava-verda/` | 20 / 2,073 / 1.0 % / 5.6 | preu zona blava barcelona 51 at 5.3 (on the ES URL); horari zona blava barcelona 27 at 7.8 (1 click); horari zona verda barcelona festius 8 at 7.1 |
+| `/en/guides/parking-in-barcelona-blue-green-zones/` | 1 / 76 / 1.3 % / 7.2 | — |
+| `/en/guides/barcelona-transport-passes/` | 20 / 3,394 / 0.6 % / 7.6 | t casual barcelona 124 at 8.9; t-casual barcelona 39 at 9.1; t casual card barcelona 21 at 7.8; barcelona metro tickets price 8 at 8.8 |
+| `/es/guias/tarjetas-transporte-barcelona/` | 3 / 3,098 / 0.1 % / 8.7 | t casual 1 zona 87 at 2.3; t casual 40 at 15.4; t casual precio 38 at 8.2; la t casual se puede compartir 6 at 9.8 |
+| `/ca/guies/targetes-transport-barcelona/` | 1 / 235 / 0.4 % / 9.9 | preu t casual 2026 8 at 7.4 (1 click) |
+| `/en/guides/barcelona-catalonia-tourist-tax/` | 21 / 1,881 / 1.1 % / 8.1 | barcelona city tax 124 at 7.6 (2 clicks); city tax barcelona 90 at 11.2; barcelona tourist tax 38 at 17.9; how much is city tax in barcelona 19 at 4.7; what is city tax in barcelona 7 at 5.3; barcelona hotel city tax 12 at 5.8 |
+| `/es/guias/tasa-turistica-barcelona-cataluna/` | 12 / 1,699 / 0.7 % / 8.3 | tasa turistica barcelona 108 at 11.7; cuanto es la tasa turistica en barcelona 40 at 9.6; tasa turistica cataluña 17 at 24.3 |
+| `/ca/guies/taxa-turistica-barcelona-catalunya/` | 1 / 164 / 0.6 % / 6.5 | tasa turistica barcelona 16 at 11.0 |
+| `/en/day-trips/sitges-from-barcelona-by-train/` | 3 / 624 / 0.5 % / 14.1 | barcelona to sitges 78 at 21.8; barcelona to sitges train 71 at 27.0; barcelona sitges trein 12 at 9.2; last train from barcelona to sitges 8 at 9.5 |
+| `/es/escapadas/sitges-desde-barcelona-tren/` | 0 / 219 / 0 % / 26.2 | sitges barcelona tren, tren barcelona sitges, trenes a sitges 25 each at 23–29 |
+| `/ca/escapades/sitges-des-de-barcelona-tren/` | 0 / 12 / 0 % / 8.2 | — |
+| `/ca/guies/barcelona-guia-practica/` + ES | 0 / 24 / 0 % / 10.9 | — (EN hub: 0 impressions) |
+
+**Verified on 20 Nov 2026 (curl + grep; downloads in their own scratchpad directories, parsed with `python3 -I`).**
+- AREA: ES "tipos de plazas" azul/verde (every rate, hour, maximum unchanged); Zone 36 news ("632 new Green Area spaces in Zone
+  36 and 136 spaces resulting from the overlap with Zone 20, all identified with green road markings", 231 AREA Motorcycle, 29
+  AREA DUM, "09/11/2026: Activation"); delimitation page ("Actualmente AREA se divide en 36 zonas de residentes"; the green page
+  still says 35, written before Zone 36).
+- Ajuntament, Ordenança fiscal 3.12 (normativa/2026-11/3.12-taxa-estacionament-regulat-vehicles.pdf; BOPB 2-2-2026, CVE
+  202610021075): "aprovada definitivament pel Plenari del Consell Municipal en data 30 de gener de 2026, començarà a regir a
+  partir de la seva publicació al BOPB"; annex A base (Blava A 2,50 / B 2,25, Verda A 3,00 / B 2,75 €/h) + "per tipus de
+  vehicle" (Eco +0,00, C +0,75, B +1,00, resta +1,25); A.2.1 "Per episodi de contaminació ... 2 euros/hora ... excepte en els
+  'Eco' i els 'cero emisiones'", Monday to Friday from 7:00 the day after; annex E zero-emission 1,15–1,50 €/h; G rounding
+  down to 5 cents. AREA's own page exempts only zero-emission cars: both printed. No general weekday-holiday rule anywhere:
+  the FAQ says so.
+- TMB "Prices in force from 15 January 2026" (every cell unchanged); ATM home "En vigor les tarifes de 2026", press room
+  latest note 9 Nov 2026 (no 2027 fares; 2026 approved 19 Dec 2025); ATM T-casual page "Where can I buy a T-casual?" (app,
+  self-service machines, official sales points, cardboard card +€1) and "you can still reach the airport by public transport
+  using the Rodalies de Catalunya train network or by bus"; transportes.gob.es press room to 20 Nov: no 2027 RDL 17/2025
+  extension.
+- ATC "Quota tributària, tarifes i recàrrecs municipals": Barcelona, rest of Catalonia, special rate, the seven municipal
+  surcharges and cruise rows unchanged; Barcelona's ordinance index still lists the 2-2-2026 Ordenança fiscal 2.2.
+- Rodalies planner API (`/api/timetables`) for Tue 24, Sat 28, Sun 29 Nov, Sants/Passeig de Gràcia/França ↔ Sitges; R2 PDF
+  "01/9/2026" for the last departures (23:36, 0:06 from Sants; 0:00 PdG; 23:49 França); fares page (4 zones 5,50 €; monthly
+  20 € "fins al 31/12/2026"); planner prices (single 5,50, Bonotren 35,80, T-casual 34,70 €).
+
+**What changed (body only).**
+1. **Parking** ca/es/en (`barcelona-practical.ts`, group `parking`). New H2 "De dónde salen las tarifas de 2026 y desde cuándo
+   rigen": ordinance 3.12, approved 30 Jan, BOPB 2 Feb 2026; base per zone + label supplement, read back out of the label tables
+   (`rateParts()` throws if a supplement differs by zone); zero-emission range; rounding; the pollution-episode +2 €/h. Zone 36
+   in the past tense, with the 136 overlap spaces, 29 DUM spaces and AREA's zone map; H2 "Zona verde de Trinitat Vella (zona
+   36), en marcha desde el 9 de noviembre". 35 → 36 resident zones. Four FAQs in the query words: "¿Hasta qué hora se paga la
+   zona azul?", "¿Se paga la zona verde los sábados?", "¿…en festivos?", "¿Por qué la zona azul cuesta 2 € más algunos días?".
+   Sources: the 2026 ordinance PDF replaces the 2021 one; delimitation page and Zone 36 map added. Verified 20 Nov.
+2. **Transport passes** ca/es/en (group `transport`). H2 "¿Dónde se compra la T-casual?" (ATM); the airport FAQ adds Rodalies
+   and bus; ES/CA FAQ renamed "¿Se puede compartir la T-casual?"; zones paragraph adds Barcelona–Sitges = 3 zones (34,70 €) with
+   a link to the Sitges guide; related list adds the tourist tax and Sitges. As-of sentence 13 → 20 Nov; `FARES_AS_OF` and the
+   2026 table's `verifiedAt` 2026-11-20 (the 16 Dec / 15 Jan re-check guards stand).
+3. **Tourist tax** ca/es/en (`tourist-tax/copy.ts`, `publish.ts`, `rates.ts`; group `tourist-tax`). Dates 13 → 20 Nov
+   (`LAST_VERIFIED`, key facts, table notes). FAQs "What is the city tax in Barcelona?", "Is the city tax included in the hotel
+   price?", "Is there a tourist tax in Sitges, Girona or Tarragona?" (ca/es equivalents), figures from the rate table. The
+   closing line now links the transport passes, the airport guide and Sitges (it linked only two features).
+4. **Sitges** ca/es/en (`coast-trips.ts`, group `coast-trips`; Tarragona republished unchanged, keeps 28 Oct). New table
+   "Barcelona-Sants ↔ Sitges: every R2 Sud train" (7 rows: weekday vs weekend, both directions, the weekday morning extras
+   back to Barcelona); FAQs "How do I get from Barcelona to Sitges?" and "What time is the first train…?"; a "staying the
+   night" line linking the tourist tax (Sitges is not on the ATC surcharge list) and the transport passes; related adds
+   transport. `SITGES_VERIFIED` 2026-11-20; table note dated to the 24/28/29 Nov planner reads.
+5. **Barcelona hub** ca/es/en (group `barcelona-hub`). The tourist tax guide had no line: added under "Arriving" ("€6 to €12
+   per person per night in Barcelona until 31 March 2027 …").
+
+**Hypotheses.** (1) Parking ES: "horario zona azul barcelona" 10.5 → ≤ 8 and the "sábado"/"hasta qué hora" family into the
+top 8, by matching FAQs; "zona verde trinitat vella" 10.3 → ≤ 7 with the dated Zone 36 section. (2) Transport EN/ES: "t casual
+barcelona" 8.9 → ≤ 7 (where-to-buy answers the card/ticket intent). (3) Tourist tax EN: "city tax barcelona" 11.2 → ≤ 8 and
+"what is city tax in barcelona" ≤ 4, with one click a week from the new FAQs; ES "tasa turistica barcelona" 11.7 → ≤ 9. (4)
+Sitges EN: "barcelona to sitges train" 27.0 → ≤ 15 and "barcelona to sitges" 21.8 → ≤ 15; ES "tren barcelona sitges" 22.9
+→ ≤ 15. It is wrong if none of the four moves by 18 Dec. Confounder: the core update of 13–14 Nov is still settling.
+
+**Revert rule.** Any page that loses > 1.5 positions (14-day average) with no gain on its target queries at the 18 Dec read:
+revert that page's new section (keep the date refreshes, which are facts).
+
+**Review 2026-12-04 (14 days) and 2026-12-18 (28 days)**, counted from the publish day: `snapshot.py page aparcar-barcelona 14`,
+`page transport-passes 14`, `page tarjetas-transporte 14`, `page tourist-tax 14`, `page tasa-turistica 14`, `page sitges 14`,
+query × page for the baseline queries above.
+
+**Queue (not done, dated).**
+- **3 Dec, metro hours and zoo** (after the 2 Dec control review): re-read TMB's metro/NitBus hours and zoobarcelona.cat
+  prices and hours, then body only: an "every line, first and last train" table on the metro page if TMB's line pages give it,
+  and on the zoo page a dated price table (online vs door, children, Zoo + Aquarium) if the zoo lists one. Their FAQs already use
+  the query words ("What time does the Barcelona metro close?", "How much is Barcelona Zoo?"), so position, not wording, is the
+  gap. Titles stay in their own windows (metro EN to 4 Dec).
+- **ZBE/LEZ** (ES 307 at 8.3, EN 370 at 7.9): 28 Oct window measured 28 Nov; its queries rank 10–60 (18 Nov entry). Next push
+  after that read.
+
+**Publish.** Deploy (the content is code), then groups `parking transport tourist-tax coast-trips barcelona-hub`. IndexNow
+prefixes: `/ca/guies/aparcar-barcelona-zona-blava-verda/ /es/guias/aparcar-barcelona-zona-azul-verde/
+/en/guides/parking-in-barcelona-blue-green-zones/ /ca/guies/targetes-transport-barcelona/ /es/guias/tarjetas-transporte-barcelona/
+/en/guides/barcelona-transport-passes/ /ca/guies/taxa-turistica-barcelona-catalunya/ /es/guias/tasa-turistica-barcelona-cataluna/
+/en/guides/barcelona-catalonia-tourist-tax/ /ca/escapades/sitges-des-de-barcelona-tren/ /es/escapadas/sitges-desde-barcelona-tren/
+/en/day-trips/sitges-from-barcelona-by-train/ /ca/guies/barcelona-guia-practica/ /es/guias/barcelona-guia-practica/
+/en/guides/barcelona-practical-guide/`.
+
+**Tests.** New `tests/bcn-practical-20nov.test.ts` (ordinance date and decomposition, Zone 36 live, where-to-buy, the new FAQs,
+links, the Sitges table, Tarragona keeps its date, the hub link); `tests/batch02.test.ts` verified-date pins for parking and
+transport moved to 2026-11-20. `npx tsc --noEmit -p .` clean; eslint clean on the changed files; the covering tests
+(batch02, transport-fares, tourist-tax, title-budget, home-tools, b2-sources-unique, article-photo, rodalies, carnival and the
+new file) 157/157. `npm test` 2838/2844: the 6 failures are date guards outside this change (postal-vote `POSTAL_AS_OF`
+2026-11-05; strike-days-1920n ×3 and strikes-hub / strikes-spain as-of 19 vs 20 Nov), not touched here.
+
+**Outcome:** _pending_

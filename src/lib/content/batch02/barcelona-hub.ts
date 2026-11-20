@@ -13,6 +13,11 @@ import { b2link, h2, lead, list, paras, verifiedLine, type B2Article, type B2Key
  * Re-synced with every child guide on 24 Oct 2026 (airport, ZBE, cards,
  * monuments, Girona, Sitges, Tarragona and Figueres lines updated to the
  * figures those guides now carry).
+ *
+ * 20 Nov 2026: the tourist tax guide had no line here; added under
+ * "Arriving" with the range its own rate table prints (ATC tariff page
+ * re-read that day: Catalan rate €1-€7 plus Barcelona's €5 surcharge to
+ * 31 Mar 2027, 7-night cap, 16 or younger exempt).
  */
 
 const VERIFIED = "2026-10-24";
@@ -29,6 +34,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["airport", "Airport to the city centre", "Bus 46 on a €2.90 single, airport metro €5.90, the R2 Nord train from T2, night buses N17 and N18, or a taxi with a €21 minimum."],
           ["cruiseport", "Cruise port to the city", "Cruise Bus shuttle €3.50 from the Moll Adossat; only the WTC terminal is walkable."],
+          ["touristTax", "Tourist tax (city tax)", "€6 to €12 per person per night in Barcelona until 31 March 2027 (the Catalan rate plus the €5 city surcharge), for at most 7 nights; 16 or younger free."],
         ],
       },
       {
@@ -87,6 +93,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["airport", "Del aeropuerto al centro", "Bus 46 con billete sencillo de 2,90 €, metro del aeropuerto 5,90 €, tren R2 Nord desde la T2, nitbus N17 y N18 o taxi con un mínimo de 21 €."],
           ["cruiseport", "Del puerto de cruceros a la ciudad", "Lanzadera Cruise Bus 3,50 € desde el Moll Adossat; solo la terminal WTC está a distancia de ir a pie."],
+          ["touristTax", "Tasa turística", "De 6 a 12 € por persona y noche en Barcelona hasta el 31 de marzo de 2027 (tarifa de la Generalitat más 5 € de recargo municipal), como máximo 7 noches; hasta 16 años, exentos."],
         ],
       },
       {
@@ -145,6 +152,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["airport", "De l'aeroport al centre", "Bus 46 amb bitllet senzill de 2,90 €, metro de l'aeroport 5,90 €, tren R2 Nord des de la T2, nitbus N17 i N18 o taxi amb un mínim de 21 €."],
           ["cruiseport", "Del port de creuers a la ciutat", "Llançadora Cruise Bus 3,50 € des del Moll Adossat; només la terminal WTC és a distància d'anar-hi a peu."],
+          ["touristTax", "Taxa turística", "De 6 a 12 € per persona i nit a Barcelona fins al 31 de març de 2027 (tarifa de la Generalitat més 5 € de recàrrec municipal), com a màxim 7 nits; fins a 16 anys, exempts."],
         ],
       },
       {

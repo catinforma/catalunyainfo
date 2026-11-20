@@ -65,9 +65,9 @@ export interface FareTable {
 
 /**
  * 2026: TMB, "2026 transport ticket fares — Prices in force from 15 January
- * 2026", read 28 Oct, 30 Oct and 13 Nov 2026 (every cell unchanged). ATM's
- * T-casual page shows the same row and the ATM home page says "En vigor les
- * tarifes de 2026" (13 Nov 2026). The T-usual carries the 50 % discount of
+ * 2026", read 28 Oct, 30 Oct, 13 Nov and 20 Nov 2026 (every cell unchanged).
+ * ATM's T-casual page shows the same row and the ATM home page says "En vigor
+ * les tarifes de 2026" (13 and 20 Nov 2026). The T-usual carries the 50 % discount of
  * Real Decreto-ley 17/2025, whose aid runs 1 Jan to 31 Dec 2026.
  */
 export const FARES_2026: FareTable = {
@@ -85,14 +85,15 @@ export const FARES_2026: FareTable = {
   airportTicket: 5.9,
   sourceUrl: TMB_FARE_TABLE,
   quote: "2026 transport ticket fares. Prices in force from 15 January 2026",
-  verifiedAt: "2026-11-13",
+  verifiedAt: "2026-11-20",
 };
 
 /**
- * 2027: not published. On 13 Nov 2026 neither ATM (press room, latest note
- * 9 Nov 2026; home page "En vigor les tarifes de 2026") nor TMB lists 2027
- * fares, and the State aid of RDL 17/2025 covers "del 1 de enero al 31 de
- * diciembre de 2026", with no 2027 extension on the Ministry's news page.
+ * 2027: not published. On 13 Nov and again on 20 Nov 2026 neither ATM (press
+ * room, latest note 9 Nov 2026; home page "En vigor les tarifes de 2026")
+ * nor TMB lists 2027 fares, and the State aid of RDL 17/2025 covers "del 1
+ * de enero al 31 de diciembre de 2026", with no 2027 extension on the
+ * Ministry's news page (transportes.gob.es sala de prensa, items to 20 Nov).
  *
  * To publish 2027: fill this from the operator's page the day it is out,
  * point CURRENT_FARES at it (one line), move FARES_AS_OF, run the tests. The
@@ -118,7 +119,7 @@ export function fareTableFor(iso: string): FareTable | null {
  * `FARES_AS_OF` is the last day ATM/TMB were read for a new table; the
  * date-guard test fails once a re-check date passes without a newer reading.
  */
-export const FARES_AS_OF = "2026-11-13";
+export const FARES_AS_OF = "2026-11-20";
 export const FARES_RECHECK = ["2026-12-16", "2027-01-15"] as const;
 
 /** The latest re-check date that has passed since the last reading, or null. */

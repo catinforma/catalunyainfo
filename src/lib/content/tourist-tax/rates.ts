@@ -103,7 +103,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     regional: BARCELONA_REGIONAL,
     surcharge,
     sourceUrl: surcharge === 5.0 ? ATC_RATES : BCN_ORDINANCE,
-    verifiedAt: "2026-11-13",
+    verifiedAt: "2026-11-20",
   })),
   {
     scope: "rest-of-catalonia",
@@ -122,7 +122,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     // (seven municipalities have one since 1 Oct 2026; the page names them).
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-11-13",
+    verifiedAt: "2026-11-20",
   },
   {
     scope: "rest-of-catalonia",
@@ -139,7 +139,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     },
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-11-13",
+    verifiedAt: "2026-11-20",
   },
 ];
 
@@ -420,7 +420,13 @@ export const SPECIAL_RATE = { "hotel-5": 10.0, "hotel-4": 7.0, other: 5.0 } as c
 // 13 Nov 2026: ATC tariff, taxable-event and accrual pages re-read; Barcelona
 // Ordenança fiscal 2.2 (BOPB 2-2-2026) re-read, no 2027 modification on the
 // Ajuntament's tax page; no IEET news from the ATC since 30 Sep 2026.
-export const LAST_VERIFIED = "2026-11-13";
+// 20 Nov 2026: ATC tariff page re-read ("Quota tributària, tarifes i recàrrecs
+// municipals"): Barcelona, rest of Catalonia, special rate, the seven
+// municipal surcharges (still only Castelldefels, Esplugues, L'Hospitalet,
+// El Prat, Sabadell, Sant Cugat, Sant Just) and the cruise rows all
+// unchanged; Barcelona's ordinance index still lists the 2-2-2026 Ordenança
+// fiscal 2.2 (no 2027 change).
+export const LAST_VERIFIED = "2026-11-20";
 // New municipal surcharges approved this autumn; then again before 1 Apr 2027.
 export const NEXT_REVIEW = "2026-12-01";
 /** By this date the 1 April 2027 figures are re-read on the ATC page (date-guard test). */

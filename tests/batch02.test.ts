@@ -484,7 +484,8 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
     assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
     assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
   }
-  assert.equal(TRANSPORT.verifiedAt, "2026-11-13");
+  // TMB fare table and ATM press room re-read 20 Nov 2026 (no 2027 fares).
+  assert.equal(TRANSPORT.verifiedAt, "2026-11-20");
 });
 
 test("the selector block is placed on the transport article in every language", () => {
@@ -791,7 +792,8 @@ test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-b
   // its queries in the title, the visitor answer in the description.
   assert.match(PARKING.editions.en.seoTitle, /^Barcelona blue and green zone parking/);
   assert.match(PARKING.editions.en.seoDescription, /9:00–20:00.*visitors may park 1–2 h/);
-  assert.equal(PARKING.verifiedAt, "2026-10-30");
+  // AREA pages and Ordenança fiscal 3.12 re-read 20 Nov 2026.
+  assert.equal(PARKING.verifiedAt, "2026-11-20");
   assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
 });
 
