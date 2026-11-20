@@ -10256,3 +10256,109 @@ education guides, Spain hub, 17N, 19N, 20N, 23N, 26N), `huelgas-espana`, `huelga
 `/en/guides/general-strike-11-november`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — Lottery cluster, December queries: the time, "cuánto toca por décimo", Hacienda on the Gordo and El Niño, "hasta cuándo se puede cobrar", participacions de La Grossa, and the calculator linked from both guides, ca + es + en (body only; deploy, then `gordo-navidad`; `loteria-nadal` after the 1 Dec review; `grossa` after the 8 Dec review) (review 2026-12-15, 2026-12-29, 2027-01-07, 2027-01-13)
+
+**Why.** Owner, 20 Nov: top 3 on the lottery queries from now to 6 Jan (22 Dec target 100,000 sessions). Every page in the
+cluster was read against the December queries ("a qué hora es el sorteo de la lotería de Navidad", "cuánto se lleva Hacienda del
+Gordo", "cuánto toca por décimo", "premios lotería de Navidad 2026", "cómo cobrar un décimo premiado", "hasta cuándo se puede
+cobrar", "décimo compartido / participaciones", "lotería del Niño 2027 fecha", "La Grossa preu / premis"). Most already had a
+direct, sourced answer. The gaps: no FAQ item worded for the time or for the per-décimo amounts; the Christmas guide's tax answer
+gave the second and third prizes but not the Gordo's 72,000 €; neither guide (the two pages with the impressions) linked the prize
+tax calculator; the Grossa guide had no question for the claim deadline or for participacions ("participacions de la grossa" 8
+impr. at 13.1); the hub and the Christmas checker had no claim-deadline question; the calculator had nothing for El Niño.
+
+**Windows respected.** No title, meta description, H1 or lead touched on any page. The Christmas guide (13 Nov body change,
+review 1 Dec) and the Grossa guide (17 Nov title, review 1 Dec, revert rule 8 Dec) are database articles: their changes wait in
+the code for those publishes. `PROGRAMME_CONFIRMED` (14 Dec test) and the El Niño programme (28 Dec test) are untouched:
+SELAE is still unreadable from the server (below). The hub window ("measure from 23 Dec"), the checkers' (29 Dec, 7 and 13 Jan)
+and the calculator's (29 Dec) are body-only here.
+
+**Sources checked 20 Nov 2026 (curl + grep from the server).**
+- BOE, Ley 35/2006 consolidated (API `legislacion-consolidada/id/BOE-A-2006-20764`, `fecha_actualizacion` 20261118; the DA 33ª
+  block still dated 20180704): "Estarán exentos del gravamen especial los premios cuyo importe íntegro sea igual o inferior a 40.000
+  euros"; "En el supuesto de que el premio fuera de titularidad compartida, la cuantía exenta … se prorrateará entre los
+  cotitulares"; "aplicar … el tipo del 20 por ciento"; BOE note: "Se modifica, con efectos desde el 1 de enero de 2013, por el
+  art. 2.3 de la Ley 16/2012". `TAX_CHECKED` in the Christmas guide moves from 13 to 20 Nov.
+- AEAT notice of 17 Dec 2024 (sede.agenciatributaria.gob.es, 200): "…acreditar ante la Administración Tributaria que el premio
+  ha sido repartido a los titulares de participaciones"; "no tendrán que presentar ninguna otra autoliquidación"; the treaty refund.
+- SELAE: HTTP 403 (Akamai) to the server on www.loteriasyapuestas.es/es/loteria-nacional, the Q4 2026 and Q1 2027 programme
+  PDFs, `buscadorSorteos` (22 Dec 2026) and www.selae.es/…/sala-de-prensa; WebFetch also 403. Nothing new read: every SELAE
+  figure keeps its 31 Oct reading (calendar, 2026 programme, El Niño date and first prize).
+- BOE search (site:boe.es, 2026): no resolution with a 2026 Lotería Nacional programme; only ONCE draws (e.g. BOE-A-2026-10039,
+  Cupón Extra de Navidad, 1 Jan 2027). As the runbook says, the last BOE programme is BOE-A-2010-19540.
+- Loteries de Catalunya, press notes (www.loteriesdecatalunya.info/ca/sobre-loteries/publicitat/premsa/, 200): no 2026 Cap d'Any
+  note; newest "La Grossa de La Diada 2026: Números premiats". loteriesdecatalunya.cat: 403. `DRAW_TIME_CHECKED` stays 17 Nov
+  because it prints in the Grossa lead (17 Nov window): move it to the publish day when `grossa` goes out on 8 Dec.
+
+**Baselines (GSC 7–20 Nov, 20 Nov partial; clicks / impressions; `snapshot.py page … 14`).**
+
+| URL | 14 d | Queries |
+| --- | --- | --- |
+| `/ca/guies/loteria-de-nadal/` | 41 / 703 | "loteria de nadal 2026" 70 at 9.0 (1 click), "la grossa de nadal 2026" 33 at 8.7, "quant val un decim de loteria de nadal" 13 at 3.0, "quan toca a la loteria de nadal" 12 at 2.5, "grossa nadal 2026" 13 at 7.8 |
+| `/es/guias/loteria-de-navidad/` | 1 / 61 | none above 1 |
+| `/en/guides/spanish-christmas-lottery/` | 1 / 148 | "spanish christmas lottery" 7 at 11.7, "el gordo 2026" 5 at 9.2 |
+| `/ca/guies/la-grossa-cap-d-any/` | 9 / 1,526 | "la grossa de cap d'any 2026" 226 at 8.3 (2 clicks), "la grossa de cap d'any" 88 at 8.0, "la grossa de cap d any" 54 at 12.9, "grossa de cap d'any 2026" 42 at 8.4, "participacions de la grossa" 8 at 13.1 |
+| `/es/guias/la-grossa-fin-de-ano/` | 22 / 704 | "la grossa 2026" 9 at 8.9, "cuanto vale la grossa de cap d any" 5 at 6.4, "donde se cobra la grossa" 4 at 11.0 |
+| `/en/guides/la-grossa-new-years-eve-lottery/` | 0 / 0 | — |
+| Gordo hubs (3) | 3 / 50 | "donde ha tocado …" at 16–95 |
+| Checkers (6), calculator (3) | 0 / ≤ 1 | new 17–19 Nov |
+
+**What changed (body only).**
+1. **Christmas guide** (`batch02/loteria-nadal.ts`, ca/es/en): FAQ "¿A qué hora es el sorteo de la Lotería de Navidad 2026?" (ca
+   "A quina hora és…", en "What time is…"): while `DRAW_TIME_2026` is null, "SELAE aún no ha anunciado la hora de 2026" and 2025's
+   8:30 table / about four hours / La 1 from 8:00, with the year (the "no 2026 time" guard covers it); the announced time takes
+   over by itself. FAQ "¿Cuánto toca por décimo en la Lotería de Navidad?": every prize per 20 € décimo from `PROGRAMME`. The tax
+   answer now leads with the Gordo (72,000 € withheld, 328,000 € net; from the 4th prize down, nothing). "¿Cómo sé si me ha tocado?"
+   names our checker. Claim H2: "Cómo y dónde cobrar un décimo premiado de la Lotería de Navidad" (was "Dónde se cobran los premios…").
+   Tax section: one line to the prize tax calculator. FAQ 11 → 13 (en 12 → 14).
+2. **La Grossa guide** (`batch02/grossa.ts`): FAQ "Fins quan es pot cobrar La Grossa de Cap d'Any?" (90 days from the draw; 2025's
+   last day 30 Mar 2026, both already in the claim section) and "Com funcionen les participacions de La Grossa de Cap d'Any?" (the
+   game page's 18 Dec rule and the shared exemption, both already in the body); tax section links the calculator; "what is La
+   Grossa" ends with El Niño (Wed 6 Jan 2027) and its checker. FAQ 9 → 11.
+3. **Gordo hubs** (`gordo/copy.ts`): FAQ "¿A qué hora es el sorteo…?" on its own (the time line moves out of the "¿Cuándo…?"
+   answer) and "¿Hasta cuándo se puede cobrar un décimo premiado?" (three months from the day after; 2025: 23 Mar 2026). FAQ 4 → 6.
+   Once the snapshot has the numbers and `DRAW_TIME_2026` is still null (SELAE blocks the server, so the dossier may never be
+   read here), the time answer says the draw took place and points at the table, never "SELAE has not announced the time yet".
+4. **Christmas checker** (`lottery-check/copy.ts`): the same deadline question. FAQ 6 → 7.
+5. **Prize tax calculator** (`lottery-tax/page.ts`): "¿Cuánto se queda Hacienda del Niño?" from the `nino-primero` preset
+   (200,000 € a décimo, 32,000 € withheld, 168,000 € net). FAQ 7 → 8.
+
+Not done: no new page; no 2026 claim deadline computed (only the rule and 2025's day); no 2026 draw time; nothing on the El Niño
+checker (its FAQ already opens with "¿Cuándo es el sorteo del Niño 2027?").
+
+**Tests.** `tests/loteria-nadal.test.ts` (new: time, per-décimo, Gordo tax, calculator link; the tax-date pin moves to 20 Nov),
+`tests/grossa.test.ts` (new: deadline, participacions, calculator and El Niño links), `tests/lottery-check.test.ts` (7 FAQ, the
+deadline wording, no 2027 date), `tests/lottery-tax.test.ts` (8 FAQ, El Niño figures), `tests/gordo-navidad.test.ts` (new: hub
+time and deadline questions, no "not announced" line after the draw).
+
+**Owner, before 22 Dec (draw time).** RTVE answered 200 to the server on 20 Nov (its 19 Dec 2025 programming note is the 2025
+time source, and `TIME_HOSTS` accepts rtve.es): when RTVE or SELAE announces the 2026 broadcast (2025: 19 Dec), fill
+`DRAW_TIME_2026` from that page, gate, deploy, publish `loteria-nadal gordo-navidad`. SELAE's dossier needs a browser on the PC.
+
+**Prediction.** By 15 Dec (two weeks after the 1 Dec publish), the CA guide gets impressions for "a quina hora és la loteria de
+Nadal" / "quant toca per dècim" variants and the head "loteria de nadal 2026" moves from 9.0 to ≤ 6; on 22–23 Dec the hub or the
+guide shows for "a qué hora es el sorteo de la lotería" at ≤ 10. The Grossa CA guide's "participacions de la grossa" from 13.1 to
+≤ 8 and "fins quan es pot cobrar la grossa" appears by 7 Jan. Wrong if none of these query families shows on its page by its date.
+
+**Review.** 2026-12-15 (`snapshot.py page loteria-de-nadal 14`, `page loteria-de-navidad 14`, `page spanish-christmas-lottery 14`;
+queries with hora/hour/décimo/hacienda/hisenda); 2026-12-29 (with the hub, checker and calculator reviews already logged:
+`page donde-ha-tocado 7`, `page comprobar-loteria 7`, `page premios-loteria 7`); 2027-01-07 (`page la-grossa 14`, "participacions",
+"cobrar"); 2027-01-13 (`page premios-loteria 7`, "niño").
+
+**Confounders.** The 13 Nov body change and the 18–19 Nov link lines going out in the same `loteria-nadal` publish; the Grossa
+title test (1 and 8 Dec) and its results title on 31 Dec; draw-day news demand on 22 and 31 Dec and 6 Jan.
+
+**Go-live.**
+- Now: **deploy** (hub, checker and calculator are code routes), then `publish.sh gordo-navidad` (hubs + Christmas checker + its
+  JSON; retry up to 3× on "-> 500"). IndexNow: `/es/donde-ha-tocado-el-gordo/ /ca/on-ha-tocat-la-loteria-de-nadal/
+  /en/spanish-christmas-lottery-results/ /es/comprobar-loteria-navidad/ /ca/comprovar-loteria-nadal/
+  /en/check-spanish-christmas-lottery-ticket/ /es/calculadoras/premios-loteria/ /ca/calculadores/premis-loteria/
+  /en/calculators/spain-lottery-prize-tax/`.
+- **Not before the 1 Dec review:** `publish.sh loteria-nadal` (carries this entry's guide body with the held 18–19 Nov lines).
+  IndexNow `/ca/guies/loteria-de-nadal/ /es/guias/loteria-de-navidad/ /en/guides/spanish-christmas-lottery/`.
+- **Not before the 8 Dec review:** re-read the press notes, move `DRAW_TIME_CHECKED` (or fill `DRAW_TIME_2026`), gate, deploy,
+  `publish.sh grossa`. IndexNow `/ca/guies/la-grossa-cap-d-any/ /es/guias/la-grossa-fin-de-ano/
+  /en/guides/la-grossa-new-years-eve-lottery/`.
+
+**Outcome:** _pending_

@@ -437,6 +437,7 @@ export function checkFaq(locale: Locale): { q: string; a: string }[] {
       { q: "¿Qué es el reintegro?", a: `Que te devuelven lo jugado: ${rd} por décimo si tu número acaba en la misma cifra que el Gordo (salvo el propio Gordo).` },
       { q: "¿Cuánto se queda Hacienda de un décimo premiado?", a: `El 20 % de lo que pasa de ${ex} por décimo. Del Gordo (${M(g.gross, "es")}) se retienen ${M(g.withholding, "es")} y cobras ${M(g.net, "es")}. Los demás premios, salvo el segundo y el tercero, no pagan nada.` },
       { q: "¿Qué lista vale para cobrar?", a: "Solo la Lista Oficial de Premios de SELAE. Ningún comprobador, tampoco este, sustituye a esa lista." },
+      { q: "¿Hasta cuándo se puede cobrar un décimo premiado?", a: "Tres meses, contados desde el día siguiente al sorteo, según SELAE. Para el sorteo de 2025, el último día fue el 23 de marzo de 2026." },
     ],
     ca: [
       { q: `Quan es pot comprovar la Loteria de Nadal ${PROGRAMME_YEAR}?`, a: `El ${drawDay("ca")}, a mesura que surten els números. Aquesta pàgina s'actualitza amb els que publica SELAE; la Llista Oficial de Premis, l'única vàlida per cobrar, es va publicar el 2025 la tarda del sorteig.` },
@@ -445,6 +446,7 @@ export function checkFaq(locale: Locale): { q: string; a: string }[] {
       { q: "Què és el reintegrament?", a: `Que et tornen el que has jugat: ${rd} per dècim si el teu número acaba en la mateixa xifra que el Gordo (llevat del mateix Gordo).` },
       { q: "Quant se n'endú Hisenda d'un dècim premiat?", a: `El 20 % del que passa de ${ex} per dècim. Del Gordo (${M(g.gross, "ca")}) se'n retenen ${M(g.withholding, "ca")} i en cobres ${M(g.net, "ca")}. La resta de premis, llevat del segon i el tercer, no paguen res.` },
       { q: "Quina llista val per cobrar?", a: "Només la Llista Oficial de Premis de SELAE. Cap comprovador, tampoc aquest, no substitueix aquesta llista." },
+      { q: "Fins quan es pot cobrar un dècim premiat?", a: "Tres mesos, comptats des de l'endemà del sorteig, segons SELAE. Per al sorteig del 2025, l'últim dia va ser el 23 de març de 2026." },
     ],
     en: [
       { q: `When can I check the ${PROGRAMME_YEAR} Spanish Christmas Lottery?`, a: `On ${drawDay("en")}, as the numbers come out. This page is updated with the numbers SELAE publishes; the Lista Oficial de Premios, the only list valid for payment, was posted on the afternoon of the draw in 2025.` },
@@ -453,6 +455,7 @@ export function checkFaq(locale: Locale): { q: string; a: string }[] {
       { q: "What is the reintegro?", a: `Your money back: ${rd} per décimo if your number ends in the same digit as El Gordo (except El Gordo itself).` },
       { q: "How much tax is taken from a winning décimo?", a: `20% of whatever it wins above ${ex}. El Gordo (${M(g.gross, "en")}) has ${M(g.withholding, "en")} withheld and you keep ${M(g.net, "en")}. Other prizes, except the second and third, pay nothing.` },
       { q: "Which list is valid for payment?", a: "Only SELAE's Lista Oficial de Premios. No checker, this one included, replaces it." },
+      { q: "How long do I have to claim a winning décimo?", a: "Three months, counted from the day after the draw, according to SELAE. For the 2025 draw, the last day was 23 March 2026." },
     ],
   });
 }

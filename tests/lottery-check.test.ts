@@ -424,8 +424,12 @@ test("the FAQ's figures come from the programme and the tax engine", () => {
   assert.match(es, /2\.000 € por décimo cada una/);
   assert.match(es, /20 € por décimo si tu número acaba/);
   assert.match(es, /se retienen 72\.000 € y cobras 328\.000 €/);
-  assert.equal(checkFaq("ca").length, 6);
-  assert.equal(checkFaq("en").length, 6);
+  // 20 Nov 2026: "¿Hasta cuándo se puede cobrar un décimo premiado?" (the 2025 rule and last day, no 2026 date).
+  assert.match(es, /Tres meses, contados desde el día siguiente al sorteo, según SELAE\. Para el sorteo de 2025, el último día fue el 23 de marzo de 2026\./);
+  for (const locale of ["es", "ca", "en"] as const) assert.doesNotMatch(checkFaq(locale).map((f) => f.a).join(" "), /2027/, locale);
+  assert.equal(checkFaq("es").length, 7);
+  assert.equal(checkFaq("ca").length, 7);
+  assert.equal(checkFaq("en").length, 7);
 });
 
 test("routes: one static page per language, a 404 in the others; the JSON is static, noindex and cacheable", () => {

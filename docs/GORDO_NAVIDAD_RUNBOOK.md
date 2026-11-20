@@ -50,7 +50,10 @@ to the production VPS (84.46.242.202), with a browser User-Agent: the
 `buscadorSorteos` draw record (2025 query), `/es/loteria-nacional`, the help
 pages and the PDFs on both `www.loteriasyapuestas.es` and `www.selae.es`
 (WebFetch got 403 too). `fetch` will therefore fail on the server on 22 Dec
-unless the block lifts. Do not try to get round the block. Plan:
+unless the block lifts. Re-tested 20 Nov 2026: still 403 (the Lotería
+Nacional page, the Q4 2026 and Q1 2027 programme PDFs, `buscadorSorteos` for
+22 Dec 2026, selae.es's press room; WebFetch 403 too), and a BOE search found
+no 2026 programme resolution. Do not try to get round the block. Plan:
 
 1. ~18-20 Dec: re-test from the server
    (`curl -s -o /dev/null -w "%{http_code}\n" -A "Mozilla/5.0" "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=LNAC&celebrados=true&fechaInicioInclusiva=20251222&fechaFinInclusiva=20251222"`).

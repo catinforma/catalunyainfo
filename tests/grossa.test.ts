@@ -44,7 +44,9 @@ import { holidayOn, weekdayIndex } from "../src/lib/content/holidays/calendar.ts
 import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { GROSSA_CHECK_ROUTE } from "../src/lib/programmatic/grossa-check/paths.ts";
+import { NINO_CHECK_ROUTE } from "../src/lib/programmatic/nino-check/paths.ts";
 
 /**
  * La Grossa de Cap d'Any 2026 (30 Oct 2026): one page per language, one
@@ -63,8 +65,9 @@ const body = (locale: Locale) => text(GROSSA.editions[locale].blocks);
 const sentences = (plain: string) => plain.split(/\n|(?<=[.!?])\s+/);
 
 // GROSSA_CHECK_ROUTE: the number checker (a code route), linked from "how to check".
-const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GROSSA_CHECK_ROUTE];
-const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
+// NINO_CHECK_ROUTE and the prize tax calculator (code routes): linked since 20 Nov 2026 ("what is La Grossa", tax).
+const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS), GROSSA_CHECK_ROUTE, NINO_CHECK_ROUTE];
+const PUBLISHED = new Set([...ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)), ...LOCALES.map((locale) => calcPath("lottery-tax", locale))]);
 
 /** A made-up result (not real numbers), with the 99999/00000 wrap on purpose. */
 const FAKE: GrossaResults = {
@@ -351,6 +354,26 @@ test("the FAQ asks in the searched words and answers in plain text", () => {
       for (const question of questions[locale]) assert.ok(asked.includes(question), `${locale}: missing "${question}"`);
       for (const item of block.items) assert.doesNotMatch(item.answer, /\*\*|\]\(/, `${locale}: markdown in "${item.question}"`);
     }
+  }
+});
+
+test("20 Nov 2026: the deadline and participacions questions, the calculator in the tax section, El Niño's checker", () => {
+  const asks: Record<Locale, { deadline: string; shares: string }> = {
+    ca: { deadline: "Fins quan es pot cobrar La Grossa de Cap d'Any?", shares: "Com funcionen les participacions de La Grossa de Cap d'Any?" },
+    es: { deadline: "¿Hasta cuándo se puede cobrar La Grossa de Cap d'Any?", shares: "¿Cómo funcionan las participaciones de La Grossa de Cap d'Any?" },
+    en: { deadline: "How long do I have to collect a La Grossa prize?", shares: "How do La Grossa de Cap d'Any shares (participacions) work?" },
+  };
+  const deadline: Record<Locale, RegExp> = { ca: /90 dies naturals.*30 de març de 2026/, es: /90 días naturales.*30 de marzo de 2026/, en: /90 calendar days.*30 March 2026/ };
+  const shares: Record<Locale, RegExp> = { ca: /18 de desembre.*40\.000 €/, es: /18 de diciembre.*40\.000 €/, en: /18 December.*€40,000/ };
+  for (const locale of LOCALES) {
+    const items = (GROSSA.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    const answer = (q: string) => items.find((i) => i.question === q)?.answer ?? "";
+    assert.match(answer(asks[locale].deadline), deadline[locale], locale);
+    assert.match(answer(asks[locale].shares), shares[locale], locale);
+    // Only 2025's last day: never a computed 2026 one.
+    assert.doesNotMatch(answer(asks[locale].deadline), /2027/, locale);
+    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 1, `${locale}: calculator link`);
+    assert.equal(json(locale).split(`](/${locale}/${NINO_CHECK_ROUTE[locale]}/)`).length - 1, 1, `${locale}: El Niño checker link`);
   }
 });
 

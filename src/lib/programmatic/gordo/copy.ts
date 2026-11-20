@@ -37,6 +37,11 @@
  *    province and municipality pages link the calculator for tax.
  *  - Since 18 Nov 2026 "how to check a décimo" also links the number checker
  *    (lib/programmatic/lottery-check), body only.
+ *  - 20 Nov 2026 (body only, hub window "measure from 23 Dec" untouched): the
+ *    FAQ asks the time on its own ("¿A qué hora es el sorteo…?", timeLine) and
+ *    "¿Hasta cuándo se puede cobrar un décimo premiado?" (three months from the
+ *    day after, the 2025 dossier; 2025's last day, 23 Mar 2026, from the 2025
+ *    Lista Oficial, as in the lottery guide). No 2026 deadline is computed.
  *
  * Checked and not used: a BOE resolution with the 2026 programme does not
  * exist (a BOE title search for "programa de premios 22 de diciembre" returns
@@ -547,27 +552,38 @@ export function hubBlocks(locale: Locale, s: GordoSnapshot | null): Block[] {
 
 export function hubFaq(locale: Locale, s: GordoSnapshot | null, c: Ctx = ctx(locale)): { question: string; answer: string }[] {
   const first = hasResults(s) ? s.prizes[0]!.numbers[0]! : null;
+  // Once the numbers are in, no "not announced yet" line, even if DRAW_TIME_2026 was never filled (SELAE blocks the server).
+  const time =
+    first && !DRAW_TIME_2026
+      ? { ca: `Es va fer el ${c.day} al Teatro Real de Madrid; els números són a la taula d'aquesta pàgina.`, es: `Se celebró el ${c.day} en el Teatro Real de Madrid; los números están en la tabla de esta página.`, en: `It took place on ${c.day} at the Teatro Real in Madrid; the numbers are in the table on this page.` }[locale]
+      : strip(timeLine(c));
   if (locale === "ca") {
     return [
-      { question: "Quan és el sorteig de la loteria de Nadal 2026?", answer: `El ${c.day}, al Teatro Real de Madrid. ${strip(timeLine(c))}` },
+      { question: "Quan és el sorteig de la loteria de Nadal 2026?", answer: `El ${c.day}, al Teatro Real de Madrid.` },
+      { question: "A quina hora és el sorteig de la loteria de Nadal 2026?", answer: time },
       { question: "On es mira on ha tocat el Gordo?", answer: first ? `El Gordo del 2026 és el ${first}; on s'ha venut és a la taula d'aquesta pàgina, amb les pàgines de punts de venda de SELAE.` : "SELAE publica una pàgina per premi amb les administracions que l'han venut; aquesta pàgina les recull per províncies i municipis el dia del sorteig." },
       { question: "Quant paga el Gordo?", answer: `400.000 € per dècim de 20 € (4 milions per bitllet). Cada dècim està exempt fins a 40.000 € i Hisenda reté el 20% de la resta: en cobres ${gordoNet("ca")} per dècim.` },
       { question: "Quina llista val per cobrar?", answer: "Només la Llista Oficial de Premis de SELAE, que el 2025 es va repartir la tarda del 22 de desembre." },
+      { question: "Fins quan es pot cobrar un dècim premiat?", answer: "Tres mesos, comptats des de l'endemà del sorteig, segons SELAE. Per al sorteig del 2025, l'últim dia va ser el 23 de març de 2026." },
     ];
   }
   if (locale === "es") {
     return [
-      { question: "¿Cuándo es el sorteo de la Lotería de Navidad 2026?", answer: `El ${c.day}, en el Teatro Real de Madrid. ${strip(timeLine(c))}` },
+      { question: "¿Cuándo es el sorteo de la Lotería de Navidad 2026?", answer: `El ${c.day}, en el Teatro Real de Madrid.` },
+      { question: "¿A qué hora es el sorteo de la Lotería de Navidad 2026?", answer: time },
       { question: "¿Dónde se mira dónde ha tocado el Gordo?", answer: first ? `El Gordo de 2026 es el ${first}; dónde se ha vendido está en la tabla de esta página, con las páginas de puntos de venta de SELAE.` : "SELAE publica una página por premio con las administraciones que lo vendieron; esta página las recoge por provincias y municipios el día del sorteo." },
       { question: "¿Cuánto paga el Gordo?", answer: `400.000 € por décimo de 20 € (4 millones por billete). Cada décimo está exento hasta 40.000 € y Hacienda retiene el 20% del resto: cobras ${gordoNet("es")} por décimo.` },
       { question: "¿Qué lista vale para cobrar?", answer: "Solo la Lista Oficial de Premios de SELAE, que en 2025 se repartió la tarde del 22 de diciembre." },
+      { question: "¿Hasta cuándo se puede cobrar un décimo premiado?", answer: "Tres meses, contados desde el día siguiente al sorteo, según SELAE. Para el sorteo de 2025, el último día fue el 23 de marzo de 2026." },
     ];
   }
   return [
-    { question: "When is the 2026 Spanish Christmas Lottery draw?", answer: `On ${c.day}, at the Teatro Real in Madrid. ${strip(timeLine(c))}` },
+    { question: "When is the 2026 Spanish Christmas Lottery draw?", answer: `On ${c.day}, at the Teatro Real in Madrid.` },
+    { question: "What time is the 2026 Spanish Christmas Lottery draw?", answer: time },
     { question: "Where can I see where El Gordo was sold?", answer: first ? `El Gordo 2026 is ${first}; where it was sold is in the table on this page, from SELAE's points-of-sale pages.` : "SELAE publishes one page per prize listing the shops that sold it; on the day this page gathers them by province and town." },
     { question: "How much does El Gordo pay?", answer: `€400,000 per €20 décimo (€4 million per full ticket). Each décimo is tax-free up to €40,000 and 20% of the rest is withheld: you keep ${gordoNet("en")} per décimo.` },
     { question: "Which list is valid for payment?", answer: "Only SELAE's Lista Oficial de Premios, handed out on the afternoon of 22 December in 2025." },
+    { question: "How long do I have to claim a winning décimo?", answer: "Three months, counted from the day after the draw, according to SELAE. For the 2025 draw, the last day was 23 March 2026." },
   ];
 }
 
