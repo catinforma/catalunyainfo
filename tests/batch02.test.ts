@@ -641,9 +641,10 @@ test("shops: the date table answers 29N, Christmas and Reis from the DOGC and th
  */
 test("voting: dated calendar from the decree, MiDNI suspension and its lifting cited, MiDGT not valid", () => {
   const dates: Record<string, string[]> = {
-    ca: ["31 d'octubre", "2 de novembre", "19 de novembre", "25 de novembre", "4–7 de desembre", "23 de desembre"],
-    es: ["31 de octubre", "2 de noviembre", "19 de noviembre", "25 de noviembre", "4–7 de diciembre", "23 de diciembre"],
-    en: ["31 October", "2 November", "19 November", "25 November", "4–7 December", "23 December"],
+    // 20 Nov 2026: postal hand-in moved from 25 to 26 Nov, 14:00 (JEC Acuerdo 418/2026).
+    ca: ["31 d'octubre", "2 de novembre", "19 de novembre", "26 de novembre, a les 14 h", "4–7 de desembre", "23 de desembre"],
+    es: ["31 de octubre", "2 de noviembre", "19 de noviembre", "26 de noviembre, a las 14 h", "4–7 de diciembre", "23 de diciembre"],
+    en: ["31 October", "2 November", "19 November", "26 November, 14:00", "4–7 December", "23 December"],
   };
   for (const locale of ["ca", "es", "en"] as const) {
     const text = bodyToPlainText(VOTING.editions[locale].blocks);

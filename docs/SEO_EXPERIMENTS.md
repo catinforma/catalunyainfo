@@ -9598,3 +9598,69 @@ postal-vote 7`). No revert rule for titles (the phase switch is scheduled). **20
 `/es/guias/voto-por-correo`, `/en/guides/postal-vote-spain`.
 
 **Outcome:** _pending_
+
+## 2026-11-20 — 29N cluster, body only: how-to-vote and the strip say the postal hand-in moved to 26 Nov, 14:00; when the Parliament's term ends; election night answers "when is the election" and "where to see the results"; town pages say how to check the roll, ca + es + en (deploy, then groups `voting`, `election-night`) (review 2026-11-26 and 2026-12-02)
+
+**Why.** Last week before the biggest traffic day of the month (29 Nov, target 30,000 sessions). Queries at positions 4–15 in
+`snapshot.py gaps 14 400` and `page … 14` (7–20 Nov) where the page that should win does not say the answer in the searcher's
+words. Titles, descriptions and leads of the election guides are inside the 11 and 16 Nov windows (review 26 Nov) and the town
+pages inside the 3 Nov one: **none touched**; body only.
+
+**Baseline** (GSC 7–20 Nov, 14 d, 20 Nov partial; clicks / impressions / CTR / position):
+- `/en/guides/how-to-vote-catalonia/`: 139 / 7,162 / 1.9 % / 6.3. "2026 spain general election how to register to vote" 1,654 at
+  5.6, "how to vote 2026 spain general election" 1,288 at 5.4, "2026 spain general election dates" 157 at 10.0 (0 clicks),
+  "… polling stations" 95 at 6.2, "spain election date" 25 at 9.7.
+- `/en/guides/spain-election-night-results/`: 113 / 4,457 / 2.5 % / 6.9. "election results" 315 at 8.9, "2026 spain general
+  election results" 192 at 6.5 (0 clicks), and date queries landing here instead of on how-to-vote: "spain election" 71 at 10.3,
+  "when is the spanish election" 65 at 9.6, "spain elections" 57 at 10.8, "when is spanish election" 52 at 9.3, "when is spain
+  election" 27 at 10.7, "when is the election in spain" 27 at 9.8.
+- `/es/guias/como-votar-elecciones-cataluna/`: 150 / 9,317 / 1.6 % / 6.7. "cuando son las elecciones en cataluña" 624 at 7.3
+  (0.3 %), "elecciones catalunya cuando son" 302 at 8.2, "proximas elecciones cataluña" 302 at 7.0, "cuando son las elecciones
+  catalanas" 65 at 7.8. `/ca/guies/com-votar-eleccions-catalunya/`: 42 / 1,823 / 2.3 % / 6.9 ("eleccions catalunya quan son" 35
+  at 7.2).
+- `/es/guias/noche-electoral-resultados-escrutinio/`: 15 / 475 / 3.2 % / 7.1; `/ca/guies/nit-electoral-resultats-escrutini/`:
+  1 / 81 / 1.2 % / 9.0.
+- Town families: `/es/elecciones/` 773 / 15,107 / 5.1 % / 5.7; `/ca/eleccions/` 585 / 16,134 / 3.6 % / 6.0. "censo electoral
+  mataro" 33 at 5.9, "… badalona" 31 at 7.5, "… santa coloma de gramenet" 22 at 7.2 (0 clicks each), "mesa electoral 29n <town>"
+  at 3–9.
+
+**What changed** (each fact read on 20 Nov 2026 on the primary source; quotes in the modules' header comments):
+1. `voting` (how-to-vote, `voting.ts`, body): the warning box under "Where do I vote?" now says requests closed on 19 Nov and the
+   vote goes to Correos by Thursday 26 Nov, 14:00 at the latest (JEC Acuerdo 418/2026), linking the postal guide with "what to do
+   if the papers have not arrived"; the postal paragraph, calendar row, "until when" and "key dates" FAQs, the ERTA line (INE:
+   before 14:00 on 26 Nov) and the CERA-in-Spain lines say the same in the past tense. Correos and Interior source names re-dated,
+   JEC 418/2026 added. **The three leads still say "hand it in by 25 November"** (true, conservative, inside the window).
+2. `voting`, "next elections": the Parlament row and a new FAQ in query words ("¿Cuándo son las próximas elecciones catalanas al
+   Parlament?", "Quan són les properes eleccions al Parlament de Catalunya?", "When is the next Catalan parliament election?"):
+   none called; the term ends four years after the 12 May 2024 vote, on 12 May 2028, unless brought forward (Statute of Autonomy,
+   art. 66: "La legislatura finaliza por expiración del mandato legal al cumplirse los cuatro años de la fecha de las
+   elecciones"; BOE consolidated text, added to sources). Calendar H2 says "dates": "2026 Spain general election dates: the full
+   calendar" / "Fechas de las elecciones generales del 29 de noviembre: el calendario completo" / "Dates de les eleccions generals
+   del 29 de novembre: el calendari complet". The one hub link now reads "town's election page, with its polling places and past
+   results" (all 947 towns carry their 29N polling places).
+3. `election-night` (`election-night.ts`, body): H2 "Where to see the 2026 Spain general election results" / "Dónde ver los
+   resultados de las elecciones generales del 29N" / "On veure els resultats de les eleccions generals del 29N"; two FAQs after
+   the first: "Where can I see the 2026 Spain general election results?" (Interior's results site and app, link once
+   `ELECTION_NIGHT_RESULTS_URL` is set; 29neleccionesgenerales.es home re-read 20 Nov: no results link) and "When is the Spanish
+   general election?" (Sunday 29 Nov, 9:00–20:00, campaign, reflection day) with a descriptive link to how-to-vote ("2026 Spain
+   general election dates and how to vote"), so the date queries have a path to the page that should win them.
+4. Town pages (`model.ts`, all 947 × ca/es, 30 × en; deploy): the census section gets "How to check you are on the roll": with
+   Cl@ve on the INE's roll lookup, without it at the town hall or 900 343 232; the certificación censal específica up to polling
+   day (INE cid=1700, read 20 Nov).
+5. Tests: `tests/election-cluster.test.ts` (four new), `tests/batch02.test.ts` (calendar expects "26 November, 14:00").
+
+**Prediction** (7 d after the deploy vs the 7 d before, equal-query): EN night page's date queries either move to how-to-vote or
+gain CTR; "2026 spain general election dates" ≤ 8 on how-to-vote; "cuando son las elecciones catalanas / en cataluña" CTR ≥ 1 %;
+"censo electoral <town>" CTR > 0 on the 20 largest towns.
+
+**Review 2026-11-26** with the elections review (`snapshot.py page how-to-vote-catalonia 7`, `page spain-election-night-results
+7`, `page como-votar-elecciones-cataluna 7`) and **2026-12-02** (`page /elecciones/ 7`, `page /eleccions/ 7`). Revert rule: if the
+EN night page loses ≥ 2 positions on "election results" / "2026 spain general election results" at equal impressions, drop the
+"When is…" FAQ from it. Confounders: the 18 Nov EN section order and election-day layer, the 26 Nov title review, the news cycle.
+
+**Go-live.** Deploy (town pages, strip), then publish `voting` and `election-night` (and `vot-correu`, entry above). IndexNow
+prefixes `/ca/guies/com-votar-eleccions-catalunya`, `/es/guias/como-votar-elecciones-cataluna`, `/en/guides/how-to-vote-catalonia`,
+`/ca/guies/nit-electoral-resultats-escrutini`, `/es/guias/noche-electoral-resultados-escrutinio`,
+`/en/guides/spain-election-night-results`, `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
+
+**Outcome:** _pending_
