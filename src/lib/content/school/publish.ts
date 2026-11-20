@@ -1,5 +1,6 @@
 import "server-only";
 
+import { b2href } from "@/lib/content/batch02/shared";
 import type { Block } from "@/lib/content/blocks";
 import { IMAGES } from "@/lib/content/images";
 import { publishArticle, upsertImages, type ArticleSpec, type ImageSpec, type PublishResult } from "@/lib/content/publish-article";
@@ -620,6 +621,21 @@ function lastDayBeforeChristmas(year: SchoolYear): string {
   return iso;
 }
 
+/**
+ * 20 Nov 2026: the December bridge cluster. For Monday 7 December 2026 only
+ * (the bridge page is about that December), the school answer hands on to the
+ * Catalan bridge page, day by day.
+ */
+function bridgeGuide(dayIso: string, locale: Locale): string {
+  if (dayIso !== "2026-12-07") return "";
+  return L(
+    locale,
+    ` El pont, dia a dia: [pont de desembre 2026 a Catalunya](${b2href("decemberBridge", "ca")}).`,
+    ` El puente, día a día: [puente de diciembre 2026 en Cataluña](${b2href("decemberBridge", "es")}).`,
+    ` The long weekend, day by day: [the December 2026 long weekend in Catalonia](${b2href("decemberBridge", "en")}).`,
+  );
+}
+
 /** The questions the school calendar is searched with, in the searchers' words. */
 function faq(year: SchoolYear, locale: Locale): Block {
   const next = SCHOOL_YEARS[SCHOOL_YEARS.indexOf(year) + 1] ?? null;
@@ -640,7 +656,7 @@ function faq(year: SchoolYear, locale: Locale): Block {
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
       { question: `Quan comencen les vacances de Nadal ${cy} a les escoles?`, answer: `El ${d(c0)}. Duren fins al ${d(c1)}, inclòs, i es torna a classe el ${d(addDays(c1, 1))}.` },
-      ...(bridge ? [{ question: `Hi ha escola el ${weekdayDay(bridge.day, locale)}?`, answer: `Al calendari general, sí: és dia lectiu, i només el ${weekdayDay(bridge.holiday, locale)} és festiu a tot Catalunya. Però cada escola el pot fer festiu amb un dels seus quatre dies de lliure disposició${cemb.some((c) => c.date === bridge.day) ? ", i a Barcelona el Consell d'Educació Municipal el proposa a tots els centres" : ""}. Pregunta-ho a la teva escola.` }] : []),
+      ...(bridge ? [{ question: `Hi ha escola el ${weekdayDay(bridge.day, locale)}?`, answer: `Al calendari general, sí: és dia lectiu, i només el ${weekdayDay(bridge.holiday, locale)} és festiu a tot Catalunya. Però cada escola el pot fer festiu amb un dels seus quatre dies de lliure disposició${cemb.some((c) => c.date === bridge.day) ? ", i a Barcelona el Consell d'Educació Municipal el proposa a tots els centres" : ""}. Pregunta-ho a la teva escola.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `Quins són els dies de lliure disposició del curs ${year.label}?`, answer: `Els tria cada escola: quatre per curs, repartits entre els tres trimestres i mai el primer o l'últim dia ni durant les vacances. El consell escolar municipal en proposa uns de comuns${cemb.length ? `; a Barcelona, el CEMB proposa ${cembList}` : ""}.` },
       { question: `Quan és la Setmana Santa ${ey} a les escoles de Catalunya?`, answer: `Del ${d(e0)} al ${d(e1)}, tots dos inclosos; les classes tornen el ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `Quan és la Setmana Santa ${next.easter[0].slice(0, 4)} a les escoles?`, answer: `Del ${d(next.easter[0])} al ${d(next.easter[1])}, tots dos inclosos (curs ${next.label}).` }] : []),
@@ -653,7 +669,7 @@ function faq(year: SchoolYear, locale: Locale): Block {
     ],
     es: [
       { question: `¿Cuándo empiezan las vacaciones de Navidad ${cy} en los colegios?`, answer: `El ${d(c0)}. Duran hasta el ${d(c1)}, incluido, y se vuelve a clase el ${d(addDays(c1, 1))}.` },
-      ...(bridge ? [{ question: `¿Hay cole el ${weekdayDay(bridge.day, locale)}?`, answer: `En el calendario general, sí: es día lectivo, y solo el ${weekdayDay(bridge.holiday, locale)} es festivo en toda Cataluña. Pero cada colegio puede hacerlo festivo con uno de sus cuatro días de libre disposición${cemb.some((c) => c.date === bridge.day) ? ", y en Barcelona el Consell d'Educació Municipal lo propone a todos los centros" : ""}. Pregúntalo en tu colegio.` }] : []),
+      ...(bridge ? [{ question: `¿Hay cole el ${weekdayDay(bridge.day, locale)}?`, answer: `En el calendario general, sí: es día lectivo, y solo el ${weekdayDay(bridge.holiday, locale)} es festivo en toda Cataluña. Pero cada colegio puede hacerlo festivo con uno de sus cuatro días de libre disposición${cemb.some((c) => c.date === bridge.day) ? ", y en Barcelona el Consell d'Educació Municipal lo propone a todos los centros" : ""}. Pregúntalo en tu colegio.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `¿Cuáles son los días de libre disposición del curso ${year.label}?`, answer: `Los elige cada colegio: cuatro por curso, repartidos entre los tres trimestres y nunca el primer o el último día ni durante las vacaciones. El consejo escolar municipal propone unos comunes${cemb.length ? `; en Barcelona, el CEMB propone ${cembList}` : ""}.` },
       { question: `¿Cuándo es Semana Santa ${ey} en los colegios de Cataluña?`, answer: `Del ${d(e0)} al ${d(e1)}, ambos incluidos; las clases vuelven el ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `¿Cuándo es Semana Santa ${next.easter[0].slice(0, 4)} en los colegios?`, answer: `Del ${d(next.easter[0])} al ${d(next.easter[1])}, ambos incluidos (curso ${next.label}).` }] : []),
@@ -666,7 +682,7 @@ function faq(year: SchoolYear, locale: Locale): Block {
     ],
     en: [
       { question: `When do the ${cy} Christmas school holidays start?`, answer: `On ${d(c0)}. They last until ${d(c1)}, included, and classes restart on ${d(addDays(c1, 1))}.` },
-      ...(bridge ? [{ question: `Is there school on ${weekdayDay(bridge.day, locale)}?`, answer: `In the general calendar, yes: it is a school day, and only ${weekdayDay(bridge.holiday, locale)} is a holiday across Catalonia. But each school can take it as one of its four free-choice days${cemb.some((c) => c.date === bridge.day) ? ", and Barcelona's municipal education council recommends it to every school" : ""}. Ask your school.` }] : []),
+      ...(bridge ? [{ question: `Is there school on ${weekdayDay(bridge.day, locale)}?`, answer: `In the general calendar, yes: it is a school day, and only ${weekdayDay(bridge.holiday, locale)} is a holiday across Catalonia. But each school can take it as one of its four free-choice days${cemb.some((c) => c.date === bridge.day) ? ", and Barcelona's municipal education council recommends it to every school" : ""}. Ask your school.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `What are the free-choice days in ${year.label}?`, answer: `Each school chooses its own: four a year, spread across the three terms, never the first or last day or inside the holidays. The municipal school council suggests shared ones${cemb.length ? `; in Barcelona the CEMB recommends ${cembList}` : ""}.` },
       { question: `When are the ${ey} Easter school holidays in Catalonia?`, answer: `From ${d(e0)} to ${d(e1)}, both included; classes restart on ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `When are the ${next.easter[0].slice(0, 4)} Easter school holidays?`, answer: `From ${d(next.easter[0])} to ${d(next.easter[1])}, both included (${next.label} school year).` }] : []),

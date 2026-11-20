@@ -56,6 +56,7 @@ import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/p
 import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 
 import { DayDateLink, SpainDayIndex } from "./days";
+import { DecemberBridgeLine } from "./DecemberBridgeLine";
 
 /** The Spain-wide 2027 pages (Spanish only), all server-rendered from the BOE table and `sources.ts`. */
 
@@ -376,6 +377,7 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             ))}
           </ul>
           <p className="text-sm text-[var(--color-muted)]">{COMPUTED_NOTE}</p>
+          <DecemberBridgeLine locale="es" region={c.region} inPlace={c.en} />
 
           <h2 id="locales">Festivos locales de {YEAR} {c.en}</h2>
           <p>
@@ -597,6 +599,7 @@ export function SpainHubPage() {
             <Link href={spainBridgesPath()}>Todos los puentes de {YEAR}, comunidad por comunidad</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{COMPUTED_NOTE}</p>
+          <DecemberBridgeLine locale="es" />
 
           <h2 id="locales">Festivos locales de {YEAR}</h2>
           <p>

@@ -139,6 +139,51 @@ const SOURCES: B2Source[] = [
   { name: "Resolución de 17 de octubre de 2025, relación de fiestas laborales para el año 2026 (26 de diciembre: Cataluña e Illes Balears)", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21667", publisher: "BOE" },
 ];
 
+/**
+ * 20 Nov 2026 (docs/SEO_EXPERIMENTS.md; publish `shops` only after the 25 Nov
+ * review): "domingos abiertos 2026" and "cuando abren las tiendas los domingos"
+ * (the page's largest query group, at 6-9) had no question in their words.
+ * Read again on 20 Nov 2026 in the DOGC PDFs: Ordre EMT/77/2025 (DOGC 9421,
+ * 27.5.2025) art. 1, "4 de gener. 15 d'agost. 12 d'octubre. 29 de novembre.
+ * 6, 13, 20 i 27 de desembre.", and art. 6, defaults "el dia 11 de gener i el
+ * dia 8 de desembre per a l'any 2026"; Resolució EMT/4342/2025 (DOGC 9551,
+ * 27.11.2025), Barcelona: "4 i 11 de gener. 15 d'agost. 12 d'octubre. 29 de
+ * novembre. 6, 8, 13, 20 i 27 de desembre." No new fact: every date is
+ * already in the page's 2026 calendar section.
+ */
+const SUNDAYS_2026_FAQ: Record<Locale, { question: string; answer: string }[]> = {
+  ca: [
+    {
+      question: "Quins diumenges obren les botigues el 2026?",
+      answer: "A Barcelona i als municipis que no han triat dies propis, els diumenges 4 i 11 de gener, 29 de novembre i 6, 13, 20 i 27 de desembre, i a més els festius 15 d'agost, 12 d'octubre i 8 de desembre. Són els vuit dies generals de l'Ordre EMT/77/2025 més els dos municipals per defecte (11 de gener i 8 de desembre). Els ajuntaments que n'han triat d'altres són a la Resolució EMT/4342/2025: busca el teu a la taula de Nadal.",
+    },
+    {
+      question: "Quan obren les botigues els diumenges a Catalunya?",
+      answer: "No cada diumenge: les botigues amb horari general només poden obrir deu diumenges o festius a l'any, vuit fixats per la Generalitat per a tot Catalunya i dos per cada ajuntament. Al novembre i al desembre del 2026 són el diumenge 29 de novembre i els diumenges 6, 13, 20 i 27 de desembre (i el dimarts 8). Les botigues d'alimentació de fins a 300 m², les fleques o les de conveniència, entre d'altres, poden obrir qualsevol diumenge.",
+    },
+  ],
+  es: [
+    {
+      question: "¿Qué domingos abren las tiendas en 2026?",
+      answer: "En Barcelona y en los municipios que no han elegido días propios, los domingos 4 y 11 de enero, 29 de noviembre y 6, 13, 20 y 27 de diciembre, y además los festivos 15 de agosto, 12 de octubre y 8 de diciembre. Son los ocho días generales de la Orden EMT/77/2025 más los dos municipales por defecto (11 de enero y 8 de diciembre). Los ayuntamientos que eligieron otros están en la Resolución EMT/4342/2025: busca el tuyo en la tabla de Navidad.",
+    },
+    {
+      question: "¿Cuándo abren las tiendas los domingos en Cataluña?",
+      answer: "No todos los domingos: las tiendas con horario general solo pueden abrir diez domingos o festivos al año, ocho fijados por la Generalitat para toda Cataluña y dos por cada ayuntamiento. En noviembre y diciembre de 2026 son el domingo 29 de noviembre y los domingos 6, 13, 20 y 27 de diciembre (y el martes 8). Las tiendas de alimentación de hasta 300 m², las panaderías o las de conveniencia, entre otras, pueden abrir cualquier domingo.",
+    },
+  ],
+  en: [
+    {
+      question: "Which Sundays can shops open in 2026?",
+      answer: "In Barcelona and in towns that did not choose days of their own: Sundays 4 and 11 January, 29 November and 6, 13, 20 and 27 December, plus the holidays of 15 August, 12 October and 8 December. These are the eight general days of Order EMT/77/2025 plus the two default municipal days (11 January and 8 December). Councils that chose other days are in Resolution EMT/4342/2025: look yours up in the Christmas table.",
+    },
+    {
+      question: "When are shops open on Sundays in Catalonia?",
+      answer: "Not every Sunday: shops on the general timetable may open on only ten Sundays or holidays a year, eight set by the Generalitat for all of Catalonia and two by each council. In November and December 2026 they are Sunday 29 November and Sundays 6, 13, 20 and 27 December (and Tuesday 8). Food shops of up to 300 m², bakeries and convenience stores, among others, may open on any Sunday.",
+    },
+  ],
+};
+
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/botigues-obertes-festius-catalunya",
@@ -531,6 +576,7 @@ const COPY: Record<Locale, T> = {
       { question: "Quins festius d'obertura comercial queden el 2026?", answer: `A Barcelona i a la majoria de municipis, el diumenge 29 de novembre, dia d'eleccions, i el 6, 8, 13, 20 i 27 de desembre. Són dies en què les botigues poden obrir, no dies en què hagin d'obrir. ${TOWNS_NOV_DEC.length} municipis en canvien algun (són a la taula de dalt).` },
       { question: "Obren les botigues el 29 de novembre, dia d'eleccions?", answer: `Sí. El diumenge 29 de novembre és dia d'obertura comercial a Barcelona i a tots els municipis excepte ${joinList(NO_29_NOV, "ca")}, i les eleccions no el converteixen en dia de tancament. Hi poden obrir també els centres comercials. Qui hi treballi té dret a fins a quatre hores retribuïdes per anar a votar.` },
       { question: "Quins diumenges obren les botigues el desembre del 2026?", answer: "A Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre, i també el dimarts 8 de desembre. Alguns municipis, com Terrassa, Manresa, Olot o Badalona, en canvien algun." },
+      ...SUNDAYS_2026_FAQ.ca,
       { question: "Obren les botigues el 8 de desembre de 2026?", answer: `A Barcelona i a la majoria de municipis, sí: el dimarts 8 de desembre és dia d'obertura. No ho és a ${NO_8_DEC.length} municipis que l'han canviat per un altre dia, entre els quals ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: la llista sencera és a la taula de dalt.` },
       { question: "Obren les botigues el diumenge 6 de desembre?", answer: `Sí, a Barcelona i a tots els municipis excepte a ${townList(NO_6_DEC, "ca")}, que l'han canviat per un altre dia. El 6 de desembre és un dels vuit dies generals d'obertura del 2026.` },
       { question: "Obren els supermercats el 26 de desembre?", answer: "Els que segueixen l'horari general, no: el dissabte 26 de desembre, Sant Esteve, és dia de tancament obligatori, igual que el 25 (Llei 18/2017, article 36.2.d). Hi poden obrir els de fins a 300 m² de superfície de venda dedicats sobretot a l'alimentació, les botigues de pimes de fins a 300 m², les de conveniència, les fleques i les gasolineres, entre d'altres." },
@@ -610,6 +656,7 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "¿Abren las tiendas el domingo 29 de noviembre, día de elecciones?", answer: `Sí. El domingo 29 de noviembre es día de apertura comercial en Barcelona y en todos los municipios salvo ${joinList(NO_29_NOV, "es")}, y las elecciones no lo convierten en día de cierre. También pueden abrir los centros comerciales. Quien trabaje ese día tiene derecho a hasta cuatro horas retribuidas para ir a votar.` },
       { question: "¿Qué domingos abren las tiendas en diciembre de 2026 en Cataluña?", answer: "En Barcelona y en la mayoría de municipios, los domingos 6, 13, 20 y 27 de diciembre, y también el martes 8 de diciembre. Algunos municipios, como Terrassa, Manresa, Olot o Badalona, cambian alguno." },
+      ...SUNDAYS_2026_FAQ.es,
       { question: "¿Abren las tiendas el 8 de diciembre de 2026?", answer: `En Barcelona y en la mayoría de municipios, sí: el martes 8 de diciembre es día de apertura. No lo es en ${NO_8_DEC.length} municipios que lo han cambiado por otro día, entre ellos ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: la lista completa está en la tabla de arriba.` },
       { question: "¿Abren las tiendas el domingo 6 de diciembre?", answer: `Sí, en Barcelona y en todos los municipios salvo en ${townList(NO_6_DEC, "es")}, que lo han cambiado por otro día. El 6 de diciembre es uno de los ocho días generales de apertura de 2026.` },
       { question: "¿Abren los supermercados el 26 de diciembre en Cataluña?", answer: "Los que siguen el horario general, no: el sábado 26 de diciembre, San Esteban, es día de cierre obligatorio en Cataluña, igual que el 25 (Ley 18/2017, artículo 36.2.d). Pueden abrir los de hasta 300 m² de superficie de venta dedicados sobre todo a la alimentación, las tiendas de pymes de hasta 300 m², las de conveniencia, las panaderías y las gasolineras, entre otros. El 26 es festivo en Cataluña y en Baleares, no en el resto de España." },
@@ -689,6 +736,7 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "Are shops open on Sunday 29 November, election day?", answer: `Yes. Sunday 29 November is a shop opening day in Barcelona and every town except ${joinList(NO_29_NOV, "en")}, and the election does not make it a closing day. Shopping centres may open too. Anyone working that day is entitled to up to four paid hours off to vote.` },
       { question: "Are shops open on Sundays in Barcelona in December 2026?", answer: "Yes, on Sundays 6, 13, 20 and 27 December, and on Tuesday 8 December, in Barcelona and most towns. A few towns, such as Terrassa, Manresa, Olot or Badalona, change one of them." },
+      ...SUNDAYS_2026_FAQ.en,
       { question: "Are shops open on 8 December 2026?", answer: `In Barcelona and most towns, yes: Tuesday 8 December is an opening day. It is not in ${NO_8_DEC.length} towns that swapped it for another day, including ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: the full list is in the table above.` },
       { question: "Are shops open on Sunday 6 December?", answer: `Yes, in Barcelona and every town except ${joinList(NO_6_DEC, "en")}, which swapped it for another day. 6 December is one of the eight general opening days of 2026.` },
       { question: "Are supermarkets open on 26 December in Catalonia?", answer: "Not those on the general timetable: Saturday 26 December, St Stephen's Day, is a compulsory closing day in Catalonia, like the 25th (Llei 18/2017, article 36.2.d). Shops of up to 300 m² of sales floor selling mainly food, small-business shops of up to 300 m², convenience stores, bakeries and petrol stations, among others, may open. The 26th is a public holiday in Catalonia and the Balearic Islands, not in the rest of Spain." },

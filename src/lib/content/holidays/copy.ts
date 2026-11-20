@@ -170,7 +170,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesTitle: "Els millors ponts del 2027",
     bridgesIntro: [
       "Tot el que ve a continuació pressuposa una setmana laboral habitual de dilluns a divendres. No és una regla universal: torns, convenis i calendaris d'empresa poden canviar-ho del tot.",
-      "Si el que busques és el pont d'enguany, el 2026 a Catalunya només és festiu el dimarts 8 de desembre: ho expliquem a [pont de desembre 2026](/ca/guies/pont-desembre-catalunya/).",
+      "Si el que busques és el pont d'enguany, el 2026 a Catalunya només és festiu el dimarts 8 de desembre: ho expliquem a [pont de desembre 2026 a Catalunya](/ca/guies/pont-desembre-catalunya/).",
       "Tots els ponts del 2027 en una sola taula, amb els dies de vacances que cal demanar i els ponts de les festes locals de les grans ciutats, són a [ponts 2027 a Catalunya](/ca/guies/ponts-2027-catalunya/).",
     ],
 
@@ -311,7 +311,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesTitle: "Los mejores puentes de 2027",
     bridgesIntro: [
       "Todo lo que sigue presupone una semana laboral habitual de lunes a viernes. No es una regla universal: turnos, convenios y calendarios de empresa pueden cambiarlo por completo.",
-      "Si lo que buscas es el puente de este año, en 2026 en Cataluña solo es festivo el martes 8 de diciembre: lo explicamos en [puente de diciembre 2026](/es/guias/puente-diciembre-cataluna/).",
+      "Si lo que buscas es el puente de este año, en 2026 en Cataluña solo es festivo el martes 8 de diciembre: lo explicamos en [puente de diciembre 2026 en Cataluña](/es/guias/puente-diciembre-cataluna/).",
       "Todos los puentes de 2027 en una sola tabla, con los días de vacaciones que hay que pedir y los puentes de las fiestas locales de las grandes ciudades, están en [puentes 2027 en Cataluña](/es/guias/puentes-2027-cataluna/).",
     ],
 

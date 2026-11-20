@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { BOE_2026, REGION_WIDE_LOCAL, boeRegionsOn2026 } from "@/lib/programmatic/holidays/boe-2026";
 import { BOE_2027, REGIONS, REGION_NAME, boeRegionsOn, type Region } from "@/lib/programmatic/holidays/boe-2027";
 import { joinList } from "@/lib/programmatic/holidays/names";
+import { datePath } from "@/lib/programmatic/holidays/paths";
 import { COMMUNITIES_AZ, names } from "@/lib/programmatic/spain-2027/communities";
 import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
@@ -14,7 +15,7 @@ import { LOCAL_MONDAY_7, runWords, type Run } from "./december-bridge";
 import { SHOPS } from "./shops";
 import { bridgeShopsParagraph } from "./shops-spain-december";
 import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
-import { b2Related, b2link, callout, faq, h2, keyFacts, lead, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { b2Related, b2href, b2link, callout, faq, h2, keyFacts, lead, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
  * "Puente de diciembre 2026" for the whole of Spain: where Monday 7 December
@@ -56,7 +57,9 @@ import { b2Related, b2link, callout, faq, h2, keyFacts, lead, paras, table, veri
  * picture), with its alt and caption, since media rows are keyed by file.
  */
 
-export const SPAIN_BRIDGE_VERIFIED = "2026-11-06";
+// 20 Nov 2026: BOE-A-2025-21667 re-read (txt.php, the 7 and 8 December rows and
+// the legend; doc.php lists no later reference), plus the regional texts below.
+export const SPAIN_BRIDGE_VERIFIED = "2026-11-20";
 /** The last day the page answers a live question (the weekend after Reyes). */
 export const SPAIN_BRIDGE_EXPIRES = "2027-01-09";
 
@@ -382,6 +385,97 @@ export function nextDecemberRun(): Run {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Who moves Sunday 6 December to Monday 7: each community's own text          */
+/* -------------------------------------------------------------------------- */
+
+export interface Monday7Rule {
+  /** Short name of the instrument, in Spanish as published. */
+  name: string;
+  /** Bulletin, number and date. */
+  bulletin: string;
+  url: string;
+  /** The instrument does not name 7 December; the day is in the BOE list (Asturias). */
+  silent?: boolean;
+}
+
+export const MONDAY_7_RULES_READ_ON = "2026-11-20";
+
+/**
+ * 20 Nov 2026: "que comunidades pasan el 6 de diciembre al lunes" (52
+ * impressions at 8.2 on this page) and the other Monday-7 questions. Each of
+ * the ten places in the BOE's 7 December row, with the 2026 calendar it
+ * published in its own bulletin. Every text fetched with curl and read with
+ * pdftotext on 20 Nov 2026; the line about 7 December, as printed:
+ *
+ *  - AN BOJA 93: "• 7 de diciembre (lunes), Día de la Constitución Española."
+ *  - AR BOA 135: "- 7 de diciembre, lunes, en sustitución del día 6, domingo, Día de la Constitución"
+ *  - AS BOPA 57: no December line. The decree only swaps San José / Santiago
+ *    for 8 September; Monday 7 is in the BOE list Asturias sent the Ministry.
+ *  - CB BOC 147: "(domingo) se traslada al lunes 7 de diciembre." and the
+ *    table row "7 de diciembre  Lunes  Día de la Constitución Española"
+ *  - CL BOCYL 103: "– 6 de diciembre, Día de la Constitución Española. Se traslada al lunes."
+ *  - EX DOE 94, art. 2: "… se disfrutarán los lunes, 2 de noviembre y 7 de diciembre de 2026, por coincidir dichas fiestas en domingo."
+ *  - MD BOCM 229: "— 7 de diciembre (lunes), traslado del Día de la Constitución Española."
+ *  - MC BORM 163: "Día de la Constitución (Domingo 6 de diciembre que pasa lunes 7) 7 diciembre"
+ *  - ML BOME 6315: "12.- 7 de diciembre (Lunes siguiente al Día de la Constitución)"
+ *  - RI: not read. larioja.org answers 403 (Cloudflare challenge) to the
+ *    server; the row cites the BOE list only.
+ *
+ * Of the other nine, the same day's reading found the swap in the text itself
+ * for Canarias (Decreto 61/2025: "sustituir el descanso laboral
+ * correspondiente al día 7 de diciembre (por ser lunes), por el día 30 de
+ * mayo"), Castilla-La Mancha (Decreto 44/2025: Corpus Christi "en sustitución
+ * del descanso laboral correspondiente al día 6 de diciembre") and Galicia
+ * (Decreto 46/2025: "el día 6 de diciembre … se sustituye por el día 24 de
+ * junio"); the page prints only what the BOE list says for them.
+ */
+export const MONDAY_7_RULES: Partial<Record<Region, Monday7Rule>> = {
+  AN: { name: "Decreto 101/2025, de 14 de mayo", bulletin: "BOJA núm. 93, 19.5.2025", url: "https://cdn.juntadeandalucia.es/boja/2025/93/BOJA25-093-00002-6889-01_00320489.pdf" },
+  AR: { name: "Decreto 70/2025, de 9 de julio", bulletin: "BOA núm. 135, 16.7.2025", url: "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1403827540808" },
+  AS: { name: "Decreto 35/2025, de 7 de marzo", bulletin: "BOPA núm. 57, 24.3.2025", url: "https://www.asturias.es/bopa/2025/03/24/2025-02228.pdf", silent: true },
+  CB: { name: "Orden IND/37/2025, de 24 de julio", bulletin: "BOC núm. 147, 1.8.2025", url: "https://boc.cantabria.es/boces/verAnuncioAction.do?idAnuBlob=423185" },
+  CL: { name: "Decreto 9/2025, de 29 de mayo", bulletin: "BOCYL núm. 103, 2.6.2025", url: "https://bocyl.jcyl.es/boletines/2025/06/02/pdf/BOCYL-D-02062025-1.pdf" },
+  EX: { name: "Decreto 40/2025, de 13 de mayo", bulletin: "DOE núm. 94, 19.5.2025", url: "https://doe.juntaex.es/pdfs/doe/2025/940o/25040070.pdf" },
+  MD: { name: "Decreto 75/2025, de 24 de septiembre", bulletin: "BOCM núm. 229, 25.9.2025", url: "https://www.bocm.es/boletin/CM_Orden_BOCM/2025/09/25/BOCM-20250925-16.PDF" },
+  MC: { name: "Resolución de la Dirección General de Trabajo (calendario de fiestas laborales de 2026)", bulletin: "BORM núm. 163, 17.7.2025", url: "https://www.borm.es/services/anuncio/ano/2025/numero/3546/pdf?id=837607" },
+  ML: { name: "Acuerdo del Consejo de Gobierno de 19 de septiembre de 2025", bulletin: "BOME núm. 6315, 3.10.2025", url: "https://bomemelilla.es/bome/descargar/BOME-A-2025-1033.pdf" },
+};
+
+/** One row per place with Monday 7 off: the community and the text that sets it (or the BOE list). */
+export function monday7RuleRows(locale: Locale): string[][] {
+  const boe = { es: "Relación del BOE (BOE-A-2025-21667)", ca: "Llista del BOE (BOE-A-2025-21667)", en: "BOE list (BOE-A-2025-21667)" }[locale];
+  const silent = {
+    es: " (no cambia el lunes 7, que figura en la relación del BOE)",
+    ca: " (no canvia el dilluns 7, que figura a la llista del BOE)",
+    en: " (leaves Monday 7 as it is; the day is in the BOE list)",
+  }[locale];
+  return MONDAY_7.map((region) => {
+    const rule = MONDAY_7_RULES[region];
+    if (!rule) return [shortName(region, locale), `[${boe}](${BOE_2026.url})`, "BOE núm. 259, 28.10.2025"];
+    return [shortName(region, locale), `[${rule.name}](${rule.url})${rule.silent ? silent : ""}`, rule.bulletin];
+  });
+}
+
+function monday7RuleTable(locale: Locale): Block {
+  const caption = {
+    es: "Dónde pasa al lunes 7 el Día de la Constitución en 2026, y la norma que lo fija",
+    ca: "On passa al dilluns 7 el Dia de la Constitució el 2026, i la norma que ho fixa",
+    en: "Where Constitution Day moves to Monday 7 in 2026, and the text that sets it",
+  }[locale];
+  const headers = {
+    es: ["Comunidad", "Calendario de fiestas de 2026", "Boletín"],
+    ca: ["Comunitat", "Calendari de festes del 2026", "Butlletí"],
+    en: ["Region", "2026 holiday calendar", "Bulletin"],
+  }[locale];
+  const note = {
+    es: `Leídos en cada boletín oficial el 20 de noviembre de 2026. La Rioja: su boletín no se ha podido consultar desde nuestro servidor, y la fila remite a la relación del BOE, que recoge los calendarios que cada comunidad envía al Ministerio de Trabajo.`,
+    ca: `Llegits a cada butlletí oficial el 20 de novembre de 2026. La Rioja: el seu butlletí no s'ha pogut consultar des del nostre servidor, i la fila remet a la llista del BOE, que recull els calendaris que cada comunitat envia al Ministeri de Treball.`,
+    en: `Read in each official bulletin on 20 November 2026. La Rioja: its bulletin could not be read from our server, so the row points to the BOE list, which gathers the calendars each region sends to the Ministry of Labour.`,
+  }[locale];
+  return table(caption, headers, monday7RuleRows(locale), note);
+}
+
+/* -------------------------------------------------------------------------- */
 /* Sources                                                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -393,6 +487,10 @@ const SOURCES: B2Source[] = [
   { name: "Acuerdo del Consejo de Gobierno de 19 de septiembre de 2025, relativo a calendario laboral para el año 2026 (BOME 6315, 3.10.2025)", url: "https://bomemelilla.es/bome/descargar/BOME-A-2025-1033.pdf", publisher: "Boletín Oficial de la Ciudad de Melilla" },
   { name: "Ordre EMT/66/2025, de 30 d'abril, calendari oficial de festes laborals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1013204&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Ordre EMT/208/2025, d'11 de desembre, calendari de festes locals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1032232&type=01&language=ca_ES", publisher: "DOGC" },
+  // 20 Nov 2026: each community's own 2026 calendar where Monday 7 is a holiday (Melilla's is above).
+  ...(Object.entries(MONDAY_7_RULES) as [Region, Monday7Rule][])
+    .filter(([region]) => region !== "ML")
+    .map(([region, rule]) => ({ name: `${rule.name}, calendario de fiestas laborales de 2026 (${REGION_NAME[region].es})`, url: rule.url, publisher: rule.bulletin.split(" ")[0]! })),
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -485,6 +583,144 @@ function schoolChristmasLine(locale: Locale): string {
   }[locale];
 }
 
+/**
+ * 20 Nov 2026: who answers what. This page owns the Spain-wide questions
+ * ("festivos puente diciembre", "el lunes 7 de diciembre es festivo", "qué
+ * comunidades pasan el 6 de diciembre al lunes"); the Catalan bridge page and
+ * the two date pages own Catalonia. Readers from Catalonia get the date pages,
+ * which list the towns with the local holiday and the shops that may open.
+ */
+function cataloniaDateLine(locale: Locale): string {
+  const d7 = datePath(locale, SPAIN_DAYS.monday);
+  const d8 = datePath(locale, SPAIN_DAYS.immaculada);
+  return {
+    es: `Los municipios donde el 7 es fiesta local están en [la lista de municipios de Cataluña con fiesta el 7 de diciembre](${d7}), y qué tiendas pueden abrir allí el martes 8, en [qué abre el 8 de diciembre en Cataluña](${d8}).`,
+    ca: `Els municipis on el 7 és festa local són a [la llista de municipis de Catalunya amb festa el 7 de desembre](${d7}), i quines botigues hi poden obrir el dimarts 8, a [què obre el 8 de desembre a Catalunya](${d8}).`,
+    en: `The towns where the 7th is a local holiday are in [the list of Catalan towns with a holiday on 7 December](${d7}), and which shops may open there on Tuesday the 8th in [what opens on 8 December in Catalonia](${d8}).`,
+  }[locale];
+}
+
+/**
+ * 20 Nov 2026: the searched questions the FAQ did not ask in their own words
+ * (GSC 7-20 Nov, this page): "7 y 8 de diciembre es festivo" 104 impressions
+ * at 9.2, "festivos puente diciembre" 530 at 10.6, "que comunidades pasan el 6
+ * de diciembre al lunes" 52 at 8.2. Every answer is computed from the BOE rows.
+ */
+function searchedFaq(locale: Locale): { question: string; answer: string }[] {
+  const bridge = runIn("MD", SPAIN_DAYS.immaculada);
+  const n7 = countWords(MONDAY_7, locale);
+  const navarra = REGION_WIDE_LOCAL[0]!;
+  if (locale === "es") {
+    return [
+      {
+        question: "¿Son festivos el 7 y el 8 de diciembre de 2026?",
+        answer: `El martes 8, sí, en toda España. El lunes 7, solo en ${proseList(MONDAY_7, locale)}: allí son festivos los dos días y el puente va ${runWords(bridge, locale)}. En ${proseList(MONDAY_7_WORKING, locale)}, el 7 es laborable.`,
+      },
+      {
+        question: "¿Qué comunidades pasan el 6 de diciembre al lunes?",
+        answer: `${cap(proseList(communities(MONDAY_7), locale))}, además de ${joinList(cities(MONDAY_7).map((r) => shortName(r, locale)), locale)}. Lo fija el calendario de fiestas laborales de 2026 de cada una, y lo recoge la relación del BOE del 28 de octubre de 2025. Las demás no lo pasan al lunes: lo cambiaron por una fiesta propia en otra fecha.`,
+      },
+      {
+        question: "¿Qué días son festivos en el puente de diciembre de 2026?",
+        answer: `El martes 8, la Inmaculada, en toda España, y el lunes 7 en ${n7}, que pasan a él el Día de la Constitución (domingo 6). En Navarra también es festivo el ${weekdayDate(navarra.date, locale)}, San Francisco Javier.`,
+      },
+    ];
+  }
+  if (locale === "ca") {
+    return [
+      {
+        question: "El 7 i el 8 de desembre de 2026 són festius?",
+        answer: `El dimarts 8, sí, a tot Espanya. El dilluns 7, només a ${proseList(MONDAY_7, locale)}: allà són festius els dos dies i el pont va ${runWords(bridge, locale)}. A ${proseList(MONDAY_7_WORKING, locale)}, el 7 és feiner.`,
+      },
+      {
+        question: "Quines comunitats passen el 6 de desembre al dilluns?",
+        answer: `${cap(proseList(communities(MONDAY_7), locale))}, a més de ${joinList(cities(MONDAY_7).map((r) => shortName(r, locale)), locale)}. Ho fixa el calendari de festes laborals del 2026 de cadascuna, i ho recull la llista del BOE del 28 d'octubre de 2025. Les altres no el passen al dilluns: el van canviar per una festa pròpia en una altra data.`,
+      },
+      {
+        question: "Quins dies són festius al pont de desembre del 2026?",
+        answer: `El dimarts 8, la Immaculada, a tot Espanya, i el dilluns 7 en ${n7}, que hi passen el Dia de la Constitució (diumenge 6). A Navarra també és festiu el ${weekdayDate(navarra.date, locale)}, Sant Francesc Xavier.`,
+      },
+    ];
+  }
+  return [
+    {
+      question: "Are 7 and 8 December 2026 public holidays in Spain?",
+      answer: `Tuesday the 8th is, everywhere in Spain. Monday the 7th only in ${proseList(MONDAY_7, locale)}: there both days are holidays and the long weekend runs ${runWords(bridge, locale)}. In ${proseList(MONDAY_7_WORKING, locale)}, the 7th is a working day.`,
+    },
+    {
+      question: "Which regions move 6 December to the Monday?",
+      answer: `${cap(proseList(communities(MONDAY_7), locale))}, plus ${joinList(cities(MONDAY_7).map((r) => shortName(r, locale)), locale)}. Each one's 2026 calendar of public holidays sets it, and the BOE list of 28 October 2025 brings them together. The others do not move it: they swapped it for a holiday of their own on another date.`,
+    },
+    {
+      question: "Which days are holidays over the December 2026 bridge?",
+      answer: `Tuesday 8, the Immaculate Conception, everywhere in Spain, and Monday 7 in ${n7}, which move Sunday's Constitution Day to it. In Navarre, ${weekdayDate(navarra.date, locale)} (St Francis Xavier) is a holiday too.`,
+    },
+  ];
+}
+
+/**
+ * "¿Y este diciembre?" on the Spain-wide 2027 hub and community pages (20 Nov
+ * 2026; component DecemberBridgeLine): readers of the 2027 calendar in
+ * November ask about this December's bridge, and the holiday hubs barely
+ * linked this page. One line from the 2026 BOE rows: Monday 7 is or is not a
+ * holiday in the community, Tuesday 8 is everywhere. Catalonia links its own
+ * bridge page. Null after 8 December 2026.
+ */
+export function decemberBridgeLine(
+  locale: Locale,
+  today: string,
+  region?: Region,
+  inPlace?: string,
+): { lead: string; text: string; label: string; href: string } | null {
+  if (today > SPAIN_DAYS.immaculada) return null;
+  const L = (es: string, ca: string, en: string) => (locale === "es" ? es : locale === "ca" ? ca : en);
+  const lead = L("¿Y este diciembre?", "I aquest desembre?", "And this December?");
+  const spain = {
+    label: L("Los festivos del puente de diciembre 2026 en cada comunidad", "Els festius del pont de desembre 2026 a cada comunitat", "The December 2026 bridge holidays in every region"),
+    href: b2href("decemberBridgeSpain", locale),
+  };
+  if (!region || !inPlace) {
+    const n7 = countWords(MONDAY_7, locale);
+    return {
+      lead,
+      text: L(
+        `El lunes 7 de diciembre de 2026 es festivo en ${n7}, y el martes 8 en toda España.`,
+        `El dilluns 7 de desembre de 2026 és festiu en ${n7}, i el dimarts 8 a tot Espanya.`,
+        `Monday 7 December 2026 is a public holiday in ${n7}, and Tuesday the 8th everywhere in Spain.`,
+      ),
+      ...spain,
+    };
+  }
+  const where = cap(inPlace);
+  const navarra = REGION_WIDE_LOCAL.find((d) => d.region === region && d.date < SPAIN_DAYS.monday);
+  const text = isHolidayIn(region, SPAIN_DAYS.monday)
+    ? L(
+        `${where}, el lunes 7 de diciembre de 2026 es festivo (el domingo 6, Día de la Constitución, pasa al lunes) y el martes 8 también: el puente va ${runWords(runIn(region, SPAIN_DAYS.immaculada), "es")} sin pedir días.`,
+        `${where}, el dilluns 7 de desembre de 2026 és festiu (el diumenge 6, Dia de la Constitució, passa al dilluns) i el dimarts 8 també: el pont va ${runWords(runIn(region, SPAIN_DAYS.immaculada), "ca")} sense demanar dies.`,
+        `${where}, Monday 7 December 2026 is a public holiday (Sunday's Constitution Day moves to it) and so is Tuesday the 8th: the long weekend runs ${runWords(runIn(region, SPAIN_DAYS.immaculada), "en")} with no leave.`,
+      )
+    : L(
+        navarra
+          ? `${where}, el lunes 7 de diciembre de 2026 es laborable y el martes 8 es festivo; antes, el ${weekdayDate(navarra.date, "es")}, San Francisco Javier, también lo es.`
+          : `${where}, el lunes 7 de diciembre de 2026 es laborable y el único festivo del puente es el martes 8.`,
+        navarra
+          ? `${where}, el dilluns 7 de desembre de 2026 és feiner i el dimarts 8 és festiu; abans, el ${weekdayDate(navarra.date, "ca")}, Sant Francesc Xavier, també ho és.`
+          : `${where}, el dilluns 7 de desembre de 2026 és feiner i l'únic festiu del pont és el dimarts 8.`,
+        navarra
+          ? `${where}, Monday 7 December 2026 is a working day and Tuesday the 8th a public holiday; before that, ${weekdayDate(navarra.date, "en")}, St Francis Xavier, is one too.`
+          : `${where}, Monday 7 December 2026 is a working day and the bridge's only holiday is Tuesday the 8th.`,
+      );
+  if (region === "CT") {
+    return {
+      lead,
+      text,
+      label: L("El puente de diciembre 2026 en Cataluña", "El pont de desembre 2026 a Catalunya", "The December 2026 long weekend in Catalonia"),
+      href: b2href("decemberBridge", locale),
+    };
+  }
+  return { lead, text, ...spain };
+}
+
 /** The 2027 pages of every community, for the Spanish edition (code routes, Spanish only). */
 function communityLinks2027(): string {
   return COMMUNITIES_AZ.map((c) => `[${c.short}](${communityPath(c)})`).join(" · ");
@@ -522,7 +758,7 @@ function bodyEs(): Block[] {
     callout(
       "official",
       "De dónde salen estas fechas",
-      "De la relación de fiestas laborales que el Ministerio de Trabajo publica cada año en el BOE con los calendarios que le envían las comunidades: la de 2026 (BOE del 28 de octubre de 2025) para diciembre y la de 2027 (BOE del 13 de octubre de 2026) para enero. Las hemos vuelto a leer el 6 de noviembre de 2026: ninguna tiene correcciones, y no hemos encontrado ningún decreto autonómico posterior que cambie estos días.",
+      "De la relación de fiestas laborales que el Ministerio de Trabajo publica cada año en el BOE con los calendarios que le envían las comunidades: la de 2026 (BOE del 28 de octubre de 2025) para diciembre y la de 2027 (BOE del 13 de octubre de 2026) para enero. Las hemos vuelto a leer el 20 de noviembre de 2026: ninguna tiene correcciones, y no hemos encontrado ningún decreto autonómico posterior que cambie estos días. Ese mismo día leímos en su boletín el calendario de nueve de los diez lugares que dan fiesta el lunes 7 (el de La Rioja no se pudo consultar): están en la tabla, más abajo.",
     ),
     ...h2(
       "¿Es festivo el 7 de diciembre? Comunidad por comunidad",
@@ -530,10 +766,11 @@ function bodyEs(): Block[] {
     ),
     holidayTable(L),
     ...h2(
-      "El 6 de diciembre cae en domingo: ¿se traslada al lunes?",
-      `Solo en ${n7}. El Día de la Constitución es fiesta nacional, pero en 2026 cae en domingo, y la norma estatal (el artículo 45 del Real Decreto 2001/1983) deja que cada comunidad elija: dar fiesta el lunes siguiente o cambiar ese descanso por una fiesta propia en otra fecha del año.`,
-      `${cap(proseList(MONDAY_7, L))} eligieron el lunes 7. ${cap(proseList(MONDAY_7_WORKING, L))} lo cambiaron por otro día de su calendario, así que allí el domingo 6 no se mueve y el lunes 7 se trabaja.`,
+      "El 6 de diciembre cae en domingo: ¿qué comunidades lo pasan al lunes?",
+      `Solo ${n7}. El Día de la Constitución es fiesta nacional, pero en 2026 cae en domingo, y la norma estatal (el artículo 45 del Real Decreto 2001/1983) deja que cada comunidad elija: dar fiesta el lunes siguiente o cambiar ese descanso por una fiesta propia en otra fecha del año.`,
+      `${cap(proseList(MONDAY_7, L))} eligieron el lunes 7. ${cap(proseList(MONDAY_7_WORKING, L))} lo cambiaron por otro día de su calendario, así que allí el domingo 6 no se mueve y el lunes 7 se trabaja. Esta es la norma de cada una que da fiesta el lunes 7:`,
     ),
+    monday7RuleTable(L),
     ...h2(
       "Puente de diciembre 2026: cuántos días libres salen y cuántos hay que pedir",
       `Donde el lunes 7 es festivo, el puente sale solo: ${bridge.days} días, ${runWords(bridge, L)}, sin gastar vacaciones. Donde es laborable, cuesta ${withMonday.leave.length} día (el lunes 7) para tener los mismos ${withMonday.run.days}. Y quien quiera la semana entera, ${runWords(week.run, L)}, necesita ${week.leave.length} días de vacaciones donde el 7 es festivo y ${weekOthers.leave.length} donde no lo es.`,
@@ -559,6 +796,7 @@ function bodyEs(): Block[] {
     ...h2(
       "Si vives en Cataluña: el 7 se trabaja",
       `En Cataluña el lunes 7 es laborable, salvo en los ${local} municipios que lo tienen como fiesta local, y el único festivo del puente es el martes 8. A cambio, el sábado 26, Sant Esteve, sí es festivo. Lo explicamos con detalle, con colegios y tiendas, en ${b2link("decemberBridge", L, "el puente de diciembre en Cataluña")}.`,
+      cataloniaDateLine(L),
       `Y si ya estás mirando el año que viene, los festivos de 2027 de cada comunidad, con sus puentes, están en [el calendario laboral 2027 por comunidades](${spainHubPath()}).`,
     ),
     ...trafficBlocks("spain", "es"),
@@ -582,6 +820,7 @@ function bodyEs(): Block[] {
         question: "¿El 6 de diciembre de 2026 se traslada al lunes?",
         answer: `Solo en ${n7}. En el resto, el domingo 6 no se traslada: cada comunidad podía pasarlo al lunes o cambiarlo por una fiesta propia, y ${proseList(MONDAY_7_WORKING, L)} eligieron lo segundo.`,
       },
+      ...searchedFaq(L),
       { question: "¿Es festivo el 8 de diciembre de 2026?", answer: "Sí, en toda España. El martes 8, Inmaculada Concepción, es una fiesta nacional que ninguna comunidad puede cambiar." },
       {
         question: "¿Cuántos días hay que pedir para el puente de diciembre?",
@@ -636,9 +875,10 @@ function bodyCa(): Block[] {
     ),
     holidayTable(L),
     ...h2(
-      "Per què el 7 és festiu en unes comunitats i no en d'altres?",
-      `El Dia de la Constitució, el 6 de desembre, cau en diumenge el 2026, i la norma estatal (l'article 45 del Reial decret 2001/1983) deixa que cada comunitat triï: fer festa el dilluns següent o canviar aquest descans per una festa pròpia en una altra data. ${cap(proseList(MONDAY_7, L))} van triar el dilluns 7; ${proseList(MONDAY_7_WORKING, L)}, no.`,
+      "El 6 de desembre cau en diumenge: quines comunitats el passen al dilluns?",
+      `El Dia de la Constitució, el 6 de desembre, cau en diumenge el 2026, i la norma estatal (l'article 45 del Reial decret 2001/1983) deixa que cada comunitat triï: fer festa el dilluns següent o canviar aquest descans per una festa pròpia en una altra data. ${cap(proseList(MONDAY_7, L))} van triar el dilluns 7; ${proseList(MONDAY_7_WORKING, L)}, no. Aquesta és la norma de cadascuna que fa festa el dilluns 7:`,
     ),
+    monday7RuleTable(L),
     ...h2(
       "Quants dies de festa surten i quants cal demanar",
       "Per a qui treballa de dilluns a divendres. És un càlcul nostre, no un dret: les vacances s'han de demanar i pactar amb l'empresa.",
@@ -654,11 +894,13 @@ function bodyCa(): Block[] {
     ...h2(
       "I a Catalunya?",
       `Aquí el pont només surt demanant el dilluns 7: l'únic festiu és el dimarts 8, i el dissabte 26, Sant Esteve, també és festiu (a l'Aran, no). Tot el detall, amb escoles i botigues, és a ${b2link("decemberBridge", L, "el pont de desembre a Catalunya")}.`,
+      cataloniaDateLine(L),
       `El 2027 el pont és per a tothom: el 6 de desembre cau en ${wd(NEXT_DECEMBER.constitution, L)} i el 8 en ${wd(NEXT_DECEMBER.immaculada, L)}, i demanant el 7 surten ${next.days} dies seguits. Tots els ponts de l'any són a ${b2link("bridges2027", L, "ponts 2027 a Catalunya")}.`,
       plannerLine(L),
     ),
     faq([
       { question: "El 7 de desembre de 2026 és festiu?", answer: `Depèn de la comunitat: ho és a ${proseList(MONDAY_7, L)}. A Catalunya és feiner, llevat de ${local} municipis amb festa local.` },
+      ...searchedFaq(L),
       { question: "El 8 de desembre de 2026 és festiu a tot Espanya?", answer: "Sí. El dimarts 8, la Immaculada, és una festa nacional que cap comunitat no pot canviar." },
       { question: "El 26 de desembre de 2026 és festiu?", answer: `Només a ${proseList(stStephen, L)} (a l'Aran, no). Cau en dissabte i no es passa al dilluns.` },
       { question: "El 6 de gener de 2027 és festiu?", answer: "Sí, a tot Espanya, i cau en dimecres." },
@@ -697,7 +939,7 @@ function bodyEn(): Block[] {
     callout(
       "official",
       "Where these dates come from",
-      "Spain's Ministry of Labour publishes each year's public holidays, region by region, in the BOE (the official state gazette): the 2026 list on 28 October 2025 and the 2027 list on 13 October 2026. We re-read both on 6 November 2026; neither has been corrected, and we found no later regional decree changing these days.",
+      "Spain's Ministry of Labour publishes each year's public holidays, region by region, in the BOE (the official state gazette): the 2026 list on 28 October 2025 and the 2027 list on 13 October 2026. We re-read both on 20 November 2026; neither has been corrected, and we found no later regional decree changing these days. The same day we read, in its own bulletin, the calendar of nine of the ten places that give Monday the 7th off (La Rioja's could not be reached): they are in the table below.",
     ),
     ...h2(
       "Is 7 December a holiday in Spain? Region by region",
@@ -705,9 +947,10 @@ function bodyEn(): Block[] {
     ),
     holidayTable(L),
     ...h2(
-      "Why is the 7th a holiday in some regions and not others?",
-      `Constitution Day, 6 December, is a national holiday, but in 2026 it falls on a Sunday. Spanish law (article 45 of Royal Decree 2001/1983) lets each region choose: give the following Monday off, or swap that day for a holiday of its own on another date. ${cap(n7)} chose Monday the 7th; the rest swapped it, so there the Sunday is not moved and the 7th is a normal working day.`,
+      "6 December falls on a Sunday: which regions move it to Monday?",
+      `Constitution Day, 6 December, is a national holiday, but in 2026 it falls on a Sunday. Spanish law (article 45 of Royal Decree 2001/1983) lets each region choose: give the following Monday off, or swap that day for a holiday of its own on another date. ${cap(n7)} chose Monday the 7th; the rest swapped it, so there the Sunday is not moved and the 7th is a normal working day. This is the text in each one that gives Monday the 7th off:`,
     ),
+    monday7RuleTable(L),
     ...h2(
       "How many days off, for how much leave",
       `Where Monday the 7th is a holiday, the long weekend comes free: ${bridge.days} days, ${runWords(bridge, L)}. Elsewhere it takes ${withMonday.leave.length} day of leave (Monday the 7th) to get the same ${withMonday.run.days}. These are all the December and January combinations for a Monday-to-Friday job; leave still has to be agreed with your employer.`,
@@ -727,11 +970,13 @@ function bodyEn(): Block[] {
     ...h2(
       "Living in Catalonia?",
       `Monday the 7th is a working day in Catalonia, except in ${local} towns that have it as a local holiday, and the only bridge holiday is Tuesday the 8th; 26 December (Sant Esteve) is a holiday there. Schools and shops are covered in ${b2link("decemberBridge", L, "December 2026 public holidays in Catalonia")}.`,
+      cataloniaDateLine(L),
       `Next year the bridge is for everyone: in 2027, 6 December is a ${wd(NEXT_DECEMBER.constitution, L)} and the 8th a ${wd(NEXT_DECEMBER.immaculada, L)}, both national holidays, so taking the 7th off gives ${next.days} days in a row. Catalonia's 2027 long weekends are in ${b2link("bridges2027", L, "long weekends 2027 in Catalonia")}.`,
       plannerLine(L),
     ),
     faq([
       { question: "Is 7 December 2026 a holiday in Spain?", answer: `Only in some regions: ${proseList(MONDAY_7, L)}, which moved Sunday's Constitution Day to the Monday. In ${proseList(MONDAY_7_WORKING, L)} it is a working day.` },
+      ...searchedFaq(L),
       { question: "Is 8 December 2026 a holiday in Spain?", answer: "Yes, everywhere. Tuesday 8 December, the Immaculate Conception, is a national holiday no region can swap." },
       { question: "Is 26 December a holiday in Spain?", answer: `Only in ${proseList(stStephen, L)} (not in Aran). In 2026 it is a Saturday and is not moved to the Monday.` },
       { question: "Are Christmas Eve and New Year's Eve holidays in Spain?", answer: "No. Neither is a public holiday in any region." },

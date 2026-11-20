@@ -3,6 +3,7 @@ import { plansFor } from "@/lib/content/holidays/bridges";
 import { HOLIDAYS_BY_YEAR, addDays, daysBetween, holidayOn, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { datePath } from "@/lib/programmatic/holidays/paths";
 
 import { dayDate, range, span } from "./festive";
 import { FREE_DAYS_TOWNS, monday7 } from "./school-free-days-towns";
@@ -291,6 +292,15 @@ function sibling(key: "school" | "local", locale: Locale, label: string): string
 }
 
 /**
+ * 20 Nov 2026: the "is 7 December a holiday?" date page lists every town and
+ * nucleus with the local holiday (Ordre EMT/208/2025 as amended), so the
+ * bridge's 7 December section links it where it names the 43.
+ */
+function dec7Link(locale: Locale, label: string): string {
+  return `[${label}](${datePath(locale, BRIDGE_DAYS.monday)})`;
+}
+
+/**
  * The link to the school free days page (5 Nov 2026, group
  * `lliure-disposicio-links`), with its count, in the 7 December paragraph.
  * Body only: the title and description stay as they are.
@@ -508,7 +518,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "El 7 de desembre és festiu a Catalunya?",
         `No a tot Catalunya: és un dilluns feiner. Sí que és **festa local a ${n} municipis**, com ${examples}, segons l'Ordre EMT/208/2025 (DOGC del 17 de desembre de 2025). Alguns nuclis de població, com Escaladei i Escart, també en fan festa. Barcelona no hi és: les seves festes locals del 2026 són el 25 de maig i el 24 de setembre.`,
-        `Per saber si el teu municipi en fa festa, busca'l a ${sibling("local", "ca", "les festes locals de cada municipi")}.`,
+        `Per saber si el teu municipi en fa festa, mira ${dec7Link("ca", "la llista de municipis on el 7 de desembre és festa local")} o busca'l a ${sibling("local", "ca", "les festes locals de cada municipi")}.`,
       ),
       ...h2(
         "Com fer pont al desembre del 2026: quins dies demanar",
@@ -522,7 +532,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "I a la resta d'Espanya? On el dilluns 7 sí que és festiu",
         `Segons la relació de festes laborals del 2026 que va publicar el BOE el 28 d'octubre de 2025, el dilluns 7 de desembre és festiu a ${regions}. A Catalunya no, i tampoc a les Illes Balears, les Canàries, Castella-la Manxa, Galícia, Navarra, el País Basc, la Comunitat Valenciana ni Ceuta. El dimarts 8 és festiu a tot Espanya.`,
-        `Per això, en aquelles comunitats el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia, i a Catalunya no. Si viatges o tens família en una altra comunitat, compta amb el seu calendari, no amb el català: la taula de totes les comunitats, amb Nadal i Reis, és a ${b2link("decemberBridgeSpain", "ca", "el pont de desembre a Espanya, comunitat per comunitat")}.`,
+        `Per això, en aquelles comunitats el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia, i a Catalunya no. Si viatges o tens família en una altra comunitat, compta amb el seu calendari, no amb el català: la taula de totes les comunitats, amb Nadal i Reis, és a ${b2link("decemberBridgeSpain", "ca", "els festius del pont de desembre a Espanya, comunitat per comunitat")}.`,
       ),
       ...h2(
         "Hi ha escola el 7 i el 8 de desembre?",
@@ -598,7 +608,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "¿El 7 de diciembre es festivo en Cataluña?",
         `No en toda Cataluña: es un lunes laborable. Sí es **fiesta local en ${n} municipios**, como ${examples}, según la Orden EMT/208/2025 (DOGC del 17 de diciembre de 2025). Algunos núcleos de población, como Escaladei y Escart, también tienen fiesta. Barcelona no está entre ellos: sus fiestas locales de 2026 son el 25 de mayo y el 24 de septiembre.`,
-        `Para saber si tu municipio tiene fiesta, búscalo en ${sibling("local", "es", "los festivos locales de cada municipio")}.`,
+        `Para saber si tu municipio tiene fiesta, mira ${dec7Link("es", "la lista de municipios donde el 7 de diciembre es fiesta local")} o búscalo en ${sibling("local", "es", "los festivos locales de cada municipio")}.`,
       ),
       ...h2(
         "Cómo hacer puente en diciembre de 2026: qué días pedir",
@@ -612,7 +622,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "¿Y en el resto de España? Dónde el lunes 7 sí es festivo",
         `Según la relación de fiestas laborales de 2026 que publicó el BOE el 28 de octubre de 2025, el lunes 7 de diciembre es festivo en ${regions}. En Cataluña no, y tampoco en Baleares, Canarias, Castilla-La Mancha, Galicia, Navarra, el País Vasco, la Comunidad Valenciana ni Ceuta. El martes 8 es festivo en toda España.`,
-        `Por eso, en esas comunidades el puente del sábado 5 al martes 8 sale sin pedir ningún día, y en Cataluña no. Si viajas o tienes familia en otra comunidad, cuenta con su calendario, no con el catalán: la tabla de todas las comunidades, con Navidad y Reyes, está en ${b2link("decemberBridgeSpain", "es", "el puente de diciembre en España, comunidad por comunidad")}.`,
+        `Por eso, en esas comunidades el puente del sábado 5 al martes 8 sale sin pedir ningún día, y en Cataluña no. Si viajas o tienes familia en otra comunidad, cuenta con su calendario, no con el catalán: la tabla de todas las comunidades, con Navidad y Reyes, está en ${b2link("decemberBridgeSpain", "es", "los festivos del puente de diciembre en España, comunidad por comunidad")}.`,
       ),
       ...h2(
         "¿Hay colegio el 7 y el 8 de diciembre?",
@@ -687,7 +697,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ...h2(
       "Is 7 December a holiday in Catalonia?",
       `Not across Catalonia: it is an ordinary working Monday. It **is a local holiday in ${n} towns**, such as ${examples}, according to Order EMT/208/2025 (DOGC, 17 December 2025). A few villages within other municipalities, such as Escaladei and Escart, have the day off too. Barcelona is not one of them: its 2026 local holidays are 25 May and 24 September.`,
-      `To check your own town, look it up in ${sibling("local", "en", "local holidays for every town in Catalonia")}.`,
+      `To check your own town, see ${dec7Link("en", "the towns where 7 December is a local holiday")} or look it up in ${sibling("local", "en", "local holidays for every town in Catalonia")}.`,
     ),
     ...h2(
       "How to make a long weekend of it: which days to take off",
@@ -701,7 +711,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ...h2(
       "What about the rest of Spain? Where Monday the 7th is a holiday",
       `According to the national list of 2026 public holidays published in the BOE (Spain's official state gazette) on 28 October 2025, Monday 7 December is a holiday in ${regions}. Not in Catalonia, nor in the Balearic Islands, the Canary Islands, Castilla-La Mancha, Galicia, Navarre, the Basque Country, the Valencian Community or Ceuta. Tuesday the 8th is a holiday everywhere in Spain.`,
-      `That is why in those regions the Saturday 5 to Tuesday 8 break comes without booking a day, and in Catalonia it does not. If you are travelling to or have family in another region, go by its calendar, not Catalonia's: every region's table, with Christmas and Epiphany, is in ${b2link("decemberBridgeSpain", "en", "December holidays in Spain, region by region")}.`,
+      `That is why in those regions the Saturday 5 to Tuesday 8 break comes without booking a day, and in Catalonia it does not. If you are travelling to or have family in another region, go by its calendar, not Catalonia's: every region's table, with Christmas and Epiphany, is in ${b2link("decemberBridgeSpain", "en", "the December bridge holidays in Spain, region by region")}.`,
     ),
     ...h2(
       "Is there school on 7 and 8 December?",

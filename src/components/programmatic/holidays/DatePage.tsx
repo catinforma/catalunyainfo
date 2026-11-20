@@ -112,6 +112,11 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               <strong>{REST_OF_SPAIN[locale]}</strong>{" "}
               <Link href={spainDayPath(iso, locale)}>{locale === "es" ? restOfSpainLabel(iso) : restOfSpainLabelIntl(iso, locale)}</Link>.
             </p>
+          ) : content.restOfSpain ? (
+            // 7 and 8 December 2026 (20 Nov 2026): the Spain-wide December bridge page.
+            <p>
+              <strong>{REST_OF_SPAIN[locale]}</strong> <Link href={content.restOfSpain.href}>{content.restOfSpain.label}</Link>.
+            </p>
           ) : null}
 
           {/* The next useful step (lib/engagement/next-step.ts): the December bridge or the 2027 bridges, and the 2027 leave planner. */}

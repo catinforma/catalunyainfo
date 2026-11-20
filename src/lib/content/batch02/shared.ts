@@ -869,8 +869,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Catalan Christmas traditions: tió, caganer and Sant Esteve",
   },
   decemberBridge: {
-    ca: "Pont de desembre 2026: quins dies són festius",
-    es: "Puente de diciembre 2026: qué días son festivos",
+    // 20 Nov 2026: "en Cataluña" in the anchor. "festivos puente diciembre" split
+    // between this page (9.3) and the Spain-wide one (10.6); generic anchors told
+    // Google this page answered for all of Spain.
+    ca: "Pont de desembre 2026 a Catalunya: quins dies són festius",
+    es: "Puente de diciembre 2026 en Cataluña: qué días son festivos",
     en: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
   },
   marato: {

@@ -30,6 +30,7 @@ import { COPY as SCHOOL_COPY } from "../src/lib/content/school/publish.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { fairsHubPath } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
+import { DATE_PAGES, datePath } from "../src/lib/programmatic/holidays/paths.ts";
 
 /**
  * Round 4 (26 Oct 2026): the December 2026 bridge and La Marató 2026.
@@ -52,6 +53,8 @@ const PUBLISHED = new Set([
   ),
   // Programmatic family pages, as their own module lists what it publishes (30 Oct: both pages link the fairs hub).
   ...christmasFairsPaths().map((p) => p.path),
+  // 20 Nov 2026: the bridge's 7 December section links the "is 7 December a holiday?" date page (code routes).
+  ...DATE_PAGES.flatMap((iso) => LOCALES.map((locale) => datePath(locale, iso))),
 ]);
 
 /* -------------------------------------------------------------------------- */
