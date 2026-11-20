@@ -6,7 +6,7 @@ import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
-import { seasonalFooterLinks } from "@/lib/nav/footer";
+import { LIVE_FOOTER_TITLE, liveFooterLinks, seasonalFooterLinks } from "@/lib/nav/footer";
 import { SITE } from "@/lib/site";
 import { Wordmark } from "@/components/Wordmark";
 import { FollowChannelLink } from "@/components/share/FollowChannel";
@@ -33,7 +33,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
   return (
     <footer className="ci-footer">
-      <div className="ci-shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="ci-shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-5">
         <div>
           <Wordmark href={`/${locale}/`} />
           <p className="ci-measure mt-3 text-sm text-[var(--color-muted)]">
@@ -75,6 +75,21 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 <Link prefetch={false} href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
               </li>
             ) : null}
+          </ul>
+        </nav>
+
+        {/* The live-data pages (lib/nav/footer.ts liveFooterLinks): linked
+            from nowhere else since the homepage grid went (12 Nov 2026). */}
+        <nav aria-labelledby="ci-foot-live">
+          <h2 id="ci-foot-live" className="ci-label mb-3 font-sans">
+            {LIVE_FOOTER_TITLE[locale]}
+          </h2>
+          <ul className="flex list-none flex-col gap-2 p-0 text-sm">
+            {liveFooterLinks(locale).map((item) => (
+              <li key={item.key}>
+                <Link prefetch={false} href={item.href}>{item.label}</Link>
+              </li>
+            ))}
           </ul>
         </nav>
 

@@ -19,25 +19,15 @@ import {
   townCount,
   type Place,
 } from "@/lib/programmatic/fuel/data";
-import { initialPrices, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
+import { placeFilter } from "@/lib/programmatic/fuel/areas";
+import { initialPrices, type LivePayload } from "@/lib/programmatic/fuel/live";
 import { fuelHubPath, fuelPath, type FuelLocale } from "@/lib/programmatic/fuel/paths";
 import { esName } from "@/lib/programmatic/holidays/names";
 
 import { FuelPrices } from "./FuelPrices";
 import { CountTable, DriverGuides, Guidance, LinkList, Sources } from "./parts";
 
-export function placeFilter(place: Place): StationFilter {
-  switch (place.kind) {
-    case "province":
-      return { province: place.code };
-    case "comarca":
-      return { comarca: place.code };
-    case "city":
-      return { ine: place.ine };
-    case "chain":
-      return { brands: place.chain.brands };
-  }
-}
+export { placeFilter };
 
 export function placeCrumbs(place: Place, locale: FuelLocale): Crumb[] {
   const home = getMessages(locale).common.home;

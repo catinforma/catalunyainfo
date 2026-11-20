@@ -14,9 +14,9 @@ import { datasetSchema } from "@/lib/seo/jsonld";
 
 import { fuelDescription, fuelH1, hubMeta, placeName } from "./copy";
 import { MUNICIPALITIES, STATIONS, type Place } from "./data";
-import { fuelHubPath, fuelPath, type FuelLocale } from "./paths";
+import { fuelHubPath, fuelPath, type FuelHubLocale, type FuelLocale } from "./paths";
 
-const CATALONIA: Record<FuelLocale, string> = { ca: "Catalunya", es: "Cataluña" };
+const CATALONIA: Record<FuelHubLocale, string> = { ca: "Catalunya", es: "Cataluña", en: "Catalonia" };
 
 function spatial(place: Place, locale: FuelLocale): string {
   switch (place.kind) {
@@ -46,7 +46,7 @@ export function fuelPlaceDataset(place: Place, locale: FuelLocale, dateModified?
   });
 }
 
-export function fuelHubDataset(locale: FuelLocale, dateModified?: string) {
+export function fuelHubDataset(locale: FuelHubLocale, dateModified?: string) {
   const meta = hubMeta(locale, STATIONS.stations.length);
   return datasetSchema({
     path: fuelHubPath(locale),

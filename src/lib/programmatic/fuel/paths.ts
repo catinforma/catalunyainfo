@@ -26,8 +26,23 @@ export const FUEL_ROUTE = {
 
 export type PathKind = "province" | "comarca" | "city" | "chain";
 
-export function fuelHubPath(locale: FuelLocale): string {
-  return `/${locale}/${FUEL_ROUTE[locale].root}/`;
+/**
+ * The hub also has an English edition (20 Nov 2026, the owner's rule that
+ * every page exists in ca, es and en): /en/fuel-prices-catalonia/, the same
+ * live table and area table. Only the hub: the place pages stay ca/es (and
+ * noindex, lib/seo/low-demand.ts); the English hub links their Spanish edition.
+ */
+export type FuelHubLocale = FuelLocale | "en";
+export const FUEL_HUB_LOCALES: readonly FuelHubLocale[] = ["es", "ca", "en"];
+export const EN_FUEL_HUB_SEGMENT = "fuel-prices-catalonia";
+
+export function fuelHubPath(locale: FuelHubLocale): string {
+  return locale === "en" ? `/en/${EN_FUEL_HUB_SEGMENT}/` : `/${locale}/${FUEL_ROUTE[locale].root}/`;
+}
+
+/** The edition of the place pages a hub links: its own, or the Spanish one from the English hub. */
+export function placeLocaleFor(locale: FuelHubLocale): FuelLocale {
+  return locale === "en" ? "es" : locale;
 }
 
 export function fuelPath(locale: FuelLocale, kind: PathKind, slug: string): string {
@@ -41,6 +56,6 @@ export function fuelTranslations(kind: PathKind, slug: string): Record<FuelLocal
   return { ca: fuelPath("ca", kind, slug), es: fuelPath("es", kind, slug) };
 }
 
-export function fuelHubTranslations(): Record<FuelLocale, string> {
-  return { ca: fuelHubPath("ca"), es: fuelHubPath("es") };
+export function fuelHubTranslations(): Record<FuelHubLocale, string> {
+  return { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("en") };
 }

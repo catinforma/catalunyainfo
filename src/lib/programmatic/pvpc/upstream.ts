@@ -43,10 +43,23 @@ export function esiosUrl(date: string): string {
   return `${ESIOS_ARCHIVE_ENDPOINT}?locale=es&date=${date}`;
 }
 
-/** The upstream's own `Date` header (when it answered), else `now`. */
+/**
+ * Slack for a `Date` header ahead of our clock before it is distrusted: a
+ * minute covers ordinary skew between two NTP-synced servers.
+ */
+export const MAX_CLOCK_AHEAD_MS = 60_000;
+
+/**
+ * The upstream's own `Date` header (when it answered), else `now`. A header
+ * ahead of `now` is not believed: on 20 Nov 2026 REData answered at 17:07 UTC
+ * with "date: Fri, 20 Nov 2026 18:08:08 GMT" (Madrid wall clock labelled GMT),
+ * and the pages printed "leídos … a las 18:58" at 17:58. Data that has not
+ * been read yet cannot be shown, so the read time is never later than now.
+ */
 export function answeredAt(response: Pick<Response, "headers">, now: number): string {
   const header = Date.parse(response.headers.get("date") ?? "");
-  return new Date(Number.isFinite(header) ? header : now).toISOString();
+  const believed = Number.isFinite(header) && header <= now + MAX_CLOCK_AHEAD_MS;
+  return new Date(believed ? Math.min(header, now) : now).toISOString();
 }
 
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;

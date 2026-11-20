@@ -25,7 +25,7 @@ import { caA, caComarca, caDe, esName } from "@/lib/programmatic/holidays/names"
 
 import type { Place } from "./data";
 import type { Fuel } from "./live";
-import type { FuelLocale } from "./paths";
+import type { FuelHubLocale, FuelLocale } from "./paths";
 
 export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
@@ -169,7 +169,15 @@ export interface HubMeta {
   crumb: string;
 }
 
-export function hubMeta(locale: FuelLocale, total: number): HubMeta {
+export function hubMeta(locale: FuelHubLocale, total: number): HubMeta {
+  if (locale === "en") {
+    return {
+      title: "Cheapest petrol stations in Catalonia today: fuel prices",
+      description: `Petrol and diesel prices now at Catalonia's ${total} filling stations: the cheapest by province, city and chain, from the Spanish Ministry's data.`,
+      h1: "Cheapest petrol and diesel in Catalonia today",
+      crumb: "Fuel prices",
+    };
+  }
   return locale === "es"
     ? {
         title: "Gasolineras baratas en Cataluña hoy: por ciudad y comarca",
@@ -190,14 +198,16 @@ export function hubMeta(locale: FuelLocale, total: number): HubMeta {
 /* -------------------------------------------------------------------------- */
 
 /** "28 de octubre de 2026" / "28 d'octubre de 2026" from an ISO date. */
-export function longDate(iso: string, locale: FuelLocale): string {
+export function longDate(iso: string, locale: FuelHubLocale): string {
   const date = new Date(`${iso}T12:00:00Z`);
-  const text = new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "ca-ES", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);
+  const intl = locale === "en" ? "en-GB" : locale === "es" ? "es-ES" : "ca-ES";
+  const text = new Intl.DateTimeFormat(intl, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);
   // Intl writes "28 d’octubre": the site uses a straight apostrophe.
   return text.replace(/’/g, "'");
 }
 
-export function readLine(readOn: string, locale: FuelLocale): string {
+export function readLine(readOn: string, locale: FuelHubLocale): string {
+  if (locale === "en") return `Ministry station list as of ${longDate(readOn, locale)}`;
   return locale === "es" ? `Listado de estaciones del Ministerio a ${longDate(readOn, locale)}` : `Llista d'estacions del Ministeri a ${longDate(readOn, locale)}`;
 }
 
@@ -216,7 +226,10 @@ export function placeLead(place: Place, locale: FuelLocale, towns: number): stri
   return `${who} Aquí tens les deu més barates en aquest moment per a cada carburant i la mediana de totes, amb l'hora a què el Ministeri va publicar els preus.`;
 }
 
-export function hubLead(locale: FuelLocale, total: number, towns: number): string {
+export function hubLead(locale: FuelHubLocale, total: number, towns: number): string {
+  if (locale === "en") {
+    return `Spain's Ministry for the Ecological Transition lists ${total} filling stations in Catalonia, in ${towns} municipalities. Here are the ten cheapest right now for each fuel, today's price in every province, city and Catalan chain (bonÀrea and Esclatoil), and how to read the figures. Each area's own page, in Spanish, lists its ten cheapest stations.`;
+  }
   return locale === "es"
     ? `El Ministerio para la Transición Ecológica tiene registradas ${total} gasolineras en Cataluña, en ${towns} municipios. Aquí tienes las diez más baratas ahora para cada carburante, y una página para cada provincia, comarca, ciudad con al menos diez gasolineras y las cadenas catalanas bonÀrea y Esclatoil.`
     : `El Ministeri per a la Transició Ecològica té registrades ${total} benzineres a Catalunya, en ${towns} municipis. Aquí tens les deu més barates ara per a cada carburant, i una pàgina per a cada província, comarca, ciutat amb almenys deu benzineres i les cadenes catalanes bonÀrea i Esclatoil.`;
@@ -228,7 +241,27 @@ export interface Guidance {
 }
 
 /** The block of original guidance every page carries. Inline Markdown links only. */
-export function guidance(locale: FuelLocale): Guidance[] {
+export function guidance(locale: FuelHubLocale): Guidance[] {
+  if (locale === "en") {
+    return [
+      {
+        title: "Where these prices come from",
+        paragraphs: [
+          `Every filling station reports its prices to Spain's Ministry for the Ecological Transition and the Demographic Challenge: every Monday and whenever it changes them, at least one hour before applying them ([Orden ITC/2308/2007, article 6](${BOE_ORDER_URL})). A station that belongs to a network may instead declare that it applies its operator's maximum or recommended prices.`,
+          `The Ministry publishes them on the [Geoportal Gasolineras](${GEOPORTAL_HOME}) and in an open-data service refreshed every half hour with the prices in force at that moment. This page reads that service when you open it; we keep no old prices.`,
+        ],
+      },
+      {
+        title: "How to read the table",
+        paragraphs: [
+          "**Gasolina 95 E5** is ordinary 95-octane unleaded petrol; **gasóleo A**, ordinary car diesel; **gasolina 98 E5**, 98-octane petrol, and **GLP**, autogas (LPG). All prices are in euros per litre, with a decimal point here (1.329 €/l is one euro and 32.9 cents).",
+          "It is the pump price, **without discounts**: the one the station itself declares. Loyalty cards and discount schemes are not included; the Ministry publishes those schemes separately, on the same Geoportal.",
+          "The **median** is the price with half of the stations above it and half below: it shows how much you save at the cheapest compared with a typical station in the area.",
+          "A station can change its price after the last update. Check it on the pump before you fill up.",
+        ],
+      },
+    ];
+  }
   if (locale === "es") {
     return [
       {
@@ -270,7 +303,10 @@ export function guidance(locale: FuelLocale): Guidance[] {
 }
 
 /** Attribution required by the licence (CC BY 4.0) and MITECO's legal notice. */
-export function attribution(locale: FuelLocale, datasetUrl: string): string {
+export function attribution(locale: FuelHubLocale, datasetUrl: string): string {
+  if (locale === "en") {
+    return `Prices and stations: [Spain's Ministry for the Ecological Transition and the Demographic Challenge](${datasetUrl}), open data under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en) licence. CatalunyaInfo filters them by area and sorts them by price; the Ministry takes no part in this page and does not sponsor it.`;
+  }
   return locale === "es"
     ? `Precios y estaciones: [Ministerio para la Transición Ecológica y el Reto Demográfico](${datasetUrl}), datos abiertos con licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). CatalunyaInfo los filtra por zona y los ordena por precio; el Ministerio no participa en esta página ni la patrocina.`
     : `Preus i estacions: [Ministeri per a la Transició Ecològica i el Repte Demogràfic](${datasetUrl}), dades obertes amb llicència [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ca). CatalunyaInfo les filtra per zona i les ordena per preu; el Ministeri no participa en aquesta pàgina ni la patrocina.`;
@@ -280,9 +316,10 @@ export function attribution(locale: FuelLocale, datasetUrl: string): string {
 /* Section titles and labels                                                  */
 /* -------------------------------------------------------------------------- */
 
-export const FUEL_NAMES: Record<FuelLocale, Record<Fuel, string>> = {
+export const FUEL_NAMES: Record<FuelHubLocale, Record<Fuel, string>> = {
   es: { e95: "Gasolina 95 E5", goa: "Gasóleo A (diésel)", e98: "Gasolina 98 E5", glp: "GLP (autogás)" },
   ca: { e95: "Gasolina 95 E5", goa: "Gasoli A (dièsel)", e98: "Gasolina 98 E5", glp: "GLP (autogas)" },
+  en: { e95: "Petrol 95 E5", goa: "Diesel (gasóleo A)", e98: "Petrol 98 E5", glp: "LPG (autogas)" },
 };
 
 export interface LiveLabels {
@@ -307,7 +344,28 @@ export interface LiveLabels {
   cheapestGoa: string;
 }
 
-export function liveLabels(locale: FuelLocale): LiveLabels {
+export function liveLabels(locale: FuelHubLocale): LiveLabels {
+  if (locale === "en") {
+    return {
+      fuelNames: FUEL_NAMES.en,
+      fallback: "Current prices load from the Ministry when the page opens, with JavaScript on. Without it, see them on the Geoportal Gasolineras.",
+      loading: "Loading the Ministry's prices…",
+      failed: "We cannot show the prices right now: the Ministry's service is not answering. You can check them on the Geoportal Gasolineras.",
+      stale: "No prices are shown because the latest Ministry list we have is from {when}, more than a day ago. Check current prices on the Geoportal Gasolineras.",
+      old: "Note: the Ministry's list is from {when}, more than four hours ago. Prices may have changed; check them on the Geoportal Gasolineras.",
+      updated: "Prices in force at {time} on {date}, according to the Ministry.",
+      picker: "Fuel",
+      median: "Median price at {count} stations {place}: {price}.",
+      none: "No station {place} publishes a price for this fuel right now.",
+      caption: "The {n} cheapest: {fuel}",
+      cols: { rank: "#", station: "Station", town: "Town", price: "€/litre", map: "Map" },
+      map: "Show on the map",
+      perLitre: "€/l",
+      geoportal: "Geoportal Gasolineras",
+      cheapestE95: "Cheapest petrol 95 {place}: {price} at {station}.",
+      cheapestGoa: "Cheapest diesel: {price} at {station}.",
+    };
+  }
   if (locale === "es") {
     return {
       fuelNames: FUEL_NAMES.es,
@@ -350,6 +408,50 @@ export function liveLabels(locale: FuelLocale): LiveLabels {
   };
 }
 
+/** The hub's "price in every area" table (lib/programmatic/fuel/areas.ts). Slots: {time}, {date}. */
+export interface AreaLabels {
+  title: string;
+  intro: string;
+  caption: string;
+  cols: { area: string; e95Min: string; e95Median: string; goaMin: string; goaMedian: string };
+  groups: Record<"province" | "city" | "chain", string>;
+  province: (name: string) => string;
+}
+
+export function areaLabels(locale: FuelHubLocale): AreaLabels {
+  if (locale === "en") {
+    return {
+      title: "Petrol and diesel prices today in every province, city and chain",
+      intro:
+        "The cheapest and the median price of petrol 95 and diesel in each province, each city with at least ten stations and the bonÀrea and Esclatoil chains, with the Ministry's prices in force at {time} on {date}. Under the lowest price, where that station is (its brand, its town or both); each name leads to its ten cheapest stations and the other fuels, on the Spanish page.",
+      caption: "Petrol 95 E5 and diesel by area, in €/litre",
+      cols: { area: "Area", e95Min: "Petrol 95: cheapest", e95Median: "Petrol 95: median", goaMin: "Diesel: cheapest", goaMedian: "Diesel: median" },
+      groups: { province: "Provinces", city: "Cities", chain: "Catalan chains" },
+      province: (name) => `Province of ${name}`,
+    };
+  }
+  if (locale === "es") {
+    return {
+      title: "Precio de la gasolina y el diésel hoy en cada provincia, ciudad y cadena",
+      intro:
+        "La gasolina 95 y el diésel más baratos y el precio mediano de cada provincia, de cada ciudad con al menos diez gasolineras y de las cadenas bonÀrea y Esclatoil, con los precios del Ministerio en vigor a las {time} del {date}. Debajo del precio más bajo, dónde está esa gasolinera (su marca, su municipio o los dos); cada nombre lleva a sus diez gasolineras más baratas y al resto de carburantes.",
+      caption: "Gasolina 95 E5 y gasóleo A por zona, en €/litro",
+      cols: { area: "Zona", e95Min: "Gasolina 95: la más barata", e95Median: "Gasolina 95: mediana", goaMin: "Diésel: el más barato", goaMedian: "Diésel: mediana" },
+      groups: { province: "Provincias", city: "Ciudades", chain: "Cadenas catalanas" },
+      province: (name) => `Provincia de ${name}`,
+    };
+  }
+  return {
+    title: "Preu de la gasolina i el dièsel avui a cada província, ciutat i cadena",
+    intro:
+      "La gasolina 95 i el dièsel més barats i el preu mitjà (la mediana) de cada província, de cada ciutat amb almenys deu benzineres i de les cadenes bonÀrea i Esclatoil, amb els preus del Ministeri vigents a les {time} del {date}. Sota el preu més baix, on és aquella benzinera (la marca, el municipi o totes dues coses); cada nom porta a les seves deu benzineres més barates i a la resta de carburants.",
+    caption: "Gasolina 95 E5 i gasoli A per zona, en €/litre",
+    cols: { area: "Zona", e95Min: "Gasolina 95: la més barata", e95Median: "Gasolina 95: mediana", goaMin: "Dièsel: el més barat", goaMedian: "Dièsel: mediana" },
+    groups: { province: "Províncies", city: "Ciutats", chain: "Cadenes catalanes" },
+    province: (name) => `Província de ${name}`,
+  };
+}
+
 export interface SectionTitles {
   live: string;
   stations: string;
@@ -373,7 +475,31 @@ export interface SectionTitles {
   stationsUnit: (n: number) => string;
 }
 
-export function sectionTitles(locale: FuelLocale): SectionTitles {
+export function sectionTitles(locale: FuelHubLocale): SectionTitles {
+  if (locale === "en") {
+    return {
+      live: "Prices now",
+      stations: "Registered stations",
+      brands: "Stations by brand",
+      byComarca: "By comarca",
+      byTown: "By municipality",
+      siblings: "Other areas",
+      nearbyCities: "Other cities",
+      comarquesHere: "Comarques (counties)",
+      citiesHere: "Cities",
+      provinces: "Provinces (pages in Spanish)",
+      chains: "Catalan chains (pages in Spanish)",
+      guides: "If you are driving",
+      sources: "Sources",
+      colBrand: "Brand",
+      colStations: "Stations",
+      colAddress: "Address",
+      colTown: "Municipality",
+      colComarca: "Comarca",
+      allPlaces: "Every area: fuel prices in Catalonia",
+      stationsUnit: (n) => (n === 1 ? "1 station" : `${n} stations`),
+    };
+  }
   return locale === "es"
     ? {
         live: "Precios ahora",
@@ -422,7 +548,14 @@ export function sectionTitles(locale: FuelLocale): SectionTitles {
 }
 
 /** Guides that help someone who is driving; only ones that exist. */
-export function driverGuides(locale: FuelLocale): { label: string; href: string }[] {
+export function driverGuides(locale: FuelHubLocale): { label: string; href: string }[] {
+  if (locale === "en") {
+    return [
+      { label: B2_TITLES.zbe.en, href: b2href("zbe", "en") },
+      { label: B2_TITLES.parking.en, href: b2href("parking", "en") },
+      { label: "Traffic fines in Spain: deadlines and the 50% discount", href: calcPath("traffic-fines", "en") },
+    ];
+  }
   return locale === "es"
     ? [
         { label: B2_TITLES.zbe.es, href: b2href("zbe", "es") },

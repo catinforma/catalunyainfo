@@ -455,8 +455,8 @@ export function liveTools(today?: string): LiveTool[] {
     },
     {
       name: "Cheapest petrol stations",
-      hubs: { ca: fuelHubPath("ca"), es: fuelHubPath("es") },
-      description: `today's petrol and diesel prices at Catalonia's ${STATIONS.stations.length} public stations, cheapest first, by province, comarca, town and chain (${fuelPages} pages per language), from the Ministry for the Ecological Transition (CC BY 4.0).`,
+      hubs: { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("en") },
+      description: `today's petrol and diesel prices at Catalonia's ${STATIONS.stations.length} public stations, cheapest first, with today's cheapest and median price in every province, city and chain, and ${fuelPages} area pages per language in Catalan and Spanish, from the Ministry for the Ecological Transition (CC BY 4.0).`,
     },
     {
       name: "Electricity price in Spain today and tomorrow (PVPC)",

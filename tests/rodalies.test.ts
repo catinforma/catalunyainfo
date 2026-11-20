@@ -23,7 +23,7 @@ import {
   plainText,
   type Fetcher,
 } from "../src/lib/programmatic/rodalies/alerts.ts";
-import { KEY_STATIONS, alertsAnswer, hubCopy, lineCopy, linesAt, siblingLinks } from "../src/lib/programmatic/rodalies/copy.ts";
+import { KEY_STATIONS, alertsAnswer, hubCopy, lineCopy, lineStatus, lineStatusNote, linesAt, siblingLinks } from "../src/lib/programmatic/rodalies/copy.ts";
 import { SERVER_REVALIDATE_SECONDS, asOfAnswer } from "../src/lib/programmatic/rodalies/server.ts";
 import { liveLabels } from "../src/lib/programmatic/rodalies/labels.ts";
 import { LINES, SNAPSHOT, lineById, siblings } from "../src/lib/programmatic/rodalies/data.ts";
@@ -55,7 +55,7 @@ import {
 } from "../src/lib/programmatic/rodalies/pages.ts";
 import { hubPath, lineFromSlug, linePath, lineSlug } from "../src/lib/programmatic/rodalies/paths.ts";
 import { routesFromGtfs } from "../src/lib/programmatic/rodalies/prepare.ts";
-import { LINE_IDS, type AlertsOk, type AlertsPayload, type CompactAlert } from "../src/lib/programmatic/rodalies/types.ts";
+import { LINE_IDS, type AlertsOk, type AlertsPayload, type CompactAlert, type LineId } from "../src/lib/programmatic/rodalies/types.ts";
 import { composeTitle } from "../src/lib/seo/metadata.ts";
 import { absoluteUrl } from "../src/lib/site.ts";
 
@@ -484,6 +484,27 @@ test("alerts answer: count, lines and the read time, never 'now'; line pages cou
   for (const locale of LOCALES) assert.doesNotMatch(alertsAnswer(locale, payload, null)!, /\b(ahora|ara|now)\b/i, locale);
 });
 
+test("hub line list (20 Nov 2026): each line's notice count at the read time, counted as the line pages count; nothing without a read", () => {
+  const alerts = [
+    { id: "a", lines: ["R1", "R4"], stations: [], date: "2026-11-13", time: "10:04", text: { ca: "x", es: "x", en: null } },
+    { id: "b", lines: ["R4"], stations: [], date: "2026-11-13", time: "09:00", text: { ca: "y", es: "y", en: null } },
+  ] as AlertsOk["alerts"];
+  const payload: AlertsOk = { ok: true, source: "rodalies", fetchedAt: "2026-11-13T10:50:52Z", sourceUpdatedAt: null, alerts, unmapped: [] };
+  assert.deepEqual(["R1", "R4", "R2"].map((id) => lineStatus("es", payload, id as LineId)), ["1 aviso", "2 avisos", "sin avisos"]);
+  assert.deepEqual(["R1", "R4", "R2"].map((id) => lineStatus("ca", payload, id as LineId)), ["1 avís", "2 avisos", "cap avís"]);
+  assert.deepEqual(["R1", "R4", "R2"].map((id) => lineStatus("en", payload, id as LineId)), ["1 notice", "2 notices", "no notices"]);
+  for (const line of LINES) {
+    const own = alerts.filter((a) => a.lines.includes(line.id)).length;
+    assert.match(alertsAnswer("es", payload, line)!, new RegExp(own === 0 ? "ningún aviso" : `${own} aviso`), line.id);
+  }
+  assert.equal(lineStatusNote("es", payload), "Entre paréntesis, los avisos activos de cada línea a las 11:50 h del 13/11/2026; el texto de cada aviso está arriba.");
+  assert.match(lineStatusNote("ca", { ...payload, fetchedAt: "2026-11-11T08:00:00Z" })!, /a les 09:00 h de l'11\/11\/2026/);
+  assert.equal(lineStatus("es", null, "R1"), null);
+  assert.equal(lineStatusNote("en", null), null);
+  const hub = readFileSync(join(ROOT, "src/components/programmatic/rodalies/HubPage.tsx"), "utf8");
+  assert.match(hub, /lineStatus\(locale, initial, line\.id\)/);
+});
+
 test("metadata: titles <= 60 in the searched words, descriptions <= 155, unique", () => {
   for (const locale of ["ca", "es"] as const) {
     const titles = new Set<string>();
@@ -546,7 +567,29 @@ test("sitemap: 41 URLs, unique, dated with the snapshot, with their alternates",
   assert.deepEqual(entries.find((e) => e.path === "/es/rodalies/rg1/")?.translations, { ca: "/ca/rodalies/rg1/", es: "/es/rodalies/rg1/" });
   assert.deepEqual(rodaliesSitemap(), [], "nothing on a deployment that may not be indexed");
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
-  assert.match(sitemap, /\.\.\.rodaliesSitemap\(\)/);
+  assert.match(sitemap, /\.\.\.rodaliesSitemap\(madridDate\(Date\.now\(\)\)\)/, "dated by the render day: the notices are in the HTML");
+});
+
+test("sitemap (20 Nov 2026): dated today at 00:00 Madrid and hourly, since the notices are read at render; the snapshot's date only without a day", () => {
+  const env = { ...process.env };
+  process.env.VERCEL_ENV = "production";
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
+  try {
+    const today = rodaliesSitemap("2026-11-20");
+    assert.equal(today.length, 3 + 19 * 2);
+    for (const e of today) {
+      assert.equal((e.lastModified as Date).toISOString(), "2026-11-19T23:00:00.000Z", e.url);
+      assert.equal(e.changeFrequency, "hourly");
+    }
+    const undated = rodaliesSitemap();
+    assert.equal(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(undated[0]!.lastModified as Date), SNAPSHOT.readOn);
+    assert.equal(rodaliesSitemap("2026-01-01")[0]!.lastModified?.valueOf(), undated[0]!.lastModified?.valueOf(), "never older than the snapshot");
+  } finally {
+    process.env.VERCEL_ENV = env.VERCEL_ENV;
+    process.env.NEXT_PUBLIC_ALLOW_INDEXING = env.NEXT_PUBLIC_ALLOW_INDEXING;
+    if (env.VERCEL_ENV === undefined) delete process.env.VERCEL_ENV;
+    if (env.NEXT_PUBLIC_ALLOW_INDEXING === undefined) delete process.env.NEXT_PUBLIC_ALLOW_INDEXING;
+  }
 });
 
 /* -------------------------------------------------------------------------- */

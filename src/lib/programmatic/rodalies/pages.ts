@@ -11,6 +11,7 @@ import type { Metadata, MetadataRoute } from "next";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
+import { madridMidnight } from "@/lib/programmatic/pvpc/time";
 
 import { LINES, SNAPSHOT, lineById } from "./data";
 import { LINE_LOCALES, hubPath, hubTranslations, isLineLocale, lineFromSlug, linePath, lineSlug, lineTranslations, type LineLocale } from "./paths";
@@ -149,8 +150,20 @@ export function rodaliesFamilyPaths(): RodaliesFamilyPath[] {
   return [...hubs, ...lines];
 }
 
-/** Sitemap entries with hreflang alternates; nothing on a deployment that may not be indexed. */
-export function rodaliesSitemap(): MetadataRoute.Sitemap {
+/**
+ * Sitemap entries with hreflang alternates; nothing on a deployment that may
+ * not be indexed.
+ *
+ * `today` is the Madrid date of the sitemap's render. Since 13 Nov 2026 every
+ * page of the family prints the notices read at render (ISR every five
+ * minutes, server.ts), with that day's date and time in its first line, so
+ * the page changes every day. Until 20 Nov the sitemap still gave the
+ * snapshot's date (28 Oct) and "weekly": Search Console's URL inspection on
+ * 20 Nov showed /es/rodalies/r1/ and /es/rodalies/r4/ last crawled on 30 Oct
+ * and /ca/rodalies/ on 29 Oct, i.e. Google ranked copies without the notices.
+ * Without `today` (tests, scripts) the snapshot's date is used.
+ */
+export function rodaliesSitemap(today?: string): MetadataRoute.Sitemap {
   if (!indexingAllowed()) return [];
   return rodaliesFamilyPaths().map((entry) => {
     const languages: Record<string, string> = {};
@@ -162,9 +175,9 @@ export function rodaliesSitemap(): MetadataRoute.Sitemap {
     if (fallback) languages["x-default"] = absoluteUrl(fallback);
     return {
       url: absoluteUrl(entry.path),
-      lastModified: new Date(`${entry.lastModified}T00:00:00Z`),
-      // The HTML changes only with the snapshot; the live notices are fetched by the browser.
-      changeFrequency: "weekly" as const,
+      lastModified: new Date(madridMidnight(today && today > entry.lastModified ? today : entry.lastModified)),
+      // The notices are in the HTML, read at render every five minutes.
+      changeFrequency: "hourly" as const,
       priority: 0.6,
       alternates: { languages },
     };

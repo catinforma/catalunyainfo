@@ -186,8 +186,8 @@ export function todayLinks(locale: Locale) {
     strikes: { hub: b2href("strikes", locale), general: b2href("strike11n", locale) },
     rodalies: { hub: rodaliesHubPath(locale), official: rodaliesOfficial.status(locale) },
     reservoirs: { hub: reservoirHubPath(locale), guide: tool("reservoirs", locale) },
-    // The fuel pages are Catalan and Spanish; the English edition links the Spanish hub.
-    fuel: { hub: fuelHubPath(muni ?? "es"), sameLanguage: muni !== null },
+    // Every edition has its fuel hub since 20 Nov 2026 (/en/fuel-prices-catalonia/).
+    fuel: { hub: fuelHubPath(locale), sameLanguage: true },
     weekend: {
       agenda: tool("weekend", locale),
       hub: muni ? weekendHubPath(muni) : null,

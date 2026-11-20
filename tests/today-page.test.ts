@@ -543,7 +543,7 @@ test("every internal link resolves to a real page (family routes or the path its
       assert.ok(l.weekend.zones.length >= 5);
       assert.equal(l.fuel.hub, `/${locale}/${locale === "ca" ? "benzineres" : "gasolineras"}/`);
     } else {
-      assert.equal(l.fuel.hub, "/es/gasolineras/", "English links the Spanish fuel hub, labelled as Spanish");
+      assert.equal(l.fuel.hub, "/en/fuel-prices-catalonia/", "English links its own fuel hub (20 Nov 2026)");
       assert.equal(l.holidays.hub, null);
     }
     assert.ok(l.rodalies.official.startsWith("https://rodalies.gencat.cat/"));

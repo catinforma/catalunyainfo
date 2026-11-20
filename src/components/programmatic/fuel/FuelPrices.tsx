@@ -8,6 +8,7 @@ import {
   FUEL_ENDPOINT,
   freshness,
   rank,
+  splitFecha,
   type Freshness,
   type Fuel,
   type FuelRanking,
@@ -49,12 +50,6 @@ function withPrice(template: string, values: Record<string, string>, priceText: 
   );
 }
 
-/** "28/10/2026 11:36:05" -> { date: "28/10/2026", time: "11:36" }. */
-function splitFecha(fecha: string): { date: string; time: string } {
-  const [date = fecha, time = ""] = fecha.split(" ");
-  return { date, time: time.slice(0, 5) };
-}
-
 export function FuelPrices({
   filter,
   placeOf,
@@ -70,7 +65,7 @@ export function FuelPrices({
   placeOf: string;
   /** Show the municipality column (off on a single-town page). */
   showTown: boolean;
-  locale: "ca" | "es";
+  locale: "ca" | "es" | "en";
   labels: LiveLabels;
   geoportalUrl: string;
   /** Rows the price table will most likely have: min(10, stations behind the page). */
@@ -164,11 +159,11 @@ export function FuelPrices({
     );
   }
 
-  const price = new Intl.NumberFormat(locale === "es" ? "es-ES" : "ca-ES", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+  const price = new Intl.NumberFormat(locale === "en" ? "en-GB" : locale === "es" ? "es-ES" : "ca-ES", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
   const all = shown.rankings;
   const available = FUELS.filter((f) => all[f].count > 0);
   const current = all[available.includes(fuel) ? fuel : (available[0] ?? fuel)];
-  const townOf = (s: LiveStation) => (locale === "es" ? s.t.charAt(0).toUpperCase() + s.t.slice(1) : s.t);
+  const townOf = (s: LiveStation) => (locale === "ca" ? s.t : s.t.charAt(0).toUpperCase() + s.t.slice(1));
   const stationLabel = (s: LiveStation) => `${s.b} (${s.a}${showTown ? `, ${townOf(s)}` : ""})`;
   const best95 = all.e95.cheapest[0];
   const bestGoa = all.goa.cheapest[0];
