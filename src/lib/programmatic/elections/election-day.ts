@@ -96,6 +96,29 @@ export function electionPhase(now: Date): ElectionDayPhase {
   return "over";
 }
 
+/**
+ * When each phase begins, as instants (Madrid is on UTC+1 from 25 Oct 2026 to
+ * 28 Mar 2027, so the offset is fixed for these dates). "after" starts the day
+ * after polling day, "over" the day after the layer's last day.
+ */
+const PHASE_STARTS: Record<Exclude<ElectionDayPhase, "before">, string> = {
+  eve: `${ELECTION_DAY.eve}T00:00:00+01:00`,
+  polling: `${ELECTION_DAY.day}T00:00:00+01:00`,
+  count: `${ELECTION_DAY.day}T20:00:00+01:00`,
+  after: "2026-11-30T00:00:00+01:00",
+  over: "2026-12-08T00:00:00+01:00",
+};
+
+/**
+ * The instant the phase `now` falls in began, or null before the layer starts.
+ * The pages print the phase (revalidated every 5 minutes), so their content
+ * changes at these instants: the sitemap dates them no earlier (app/sitemap.ts).
+ */
+export function electionPhaseStart(now: Date): Date | null {
+  const phase = electionPhase(now);
+  return phase === "before" ? null : new Date(PHASE_STARTS[phase]);
+}
+
 /** The town a page is about, as that page writes it. */
 export interface DayTown {
   /** "a Salou", "en Salou", "in Salou": the page's own locative. */

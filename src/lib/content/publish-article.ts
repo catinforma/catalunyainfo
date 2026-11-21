@@ -202,7 +202,11 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
 
   /* ---- Entry ------------------------------------------------------------ */
   const entryRows = await db
-    .select({ id: schema.entries.id })
+    .select({
+      id: schema.entries.id,
+      primaryCategoryId: schema.entries.primaryCategoryId,
+      heroMediaId: schema.entries.heroMediaId,
+    })
     .from(schema.entries)
     .where(eq(schema.entries.key, spec.entryKey))
     .limit(1);
@@ -216,11 +220,23 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
     isDemo: false,
   };
 
+  // entries.updated_at is the last publish that changed what a reader sees
+  // (the sitemap's lastmod, lib/seo/body-dates.ts): a new or changed edition,
+  // a new hero image, category or source list. A re-send of the same page
+  // leaves it alone, so the date stays a signal Google can trust.
+  let readerVisibleChange =
+    !entryRows[0] ||
+    (entryRows[0].primaryCategoryId ?? null) !== (categoryId ?? null) ||
+    (entryRows[0].heroMediaId ?? null) !== (heroMediaId ?? null);
+
   if (entryId) {
-    await db
-      .update(schema.entries)
-      .set({ ...entryValues, updatedAt: now })
-      .where(eq(schema.entries.id, entryId));
+    const previousSources = await db
+      .select({ sourceId: schema.entrySources.sourceId })
+      .from(schema.entrySources)
+      .where(eq(schema.entrySources.entryId, entryId))
+      .orderBy(schema.entrySources.sortOrder);
+    if (previousSources.map((row) => row.sourceId).join() !== sourceIds.join()) readerVisibleChange = true;
+    await db.update(schema.entries).set(entryValues).where(eq(schema.entries.id, entryId));
   } else {
     const inserted = await db
       .insert(schema.entries)
@@ -293,6 +309,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
     // pages are re-sent every day at 00:05 only to turn "mañana" into "hoy".
     // Rule and reasons: lib/seo/article-dates.ts (editionUpdatedAt).
     const previous = existing[0];
+    if (!previous || editionFingerprint(previous) !== editionFingerprint(edition)) readerVisibleChange = true;
     const updatedAt = editionUpdatedAt({
       now,
       publishedAt,
@@ -321,6 +338,10 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
         action: "created",
       });
     }
+  }
+
+  if (readerVisibleChange && entryRows[0]) {
+    await db.update(schema.entries).set({ updatedAt: now }).where(eq(schema.entries.id, entryId));
   }
 
   return {

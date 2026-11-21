@@ -1,0 +1,226 @@
+{
+ "inspected": "2026-11-21",
+ "tool": "scripts/crawl-gap.py",
+ "rows": [
+  {
+   "url": "https://www.catalunyainfo.com/es/rodalies/r1/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-10-30",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/rodalies/r1/",
+   "userCanonical": "https://www.catalunyainfo.com/es/rodalies/r1/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/rodalies/r4/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-10-30",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/rodalies/r4/",
+   "userCanonical": "https://www.catalunyainfo.com/es/rodalies/r4/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/ca/rodalies/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/ca/rodalies/",
+   "userCanonical": "https://www.catalunyainfo.com/ca/rodalies/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/embalses/",
+   "lastmod": "2026-11-19",
+   "crawled": "2026-11-20",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/embalses/",
+   "userCanonical": "https://www.catalunyainfo.com/es/embalses/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/gasolineras/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-20",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/gasolineras/",
+   "userCanonical": "https://www.catalunyainfo.com/es/gasolineras/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/en/fuel-prices-catalonia/",
+   "lastmod": "2026-11-20",
+   "crawled": "",
+   "coverage": "URL is unknown to Google",
+   "crawledAs": "",
+   "googleCanonical": "",
+   "userCanonical": "",
+   "referrers": 0
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/avisos/",
+   "lastmod": "2026-11-21",
+   "crawled": "2026-11-20",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/avisos/",
+   "userCanonical": "https://www.catalunyainfo.com/es/avisos/",
+   "referrers": 0
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/precio-luz/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-20",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/precio-luz/",
+   "userCanonical": "https://www.catalunyainfo.com/es/precio-luz/",
+   "referrers": 2
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/guias/semana-santa-2027-cataluna/",
+   "lastmod": "2026-10-31",
+   "crawled": "2026-11-16",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/guias/semana-santa-2027-cataluna/",
+   "userCanonical": "https://www.catalunyainfo.com/es/guias/semana-santa-2027-cataluna/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/guias/huelga-26-noviembre/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/guias/huelga-26-noviembre/",
+   "userCanonical": "https://www.catalunyainfo.com/es/guias/huelga-26-noviembre/",
+   "referrers": 0
+  },
+  {
+   "url": "https://www.catalunyainfo.com/ca/guies/vaga-26-novembre/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/ca/guies/vaga-26-novembre/",
+   "userCanonical": "https://www.catalunyainfo.com/ca/guies/vaga-26-novembre/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/guias/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/guias/",
+   "userCanonical": "https://www.catalunyainfo.com/es/guias/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/",
+   "userCanonical": "https://www.catalunyainfo.com/es/",
+   "referrers": 2
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/festivos/barcelona/",
+   "lastmod": "2026-10-30",
+   "crawled": "2026-11-21",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/festivos/barcelona/",
+   "userCanonical": "https://www.catalunyainfo.com/es/festivos/barcelona/",
+   "referrers": 2
+  },
+  {
+   "url": "https://www.catalunyainfo.com/ca/festius/",
+   "lastmod": "2026-10-30",
+   "crawled": "2026-11-20",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/ca/festius/",
+   "userCanonical": "https://www.catalunyainfo.com/ca/festius/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/festivos/2027/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-14",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/festivos/2027/",
+   "userCanonical": "https://www.catalunyainfo.com/es/festivos/2027/",
+   "referrers": 2
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/festivos/2027/cantabria/santander/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-15",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/festivos/2027/cantabria/santander/",
+   "userCanonical": "https://www.catalunyainfo.com/es/festivos/2027/cantabria/santander/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/festivos/2027/comunidad-valenciana/elche/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-13",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/festivos/2027/comunidad-valenciana/elche/",
+   "userCanonical": "https://www.catalunyainfo.com/es/festivos/2027/comunidad-valenciana/elche/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/elecciones/barcelona/",
+   "lastmod": "2026-10-30",
+   "crawled": "2026-10-28",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/elecciones/barcelona/",
+   "userCanonical": "https://www.catalunyainfo.com/es/elecciones/barcelona/",
+   "referrers": 3
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/calculadoras/sueldo-neto/",
+   "lastmod": "2026-11-13",
+   "crawled": "2026-11-14",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/calculadoras/sueldo-neto/",
+   "userCanonical": "https://www.catalunyainfo.com/es/calculadoras/sueldo-neto/",
+   "referrers": 2
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/calculadoras/salario-minimo-2027/",
+   "lastmod": "2026-11-19",
+   "crawled": "2026-11-14",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/calculadoras/salario-minimo-2027/",
+   "userCanonical": "https://www.catalunyainfo.com/es/calculadoras/salario-minimo-2027/",
+   "referrers": 1
+  },
+  {
+   "url": "https://www.catalunyainfo.com/es/mercados-navidad/",
+   "lastmod": "2026-11-20",
+   "crawled": "2026-11-17",
+   "coverage": "Submitted and indexed",
+   "crawledAs": "MOBILE",
+   "googleCanonical": "https://www.catalunyainfo.com/es/mercados-navidad/",
+   "userCanonical": "https://www.catalunyainfo.com/es/mercados-navidad/",
+   "referrers": 2
+  }
+ ]
+}

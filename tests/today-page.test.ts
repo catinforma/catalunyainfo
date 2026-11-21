@@ -209,7 +209,8 @@ test("sitemap: three URLs with hreflang and a deterministic lastmod (the newest 
     }
   }
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
-  assert.match(sitemap, /\.\.\.todaySitemapEntries\(\),/);
+  // Wrapped in dated("today", …) since 21 Nov 2026 (body date, tests/sitemap-lastmod.test.ts).
+  assert.match(sitemap, /\.\.\.dated\("today", \[\.\.\.todaySitemapEntries\(\)\]\),/);
 });
 
 /* -------------------------------------------------------------------------- */

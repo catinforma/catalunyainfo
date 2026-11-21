@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, desc, eq, gte, inArray, isNotNull, lte, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, lte, ne, or, sql, type SQL } from "drizzle-orm";
 
 import { getDb, schema } from "@/lib/db/client";
 import type { Locale } from "@/lib/i18n/config";
@@ -20,6 +20,7 @@ import type {
 } from "./types";
 import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
+import { DATA_BLOCK_TYPES, dataBlockPattern, type DataBlockType } from "@/lib/seo/body-dates";
 import { relatedTerms } from "./related-terms";
 import { anyWordTsQuery } from "./search-query";
 import { isRegionSchoolPage } from "./school-spain/regions";
@@ -959,7 +960,20 @@ export interface SitemapRow {
   entryId: string;
   /** Carries a block whose output changes every day (see day-dependent.ts). */
   dayDependent: boolean;
+  /**
+   * The last publish that changed what a reader sees of the entry
+   * (entries.updated_at; publish-article.ts moves it only then). The sitemap's
+   * lastmod; `updatedAt` stays the verified-content date (dateModified).
+   */
+  contentChangedAt: Date | null;
+  /** The code-data blocks the body carries (lib/seo/body-dates.ts, DATA_BLOCK_COMPONENTS). */
+  dataBlocks: DataBlockType[];
 }
+
+/** One boolean column per code-data block type, as dayDependent is computed. */
+const DATA_BLOCK_COLUMNS = Object.fromEntries(
+  DATA_BLOCK_TYPES.map((type) => [`block_${type}`, sql<boolean>`${entryTranslations.body}::text ~ ${dataBlockPattern(type)}`]),
+) as Record<`block_${DataBlockType}`, SQL<boolean>>;
 
 export async function allIndexablePaths({ strict = false }: { strict?: boolean } = {}): Promise<SitemapRow[]> {
   const db = getDb();
@@ -979,6 +993,8 @@ export async function allIndexablePaths({ strict = false }: { strict?: boolean }
         publishedAt: entryTranslations.publishedAt,
         entryId: entryTranslations.entryId,
         dayDependent: sql<boolean>`${entryTranslations.body}::text ~ ${DAY_DEPENDENT_PATTERN}`,
+        contentChangedAt: entries.updatedAt,
+        ...DATA_BLOCK_COLUMNS,
       })
       .from(entryTranslations)
       .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
@@ -993,7 +1009,19 @@ export async function allIndexablePaths({ strict = false }: { strict?: boolean }
       )
       .orderBy(desc(entryTranslations.publishedAt));
 
-    return rows as SitemapRow[];
+    return rows.map((row) => {
+      const flags = row as unknown as Record<string, unknown>;
+      return {
+        locale: row.locale,
+        path: row.path,
+        updatedAt: row.updatedAt,
+        publishedAt: row.publishedAt,
+        entryId: row.entryId,
+        dayDependent: Boolean(row.dayDependent),
+        contentChangedAt: row.contentChangedAt ?? null,
+        dataBlocks: DATA_BLOCK_TYPES.filter((type) => flags[`block_${type}`] === true),
+      } as SitemapRow;
+    });
   });
 }
 
