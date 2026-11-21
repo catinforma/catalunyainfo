@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-11-10";
+export const READ_AT = "2026-11-21";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -63,90 +63,90 @@ export const LEVEL_RULE = [
 export const ZONE_READINGS: readonly ZoneReading[] = [
   {
     "id": "ripolles",
-    "mm": 2.6,
+    "mm": 38.6,
     "stations": 5,
-    "daysSinceRain": 1,
-    "level": "low",
+    "daysSinceRain": 2,
+    "level": "favourable",
     "wettest": {
       "name": "Núria (1.971 m)",
-      "mm": 5.1
+      "mm": 49.8
     }
   },
   {
     "id": "bergueda",
-    "mm": 12.9,
+    "mm": 63.9,
     "stations": 5,
-    "daysSinceRain": 1,
-    "level": "patchy",
+    "daysSinceRain": 2,
+    "level": "very",
     "wettest": {
       "name": "Santuari de Queralt",
-      "mm": 21.6
+      "mm": 82.3
     }
   },
   {
     "id": "garrotxa",
-    "mm": 1.2,
+    "mm": 26.7,
     "stations": 2,
-    "daysSinceRain": 7,
-    "level": "low",
+    "daysSinceRain": 3,
+    "level": "interesting",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 1.2
+      "mm": 27.7
     }
   },
   {
     "id": "osona",
-    "mm": 2.3,
+    "mm": 38.5,
     "stations": 7,
-    "daysSinceRain": 1,
-    "level": "low",
+    "daysSinceRain": 2,
+    "level": "favourable",
     "wettest": {
-      "name": "Viladrau",
-      "mm": 5.9
+      "name": "Montesquiu",
+      "mm": 50.7
     }
   },
   {
     "id": "pirineu",
-    "mm": 8.5,
+    "mm": 60.7,
     "stations": 24,
-    "daysSinceRain": 1,
-    "level": "patchy",
+    "daysSinceRain": 0,
+    "level": "very",
     "wettest": {
-      "name": "Boí (2.537 m)",
-      "mm": 20.7
+      "name": "Espot (2.519 m)",
+      "mm": 119
     }
   },
   {
     "id": "montseny",
-    "mm": 5.2,
+    "mm": 36.1,
     "stations": 9,
-    "daysSinceRain": 1,
-    "level": "low",
+    "daysSinceRain": 3,
+    "level": "favourable",
     "wettest": {
-      "name": "Tagamanent - PN del Montseny",
-      "mm": 10.2
+      "name": "Puig Sesolles (1.666 m)",
+      "mm": 50.7
     }
   },
   {
     "id": "ports",
-    "mm": 20.2,
+    "mm": 29.2,
     "stations": 19,
     "daysSinceRain": 2,
     "level": "interesting",
     "wettest": {
-      "name": "Illa de Buda",
-      "mm": 57.7
+      "name": "Batea",
+      "mm": 61.6
     }
   },
   {
     "id": "ponent",
-    "mm": 15.8,
+    "mm": 45.2,
     "stations": 31,
-    "daysSinceRain": 1,
-    "level": "patchy",
+    "daysSinceRain": 2,
+    "level": "favourable",
     "wettest": {
-      "name": "el Canós",
-      "mm": 27.5
+      "name": "Vilanova de Meià",
+      "mm": 83.4
     }
   }
 ];
