@@ -64,9 +64,12 @@ export async function publishInstitutionalPages(keys?: readonly string[]): Promi
 
     let entryId = entryRows[0]?.id;
     if (entryId) {
+      // No `updatedAt: now`: entries.updated_at is the sitemap's "a reader-visible
+      // change was published" date (lib/seo/body-dates.ts), and a policy page's
+      // wording change already dates its translation with this publish.
       await db
         .update(schema.entries)
-        .set({ type: "page", isFeatured: false, isDemo: false, updatedAt: now })
+        .set({ type: "page", isFeatured: false, isDemo: false })
         .where(eq(schema.entries.id, entryId));
     } else {
       const inserted = await db

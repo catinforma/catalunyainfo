@@ -282,6 +282,14 @@ if [[ ${REUSE_BUILD_CACHE:-1} == 1 && -n $PREVIOUS && -d $PREVIOUS/.next/cache/t
   fi
 fi
 
+# Sitemap lastmod (scripts/body-dates.ts, run by `prebuild`): a page family whose
+# code or data differs from the live release's is dated now, as it goes live;
+# the others keep the live release's dates. It never fails the build. (Without
+# this variable the script finds ../../current itself; it is set to be explicit.)
+if [[ -n $PREVIOUS ]]; then
+  export BODY_DATES_PREVIOUS="$PREVIOUS/src/lib/seo/body-dates.json"
+fi
+
 log "npm run build (standalone)"
 BUILD_START=$(date +%s)
 nice -n 10 ionice -c 2 -n 7 npm run build || fail_build "next build failed"

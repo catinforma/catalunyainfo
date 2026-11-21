@@ -10852,4 +10852,120 @@ home-tools, inline-bold-links, next-step, search-shortcuts, title-budget, transp
 touched here, and `rsc-payload` only because this worktree has no `node_modules` (15/15 with a temporary link to the main
 checkout's).
 
+## 21 Nov 2026 — Crawl freshness: sitemap `lastmod` = when the page really last changed, site-wide (body dates per family, articles dated by their last reader-visible publish, 29N phases); sitemap resubmission script (deploy only; no publish group; no title, description or lead touched)
+
+**Why.** Google is not re-reading pages after we change them. Search Console last-crawl dates on 20 Nov: `/es/rodalies/r1/`
+and `/r4/` 30 Oct, `/ca/rodalies/` 29 Oct, `/es/embalses/` 1 Nov, `/es/gasolineras/` 6 Nov,
+`/es/guias/semana-santa-2027-cataluna/` 16 Nov, `/es/avisos/` unknown. We ship body changes daily to thousands of pages, and
+the sitemap told Google most of them had not changed since 28–30 Oct.
+
+**Findings (measured 20–21 Nov).**
+
+1. *Sitemap `lastmod` sources* (live sitemap of 21 Nov, release c8b6ae3, 2,888 URLs, 1.55 MB: one file is far inside the
+   50,000-URL / 50 MB limits; robots.txt lists `/sitemap.xml` and `/news-sitemap.xml`; every one of the 2,888 URLs answers 200
+   at the origin, none is noindex, every canonical is the URL itself):
+
+   | Family (URLs) | `lastmod` came from | Live 21 Nov | Wrong because |
+   |---|---|---|---|
+   | Elections ca/es/en (924) | results snapshot read day (`latestDataDate`) | 30 Oct, all 924 | polling places 2 Nov, mesa 4 Nov, polling section 16–19 Nov, 29N layer 18 Nov, model 20 Nov never showed; `/es/elecciones/barcelona/` last crawled **28 Oct** |
+   | Holiday towns/hubs/dates (797) | `NEXT_YEAR.readOn ?? SNAPSHOT.readOn` | 30 Oct (794) | 2027 local days for 302 + 72 more towns (4, 17, 20 Nov), next-holiday line, .ics block, CTR titles: frozen read day |
+   | Spain 2027 (421) | `SOURCES_READ_ON` / latest reading | 20 Nov (386), day pages 6 Nov (29) | day pages changed 18–20 Nov |
+   | Calculators (120) | each `RULES_AS_OF` / snapshot | 13 Nov (54), down to 28 May (average salary) | WebApplication schema 19 Nov, kinship table, "más calculadoras" links: rule dates only |
+   | Christmas fairs (95) | each town's check day | 13 Nov (90) | 33-town re-read and copy 20 Nov |
+   | Weekend (26), gordo, lottery checkers, polls | snapshot read / page constant | 11–19 Nov | template changes after |
+   | Rodalies, fuel, PVPC, butane, warnings, today | read at render (34b7e03, live since 20 Nov 18:55) | today / this hour | right (kept) |
+   | Reservoirs (30) | ACA latest reading | 20 Nov | right (kept) |
+   | Database articles: guides, strikes, legal (≈380 of the 401 non-programmatic URLs) | `entry_translations.updated_at` = dateModified, moved only when the facts are re-verified (article-dates.ts rule 3) | Easter 2027 guide **31 Oct** | body-only changes never moved it: Easter 2027 was republished with new content on 4, 11, 17, 18 and 20 Nov and stayed at 31 Oct (last crawl 16 Nov) |
+   | Home, hubs, author pages | newest article `updated_at` | 20 Nov | right source, inherited the article gap |
+
+2. *Google is not reading the sitemap.* Search Console sitemaps report (API, 21 Nov): `/sitemap.xml` submitted 17 Nov 12:41,
+   **last read 17 Nov 12:41** (only when submitted), 3,413 URLs submitted (the pre-cleanup count; live has 2,888);
+   `/news-sitemap.xml` read daily (last 21 Nov 04:56), 9 URLs, 0 errors. The origin log agrees: in 3.5 days Googlebot fetched
+   robots.txt 386 times and `/sitemap.xml` **0** times (the sitemap is `max-age=0, must-revalidate`, Cloudflare `EXPIRED`,
+   so every fetch would reach the origin). The news sitemap holds the last 48 h of news-type pages (9 = 3 pieces × 3 locales).
+3. *Crawl health* (Caddy log, Googlebot verified against Google's published IP ranges; 24 spoofed "Googlebot" requests
+   excluded; the log only keeps 18 Nov 02:09 → 21 Nov 11:47 because it rolls at 50 MiB × 10 files, so no 14-day view; with
+   Cloudflare in front the origin sees only cache misses and bypassed requests, so these are lower bounds and Search Console
+   Crawl stats is the full picture): **1,043 / 1,104 / 1,162 requests a day** (18/19/20 Nov; 848 by 11:47 on 21 Nov).
+   By family over the window: elections 1,296 (842 URLs), holidays 1,266 (836), robots/sitemaps 388, static 367, guides 344
+   (108), Spain 2027 201 (137), live pages 142 (104), home 51, fairs 15, calculators 8. Status: 4,022 × 200, 23 × 304,
+   32 × 307/308, 80 × 404 (75 old `/_next/static` chunks after deploys, 5 legacy WordPress URLs), **0 × 5xx, no timeouts**
+   (3 requests over 5 s). Response time p50 109 ms, p95 621 ms, p99 1.6 s (live pages p95 2.0 s). **52 % of Googlebot's HTML
+   hits (1,758 of 3,350) go to URLs not in the sitemap**: the noindex low-demand town pages (`/ca/festius/` 495,
+   `/ca/eleccions/` 417, `/es/festivos/` 304, `/es/elecciones/` 214), past 11N city strike pages 145, fuel place pages 75 —
+   expected while Google confirms the noindex, and the reason calculators get 8 hits in 3.5 days.
+4. *Freshness signals on pages.* HTML carries an ETag (weak through Caddy's gzip) and no `Last-Modified`; `If-None-Match`
+   gets 304 at the edge and `If-Modified-Since` gets 200, so a changed page can never be answered "not modified".
+   Cache-Control: static families `s-maxage=31536000` (purged by every deploy and publish), guides `s-maxage=86400, swr`, live
+   pages 300–1800 s, home 3600 s; Cloudflare HIT on cached pages, MISS after the 00:05 deploy purge. The sitemap's
+   `Last-Modified` is the response time (added at the edge; harmless, Google reads `lastmod`). JSON-LD `dateModified` and the
+   visible "updated" date follow the verification rules on purpose (lib/seo/article-dates.ts: Google News forbids freshening
+   without new information), elections/holidays carry their dataset's read day: both unchanged.
+5. *Discovery.* The new pages are linked from crawled hubs: `/es/avisos/` and `/en/fuel-prices-catalonia/` from the home
+   footer (home crawled 21 Nov), strike day pages from `/es/` and `/es/guias/`, the 46 new Spain 2027 city pages from their
+   community hub. URL inspection 21 Nov (22 URLs, `docs/growth/baseline/crawl-freshness-2026-11-21.json`): 21 indexed,
+   `/en/fuel-prices-catalonia/` unknown; last crawl `/es/rodalies/r1/` and `/r4/` 30 Oct, `/es/elecciones/barcelona/`
+   28 Oct, Spain 2027 city pages 13–15 Nov, `/es/guias/semana-santa-2027-cataluna/` 16 Nov, `/es/festivos/2027/` 14 Nov,
+   `/es/calculadoras/sueldo-neto/` and `salario-minimo-2027/` 14 Nov, `/es/mercados-navidad/` 17 Nov; already recrawled
+   after the 20 Nov live-data fix: `/ca/rodalies/` 21 Nov, `/es/gasolineras/`, `/es/embalses/`, `/es/avisos/` 20 Nov.
+   IndexNow (`scripts/indexnow-sitemap.py`, the publish route) reaches Bing, Yandex and Seznam only; Google ignores it and
+   retired the sitemap ping in 2023. What Google honours is an accurate `lastmod` it reads, and a sitemap it re-reads.
+
+**What changed.**
+
+- `src/lib/seo/body-dates.ts` + `body-dates.json`: every code-rendered family (55 `dated("<key>", …)` wraps in
+  `src/app/sitemap.ts`) is dated no earlier than its **body date**, the moment the code and data files that render its pages
+  last changed. `scripts/body-dates.ts` finds those files (the family's route files from its own sitemap URLs, their imports
+  inside the content folders, minus the site chrome and minus other families reached only through cross-links) and
+  fingerprints them on normalised source (comments and formatting move nothing; a string, number, link or data row does).
+  At deploy, `prebuild` re-dates a family whose fingerprint differs from the live release's **to the build time**, the
+  moment the change goes live; the others keep the live release's date (`BODY_DATES_PREVIOUS` from deploy.sh, or
+  `../../current` itself; it can never fail the build). Locally, `npm run seo:body-dates` dates a changed family by its last
+  real commit; `--check`, `--explain <key>`.
+- Database articles: `lastmod` = latest of dateModified, `entries.updated_at` (now written by publish-article.ts **only** when
+  an edition is new or its title, lead, SEO fields or body changed, or the hero image, category or source list changed; the
+  institutional-pages publisher no longer stamps it), today for day-dependent blocks (unchanged), and the body date of any
+  code-data block the article carries (local holidays table, Christmas shops, tourist tax, transport passes, municipal
+  elections, election history). Hubs and author pages take the newest article `lastmod`.
+- Elections: never older than the 29N phase the pages print (`electionPhaseStart`: 28 Nov 00:00, 29 Nov 00:00 and 20:00,
+  30 Nov, 8 Dec; the sitemap revalidates hourly).
+- `scripts/gsc-sitemaps.py`: `list` (the report above) and `submit --yes` (Search Console `sitemaps.submit` for both
+  sitemaps). Not run.
+- Effect on the live sitemap's code-rendered URLs (2,484): 2,428 move forward, e.g. elections 30 Oct → 20 Nov (924),
+  holiday towns 30 Oct → 20 Nov (794), Spain 2027 day pages 6 Nov → 20 Nov, calculators 13 Nov → 18–19 Nov, fairs 13 Nov →
+  20 Nov, average salary 28 May → 19 Nov; live families unchanged. Articles move to their last reader-visible publish (first
+  deploy: `entries.updated_at` still holds the last re-send, so it may overstate once for an article re-sent unchanged; from
+  then on only real changes move it).
+
+**Not changed, on purpose.** Titles, descriptions, H1s and leads (windows above). JSON-LD `dateModified` and visible dates
+(article-dates.ts rules). The single sitemap file (inside the limits; a split by family would only add per-family indexed
+counts in Search Console). Noindex decisions and the low-demand list. Caddy log retention (`roll_keep 10` keeps ~3.5 days;
+raising it to 40 would give the 14-day view: owner decision, disk). Granularity: the holiday town, comarca and date pages share
+one route (`[municipi]`), so a date-page change re-dates the towns too.
+
+**Prediction.** Within 14 days of the deploy plus resubmission: Search Console shows `/sitemap.xml` read after the
+resubmission and again without one; Googlebot origin requests reach `/sitemap.xml` at least weekly; at least 15 of the 22
+URLs show a last crawl after the deploy (elections Barcelona, Rodalies R1/R4, Spain 2027 cities, Easter 2027, calculators);
+`/en/fuel-prices-catalonia/` indexed. Crawl requests per day (Search Console Crawl stats) up ≥ 20 % on the 14 days before.
+Wrong if on 5 Dec the sitemap's last read is still the resubmission day, or fewer than 8 of the 22 URLs were crawled after it.
+
+**Confounders.** The 20 Nov live-data entry (same Rodalies/fuel/reservoir URLs; already recrawling). 29N (election pages
+get demand and links: crawl rises anyway — compare the elections share with the other families). The core update rolling out
+(18 Nov entry). Owner "Request indexing" clicks on single URLs (note which).
+
+**Review 2026-12-05 (14 days).** `~/.local/share/pipx/venvs/mcp-search-console/bin/python -I scripts/crawl-gap.py
+/tmp/crawl-5dec.json docs/growth/baseline/crawl-freshness-urls-2026-11-21.txt` (compare with
+`docs/growth/baseline/crawl-freshness-2026-11-21.json`); `… scripts/gsc-sitemaps.py list` (last read, submitted count
+2,888±); owner: Search Console → Settings → Crawl stats screenshot (requests/day, by response, by purpose "refresh" vs
+"discovery", by file type) for 7–21 Nov vs 21 Nov–5 Dec; the Googlebot-by-day count from the Caddy log (verified IPs, counts
+only); the live sitemap's `lastmod` for `/es/elecciones/barcelona/` (≥ 28 Nov once the 29N layer starts) and
+`/es/guias/semana-santa-2027-cataluna/` (its last reader-visible publish).
+
+**Go-live.** Deploy (`sudo -u deploy catalunyainfo-deploy main`); prebuild writes the release's body dates (log line
+`body-dates: 61 families, N changed since the live release`). Then reinstall the deploy script so it passes
+`BODY_DATES_PREVIOUS` explicitly (`sudo bash /srv/catalunyainfo/current/ops/vps/provision.sh --files-only`; without it the
+script finds `../../current` by itself). Then, once the new sitemap is live (check `lastmod` of `/es/elecciones/barcelona/`
+is no longer 30 Oct): `~/.local/share/pipx/venvs/mcp-search-console/bin/python -I scripts/gsc-sitemaps.py submit --yes`.
+Repeat the submit after a deploy that re-dates many families, at most once a day. No publish group, no IndexNow needed.
+
 **Outcome:** _pending_

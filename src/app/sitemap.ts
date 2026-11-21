@@ -68,6 +68,8 @@ import { widowSitemapEntries } from "@/lib/programmatic/widow-pension/page";
 import { ncSitemapEntries } from "@/lib/programmatic/non-contributory-pension/page";
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
 import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
+import { electionPhaseStart } from "@/lib/programmatic/elections/election-day";
+import { contentLastModified, dated, latestDate } from "@/lib/seo/body-dates";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -116,11 +118,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     byEntry.set(row.entryId, group);
   }
 
+  // lastmod of an article: its last reader-visible publish, today when it carries a
+  // day-dependent block, the body date of any code-data block in it (lib/seo/body-dates.ts).
+  const today = startOfTodayInMadrid();
   const entries: MetadataRoute.Sitemap = rows.map((row) => {
     const group = byEntry.get(row.entryId) ?? {};
     return {
       url: absoluteUrl(`/${row.locale}/${row.path}/`),
-      lastModified: row.dayDependent ? latest(row.updatedAt, startOfTodayInMadrid()) : row.updatedAt,
+      lastModified: contentLastModified(row, today),
       changeFrequency: row.dayDependent ? "daily" : "monthly",
       priority: 0.7,
       alternates: { languages: languageMap(group) },
@@ -156,10 +161,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     that is the date to use. Falls back to the current time only when there is
     no content at all, which is the one case where it is true.
   */
-  const newestContent = rows.reduce<Date | null>(
-    (newest, row) => (newest === null || row.updatedAt > newest ? row.updatedAt : newest),
-    null,
-  );
+  const newestContent = latestDate(...entries.map((entry) => entry.lastModified));
   const listingModified = newestContent ?? new Date();
 
   const systemEntries: MetadataRoute.Sitemap = [];
@@ -193,111 +195,115 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  // Every code-rendered family is dated no earlier than its body date: when the code and data
+  // that render its pages last changed them, stamped at the deploy that shipped it
+  // (lib/seo/body-dates.ts; scripts/body-dates.ts). Keys: scripts/lib/body-families.ts.
   const all: MetadataRoute.Sitemap = [
     ...systemEntries,
     ...entries,
-    ...electionsSitemap(),
-    ...holidaySitemapEntries(),
+    // From 28 Nov the 29N layer changes the pages at each phase (election-day.ts): never older than the phase.
+    ...dated("elections", [...electionsSitemap()], { floor: electionPhaseStart(new Date()) }),
+    ...dated("holidays", [...holidaySitemapEntries()]),
     // Calendario laboral 2027 en España: hub, bridges and the 19 communities (Spanish only).
-    ...spainSitemapEntries(),
+    ...dated("spain-2027", [...spainSitemapEntries()]),
     // "¿Es festivo el … de 2027?" for all Spain: one page per date, in ca, es and en.
-    ...spainDaySitemapEntries(),
+    ...dated("spain-2027-days", [...spainDaySitemapEntries()]),
     // Its Catalan and English editions (/ca/festius/2027/, /en/holidays/2027/), same pages.
-    ...editionSitemapEntries(),
+    ...dated("spain-2027-editions", [...editionSitemapEntries()]),
     // "Posa el calendari laboral 2027 al teu web", in ca, es and en. Never the /embed/ widgets themselves (noindex).
-    ...widgetSitemapEntries(),
+    ...dated("embed-2027", [...widgetSitemapEntries()]),
     // "Festius locals de Catalunya: els dies que més es repeteixen", the data report, in ca, es and en (never its CSV).
-    ...reportSitemapEntries([REPORT_PAGE_AS_OF, reportAsOf()].sort().at(-1)!),
+    ...dated("holidays-report", [...reportSitemapEntries([REPORT_PAGE_AS_OF, reportAsOf()].sort().at(-1)!)]),
     // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
-    ...leaveSitemapEntries(),
+    ...dated("leave-2027", [...leaveSitemapEntries()]),
     // The calculators hub (/es/calculadoras/, /ca/calculadores/, /en/calculators/).
-    ...calculatorsHubSitemapEntries(),
+    ...dated("calculators", [...calculatorsHubSitemapEntries()]),
     // "Calculadora de sueldo neto 2026" (calculators family), in es, ca and en.
-    ...netSalarySitemapEntries(),
+    ...dated("net-salary", [...netSalarySitemapEntries()]),
     // "Paga extra de Navidad 2026": gross, earned part, IRPF and net of the Christmas extra pay, in es, ca and en.
-    ...extraPaySitemapEntries(),
+    ...dated("extra-pay", [...extraPaySitemapEntries()]),
     // "Cuota de autónomos 2026 (y 2027)": the self-employed contributions calculator (Orden PJC/297/2026 bands), in es, ca and en.
-    ...selfEmployedSitemapEntries(),
+    ...dated("self-employed", [...selfEmployedSitemapEntries()]),
     // Dismissal pay, final settlement and unemployment benefit calculators, in ca, es and en.
-    ...employmentSitemapEntries(),
+    ...dated("employment", [...employmentSitemapEntries()]),
     // "Calculadora de baja laboral": sick pay (incapacidad temporal) day by day, in es, ca and en.
-    ...sickLeaveSitemapEntries(),
+    ...dated("sick-leave", [...sickLeaveSitemapEntries()]),
     // "Permisos laborales 2026": paid leave of the Estatuto de los Trabajadores with its calculator, in es, ca and en.
-    ...paidLeaveSitemapEntries(),
+    ...dated("paid-leave", [...paidLeaveSitemapEntries()]),
     // "Subsidio por desempleo 2026": who gets it, how much and how long (+ IMV 2026), in es, ca and en.
-    ...subsidySitemapEntries(),
+    ...dated("unemployment-subsidy", [...subsidySitemapEntries()]),
     // "Actualizar el alquiler": the rent-update calculator (INE IPC and IRAV), in es, ca and en.
-    ...rentSitemapEntries(),
+    ...dated("rent-update", [...rentSitemapEntries()]),
     // Precio de la luz hoy / mañana (PVPC), Spain-wide, in es, ca and en.
-    ...pvpcSitemapEntries(madridDate(Date.now())),
+    ...dated("pvpc", [...pvpcSitemapEntries(madridDate(Date.now()))]),
     // "Precio de la bombona de butano hoy" (BOE regulated price), in es, ca and en.
-    ...butaneSitemapEntries(madridDate(Date.now())),
+    ...dated("butane", [...butaneSitemapEntries(madridDate(Date.now()))]),
     // "Avisos ara a Catalunya": AEMET warnings, Protecció Civil plans and SCT incidents in force, in ca, es and en.
-    ...warningsSitemapEntries(Date.now()),
+    ...dated("warnings", [...warningsSitemapEntries(Date.now())]),
     // "Subida de las pensiones 2027": the pension revaluation calculator (INE CPI), in es, ca and en.
-    ...pensionSitemapEntries(),
+    ...dated("pensions-2027", [...pensionSitemapEntries()]),
     // "Calculadora de días hábiles": working days and deadlines (Ley 39/2015 art. 30, LOPJ, LEC), in es, ca and en.
-    ...workingDaysSitemapEntries(),
+    ...dated("working-days", [...workingDaysSitemapEntries()]),
     // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
-    ...smiSitemapEntries(),
+    ...dated("smi", [...smiSitemapEntries()]),
     // "IPREM 2026" (calculators family, group "official"), in es, ca and en.
-    ...ipremSitemapEntries(),
-    ...ipcSitemapEntries(),
+    ...dated("iprem", [...ipremSitemapEntries()]),
+    ...dated("ipc", [...ipcSitemapEntries()]),
     // "Salario medio en España" (INE EAES + EPA deciles; calculators family, group "official"), in es, ca and en; last modified on the newest INE release in the snapshot.
-    ...wageSitemapEntries(),
+    ...dated("average-salary", [...wageSitemapEntries()]),
     // "Letras del Tesoro" (calculators family, group "official"), in es, ca and en; last modified on the newest snapshot auction.
-    ...letrasSitemapEntries(LETRAS_SNAPSHOT.results),
+    ...dated("treasury-bills", [...letrasSitemapEntries(LETRAS_SNAPSHOT.results)]),
     // "Euríbor hoy" and "Calculadora de hipoteca" (calculators family, group "housing"), in es, ca and en; last modified on the snapshot's newest BOE day.
-    ...euriborSitemapEntries(EURIBOR_SNAPSHOT.series),
-    ...mortgageSitemapEntries(EURIBOR_SNAPSHOT.series),
+    ...dated("euribor", [...euriborSitemapEntries(EURIBOR_SNAPSHOT.series)]),
+    ...dated("mortgage", [...mortgageSitemapEntries(EURIBOR_SNAPSHOT.series)]),
     // "¿Cuándo me toca pasar la ITV?" (calculators family, group "vehicle"), in es, ca and en.
-    ...itvSitemapEntries(),
+    ...dated("itv", [...itvSitemapEntries()]),
     // Taxes on buying a home: ITP or IVA + AJD by community (calculators family, group "housing"), in es, ca and en.
-    ...htSitemapEntries(),
+    ...dated("home-purchase-tax", [...htSitemapEntries()]),
     // Home buying costs: notary and Land Registry fees on their official scales plus the taxes above (calculators family, group "housing"), in es, ca and en.
-    ...pcSitemapEntries(),
+    ...dated("purchase-costs", [...pcSitemapEntries()]),
     // Plusvalía municipal (IIVTNU, TRLRHL arts. 104-110; calculators family, group "housing"), in es, ca and en.
-    ...pvSitemapEntries(),
+    ...dated("plusvalia", [...pvSitemapEntries()]),
     // Catalan inheritance tax (Codi tributari, llibre sisè; calculators family, group "housing"), in ca, es and en.
-    ...isdSitemapEntries(),
+    ...dated("inheritance-tax", [...isdSitemapEntries()]),
     // The same tax in Madrid, Andalucía and the Comunitat Valenciana (calculators family, group "taxes"), in es, ca and en.
-    ...isdRegionSitemapEntries(),
+    ...dated("inheritance-tax-regions", [...isdRegionSitemapEntries()]),
     // Gift tax in the same four communities (calculators family, group "taxes"), in es, ca and en.
-    ...giftSitemapEntries(),
+    ...dated("gift-tax", [...giftSitemapEntries()]),
     // Inheritance and gift tax compared across the 21 territories, one worked example (calculators family, group "taxes"), in es, ca and en.
-    ...cmpSitemapEntries(),
+    ...dated("inheritance-compare", [...cmpSitemapEntries()]),
     // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
-    ...lotteryTaxSitemapEntries(),
-    ...bonoSocialSitemapEntries(),
+    ...dated("lottery-tax", [...lotteryTaxSitemapEntries()]),
+    ...dated("bono-social", [...bonoSocialSitemapEntries()]),
     // "¿A qué edad me puedo jubilar?" (LGSS art. 205 and DT 7ª; calculators family, group "work"), in es, ca and en.
-    ...retirementSitemapEntries(),
+    ...dated("retirement-age", [...retirementSitemapEntries()]),
     // "Pensión de viudedad: requisitos y cuánto se cobra" (LGSS arts. 219-223; calculators family, group "work"), in es, ca and en.
-    ...widowSitemapEntries(),
+    ...dated("widow-pension", [...widowSitemapEntries()]),
     // "Pensión no contributiva: requisitos y cuánto se cobra" (LGSS arts. 363-372; calculators family, group "work"), in es, ca and en.
-    ...ncSitemapEntries(),
+    ...dated("non-contributory-pension", [...ncSitemapEntries()]),
     // Traffic fines: deadlines, the 50 % and points (Ley de Tráfico; calculators family, group "vehicle"), in es, ca and en.
-    ...trafficFinesSitemapEntries(),
+    ...dated("traffic-fines", [...trafficFinesSitemapEntries()]),
     // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
-    ...ztSitemapEntries(),
+    ...dated("zona-tensionada", [...ztSitemapEntries()]),
     // The live pages are dated by what they print now: today for the fuel prices and the
     // Rodalies notices (both read at render), the ACA's latest reading for the reservoirs.
-    ...fuelSitemapEntries(madridDate(Date.now())),
+    ...dated("fuel", [...fuelSitemapEntries(madridDate(Date.now()))]),
     // Spain by province (es, ca, en): dated by the Ministry's time of the list the pages print (same memoised read).
-    ...spainFuelSitemapEntries(await loadSpainReadingTime()),
-    ...rodaliesSitemap(madridDate(Date.now())),
-    ...reservoirSitemapEntries(await loadLatestReadingDate()),
-    ...weekendSitemapEntries(),
-    ...todaySitemapEntries(),
-    ...christmasFairsSitemapEntries(),
+    ...dated("fuel-spain", [...spainFuelSitemapEntries(await loadSpainReadingTime())]),
+    ...dated("rodalies", [...rodaliesSitemap(madridDate(Date.now()))]),
+    ...dated("reservoirs", [...reservoirSitemapEntries(await loadLatestReadingDate())]),
+    ...dated("weekend", [...weekendSitemapEntries()]),
+    ...dated("today", [...todaySitemapEntries()]),
+    ...dated("christmas-fairs", [...christmasFairsSitemapEntries()]),
     // The Christmas lottery hubs; provinces and towns only once the 22 December snapshot lists them.
-    ...gordoSitemapEntries(),
+    ...dated("gordo", [...gordoSitemapEntries()]),
     // The Christmas lottery checker (es, ca, en): always; last modified when the snapshot was read.
-    ...checkSitemapEntries(),
+    ...dated("lottery-check", [...checkSitemapEntries()]),
     // The La Grossa de Cap d'Any (31 Dec) and El Niño (6 Jan) checkers (ca, es, en): always.
-    ...grossaCheckSitemapEntries(),
-    ...ninoCheckSitemapEntries(),
+    ...dated("grossa-check", [...grossaCheckSitemapEntries()]),
+    ...dated("nino-check", [...ninoCheckSitemapEntries()]),
     // URLs only: no title or snippet, so nothing here can carry a poll figure.
-    ...pollsSitemapEntries(),
+    ...dated("polls", [...pollsSitemapEntries()]),
   ];
   // The pages kept out of the index (noindex) are left out here too (lib/seo/low-demand.ts),
   // as <loc> and as anyone's hreflang alternate: the HTML leaves them out the same way
@@ -362,8 +368,4 @@ function startOfTodayInMadrid(now: Date = new Date()): Date {
       .find((part) => part.type === "timeZoneName")
       ?.value.replace("GMT", "") || "+00:00";
   return new Date(`${day}T00:00:00${offset}`);
-}
-
-function latest(a: Date, b: Date): Date {
-  return a > b ? a : b;
 }
