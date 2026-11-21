@@ -41,11 +41,13 @@
 }
 
 # Access log: JSON, rotated at 50 MiB, kept 14 days (it holds IP addresses).
+# roll_keep 40 (21 Nov 2026): at ~3 rolls a day, 10 files kept only ~3.5 days,
+# so the 14 days of roll_keep_for never applied; 40 gzipped rolls are ~160 MB.
 (access_log) {
 	log {
 		output file /var/log/caddy/catalunyainfo.access.log {
 			roll_size 50MiB
-			roll_keep 10
+			roll_keep 40
 			roll_keep_for 336h
 		}
 		format json
