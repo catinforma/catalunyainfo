@@ -239,6 +239,7 @@ export const TRANSPORT: B2Article = {
           "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 20 de novembre de 2026 ni l'ATM ni TMB no han publicat els del 2027 (l'any passat l'ATM els va aprovar el 19 de desembre). Les ajudes estatals del Reial decret llei 17/2025, que paguen el 50 % de descompte de la T-usual, cobreixen de l'1 de gener al 31 de desembre de 2026; encara no s'ha anunciat cap pròrroga per al 2027.",
           "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Badalona i Montgat són a la zona 1; el Masnou (amb Ocata) i Premià de Mar, a la zona 2. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
           `Per anar a Sitges amb títols integrats de l'ATM calen 3 zones (T-casual de 3 zones, 34,70 €); ho detallem a ${b2link("sitges", "ca", "el tren de Barcelona a Sitges")}.`,
+          `L'R5 de Plaça Espanya a Montserrat són 4 zones, però el cremallera i l'Aeri no accepten la T-casual: ${b2link("montserratFree", "ca", "quin bitllet comprar per al cremallera o l'Aeri de Montserrat")}.`,
         ),
         ...h2(
           "T-casual: la targeta de 10 viatges",
@@ -342,6 +343,7 @@ export const TRANSPORT: B2Article = {
           "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 20 de noviembre de 2026 ni la ATM ni TMB han publicado los de 2027 (el año pasado la ATM los aprobó el 19 de diciembre). Las ayudas estatales del Real Decreto-ley 17/2025, que pagan el 50 % de descuento de la T-usual, cubren del 1 de enero al 31 de diciembre de 2026; aún no se ha anunciado ninguna prórroga para 2027.",
           "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Badalona y Montgat están en la zona 1; El Masnou (con Ocata) y Premià de Mar, en la zona 2. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
           `Para ir a Sitges con títulos integrados de la ATM hacen falta 3 zonas (T-casual de 3 zonas, 34,70 €); lo detallamos en ${b2link("sitges", "es", "el tren de Barcelona a Sitges")}.`,
+          `La R5 de Plaça Espanya a Montserrat son 4 zonas, pero el cremallera y el teleférico no aceptan la T-casual: ${b2link("montserratFree", "es", "qué billete comprar para el cremallera o el teleférico de Montserrat")}.`,
         ),
         ...h2(
           "T-casual: la tarjeta de 10 viajes",
@@ -438,6 +440,7 @@ export const TRANSPORT: B2Article = {
           "These prices apply until ATM's next fare change; as of 20 November 2026 neither ATM nor TMB had published the 2027 fares (last year ATM approved them on 19 December). The State aid of Royal Decree-Law 17/2025, which pays for the T-usual's 50% discount, covers 1 January to 31 December 2026; no extension for 2027 has been announced yet.",
           "**How many zones do you need?** Count the fare sector you leave from and the one you arrive in: Barcelona (zone 1) to Sabadell (zone 2C) needs a 2-zone ticket, according to TMB. Badalona and Montgat are in zone 1; El Masnou (with Ocata) and Premià de Mar in zone 2. Each journey allows up to 3 transfers within 75 minutes in one zone, plus 15 minutes for each extra zone. A T-casual on a cardboard T-mobilitat card costs €1 more.",
           `Sitges is 3 zones on ATM integrated tickets (a 3-zone T-casual is €34.70): see ${b2link("sitges", "en", "the Barcelona to Sitges train")}.`,
+          `The R5 from Plaça Espanya to Montserrat is 4 zones, but the rack railway and the cable car do not take the T-casual: ${b2link("montserratFree", "en", "which ticket to buy for the Montserrat cable car or rack railway")}.`,
         ),
         ...h2(
           "T-casual: Barcelona's 10-journey ticket",

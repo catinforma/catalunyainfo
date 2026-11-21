@@ -101,13 +101,13 @@ test("montserrat: external links are the operators' and the Abbey's own sites, n
     }
   }
   for (const source of MONTSERRAT_FREE.sources) {
-    assert.match(new URL(source.url).hostname, /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.museudemontserrat\.cat)$/, source.url);
+    assert.match(new URL(source.url).hostname, /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.museudemontserrat\.cat|www\.tmb\.cat)$/, source.url);
   }
   assert.equal(new Set(MONTSERRAT_FREE.sources.map((s) => s.url)).size, MONTSERRAT_FREE.sources.length, "no duplicate source URL (it breaks the publish)");
 });
 
 test("montserrat: fares and the Aeri calendar run to 31 Dec 2026 (re-read the 2027 fares and calendar, then move MONTSERRAT_REREAD_BY)", () => {
-  assert.equal(MONTSERRAT_FREE.verifiedAt, "2026-11-13");
+  assert.equal(MONTSERRAT_FREE.verifiedAt, "2026-11-21");
   assert.ok(Date.now() < Date.parse(`${MONTSERRAT_REREAD_BY}T00:00:00Z`), "Montserrat fares (Turistren, Aeri) and the Aeri calendar end on 31 Dec 2026: re-read them for 2027");
 });
 

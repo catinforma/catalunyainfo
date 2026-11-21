@@ -633,15 +633,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Aparcar en Barcelona: zona azul y zona verde",
     en: "Parking in Barcelona: blue and green zones",
   },
+  // 21 Nov 2026: day-trip rail labels in the searched words (horaris AVE, cremallera o Aeri, preu Museu Dalí).
   girona: {
-    ca: "Girona des de Barcelona en tren",
-    es: "Girona desde Barcelona en tren",
-    en: "Girona from Barcelona by train",
+    ca: "Tren de Barcelona a Girona: horaris de l'AVE i l'R11",
+    es: "Tren de Barcelona a Girona: horarios del AVE y el R11",
+    en: "Barcelona to Girona by train: AVE and R11 times",
   },
   montserratFree: {
-    ca: "Montserrat per lliure des de Barcelona",
-    es: "Montserrat por libre desde Barcelona",
-    en: "Montserrat without a tour",
+    ca: "Cremallera o Aeri de Montserrat: horaris i preus",
+    es: "Cremallera o teleférico de Montserrat: horarios y precios",
+    en: "Montserrat cable car or rack railway: times and fares",
   },
   ripolles: {
     ca: "El Ripollès: què veure a la comarca",
@@ -756,9 +757,9 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Barcelona to Andorra bus: timetable and fares",
   },
   figueres: {
-    ca: "Figueres i el Museu Dalí des de Barcelona",
-    es: "Figueres y el Museo Dalí desde Barcelona",
-    en: "Figueres and the Dalí Museum from Barcelona",
+    ca: "Museu Dalí de Figueres des de Barcelona: tren i preu",
+    es: "Museo Dalí de Figueres desde Barcelona: tren y precio",
+    en: "Barcelona to the Dalí Museum in Figueres by train",
   },
   sitges: {
     ca: "Sitges des de Barcelona en tren",
