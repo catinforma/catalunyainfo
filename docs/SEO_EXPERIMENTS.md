@@ -10969,3 +10969,104 @@ is no longer 30 Oct): `~/.local/share/pipx/venvs/mcp-search-console/bin/python -
 Repeat the submit after a deploy that re-dates many families, at most once a day. No publish group, no IndexNow needed.
 
 **Outcome:** _pending_
+
+## 2026-11-21 — Core Web Vitals on mobile, 10 templates: field passes everywhere; the LCP hero is the only high-priority image and ≥ 2.5 dppx phones fetch a ~2x hero (deploy only; no group; no title, description, lead, AdSense, consent or verification code touched) (review 2026-12-19)
+
+**Field data (CrUX, phone, 28 days to ~20 Nov), read from pagespeed.web.dev.** The keyless PSI API v5 still answers 429
+with `quota_limit_value: "0"` (13 calls, all refused), so the 10 URLs were run in the public PSI page in headless Chromium
+and its results saved (raw payloads, Lighthouse JSON and the field section per URL:
+`/tmp/claude-1003/-home-claude/66f5ed46-c07a-4181-b990-f92071877662/scratchpad/cwv-21nov/`; 13 analyses, ≤ 40 calls with
+the refused ones). Only one URL has its own CrUX record; the other nine fall back to the origin.
+
+| Scope | LCP p75 (good %) | INP p75 | CLS p75 | FCP p75 (good %) | TTFB p75 (good %) | Assessment |
+| --- | --- | --- | --- | --- | --- | --- |
+| Origin www.catalunyainfo.com | 1.7 s (89 %; 4 % poor) | 97 ms (96 %) | 0 (100 %) | 1.7 s (79 %; 7 % poor) | 0.6 s (85 %; 4 % poor) | **Passed** |
+| `/es/guias/puente-diciembre-espana/` (URL) | 1.6 s (94 %) | n/a | 0 (100 %) | 1.6 s (84 %) | 0.5 s (92 %) | **Passed** |
+| home /es/, strike 26N, Barcelona holidays, Vigo 2027, Barcelona elections, paga extra, Canyelles fair, fuel hub, Montserrat | no URL record → origin row | | | | | Passed (origin) |
+
+FCP = LCP at p75 and TTFB is a third of it: the field LCP is mostly the document's arrival and first paint.
+
+**Lab (Lighthouse 13.6.0 in PSI, mobile: 412×823 @1.75 dppx, 150 ms RTT, 1.6 Mbps, 21 Nov 12:27–12:33 UTC, one run each,
+new profile so the consent card is up).**
+
+| Template | URL | Score | FCP | LCP (simulated) | LCP element | TBT | CLS |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Home | /es/ | 100 | 0.9 s | 0.9 s | lead paragraph | 0 ms | 0 |
+| Database guide | /es/guias/puente-diciembre-espana/ | 96 | 1.1 s | **2.7 s** | hero image | 31 ms | 0 |
+| Strike day | /es/guias/huelga-26-noviembre/ | 98 | 1.1 s | **2.4 s** | hero image | 4 ms | 0 |
+| Holiday town | /es/festivos/barcelona/ | 99 | 1.1 s | 1.1 s | lead (`p.ci-lead`) | 24 ms | 0 |
+| Spain 2027 city | /es/festivos/2027/galicia/vigo/ | 100 | 0.9 s | 0.9 s | list item | 47 ms | 0 |
+| Election town | /es/elecciones/barcelona/ | 100 | 1.2 s | 1.2 s | H1 | 25 ms | 0 |
+| Calculator | /es/calculadoras/paga-extra/ | 100 | 1.4 s | 1.4 s | lead | 12 ms | 0 |
+| Christmas fair | /es/mercados-navidad/canyelles/ | 100 | 1.1 s | 1.1 s | lead | 10 ms | 0.002 (FairStatus line) |
+| Live (fuel) | /es/gasolineras/ | 100 | 1.1 s | 1.1 s | lead | 11 ms | 0 |
+| Day trip | /en/day-trips/montserrat-without-a-tour-from-barcelona/ | 98 | 1.2 s | **2.4 s** | hero image | 8 ms | 0 |
+
+Every page: one 15.7 KB (br) stylesheet flagged render-blocking (100–450 ms estimated), 170–190 KB of JS (React DOM and the
+Next router are 46–50 KB of "unused" JS), 108 KB of preloaded fonts (Plex variable 41 KB + Fraunces 67.5 KB), no
+third-party request (GA only after consent; **no AdSense script is loaded anywhere**: 0 `adsbygoogle`, 0 `<ins>`, only the
+`google-adsense-account` meta). Rodalies was not run (same live template as the fuel hub; call budget).
+
+**Server side.** curl from the VPS through Cloudflare: HTML HIT 0.09–0.26 s, MISS 0.37–1.9 s (paga extra 1.9 s, strike
+0.82 s, Canyelles 0.77 s, Montserrat 0.62 s). Caddy origin log 21 Nov 01:11–12:34 UTC (19,676 origin requests): HTML for
+people p50 31 ms, p75 78 ms, p90 198 ms, p99 1.16 s; `/_next/image` (bypassed at Cloudflare) p50 122 ms, p90 453 ms.
+
+**Top three, with evidence.**
+1. **TTFB/cache misses** are the largest share of field LCP (TTFB p75 0.6 s of 1.7 s; 4 % poor > 1.8 s). A Cloudflare MISS
+   costs 0.4–1.9 s against 0.1–0.25 s for a HIT. Not code.
+2. **Image-hero templates** (guides, strike days, day trips; `/es/guias/` is a third of impressions) are the only ones with lab
+   LCP over 2 s. In the waterfall the hero (fetchpriority high, preloaded) shares the first window with the two fonts, the
+   stylesheet and the header mark, all "High"; the mark (36 px) only because React's server renderer preloads every
+   non-lazy `<img>` that is not `fetchPriority="low"`. Real phones also fetch big heroes: origin log, mobile user agents,
+   w=1200 54 KB, w=1600 90 KB on average.
+3. **Consent card on election town pages** (not changed, owner rule): Playwright lab (412×823 @1.75, 1.6 Mbps/150 ms, CPU ×2,
+   3 runs each) `/es/elecciones/barcelona/` first visit LCP 4.18 s (3.92–4.64), card paragraph = LCP element 3/3, vs
+   2.43 s (2.37–2.74) with the cookie answered: **+1.75 s**. On `/es/festivos/barcelona/` the card is no longer the LCP
+   element (the 19 Nov answer-first lead is bigger): 3.57 s (2.66–4.31) vs 3.47 s (2.45–3.59), noise. In PSI the election
+   H1 (27,500 px²) and the card paragraph are about the same size, so the LCP element flips with fonts and viewport. Field
+   LCP still passes at the origin; the cost lands on first visits only, i.e. ~90 % of visitors.
+
+**Changes.**
+- `src/components/Wordmark.tsx`: the mark gets `fetchPriority="low"` (still `loading="eager"`). React then emits no
+  `<link rel="preload" as="image">` for it, so the hero (articles) or the fonts and stylesheet (everything else) are the only
+  high-priority requests in the first window, and every page drops one origin request from it.
+- `src/components/pages/EntryArticle.tsx` + `src/lib/layout/hero-image.ts`: hero `sizes` =
+  `(max-width: 47.99rem) and (min-resolution: 2.5dppx) 70vw, 100vw`. What-if on production (HTML rewritten, Chromium):
+  412 px @2.625 1080w → 828w, 393/430 px @3 1200w → 828w, 412 px @3.5 1600w → 1080w; strike guide hero 33–62 KB → 21–33 KB,
+  Montserrat 51–128 KB → 32–51 KB; effective density 1.9–2.6x; 1.75 and 2 dppx phones, tablets and desktops unchanged; a
+  browser without `resolution` in `sizes` reads 100vw. The head preload carries the same string (one request).
+- Test: `tests/lcp-image-priority.test.ts`.
+
+**Expected effect.** Field: LCP on the image-hero templates a little earlier on ≥ 2.5 dppx phones (20–75 KB less on the LCP
+request; the slow tail gains most: the bridge guide has 7 % of loads over 2.5 s). No pass/fail change: everything already
+passes. Lab: the PSI phone is 1.75 dppx, so its hero is unchanged; only the mark leaves the head preloads.
+
+**Not changed, and why.**
+- Consent card: owner rule (numbers above). AdSense: not loaded, nothing to measure.
+- `experimental.inlineCss` (would remove the render-blocking stylesheet, ~1 RTT for new visitors): experimental, duplicates
+  the CSS in the RSC payload (+15–30 KB br on every HTML, ISR cache and crawls), cannot be checked without a build. Candidate
+  for its own measured trial.
+- Fonts: dropping the Fraunces preload or its `opsz` axis would free ~67 KB of the first window on hero pages, at the cost of
+  heading swap shifts on Android (no metric-matched local fallback there) or the brand cut. Field CLS is 100 % good; left.
+- Framework JS (React DOM, router) and the 11 KB block-renderer chunk on articles: not worth a refactor at TBT 4–47 ms.
+- Owner, free, outside the code: (a) Cloudflare **Tiered Cache → Smart Tiered Caching** to raise the HTML hit ratio (point
+  1). (b) `/api/fuel/catalonia/` is bypassed at Cloudflare (rule 3, `/api/`) while upstream.ts assumes an hour of CDN cache:
+  every call re-reads the Ministry list (origin p50 1.66 s, p90 3.5 s; PSI: the fetch took 3.3 s and the re-rank landed at
+  4.3 s, main thread 821 ms, the highest of the ten). Fix = a cache rule for that path or a 5-minute in-process memo like
+  `fuel/server.ts`; not done here (live-data behaviour, 10 calls in 11 h). (c) Meta's link-preview bot `HatchFeed`
+  (agent.meta.ai) took 2,680 of 3,886 `/_next/image` responses and 343 of 398 MB in those 11 h (1600/1920 w), over the same
+  origin link the readers use.
+
+**Re-test after deploy.**
+1. `curl -s https://www.catalunyainfo.com/es/guias/huelga-26-noviembre/ | grep -o 'imageSizes="[^"]*"'` → the new string;
+   `grep -c 'rel="preload" as="image" imageSrcSet="/_next/image/?url=%2Ficon-192'` → 0 (no head preload for the mark).
+2. Rerun the what-if script unmodified (`whatif-hero-sizes.js` in the scratchpad tools): 393 px @3 must fetch 828w, once.
+3. pagespeed.web.dev on the 10 URLs (links in the scratchpad `*.field.json`): the mark's request "Low", hero alone "High".
+
+**Revert rule.** If the hero is fetched twice (preload and `<img>` disagree), or the URL-level field LCP of
+`/es/guias/puente-diciembre-espana/` is worse than 1.6 s at p75 at the review, revert `HERO_SIZES` to `"100vw"`.
+
+**Review 2026-12-19 (28-day CrUX window after the deploy).** pagespeed.web.dev for the same 10 URLs (origin and any URL
+records), Search Console → Core Web Vitals (mobile) groups. Compare with the table above.
+
+**Outcome:** _pending_
