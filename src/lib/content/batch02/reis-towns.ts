@@ -28,8 +28,8 @@ import type { B2Key } from "./shared";
  * page, never as the source. On that day no council had published its 2027
  * times or route.
  *
- * HOW TO UPDATE (by 22 December 2026, when a test starts failing, and again
- * from 2 January 2027):
+ * HOW TO UPDATE (from each REIS_REREAD_BY day, when a test starts failing:
+ * 1, 15 and 22 December 2026 and 2 January 2027):
  *  - Read each town's `watch` page. If the 2027 parade is out, fill `y2027`
  *    with what the council's own page says (date, time, and whatever of
  *    start, route, end and arrival it gives), its URL and the read date.
@@ -40,16 +40,24 @@ import type { B2Key } from "./shared";
  *  - `y2026` stays as it is: it is printed with its year, never as 2027's.
  */
 
-/** The day every row below was last read on the councils' own sites. */
-export const REIS_TOWNS_AS_OF = "2026-11-05";
+/**
+ * The day every council's `watch` page was last read for its 2027 parade.
+ * 21 Nov 2026: all re-read; Granollers (programme "2026 - 2027") has
+ * published its 2027 parade, and so have Sabadell and Reus (reis.ts
+ * ANNOUNCED_2027); the others still show 2026 or nothing.
+ */
+export const REIS_TOWNS_AS_OF = "2026-11-21";
 
 /**
  * The re-read checkpoints: from each of these days on, REIS_TOWNS_AS_OF (and
- * REIS_AS_OF) must be on or after it. Councils publish their routes in the
- * last ten days of December (Mataró 22 Dec 2025, Reus 15 Dec 2025) and
- * Barcelona on 2 January.
+ * REIS_AS_OF) must be on or after it.
+ *  - 1 Dec: Barcelona's Christmas programme (arrival and start time) came out
+ *    on 12 Nov in 2025 and is not out on 21 Nov 2026; Mataró's on 20 Nov 2025.
+ *  - 15 Dec: Igualada published on 11 Dec 2025, Reus presented on 15 Dec.
+ *  - 22 Dec: Mataró's route on 22 Dec 2025, Badalona's tickets from 22 Dec.
+ *  - 2 Jan: Barcelona's full route and passing times (2 Jan 2026).
  */
-export const REIS_REREAD_BY = ["2026-12-22", "2027-01-02"] as const;
+export const REIS_REREAD_BY = ["2026-12-01", "2026-12-15", "2026-12-22", "2027-01-02"] as const;
 
 /** The 2026 parade as the council gave it. Place names stay as the council writes them (Catalan). */
 export interface TownParade2026 {
@@ -208,10 +216,11 @@ export const REIS_TOWNS: readonly ReisTown[] = [
     name: "Granollers",
     hosts: /(^|\.)granollers\.cat$/,
     watch: "https://www.granollers.cat/nadal/cavalcada",
-    // Christmas site (reused every year; "Dilluns 5 de gener" = 2026): "Dilluns 5 de gener, 17.30 h. Carrer de
+    // 2026: the 2025-26 programme PDF ("2025 - 2026", re-read 21 Nov 2026): "Dilluns 5 de gener, 17.30 h. Carrer de
     // Lluís Companys." Route as below, "pl. Corona (aprox. 18.30 h)", "pl. Constitució (aprox. 19.30 h)", floats
-    // only "fins al carrer Sant Josep"; "20 h a la Plaça de la Porxada". Same text in the programme PDF (20 Nov
-    // 2025). The quiet stretch is left out: the 20 Nov 2025 press note puts it elsewhere.
+    // only "fins al carrer Sant Josep"; "20 h a la Plaça de la Porxada". The quiet stretch is left out: the 20 Nov
+    // 2025 press note puts it elsewhere. Until 5 Nov this row cited the yearly parade page
+    // (granollers.cat/nadal/cavalcada), which shows 2027's parade since mid-November.
     y2026: {
       date: "2026-01-05",
       time: "17:30",
@@ -219,12 +228,33 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       route: ["carrer del Camp de les Moreres", "carrer de Fernao Magallanes", "carrer de Francesc Macià", "carrer d'Alfons IV", "plaça de la Corona", "carrer d'Anselm Clavé", "plaça de Maluquer i Salvador", "plaça de Perpinyà", "carrer de Joan Prim", "carrer de Ramon Llull", "carrer de Rafael Casanova", "carrer de Torras i Bages", "plaça de la Constitució", "carrer de Roger de Flor", "carrer de Sant Josep", "plaça de l'Església"],
       end: "plaça de la Porxada",
       endTime: "20:00",
-      url: "https://www.granollers.cat/nadal/cavalcada",
-      alsoUrl: "https://www.granollers.cat/sites/default/files/aaff_nadal2025_programa_17nov_ok_sense_creus.pdf",
+      url: "https://www.granollers.cat/sites/default/files/aaff_nadal2025_programa_17nov_ok_sense_creus.pdf",
       published: "2025-11-20",
-      read: READ,
+      read: "2026-11-21",
     },
-    y2027: null,
+    // 2027: the programme "Nadal i Reis a Granollers 2026 - 2027" (PDF linked from granollers.cat/nadal/cavalcada,
+    // read 21 Nov 2026): "Dimarts 5 de gener 17.30 h Carrer Camp de les Moreres"; "(amb carrosses fins al carrer Sant
+    // Josep) C. Camp de les Moreres (17.30 h), c. Fernando Magallanes, c. Francesc Macià, c. Alfons IV, pl. Corona
+    // (aprox. 18.30 h), c. Anselm Clavé, pl. Maluquer i Salvador, pl. Perpinyà, c. Joan Prim, c. Ramon Llull, c. Rafael
+    // Casanova, c. Torras i Bages, pl. Constitució (aprox. 19.30 h), c. Roger de Flor, c. Sant Josep, pl. Església i pl.
+    // Porxada"; "Recepció reial als infants Dimarts 5 de gener 20 h Plaça de la Porxada"; "Tram de cavalcada tranquil·la
+    // Al carrer Camp de les Moreres entre Lluís Companys i Mare de Déu de Montserrat"; "Els caramels que es reparteixen a
+    // la cavalcada són sense gluten"; "La Picarolada Dimarts 5 de gener 17 h Roca Umbert Fàbrica de les Arts".
+    y2027: {
+      date: "2027-01-05",
+      time: "17:30",
+      start: "carrer del Camp de les Moreres",
+      route: ["carrer de Fernao Magallanes", "carrer de Francesc Macià", "carrer d'Alfons IV", "plaça de la Corona", "carrer d'Anselm Clavé", "plaça de Maluquer i Salvador", "plaça de Perpinyà", "carrer de Joan Prim", "carrer de Ramon Llull", "carrer de Rafael Casanova", "carrer de Torras i Bages", "plaça de la Constitució", "carrer de Roger de Flor", "carrer de Sant Josep", "plaça de l'Església"],
+      end: "plaça de la Porxada",
+      endTime: "20:00",
+      url: "https://www.granollers.cat/sites/default/files/aaff_nadal2026_programa-baixa.pdf",
+      read: "2026-11-21",
+      notes: {
+        ca: "Les carrosses arriben fins al carrer de Sant Josep; el programa marca la plaça de la Corona cap a les 18:30 i la de la Constitució cap a les 19:30, i a les 20:00 els Reis reben els infants a la plaça de la Porxada. El tram tranquil és al carrer del Camp de les Moreres, entre Lluís Companys i Mare de Déu de Montserrat, i els caramels són sense gluten. Abans, a les 17:00, la Picarolada surt de Roca Umbert.",
+        es: "Las carrozas llegan hasta la calle de Sant Josep; el programa marca la plaza de la Corona hacia las 18:30 y la de la Constitució hacia las 19:30, y a las 20:00 los Reyes reciben a los niños en la plaza de la Porxada. El tramo tranquilo está en la calle del Camp de les Moreres, entre Lluís Companys y Mare de Déu de Montserrat, y los caramelos son sin gluten. Antes, a las 17:00, la Picarolada sale de Roca Umbert.",
+        en: "The floats go as far as Carrer de Sant Josep; the programme has the parade at Plaça de la Corona at about 18:30 and Plaça de la Constitució at about 19:30, and at 20:00 the Kings meet children in Plaça de la Porxada. The quiet stretch is on Carrer del Camp de les Moreres, between Lluís Companys and Mare de Déu de Montserrat, and the sweets are gluten-free. Before that, at 17:00, the Picarolada (bells and rattles) sets off from Roca Umbert.",
+      },
+    },
     notes: {
       ca: "Les carrosses arribaven fins al carrer de Sant Josep; l'últim tram els Reis el feien a peu, i a les 20:00 rebien els infants a la plaça de la Porxada. L'horari previst marcava la plaça de la Corona cap a les 18:30 i la de la Constitució cap a les 19:30.",
       es: "Las carrozas llegaban hasta la calle de Sant Josep; el último tramo los Reyes lo hacían a pie, y a las 20:00 recibían a los niños en la plaza de la Porxada. El horario previsto marcaba la plaza de la Corona hacia las 18:30 y la de la Constitució hacia las 19:30.",

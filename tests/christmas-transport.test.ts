@@ -13,12 +13,18 @@ import {
   TRANSPORT_NADAL_META,
   TRANSPORT_NADAL_REREAD_BY,
   TRANSPORT_URLS,
+  FGC_PRE_CHRISTMAS_2026,
   announcedProblems,
   buildTransportBody,
   christmasTransportMention,
   dayItems,
+  daysByMonth,
+  glanceRows,
   metroLine,
   needsReread,
+  operatorRowsFor,
+  rereadDueOn,
+  shortCell,
   operatorByKey,
   operatorProblems,
   tramDay,
@@ -205,24 +211,72 @@ test("every operator row is publishable: own hosts, last season's notices, the r
   assert.ok(operatorProblems({ ...fgc, notices: [{ ...fgc.notices[0]!, published: "2024-12-19" }] }).length > 0, "an older notice");
 });
 
-test("while no operator has published, every last-season line says its year and 'per confirmar', and no line claims 2026-27", () => {
-  if (Object.values(ANNOUNCED_2026_27).some(Boolean)) return;
+test("every last-season line says its year and 'per confirmar'; a 2026-27 line only comes from a filled slot, on its own site", () => {
   const pending: Record<Locale, string> = { ca: "per confirmar", es: "por confirmar", en: "to be confirmed" };
+  const slotUrls = Object.values(ANNOUNCED_2026_27).filter((s): s is Announced => Boolean(s)).map((s) => s.url);
   for (const locale of LOCALES) {
     for (const day of TRANSPORT_DAYS) {
       for (const item of dayItems(day, locale)) {
-        assert.ok(!/\*\* \(2026-27\)/.test(item), `${locale} ${day}: a 2026-27 line without a notice: ${item}`);
+        if (/\*\* \(2026-27\)/.test(item)) assert.ok(slotUrls.some((u) => item.includes(`](${u})`)), `${locale} ${day}: a 2026-27 line without a notice: ${item}`);
         if (/\((2025|2026), /.test(item)) assert.ok(item.includes(pending[locale]), `${locale} ${day}: ${item}`);
       }
     }
     assert.ok(body(locale).includes(pending[locale]), locale);
   }
-  // Every last-season fact appears with its year on the day it describes.
+  // Every last-season fact appears with its year on the day it describes, unless that operator's 2026-27 notice covers the day.
   for (const op of OPERATORS) {
     for (const [day, fact] of Object.entries(op.days)) {
       const items = dayItems(day as never, "ca").join(" ");
+      if (ANNOUNCED_2026_27[op.key]?.days[day as never]) {
+        assert.ok(!items.includes(fact!.text.ca), `${op.key} ${day}: last season's line next to this season's`);
+        continue;
+      }
       assert.ok(items.includes(fact!.text.ca) && items.includes(`(${fact!.year}`), `${op.key} ${day}`);
     }
+  }
+});
+
+test("21 Nov 2026: FGC's 2026-27 notice is in (24 Dec 23:00, 25 Dec 2:00, all night on New Year's Eve) and the other operators still show last season", () => {
+  const fgc = ANNOUNCED_2026_27.fgc!;
+  assert.ok(fgc, "FGC published on 19 Nov 2026");
+  assert.deepEqual(announcedProblems(fgc, operatorByKey("fgc")), []);
+  assert.equal(fgc.published, "2026-11-19");
+  assert.match(new URL(fgc.url).host, /(^|\.)govern\.cat$/);
+  assert.deepEqual(Object.keys(fgc.days).sort(), ["christmas", "christmasEve", "newYearsEve"]);
+  for (const key of ["metro", "tmbBus", "nitbus", "rodalies", "tram"] as const) assert.equal(ANNOUNCED_2026_27[key], null, `${key}: nothing out on ${TRANSPORT_NADAL_AS_OF}`);
+  for (const locale of LOCALES) {
+    assert.ok(json(locale).includes(`](${fgc.url})`), `${locale}: the FGC note is linked`);
+    assert.ok(CHRISTMAS_TRANSPORT.sources.some((s) => s.url === fgc.url), "the FGC note is a source");
+    // Sant Esteve is not in the note: last season's line stays, with its year.
+    assert.ok(dayItems("santEsteve", locale).some((i) => i.includes(operatorByKey("fgc").days.santEsteve!.text[locale])), `${locale}: FGC on 26 Dec keeps 2025`);
+    // The day-by-day table: one row per day, one column per operator, the FGC cell of 31 Dec from the 2026-27 notice.
+    const rows = glanceRows(locale);
+    assert.equal(rows.length, TRANSPORT_DAYS.length);
+    for (const row of rows) assert.equal(row.length, 7, `${locale}: ${row[0]}`);
+    assert.ok(rows[TRANSPORT_DAYS.indexOf("newYearsEve")]![5]!.includes("2026-27"), `${locale}: FGC on 31 Dec`);
+    assert.ok(rows[TRANSPORT_DAYS.indexOf("newYearsEve")]![4]!.length > 0, `${locale}: Rodalies on 31 Dec`);
+    // The New Year's Eve table the NYE guide prints.
+    const nye = operatorRowsFor("newYearsEve", locale);
+    assert.equal(nye.length, OPERATORS.length);
+    // FGC's weekend trains before Christmas.
+    assert.ok(body(locale).includes(`${FGC_PRE_CHRISTMAS_2026.vallesExtra.from}`) && json(locale).includes(`](${FGC_PRE_CHRISTMAS_2026.url})`), `${locale}: FGC weekend trains`);
+  }
+  assert.equal(daysByMonth(FGC_PRE_CHRISTMAS_2026.days, "ca"), "21, 22, 28 i 29 de novembre i 5, 6, 8, 12, 13, 19 i 20 de desembre");
+  assert.equal(daysByMonth(FGC_PRE_CHRISTMAS_2026.days, "en"), "21, 22, 28 and 29 November and 5, 6, 8, 12, 13, 19 and 20 December");
+  assert.equal(shortCell("nitbus", "christmas", "ca", NONE), "sense avís especial");
+});
+
+test("21 Nov 2026: the FAQ answers Rodalies on New Year's Eve, the metro on 26 December, 1 January and 5-6 January", () => {
+  const questions: Record<Locale, string[]> = {
+    ca: ["Hi ha trens de Rodalies la nit de Cap d'Any?", "Hi ha metro tota la nit per Sant Esteve, el 26 de desembre?", "Fins a quina hora hi ha metro l'1 de gener?", "Quin horari fa el metro el 5 i el 6 de gener?"],
+    es: ["¿Hay trenes de Rodalies la noche de Fin de Año?", "¿Hay metro toda la noche en San Esteban, el 26 de diciembre?", "¿Hasta qué hora hay metro el 1 de enero?", "¿Qué horario tiene el metro el 5 y el 6 de enero?"],
+    en: ["Do Rodalies trains run all night on New Year's Eve?", "Does the metro run all night on 26 December (Sant Esteve)?", "Until what time does the metro run on 1 January?", "What are the metro hours on 5 and 6 January?"],
+  };
+  for (const locale of LOCALES) {
+    const faq = CHRISTMAS_TRANSPORT.editions[locale].blocks.find((b) => b.type === "faq") as unknown as { items: { question: string; answer: string }[] };
+    for (const q of questions[locale]) assert.ok(faq.items.some((i) => i.question === q), `${locale}: ${q}`);
+    const fgcFaq = faq.items.find((i) => /FGC/.test(i.question) && /Cap d'Any|Fin de Año|New Year/.test(i.question))!;
+    assert.ok(fgcFaq.answer.includes("2026-27") && !fgcFaq.answer.includes(`2026-27, ${{ ca: "per confirmar", es: "por confirmar", en: "to be confirmed" }[locale]}`), `${locale}: FGC's NYE answer gives this season's notice`);
   }
 });
 
@@ -321,11 +375,15 @@ test("the server HTML does not depend on the clock: no clock read, same body on 
   }
 });
 
-test("re-read the operators: from 18 December 2026 TRANSPORT_NADAL_AS_OF must be on or after that day", () => {
-  assert.equal(TRANSPORT_NADAL_REREAD_BY, "2026-12-18");
-  assert.equal(needsReread("2026-12-17"), false);
-  assert.equal(needsReread("2026-12-18"), true);
-  assert.equal(needsReread("2026-12-18", "2026-12-18"), false);
+test("re-read the operators: from 7, 17, 23 and 30 December 2026 TRANSPORT_NADAL_AS_OF must be on or after the checkpoint", () => {
+  assert.deepEqual([...TRANSPORT_NADAL_REREAD_BY], ["2026-12-07", "2026-12-17", "2026-12-23", "2026-12-30"]);
+  assert.equal(rereadDueOn("2026-12-06"), null);
+  assert.equal(needsReread("2026-12-06", "2026-11-21"), false);
+  assert.equal(needsReread("2026-12-07", "2026-11-21"), true);
+  assert.equal(needsReread("2026-12-16", "2026-12-07"), false);
+  assert.equal(needsReread("2026-12-17", "2026-12-07"), true);
+  assert.equal(needsReread("2026-12-24", "2026-12-23"), false);
+  assert.equal(needsReread("2026-12-31", "2026-12-23"), true);
   const today = madridDate(new Date());
   assert.ok(TRANSPORT_NADAL_AS_OF <= today, `TRANSPORT_NADAL_AS_OF (${TRANSPORT_NADAL_AS_OF}) is in the future`);
   assert.equal(

@@ -101,6 +101,20 @@ import { OPENING_2027, SHOPS } from "./shops";
  * re-read (reis-towns.ts REIS_REREAD_BY). The 5-6 January transport line now
  * links the Christmas transport page.
  *
+ * 21 Nov 2026 (December events cluster): every council re-read. Three have
+ * published 2027: Sabadell (its new web.sabadell.cat agenda, north to south,
+ * 18:00-21:00), Reus (Christmas campaign note of 18 Nov: arrival 16:30,
+ * parade 18:30) and Granollers (programme "2026 - 2027", reis-towns.ts). The
+ * old Sabadell page answers 404: `gone` keeps its 2026 facts with the read
+ * date, unlinked. Barcelona: still nothing (press room tags "nadal-2026" and
+ * "reis", searches "cap d'any" and "cavalcada", barcelona.cat/nadal still
+ * "Nadal 2025"); sign-ups close 23 Nov (SIGNUPS_CLOSED switches the wording
+ * at the next re-read). New query-worded FAQ: "Quan és la Cavalcada de Reis
+ * 2027?", when Barcelona publishes, how to take part, and Sabadell, Terrassa,
+ * Badalona and L'Hospitalet in one answer. Title, description and lead
+ * wording untouched (window to 28 Nov); only the lead's check date moves.
+ * Re-read checkpoints: reis-towns.ts REIS_REREAD_BY (1, 15, 22 Dec, 2 Jan).
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights on a Barcelona shopping street), also the Christmas in Barcelona
  * hero, with its exact alt text and caption, because media rows are keyed by
@@ -108,7 +122,7 @@ import { OPENING_2027, SHOPS } from "./shops";
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const REIS_AS_OF = "2026-11-05";
+export const REIS_AS_OF = "2026-11-21";
 
 /* -------------------------------------------------------------------------- */
 /* The days, from the shared modules                                          */
@@ -171,10 +185,18 @@ export interface Parade {
   url: string;
   /** The day that page was read, ISO. */
   read: string;
+  /** What else the council's page says about this parade (the camp, a quiet stretch), in each language. */
+  notes?: Record<Locale, string>;
 }
 
 /** A past parade, always printed with its year. */
 export interface PastParade extends Parade {
+  /**
+   * The day `url` was found removed from the council's site (it answered 404).
+   * The facts read before stay, with the read date, but the page is no longer
+   * linked or listed as a source.
+   */
+  gone?: string;
   /** The arrival as one short phrase, for the towns table. */
   arrivalText: Record<Locale, string>;
   /** The start as one short phrase, when "time, start" would mislead. */
@@ -240,8 +262,48 @@ export const ANNOUNCED_2027: Announced2027 = {
     girona: null,
     lleida: null,
     tarragona: null,
-    reus: null,
-    sabadell: null,
+    // "Reus convida a celebrar el Nadal amb tots els sentits" (presentation of the 2026 Christmas campaign, dated
+    // Wednesday 18 Nov 2026; read 21 Nov 2026): "El 5 de gener, a les 16.30 h, a la plaça d'Anton Borrell, arribaran
+    // Ses Majestats els Reis d'Orient. A les 18.30 h, des del Capdamunt del carrer Ample, s'iniciarà la Cavalcada [...]
+    // En arribar a l'Ajuntament, Ses Majestats sortiran al balcó per rebre les claus de la ciutat." "Els emissaris
+    // reials [...] recolliran cartes als Campaments Reials de La Palma els dies 30 de desembre i 2, 3 i 4 de gener."
+    // No route beyond the start and the end yet.
+    reus: {
+      date: "2027-01-05",
+      time: "18:30",
+      arrival: { time: "16:30", place: "plaça d'Anton Borrell" },
+      start: "capdamunt del carrer Ample",
+      end: "Ajuntament",
+      url: "https://www.reus.cat/noticia/reus-convida-celebrar-el-nadal-amb-tots-els-sentits",
+      read: "2026-11-21",
+      notes: {
+        ca: "L'Ajuntament ho va presentar el 18 de novembre de 2026, amb la campanya de Nadal. La cavalcada l'obre l'estel; en arribar a l'Ajuntament, els Reis surten al balcó a rebre les claus de la ciutat. Els emissaris reials recullen cartes als Campaments Reials de La Palma el 30 de desembre i el 2, 3 i 4 de gener. El recorregut complet encara no s'ha publicat.",
+        es: "El Ayuntamiento lo presentó el 18 de noviembre de 2026, con la campaña de Navidad. Abre la cabalgata la estrella; al llegar al Ayuntamiento, los Reyes salen al balcón a recibir las llaves de la ciudad. Los emisarios reales recogen cartas en los Campamentos Reales de La Palma el 30 de diciembre y el 2, 3 y 4 de enero. El recorrido completo aún no se ha publicado.",
+        en: "The City Council announced it on 18 November 2026, with its Christmas programme. A star leads the parade; at the town hall the Kings come out on the balcony to receive the keys to the city. The royal emissaries collect letters at the royal camps in La Palma on 30 December and 2, 3 and 4 January. The full route has not been published yet.",
+      },
+    },
+    // web.sabadell.cat, the council's Christmas agenda (read 21 Nov 2026): "CAVALCADA DE REIS. Eix central de la Ciutat
+    // de nord a sud. Inici: carrer de Les Palmeres. Final: pl. de la Nova Creu." "Recorregut: carrer de Les Palmeres,
+    // av. Matadepera, av. Concòrdia, av. Francesc Layret, Ctra. de Prats, av. Onze de Setembre, Via Massagué,
+    // pg. Manresa, pg. de la Plaça Major, pl. Doctor Robert, Rambla, av. Barberà, ctra. de Barcelona i pl. de la Nova
+    // Creu." "Dimarts 5 de gener de 2027. Horari: de 18 a 21 h". Ambassador (id 116649): "Dissabte 26 de desembre de
+    // 2026, de 12 a 13 h, Ajuntament de Sabadell, pl. de Sant Roc, 1". Royal camp (id 116648): "26 de desembre: de 17
+    // a 20.30 h. Del 27 de desembre al 4 de gener: d'11 a 14 h i de 17 a 20.30 h", Casa Duran, c. del Pedregar, 7.
+    sabadell: {
+      date: "2027-01-05",
+      time: "18:00",
+      start: "carrer de les Palmeres",
+      route: ["avinguda de Matadepera", "avinguda de la Concòrdia", "avinguda de Francesc Layret", "carretera de Prats de Lluçanès", "avinguda de l'Onze de Setembre", "via de Massagué", "passeig de Manresa", "passeig de la Plaça Major", "plaça del Doctor Robert", "Rambla", "avinguda de Barberà", "carretera de Barcelona"],
+      end: "plaça de la Nova Creu",
+      endTime: "21:00",
+      url: "https://web.sabadell.cat/index.php?option=com_content&view=article&id=116565&Itemid=371",
+      read: "2026-11-21",
+      notes: {
+        ca: "Aquest any la cavalcada va de nord a sud, al revés que el 2026. Abans, l'Ambaixador Reial arriba a l'Ajuntament (plaça de Sant Roc, 1) el dissabte 26 de desembre, de 12:00 a 13:00, i el Campament Reial obre a la Casa Duran (carrer del Pedregar, 7) del 26 de desembre (de 17:00 a 20:30) al 4 de gener (d'11:00 a 14:00 i de 17:00 a 20:30).",
+        es: "Este año la cabalgata va de norte a sur, al revés que en 2026. Antes, el Embajador Real llega al Ayuntamiento (plaza de Sant Roc, 1) el sábado 26 de diciembre, de 12:00 a 13:00, y el Campamento Real abre en la Casa Duran (calle del Pedregar, 7) del 26 de diciembre (de 17:00 a 20:30) al 4 de enero (de 11:00 a 14:00 y de 17:00 a 20:30).",
+        en: "This year the parade runs north to south, the other way round from 2026. Before it, the Royal Ambassador arrives at the town hall (Plaça de Sant Roc, 1) on Saturday 26 December, 12:00 to 13:00, and the royal camp is open at Casa Duran (Carrer del Pedregar, 7) from 26 December (17:00 to 20:30) to 4 January (11:00 to 14:00 and 17:00 to 20:30).",
+      },
+    },
     mataro: null,
     badalona: null,
     igualada: null,
@@ -270,8 +332,11 @@ export const BARCELONA_NEWS_2027 = {
   opens: "2026-10-19",
   closes: "2026-11-23",
   url: "https://inscripcions-ajuntament.barcelona.cat/index.php/469371?lang=ca",
-  read: "2026-11-05",
+  read: "2026-11-21",
 } as const;
+
+/** True once the page's check date is past the sign-up deadline: the sentence then says they have closed. */
+export const SIGNUPS_CLOSED = REIS_AS_OF > BARCELONA_NEWS_2027.closes;
 
 export const REIS_WATCH = {
   barcelonaPage: "https://www.barcelona.cat/nadal/ca/els-reis-dorient/la-cavalcada-de-reis",
@@ -310,6 +375,11 @@ export function paradeProblems(parade: Parade, hosts: RegExp): string[] {
   }
   if (!valid(parade.read)) problems.push(`read ${parade.read} is not an ISO date`);
   else if (parade.read < FIRST_CHECKED) problems.push(`read ${parade.read} is before this page first checked the councils`);
+  if (parade.notes) {
+    for (const locale of ["ca", "es", "en"] as Locale[]) {
+      if (!parade.notes[locale]?.trim()) problems.push(`notes: empty ${locale} text`);
+    }
+  }
   return problems;
 }
 
@@ -528,8 +598,11 @@ export const TOWNS: readonly Town[] = [
     key: "sabadell",
     name: "Sabadell",
     hosts: /(^|\.)sabadell\.cat$/,
-    watch: "https://www.sabadell.cat/ca/?option=com_content&view=article&id=246271&Itemid=2907",
+    // The council moved to web.sabadell.cat in November 2026; its Christmas agenda lists the 2027 parade.
+    watch: "https://web.sabadell.cat/nadal",
     past: {
+      // Read on 31 Oct 2026; on 21 Nov 2026 the address redirected to web.sabadell.cat and answered 404.
+      gone: "2026-11-21",
       date: "2026-01-05",
       time: "18:00",
       start: "ronda de Pau Vila amb carretera de Barcelona",
@@ -738,7 +811,8 @@ export function reisSources(announced: Announced2027 = ANNOUNCED_2027, moreTowns
   ]);
   const seen = new Set<string>();
   const out: B2Source[] = [];
-  for (const source of [...filled, ...BASE_SOURCES, ...TOWNS.flatMap((t) => t.past.sources), ...more]) {
+  const pastSources = TOWNS.flatMap((t) => (t.past.gone ? t.past.sources.filter((s) => s.url !== t.past.url) : t.past.sources));
+  for (const source of [...filled, ...BASE_SOURCES, ...pastSources, ...more]) {
     if (seen.has(source.url)) continue;
     seen.add(source.url);
     out.push(source);
@@ -956,6 +1030,8 @@ export interface TownView {
   notes?: Record<Locale, string>;
   announcedRoute?: true;
   guide?: B2Key;
+  /** The day the 2026 page was found removed (then it is named, not linked). */
+  gone?: string;
 }
 
 const sortName = (name: string) => name.replace(/^(L'|El |La |Les |Els )/, "");
@@ -975,6 +1051,7 @@ export function allTowns(announced: Announced2027 = ANNOUNCED_2027, more: readon
       notes: t.past.notes,
       announcedRoute: t.past.announcedRoute,
       guide: t.guide,
+      gone: t.past.gone,
       full: true,
     })),
     ...more.map((t) => ({ name: t.name, hosts: t.hosts, watch: t.watch, slot: t.y2027, news2027: t.news2027, past: t.y2026, startText: t.startText, arrivalText: t.arrivalText, notes: t.notes, announcedRoute: t.announcedRoute, guide: t.guide, full: false })),
@@ -987,11 +1064,12 @@ const PENDING: Record<Locale, string> = { ca: "per confirmar", es: "por confirma
 function townStatus(town: TownView, locale: Locale): string {
   const slot = town.slot;
   if (slot) {
+    const notes = slot.notes ? ` ${slot.notes[locale]}` : "";
     const arrival = slot.arrival ? { ca: `Arribada dels Reis: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. `, es: `Llegada de los Reyes: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. `, en: `The Kings arrive: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. ` }[locale] : "";
     return {
-      ca: `**2027:** ${dayDate(slot.date, "ca")}, ${at(slot.time, "ca")}. ${arrival}${routeLine(slot, "ca")} Font: [${COUNCIL.ca}](${slot.url}), consultada el ${dateYear(slot.read, "ca")}.`,
-      es: `**2027:** ${dayDate(slot.date, "es")}, ${at(slot.time, "es")}. ${arrival}${routeLine(slot, "es")} Fuente: [${COUNCIL.es}](${slot.url}), consultada el ${dateYear(slot.read, "es")}.`,
-      en: `**2027:** ${dayDate(slot.date, "en")}, ${at(slot.time, "en")}. ${arrival}${routeLine(slot, "en")} Source: [${COUNCIL.en}](${slot.url}), read on ${dateYear(slot.read, "en")}.`,
+      ca: `**2027:** ${dayDate(slot.date, "ca")}, ${at(slot.time, "ca")}. ${arrival}${routeLine(slot, "ca")}${notes} Font: [${COUNCIL.ca}](${slot.url}), consultada el ${dateYear(slot.read, "ca")}.`,
+      es: `**2027:** ${dayDate(slot.date, "es")}, ${at(slot.time, "es")}. ${arrival}${routeLine(slot, "es")}${notes} Fuente: [${COUNCIL.es}](${slot.url}), consultada el ${dateYear(slot.read, "es")}.`,
+      en: `**2027:** ${dayDate(slot.date, "en")}, ${at(slot.time, "en")}. ${arrival}${routeLine(slot, "en")}${notes} Source: [${COUNCIL.en}](${slot.url}), read on ${dateYear(slot.read, "en")}.`,
     }[locale];
   }
   const news = town.news2027 ? ` ${town.news2027.text[locale]}` : "";
@@ -1032,6 +1110,13 @@ const SOURCE_LINK: Record<Locale, (url: string) => string> = {
   en: (url) => `Source: [council website](${url}).`,
 };
 
+/** A 2026 page the council has since removed: named with the day it was read, not linked. */
+const GONE_SOURCE: Record<Locale, (read: string) => string> = {
+  ca: (read) => `Font: web de l'Ajuntament, consultada el ${dateYear(read, "ca")}; l'Ajuntament ja l'ha retirada.`,
+  es: (read) => `Fuente: web del Ayuntamiento, consultada el ${dateYear(read, "es")}; el Ayuntamiento ya la ha retirado.`,
+  en: (read) => `Source: council website, read on ${dateYear(read, "en")}; the council has since taken the page down.`,
+};
+
 function townPast(town: TownView, locale: Locale): string[] {
   const p = town.past;
   const route = routeLine(p, locale);
@@ -1041,7 +1126,8 @@ function townPast(town: TownView, locale: Locale): string[] {
   const how = { ca: "Com va ser el 2026", es: "Cómo fue en 2026", en: "How 2026 went" }[locale];
   // The first eight towns carry a full account; the others a summary built from the row.
   const account = town.full && town.notes ? town.notes[locale] : [pastSummary(p, locale, town.startText), town.notes?.[locale]].filter(Boolean).join(" ");
-  const out = [`**${how}:** ${account} ${SOURCE_LINK[locale](p.url)}`];
+  const source = town.gone ? GONE_SOURCE[locale](p.read) : SOURCE_LINK[locale](p.url);
+  const out = [`**${how}:** ${account} ${source}`];
   if (route && p.route?.length) out.push(`**${routeLabel}:** ${route}`);
   return out;
 }
@@ -1201,6 +1287,33 @@ function daysParas(locale: Locale): string[] {
 
 const RELATED = ["christmasBarcelona", "christmasTraditions", "barcelonaDecember", "newYear", "shops", "bridges2027", "hours"] as const;
 
+/** Barcelona's call for people to take part: open until 23 Nov 2026, then in the past tense. */
+function signupsSentence(): Record<Locale, string> {
+  const n = BARCELONA_NEWS_2027;
+  const d = (iso: string, locale: Locale) => dateYear(iso, locale);
+  return SIGNUPS_CLOSED
+    ? {
+        ca: `Ja s'hi està treballant: les [inscripcions per participar a la Cavalcada de Reis 2027](${n.url}), per a majors de 8 anys, van estar obertes del ${d(n.opens, "ca")} al ${d(n.closes, "ca")} i ja s'han tancat.`,
+        es: `Ya se está preparando: las [inscripciones para participar en la Cabalgata de Reyes 2027](${n.url}), para mayores de 8 años, estuvieron abiertas del ${d(n.opens, "es")} al ${d(n.closes, "es")} y ya se han cerrado.`,
+        en: `Preparations have started: [sign-ups to take part in the 2027 parade](${n.url}), for anyone aged 8 or over, ran from ${d(n.opens, "en")} to ${d(n.closes, "en")} and have now closed.`,
+      }
+    : {
+        ca: `Ja s'hi està treballant: l'Ajuntament ha obert les [inscripcions per participar a la Cavalcada de Reis 2027](${n.url}) del ${d(n.opens, "ca")} al ${d(n.closes, "ca")}, a les 23:59, per a majors de 8 anys.`,
+        es: `Ya se está preparando: el Ayuntamiento ha abierto las [inscripciones para participar en la Cabalgata de Reyes 2027](${n.url}) del ${d(n.opens, "es")} al ${d(n.closes, "es")}, a las 23:59, para mayores de 8 años.`,
+        en: `Preparations have started: the City Council has opened [sign-ups to take part in the 2027 parade](${n.url}) from ${d(n.opens, "en")} to ${d(n.closes, "en")} at 23:59, for anyone aged 8 or over.`,
+      };
+}
+
+/** "Granollers (17:30), Reus (18:30) i Sabadell (18:00)": the towns whose 2027 slot is filled, with the start time. */
+export function publishedTownsList(locale: Locale, announced: Announced2027 = ANNOUNCED_2027): string {
+  return joinList(
+    allTowns(announced)
+      .filter((t) => t.slot)
+      .map((t) => `${t.name} (${t.slot!.time})`),
+    locale,
+  );
+}
+
 function keyFactItems(locale: Locale, barcelona: Parade | null): { label: string; value: string }[] {
   const L = <T,>(value: Record<Locale, T>) => value[locale];
   const holiday = holidayOn(REIS_DAY);
@@ -1247,11 +1360,7 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
           es: `Aún no se ha anunciado (${AS_OF.es}). La cabalgata es siempre la tarde del 5 de enero, la víspera de Reyes, y en 2027 cae en ${dayDate(PARADE_DAY, "es", false).split(" ")[0]}. El Ayuntamiento publica el horario en dos fases: para la de 2026, el ${programme} anunció la llegada de los Reyes y la hora de salida, y el ${routeDay} el recorrido completo con el horario de paso.`,
           en: `Not announced yet (${AS_OF.en}). The parade is always on the evening of 5 January, the eve of Three Kings' Day, which in 2027 is a ${dayDate(PARADE_DAY, "en", false).split(" ")[0]}. The City Council publishes the times in two stages: for the 2026 parade, it announced the Kings' arrival and the start time on ${programme}, and the full route with passing times on ${routeDay}.`,
         }),
-        L({
-          ca: `Ja s'hi està treballant: l'Ajuntament ha obert les [inscripcions per participar a la Cavalcada de Reis 2027](${BARCELONA_NEWS_2027.url}) del ${dateYear(BARCELONA_NEWS_2027.opens, "ca")} al ${dateYear(BARCELONA_NEWS_2027.closes, "ca")}, per a majors de 8 anys.`,
-          es: `Ya se está preparando: el Ayuntamiento ha abierto las [inscripciones para participar en la Cabalgata de Reyes 2027](${BARCELONA_NEWS_2027.url}) del ${dateYear(BARCELONA_NEWS_2027.opens, "es")} al ${dateYear(BARCELONA_NEWS_2027.closes, "es")}, para mayores de 8 años.`,
-          en: `Preparations have started: the City Council has opened [sign-ups to take part in the 2027 parade](${BARCELONA_NEWS_2027.url}) from ${dateYear(BARCELONA_NEWS_2027.opens, "en")} to ${dateYear(BARCELONA_NEWS_2027.closes, "en")}, for anyone aged 8 or over.`,
-        }),
+        L(signupsSentence()),
         L({
           ca: `Com a referència, el 2026 els Reis van arribar al Portal de la Pau a les ${B_ARRIVAL} i la cavalcada va sortir a les ${B.time}; l'horari previst la feia arribar al final, l'avinguda de Francesc Ferrer i Guàrdia, a les ${B.endTime}. ${B.notes.ca}`,
           es: `Como referencia, en 2026 los Reyes llegaron al Portal de la Pau a las ${B_ARRIVAL} y la cabalgata salió a las ${B.time}; el horario previsto la hacía llegar al final, la avenida de Francesc Ferrer i Guàrdia, a las ${B.endTime}. ${B.notes.es}`,
@@ -1338,6 +1447,19 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
     const holiday = holidayOn(REIS_DAY);
     const T = TRANSPORT_2026;
     const mariaCristina = B.stops?.find((stop) => stop.place.includes("Maria Cristina"))?.time ?? "";
+    const published = publishedTownsList(loc, a);
+    const views = allTowns(a);
+    /** "a Sabadell, a les 18:00 (2027, ja publicada)" or "a Terrassa, per confirmar (el 2026, a les 18:00)". */
+    const townClause = (name: string): string => {
+      const view = views.find((t) => t.name === name);
+      if (!view) return "";
+      const s = view.slot;
+      return s
+        ? LL({ ca: `a ${name}, ${at(s.time, "ca")} (2027, ja publicada)`, es: `en ${name}, ${at(s.time, "es")} (2027, ya publicada)`, en: `in ${name}, ${at(s.time, "en")} (2027, already published)` })
+        : LL({ ca: `a ${name}, per confirmar (el 2026, ${at(view.past.time, "ca")})`, es: `en ${name}, por confirmar (en 2026, ${at(view.past.time, "es")})`, en: `in ${name}, to be confirmed (${view.past.time} in 2026)` });
+    };
+    const bigTowns = ["Sabadell", "Terrassa", "Badalona", "L'Hospitalet de Llobregat"].map(townClause).filter(Boolean);
+    const signupAges = { ca: "persones que l'1 de gener de 2027 tinguin 8 anys o més, en quatre franges d'edat (de 8 a 10, d'11 a 13, de 14 a 17 i a partir de 18); els menors de 14 anys, amb el pare, la mare o el tutor", es: "personas que el 1 de enero de 2027 tengan 8 años o más, en cuatro franjas de edad (de 8 a 10, de 11 a 13, de 14 a 17 y a partir de 18); los menores de 14 años, con el padre, la madre o el tutor", en: "anyone aged 8 or over on 1 January 2027, in four age groups (8 to 10, 11 to 13, 14 to 17, and 18 and over); under-14s through a parent or guardian" };
     return [
       {
         question: LL({ ca: "A quina hora és la Cavalcada de Reis 2027 a Barcelona?", es: "¿A qué hora es la Cabalgata de Reyes 2027 en Barcelona?", en: "What time is the Three Kings parade in Barcelona in 2027?" }),
@@ -1352,6 +1474,14 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
               es: `El Ayuntamiento aún no lo ha publicado (${AS_OF.es}). Será la tarde del ${dayDate(PARADE_DAY, "es")}. En 2026 los Reyes llegaron al Portal de la Pau a las ${B_ARRIVAL} y la cabalgata salió a las ${B.time}.`,
               en: `The City Council has not published it yet (${AS_OF.en}). It will be on the evening of ${dayDate(PARADE_DAY, "en")}. In 2026 the Kings arrived at Portal de la Pau at ${B_ARRIVAL} and the parade set off at ${B.time}.`,
             }),
+      },
+      {
+        question: LL({ ca: "Quan és la Cavalcada de Reis 2027?", es: "¿Cuándo es la Cabalgata de Reyes 2027?", en: "When is the Three Kings parade in 2027?" }),
+        answer: LL({
+          ca: `El vespre del ${dayDate(PARADE_DAY, "ca")}, la vigília de Reis, a Barcelona i a la resta de Catalunya; el ${dayDate(REIS_DAY, "ca")} és festiu.${published ? ` Ja n'han publicat l'hora: ${published}.` : ""} ${b ? `A Barcelona, ${at(b.time, "ca")}.` : `Barcelona encara no (${AS_OF.ca}); el 2026 la cavalcada va sortir a les ${B.time}.`}`,
+          es: `La tarde del ${dayDate(PARADE_DAY, "es")}, la víspera de Reyes, en Barcelona y en el resto de Cataluña; el ${dayDate(REIS_DAY, "es")} es festivo.${published ? ` Ya han publicado la hora: ${published}.` : ""} ${b ? `En Barcelona, ${at(b.time, "es")}.` : `Barcelona aún no (${AS_OF.es}); en 2026 la cabalgata salió a las ${B.time}.`}`,
+          en: `On the evening of ${dayDate(PARADE_DAY, "en")}, the eve of Three Kings' Day, in Barcelona and across Catalonia; ${dayDate(REIS_DAY, "en")} is a public holiday.${published ? ` Start times already published: ${published}.` : ""} ${b ? `In Barcelona, ${at(b.time, "en")}.` : `Not Barcelona yet (${AS_OF.en}); in 2026 its parade set off at ${B.time}.`}`,
+        }),
       },
       {
         question: LL({ ca: "Quin és el recorregut de la Cavalcada de Reis de Barcelona?", es: "¿Cuál es el recorrido de la Cabalgata de Reyes de Barcelona?", en: "What is the route of the Barcelona Three Kings parade?" }),
@@ -1392,6 +1522,34 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
         }),
       },
       {
+        question: LL({ ca: "Quan es publica l'horari i el recorregut de la Cavalcada de Barcelona 2027?", es: "¿Cuándo se publica el horario y el recorrido de la Cabalgata de Barcelona 2027?", en: "When are the times and route of Barcelona's 2027 parade published?" }),
+        answer: b
+          ? LL({
+              ca: `L'Ajuntament ja els ha publicat: ${dayDate(b.date, "ca")}, ${at(b.time, "ca")}${b.stops?.length ? ", amb l'horari de pas carrer a carrer" : ""} ([font](${b.url}), consultada el ${dateYear(b.read, "ca")}).`,
+              es: `El Ayuntamiento ya los ha publicado: ${dayDate(b.date, "es")}, ${at(b.time, "es")}${b.stops?.length ? ", con el horario de paso calle a calle" : ""} ([fuente](${b.url}), consultada el ${dateYear(b.read, "es")}).`,
+              en: `The City Council has published them: ${dayDate(b.date, "en")} ${at(b.time, "en")}${b.stops?.length ? ", with street-by-street passing times" : ""} ([source](${b.url}), read on ${dateYear(b.read, "en")}).`,
+            })
+          : LL({
+              ca: `Encara no s'han publicat (${AS_OF.ca}): el [web de Nadal de l'Ajuntament](${REIS_WATCH.barcelonaPage}) encara mostra la cavalcada del 2026. Per a la del 2026, l'Ajuntament va anunciar l'arribada dels Reis i l'hora de sortida el ${dateYear(PAST.programme2025.published, "ca")}, amb el programa de Nadal, i el recorregut complet amb l'horari de pas el ${dateYear(PAST.cavalcada2026.route, "ca")}.`,
+              es: `Aún no se han publicado (${AS_OF.es}): la [web de Navidad del Ayuntamiento](${REIS_WATCH.barcelonaPage}) aún muestra la cabalgata de 2026. Para la de 2026, el Ayuntamiento anunció la llegada de los Reyes y la hora de salida el ${dateYear(PAST.programme2025.published, "es")}, con el programa de Navidad, y el recorrido completo con el horario de paso el ${dateYear(PAST.cavalcada2026.route, "es")}.`,
+              en: `Not yet (${AS_OF.en}): the [City Council's Christmas website](${REIS_WATCH.barcelonaPage}) still shows the 2026 parade. For the 2026 parade, the council announced the Kings' arrival and start time on ${dateYear(PAST.programme2025.published, "en")}, in its Christmas programme, and the full route with passing times on ${dateYear(PAST.cavalcada2026.route, "en")}.`,
+            }),
+      },
+      {
+        question: LL({ ca: "Com es pot participar a la Cavalcada de Reis 2027 de Barcelona?", es: "¿Cómo se puede participar en la Cabalgata de Reyes 2027 de Barcelona?", en: "How can you take part in Barcelona's 2027 Three Kings parade?" }),
+        answer: SIGNUPS_CLOSED
+          ? LL({
+              ca: `Amb el sorteig de l'Ajuntament, que ja s'ha tancat: s'hi podien inscriure ${signupAges.ca}, del ${dateYear(BARCELONA_NEWS_2027.opens, "ca")} al ${dateYear(BARCELONA_NEWS_2027.closes, "ca")}.`,
+              es: `Con el sorteo del Ayuntamiento, que ya se ha cerrado: podían inscribirse ${signupAges.es}, del ${dateYear(BARCELONA_NEWS_2027.opens, "es")} al ${dateYear(BARCELONA_NEWS_2027.closes, "es")}.`,
+              en: `Through the City Council's draw, now closed: it was open to ${signupAges.en}, from ${dateYear(BARCELONA_NEWS_2027.opens, "en")} to ${dateYear(BARCELONA_NEWS_2027.closes, "en")}.`,
+            })
+          : LL({
+              ca: `Inscrivint-te al [sorteig de l'Ajuntament](${BARCELONA_NEWS_2027.url}) fins al ${dateYear(BARCELONA_NEWS_2027.closes, "ca")}, a les 23:59. S'hi poden inscriure ${signupAges.ca}.`,
+              es: `Inscribiéndote en el [sorteo del Ayuntamiento](${BARCELONA_NEWS_2027.url}) hasta el ${dateYear(BARCELONA_NEWS_2027.closes, "es")}, a las 23:59. Pueden inscribirse ${signupAges.es}.`,
+              en: `By entering the [City Council's draw](${BARCELONA_NEWS_2027.url}) by ${dateYear(BARCELONA_NEWS_2027.closes, "en")} at 23:59. It is open to ${signupAges.en}.`,
+            }),
+      },
+      {
         question: LL({ ca: "Quan és la Cavalcada de Reis 2027 a Girona?", es: "¿Cuándo es la Cabalgata de Reyes 2027 en Girona?", en: "When is the 2027 Three Kings parade in Girona?" }),
         answer: gironaSlot
           ? LL({ ca: `El ${dayDate(gironaSlot.date, "ca")}, ${at(gironaSlot.time, "ca")}, segons l'Ajuntament de Girona.`, es: `El ${dayDate(gironaSlot.date, "es")}, ${at(gironaSlot.time, "es")}, según el Ayuntamiento de Girona.`, en: `On ${dayDate(gironaSlot.date, "en")} ${at(gironaSlot.time, "en")}, according to Girona City Council.` })
@@ -1401,6 +1559,18 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
               en: `The council has not published the times yet (${AS_OF.en}). In 2026 the Kings were at the royal camp at Camp de Mart, in La Devesa park, from 16:00 to 18:00, and the parade left at ${girona.past.time} for Plaça de l'U d'Octubre de 2017, where the closing event began at ${girona.past.endTime}.`,
             }),
       },
+      ...(bigTowns.length
+        ? [
+            {
+              question: LL({ ca: "A quina hora és la Cavalcada de Reis 2027 a Sabadell, Terrassa, Badalona i l'Hospitalet?", es: "¿A qué hora es la Cabalgata de Reyes 2027 en Sabadell, Terrassa, Badalona y L'Hospitalet?", en: "What time is the 2027 Three Kings parade in Sabadell, Terrassa, Badalona and L'Hospitalet?" }),
+              answer: LL({
+                ca: `${cap(bigTowns.join("; "))}. La resta de detalls de cada ciutat (arribada dels Reis i recorregut) és a la secció de la ciutat, més amunt.`,
+                es: `${cap(bigTowns.join("; "))}. El resto de detalles de cada ciudad (llegada de los Reyes y recorrido) está en la sección de la ciudad, más arriba.`,
+                en: `${cap(bigTowns.join("; "))}. Each town's other details (the Kings' arrival and the route) are in its section above.`,
+              }),
+            },
+          ]
+        : []),
       {
         question: LL({ ca: "A quina hora arriben els Reis a Tarragona i a Lleida?", es: "¿A qué hora llegan los Reyes a Tarragona y a Lleida?", en: "What time do the Kings arrive in Tarragona and Lleida?" }),
         answer: LL({

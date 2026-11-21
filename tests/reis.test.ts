@@ -40,6 +40,7 @@ import {
   type Announced2027,
   type Parade,
   allTowns,
+  SIGNUPS_CLOSED,
 } from "../src/lib/content/batch02/reis.ts";
 import { REIS_REREAD_BY, REIS_TOWNS, REIS_TOWNS_AS_OF, REIS_TOWNS_LEFT_OUT, rereadDue, townRowProblems } from "../src/lib/content/batch02/reis-towns.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
@@ -183,8 +184,14 @@ test("sources are https, untracked, official and listed once; the reader sees th
     assert.ok(councilHost || /(^|\.)(barcelona\.cat|dtibcn\.cat|tmb\.cat|gencat\.cat|boe\.es)$/.test(host), `${host} is not an official source`);
   }
   for (const town of TOWNS) {
-    assert.ok(urls.has(town.past.url), `${town.name}: its 2026 page is a source`);
+    // A 2026 page the council has removed (`gone`) is neither a source nor linked; its facts keep the read date.
+    if (town.past.gone) {
+      assert.ok(!urls.has(town.past.url), `${town.name}: its removed 2026 page is still a source`);
+      for (const locale of LOCALES) assert.ok(!json(locale).includes(`](${town.past.url})`), `${locale}: ${town.name}'s removed page is linked`);
+    } else assert.ok(urls.has(town.past.url), `${town.name}: its 2026 page is a source`);
     if (town.news2027) assert.ok(urls.has(town.news2027.url), `${town.name}: its 2027 news is a source`);
+    const slot = ANNOUNCED_2027.towns[town.key];
+    if (slot) assert.ok(urls.has(slot.url), `${town.name}: its 2027 page is a source`);
   }
   for (const town of REIS_TOWNS) {
     assert.ok(urls.has(town.y2026.url), `${town.name}: its 2026 page is a source`);
@@ -366,7 +373,9 @@ test("every added row is the 5 January 2026 parade, from the council's own site,
     for (const locale of LOCALES) {
       const j = json(locale);
       assert.ok(j.includes(`](${town.y2026.url})`), `${locale}: ${town.name}'s source is linked`);
-      assert.ok(j.includes(`](${town.watch})`), `${locale}: where ${town.name} will publish is linked`);
+      // Until the council publishes, where it will; once it has, its 2027 page.
+      if (town.y2027) assert.ok(j.includes(`](${town.y2027.url})`), `${locale}: ${town.name}'s 2027 page is linked`);
+      else assert.ok(j.includes(`](${town.watch})`), `${locale}: where ${town.name} will publish is linked`);
       const row = townRows(locale).find((r) => r[0] === town.name);
       assert.ok(row, `${locale}: ${town.name} in the table`);
       assert.ok(row![2]!.includes(town.y2026.time), `${locale}: ${town.name}'s 2026 start time in the table`);
@@ -395,9 +404,11 @@ test("the towns table says 'per confirmar' for 2027 until a council publishes, a
   }
 });
 
-test("re-read the councils: from 22 December 2026 (and again from 2 January 2027) REIS_TOWNS_AS_OF and REIS_AS_OF must have moved", () => {
-  assert.equal(REIS_REREAD_BY[0], "2026-12-22");
-  assert.equal(rereadDue("2026-12-21"), null);
+test("re-read the councils: from 1, 15 and 22 December 2026 and 2 January 2027 REIS_TOWNS_AS_OF and REIS_AS_OF must have moved", () => {
+  assert.deepEqual([...REIS_REREAD_BY], ["2026-12-01", "2026-12-15", "2026-12-22", "2027-01-02"]);
+  assert.equal(rereadDue("2026-11-30"), null);
+  assert.equal(rereadDue("2026-12-01"), "2026-12-01");
+  assert.equal(rereadDue("2026-12-21"), "2026-12-15");
   assert.equal(rereadDue("2026-12-22"), "2026-12-22");
   assert.equal(rereadDue("2027-01-03"), "2027-01-02");
   const today = madridDate(new Date());
@@ -614,4 +625,62 @@ test("the publish route has the page's group and the links group, after the last
   const links = route.slice(route.indexOf('wants("reis-2027-links")'));
   for (const article of ["CHRISTMAS_BARCELONA", "NEW_YEAR", "CHRISTMAS_TRADITIONS", "BARCELONA_DECEMBER"]) assert.match(links.slice(0, 400), new RegExp(`publishB2Article\\(${article}\\)`), article);
   assert.ok(route.indexOf('wants("reis-2027")') > route.indexOf('wants("batch02-c")'), "after the last batch02 group");
+});
+
+/* -------------------------------------------------------------------------- */
+/* 21 Nov 2026: the first 2027 parades, the FAQ in the searched words         */
+/* -------------------------------------------------------------------------- */
+
+test("21 Nov 2026: Sabadell, Reus and Granollers print their 2027 start time and council page; Barcelona's title is unchanged", () => {
+  const filled = allTowns().filter((t) => t.slot);
+  assert.deepEqual(filled.map((t) => t.name).sort(), ["Granollers", "Reus", "Sabadell"]);
+  for (const town of filled) {
+    assert.deepEqual(paradeProblems(town.slot!, town.hosts), [], town.name);
+    assert.equal(town.slot!.date, PARADE_DAY, `${town.name}: 2027 is the 5 January`);
+    assert.ok(town.slot!.read <= REIS_AS_OF, `${town.name}: read after REIS_AS_OF`);
+    for (const locale of LOCALES) {
+      assert.ok(json(locale).includes(`](${town.slot!.url})`), `${locale}: ${town.name}'s 2027 page`);
+      const row = townRows(locale).find((r) => r[0] === town.name)!;
+      assert.ok(row[3]!.includes(town.slot!.time), `${locale}: ${town.name}'s 2027 time in the table`);
+      assert.ok(townsIntro(locale).includes(town.name), `${locale}: ${town.name} named as published`);
+    }
+  }
+  // Barcelona has not published: title and description stay the pre-registered "not yet" ones.
+  assert.equal(ANNOUNCED_2027.barcelona, null);
+  for (const locale of LOCALES) {
+    assert.equal(REIS.editions[locale].seoTitle, reisSeoTitle(locale, null));
+    assert.equal(REIS.editions[locale].seoDescription, reisDescription(locale, null));
+  }
+  // A notes field must be filled in every language.
+  const reus = ANNOUNCED_2027.towns.reus!;
+  assert.ok(paradeProblems({ ...reus, notes: { ...reus.notes!, en: " " } }, /(^|\.)reus\.cat$/).length > 0, "empty notes");
+});
+
+test("21 Nov 2026: a council page that has gone is named with its read date, never linked", () => {
+  const sabadell = TOWNS.find((t) => t.key === "sabadell")!;
+  assert.ok(sabadell.past.gone, "Sabadell's 2026 page answered 404 on 21 Nov");
+  assert.ok(sabadell.hosts.test(new URL(sabadell.watch).host));
+  const gone: Record<Locale, RegExp> = { ca: /ja l'ha retirada/, es: /ya la ha retirado/, en: /taken the page down/ };
+  for (const locale of LOCALES) {
+    assert.match(body(locale), gone[locale], locale);
+    assert.ok(body(locale).includes(dateYear(sabadell.past.read, locale)), `${locale}: the read date of the removed page`);
+  }
+});
+
+test("21 Nov 2026: the FAQ answers when, when Barcelona publishes, how to take part and the big towns", () => {
+  const questions: Record<Locale, string[]> = {
+    ca: ["Quan és la Cavalcada de Reis 2027?", "Quan es publica l'horari i el recorregut de la Cavalcada de Barcelona 2027?", "Com es pot participar a la Cavalcada de Reis 2027 de Barcelona?", "A quina hora és la Cavalcada de Reis 2027 a Sabadell, Terrassa, Badalona i l'Hospitalet?"],
+    es: ["¿Cuándo es la Cabalgata de Reyes 2027?", "¿Cuándo se publica el horario y el recorrido de la Cabalgata de Barcelona 2027?", "¿Cómo se puede participar en la Cabalgata de Reyes 2027 de Barcelona?", "¿A qué hora es la Cabalgata de Reyes 2027 en Sabadell, Terrassa, Badalona y L'Hospitalet?"],
+    en: ["When is the Three Kings parade in 2027?", "When are the times and route of Barcelona's 2027 parade published?", "How can you take part in Barcelona's 2027 Three Kings parade?", "What time is the 2027 Three Kings parade in Sabadell, Terrassa, Badalona and L'Hospitalet?"],
+  };
+  for (const locale of LOCALES) {
+    const faq = REIS.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    for (const q of questions[locale]) assert.ok(faq.items.some((i) => i.question === q), `${locale}: ${q}`);
+    const when = faq.items.find((i) => i.question === questions[locale][0])!.answer;
+    for (const name of ["Granollers", "Reus", "Sabadell"]) assert.ok(when.includes(name), `${locale}: ${name} in the "when" answer`);
+    const towns = faq.items.find((i) => i.question === questions[locale][3])!.answer;
+    assert.ok(towns.includes("2027") && towns.includes("2026"), `${locale}: published and last year's times, each with its year`);
+  }
+  // The sign-up sentence turns to the past tense once the page's check date is after 23 November.
+  assert.equal(SIGNUPS_CLOSED, REIS_AS_OF > "2026-11-23");
 });

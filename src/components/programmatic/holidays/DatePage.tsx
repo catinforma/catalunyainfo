@@ -106,6 +106,13 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               {content.notice.after}
             </p>
           ) : null}
+          {content.transportNotice ? (
+            <p>
+              {content.transportNotice.before}
+              <Link href={content.transportNotice.href}>{content.transportNotice.label}</Link>
+              {content.transportNotice.after}
+            </p>
+          ) : null}
           {/* The Spain-wide day page, in this page's own language (body links stay in their language). */}
           {hasDayPage(iso) ? (
             <p>

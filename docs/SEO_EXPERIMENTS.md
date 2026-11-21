@@ -10969,3 +10969,141 @@ is no longer 30 Oct): `~/.local/share/pipx/venvs/mcp-search-console/bin/python -
 Repeat the submit after a deploy that re-dates many families, at most once a day. No publish group, no IndexNow needed.
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — December events cluster: Reis 2027 in Sabadell, Reus and Granollers, FGC's 2026-27 Christmas hours, a day-by-day transport table, the New Year's Eve night and its transport in tables, FAQ in the searched words, cluster link lines (body only; deploy, then groups `reis-2027`, `transport-nadal`, `nye`, `llums-nadal`, `pont-desembre`, `puente-diciembre-espana`) (review 2026-12-01, 2026-12-28, 2027-01-08)
+
+**Why now.** The cluster peaks from 20 December to 6 January ("cabalgata de reyes 2027", "fin de año en barcelona 2026",
+"metro 24 diciembre"). Google needs the answers on the page and indexed before then. The "Reis re-read due 28 Nov" in the
+project notes was brought forward: three councils have already published.
+
+### 1. What the official sources say on 21 Nov 2026 (curl, browser UA; fact pack `research_notes/x10/dec-events-21nov.md`, gitignored)
+
+- **Barcelona: nothing for 2026-27 yet.** The press room's `nadal-2026` tag ends with the Sant Jaume projection and the
+  Christmas Tour (17 Nov); the `reis` tag with 2 Jan 2026; searches "cap d'any" and "cavalcada" give no 2026 item.
+  barcelona.cat/nadal/ca still says "Nadal 2025" and "Properament podràs consultar totes les activitats d'aquest Nadal
+  2026"; the parade page still says "Cavalcada de Reis 2026"; the Cap d'Any page still shows the 2025 show ("de 23.50 h a
+  00.10 h. Activitat gratuïta i sense límit d'aforament"). In 2025 the programme was out on 12 Nov: it is late this year.
+  The parade sign-ups close on 23 Nov 23:59 (sorteig; 8 or over on 1 Jan 2027; four age groups).
+- **Three councils have published their 2027 parade.** Sabadell (new site web.sabadell.cat, Christmas agenda): "Dimarts 5 de
+  gener de 2027, de 18 a 21 h", "Inici: carrer de Les Palmeres. Final: pl. de la Nova Creu", north to south; Ambassador
+  26 Dec 12-13 h at the town hall; royal camp at Casa Duran 26 Dec-4 Jan. Reus (note "Reus convida a celebrar el Nadal amb
+  tots els sentits", 18 Nov 2026): Kings at 16.30 in Plaça d'Anton Borrell, parade at 18.30 "des del Capdamunt del carrer
+  Ample", keys on the town hall balcony. Granollers (programme PDF "Nadal i Reis a Granollers 2026 - 2027"): "Dimarts 5 de
+  gener 17.30 h Carrer Camp de les Moreres", full route, reception 20 h at Plaça de la Porxada, quiet stretch, gluten-free
+  sweets. 5 Jan 2027 is a Tuesday; 2026 was a Monday, so yearless pages that say "dimarts" are 2027's.
+- **Sabadell's 2026 page is gone**: www.sabadell.cat/ca/?option=com_content&view=article&id=246271 now redirects to
+  web.sabadell.cat and answers 404. Its facts (read 31 Oct) stay, named with the read date, no longer linked or a source.
+- **Still 2026 or nothing:** Girona ("Dilluns 5 de gener de 2026"), Figueres (dilluns), Lleida, Tarragona, Badalona (only the
+  12 Nov draw), Mataró (switch-on note: arrival by sea on 5 Jan, no time), Terrassa (yearless, same times as 2026), Vic,
+  Manresa, Rubí, Mollet, Cornellà, Sant Boi, El Prat, Castelldefels, Igualada, Sant Cugat, L'Hospitalet. Vilanova timed out;
+  Santa Coloma and Viladecans 403 (left out already).
+- **FGC has published its 2026-27 hours** (Govern press room, "Ferrocarrils reforça el servei els caps de setmana i festius
+  previs a les festes de Nadal", 19 Nov 2026 10:00): 24 Dec service ends at 23.00, Christmas Day until 2.00, New Year's Eve all
+  night on S1, S2, L6, L7, L12 and L8; plus 11 extra Barcelona-Vallès trains 16-21 h and double trains on Llobregat-Anoia
+  14-19 h on 21-22 and 28-29 Nov and 5, 6, 8, 12, 13, 19 and 20 Dec. Sant Esteve, 1 and 6 Jan are not in the note.
+- **TMB, ATM, Rodalies, TRAM: nothing yet.** TMB's standing timetable unchanged ("24 de desembre De 5.00 a 23.00 hores", "31
+  de desembre Servei continu tota la nit de Cap d'Any"). Every 2025 notice the pages cite re-read: still online, same text.
+
+### 2. Baselines (Search Console, 25 Oct–21 Nov 2026, 28 days; clicks / impressions / CTR / position)
+
+| URL | Baseline |
+| --- | --- |
+| `/es/guias/cabalgata-de-reyes-barcelona/` | 23 / 1,146 / 2.0 % / 6.3 |
+| `/ca/guies/cavalcada-de-reis-barcelona/` | 17 / 586 / 2.9 % / 6.5 |
+| `/en/guides/three-kings-parade-barcelona/` | 4 / 183 / 2.2 % / 7.4 |
+| `/ca/guies/cap-d-any-barcelona/` | 13 / 546 / 2.4 % / 6.0 |
+| `/es/guias/nochevieja-barcelona/` | 22 / 455 / 4.8 % / 7.1 |
+| `/en/guides/new-years-eve-barcelona/` | 8 / 219 / 3.7 % / 6.5 |
+| `/es/guias/transporte-navidad-nochevieja-barcelona/` | 10 / 532 / 1.9 % / 5.7 |
+| `/ca/guies/transport-nadal-cap-d-any-barcelona/` | 8 / 172 / 4.7 % / 6.0 |
+| `/en/guides/barcelona-public-transport-christmas-new-year/` | 8 / 229 / 3.5 % / 4.7 |
+| Lights ES / CA / EN (link line only) | 38 / 3,158 / 1.2 % / 7.2; 40 / 1,780 / 2.2 % / 6.5; 11 / 583 / 1.9 % / 7.1 |
+| December bridge ES / CA / EN (link line only) | 358 / 19,122 / 1.9 % / 6.0; 37 / 2,708 / 1.4 % / 6.0; 2 / 437 / 0.5 % / 4.1 |
+| Spain December ES / CA / EN (link line only) | 505 / 16,578 / 3.0 % / 7.6; 8 / 242 / 3.3 % / 5.7; 12 / 558 / 2.2 % / 3.7 |
+| Fairs hubs CA / ES / EN (link list only) | 50 / 1,270 / 3.9 % / 5.7; 6 / 302 / 2.0 % / 9.5; 3 / 130 / 2.3 % / 9.8 |
+| Date pages ES 24, 25, 26, 31 Dec, 1, 6 Jan (link line only) | 1/227, 1/145, 1/210, 2/361, 1/137, 1/312 impressions (pos 4.9–6.9); CA 30, 33, 74, 15, 52, 76 |
+
+Queries (28 d): "cabalgata de reyes 2027" 73 at 5.2 (1 click); "cavalcada de reis 2027" 40 at 8.1 (CA) and 41 at 7.8 (ES
+page); "cabalgata de reyes barcelona 2027" 34 at 8.2; "cuando es la cabalgata de reyes 2027" 24 at 5.3; "noche de reyes
+2027" 14 at 5.6; "participar cavalcada reis barcelona 2027" 7 at 8.4; "cap d'any 2026" 37 at 5.8; "fin de año en barcelona
+2026" 32 at 6.6; "cap d any barcelona 2026" 18 at 7.8; "nochevieja barcelona 2026" 11 at 7.9; "barcelona new year fireworks
+2026" 5 at 5.4; "metro navidad 2026" 3 at 3.3; "horario metro barcelona 24 diciembre" 2 at 8.0; "y el 26 de diciembre?" 1.
+
+### 3. What changed (body only; ca/es/en)
+
+- **Reis** (`reis.ts`, `reis-towns.ts`): `ANNOUNCED_2027.towns.sabadell` and `.reus` and Granollers' `y2027` filled from the
+  councils' own pages, each with a `notes` line (camp, ambassador, quiet stretch); the towns table, the towns intro ("Ya han
+  publicado el horario de 2027: Granollers, Reus y Sabadell") and each town section switch by themselves. Granollers' 2026
+  row now cites the 2025-26 programme PDF (its yearly page shows 2027). Sabadell's removed 2026 page: new `gone` field.
+  Four FAQ items: "¿Cuándo es la Cabalgata de Reyes 2027?" (with the towns already published), "¿Cuándo se publica el
+  horario y el recorrido de la Cabalgata de Barcelona 2027?" (12 Nov 2025 and 2 Jan 2026 last time), "¿Cómo se puede
+  participar…?" (closes 23 Nov; `SIGNUPS_CLOSED` turns it to the past tense at the next re-read) and Sabadell, Terrassa,
+  Badalona and L'Hospitalet in one answer, each time labelled 2027 or 2026. `REIS_AS_OF`/`REIS_TOWNS_AS_OF` → 21 Nov.
+- **Christmas transport** (`christmas-transport.ts`): `ANNOUNCED_2026_27.fgc` filled (24, 25 and 31 Dec); a day-by-day table
+  of all six operators (metro, TMB bus, NitBus, Rodalies, FGC, TRAM), each cell labelled "horari general", "2026-27" or the
+  year; FGC's weekend trains before Christmas; FAQ "¿Hay trenes de Rodalies la noche de Fin de Año?", "¿Hay metro toda la
+  noche en San Esteban?", "¿Hasta qué hora hay metro el 1 de enero?", "¿Qué horario tiene el metro el 5 y el 6 de enero?";
+  the FGC New Year's Eve answer gives the 2026-27 notice; links to what is open on 25-26 Dec (Christmas in Barcelona) and
+  the shops guide (1 and 6 Jan). `TRANSPORT_NADAL_AS_OF` → 21 Nov.
+- **New Year's Eve** (`new-year.ts`): the 2025 night hour by hour (19:00 bus diversions to 00:10, labelled 2025); the
+  transport of 31 December from the transport page's data (FGC 2026-27, Rodalies "no special notice"); FAQ "¿A qué hora
+  son los fuegos artificiales de Nochevieja en Barcelona?", the nearest metro, Rodalies and FGC that night, what opens on
+  1 January; the plans sentence carries its check date (`NEW_YEAR_CHECKED`); TMB's 2025 note and FGC's note added as
+  sources. `festive-pages.test.ts`'s "no November 2026 date" guard now ignores check and notice dates (it still catches any
+  other November 2026 date, with a self-test).
+- **Link lines (descriptive anchors, one sentence each):** lights page → transport + New Year's Eve; December bridge
+  (Catalonia) → transport, New Year's Eve, Reis; Spain December page ("Si vives en Cataluña") → transport, Reis; fairs hub
+  guide list + New Year's Eve and transport (code route); date pages 24, 25, 26 Dec, 1 and 6 Jan → transport, 31 Dec → New
+  Year's Eve (`transportNoticeFor`, code route).
+
+**Not changed, on purpose.** Every title, meta description and H1. Leads: wording untouched; two factual updates inside
+the windows, logged here: the Reis lead's check date (5 → 21 Nov, as on 5 Nov), and the transport lead's pre-registered
+switch ("FGC ja ha publicat els horaris d'aquest any…" instead of "no operator has published", with the operator named
+instead of "some operators"; its bold first sentence is the same). The NYE lead keeps `ANNOUNCEMENTS_CHECKED` (30 Oct),
+shared with the Christmas hub; the body gives 21 Nov. No Barcelona 2026-27 time, venue or route is printed (none exists).
+
+**No new page.** The searched questions all have a page that now answers them: the parade (one URL for Barcelona and 21
+towns; town demand is still 0 and the 5 Nov decision stands), the night (New Year's Eve guide), transport by day (transport
+page), and what opens on 25-26 Dec and 1 and 6 Jan (the Christmas hub's FAQ, the shops guide, the date pages, the NYE and
+Reis pages), all now linked from each other.
+
+### 4. Re-read guards (tests fail on the day)
+
+- Reis: `REIS_REREAD_BY` = 1 Dec (Barcelona's programme is already later than 12 Nov 2025), 15 Dec, 22 Dec, 2 Jan 2027
+  (`tests/reis.test.ts`); the "Barcelona slot empty after Reis" test from 7 Jan.
+- Transport: `TRANSPORT_NADAL_REREAD_BY` = 7 Dec (ATM 5 Dec 2025), 17 Dec (Rodalies 16 Dec), 23 Dec (TMB's Christmas Eve
+  hours), 30 Dec (TMB's New Year's Eve note) (`tests/christmas-transport.test.ts`).
+- New Year's Eve: `NEW_YEAR_REREAD_BY` = 1 Dec, 15 Dec, 29 Dec (the entry and transport plan, 29 Dec in 2024 and 2025)
+  (`tests/dec-events-21nov.test.ts`).
+When Barcelona publishes: fill `ANNOUNCED_2027.barcelona` and festive.ts `ANNOUNCED_2026.cavalcada` together (the Reis title
+and description switch by themselves: allowed from 28 Nov, the end of the Reis window), and `ANNOUNCED_2026.newYearShow`
+for the show (the NYE lead switches; its window ended 23 Nov).
+
+### 5. Go-live
+
+Deploy first (the date pages and the fairs hub are code routes; the articles publish from the deployed code). Then publish
+`reis-2027`, `transport-nadal`, `nye`, `llums-nadal`, `pont-desembre` (also republishes the holiday calendar guide, unchanged
+here), `puente-diciembre-espana`. Nothing must wait for a date. The publish route pings IndexNow for the articles; for the
+code routes run `python scripts/indexnow-sitemap.py /ca/festius/dia/24-desembre-2026/ /ca/festius/dia/25-desembre-2026/
+/ca/festius/dia/26-desembre-2026/ /ca/festius/dia/31-desembre-2026/ /ca/festius/dia/1-gener-2027/ /ca/festius/dia/6-gener-2027/
+/es/festivos/dia/24-diciembre-2026/ /es/festivos/dia/25-diciembre-2026/ /es/festivos/dia/26-diciembre-2026/
+/es/festivos/dia/31-diciembre-2026/ /es/festivos/dia/1-enero-2027/ /es/festivos/dia/6-enero-2027/
+/en/holidays/day/24-december-2026/ /en/holidays/day/25-december-2026/ /en/holidays/day/26-december-2026/
+/en/holidays/day/31-december-2026/ /en/holidays/day/1-january-2027/ /en/holidays/day/6-january-2027/`. The fairs hubs
+(`/ca/fires-de-nadal/`, `/es/mercados-navidad/`, `/en/christmas-markets/`) only gained two list links: not pinged (as a
+prefix they would also send every fair town page).
+
+**Prediction.** By 28 Dec: the Reis ES page holds ≤ 6 on "cabalgata de reyes 2027" and "cuando es la cabalgata de reyes
+2027", and "cabalgata reyes sabadell 2027" / "cavalcada reis granollers 2027" / "cabalgata reyes reus 2027" appear at ≤ 15;
+the transport page ranks ≤ 10 for "metro nochevieja barcelona" and "horario metro 24 diciembre"; the NYE ES page ≤ 6 on
+"fin de año en barcelona 2026". 20 Dec–6 Jan: the three transport editions ≥ 2,000 impressions at CTR ≥ 3 % (5 Nov
+prediction, unchanged); the transport page's GA4 sessions with a `/festivos/dia/` or `/festius/dia/` previous page are
+measurable only as page paths (no internal-link event exists), so the date-page lines are judged by the transport page's
+impressions and position, not by referral counts.
+Wrong if on 28 Dec the Reis ES page has dropped below 8 on its two head queries.
+
+**Review 2026-12-01** (re-read day: Barcelona, Mataró, ATM), **2026-12-28** (`snapshot.py page cabalgata-de-reyes 14`,
+`page cavalcada-de-reis 14`, `page transporte-navidad 14`, `page transport-nadal 14`, `page nochevieja 14`, `page
+cap-d-any-barcelona 14`; town queries with `gaps 14 400 | grep -iE 'reis|reyes|cavalcada|cabalgata'`) and **2027-01-08**.
+
+**Outcome:** _pending_

@@ -418,8 +418,12 @@ test("no 2026 switch-on, nativity or New Year's Eve date is printed while none i
   for (const locale of LOCALES) {
     const hub = text(buildChristmasBarcelonaBody(locale, NONE));
     const nye = text(buildNewYearBody(locale, NONE));
-    // A November 2026 date anywhere would be an invented switch-on date.
-    assert.doesNotMatch(hub + nye, /\b\d{1,2} (de )?(novembre|noviembre|November)( de)? 2026/i, locale);
+    // A November 2026 date anywhere would be an invented switch-on date, except the day a page was checked
+    // ("comprovat el 21 de novembre de 2026") and the day an operator's notice came out ("nota del 19 de
+    // novembre de 2026"), which the New Year's Eve guide prints since 21 Nov 2026.
+    const dated = /(comprovat el|comprobado el|checked on|nota del|note of) \d{1,2} (de )?(novembre|noviembre|November)( de)? 2026/gi;
+    assert.doesNotMatch((hub + " " + nye).replace(dated, ""), /\b\d{1,2} (de )?(novembre|noviembre|November)( de)? 2026/i, locale);
+    assert.match("Comprovat el 21 de novembre de 2026. Encesa el 26 de novembre de 2026.".replace(dated, ""), /26 de novembre de 2026/, "the guard still catches a bare date");
     // Nor a 2026-27 time for the show: the only show times are 2025's, in sentences that say so.
     for (const sentence of sentences(nye).filter((s) => /23:50/.test(s))) assert.match(sentence, /2025/, `${locale}: ${sentence}`);
   }
