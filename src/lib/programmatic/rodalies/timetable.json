@@ -1,0 +1,9460 @@
+{
+ "builtOn": "2026-11-21",
+ "source": {
+  "name": "Horarios cercanías (GTFS)",
+  "publisher": "Renfe Operadora",
+  "dataset": "https://data.renfe.com/dataset/horarios-cercanias",
+  "api": "https://data.renfe.com/api/3/action/package_show?id=horarios-cercanias",
+  "url": "https://ssl.renfe.com/ftransit/Fichero_CER_FOMENTO/fomento_transit.zip",
+  "licence": "CC BY 4.0",
+  "licenceId": "CC-BY-4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "terms": "https://data.renfe.com/legal",
+  "attribution": "Origen de los datos: Renfe Operadora",
+  "updated": "2026-11-21T03:09:19"
+ },
+ "feed": {
+  "from": "2026-11-21",
+  "to": "2026-12-20",
+  "gaps": [
+   [
+    "2026-11-30",
+    "2026-12-04"
+   ]
+  ]
+ },
+ "lines": {
+  "R1": {
+   "id": "R1",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 190,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-11-27",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 130,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-12",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 130,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Maçanet-Massanes",
+     "towardsId": "79200",
+     "frequencyAt": {
+      "id": "78805",
+      "name": "Barcelona-Plaça de Catalunya"
+     },
+     "stations": [
+      {
+       "id": "72305",
+       "name": "L'Hospitalet de Llobregat",
+       "days": {
+        "weekday": {
+         "first": "05:48",
+         "last": "23:33",
+         "trains": 95
+        },
+        "saturday": {
+         "first": "05:48",
+         "last": "23:33",
+         "trains": 65
+        },
+        "sunday": {
+         "first": "05:48",
+         "last": "23:33",
+         "trains": 65
+        }
+       }
+      },
+      {
+       "id": "78805",
+       "name": "Barcelona-Plaça de Catalunya",
+       "days": {
+        "weekday": {
+         "first": "06:00",
+         "last": "23:45",
+         "trains": 95
+        },
+        "saturday": {
+         "first": "06:00",
+         "last": "23:45",
+         "trains": 65
+        },
+        "sunday": {
+         "first": "06:00",
+         "last": "23:45",
+         "trains": 65
+        }
+       }
+      },
+      {
+       "id": "79500",
+       "name": "Mataró",
+       "days": {
+        "weekday": {
+         "first": "06:43",
+         "last": "23:43",
+         "trains": 54
+        },
+        "saturday": {
+         "first": "06:43",
+         "last": "22:43",
+         "trains": 33
+        },
+        "sunday": {
+         "first": "06:43",
+         "last": "22:43",
+         "trains": 33
+        }
+       }
+      },
+      {
+       "id": "79606",
+       "name": "Blanes",
+       "days": {
+        "weekday": {
+         "first": "07:23",
+         "last": "23:23",
+         "trains": 17
+        },
+        "saturday": {
+         "first": "07:23",
+         "last": "23:23",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "07:23",
+         "last": "23:23",
+         "trains": 17
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 6,
+        "perHour": null,
+        "gap": 10
+       },
+       {
+        "trains": 18,
+        "perHour": 6,
+        "gap": 10
+       },
+       {
+        "trains": 36,
+        "perHour": 5.1,
+        "gap": 12
+       },
+       {
+        "trains": 20,
+        "perHour": 6.7,
+        "gap": 9
+       },
+       {
+        "trains": 13,
+        "perHour": 4.3,
+        "gap": 13
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 45
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       },
+       {
+        "trains": 11,
+        "perHour": 3.7,
+        "gap": 17
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 45
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       },
+       {
+        "trains": 11,
+        "perHour": 3.7,
+        "gap": 17
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 45
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "72305",
+      "from": "L'Hospitalet de Llobregat",
+      "legs": [
+       {
+        "id": "78805",
+        "name": "Barcelona-Plaça de Catalunya",
+        "minutes": 11,
+        "trips": 95
+       },
+       {
+        "id": "79500",
+        "name": "Mataró",
+        "minutes": 54,
+        "trips": 95
+       },
+       {
+        "id": "79606",
+        "name": "Blanes",
+        "minutes": 94,
+        "trips": 35
+       },
+       {
+        "id": "79200",
+        "name": "Maçanet-Massanes",
+        "minutes": 109,
+        "trips": 17
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Molins de Rei",
+     "towardsId": "72300",
+     "frequencyAt": {
+      "id": "78805",
+      "name": "Barcelona-Plaça de Catalunya"
+     },
+     "stations": [
+      {
+       "id": "79200",
+       "name": "Maçanet-Massanes",
+       "days": {
+        "weekday": {
+         "first": "06:09",
+         "last": "21:09",
+         "trains": 17
+        },
+        "saturday": {
+         "first": "06:09",
+         "last": "21:09",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "06:09",
+         "last": "21:09",
+         "trains": 17
+        }
+       }
+      },
+      {
+       "id": "79606",
+       "name": "Blanes",
+       "days": {
+        "weekday": {
+         "first": "06:03",
+         "last": "21:53",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:03",
+         "last": "21:53",
+         "trains": 33
+        },
+        "sunday": {
+         "first": "06:03",
+         "last": "21:53",
+         "trains": 33
+        }
+       }
+      },
+      {
+       "id": "79500",
+       "name": "Mataró",
+       "days": {
+        "weekday": {
+         "first": "05:01",
+         "last": "23:01",
+         "trains": 95
+        },
+        "saturday": {
+         "first": "05:01",
+         "last": "22:31",
+         "trains": 65
+        },
+        "sunday": {
+         "first": "05:01",
+         "last": "22:31",
+         "trains": 65
+        }
+       }
+      },
+      {
+       "id": "78805",
+       "name": "Barcelona-Plaça de Catalunya",
+       "days": {
+        "weekday": {
+         "first": "05:44",
+         "last": "23:44",
+         "trains": 95
+        },
+        "saturday": {
+         "first": "05:44",
+         "last": "23:14",
+         "trains": 65
+        },
+        "sunday": {
+         "first": "05:44",
+         "last": "23:14",
+         "trains": 65
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 5,
+        "perHour": null,
+        "gap": 19
+       },
+       {
+        "trains": 20,
+        "perHour": 6.7,
+        "gap": 8
+       },
+       {
+        "trains": 33,
+        "perHour": 4.7,
+        "gap": 13
+       },
+       {
+        "trains": 18,
+        "perHour": 6,
+        "gap": 10
+       },
+       {
+        "trains": 17,
+        "perHour": 5.7,
+        "gap": 11
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 25
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 25
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79606",
+      "from": "Blanes",
+      "legs": [
+       {
+        "id": "79500",
+        "name": "Mataró",
+        "minutes": 37,
+        "trips": 35
+       },
+       {
+        "id": "78805",
+        "name": "Barcelona-Plaça de Catalunya",
+        "minutes": 80,
+        "trips": 35
+       },
+       {
+        "id": "72305",
+        "name": "L'Hospitalet de Llobregat",
+        "minutes": 93,
+        "trips": 35
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R2": {
+   "id": "R2",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 54,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-11-27",
+       "2026-12-10"
+      ],
+      [
+       "2026-12-15",
+       "2026-12-16"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 3,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 3,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-13"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Granollers Centre",
+     "towardsId": "79100",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "71705",
+       "name": "Castelldefels",
+       "days": {
+        "weekday": {
+         "first": "05:08",
+         "last": "06:23",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "05:08",
+         "last": "05:08",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "05:08",
+         "last": "05:08",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71706",
+       "name": "Gavà",
+       "days": {
+        "weekday": {
+         "first": "05:12",
+         "last": "21:59",
+         "trains": 25
+        },
+        "saturday": {
+         "first": "05:12",
+         "last": "05:12",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "05:12",
+         "last": "05:12",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71707",
+       "name": "El Prat de Llobregat",
+       "days": {
+        "weekday": {
+         "first": "05:19",
+         "last": "22:06",
+         "trains": 25
+        },
+        "saturday": {
+         "first": "05:19",
+         "last": "05:19",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "05:19",
+         "last": "05:19",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:30",
+         "last": "22:20",
+         "trains": 25
+        },
+        "saturday": {
+         "first": "05:30",
+         "last": "05:30",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "05:30",
+         "last": "05:30",
+         "trains": 1
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 40
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 30
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "71706",
+      "from": "Gavà",
+      "legs": [
+       {
+        "id": "71707",
+        "name": "El Prat de Llobregat",
+        "minutes": 6,
+        "trips": 25
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 19,
+        "trips": 25
+       },
+       {
+        "id": "79100",
+        "name": "Granollers Centre",
+        "minutes": 58,
+        "trips": 24
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Castelldefels",
+     "towardsId": "71705",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79100",
+       "name": "Granollers Centre",
+       "days": {
+        "weekday": {
+         "first": "06:14",
+         "last": "22:56",
+         "trains": 28
+        },
+        "saturday": {
+         "first": "22:56",
+         "last": "22:56",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "22:56",
+         "last": "22:56",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "06:53",
+         "last": "23:36",
+         "trains": 28
+        },
+        "saturday": {
+         "first": "23:36",
+         "last": "23:36",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "23:36",
+         "last": "23:36",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71707",
+       "name": "El Prat de Llobregat",
+       "days": {
+        "weekday": {
+         "first": "07:04",
+         "last": "23:47",
+         "trains": 28
+        },
+        "saturday": {
+         "first": "23:47",
+         "last": "23:47",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "23:47",
+         "last": "23:47",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71706",
+       "name": "Gavà",
+       "days": {
+        "weekday": {
+         "first": "08:37",
+         "last": "23:55",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "23:55",
+         "last": "23:55",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "23:55",
+         "last": "23:55",
+         "trains": 1
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 7,
+        "perHour": 2.3,
+        "gap": 20
+       },
+       {
+        "trains": 9,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79100",
+      "from": "Granollers Centre",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 37,
+        "trips": 28
+       },
+       {
+        "id": "71707",
+        "name": "El Prat de Llobregat",
+        "minutes": 49,
+        "trips": 28
+       },
+       {
+        "id": "71706",
+        "name": "Gavà",
+        "minutes": 57,
+        "trips": 28
+       },
+       {
+        "id": "71705",
+        "name": "Castelldefels",
+        "minutes": 61,
+        "trips": 3
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R2N": {
+   "id": "R2N",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 72,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-12-07",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 72,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 72,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-13"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Maçanet-Massanes",
+     "towardsId": "79200",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "72400",
+       "name": "Aeroport",
+       "days": {
+        "weekday": {
+         "first": "05:40",
+         "last": "22:38",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "05:40",
+         "last": "22:38",
+         "trains": 35
+        },
+        "sunday": {
+         "first": "05:40",
+         "last": "22:38",
+         "trains": 35
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:59",
+         "last": "23:01",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "05:59",
+         "last": "23:01",
+         "trains": 35
+        },
+        "sunday": {
+         "first": "05:59",
+         "last": "23:01",
+         "trains": 35
+        }
+       }
+      },
+      {
+       "id": "71802",
+       "name": "Barcelona-Passeig de Gràcia",
+       "days": {
+        "weekday": {
+         "first": "06:04",
+         "last": "23:06",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:04",
+         "last": "23:06",
+         "trains": 35
+        },
+        "sunday": {
+         "first": "06:04",
+         "last": "23:06",
+         "trains": 35
+        }
+       }
+      },
+      {
+       "id": "79100",
+       "name": "Granollers Centre",
+       "days": {
+        "weekday": {
+         "first": "07:07",
+         "last": "23:07",
+         "trains": 33
+        },
+        "saturday": {
+         "first": "07:07",
+         "last": "23:07",
+         "trains": 20
+        },
+        "sunday": {
+         "first": "07:07",
+         "last": "23:07",
+         "trains": 20
+        }
+       }
+      },
+      {
+       "id": "79104",
+       "name": "Sant Celoni",
+       "days": {
+        "weekday": {
+         "first": "20:59",
+         "last": "22:29",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "18:59",
+         "last": "22:29",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "18:59",
+         "last": "22:29",
+         "trains": 3
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 32
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 32
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 32
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "72400",
+      "from": "Aeroport",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 20,
+        "trips": 35
+       },
+       {
+        "id": "71802",
+        "name": "Barcelona-Passeig de Gràcia",
+        "minutes": 27,
+        "trips": 35
+       },
+       {
+        "id": "79100",
+        "name": "Granollers Centre",
+        "minutes": 58,
+        "trips": 34
+       },
+       {
+        "id": "79104",
+        "name": "Sant Celoni",
+        "minutes": 80,
+        "trips": 33
+       },
+       {
+        "id": "79200",
+        "name": "Maçanet-Massanes",
+        "minutes": 98,
+        "trips": 2
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Aeroport",
+     "towardsId": "72400",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79200",
+       "name": "Maçanet-Massanes",
+       "days": {
+        "weekday": {
+         "first": "06:19",
+         "last": "21:50",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "06:19",
+         "last": "20:19",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "06:19",
+         "last": "20:19",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "79104",
+       "name": "Sant Celoni",
+       "days": {
+        "weekday": {
+         "first": "05:37",
+         "last": "22:08",
+         "trains": 34
+        },
+        "saturday": {
+         "first": "05:37",
+         "last": "22:08",
+         "trains": 21
+        },
+        "sunday": {
+         "first": "05:37",
+         "last": "22:08",
+         "trains": 21
+        }
+       }
+      },
+      {
+       "id": "79100",
+       "name": "Granollers Centre",
+       "days": {
+        "weekday": {
+         "first": "04:59",
+         "last": "22:29",
+         "trains": 36
+        },
+        "saturday": {
+         "first": "04:59",
+         "last": "22:29",
+         "trains": 36
+        },
+        "sunday": {
+         "first": "04:59",
+         "last": "22:29",
+         "trains": 36
+        }
+       }
+      },
+      {
+       "id": "71802",
+       "name": "Barcelona-Passeig de Gràcia",
+       "days": {
+        "weekday": {
+         "first": "05:08",
+         "last": "23:02",
+         "trains": 37
+        },
+        "saturday": {
+         "first": "05:08",
+         "last": "23:02",
+         "trains": 37
+        },
+        "sunday": {
+         "first": "05:08",
+         "last": "23:02",
+         "trains": 37
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:13",
+         "last": "23:09",
+         "trains": 37
+        },
+        "saturday": {
+         "first": "05:13",
+         "last": "23:09",
+         "trains": 37
+        },
+        "sunday": {
+         "first": "05:13",
+         "last": "23:09",
+         "trains": 37
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 29
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 29
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 29
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79104",
+      "from": "Sant Celoni",
+      "legs": [
+       {
+        "id": "79100",
+        "name": "Granollers Centre",
+        "minutes": 21,
+        "trips": 34
+       },
+       {
+        "id": "71802",
+        "name": "Barcelona-Passeig de Gràcia",
+        "minutes": 54,
+        "trips": 34
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 60,
+        "trips": 34
+       },
+       {
+        "id": "72400",
+        "name": "Aeroport",
+        "minutes": 79,
+        "trips": 34
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R2S": {
+   "id": "R2S",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 143,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 136,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 136,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "71600",
+       "name": "Sant Vicenç de Calders",
+       "days": {
+        "weekday": {
+         "first": "05:18",
+         "last": "21:57",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "05:57",
+         "last": "21:57",
+         "trains": 34
+        },
+        "sunday": {
+         "first": "05:57",
+         "last": "21:57",
+         "trains": 34
+        }
+       }
+      },
+      {
+       "id": "71700",
+       "name": "Vilanova i la Geltrú",
+       "days": {
+        "weekday": {
+         "first": "05:37",
+         "last": "22:16",
+         "trains": 70
+        },
+        "saturday": {
+         "first": "05:14",
+         "last": "22:16",
+         "trains": 67
+        },
+        "sunday": {
+         "first": "05:14",
+         "last": "22:16",
+         "trains": 67
+        }
+       }
+      },
+      {
+       "id": "71701",
+       "name": "Sitges",
+       "days": {
+        "weekday": {
+         "first": "05:44",
+         "last": "22:22",
+         "trains": 69
+        },
+        "saturday": {
+         "first": "05:21",
+         "last": "22:22",
+         "trains": 66
+        },
+        "sunday": {
+         "first": "05:21",
+         "last": "22:22",
+         "trains": 66
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "06:27",
+         "last": "23:05",
+         "trains": 73
+        },
+        "saturday": {
+         "first": "06:02",
+         "last": "23:05",
+         "trains": 67
+        },
+        "sunday": {
+         "first": "06:02",
+         "last": "23:05",
+         "trains": 67
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 17,
+        "perHour": 5.7,
+        "gap": 11
+       },
+       {
+        "trains": 29,
+        "perHour": 4.1,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 16
+       },
+       {
+        "trains": 13,
+        "perHour": 4.3,
+        "gap": 14
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 25
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 16
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 16
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 25
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 16
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 16
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "71600",
+      "from": "Sant Vicenç de Calders",
+      "legs": [
+       {
+        "id": "71700",
+        "name": "Vilanova i la Geltrú",
+        "minutes": 19,
+        "trips": 35
+       },
+       {
+        "id": "71701",
+        "name": "Sitges",
+        "minutes": 26,
+        "trips": 34
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 62,
+        "trips": 35
+       },
+       {
+        "id": "79400",
+        "name": "Barcelona-Estació de França",
+        "minutes": 79,
+        "trips": 35
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Sant Vicenç de Calders",
+     "towardsId": "71600",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "05:28",
+         "last": "23:49",
+         "trains": 70
+        },
+        "saturday": {
+         "first": "05:28",
+         "last": "23:49",
+         "trains": 69
+        },
+        "sunday": {
+         "first": "05:28",
+         "last": "23:49",
+         "trains": 69
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:45",
+         "last": "00:06",
+         "trains": 70
+        },
+        "saturday": {
+         "first": "05:45",
+         "last": "00:06",
+         "trains": 69
+        },
+        "sunday": {
+         "first": "05:45",
+         "last": "00:06",
+         "trains": 69
+        }
+       }
+      },
+      {
+       "id": "71701",
+       "name": "Sitges",
+       "days": {
+        "weekday": {
+         "first": "06:23",
+         "last": "00:44",
+         "trains": 69
+        },
+        "saturday": {
+         "first": "06:23",
+         "last": "00:44",
+         "trains": 68
+        },
+        "sunday": {
+         "first": "06:23",
+         "last": "00:44",
+         "trains": 68
+        }
+       }
+      },
+      {
+       "id": "71700",
+       "name": "Vilanova i la Geltrú",
+       "days": {
+        "weekday": {
+         "first": "06:45",
+         "last": "23:51",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:45",
+         "last": "23:51",
+         "trains": 35
+        },
+        "sunday": {
+         "first": "06:45",
+         "last": "23:51",
+         "trains": 35
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 5,
+        "perHour": null,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 29,
+        "perHour": 4.1,
+        "gap": 14
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 60
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 20
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 29,
+        "perHour": 4.1,
+        "gap": 14
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 60
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 20
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 29,
+        "perHour": 4.1,
+        "gap": 14
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 14
+       },
+       {
+        "trains": 10,
+        "perHour": 3.3,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 60
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 70
+       },
+       {
+        "id": "71701",
+        "name": "Sitges",
+        "minutes": 54,
+        "trips": 69
+       },
+       {
+        "id": "71700",
+        "name": "Vilanova i la Geltrú",
+        "minutes": 61,
+        "trips": 70
+       },
+       {
+        "id": "71600",
+        "name": "Sant Vicenç de Calders",
+        "minutes": 78,
+        "trips": 35
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R3": {
+   "id": "R3",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 34,
+     "buses": 443,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-11-27",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 34,
+     "buses": 502,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-05",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 34,
+     "buses": 443,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-11-29",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": false,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "La Tor de Querol-Enveig",
+     "towardsId": "77310",
+     "frequencyAt": {
+      "id": "77104",
+      "name": "Sant Martí de Centelles"
+     },
+     "stations": [
+      {
+       "id": "77104",
+       "name": "Sant Martí de Centelles",
+       "days": {
+        "weekday": {
+         "first": "06:56",
+         "last": "20:36",
+         "trains": 17
+        },
+        "saturday": {
+         "first": "06:56",
+         "last": "20:36",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "06:56",
+         "last": "20:36",
+         "trains": 17
+        }
+       }
+      },
+      {
+       "id": "77109",
+       "name": "Vic",
+       "days": {
+        "weekday": {
+         "first": "07:24",
+         "last": "19:24",
+         "trains": 15
+        },
+        "saturday": {
+         "first": "07:24",
+         "last": "19:24",
+         "trains": 15
+        },
+        "sunday": {
+         "first": "07:24",
+         "last": "19:24",
+         "trains": 15
+        }
+       }
+      },
+      {
+       "id": "77200",
+       "name": "Ripoll",
+       "days": {
+        "weekday": {
+         "first": "08:10",
+         "last": "19:40",
+         "trains": 7
+        },
+        "saturday": {
+         "first": "08:10",
+         "last": "19:40",
+         "trains": 7
+        },
+        "sunday": {
+         "first": "08:10",
+         "last": "19:40",
+         "trains": 7
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 30
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "77104",
+      "from": "Sant Martí de Centelles",
+      "legs": [
+       {
+        "id": "77109",
+        "name": "Vic",
+        "minutes": 26,
+        "trips": 17
+       },
+       {
+        "id": "77200",
+        "name": "Ripoll",
+        "minutes": 73,
+        "trips": 15
+       },
+       {
+        "id": "77309",
+        "name": "Puigcerdà",
+        "minutes": 147,
+        "trips": 5
+       }
+      ]
+     }
+    },
+    {
+     "towards": "L'Hospitalet de Llobregat",
+     "towardsId": "72305",
+     "frequencyAt": {
+      "id": "77109",
+      "name": "Vic"
+     },
+     "stations": [
+      {
+       "id": "77309",
+       "name": "Puigcerdà",
+       "days": {
+        "weekday": {
+         "first": "05:53",
+         "last": "17:20",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "05:53",
+         "last": "17:20",
+         "trains": 5
+        },
+        "sunday": {
+         "first": "05:53",
+         "last": "17:20",
+         "trains": 5
+        }
+       }
+      },
+      {
+       "id": "77200",
+       "name": "Ripoll",
+       "days": {
+        "weekday": {
+         "first": "06:15",
+         "last": "18:41",
+         "trains": 15
+        },
+        "saturday": {
+         "first": "06:15",
+         "last": "18:41",
+         "trains": 15
+        },
+        "sunday": {
+         "first": "06:15",
+         "last": "18:41",
+         "trains": 15
+        }
+       }
+      },
+      {
+       "id": "77109",
+       "name": "Vic",
+       "days": {
+        "weekday": {
+         "first": "05:50",
+         "last": "19:27",
+         "trains": 17
+        },
+        "saturday": {
+         "first": "05:50",
+         "last": "19:27",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "05:50",
+         "last": "19:27",
+         "trains": 17
+        }
+       }
+      },
+      {
+       "id": "77104",
+       "name": "Sant Martí de Centelles",
+       "days": {
+        "weekday": null,
+        "saturday": {
+         "first": "06:13",
+         "last": "19:55",
+         "trains": 17
+        },
+        "sunday": null
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 34
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 55
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 34
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 55
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 34
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 55
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "77200",
+      "from": "Ripoll",
+      "legs": [
+       {
+        "id": "77109",
+        "name": "Vic",
+        "minutes": 43,
+        "trips": 15
+       },
+       {
+        "id": "77104",
+        "name": "Sant Martí de Centelles",
+        "minutes": 72,
+        "trips": 15
+       }
+      ]
+     }
+    }
+   ],
+   "buses": {
+    "span": [
+     "2026-11-22",
+     "2026-12-20"
+    ],
+    "trips": 11704,
+    "stops": [
+     "Barcelona-Fabra i Puig",
+     "Granollers-Canovelles",
+     "La Garriga",
+     "Centelles",
+     "Vic",
+     "Ripoll",
+     "Planoles",
+     "La Molina",
+     "Puigcerdà",
+     "La Tor de Querol-Enveig"
+    ]
+   }
+  },
+  "R4": {
+   "id": "R4",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 151,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-11-24",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 123,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-05",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 123,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-11-29",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": false,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Manresa",
+     "towardsId": "78600",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "71600",
+       "name": "Sant Vicenç de Calders",
+       "days": {
+        "weekday": {
+         "first": "04:55",
+         "last": "21:55",
+         "trains": 21
+        },
+        "saturday": {
+         "first": "05:55",
+         "last": "21:55",
+         "trains": 18
+        },
+        "sunday": {
+         "first": "05:55",
+         "last": "21:55",
+         "trains": 18
+        }
+       }
+      },
+      {
+       "id": "72204",
+       "name": "Vilafranca del Penedès",
+       "days": {
+        "weekday": {
+         "first": "05:23",
+         "last": "22:23",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:23",
+         "last": "22:23",
+         "trains": 32
+        },
+        "sunday": {
+         "first": "06:23",
+         "last": "22:23",
+         "trains": 32
+        }
+       }
+      },
+      {
+       "id": "72209",
+       "name": "Martorell Central",
+       "days": {
+        "weekday": {
+         "first": "04:54",
+         "last": "22:52",
+         "trains": 68
+        },
+        "saturday": {
+         "first": "04:54",
+         "last": "22:52",
+         "trains": 49
+        },
+        "sunday": {
+         "first": "05:00",
+         "last": "22:52",
+         "trains": 48
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:34",
+         "last": "23:28",
+         "trains": 74
+        },
+        "saturday": {
+         "first": "05:34",
+         "last": "23:28",
+         "trains": 60
+        },
+        "sunday": {
+         "first": "05:40",
+         "last": "23:28",
+         "trains": 59
+        }
+       }
+      },
+      {
+       "id": "78704",
+       "name": "Sabadell Centre",
+       "days": {
+        "weekday": {
+         "first": "06:16",
+         "last": "00:10",
+         "trains": 72
+        },
+        "saturday": {
+         "first": "06:16",
+         "last": "00:10",
+         "trains": 59
+        },
+        "sunday": {
+         "first": "06:10",
+         "last": "00:35",
+         "trains": 59
+        }
+       }
+      },
+      {
+       "id": "78700",
+       "name": "Terrassa Estació del Nord",
+       "days": {
+        "weekday": {
+         "first": "06:27",
+         "last": "23:21",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "07:21",
+         "last": "23:21",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "07:21",
+         "last": "23:21",
+         "trains": 16
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 4,
+        "perHour": null,
+        "gap": 28
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 30,
+        "perHour": 4.3,
+        "gap": 14
+       },
+       {
+        "trains": 16,
+        "perHour": 5.3,
+        "gap": 11
+       },
+       {
+        "trains": 11,
+        "perHour": 3.7,
+        "gap": 17
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 27
+       },
+       {
+        "trains": 7,
+        "perHour": 2.3,
+        "gap": 25
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 9,
+        "perHour": 3,
+        "gap": 21
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 48
+       },
+       {
+        "trains": 7,
+        "perHour": 2.3,
+        "gap": 25
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 9,
+        "perHour": 3,
+        "gap": 21
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "72204",
+      "from": "Vilafranca del Penedès",
+      "legs": [
+       {
+        "id": "72209",
+        "name": "Martorell Central",
+        "minutes": 28,
+        "trips": 35
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 64,
+        "trips": 35
+       },
+       {
+        "id": "78704",
+        "name": "Sabadell Centre",
+        "minutes": 107,
+        "trips": 35
+       },
+       {
+        "id": "78700",
+        "name": "Terrassa Estació del Nord",
+        "minutes": 117,
+        "trips": 35
+       },
+       {
+        "id": "78600",
+        "name": "Manresa",
+        "minutes": 154,
+        "trips": 33
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Sant Vicenç de Calders",
+     "towardsId": "71600",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "78600",
+       "name": "Manresa",
+       "days": {
+        "weekday": {
+         "first": "05:54",
+         "last": "21:58",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:24",
+         "last": "21:54",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "06:24",
+         "last": "21:54",
+         "trains": 17
+        }
+       }
+      },
+      {
+       "id": "78700",
+       "name": "Terrassa Estació del Nord",
+       "days": {
+        "weekday": {
+         "first": "04:30",
+         "last": "23:00",
+         "trains": 75
+        },
+        "saturday": {
+         "first": "05:00",
+         "last": "22:30",
+         "trains": 60
+        },
+        "sunday": {
+         "first": "05:00",
+         "last": "22:30",
+         "trains": 60
+        }
+       }
+      },
+      {
+       "id": "78704",
+       "name": "Sabadell Centre",
+       "days": {
+        "weekday": {
+         "first": "04:40",
+         "last": "23:10",
+         "trains": 75
+        },
+        "saturday": {
+         "first": "05:10",
+         "last": "22:40",
+         "trains": 60
+        },
+        "sunday": {
+         "first": "05:10",
+         "last": "22:40",
+         "trains": 60
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:22",
+         "last": "23:52",
+         "trains": 77
+        },
+        "saturday": {
+         "first": "05:52",
+         "last": "23:22",
+         "trains": 61
+        },
+        "sunday": {
+         "first": "05:52",
+         "last": "23:22",
+         "trains": 61
+        }
+       }
+      },
+      {
+       "id": "72209",
+       "name": "Martorell Central",
+       "days": {
+        "weekday": {
+         "first": "06:01",
+         "last": "23:01",
+         "trains": 35
+        },
+        "saturday": {
+         "first": "06:31",
+         "last": "22:31",
+         "trains": 33
+        },
+        "sunday": {
+         "first": "06:31",
+         "last": "22:31",
+         "trains": 32
+        }
+       }
+      },
+      {
+       "id": "72204",
+       "name": "Vilafranca del Penedès",
+       "days": {
+        "weekday": {
+         "first": "06:29",
+         "last": "23:29",
+         "trains": 21
+        },
+        "saturday": {
+         "first": "06:59",
+         "last": "22:59",
+         "trains": 19
+        },
+        "sunday": {
+         "first": "06:59",
+         "last": "22:59",
+         "trains": 18
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 6,
+        "perHour": null,
+        "gap": 18
+       },
+       {
+        "trains": 16,
+        "perHour": 5.3,
+        "gap": 11
+       },
+       {
+        "trains": 29,
+        "perHour": 4.1,
+        "gap": 14
+       },
+       {
+        "trains": 13,
+        "perHour": 4.3,
+        "gap": 14
+       },
+       {
+        "trains": 11,
+        "perHour": 3.7,
+        "gap": 17
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 30
+       },
+       {
+        "trains": 9,
+        "perHour": 3,
+        "gap": 19
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 8,
+        "perHour": 2.7,
+        "gap": 24
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 30
+       },
+       {
+        "trains": 9,
+        "perHour": 3,
+        "gap": 19
+       },
+       {
+        "trains": 28,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 12,
+        "perHour": 4,
+        "gap": 15
+       },
+       {
+        "trains": 8,
+        "perHour": 2.7,
+        "gap": 24
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "78600",
+      "from": "Manresa",
+      "legs": [
+       {
+        "id": "78700",
+        "name": "Terrassa Estació del Nord",
+        "minutes": 35,
+        "trips": 35
+       },
+       {
+        "id": "78704",
+        "name": "Sabadell Centre",
+        "minutes": 46,
+        "trips": 35
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 87,
+        "trips": 35
+       },
+       {
+        "id": "72209",
+        "name": "Martorell Central",
+        "minutes": 126,
+        "trips": 33
+       },
+       {
+        "id": "72204",
+        "name": "Vilafranca del Penedès",
+        "minutes": 154,
+        "trips": 30
+       },
+       {
+        "id": "71600",
+        "name": "Sant Vicenç de Calders",
+        "minutes": 183,
+        "trips": 16
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R7": {
+   "id": "R7",
+   "days": {
+    "weekday": {
+     "date": "2026-12-07",
+     "trains": 65,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-12-12",
+     "trains": 33,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-12-13",
+     "trains": 33,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [
+     [
+      "2026-11-23",
+      "2026-11-27"
+     ]
+    ],
+    "saturday": [
+     [
+      "2026-11-28",
+      "2026-12-05"
+     ]
+    ],
+    "sunday": [
+     [
+      "2026-11-22",
+      "2026-12-06"
+     ]
+    ]
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Cerdanyola-Universitat",
+     "towardsId": "72503",
+     "frequencyAt": {
+      "id": "78706",
+      "name": "Cerdanyola del Vallès"
+     },
+     "stations": [
+      {
+       "id": "78706",
+       "name": "Cerdanyola del Vallès",
+       "days": {
+        "weekday": {
+         "first": "06:35",
+         "last": "22:35",
+         "trains": 33
+        },
+        "saturday": {
+         "first": "06:35",
+         "last": "22:35",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "06:35",
+         "last": "22:35",
+         "trains": 17
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "78706",
+      "from": "Cerdanyola del Vallès",
+      "legs": [
+       {
+        "id": "72503",
+        "name": "Cerdanyola-Universitat",
+        "minutes": 5,
+        "trips": 33
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Fabra i Puig",
+     "towardsId": "78802",
+     "frequencyAt": {
+      "id": "72503",
+      "name": "Cerdanyola-Universitat"
+     },
+     "stations": [
+      {
+       "id": "72503",
+       "name": "Cerdanyola-Universitat",
+       "days": {
+        "weekday": {
+         "first": "06:51",
+         "last": "22:21",
+         "trains": 32
+        },
+        "saturday": {
+         "first": "06:51",
+         "last": "21:51",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:51",
+         "last": "21:51",
+         "trains": 16
+        }
+       }
+      },
+      {
+       "id": "78706",
+       "name": "Cerdanyola del Vallès",
+       "days": {
+        "weekday": {
+         "first": "06:57",
+         "last": "22:27",
+         "trains": 32
+        },
+        "saturday": {
+         "first": "06:57",
+         "last": "21:57",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:57",
+         "last": "21:57",
+         "trains": 16
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 14,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 30
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "72503",
+      "from": "Cerdanyola-Universitat",
+      "legs": [
+       {
+        "id": "78706",
+        "name": "Cerdanyola del Vallès",
+        "minutes": 5,
+        "trips": 32
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R8": {
+   "id": "R8",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 33,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-12-07",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 32,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-12",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 32,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Granollers Centre",
+     "towardsId": "79100",
+     "frequencyAt": {
+      "id": "72209",
+      "name": "Martorell Central"
+     },
+     "stations": [
+      {
+       "id": "72209",
+       "name": "Martorell Central",
+       "days": {
+        "weekday": {
+         "first": "06:26",
+         "last": "21:26",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:26",
+         "last": "21:26",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:26",
+         "last": "21:26",
+         "trains": 16
+        }
+       }
+      },
+      {
+       "id": "72501",
+       "name": "Rubí Can Vallhonrat",
+       "days": {
+        "weekday": {
+         "first": "06:41",
+         "last": "21:41",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:41",
+         "last": "21:41",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:41",
+         "last": "21:41",
+         "trains": 16
+        }
+       }
+      },
+      {
+       "id": "72503",
+       "name": "Cerdanyola-Universitat",
+       "days": {
+        "weekday": {
+         "first": "06:49",
+         "last": "21:49",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:49",
+         "last": "21:49",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:49",
+         "last": "21:49",
+         "trains": 16
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "72209",
+      "name": "Martorell Central",
+      "days": {
+       "weekday": [
+        "06:26",
+        "07:26",
+        "08:26",
+        "09:26",
+        "10:26",
+        "11:26",
+        "12:26",
+        "13:26",
+        "14:26",
+        "15:26",
+        "16:26",
+        "17:26",
+        "18:26",
+        "19:26",
+        "20:26",
+        "21:26"
+       ],
+       "saturday": [
+        "06:26",
+        "07:26",
+        "08:26",
+        "09:26",
+        "10:26",
+        "11:26",
+        "12:26",
+        "13:26",
+        "14:26",
+        "15:26",
+        "16:26",
+        "17:26",
+        "18:26",
+        "19:26",
+        "20:26",
+        "21:26"
+       ],
+       "sunday": [
+        "06:26",
+        "07:26",
+        "08:26",
+        "09:26",
+        "10:26",
+        "11:26",
+        "12:26",
+        "13:26",
+        "14:26",
+        "15:26",
+        "16:26",
+        "17:26",
+        "18:26",
+        "19:26",
+        "20:26",
+        "21:26"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "72209",
+      "from": "Martorell Central",
+      "legs": [
+       {
+        "id": "72501",
+        "name": "Rubí Can Vallhonrat",
+        "minutes": 14,
+        "trips": 16
+       },
+       {
+        "id": "72503",
+        "name": "Cerdanyola-Universitat",
+        "minutes": 22,
+        "trips": 16
+       },
+       {
+        "id": "79100",
+        "name": "Granollers Centre",
+        "minutes": 44,
+        "trips": 16
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Martorell Central",
+     "towardsId": "72209",
+     "frequencyAt": {
+      "id": "79100",
+      "name": "Granollers Centre"
+     },
+     "stations": [
+      {
+       "id": "79100",
+       "name": "Granollers Centre",
+       "days": {
+        "weekday": {
+         "first": "06:32",
+         "last": "21:32",
+         "trains": 17
+        },
+        "saturday": {
+         "first": "06:32",
+         "last": "21:32",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:32",
+         "last": "21:32",
+         "trains": 16
+        }
+       }
+      },
+      {
+       "id": "72503",
+       "name": "Cerdanyola-Universitat",
+       "days": {
+        "weekday": {
+         "first": "06:50",
+         "last": "21:50",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:50",
+         "last": "21:50",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:50",
+         "last": "21:50",
+         "trains": 16
+        }
+       }
+      },
+      {
+       "id": "72501",
+       "name": "Rubí Can Vallhonrat",
+       "days": {
+        "weekday": {
+         "first": "06:57",
+         "last": "21:57",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:57",
+         "last": "21:57",
+         "trains": 16
+        },
+        "sunday": {
+         "first": "06:57",
+         "last": "21:57",
+         "trains": 16
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 44
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79100",
+      "from": "Granollers Centre",
+      "legs": [
+       {
+        "id": "72503",
+        "name": "Cerdanyola-Universitat",
+        "minutes": 17,
+        "trips": 17
+       },
+       {
+        "id": "72501",
+        "name": "Rubí Can Vallhonrat",
+        "minutes": 24,
+        "trips": 16
+       },
+       {
+        "id": "72209",
+        "name": "Martorell Central",
+        "minutes": 41,
+        "trips": 16
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R11": {
+   "id": "R11",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 48,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-11-27",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 34,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-12",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 37,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": false,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Cerbère",
+     "towardsId": "79316",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "05:56",
+         "last": "00:01",
+         "trains": 25
+        },
+        "saturday": {
+         "first": "06:46",
+         "last": "00:01",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "07:46",
+         "last": "00:01",
+         "trains": 19
+        }
+       }
+      },
+      {
+       "id": "71802",
+       "name": "Barcelona-Passeig de Gràcia",
+       "days": {
+        "weekday": {
+         "first": "06:01",
+         "last": "00:06",
+         "trains": 25
+        },
+        "saturday": {
+         "first": "06:51",
+         "last": "00:06",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "07:51",
+         "last": "00:06",
+         "trains": 19
+        }
+       }
+      },
+      {
+       "id": "79300",
+       "name": "Girona",
+       "days": {
+        "weekday": {
+         "first": "07:17",
+         "last": "22:13",
+         "trains": 21
+        },
+        "saturday": {
+         "first": "08:18",
+         "last": "21:37",
+         "trains": 14
+        },
+        "sunday": {
+         "first": "09:07",
+         "last": "22:13",
+         "trains": 15
+        }
+       }
+      },
+      {
+       "id": "79309",
+       "name": "Figueres",
+       "days": {
+        "weekday": {
+         "first": "08:27",
+         "last": "21:27",
+         "trains": 11
+        },
+        "saturday": {
+         "first": "08:57",
+         "last": "21:27",
+         "trains": 11
+        },
+        "sunday": {
+         "first": "09:37",
+         "last": "21:27",
+         "trains": 11
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 3,
+        "perHour": null,
+        "gap": 25
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 9,
+        "perHour": 1.3,
+        "gap": 45
+       },
+       {
+        "trains": 6,
+        "perHour": 2,
+        "gap": 30
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 6,
+        "perHour": 0.9,
+        "gap": 66
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 8,
+        "perHour": 1.1,
+        "gap": 47
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 2,
+        "perHour": null,
+        "gap": 30
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "71801",
+      "from": "Barcelona-Sants",
+      "legs": [
+       {
+        "id": "71802",
+        "name": "Barcelona-Passeig de Gràcia",
+        "minutes": 4,
+        "trips": 25
+       },
+       {
+        "id": "79300",
+        "name": "Girona",
+        "minutes": 79,
+        "trips": 23
+       },
+       {
+        "id": "79309",
+        "name": "Figueres",
+        "minutes": 114,
+        "trips": 21
+       },
+       {
+        "id": "79315",
+        "name": "Portbou",
+        "minutes": 155,
+        "trips": 11
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Sants",
+     "towardsId": "71801",
+     "frequencyAt": {
+      "id": "71802",
+      "name": "Barcelona-Passeig de Gràcia"
+     },
+     "stations": [
+      {
+       "id": "79315",
+       "name": "Portbou",
+       "days": {
+        "weekday": {
+         "first": "07:05",
+         "last": "20:24",
+         "trains": 11
+        },
+        "saturday": {
+         "first": "07:05",
+         "last": "20:25",
+         "trains": 12
+        },
+        "sunday": {
+         "first": "08:35",
+         "last": "20:25",
+         "trains": 13
+        }
+       }
+      },
+      {
+       "id": "79309",
+       "name": "Figueres",
+       "days": {
+        "weekday": {
+         "first": "05:52",
+         "last": "20:46",
+         "trains": 21
+        },
+        "saturday": {
+         "first": "05:52",
+         "last": "20:49",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "06:41",
+         "last": "20:49",
+         "trains": 17
+        }
+       }
+      },
+      {
+       "id": "79300",
+       "name": "Girona",
+       "days": {
+        "weekday": {
+         "first": "06:14",
+         "last": "21:19",
+         "trains": 23
+        },
+        "saturday": {
+         "first": "06:27",
+         "last": "21:23",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "07:14",
+         "last": "21:23",
+         "trains": 18
+        }
+       }
+      },
+      {
+       "id": "71802",
+       "name": "Barcelona-Passeig de Gràcia",
+       "days": {
+        "weekday": {
+         "first": "07:35",
+         "last": "22:35",
+         "trains": 23
+        },
+        "saturday": {
+         "first": "07:50",
+         "last": "22:47",
+         "trains": 17
+        },
+        "sunday": {
+         "first": "08:35",
+         "last": "22:47",
+         "trains": 18
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 30
+       },
+       {
+        "trains": 8,
+        "perHour": 1.1,
+        "gap": 51
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 38
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 38
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 53
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 55
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 66
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 6,
+        "perHour": 0.9,
+        "gap": 54
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 38
+       },
+       {
+        "trains": 5,
+        "perHour": 1.7,
+        "gap": 41
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "79315",
+      "from": "Portbou",
+      "legs": [
+       {
+        "id": "79309",
+        "name": "Figueres",
+        "minutes": 23,
+        "trips": 11
+       },
+       {
+        "id": "79300",
+        "name": "Girona",
+        "minutes": 63,
+        "trips": 11
+       },
+       {
+        "id": "71802",
+        "name": "Barcelona-Passeig de Gràcia",
+        "minutes": 149,
+        "trips": 11
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 155,
+        "trips": 11
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R13": {
+   "id": "R13",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 18,
+     "buses": 24,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 18,
+     "buses": 24,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 18,
+     "buses": 24,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Lleida-Pirineus",
+     "towardsId": "78400",
+     "frequencyAt": {
+      "id": "73003",
+      "name": "Les Borges Blanques"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "07:12",
+         "last": "19:12",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "07:12",
+         "last": "19:12",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "07:12",
+         "last": "19:12",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "07:30",
+         "last": "19:30",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "07:30",
+         "last": "19:30",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "07:30",
+         "last": "19:30",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "76004",
+       "name": "Valls",
+       "days": {
+        "weekday": {
+         "first": "08:50",
+         "last": "20:48",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "08:50",
+         "last": "20:48",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:50",
+         "last": "20:48",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "73003",
+       "name": "Les Borges Blanques",
+       "days": {
+        "weekday": {
+         "first": "09:47",
+         "last": "21:42",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "09:47",
+         "last": "21:42",
+         "trains": 5
+        },
+        "sunday": {
+         "first": "09:47",
+         "last": "21:42",
+         "trains": 5
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 154
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 154
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 154
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "79400",
+      "name": "Barcelona-Estació de França",
+      "days": {
+       "weekday": [
+        "07:12",
+        "14:42",
+        "17:12",
+        "19:12"
+       ],
+       "saturday": [
+        "07:12",
+        "14:42",
+        "17:12",
+        "19:12"
+       ],
+       "sunday": [
+        "07:12",
+        "14:42",
+        "17:12",
+        "19:12"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 4
+       },
+       {
+        "id": "76004",
+        "name": "Valls",
+        "minutes": 97,
+        "trips": 4
+       },
+       {
+        "id": "73100",
+        "name": "La Plana-Picamoixons",
+        "minutes": 105,
+        "trips": 4
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "78400",
+      "name": "Lleida-Pirineus"
+     },
+     "stations": [
+      {
+       "id": "78400",
+       "name": "Lleida-Pirineus",
+       "days": {
+        "weekday": {
+         "first": "08:08",
+         "last": "20:30",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:08",
+         "last": "20:30",
+         "trains": 5
+        },
+        "sunday": {
+         "first": "08:08",
+         "last": "20:30",
+         "trains": 5
+        }
+       }
+      },
+      {
+       "id": "73100",
+       "name": "La Plana-Picamoixons",
+       "days": {
+        "weekday": {
+         "first": "06:42",
+         "last": "19:14",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "06:42",
+         "last": "19:14",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "06:42",
+         "last": "19:14",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "76004",
+       "name": "Valls",
+       "days": {
+        "weekday": {
+         "first": "06:50",
+         "last": "19:22",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "06:50",
+         "last": "19:22",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "06:50",
+         "last": "19:22",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "08:09",
+         "last": "20:42",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "08:09",
+         "last": "20:42",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:09",
+         "last": "20:42",
+         "trains": 4
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 155
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 155
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 155
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "78400",
+      "name": "Lleida-Pirineus",
+      "days": {
+       "weekday": [
+        "08:08",
+        "13:07",
+        "15:42",
+        "18:12",
+        "20:30"
+       ],
+       "saturday": [
+        "08:08",
+        "13:07",
+        "15:42",
+        "18:12",
+        "20:30"
+       ],
+       "sunday": [
+        "08:08",
+        "13:07",
+        "15:42",
+        "18:12",
+        "20:30"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "78400",
+      "from": "Lleida-Pirineus",
+      "legs": [
+       {
+        "id": "73003",
+        "name": "Les Borges Blanques",
+        "minutes": 20,
+        "trips": 5
+       }
+      ]
+     }
+    }
+   ],
+   "buses": {
+    "span": [
+     "2026-11-22",
+     "2026-12-20"
+    ],
+    "trips": 576,
+    "stops": [
+     "La Plana-Picamoixons",
+     "Lleida-Pirineus"
+    ]
+   }
+  },
+  "R14": {
+   "id": "R14",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 6,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 4,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 4,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Lleida-Pirineus",
+     "towardsId": "78400",
+     "frequencyAt": {
+      "id": "71500",
+      "name": "Tarragona"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "11:45",
+         "last": "20:15",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "11:45",
+         "last": "11:45",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "11:45",
+         "last": "11:45",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "12:03",
+         "last": "20:33",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "12:03",
+         "last": "12:03",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "12:03",
+         "last": "12:03",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "05:54",
+         "last": "21:44",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "05:54",
+         "last": "13:14",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "05:54",
+         "last": "13:14",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "06:15",
+         "last": "22:05",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "06:15",
+         "last": "13:35",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "06:15",
+         "last": "13:35",
+         "trains": 2
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "79400",
+      "name": "Barcelona-Estació de França",
+      "days": {
+       "weekday": [
+        "11:45",
+        "20:15"
+       ],
+       "saturday": [
+        "11:45"
+       ],
+       "sunday": [
+        "11:45"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 2
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 87,
+        "trips": 2
+       },
+       {
+        "id": "71400",
+        "name": "Reus",
+        "minutes": 108,
+        "trips": 2
+       },
+       {
+        "id": "73100",
+        "name": "La Plana-Picamoixons",
+        "minutes": 132,
+        "trips": 2
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "71400",
+      "name": "Reus"
+     },
+     "stations": [
+      {
+       "id": "73100",
+       "name": "La Plana-Picamoixons",
+       "days": {
+        "weekday": {
+         "first": "06:44",
+         "last": "21:39",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "14:14",
+         "last": "21:39",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "14:14",
+         "last": "21:39",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "07:06",
+         "last": "22:01",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "14:36",
+         "last": "22:01",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "14:36",
+         "last": "22:01",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "07:26",
+         "last": "14:56",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "14:56",
+         "last": "14:56",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "14:56",
+         "last": "14:56",
+         "trains": 1
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "08:39",
+         "last": "16:09",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "16:09",
+         "last": "16:09",
+         "trains": 1
+        },
+        "sunday": {
+         "first": "16:09",
+         "last": "16:09",
+         "trains": 1
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "73100",
+      "name": "La Plana-Picamoixons",
+      "days": {
+       "weekday": [
+        "06:44",
+        "14:14",
+        "21:39"
+       ],
+       "saturday": [
+        "14:14",
+        "21:39"
+       ],
+       "sunday": [
+        "14:14",
+        "21:39"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "73100",
+      "from": "La Plana-Picamoixons",
+      "legs": [
+       {
+        "id": "71400",
+        "name": "Reus",
+        "minutes": 20,
+        "trips": 3
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 40,
+        "trips": 3
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 113,
+        "trips": 2
+       },
+       {
+        "id": "79400",
+        "name": "Barcelona-Estació de França",
+        "minutes": 130,
+        "trips": 2
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R15": {
+   "id": "R15",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 35,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-12-14",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 29,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-19",
+       "2026-12-19"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 29,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": [
+      [
+       "2026-12-13",
+       "2026-12-20"
+      ]
+     ]
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Riba-roja d'Ebre",
+     "towardsId": "71209",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "06:15",
+         "last": "21:45",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:15",
+         "last": "21:45",
+         "trains": 13
+        },
+        "sunday": {
+         "first": "06:15",
+         "last": "21:45",
+         "trains": 13
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "06:33",
+         "last": "22:03",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "06:33",
+         "last": "22:03",
+         "trains": 13
+        },
+        "sunday": {
+         "first": "06:33",
+         "last": "22:03",
+         "trains": 13
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "07:44",
+         "last": "23:14",
+         "trains": 16
+        },
+        "saturday": {
+         "first": "07:44",
+         "last": "23:14",
+         "trains": 13
+        },
+        "sunday": {
+         "first": "07:44",
+         "last": "23:14",
+         "trains": 13
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "08:05",
+         "last": "20:34",
+         "trains": 4
+        },
+        "saturday": {
+         "first": "08:05",
+         "last": "20:34",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:05",
+         "last": "20:34",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "71300",
+       "name": "Móra la Nova",
+       "days": {
+        "weekday": {
+         "first": "11:38",
+         "last": "20:11",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "11:38",
+         "last": "20:11",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "11:38",
+         "last": "20:11",
+         "trains": 2
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 5,
+        "perHour": 0.7,
+        "gap": 83
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 40
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 4,
+        "perHour": 0.6,
+        "gap": 110
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 60
+       },
+       {
+        "trains": 4,
+        "perHour": 0.6,
+        "gap": 110
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "79400",
+      "name": "Barcelona-Estació de França",
+      "days": {
+       "weekday": [
+        "06:15",
+        "06:45",
+        "07:45",
+        "08:45",
+        "09:45",
+        "10:45",
+        "13:45",
+        "14:15",
+        "15:15",
+        "16:45",
+        "17:15",
+        "18:15",
+        "18:45",
+        "19:45",
+        "21:15",
+        "21:45"
+       ],
+       "saturday": [
+        "06:15",
+        "07:45",
+        "08:45",
+        "09:45",
+        "10:45",
+        "13:45",
+        "15:15",
+        "17:15",
+        "18:15",
+        "18:45",
+        "19:45",
+        "21:15",
+        "21:45"
+       ],
+       "sunday": [
+        "06:15",
+        "07:45",
+        "08:45",
+        "09:45",
+        "10:45",
+        "13:45",
+        "15:15",
+        "17:15",
+        "18:15",
+        "18:45",
+        "19:45",
+        "21:15",
+        "21:45"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 16
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 87,
+        "trips": 16
+       },
+       {
+        "id": "71400",
+        "name": "Reus",
+        "minutes": 108,
+        "trips": 16
+       },
+       {
+        "id": "71300",
+        "name": "Móra la Nova",
+        "minutes": 174,
+        "trips": 4
+       },
+       {
+        "id": "71209",
+        "name": "Riba-roja d'Ebre",
+        "minutes": 208,
+        "trips": 2
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "71209",
+       "name": "Riba-roja d'Ebre",
+       "days": {
+        "weekday": {
+         "first": "09:01",
+         "last": "18:27",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "09:01",
+         "last": "18:27",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "09:01",
+         "last": "18:27",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "71300",
+       "name": "Móra la Nova",
+       "days": {
+        "weekday": {
+         "first": "06:31",
+         "last": "19:03",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "06:31",
+         "last": "19:03",
+         "trains": 5
+        },
+        "sunday": {
+         "first": "06:31",
+         "last": "19:03",
+         "trains": 5
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "05:36",
+         "last": "21:06",
+         "trains": 18
+        },
+        "saturday": {
+         "first": "05:36",
+         "last": "21:06",
+         "trains": 15
+        },
+        "sunday": {
+         "first": "05:36",
+         "last": "21:06",
+         "trains": 15
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "05:56",
+         "last": "21:26",
+         "trains": 18
+        },
+        "saturday": {
+         "first": "05:56",
+         "last": "21:26",
+         "trains": 15
+        },
+        "sunday": {
+         "first": "05:56",
+         "last": "21:26",
+         "trains": 15
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "07:09",
+         "last": "22:39",
+         "trains": 18
+        },
+        "saturday": {
+         "first": "07:09",
+         "last": "22:39",
+         "trains": 15
+        },
+        "sunday": {
+         "first": "07:09",
+         "last": "22:39",
+         "trains": 15
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 8,
+        "perHour": 1.1,
+        "gap": 56
+       },
+       {
+        "trains": 4,
+        "perHour": 1.3,
+        "gap": 50
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 75
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 7,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 75
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 45
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": null,
+     "journeys": {
+      "fromId": "71400",
+      "from": "Reus",
+      "legs": [
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 18,
+        "trips": 18
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 91,
+        "trips": 18
+       },
+       {
+        "id": "79400",
+        "name": "Barcelona-Estació de França",
+        "minutes": 108,
+        "trips": 18
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R16": {
+   "id": "R16",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 24,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 24,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 24,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Ulldecona-Alcanar-La Sénia",
+     "towardsId": "65314",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "05:45",
+         "last": "20:45",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "05:45",
+         "last": "20:45",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "05:45",
+         "last": "20:45",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "06:03",
+         "last": "21:03",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "06:03",
+         "last": "21:03",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "06:03",
+         "last": "21:03",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "07:14",
+         "last": "22:14",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "07:14",
+         "last": "22:14",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "07:14",
+         "last": "22:14",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "65422",
+       "name": "Cambrils",
+       "days": {
+        "weekday": {
+         "first": "07:35",
+         "last": "22:35",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "07:35",
+         "last": "22:35",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "07:35",
+         "last": "22:35",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "65400",
+       "name": "Tortosa",
+       "days": {
+        "weekday": {
+         "first": "12:20",
+         "last": "22:20",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "12:20",
+         "last": "22:20",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "12:20",
+         "last": "22:20",
+         "trains": 2
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 4,
+        "perHour": 0.6,
+        "gap": 100
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 4,
+        "perHour": 0.6,
+        "gap": 100
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 4,
+        "perHour": 0.6,
+        "gap": 100
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "79400",
+      "name": "Barcelona-Estació de França",
+      "days": {
+       "weekday": [
+        "05:45",
+        "07:15",
+        "09:15",
+        "11:15",
+        "13:15",
+        "14:45",
+        "16:15",
+        "17:45",
+        "19:15",
+        "20:45"
+       ],
+       "saturday": [
+        "05:45",
+        "07:15",
+        "09:15",
+        "11:15",
+        "13:15",
+        "14:45",
+        "16:15",
+        "17:45",
+        "19:15",
+        "20:45"
+       ],
+       "sunday": [
+        "05:45",
+        "07:15",
+        "09:15",
+        "11:15",
+        "13:15",
+        "14:45",
+        "16:15",
+        "17:45",
+        "19:15",
+        "20:45"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 10
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 87,
+        "trips": 10
+       },
+       {
+        "id": "65422",
+        "name": "Cambrils",
+        "minutes": 109,
+        "trips": 10
+       },
+       {
+        "id": "65400",
+        "name": "Tortosa",
+        "minutes": 172,
+        "trips": 10
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "65314",
+       "name": "Ulldecona-Alcanar-La Sénia",
+       "days": {
+        "weekday": {
+         "first": "06:28",
+         "last": "20:06",
+         "trains": 2
+        },
+        "saturday": {
+         "first": "06:28",
+         "last": "20:06",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "06:28",
+         "last": "20:06",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "65400",
+       "name": "Tortosa",
+       "days": {
+        "weekday": {
+         "first": "05:44",
+         "last": "21:02",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "05:44",
+         "last": "21:02",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "05:44",
+         "last": "21:02",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "65422",
+       "name": "Cambrils",
+       "days": {
+        "weekday": {
+         "first": "06:38",
+         "last": "22:03",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "06:38",
+         "last": "22:03",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "06:38",
+         "last": "22:03",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "06:59",
+         "last": "22:26",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "06:59",
+         "last": "22:26",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "06:59",
+         "last": "22:26",
+         "trains": 10
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "08:12",
+         "last": "23:39",
+         "trains": 10
+        },
+        "saturday": {
+         "first": "08:12",
+         "last": "23:39",
+         "trains": 10
+        },
+        "sunday": {
+         "first": "08:12",
+         "last": "23:39",
+         "trains": 10
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 87
+       },
+       {
+        "trains": 3,
+        "perHour": 0.4,
+        "gap": 120
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 87
+       },
+       {
+        "trains": 3,
+        "perHour": 0.4,
+        "gap": 120
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 87
+       },
+       {
+        "trains": 3,
+        "perHour": 0.4,
+        "gap": 120
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 90
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "65400",
+      "name": "Tortosa",
+      "days": {
+       "weekday": [
+        "05:44",
+        "07:05",
+        "09:11",
+        "11:00",
+        "13:11",
+        "15:05",
+        "16:41",
+        "18:11",
+        "19:35",
+        "21:02"
+       ],
+       "saturday": [
+        "05:44",
+        "07:05",
+        "09:11",
+        "11:00",
+        "13:11",
+        "15:05",
+        "16:41",
+        "18:11",
+        "19:35",
+        "21:02"
+       ],
+       "sunday": [
+        "05:44",
+        "07:05",
+        "09:11",
+        "11:00",
+        "13:11",
+        "15:05",
+        "16:41",
+        "18:11",
+        "19:35",
+        "21:02"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "65400",
+      "from": "Tortosa",
+      "legs": [
+       {
+        "id": "65422",
+        "name": "Cambrils",
+        "minutes": 53,
+        "trips": 8
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 73,
+        "trips": 8
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 146,
+        "trips": 8
+       },
+       {
+        "id": "79400",
+        "name": "Barcelona-Estació de França",
+        "minutes": 163,
+        "trips": 8
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "R17": {
+   "id": "R17",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 6,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 6,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 6,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Salou - Port Aventura",
+     "towardsId": "65411",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "79400",
+       "name": "Barcelona-Estació de França",
+       "days": {
+        "weekday": {
+         "first": "08:15",
+         "last": "12:15",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "08:15",
+         "last": "12:15",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "08:15",
+         "last": "12:15",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "08:33",
+         "last": "12:33",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "08:33",
+         "last": "12:33",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "08:33",
+         "last": "12:33",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "09:44",
+         "last": "13:44",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "09:44",
+         "last": "13:44",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "09:44",
+         "last": "13:44",
+         "trains": 3
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "79400",
+      "name": "Barcelona-Estació de França",
+      "days": {
+       "weekday": [
+        "08:15",
+        "10:15",
+        "12:15"
+       ],
+       "saturday": [
+        "08:15",
+        "10:15",
+        "12:15"
+       ],
+       "sunday": [
+        "08:15",
+        "10:15",
+        "12:15"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "79400",
+      "from": "Barcelona-Estació de França",
+      "legs": [
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 16,
+        "trips": 3
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 87,
+        "trips": 3
+       },
+       {
+        "id": "65411",
+        "name": "Salou - Port Aventura",
+        "minutes": 102,
+        "trips": 3
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Barcelona-Estació de França",
+     "towardsId": "79400",
+     "frequencyAt": {
+      "id": "71801",
+      "name": "Barcelona-Sants"
+     },
+     "stations": [
+      {
+       "id": "65411",
+       "name": "Salou - Port Aventura",
+       "days": {
+        "weekday": {
+         "first": "11:11",
+         "last": "21:41",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "11:11",
+         "last": "21:41",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "11:11",
+         "last": "21:41",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "11:26",
+         "last": "21:56",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "11:26",
+         "last": "21:56",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "11:26",
+         "last": "21:56",
+         "trains": 3
+        }
+       }
+      },
+      {
+       "id": "71801",
+       "name": "Barcelona-Sants",
+       "days": {
+        "weekday": {
+         "first": "12:39",
+         "last": "23:09",
+         "trains": 3
+        },
+        "saturday": {
+         "first": "12:39",
+         "last": "23:09",
+         "trains": 3
+        },
+        "sunday": {
+         "first": "12:39",
+         "last": "23:09",
+         "trains": 3
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "65411",
+      "name": "Salou - Port Aventura",
+      "days": {
+       "weekday": [
+        "11:11",
+        "13:11",
+        "21:41"
+       ],
+       "saturday": [
+        "11:11",
+        "13:11",
+        "21:41"
+       ],
+       "sunday": [
+        "11:11",
+        "13:11",
+        "21:41"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "65411",
+      "from": "Salou - Port Aventura",
+      "legs": [
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 13,
+        "trips": 3
+       },
+       {
+        "id": "71801",
+        "name": "Barcelona-Sants",
+        "minutes": 86,
+        "trips": 3
+       },
+       {
+        "id": "79400",
+        "name": "Barcelona-Estació de França",
+        "minutes": 103,
+        "trips": 3
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "RG1": {
+   "id": "RG1",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 17,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-12-07",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": null,
+    "sunday": null
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [
+     [
+      "2026-11-28",
+      "2026-12-19"
+     ]
+    ],
+    "sunday": [
+     [
+      "2026-11-22",
+      "2026-12-20"
+     ]
+    ]
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": false
+    }
+   ],
+   "saturdayIsSunday": false,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Portbou",
+     "towardsId": "79315",
+     "frequencyAt": {
+      "id": "79200",
+      "name": "Maçanet-Massanes"
+     },
+     "stations": [
+      {
+       "id": "79200",
+       "name": "Maçanet-Massanes",
+       "days": {
+        "weekday": {
+         "first": "07:48",
+         "last": "21:53",
+         "trains": 8
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      },
+      {
+       "id": "79300",
+       "name": "Girona",
+       "days": {
+        "weekday": {
+         "first": "08:15",
+         "last": "22:21",
+         "trains": 8
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      },
+      {
+       "id": "79309",
+       "name": "Figueres",
+       "days": {
+        "weekday": {
+         "first": "06:56",
+         "last": "23:01",
+         "trains": 5
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 3,
+        "perHour": 0.4,
+        "gap": 120
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": null,
+      "sunday": null
+     },
+     "listed": {
+      "id": "79200",
+      "name": "Maçanet-Massanes",
+      "days": {
+       "weekday": [
+        "07:48",
+        "09:48",
+        "11:48",
+        "13:48",
+        "15:48",
+        "17:48",
+        "19:48",
+        "21:53"
+       ],
+       "saturday": null,
+       "sunday": null
+      }
+     },
+     "journeys": {
+      "fromId": "79200",
+      "from": "Maçanet-Massanes",
+      "legs": [
+       {
+        "id": "79300",
+        "name": "Girona",
+        "minutes": 27,
+        "trips": 8
+       },
+       {
+        "id": "79309",
+        "name": "Figueres",
+        "minutes": 67,
+        "trips": 8
+       },
+       {
+        "id": "79315",
+        "name": "Portbou",
+        "minutes": 92,
+        "trips": 4
+       }
+      ]
+     }
+    },
+    {
+     "towards": "L'Hospitalet de Llobregat",
+     "towardsId": "72305",
+     "frequencyAt": {
+      "id": "79309",
+      "name": "Figueres"
+     },
+     "stations": [
+      {
+       "id": "79315",
+       "name": "Portbou",
+       "days": {
+        "weekday": {
+         "first": "07:29",
+         "last": "19:29",
+         "trains": 4
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      },
+      {
+       "id": "79309",
+       "name": "Figueres",
+       "days": {
+        "weekday": {
+         "first": "05:55",
+         "last": "19:53",
+         "trains": 8
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      },
+      {
+       "id": "79300",
+       "name": "Girona",
+       "days": {
+        "weekday": {
+         "first": "06:37",
+         "last": "20:35",
+         "trains": 8
+        },
+        "saturday": null,
+        "sunday": null
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 3,
+        "perHour": 0.4,
+        "gap": 120
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 120
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": null,
+      "sunday": null
+     },
+     "listed": {
+      "id": "79315",
+      "name": "Portbou",
+      "days": {
+       "weekday": [
+        "07:29",
+        "11:29",
+        "15:29",
+        "19:29"
+       ],
+       "saturday": null,
+       "sunday": null
+      }
+     },
+     "journeys": {
+      "fromId": "79315",
+      "from": "Portbou",
+      "legs": [
+       {
+        "id": "79309",
+        "name": "Figueres",
+        "minutes": 23,
+        "trips": 4
+       },
+       {
+        "id": "79300",
+        "name": "Girona",
+        "minutes": 65,
+        "trips": 4
+       },
+       {
+        "id": "79200",
+        "name": "Maçanet-Massanes",
+        "minutes": 91,
+        "trips": 4
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "RT1": {
+   "id": "RT1",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 10,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 8,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 8,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "La Plana-Picamoixons",
+     "towardsId": "73100",
+     "frequencyAt": {
+      "id": "71500",
+      "name": "Tarragona"
+     },
+     "stations": [
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "05:40",
+         "last": "20:08",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:10",
+         "last": "20:08",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:10",
+         "last": "20:08",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "06:01",
+         "last": "20:29",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:31",
+         "last": "20:29",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:31",
+         "last": "20:29",
+         "trains": 4
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "71500",
+      "name": "Tarragona",
+      "days": {
+       "weekday": [
+        "05:40",
+        "08:10",
+        "15:40",
+        "18:10",
+        "20:08"
+       ],
+       "saturday": [
+        "08:10",
+        "15:40",
+        "18:10",
+        "20:08"
+       ],
+       "sunday": [
+        "08:10",
+        "15:40",
+        "18:10",
+        "20:08"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "71500",
+      "from": "Tarragona",
+      "legs": [
+       {
+        "id": "71400",
+        "name": "Reus",
+        "minutes": 19,
+        "trips": 5
+       },
+       {
+        "id": "73100",
+        "name": "La Plana-Picamoixons",
+        "minutes": 43,
+        "trips": 5
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Tarragona",
+     "towardsId": "71500",
+     "frequencyAt": {
+      "id": "71400",
+      "name": "Reus"
+     },
+     "stations": [
+      {
+       "id": "73100",
+       "name": "La Plana-Picamoixons",
+       "days": {
+        "weekday": {
+         "first": "09:18",
+         "last": "22:38",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "09:18",
+         "last": "21:09",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "09:18",
+         "last": "21:09",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "71400",
+       "name": "Reus",
+       "days": {
+        "weekday": {
+         "first": "09:40",
+         "last": "23:00",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "09:40",
+         "last": "21:31",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "09:40",
+         "last": "21:31",
+         "trains": 4
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 150
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 150
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 150
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "73100",
+      "name": "La Plana-Picamoixons",
+      "days": {
+       "weekday": [
+        "09:18",
+        "16:48",
+        "19:18",
+        "21:09",
+        "22:38"
+       ],
+       "saturday": [
+        "09:18",
+        "16:48",
+        "19:18",
+        "21:09"
+       ],
+       "sunday": [
+        "09:18",
+        "16:48",
+        "19:18",
+        "21:09"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "73100",
+      "from": "La Plana-Picamoixons",
+      "legs": [
+       {
+        "id": "71400",
+        "name": "Reus",
+        "minutes": 20,
+        "trips": 5
+       },
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 40,
+        "trips": 5
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "RT2": {
+   "id": "RT2",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 16,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 16,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 16,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Salou - Port Aventura",
+     "towardsId": "65411",
+     "frequencyAt": {
+      "id": "71500",
+      "name": "Tarragona"
+     },
+     "stations": [
+      {
+       "id": "71500",
+       "name": "Tarragona",
+       "days": {
+        "weekday": {
+         "first": "06:37",
+         "last": "20:52",
+         "trains": 8
+        },
+        "saturday": {
+         "first": "06:37",
+         "last": "20:52",
+         "trains": 8
+        },
+        "sunday": {
+         "first": "06:37",
+         "last": "20:52",
+         "trains": 8
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 60
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "71500",
+      "name": "Tarragona",
+      "days": {
+       "weekday": [
+        "06:37",
+        "07:23",
+        "15:53",
+        "16:53",
+        "17:53",
+        "18:53",
+        "19:52",
+        "20:52"
+       ],
+       "saturday": [
+        "06:37",
+        "07:23",
+        "15:53",
+        "16:53",
+        "17:53",
+        "18:53",
+        "19:52",
+        "20:52"
+       ],
+       "sunday": [
+        "06:37",
+        "07:23",
+        "15:53",
+        "16:53",
+        "17:53",
+        "18:53",
+        "19:52",
+        "20:52"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "71500",
+      "from": "Tarragona",
+      "legs": [
+       {
+        "id": "65411",
+        "name": "Salou - Port Aventura",
+        "minutes": 13,
+        "trips": 8
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Tarragona",
+     "towardsId": "71500",
+     "frequencyAt": {
+      "id": "65411",
+      "name": "Salou - Port Aventura"
+     },
+     "stations": [
+      {
+       "id": "65411",
+       "name": "Salou - Port Aventura",
+       "days": {
+        "weekday": {
+         "first": "06:59",
+         "last": "20:31",
+         "trains": 8
+        },
+        "saturday": {
+         "first": "06:59",
+         "last": "20:31",
+         "trains": 8
+        },
+        "sunday": {
+         "first": "06:59",
+         "last": "20:31",
+         "trains": 8
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 120
+       },
+       {
+        "trains": 3,
+        "perHour": 1,
+        "gap": 60
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "65411",
+      "name": "Salou - Port Aventura",
+      "days": {
+       "weekday": [
+        "06:59",
+        "07:46",
+        "14:31",
+        "16:31",
+        "17:31",
+        "18:31",
+        "19:31",
+        "20:31"
+       ],
+       "saturday": [
+        "06:59",
+        "07:46",
+        "14:31",
+        "16:31",
+        "17:31",
+        "18:31",
+        "19:31",
+        "20:31"
+       ],
+       "sunday": [
+        "06:59",
+        "07:46",
+        "14:31",
+        "16:31",
+        "17:31",
+        "18:31",
+        "19:31",
+        "20:31"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "65411",
+      "from": "Salou - Port Aventura",
+      "legs": [
+       {
+        "id": "71500",
+        "name": "Tarragona",
+        "minutes": 13,
+        "trips": 8
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "RL3": {
+   "id": "RL3",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 12,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": [
+      [
+       "2026-12-07",
+       "2026-12-18"
+      ]
+     ]
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 4,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": [
+      [
+       "2026-12-12",
+       "2026-12-12"
+      ]
+     ]
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 4,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Lleida-Pirineus",
+     "towardsId": "78400",
+     "frequencyAt": {
+      "id": "78500",
+      "name": "Cervera"
+     },
+     "stations": [
+      {
+       "id": "78500",
+       "name": "Cervera",
+       "days": {
+        "weekday": {
+         "first": "07:36",
+         "last": "22:30",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "07:29",
+         "last": "22:30",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "07:29",
+         "last": "22:30",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "78408",
+       "name": "Tàrrega",
+       "days": {
+        "weekday": {
+         "first": "07:46",
+         "last": "22:40",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "07:39",
+         "last": "22:40",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "07:39",
+         "last": "22:40",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "78403",
+       "name": "Mollerussa",
+       "days": {
+        "weekday": {
+         "first": "08:08",
+         "last": "23:02",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "08:01",
+         "last": "23:02",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "08:01",
+         "last": "23:02",
+         "trains": 2
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.7,
+        "gap": 96
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 192
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "78500",
+      "name": "Cervera",
+      "days": {
+       "weekday": [
+        "07:36",
+        "09:12",
+        "12:32",
+        "15:44",
+        "19:17",
+        "22:30"
+       ],
+       "saturday": [
+        "07:29",
+        "22:30"
+       ],
+       "sunday": [
+        "07:29",
+        "22:30"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "78500",
+      "from": "Cervera",
+      "legs": [
+       {
+        "id": "78408",
+        "name": "Tàrrega",
+        "minutes": 9,
+        "trips": 6
+       },
+       {
+        "id": "78403",
+        "name": "Mollerussa",
+        "minutes": 31,
+        "trips": 6
+       },
+       {
+        "id": "78400",
+        "name": "Lleida-Pirineus",
+        "minutes": 51,
+        "trips": 6
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Cervera",
+     "towardsId": "78500",
+     "frequencyAt": {
+      "id": "78400",
+      "name": "Lleida-Pirineus"
+     },
+     "stations": [
+      {
+       "id": "78400",
+       "name": "Lleida-Pirineus",
+       "days": {
+        "weekday": {
+         "first": "06:21",
+         "last": "20:44",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "06:20",
+         "last": "20:44",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "06:20",
+         "last": "20:44",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "78403",
+       "name": "Mollerussa",
+       "days": {
+        "weekday": {
+         "first": "06:40",
+         "last": "21:03",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "06:39",
+         "last": "21:03",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "06:39",
+         "last": "21:03",
+         "trains": 2
+        }
+       }
+      },
+      {
+       "id": "78408",
+       "name": "Tàrrega",
+       "days": {
+        "weekday": {
+         "first": "07:01",
+         "last": "21:25",
+         "trains": 6
+        },
+        "saturday": {
+         "first": "07:00",
+         "last": "21:25",
+         "trains": 2
+        },
+        "sunday": {
+         "first": "07:00",
+         "last": "21:25",
+         "trains": 2
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 215
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "78400",
+      "name": "Lleida-Pirineus",
+      "days": {
+       "weekday": [
+        "06:21",
+        "08:03",
+        "10:42",
+        "14:17",
+        "17:55",
+        "20:44"
+       ],
+       "saturday": [
+        "06:20",
+        "20:44"
+       ],
+       "sunday": [
+        "06:20",
+        "20:44"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "78400",
+      "from": "Lleida-Pirineus",
+      "legs": [
+       {
+        "id": "78403",
+        "name": "Mollerussa",
+        "minutes": 18,
+        "trips": 6
+       },
+       {
+        "id": "78408",
+        "name": "Tàrrega",
+        "minutes": 40,
+        "trips": 6
+       },
+       {
+        "id": "78500",
+        "name": "Cervera",
+        "minutes": 51,
+        "trips": 6
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  },
+  "RL4": {
+   "id": "RL4",
+   "days": {
+    "weekday": {
+     "date": "2026-11-23",
+     "trains": 10,
+     "buses": 0,
+     "span": [
+      "2026-11-23",
+      "2026-12-18"
+     ],
+     "differentOn": []
+    },
+    "saturday": {
+     "date": "2026-11-28",
+     "trains": 8,
+     "buses": 0,
+     "span": [
+      "2026-11-28",
+      "2026-12-19"
+     ],
+     "differentOn": []
+    },
+    "sunday": {
+     "date": "2026-11-22",
+     "trains": 8,
+     "buses": 0,
+     "span": [
+      "2026-11-22",
+      "2026-12-20"
+     ],
+     "differentOn": []
+    }
+   },
+   "noTrains": {
+    "weekday": [],
+    "saturday": [],
+    "sunday": []
+   },
+   "holidays": [
+    {
+     "date": "2026-12-08",
+     "sameAsSunday": true
+    }
+   ],
+   "saturdayIsSunday": true,
+   "journeyDay": "weekday",
+   "directions": [
+    {
+     "towards": "Lleida-Pirineus",
+     "towardsId": "78400",
+     "frequencyAt": {
+      "id": "78500",
+      "name": "Cervera"
+     },
+     "stations": [
+      {
+       "id": "78503",
+       "name": "Calaf",
+       "days": {
+        "weekday": {
+         "first": "06:21",
+         "last": "20:45",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:57",
+         "last": "20:45",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:57",
+         "last": "20:45",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "78500",
+       "name": "Cervera",
+       "days": {
+        "weekday": {
+         "first": "06:52",
+         "last": "21:16",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "09:28",
+         "last": "21:16",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "09:28",
+         "last": "21:16",
+         "trains": 4
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 200
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.1,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "78503",
+      "name": "Calaf",
+      "days": {
+       "weekday": [
+        "06:21",
+        "09:59",
+        "13:19",
+        "17:12",
+        "20:45"
+       ],
+       "saturday": [
+        "08:57",
+        "12:43",
+        "17:12",
+        "20:45"
+       ],
+       "sunday": [
+        "08:57",
+        "12:43",
+        "17:12",
+        "20:45"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "78503",
+      "from": "Calaf",
+      "legs": [
+       {
+        "id": "78500",
+        "name": "Cervera",
+        "minutes": 30,
+        "trips": 5
+       },
+       {
+        "id": "78400",
+        "name": "Lleida-Pirineus",
+        "minutes": 82,
+        "trips": 5
+       }
+      ]
+     }
+    },
+    {
+     "towards": "Terrassa Estació del Nord",
+     "towardsId": "78700",
+     "frequencyAt": {
+      "id": "78400",
+      "name": "Lleida-Pirineus"
+     },
+     "stations": [
+      {
+       "id": "78400",
+       "name": "Lleida-Pirineus",
+       "days": {
+        "weekday": {
+         "first": "05:02",
+         "last": "19:28",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "07:40",
+         "last": "19:28",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "07:40",
+         "last": "19:28",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "78500",
+       "name": "Cervera",
+       "days": {
+        "weekday": {
+         "first": "05:54",
+         "last": "20:21",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:33",
+         "last": "20:21",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:33",
+         "last": "20:21",
+         "trains": 4
+        }
+       }
+      },
+      {
+       "id": "78503",
+       "name": "Calaf",
+       "days": {
+        "weekday": {
+         "first": "06:20",
+         "last": "20:47",
+         "trains": 5
+        },
+        "saturday": {
+         "first": "08:59",
+         "last": "20:47",
+         "trains": 4
+        },
+        "sunday": {
+         "first": "08:59",
+         "last": "20:47",
+         "trains": 4
+        }
+       }
+      }
+     ],
+     "bands": {
+      "weekday": [
+       {
+        "trains": 1,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 233
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "saturday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 272
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ],
+      "sunday": [
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 2,
+        "perHour": 0.3,
+        "gap": 272
+       },
+       {
+        "trains": 1,
+        "perHour": 0.3,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": 0,
+        "gap": null
+       },
+       {
+        "trains": 0,
+        "perHour": null,
+        "gap": null
+       }
+      ]
+     },
+     "listed": {
+      "id": "78400",
+      "name": "Lleida-Pirineus",
+      "days": {
+       "weekday": [
+        "05:02",
+        "08:42",
+        "12:02",
+        "15:55",
+        "19:28"
+       ],
+       "saturday": [
+        "07:40",
+        "11:23",
+        "15:55",
+        "19:28"
+       ],
+       "sunday": [
+        "07:40",
+        "11:23",
+        "15:55",
+        "19:28"
+       ]
+      }
+     },
+     "journeys": {
+      "fromId": "78400",
+      "from": "Lleida-Pirineus",
+      "legs": [
+       {
+        "id": "78500",
+        "name": "Cervera",
+        "minutes": 52,
+        "trips": 5
+       },
+       {
+        "id": "78503",
+        "name": "Calaf",
+        "minutes": 78,
+        "trips": 5
+       },
+       {
+        "id": "78600",
+        "name": "Manresa",
+        "minutes": 122,
+        "trips": 5
+       }
+      ]
+     }
+    }
+   ],
+   "buses": null
+  }
+ }
+}

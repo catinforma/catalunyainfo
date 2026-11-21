@@ -39,7 +39,8 @@ export function dosDate(value: number): string {
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-export function readZip(buffer: Buffer): ZipMember[] {
+/** `maxMemberBytes`: Renfe's GTFS stop_times.txt is ~270 MB inflated (21 Nov 2026), so its reader raises the limit. */
+export function readZip(buffer: Buffer, maxMemberBytes: number = MAX_MEMBER_BYTES): ZipMember[] {
   // The end-of-central-directory record sits in the last 22 + 65,535 bytes.
   let end = -1;
   for (let i = buffer.length - 22; i >= Math.max(0, buffer.length - 22 - 0xffff); i--) {
@@ -75,7 +76,7 @@ export function readZip(buffer: Buffer): ZipMember[] {
     if (name.endsWith("/")) continue;
     if (flags & 0x1) fail(`${name}: encrypted members are not supported`);
     if (method !== 0 && method !== 8) fail(`${name}: compression method ${method} is not supported`);
-    if (uncompressed > MAX_MEMBER_BYTES) fail(`${name}: ${uncompressed} bytes, over the ${MAX_MEMBER_BYTES}-byte limit`);
+    if (uncompressed > maxMemberBytes) fail(`${name}: ${uncompressed} bytes, over the ${maxMemberBytes}-byte limit`);
     if (buffer.readUInt32LE(localOffset) !== LOCAL) fail(`${name}: local header is damaged`);
     const start = localOffset + 30 + buffer.readUInt16LE(localOffset + 26) + buffer.readUInt16LE(localOffset + 28);
     if (start + compressed > buffer.length) fail(`${name}: data runs past the end of the archive`);
@@ -86,7 +87,7 @@ export function readZip(buffer: Buffer): ZipMember[] {
       size: uncompressed,
       read: () => {
         const raw = buffer.subarray(start, start + compressed);
-        const data = method === 0 ? Buffer.from(raw) : inflateRawSync(raw, { maxOutputLength: MAX_MEMBER_BYTES });
+        const data = method === 0 ? Buffer.from(raw) : inflateRawSync(raw, { maxOutputLength: maxMemberBytes });
         if (data.length !== uncompressed) fail(`${name}: ${data.length} bytes, the directory says ${uncompressed}`);
         if (crc32(data) >>> 0 !== crc) fail(`${name}: CRC-32 mismatch, the archive is damaged`);
         return data;

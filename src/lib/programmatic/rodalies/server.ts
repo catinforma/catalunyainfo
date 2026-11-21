@@ -1,7 +1,7 @@
 import "server-only";
 
 import { MAX_SOURCE_AGE_MS, buildAlertsResponse, type Fetcher } from "./alerts";
-import { alertsForLine } from "./live";
+import { alertsForLine, madridDate } from "./live";
 import type { AlertsOk, LineId } from "./types";
 
 /**
@@ -48,6 +48,15 @@ export async function loadServerAlerts(now: Date = new Date()): Promise<AlertsOk
   if (!body.ok) return null;
   // The Renfe feed carries its own timestamp, which the handler already checked.
   return asOfAnswer(body, body.sourceUpdatedAt ?? answered.at, now, MAX_SOURCE_AGE_MS);
+}
+
+/**
+ * The Madrid date of this render (21 Nov 2026), read here with the notices so
+ * the route and page files stay clock-free. Its only use: the timetable
+ * summary (timetable.json) is hidden once Renfe's file has ended.
+ */
+export function renderDate(now: Date = new Date()): string {
+  return madridDate(now);
 }
 
 /** Only the notices a line page shows, so its props stay small. */

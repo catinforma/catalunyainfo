@@ -10,14 +10,16 @@ import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 import { alertsAnswer, hubCopy, lineStatus, lineStatusNote } from "@/lib/programmatic/rodalies/copy";
 import type { AlertsOk } from "@/lib/programmatic/rodalies/types";
-import { SNAPSHOT } from "@/lib/programmatic/rodalies/data";
+import { LINES, SNAPSHOT } from "@/lib/programmatic/rodalies/data";
 import { officialUrl } from "@/lib/programmatic/rodalies/official";
 import { hubPath, hubTranslations } from "@/lib/programmatic/rodalies/paths";
+import { hubTimetable } from "@/lib/programmatic/rodalies/timetable-copy";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 
 import { lineHrefs, lineNames } from "./LinePage";
 import { Compensation, LinkList, Paragraphs, Sources } from "./parts";
 import { RodaliesLive } from "./RodaliesLive";
+import { HubTimetableSection } from "./Timetable";
 
 export function hubCrumbs(locale: Locale): Crumb[] {
   return [
@@ -26,9 +28,14 @@ export function hubCrumbs(locale: Locale): Crumb[] {
   ];
 }
 
-/** The family's index: live notices on every line, the lines, and where each goes. */
-export function HubPage({ locale, initial = null }: { locale: Locale; initial?: AlertsOk | null }) {
+/**
+ * The family's index: live notices on every line, the lines, where each goes,
+ * and each line's first and last train (Renfe's GTFS snapshot; `today`, Madrid,
+ * only hides it once Renfe's file has ended).
+ */
+export function HubPage({ locale, initial = null, today }: { locale: Locale; initial?: AlertsOk | null; today: string }) {
   const t = hubCopy(locale);
+  const timetable = hubTimetable(LINES, locale, today);
   const crumbs = hubCrumbs(locale);
   const answer = initial ? alertsAnswer(locale, initial, null) : null;
   const statusNote = lineStatusNote(locale, initial);
@@ -94,6 +101,8 @@ export function HubPage({ locale, initial = null }: { locale: Locale; initial?: 
                 </ul>
               </section>
             ))}
+
+            {timetable ? <HubTimetableSection table={timetable} id="horaris" /> : null}
 
             <h2 id="estacions">{t.stationsTitle}</h2>
             <p className="text-sm text-[var(--color-muted)]">{t.stationsNote}</p>

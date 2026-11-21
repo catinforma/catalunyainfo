@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { HubPage } from "@/components/programmatic/rodalies/HubPage";
 import { hubMetadata, resolveHub } from "@/lib/programmatic/rodalies/pages";
-import { loadServerAlerts } from "@/lib/programmatic/rodalies/server";
+import { loadServerAlerts, renderDate } from "@/lib/programmatic/rodalies/server";
 
 /**
  * `/ca/rodalies/`, `/es/rodalies/`, `/en/rodalies/`: live notices on every
@@ -29,5 +29,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const locale = resolveHub((await params).locale);
   if (!locale) notFound();
-  return <HubPage locale={locale} initial={await loadServerAlerts()} />;
+  return <HubPage locale={locale} initial={await loadServerAlerts()} today={renderDate()} />;
 }

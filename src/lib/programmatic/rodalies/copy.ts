@@ -15,6 +15,7 @@ import { LINES, SNAPSHOT, accessibleCount, linesInGroup, siblings } from "./data
 import { LINE_OFFICIAL, OFFICIAL_VERIFIED, PHONE, linePageUrl, officialUrl, xUrl, type ServiceGroup } from "./official";
 import { caLine, hubMeta } from "./pages";
 import { hubPath, linePath, type LineLocale } from "./paths";
+import { TIMETABLE } from "./timetable-copy";
 import type { AlertsOk, LineId, SnapshotLine, SnapshotStation, SnapshotTransfer } from "./types";
 
 const link = (label: string, url: string) => `[${label}](${url})`;
@@ -58,10 +59,15 @@ export function stationConnections(station: SnapshotStation, locale: Locale): st
   return [...names, ...station.transfers.map((t) => transferLabel(t, locale))].join(" · ");
 }
 
-/** "entre Sant Vicenç de Calders i Barcelona-Estació de França, per Vilanova i la Geltrú". */
+/** "entre Sant Vicenç de Calders i Barcelona-Estació de França, per Vilanova i la Geltrú"; "between … and …, by …". */
 function between(line: SnapshotLine, locale: LineLocale): string {
   const via = line.via[locale];
-  const base = locale === "ca" ? `entre ${line.origin} i ${line.destination}` : `entre ${line.origin} y ${line.destination}`;
+  const base =
+    locale === "ca"
+      ? `entre ${line.origin} i ${line.destination}`
+      : locale === "es"
+        ? `entre ${line.origin} y ${line.destination}`
+        : `between ${line.origin} and ${line.destination}`;
   return via ? `${base}, ${via}` : base;
 }
 
@@ -167,8 +173,25 @@ function compensation(line: SnapshotLine | null, locale: Locale): CompensationCo
     };
   }
 
+  const where: string[] = [];
+  if (line) {
+    const name = `the ${line.name}`;
+    if (dx?.barcelona) {
+      where.push(
+        `**Where to ask on ${name}${line.id === "R3" ? " (commuter section, as far as Sant Quirze de Besora)" : ""}.** At the station where your trip ends, as soon as you arrive: the station checks the conditions. At a station without staff you have 24 hours to ask with the ${link("online form", form)}, with a copy of both sides of the ticket.`,
+      );
+    }
+    if (stations) {
+      where.push(
+        `**Where to ask on ${name}${line.id === "R3" ? " (regional section, La Farga de Bebié to Puigcerdà)" : ""}.** At any of these stations, on arrival and up to 15 calendar days after the delay: ${stations}. From any other station, with the ${link("online form", form)}.`,
+      );
+    }
+    if (!dx?.barcelona && !stations) {
+      where.push(`**Where to ask on ${name}.** The official Devolució Xpress page lists no station for ${name}: ask on ${PHONE} (free, 7:00 to 23:00 every day).`);
+    }
+  }
   return {
-    title: "Delayed Rodalies train: what you can claim",
+    title: line ? `Delayed ${line.name} train: what you can claim` : "Delayed Rodalies train: what you can claim",
     intro: `The rules are in the ${link("general conditions of use of Rodalies and Regional trains in Catalonia", conditions)} (condition 13), and depend on how late you reach your destination station:`,
     headers: ["Delay on arrival", "What you can ask for"],
     rows: [
@@ -182,7 +205,7 @@ function compensation(line: SnapshotLine | null, locale: Locale): CompensationCo
       "If your train is cancelled and you cannot start your journey within an hour, you can ask for a refund, a ticket for a later train, or travel by any alternative the operator lays on. If your journey is interrupted, you must be taken on by another train or vehicle in equivalent conditions, or you can give up and ask for a refund.",
       `On Barcelona commuter lines, ask at the station where your trip ends, on arrival; on regional lines, at the main stations Rodalies lists, up to 15 days later. Cash refunds go through ${link("Rodalies customer service", complaints)} or ${PHONE}.`,
     ],
-    where: [],
+    where,
   };
 }
 
@@ -229,6 +252,7 @@ export interface LinePageCopy {
 
 function sources(locale: Locale): LinePageCopy["sources"] {
   const read = onDate(SNAPSHOT.readOn, locale);
+  const updated = onDate(TIMETABLE.source.updated.slice(0, 10), locale);
   const checked = onDate(OFFICIAL_VERIFIED, locale);
   const ca = locale === "ca";
   const es = locale === "es";
@@ -256,6 +280,16 @@ function sources(locale: Locale): LinePageCopy["sources"] {
       publisher: "Rodalies de Catalunya",
       url: officialUrl.dx(locale),
       note: ca ? `consultada ${checked}` : es ? `consultada ${checked}` : `checked ${checked}`,
+    },
+    {
+      name: ca ? "Horaris de rodalia (GTFS «Horarios cercanías»)" : es ? "Horarios de cercanías (GTFS «Horarios cercanías»)" : "Commuter timetables (GTFS \"Horarios cercanías\")",
+      publisher: "Renfe Operadora",
+      url: TIMETABLE.source.dataset,
+      note: ca
+        ? `CC BY 4.0; origen de les dades: Renfe Operadora; fitxer actualitzat ${updated}`
+        : es
+          ? `CC BY 4.0; origen de los datos: Renfe Operadora; fichero actualizado ${updated}`
+          : `CC BY 4.0; data origin: Renfe Operadora; file updated ${updated}`,
     },
     {
       name: ca ? "Incidències i avisos (GTFS-RT), font de reserva" : es ? "Incidencias y avisos (GTFS-RT), fuente de reserva" : "Incidents and notices (GTFS-RT), backup source",
@@ -349,6 +383,78 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
       ],
       sourcesTitle: "Fonts",
       sourcesNote: `Dades oficials. Els avisos en directe es llegeixen en obrir la pàgina; la resta, ${read}.`,
+      sources: sources(locale),
+    };
+  }
+
+  if (locale === "en") {
+    const name = `the ${line.name}`;
+    return {
+      h1: `Rodalies ${line.name} today: timetable and live notices`,
+      kicker: groupLabel(official.group, locale),
+      lead: `The ${line.name} runs ${between(line, locale)}, with ${n} stations. Below: the notices Rodalies de Catalunya has published right now, then a summary of Renfe's official timetable (first and last train, how often, journey times), the stations, and what to do if your train is late.`,
+      readLine: `Route and stations read from Rodalies de Catalunya on ${read}`,
+      familyNote: r2FamilyNote(line.id, locale),
+      facts: [
+        { label: "Route", value: `${line.origin} – ${line.destination}` },
+        ...(line.via.en ? [{ label: "Via", value: line.via.en.replace(/^by /, "") }] : []),
+        { label: "Stations", value: `${n}, ${acc} accessible according to Rodalies` },
+        { label: "Service", value: groupLabel(official.group, locale) },
+        { label: "Notices on X", value: x },
+        { label: "Rodalies phone", value: `${PHONE} (free, 7:00 to 23:00)` },
+      ],
+      liveTitle: `${line.name} notices right now`,
+      stationsTitle: `${line.name} stations`,
+      stationsNote: `In route order, from ${line.origin} to ${line.destination}, as Rodalies de Catalunya lists them. "Accessible" is how Rodalies flags the station.`,
+      stationHeaders: ["Station", "Accessible", "Connections"],
+      yes: "Yes",
+      no: "No",
+      officialTitle: `Official ${line.name} timetable and notices`,
+      official: [
+        `**Timetables:** the ${link("Rodalies journey planner", officialUrl.timetables(locale))}${official.pdf ? ` and the ${link(`${line.id === "R2N" || line.id === "R2S" ? "R2" : line.name} timetable PDF`, official.pdf)}` : ""}. Rodalies asks you to check its planned service changes ("Afectacions programades") too, which can alter them.`,
+        `**Notices:** the ${link("service status page", officialUrl.status(locale))} on rodalies.gencat.cat, the ${link(x, xUrl(line.id))} account (Rodalies posts the line's status there) and the ${link("Rodalies WhatsApp channel", officialUrl.whatsapp)}.`,
+        `**The line's own page:** ${link(`${line.name} on rodalies.gencat.cat`, linePageUrl(line.id, "es"))} (in Spanish).`,
+        `**By phone:** ${PHONE}, free, every day from 7:00 to 23:00.`,
+      ],
+      disruptionTitle: `If ${name} is disrupted`,
+      disruption: [
+        `**Read the line's notice**, above or on the official service status. When Rodalies lays on replacement buses, the notice says between which stations.`,
+        `**To change lines**, the station table lists the other Rodalies lines, metro, tram and FGC at each station${sharedNames.length ? `; ${name} shares most stations with ${sharedNames.join(", ")}` : ""}. Check that line's notices before you switch.`,
+        `**If your train does not leave or stops on the way**, you are entitled to a refund or to travel on another train or vehicle the operator provides (see below).`,
+        `**If you need proof of a delay**, Rodalies publishes ${link("delay certificates", officialUrl.delayCertificates(locale))} (in Spanish) for incidents that hit several lines or trains.`,
+        `**On strike days**, Rodalies runs minimum services: see ${link("what runs on strike days", strikes)}.`,
+      ],
+      compensation: compensationCopy,
+      faqTitle: "Frequently asked questions",
+      faq: [
+        {
+          question: `How do I know if ${name} is running today?`,
+          answer: `Rodalies de Catalunya posts every line's notices on the service status page of rodalies.gencat.cat and on the ${x} account. This page shows them above, read live from the official data, with the time they were read.`,
+        },
+        {
+          question: `What can I claim if my ${line.name} train is late?`,
+          answer: "More than 15 minutes late for railway reasons: a Devolució Xpress, a ticket for the same journey valid 30 days. More than 30 minutes: you can choose a cash refund of 50% of the fare instead, and 100% after an hour.",
+        },
+        {
+          question: `Where is the official ${line.name} timetable?`,
+          answer: official.pdf
+            ? "In the journey planner on rodalies.gencat.cat and in the timetable PDF Rodalies publishes for the line."
+            : "In the journey planner on rodalies.gencat.cat: pick your departure and arrival stations.",
+        },
+      ],
+      siblingsTitle: "Other Rodalies lines",
+      sharedLabel: `Share stations with ${name}`,
+      groupLabel: groupLabel(official.group, locale),
+      hubLink: { label: "Every Rodalies line, with today's notices", href: hubPath(locale) },
+      relatedTitle: "Related guides",
+      related: [
+        { label: "Strikes in Barcelona and Catalonia today", href: strikes },
+        { label: "Barcelona transport passes", href: transport },
+        { label: "Barcelona metro hours", href: hours },
+        ...(line.id === "R2N" ? [{ label: "Barcelona airport to the city centre", href: airport }] : []),
+      ],
+      sourcesTitle: "Sources",
+      sourcesNote: `Official data. Live notices are read when you open the page; everything else on ${read}.`,
       sources: sources(locale),
     };
   }
@@ -533,9 +639,9 @@ function r2WorksLine(locale: Locale): string {
 
 /**
  * "¿R2, R2 Nord o R2 Sud?": which R2 this page is, the other two with their
- * routes (linked on the ca and es line pages; the English edition has only
- * the hub, `id` null), the stations all three share and the works notice.
- * Null for every other line.
+ * routes linked in the page's own language (`id` null on the English hub:
+ * all three), the stations all three share and the works notice. Null for
+ * every other line.
  */
 export function r2FamilyNote(id: LineId | null, locale: Locale): string | null {
   if (id !== null && !R2_FAMILY.includes(id)) return null;
@@ -546,7 +652,7 @@ export function r2FamilyNote(id: LineId | null, locale: Locale): string | null {
     const base = ca ? `entre ${l.origin} i ${l.destination}` : es ? `entre ${l.origin} y ${l.destination}` : `between ${l.origin} and ${l.destination}`;
     return via ? `${base}, ${via}` : base;
   };
-  const name = (l: SnapshotLine) => (locale === "en" ? l.name : link(l.name, linePath(locale, l.id)));
+  const name = (l: SnapshotLine) => link(l.name, linePath(locale, l.id));
   const lines = r2Lines();
   const self = lines.find((l) => l.id === id) ?? null;
   const others = lines
@@ -554,7 +660,13 @@ export function r2FamilyNote(id: LineId | null, locale: Locale): string | null {
     .map((l) => (ca ? `l'${name(l)} va ${route(l)}` : es ? `la ${name(l)} va ${route(l)}` : `the ${name(l)} runs ${route(l)}`))
     .join("; ");
   const head = ca ? "**R2, R2 Nord o R2 Sud?**" : es ? "**¿R2, R2 Nord o R2 Sud?**" : "**R2, R2 Nord or R2 Sud?**";
-  const thisOne = self ? (ca ? ` Aquesta pàgina és l'${self.name}, ${route(self)}.` : ` Esta página es la ${self.name}, ${route(self)}.`) : "";
+  const thisOne = self
+    ? ca
+      ? ` Aquesta pàgina és l'${self.name}, ${route(self)}.`
+      : es
+        ? ` Esta página es la ${self.name}, ${route(self)}.`
+        : ` This page is the ${self.name}, ${route(self)}.`
+    : "";
   const shared = joinNames(r2SharedStations(), locale);
   const sharedSentence = ca ? `Totes tres paren a ${shared}.` : es ? `Las tres paran en ${shared}.` : `All three stop at ${shared}.`;
   return `${head}${thisOne} ${others.charAt(0).toUpperCase()}${others.slice(1)}. ${sharedSentence} ${r2WorksLine(locale)}`;
@@ -603,7 +715,7 @@ export function hubCopy(locale: Locale): HubCopy {
       id: l.id,
       name: l.name,
       journey: `${l.origin} – ${l.destination}${l.via[locale] ? ` (${l.via[locale]})` : ""}`,
-      href: locale === "en" ? null : linePath(locale, l.id),
+      href: linePath(locale, l.id),
     })),
   }));
   const stations = KEY_STATIONS.map((name) => ({
@@ -689,7 +801,7 @@ export function hubCopy(locale: Locale): HubCopy {
     readLine: `Lines and stations read from Rodalies de Catalunya on ${read}`,
     liveTitle: "Rodalies notices right now",
     linesTitle: "The Rodalies lines",
-    linesNote: "Every line with its two ends, as Rodalies de Catalunya lists them.",
+    linesNote: "Every line with its two ends, as Rodalies de Catalunya lists them; each has its own page with its timetable, stations and notices.",
     groups,
     stationsTitle: "Which line goes where",
     stationsNote: "The stations visitors ask about most, with the lines that stop there according to Rodalies de Catalunya.",
@@ -698,7 +810,7 @@ export function hubCopy(locale: Locale): HubCopy {
     visitorTitle: "Before you travel",
     visitor: [
       `**From the airport**, the train is the R2 Nord from Terminal 2: times, fares and the other options are in ${link("our airport to city centre guide", airport)}.`,
-      // 18 Nov 2026: the English edition has no line pages, so the R2 note lives here.
+      // 18 Nov 2026, when the English edition had no line pages; kept, now with links to them.
       r2FamilyNote(null, "en")!,
       `**Tickets:** which pass covers Rodalies in Barcelona, and for how many zones, is in ${link("Barcelona transport passes", transport)}.`,
       `**Strike days:** Rodalies runs minimum services; see ${link("what runs on strike days", strikes)}.`,

@@ -418,14 +418,15 @@ test("client: the endpoint's JSON is checked before anything is shown from it", 
 /* Routing, pages, metadata                                                   */
 /* -------------------------------------------------------------------------- */
 
-test("routes: the hub in ca, es and en; line pages in ca and es only; anything else is a 404", () => {
+test("routes: the hub and (since 21 Nov 2026) every line page in ca, es and en; anything else is a 404", () => {
   assert.equal(resolveHub("ca"), "ca");
   assert.equal(resolveHub("en"), "en");
   assert.equal(resolveHub("fr"), null);
   assert.equal(resolveLine("ca", "r2-sud")?.line.id, "R2S");
   assert.equal(resolveLine("es", "r2-sud")?.line.id, "R2S");
   assert.equal(resolveLine("es", "r2-nord")?.locale, "es");
-  assert.equal(resolveLine("en", "r2-sud"), null, "/en/rodalies/r2-sud/ is a 404");
+  assert.equal(resolveLine("en", "r2-sud")?.line.id, "R2S", "/en/rodalies/r2-sud/ exists since 21 Nov 2026");
+  assert.equal(linePath("en", "R2N"), "/en/rodalies/r2-nord/");
   assert.equal(resolveLine("fr", "r1"), null);
   assert.equal(resolveLine("ca", "r12"), null, "no R12 today");
   assert.equal(resolveLine("ca", "r2n"), null, "one spelling per line");
@@ -438,9 +439,9 @@ test("routes: the hub in ca, es and en; line pages in ca and es only; anything e
   assert.equal(hubPath("en"), "/en/rodalies/");
 });
 
-test("routes: every line prerendered in both languages, each param complete", () => {
+test("routes: every line prerendered in the three languages, each param complete", () => {
   const params = lineStaticParams();
-  assert.equal(params.length, 38);
+  assert.equal(params.length, 57);
   for (const p of params) assert.ok(resolveLine(p.locale, p.linia), `${p.locale}/${p.linia}`);
 });
 
@@ -541,8 +542,12 @@ test("metadata: canonical and hreflang between the editions that exist, x-defaul
   assert.deepEqual(line.alternates?.languages, {
     ca: absoluteUrl("/ca/rodalies/r11/"),
     es: absoluteUrl("/es/rodalies/r11/"),
-    "x-default": absoluteUrl("/ca/rodalies/r11/"),
+    en: absoluteUrl("/en/rodalies/r11/"),
+    "x-default": absoluteUrl("/en/rodalies/r11/"),
   });
+  const english = lineMetadata(lineById("R2N"), "en");
+  assert.equal(english.alternates?.canonical, absoluteUrl("/en/rodalies/r2-nord/"));
+  assert.deepEqual(english.title, { absolute: "Rodalies R2 Nord timetable: first and last train, notices" });
   assert.deepEqual(line.title, { absolute: "Rodalies R11 hoy: incidencias y avisos en directo" }, "too long for the brand suffix: shown as is");
   const hub = hubMetadata("ca");
   assert.equal(hub.alternates?.canonical, absoluteUrl("/ca/rodalies/"));
@@ -554,17 +559,17 @@ test("metadata: canonical and hreflang between the editions that exist, x-defaul
   });
 });
 
-test("sitemap: 41 URLs, unique, dated with the snapshot, with their alternates", () => {
+test("sitemap: 60 URLs, unique, dated with the snapshot, with their alternates", () => {
   const entries = rodaliesFamilyPaths();
-  assert.equal(entries.length, 3 + 19 * 2);
+  assert.equal(entries.length, 3 + 19 * 3);
   assert.equal(new Set(entries.map((e) => e.path)).size, entries.length);
   for (const entry of entries) {
     assert.match(entry.path, /^\/(ca|es|en)\/rodalies\/([a-z0-9-]+\/)?$/);
     assert.equal(entry.lastModified, SNAPSHOT.readOn);
     assert.ok(Object.values(entry.translations).includes(entry.path), `${entry.path} lists itself`);
   }
-  assert.ok(!entries.some((e) => e.path.startsWith("/en/rodalies/r")), "no English line pages");
-  assert.deepEqual(entries.find((e) => e.path === "/es/rodalies/rg1/")?.translations, { ca: "/ca/rodalies/rg1/", es: "/es/rodalies/rg1/" });
+  assert.equal(entries.filter((e) => e.path.startsWith("/en/rodalies/r")).length, 19, "English line pages since 21 Nov 2026");
+  assert.deepEqual(entries.find((e) => e.path === "/es/rodalies/rg1/")?.translations, { ca: "/ca/rodalies/rg1/", es: "/es/rodalies/rg1/", en: "/en/rodalies/rg1/" });
   assert.deepEqual(rodaliesSitemap(), [], "nothing on a deployment that may not be indexed");
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /\.\.\.rodaliesSitemap\(madridDate\(Date\.now\(\)\)\)/, "dated by the render day: the notices are in the HTML");
@@ -576,7 +581,7 @@ test("sitemap (20 Nov 2026): dated today at 00:00 Madrid and hourly, since the n
   process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
   try {
     const today = rodaliesSitemap("2026-11-20");
-    assert.equal(today.length, 3 + 19 * 2);
+    assert.equal(today.length, 3 + 19 * 3);
     for (const e of today) {
       assert.equal((e.lastModified as Date).toISOString(), "2026-11-19T23:00:00.000Z", e.url);
       assert.equal(e.changeFrequency, "hourly");
@@ -600,7 +605,7 @@ const NO_INCIDENTS =
   /cap avís|cap incidència|sense incidències|sense avisos|funciona amb normalitat|ningún aviso|ninguna incidencia|sin incidencias|sin avisos|funciona con normalidad|no (active )?notices?|no disruptions?|running normally/i;
 
 test("the server HTML never says a line has no incidents (that is the browser's answer)", () => {
-  for (const locale of ["ca", "es"] as const) {
+  for (const locale of LOCALES) {
     for (const line of LINES) {
       const text = JSON.stringify(lineCopy(line, locale));
       assert.doesNotMatch(text, NO_INCIDENTS, `${locale}/${line.id}`);
@@ -648,11 +653,10 @@ test("siblings: lines sharing stations first, then the rest of the group; the hu
     assert.ok(links.shared.length + links.group.length >= 3, `${id} links to other lines`);
     assert.ok([...links.shared, ...links.group].every((l) => l.href.startsWith("/ca/rodalies/") && l.href !== linePath("ca", id)));
   }
-  for (const locale of ["ca", "es"] as const) {
+  for (const locale of LOCALES) {
     const listed = hubCopy(locale).groups.flatMap((g) => g.lines.map((l) => l.href));
-    assert.deepEqual([...listed].sort(), LINE_IDS.map((id) => linePath(locale, id)).sort(), `${locale} hub links every line`);
+    assert.deepEqual([...listed].sort(), LINE_IDS.map((id) => linePath(locale, id)).sort(), `${locale} hub links every line, in its own language`);
   }
-  assert.ok(hubCopy("en").groups.every((g) => g.lines.every((l) => l.href === null)), "English hub: no links to ca/es pages");
   assert.ok(KEY_STATIONS.every((name) => linesAt(name).length > 0), "every key station is on a line");
 });
 
@@ -669,7 +673,7 @@ test("links: published guides only, every internal link in its own language with
     for (const m of text.matchAll(/"href":"([^"]+)"/g)) assert.ok(published.has(m[1]!) || m[1]!.startsWith(`/${locale}/rodalies/`), m[1]);
     for (const m of text.matchAll(/\]\((https?:[^)]*)\)/g)) assert.match(m[1]!, /^https:\/\/(rodalies\.gencat\.cat|x\.com|whatsapp\.com|data\.renfe\.com)\//);
   };
-  for (const locale of ["ca", "es"] as const) for (const line of LINES) check(locale, lineCopy(line, locale));
+  for (const locale of LOCALES) for (const line of LINES) check(locale, lineCopy(line, locale));
   for (const locale of LOCALES) check(locale, hubCopy(locale));
 });
 

@@ -452,7 +452,7 @@ export function liveTools(today?: string): LiveTool[] {
     {
       name: "Rodalies live service notices",
       hubs: { ca: rodaliesHub("ca"), es: rodaliesHub("es"), en: rodaliesHub("en") },
-      description: `live notices and incidents for every Rodalies de Catalunya line (${lineIds().length} line pages in Catalan and Spanish), read from Rodalies de Catalunya and Renfe's open data, with each line's stations and official timetable.`,
+      description: `live notices and incidents for every Rodalies de Catalunya line (${lineIds().length} line pages in Catalan, Spanish and English), read from Rodalies de Catalunya and Renfe's open data, with each line's stations and a summary of Renfe's official timetable (GTFS, CC BY 4.0): first and last train from the main stations, trains per hour by time band on weekdays, Saturdays and Sundays, and journey times.`,
     },
     {
       name: "Cheapest petrol stations",

@@ -4,6 +4,9 @@
  *
  * Tranche 1 (28 Oct 2026): a hub in ca, es and en, and one page per line for
  * the 19 lines Rodalies de Catalunya lists today, in ca and es (38 + 3 URLs).
+ * 21 Nov 2026: the line pages also in English (57 + 3 URLs), with the
+ * timetable summary from Renfe's GTFS (timetable.ts). The ca and es titles
+ * and descriptions are unchanged (13 and 18 Nov measurement windows).
  */
 
 import type { Metadata, MetadataRoute } from "next";
@@ -30,8 +33,8 @@ export function resolveHub(locale: string): Locale | null {
 }
 
 /**
- * The line behind `/<locale>/rodalies/<slug>/`, or null for a 404: English,
- * an unknown locale, an unknown or differently spelled slug.
+ * The line behind `/<locale>/rodalies/<slug>/`, or null for a 404: an
+ * unknown locale, an unknown or differently spelled slug.
  */
 export function resolveLine(locale: string, slug: string): { locale: LineLocale; line: SnapshotLine } | null {
   if (!isLineLocale(locale)) return null;
@@ -40,7 +43,7 @@ export function resolveLine(locale: string, slug: string): { locale: LineLocale;
 }
 
 /**
- * All 19 lines in both languages are prerendered (fewer than the 20 the
+ * All 19 lines in the three languages are prerendered (fewer than the 20 the
  * family rule allows per locale). The same complete list is returned whatever
  * `[locale]` the layout passes: an incomplete set made Next prerender nothing
  * for the holiday routes (see holidays/routing.ts).
@@ -62,6 +65,8 @@ export const caLine = (line: SnapshotLine): string => `l'${line.name}`;
 const TITLES: Record<LineLocale, ((name: string) => string)[]> = {
   ca: [(n) => `Rodalies ${n} avui: incidències i avisos en directe`, (n) => `Rodalies ${n} avui: incidències i avisos`],
   es: [(n) => `Rodalies ${n} hoy: incidencias y avisos en directo`, (n) => `Rodalies ${n} hoy: incidencias y avisos`],
+  // New pages (21 Nov 2026): the timetable words English searches use.
+  en: [(n) => `Rodalies ${n} timetable: first and last train, live notices`, (n) => `Rodalies ${n} timetable: first and last train, notices`],
 };
 
 export function lineTitle(line: SnapshotLine, locale: LineLocale): string {
@@ -72,6 +77,15 @@ export function lineTitle(line: SnapshotLine, locale: LineLocale): string {
 export function lineDescription(line: SnapshotLine, locale: LineLocale): string {
   const n = line.stations.length;
   const between = `${line.origin} - ${line.destination}`;
+  if (locale === "en") {
+    const via = line.via.en ? `, ${line.via.en}` : "";
+    const options = [
+      `${line.name} timetable from Renfe's official data (${between}${via}): first and last train, trains per hour, journey times, ${n} stations, live notices.`,
+      `${line.name} timetable from Renfe's official data (${between}): first and last train, trains per hour, journey times and live notices.`,
+      `Rodalies ${line.name} timetable from Renfe's official data: first and last train, trains per hour and live notices.`,
+    ];
+    return options.find((d) => d.length <= DESCRIPTION_LIMIT) ?? options[options.length - 1]!;
+  }
   const options =
     locale === "ca"
       ? [

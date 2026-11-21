@@ -7,18 +7,19 @@ import { LINE_IDS, type LineId } from "./types";
  * linking here do not pull the data into their bundle.
  *
  *   /ca/rodalies/            hub (ca, es, en)
- *   /ca/rodalies/r2-sud/     one line (ca, es only)
+ *   /ca/rodalies/r2-sud/     one line (ca, es, en)
  *
  * One folder, `app/(public)/[locale]/rodalies`, serves the three languages:
- * the segment is the same word in all of them. The hub answers ca, es and en;
- * a line page answers ca and es and is a 404 in English (the English edition
- * is the hub only, for visitors). The `[...slug]` catch-all never sees these.
+ * the segment is the same word in all of them. Until 21 Nov 2026 a line page
+ * answered ca and es only (the English edition was the hub); with the
+ * timetable summary every line page exists in the three languages (owner
+ * rule: every page in ca, es and en). The `[...slug]` catch-all never sees these.
  */
 
 export const SEGMENT = "rodalies";
 
-export type LineLocale = "ca" | "es";
-export const LINE_LOCALES: readonly LineLocale[] = ["ca", "es"];
+export type LineLocale = Locale;
+export const LINE_LOCALES: readonly LineLocale[] = ["ca", "es", "en"];
 export const HUB_LOCALES: readonly Locale[] = ["ca", "es", "en"];
 
 export function isLineLocale(value: string): value is LineLocale {
@@ -45,5 +46,5 @@ export function hubTranslations(): Record<Locale, string> {
 }
 
 export function lineTranslations(id: LineId): Record<LineLocale, string> {
-  return { ca: linePath("ca", id), es: linePath("es", id) };
+  return { ca: linePath("ca", id), es: linePath("es", id), en: linePath("en", id) };
 }

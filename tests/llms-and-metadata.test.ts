@@ -260,6 +260,10 @@ function allProgrammaticMeta(): Meta[] {
   }
   const englishHub = holidayEnglish.englishHubCopy();
   out.push({ path: "holidays-hub-en", title: englishHub.title, description: englishHub.description });
+  // Rodalies line pages in English (21 Nov 2026).
+  for (const line of LINES) {
+    out.push({ path: `rodalies-en-${line.id}`, title: rodalies.lineTitle(line, "en"), description: rodalies.lineDescription(line, "en") });
+  }
   for (const m of holidayEnglishTowns.englishTowns()) {
     out.push({ path: `holidays-en-${m.slug}`, title: holidayEnglish.englishTownTitle(m), description: holidayEnglish.englishTownDescription(m) });
   }

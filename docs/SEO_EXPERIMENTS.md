@@ -11384,3 +11384,101 @@ route run `python scripts/indexnow-sitemap.py /en/calculators/net-salary-spain/ 
 `/es/guias/barcelona-guia-practica/`, `/en/guides/barcelona-practical-guide/`, plus the three calculator paths above.
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — Rodalies line pages: timetable summary per line and direction from Renfe's official GTFS (first and last train, trains per hour, journey times), FAQ in the searched words, line-to-line timetable links, a hub table, and the 19 line pages in English (deploy only; no publish group; no ca/es title, description, H1 or lead touched)
+
+**Why.** People search the timetable all year ("horarios r1", "horario rodalies r2 sud", "primer tren r4", "último tren
+r3", "frecuencia r2 nord"); the line pages answered only "is my line running" and sent the timetable to
+rodalies.gencat.cat. GSC 24 Oct–20 Nov (28 days), queries with horari/horario/primer/último/frecuencia/timetable on
+`/rodalies/` URLs: **0 clicks / 272 impressions / position 25.3** (best: "horarios r2" 14 @ 8.2 and "r2n horarios" 8 @ 7.5
+on `/es/rodalies/r2-nord/`; "horaris rodalies r4" 7 @ 45.4, "horarios r1" 4 @ 19.0, "horarios renfe r4" 4 @ 21.2). The
+English edition had the hub only (owner rule: every page in ca, es and en).
+
+**Baseline per line URL** (GSC API, clicks / impressions / position, 24 Oct–20 Nov, page filter `/rodalies/`). Line pages together: **47 / 5,448**; hubs: es 3 / 255 / 18.5, ca 0 / 144 / 15.2, en 3 / 183 / 8.7.
+
+| Line | /es/rodalies/… | /ca/rodalies/… | Line | /es/rodalies/… | /ca/rodalies/… |
+| --- | --- | --- | --- | --- | --- |
+| r1 | 4 / 568 / 12.8 | 3 / 213 / 16.3 | r13 | 0 / 82 / 15.7 | 0 / 23 / 12.9 |
+| r2 | 2 / 481 / 14.5 | 0 / 170 / 14.0 | r14 | 1 / 65 / 11.4 | 0 / 8 / 15.8 |
+| r2-nord | 8 / 701 / 12.3 | 1 / 173 / 13.0 | r15 | 0 / 53 / 9.0 | 0 / 37 / 12.2 |
+| r2-sud | 3 / 582 / 10.5 | 4 / 211 / 16.2 | r16 | 1 / 120 / 12.3 | 0 / 18 / 19.6 |
+| r3 | 1 / 233 / 12.6 | 1 / 61 / 14.4 | r17 | 1 / 37 / 9.8 | 0 / 20 / 22.6 |
+| r4 | 3 / 498 / 14.3 | 1 / 155 / 18.5 | rg1 | 1 / 49 / 19.1 | 0 / 22 / 39.2 |
+| r7 | 1 / 100 / 16.6 | 0 / 25 / 16.8 | rt1 | 0 / 17 / 31.1 | 0 / 11 / 23.9 |
+| r8 | 2 / 242 / 9.1 | 0 / 41 / 6.9 | rt2 | 0 / 18 / 15.4 | 1 / 20 / 36.0 |
+| r11 | 2 / 227 / 18.8 | 2 / 62 / 13.5 | rl3 | 1 / 36 / 9.5 | 1 / 15 / 9.7 |
+| | | | rl4 | 2 / 25 / 31.7 | 0 / 29 / 18.8 |
+
+`/en/rodalies/<line>/`: new (no baseline).
+
+**Windows checked (grep for every URL).** 13 Nov live-data entry (titles and descriptions frozen; review 27 Nov, 11 Dec),
+18 Nov R2 family entry (`r2`, `r2-nord`, `r2-sud`: body note under the notices; review 25 Nov, 2 Dec), 20 Nov live-data
+entry (sitemap dated today; review 4 Dec, 18 Dec), 21 Nov crawl-freshness entry. None forbids body changes. Titles,
+descriptions, H1 and leads of the ca and es line pages and of the three hubs are **unchanged**; the live notices
+(`server.ts`, `alerts.ts`, `RodaliesLive.tsx`, the routes' `loadServerAlerts()` and `revalidate = 300`) are unchanged.
+
+**Source and licence.** Renfe Operadora, "Horarios cercanías" (GTFS, `https://ssl.renfe.com/ftransit/Fichero_CER_FOMENTO/fomento_transit.zip`,
+dataset `data.renfe.com/dataset/horarios-cercanias`), read 21 Nov 2026: CKAN `license_id` **CC-BY-4.0**, resource
+`last_modified` 2026-11-21T03:09:19. data.renfe.com/legal (read 21 Nov): cite "Origen de los datos: Renfe Operadora", give
+the last-update date, do not distort, do not suggest Renfe takes part in or sponsors the reuse. Each summary prints all
+three (ca/es/en) and the source is listed with the others. The build refuses another licence id. The feed is one file for
+all Spanish Cercanías networks, one service per day, ~30 days ahead: 21 Nov–20 Dec 2026, **no Rodalies trips 30 Nov–4 Dec**
+(printed on the pages). Replacement buses are route type 3 under the line's name (R3 Barcelona–Centelles/Vic, R13 La
+Plana–Lleida now): counted apart, never as trains. The download was saved in a fresh directory outside the repo and parsed
+by the repo script as bytes (CRC-checked zip reader `scripts/lib/zip.ts`); only the derived snapshot is committed.
+
+**What changed.**
+1. `src/lib/programmatic/rodalies/timetable.ts` (pure builder + rules), `scripts/rodalies-timetable.ts`
+   (`npm run rodalies-timetable:snapshot -- build | check`), `timetable.json` (the snapshot, 158 KB). Per line and
+   direction, for the first weekday, Saturday and Sunday after the build that have a train: first and last departure from
+   the main stations (`MAIN_STATIONS`, both ends, the central Barcelona stop, big towns, and the railheads of long works:
+   L'Hospitalet for the R1, Gavà for the R2, Sant Martí de Centelles for the R3, La Plana and Les Borges Blanques for the
+   R13/R14, Maçanet for the RG1; a station with no train in the file is left off), trains per hour in six bands at the
+   busiest main station with the mean interval (the median misled where trains come in pairs), every departure listed
+   where a direction has ≤ 16 trains a day (regional lines), median journey time from where most trains start to each main
+   station. Days of the same type whose figures differ, days with no train (R7 until 7 Dec; RG1 no weekend trains), and
+   whether the 8 Dec holiday matches a Sunday (it does on every line with Sunday trains) are computed, not written.
+2. Line pages (ca, es, en): section "Horarios de la R2 Sud: primer y último tren y cada cuánto pasa" (ca "Horaris de
+   l'R2 Sud: …", en "R2 Sud timetable: …") after the facts box, one table per direction (H3 "Hacia …"), the day of each
+   column printed, notes on the days that differ / buses / holidays, attribution line. FAQ gains, from the same data,
+   "¿A qué hora pasa el primer tren de la R2 Sud?", "¿A qué hora sale el último tren…?", "¿Cada cuánto pasa…?", "¿Cuánto
+   tarda … de X a Y?" (in FAQPage JSON-LD with the existing three). Line-to-line block "Horarios de las otras líneas":
+   "Horarios R1 · Horarios R2 · …" to each page's `#horari`. TOC entry.
+3. Hub (ca, es, en): table "Horarios de Rodalies: primer y último tren de cada línea", one row per line linking
+   "Horarios R1"… The English hub now links the English line pages (lines list, notices, R2 note).
+4. **English line pages** `/en/rodalies/<line>/` (19 new URLs; titles "Rodalies R1 timetable: first and last train, live
+   notices", descriptions from Renfe's data words). hreflang on every line page now ca/es/en, x-default en (as the hub).
+   Sitemap: 60 URLs; lastmod logic of 34b7e03 kept (today, hourly); `npm run seo:body-dates` re-dated family `rodalies`
+   (22 files). llms.txt description updated.
+5. After the file's last day the pages print no timetable (`timetableCurrent`, date read in `server.ts` with the notices).
+   Tests: `tests/rodalies-timetable.test.ts` (date guard, every line in three languages, HH:MM and order, bands add up,
+   listed times sorted, answers quote snapshot times, links, wiring, builder fixture), `tests/rodalies.test.ts` and
+   `tests/llms-and-metadata.test.ts` updated for the English pages.
+
+**Snapshot refresh rule.** `npm run rodalies-timetable:snapshot -- build` (downloads into a new temp dir; `--zip <file>` to
+reuse a download), review the diff, `node --test … tests/rodalies-timetable.test.ts`, commit, deploy. **Every 14 days**
+(next by 5 Dec 2026) and at once after a timetable change Renfe or Rodalies announce, or a works closure starts or ends.
+The test fails 21 days after the build (12 Dec 2026) or after the feed's last day (20 Dec 2026), whichever is first; the
+pages hide the summary themselves after the feed's last day. `-- check` says whether data.renfe.com has a newer file.
+
+**Prediction.** Within 28 days of the deploy, timetable-intent queries on `/rodalies/` URLs from 0 / 272 / 25.3 to
+≥ 800 impressions at ≤ 12 with ≥ 10 clicks; line pages together from 47 / 5,448 to ≥ 120 clicks; the English line pages
+indexed with ≥ 200 impressions. Wrong if on 19 Dec the timetable queries are still below 400 impressions or above position
+18, or if the ca/es line pages lose > 1.5 positions on their "rX" queries with no timetable gain.
+
+**Confounders.** Same URLs as the 13 Nov (27 Nov, 11 Dec), 18 Nov R2 (25 Nov, 2 Dec) and 20 Nov (4 Dec, 18 Dec) entries:
+read together, and for the R2 review note that the R2 pages also gained this section after 21 Nov. Strikes (26N) and works
+(R2 Gavà–Castelldefels to 14 Dec, R3, R7) move Rodalies traffic. Google must recrawl first (the 20 Nov entry: last crawl
+30 Oct for r1/r4).
+
+**Review 2026-12-05 (14 days) and 2026-12-19 (28 days)**, counted from the deploy. `scripts/snapshot.py page rodalies 14`,
+the GSC page report per URL as in the table, the timetable-intent query filter above, `batch_url_inspection` for
+`/en/rodalies/r1/`, `/en/rodalies/r2-nord/`, `/es/rodalies/r1/`, `/es/rodalies/r4/`; curl one page per language and check
+the HTML has "Primer y último tren" / "Primer i últim tren" / "First and last train" with today ≤ 20 Dec (or the refreshed
+file's end).
+
+**Go-live.** Deploy only (code routes); **no publish group**. IndexNow prefixes after the deploy:
+`/es/rodalies/ /ca/rodalies/ /en/rodalies/` (all 60 URLs). Owner: Search Console "Request indexing" for
+`/en/rodalies/r2-nord/`, `/en/rodalies/r1/`, `/es/rodalies/r1/`, `/es/rodalies/r2-sud/`, `/es/rodalies/r4/`.
+
+**Outcome:** _pending_

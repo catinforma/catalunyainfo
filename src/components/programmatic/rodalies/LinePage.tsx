@@ -13,18 +13,19 @@ import { alertsAnswer, lineCopy, siblingLinks, stationConnections } from "@/lib/
 import { LINES, SNAPSHOT } from "@/lib/programmatic/rodalies/data";
 import { officialUrl } from "@/lib/programmatic/rodalies/official";
 import { hubPath, linePath, lineTranslations, type LineLocale } from "@/lib/programmatic/rodalies/paths";
+import { timetableFaq, timetableLinks, timetableLinksLabel, timetableView } from "@/lib/programmatic/rodalies/timetable-copy";
 import type { AlertsOk, LineId, SnapshotLine } from "@/lib/programmatic/rodalies/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 
 import { Compensation, Faq, LinkList, Paragraphs, Sources } from "./parts";
 import { RodaliesLive } from "./RodaliesLive";
+import { TimetableSection } from "./Timetable";
 
 export function lineNames(): Record<string, string> {
   return Object.fromEntries(LINES.map((l) => [l.id, l.name]));
 }
 
 export function lineHrefs(locale: Locale): Partial<Record<LineId, string>> {
-  if (locale === "en") return {};
   return Object.fromEntries(LINES.map((l) => [l.id, linePath(locale, l.id)]));
 }
 
@@ -37,19 +38,24 @@ export function lineCrumbs(line: SnapshotLine, locale: LineLocale): Crumb[] {
 }
 
 /**
- * One line's page. The facts come from the committed snapshot and the
- * verified official links (no database, no clock); the notices are the ones
- * the route read at render (`initial`, every five minutes at most, printed
- * with the time they were read), which the browser reads again (RodaliesLive).
+ * One line's page. The facts come from the committed snapshots (lines and
+ * stations; the timetable summary from Renfe's GTFS) and the verified
+ * official links (no database); the notices are the ones the route read at
+ * render (`initial`, every five minutes at most, printed with the time they
+ * were read), which the browser reads again (RodaliesLive). `today` (Madrid,
+ * from the route) only hides the timetable once Renfe's file has ended.
  */
-export function LinePage({ line, locale, initial = null }: { line: SnapshotLine; locale: LineLocale; initial?: AlertsOk | null }) {
+export function LinePage({ line, locale, initial = null, today }: { line: SnapshotLine; locale: LineLocale; initial?: AlertsOk | null; today: string }) {
   const t = lineCopy(line, locale);
   const answer = initial ? alertsAnswer(locale, initial, line) : null;
   const crumbs = lineCrumbs(line, locale);
   const sibling = siblingLinks(line.id, locale);
-  const faqBlock = { type: "faq", items: t.faq } as Block;
+  const timetable = timetableView(line, locale, today);
+  const faq = [...timetableFaq(line, locale, today), ...t.faq];
+  const faqBlock = { type: "faq", items: faq } as Block;
   const toc = [
     { id: "avisos", label: t.liveTitle },
+    ...(timetable ? [{ id: timetable.id, label: timetable.title }] : []),
     { id: "estacions", label: t.stationsTitle },
     { id: "horaris", label: t.officialTitle },
     { id: "incidencies", label: t.disruptionTitle },
@@ -105,6 +111,8 @@ export function LinePage({ line, locale, initial = null }: { line: SnapshotLine;
                   </dl>
                 </section>
 
+                {timetable ? <TimetableSection view={timetable} /> : null}
+
                 <h2 id="estacions">{t.stationsTitle}</h2>
                 <p className="text-sm text-[var(--color-muted)]">{t.stationsNote}</p>
                 <div className="ci-table-scroll mt-4">
@@ -140,7 +148,7 @@ export function LinePage({ line, locale, initial = null }: { line: SnapshotLine;
 
                 <Compensation copy={t.compensation} id="reclamar" />
 
-                <Faq title={t.faqTitle} items={t.faq} />
+                <Faq title={t.faqTitle} items={faq} />
 
                 <nav aria-labelledby="ci-rodalies-siblings">
                   <h2 id="ci-rodalies-siblings">{t.siblingsTitle}</h2>
@@ -168,6 +176,17 @@ export function LinePage({ line, locale, initial = null }: { line: SnapshotLine;
                       </ul>
                     </div>
                   ) : null}
+                  <div className="mt-3">
+                    <p className="ci-label">{timetableLinksLabel(locale)}</p>
+                    <p className="mt-1">
+                      {timetableLinks(LINES, line.id, locale).map((item, i) => (
+                        <span key={item.href}>
+                          {i > 0 ? " · " : null}
+                          <Link href={item.href}>{item.label}</Link>
+                        </span>
+                      ))}
+                    </p>
+                  </div>
                   <p className="mt-3">
                     <Link href={t.hubLink.href}>{t.hubLink.label}</Link>
                   </p>
