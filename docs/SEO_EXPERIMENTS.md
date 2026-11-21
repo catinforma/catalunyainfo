@@ -10592,3 +10592,140 @@ current time.
 permission before any ad on the six PVPC URLs (unchanged).
 
 **Outcome:** _pending_
+
+## 2026-11-21 — Day trips from Barcelona: Montserrat tickets, funiculars and the corrected last R5 back; every price at the Dalí Museum; every AVE/Avant to Girona; cluster links in the searched words, ca + es + en (body only; deploy, then groups `montserrat`, `figueres`, `girona`, `barcelona-hub`, `transport`, `coast-trips`) (review 2026-12-05 and 2026-12-19)
+
+Owner goal: top 3 on many all-year queries. Inventory 8–21 Nov: `snapshot.py page day-trips 14` (1,380 impr./week in the
+EN family), `page escapad 14`, `page escapades 14`, `gaps 14 400`, and page × query for each URL (scratch script on the
+same GSC API). The two named gaps, "cable car or rack railway to montserrat" (39 at 26.8) and "cable car vs rack railway
+montserrat" (34 at 25.6), are two of ~90 Montserrat phrasings on the EN page at positions 22–70.
+
+**Windows checked (this log).** 28 Oct day-trip sprint (titles of Figueres ES/EN, PortAventura, Núria, the trains feature EN;
+Girona ES and Tarragona EN bodies; measure 28 Nov); 30 Oct PortAventura EN title (30 Nov); 31 Oct Andorra H1 and lead
+(28 Nov); 13 Nov Montserrat body upgrade (measure publish + 28 days; the 28 Oct Montserrat title entry was closed as
+inconclusive that day); 20 Nov Barcelona practical (hub, transport passes, Sitges; review 4 and 18 Dec). **No title,
+description, lead or H1 touched on any page.** Body only, as the owner allows. Consequences: the 28 Nov reads of Figueres and
+Girona and the 13 Nov entry's Montserrat read (~11 Dec) are combined with this change; read them against the baseline below.
+Sitges (`coast-trips.ts`) untouched except Tarragona's related-rail line; no day-trip page is a control in an open entry.
+
+**Baseline (GSC 8–21 Nov, clicks / impressions / CTR / position).**
+
+| URL | Baseline | Top queries (impr. at pos., 0 clicks unless noted) |
+| --- | --- | --- |
+| `/en/day-trips/montserrat-without-a-tour-from-barcelona/` | 0 / 2,479 / 0 % / 37.4 | montserrat cable car 57 at 34.4; montserrat cable car or rack train 52 at 26.0; fgc montserrat ticket 51 at 45.7; montserrat monastery cable car 50 at 35.5; montserrat rack railway or cable car 48 at 25.7; montserrat cogwheel train or cable car 44 at 35.1; montserrat cable car vs rack railway 43 at 24.4; cable car or rack railway to montserrat 39 at 26.8; montserrat pass 33 at 36.5; montserrat to barcelona 45 at 54.2; santa cova funicular railway 18 at 60.8; montserrat funicular closed 8 at 66.5 |
+| `/es/escapadas/montserrat-por-libre-desde-barcelona/` | 0 / 99 / 0 % / 33.2 | cremallera montserrat 9 at 47.4; tren cremallera montserrat 6 at 46.3; teleférico de montserrat acceso directo 3 at 16.3 |
+| `/ca/escapades/montserrat-per-lliure-des-barcelona/` | 0 / 20 / 0 % / 9.6 | horaris cremallera montserrat (2026), 1 each |
+| `/es/escapadas/figueres-museo-dali-desde-barcelona/` | 0 / 209 / 0 % / 55.8 | como ir al museo dali desde barcelona 13 at 25.8; precio entradas museo dali figueres 13 at 34.7; museo dali figueres entradas precio 12 at 54.9; precio museo dali 12 at 42.9; ~15 more "precio / entradas museo dali" at 40–94 |
+| `/en/day-trips/figueres-dali-museum-from-barcelona/` | 2 / 192 / 1.0 % / 11.7 | dalí theatre-museum train from barcelona 7 at 11.6; figueres vilafant to dali museum 7 at 11.3; barcelona to dali museum 6 at 25.2; barcelona to dali museum train 5 at 9.0 |
+| `/ca/escapades/figueres-museu-dali-des-de-barcelona/` | 0 / 11 / 0 % / 6.6 | — |
+| `/ca/escapades/girona-des-de-barcelona-tren/` | 1 / 182 / 0.5 % / 27.6 | Spanish queries on the CA URL: ave barcelona girona 13 at 43.3; horarios renfe barcelona girona 10 at 49.2; horarios ave barcelona girona 7 at 44.0; ave barcelona girona horarios y precios 6 at 16.0 |
+| `/es/escapadas/girona-desde-barcelona-tren/` | 1 / 107 / 0.9 % / 30.5 | tren barcelona girona 29 at 24.4 (1 click); barcelona girona tren 15 at 33.7; trenes barcelona girona 11 at 34.5; renfe barcelona girona 6 at 12.5 |
+| `/en/day-trips/girona-from-barcelona-by-train/` | 0 / 19 / 0 % / 15.8 | — |
+| `/en/day-trips/tarragona-from-barcelona-by-train/` (+ es, ca) | 2 / 26 / 7.7 % / 24.3 (ES 0 / 3; CA none) | barcelona to tarragona train 10 at 28.9 (2 clicks) |
+| Hub and transport passes | see the 20 Nov entry | — |
+
+**Verified on 21 Nov 2026 (curl + grep; each download in its own scratchpad directory, parsed with `python3 -I`).**
+- FGC GTFS `google_transit.zip`, feed_version 2026-11-20T08:56:15 (ends 31 Dec): rack railway rows unchanged for 24 and
+  28 Nov and 7, 8, 24, 25, 29 Dec (7 and 29 Dec run the weekend timetable). **R5 back: the last train leaves Monistrol de
+  Montserrat at 21:41 and Montserrat-Aeri at 21:45 (Plaça Espanya 22:45) on 24, 28, 29 Nov and 9, 19, 31 Dec.** The page said
+  22:41 / 22:45: 22:41 is the Manresa-bound train and 22:45 the arrival. Corrected. Timed-day example (8:36 → 9:40 / 9:48 →
+  10:08; 14:15 → 14:35 / 14:41 → 15:45) checked for 24 and 28 Nov.
+- Turistren (FGC) Montserrat page, fares "vàlids fins al 31 de desembre del 2026": rack 9 / 15; Tren + Cremallera 4 zones
+  15.90 / 28.80 (child 11.40 / 21.30, 65+ 15.00 / 27.30); Monistrol-Vila-only first-two-trains return 12 and M-Museu 22;
+  Sant Joan 11.40 / 17.50; Santa Cova 4.55 / 7.00; both 20.65. "El Funicular de la Santa Cova romandrà fora de servei per
+  tasques de manteniment fins a nou avís"; Sant Joan's overhaul line still reads "del 13 al 31 de gener 2025" (printed as
+  such); T-Mobilitat not valid on the rack railway and funiculars.
+- Aeri de Montserrat "Tarifes 2026" (10 / 15; Aeri + museum 24.25, + buffet 35.75, + both 45.75; 65+ 21.90 / 33.40 / 43.40)
+  and calendar (Nov and Dec unchanged; Jan, Feb and Jun 2027 all "(tancat)", the placeholder for unpublished months: not
+  printed as a closure).
+- FGC shop: Trans Montserrat `"price":"50"`, Tot Montserrat `"price":"71.5"`. ATM integrated-operators page (FGC listed, the
+  Aeri not). TMB "2026 transport ticket fares" (in force from 15 January 2026): 4-zone single 6,90 €, T-casual 44,65 € (ATM's
+  T-casual page the same). 6.90 + 9 = 15.90 and 2 × 6.90 + 15 = 28.80: the train leg of FGC's combined fare.
+- Montserrat Visita: opening hours unchanged; the tourist-ticket page gives no price (none printed). **"Montserrat Exprés": no
+  ticket of that name on FGC, Turistren, the Aeri or Montserrat Visita: not printed.** museudemontserrat.cat did not answer
+  (museum fare keeps its 28 Oct date).
+- salvador-dali.org: visit page (prices and hours unchanged), FAQ ("between one and a half and two hours"; booking advisable,
+  ticket desk subject to capacity; no rucksacks worn on the back, pushchairs or objects over 35 × 35 × 25 cm; left-luggage
+  office; reduced mobility / wheelchair free with a companion), combined ticket (44.5 / 30 / under-12 free; high-speed
+  "between 55 minutes and 1 hour"), Portlligat and Púbol prices.
+- Rodalies planner API (`serveisgrs.rodalies.gencat.cat/api/timetables`, Sants 71801 ↔ Figueres 79309) for 24 and 28 Nov:
+  R11 unchanged (21 weekday / 14 Saturday trains, 1 h 50 – 2 h 18, 12,80 € / 17,10 €). Renfe GTFS (Fichero_AV_LD) for 23, 24,
+  27, 28, 29 Nov and 2, 4 Dec: Sants → Figueres-Vilafant 53–65 min (the page said 42), 15 Mon–Thu / 13 Fri / 9 Sat; every
+  AVE / Avant / Euromed between Sants and Girona (39–49 min; 15 / 13 / 9, Sunday 13); the same file's R11 trains confirm the
+  Girona R11 row. Renfe's GTFS also has a 21:46 regional to Figueres that the planner does not: the planner's figures are kept.
+
+**What changed (body only).**
+1. **Montserrat** ca/es/en (`day-trips.ts`, `MONTSERRAT_21NOV`; group `montserrat`). The comparison section opens with the
+   names searchers use (rack railway = cogwheel train = Cremallera; Aeri = the cable car some call the gondola or funicular;
+   the two funiculars start at the monastery). New H2 **"Which Montserrat ticket to buy"** with an 8-row table (train + rack
+   railway, 4 zones; train only + 4-zone T-casual, for the cable car; Aeri; Aeri combos; Trans and Tot Montserrat; the two
+   Monistrol-Vila-only tickets) and the arithmetic: train + Aeri return = €28.80 = train + rack railway return; Trans
+   Montserrat only beats separate tickets with the Sant Joan funicular (€46.30 vs €50; €21.20 cheaper without it; for non-EU
+   residents it includes sanctuary access). New H2s **"Montserrat funiculars: Sant Joan open, Santa Cova closed"** and **"Best
+   time to go"** (Nov–Dec weekday cut-offs, Escolania on weekdays, 7/8/25 Dec, no 2027 fares yet), H3 **timed day** table.
+   R5 table corrected (last back 21:41 / 21:45). Four FAQs per language ("Is the Montserrat funicular open?", "Which ticket do
+   I buy at Plaça Espanya…?", "Can I use the T-casual…?", "What time is the last train from Montserrat to Barcelona?"); the EN
+   "which is better" question now names the cogwheel train. Related rail adds Figueres, Tarragona, Sitges. TMB's fare page
+   added to the sources. `MONTSERRAT_VERIFIED` 2026-11-21 (`MONTSERRAT_REREAD_BY` 2027-01-01 stands).
+2. **Figueres / Dalí Museum** ca/es/en (`figueres.ts`, `FIG_21NOV`; group `figueres`). A price table (9 rows: general,
+   reduced, free, 6 January, guided tour, groups, + La Pedrera, Portlligat, Púbol) opens the tickets section; a visit-length,
+   bag and accessibility paragraph; high-speed row 42 → 53 min and 17/11 → 15/13/9 trains; FAQ 42 → 53 min; the past Monday
+   9 Nov dropped; the price FAQ names "Museo Dalí de Figueres" (query words); three FAQs (how long, backpack, booking).
+   Related rail adds Montserrat. `VERIFIED` 2026-11-21.
+3. **Girona** ca/es/en (`day-trips.ts`, `GIRONA_HS`; group `girona`). New H2 **"Horarios del AVE y el Avant de Barcelona a
+   Girona"** (ca/en alike) with every departure both ways for Mon–Thu, Saturday and Sunday; the summary row updated (39–49 min,
+   15/13/9 trains, last 23:05; the unconfirmed "26 min direct" dropped); five FAQs (how long, how many, how much, which
+   station, last train back). `GIRONA_VERIFIED` stays 28 Oct (the monuments table was not re-read).
+4. **Cluster links.** Related-rail labels (`B2_TITLES`) in the searched words: Montserrat "cable car or rack railway: times
+   and fares" / "Cremallera o teleférico…: horarios y precios" / "Cremallera o Aeri…: horaris i preus"; Girona "AVE and R11
+   times"; Figueres "Museo / Museu Dalí de Figueres… tren y precio". They appear on every rail that lists these guides when its
+   group is next published, and at deploy on the code-rendered weekend zone pages. Barcelona hub (link lines): Montserrat,
+   Girona and Figueres lines reworded (Figueres "under an hour" → "about an hour", which the Figueres test already forbids on
+   the guide; Girona 1 h 19–1 h 41), Núria line added. Transport passes (one line per language): the R5 is 4 zones but the
+   rack railway and the Aeri do not take the T-casual → Montserrat tickets. Tarragona's related rail adds Montserrat (the
+   only change in `coast-trips.ts`).
+
+**Not done, and why.** Costa Brava, Vic, Cardona, Besalú: no dedicated page (covered inside Beyond Montserrat and the
+medieval-villages feature); no new thin pages. Tarragona's body lives in `coast-trips.ts`, left alone on purpose: queue it
+(Renfe GTFS times, the Roman-site prices re-read, a "last train back" FAQ) for after the 18 Dec Sitges read. Núria "vall de
+nuria forfait" (8 at 30.5): pirineu365 lists day passes (1 day €23.50, with the rack railway €41) with no season label:
+confirm 2026-27 before printing. PortAventura and Andorra: titles and leads in windows to 28–30 Nov and their queries are head
+terms; next pass after those reads.
+
+**Hypotheses.** (1) Montserrat EN: the five "cable car vs / or rack railway" queries from 24–26 to ≤ 15, "fgc montserrat
+ticket" 45.7 → ≤ 20, "santa cova funicular" / "montserrat funicular closed" 60–66 → ≤ 20; first clicks (≥ 5 in 28 days).
+(2) Figueres ES: "precio entradas museo dali figueres" 34.7 → ≤ 15 and the "precio museo dali" family 40–60 → ≤ 25; EN
+"figueres vilafant to dali museum" 11.3 → ≤ 8. (3) Girona ES: "tren barcelona girona" 24.4 → ≤ 15; "horarios ave barcelona
+girona" on the ES URL at ≤ 20 (from 44 on the CA URL). Wrong if none of the three moves by 19 Dec. Confounders: the
+13–14 Nov core update still settling; the 28 Oct and 13 Nov reads on the same pages.
+
+**Revert rule.** A page losing > 2 positions (14-day average) with no gain on its target queries at the 19 Dec read: remove
+that page's new section (keep the corrections: R5 last train, Figueres high-speed minutes, Girona summary row).
+
+**Review 2026-12-05 (14 days) and 2026-12-19 (28 days)**, counted from the publish day: `snapshot.py page montserrat 14`,
+`page figueres 14`, `page dali 14`, `page girona-d 14`, `page tarragona-d 14`, and page × query for the baseline queries.
+**Upkeep:** `MONTSERRAT_REREAD_BY` 2027-01-01 (2027 fares, the Aeri's calendar, the Sant Joan overhaul dates); the Girona and
+Figueres timetables are dated to Renfe's 21 Nov–7 Dec data: re-read them in the week of 7 Dec.
+
+**Publish.** Deploy (the content is code), then groups `montserrat figueres girona barcelona-hub transport coast-trips`
+(`coast-trips` republishes Sitges unchanged except its rail labels; Tarragona gains one rail link). IndexNow prefixes:
+`/en/day-trips/montserrat-without-a-tour-from-barcelona/ /es/escapadas/montserrat-por-libre-desde-barcelona/
+/ca/escapades/montserrat-per-lliure-des-barcelona/ /en/day-trips/figueres-dali-museum-from-barcelona/
+/es/escapadas/figueres-museo-dali-desde-barcelona/ /ca/escapades/figueres-museu-dali-des-de-barcelona/
+/en/day-trips/girona-from-barcelona-by-train/ /es/escapadas/girona-desde-barcelona-tren/
+/ca/escapades/girona-des-de-barcelona-tren/ /en/day-trips/tarragona-from-barcelona-by-train/
+/es/escapadas/tarragona-desde-barcelona-tren/ /ca/escapades/tarragona-des-de-barcelona-tren/
+/en/day-trips/sitges-from-barcelona-by-train/ /es/escapadas/sitges-desde-barcelona-tren/ /ca/escapades/sitges-des-de-barcelona-tren/
+/en/guides/barcelona-practical-guide/ /es/guias/barcelona-guia-practica/ /ca/guies/barcelona-guia-practica/
+/en/guides/barcelona-transport-passes/ /es/guias/tarjetas-transporte-barcelona/ /ca/guies/targetes-transport-barcelona/`.
+
+**Tests.** New `tests/day-trips-21nov.test.ts` (R5 last train, ticket-table fares, funiculars, timed day, FAQs, Figueres price
+table and 53 min, Girona's 15 departures and FAQ, cluster links); `tests/montserrat.test.ts` verified-date pin 2026-11-21 and
+TMB in the official-source list. `npx tsc --noEmit -p .` clean; eslint clean on the changed files; covering tests (the new
+file, montserrat, batch02, bcn-practical-20nov, article-photo, b2-sources-unique, easter-2027, festive-pages, footer-links,
+home-tools, inline-bold-links, next-step, search-shortcuts, title-budget, transport-fares, weekend-zones, weekend-guide) 229/229.
+`npm test` 2876/2881: the 4 strike as-of guards (strike-days-1920n ×2, strikes hub, strikes-spain: as-of 20 vs 21 Nov), not
+touched here, and `rsc-payload` only because this worktree has no `node_modules` (15/15 with a temporary link to the main
+checkout's).
+
+**Outcome:** _pending_

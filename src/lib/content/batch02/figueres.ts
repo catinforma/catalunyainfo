@@ -7,6 +7,7 @@ import {
   h2,
   lead,
   list,
+  paras,
   table,
   verifiedLine,
   type B2Article,
@@ -46,7 +47,7 @@ import {
 // 10:30 opening runs 1 Oct-22 Mar, not "November to March"; high-speed
 // trains take 42-65 min, so "about an hour", not "under an hour". Púbol
 // closes at 17:00 from 2 Nov. R11 and Renfe GTFS re-read the same day.
-const VERIFIED = "2026-10-28";
+const VERIFIED = "2026-11-21";
 
 const SOURCES: B2Source[] = [
   { name: "Dalí Theatre-Museum — visit", url: "https://www.salvador-dali.org/en/visit/dali-theatre-museum/", publisher: "Fundació Gala-Salvador Dalí" },
@@ -109,9 +110,9 @@ const COPY: Record<Locale, T> = {
     headers: ["Train", "Arrives at", "Journey from Sants", "Trains a day", "Single fare"],
     rows: [
       ["R11 regional (from Sants and Passeig de Gràcia)", "Figueres, in the town centre", "1 h 50 – 2 h 18", "21 on weekdays, 14 on Saturdays", "€12.80 (€17.10 on MD trains)"],
-      ["Renfe high-speed (Avant, AVE)", "Figueres-Vilafant, 1.5 km from the centre", "42 min – 1 h 05", "17 on weekdays, 11 on Saturdays", "Varies by train and date"],
+      ["Renfe high-speed (Avant, AVE)", "Figueres-Vilafant, 1.5 km from the centre", "53 min – 1 h 05", "15 Monday to Thursday, 13 on Fridays, 9 on Saturdays", "Varies by train and date"],
     ],
-    tableNote: "R11 and fares from the official Rodalies planner and its 2026 R11 timetable; high-speed from Renfe's open timetable data for 29 and 31 October 2026. Read on 28 October 2026.",
+    tableNote: "R11 and fares from the official Rodalies planner for 24 and 28 November 2026; high-speed from Renfe's open timetable data for 24, 27 and 28 November (the Dalí Foundation also gives 55 minutes to an hour). Read on 21 November 2026.",
     trainTitle: "Which train to the Dalí Museum",
     train: [
       "The **R11** is slower but lands you in town. On weekdays the first leaves Sants at 5:56 and the last at 20:46 (6:46 to 20:16 on Saturdays); trains from Passeig de Gràcia leave a few minutes after Sants. The last R11 back leaves Figueres at 20:46 on weekdays.",
@@ -126,7 +127,7 @@ const COPY: Record<Locale, T> = {
     ],
     hoursTitle: "Dalí Museum opening hours",
     hours: [
-      "Last entry is 45 minutes before closing, and the rooms close 15 minutes before closing time. The museum is **closed on Mondays** outside July and August, except on Monday 9 November and Monday 7 December 2026.",
+      "Last entry is 45 minutes before closing, and the rooms close 15 minutes before closing time. The museum is **closed on Mondays** outside July and August; the next exception is Monday 7 December 2026.",
     ],
     hoursCaption: "Dalí Theatre-Museum opening hours",
     hoursHeaders: ["Period", "Days", "Hours"],
@@ -138,7 +139,7 @@ const COPY: Record<Locale, T> = {
       ["1 July – 31 August", "Every day", "9:00–20:00"],
       ["1 – 30 September", "Tuesday to Sunday", "9:30–18:00"],
     ],
-    hoursNote: "From the Dalí Foundation's official visit page, read on 28 October 2026.",
+    hoursNote: "From the Dalí Foundation's official visit page, read on 21 November 2026.",
     otherWaysTitle: "By bus or car to the Dalí Museum",
     otherWays: [
       "According to the Dalí Foundation, several companies run daily coaches from Barcelona to Figueres, taking **2 to 2 hours 30 minutes**; the bus station is next to the town-centre railway station. By car it is about **140 km**, around **1 hour 40 minutes** on the AP-7 towards Girona and Figueres, with public car parks near the museum.",
@@ -155,11 +156,11 @@ const COPY: Record<Locale, T> = {
       "**Afternoon:** the Rambla and the tourist office on Plaça de l'Escorxador, a few metres from the museum (Monday to Saturday 9:30–18:00, Sunday 10:00–15:00 in autumn and winter), then the train back.",
     ],
     faq: [
-      { question: "How do I get from Barcelona to the Dalí Museum?", answer: "By the R11 regional train from Sants or Passeig de Gràcia to Figueres station (about 2 hours, €12.80), or by high-speed train to Figueres-Vilafant (42 minutes to 1 h 05) and the shuttle bus into town." },
+      { question: "How do I get from Barcelona to the Dalí Museum?", answer: "By the R11 regional train from Sants or Passeig de Gràcia to Figueres station (about 2 hours, €12.80), or by high-speed train to Figueres-Vilafant (53 minutes to 1 h 05) and the shuttle bus into town." },
       { question: "Is the Dalí Museum in Barcelona?", answer: "No. The Dalí Theatre-Museum is in Figueres, Dalí's home town, about 140 km north of Barcelona. The Foundation's other two museums are the Portlligat house in Cadaqués and Púbol castle." },
       { question: "How do I get from Figueres-Vilafant station to the Dalí Museum?", answer: "About 25 minutes on foot or 15 by taxi, according to the Dalí Foundation; a shuttle bus into town also meets each high-speed train." },
-      { question: "How much is a ticket to the Dalí Theatre-Museum?", answer: "General admission from €18.50 and reduced from €15.00 on the official site; children up to 8 free; guided tour €26.50." },
-      { question: "Is the Dalí Museum open on Mondays?", answer: "Not from September to June, except a few holiday Mondays (9 November and 7 December 2026). In July and August it opens every day." },
+      { question: "How much is a ticket to the Dalí Museum in Figueres?", answer: "General admission from €18.50 and reduced from €15.00 on the official site; children up to 8 free; guided tour €26.50." },
+      { question: "Is the Dalí Museum open on Mondays?", answer: "Not from September to June, except a few holiday Mondays: the next is 7 December 2026. In July and August it opens every day." },
       { question: "Is the Dalí Museum ever free?", answer: "Yes, for everyone on 6 January. There is no free first Sunday." },
     ],
     note: "Museum hours and train timetables change: check the Dalí Foundation and Renfe before you travel.",
@@ -170,9 +171,9 @@ const COPY: Record<Locale, T> = {
     headers: ["Tren", "Llega a", "Duración desde Sants", "Trenes al día", "Sencillo"],
     rows: [
       ["Regional R11 (desde Sants y Passeig de Gràcia)", "Figueres, en el centro", "1 h 50 – 2 h 18", "21 laborables, 14 los sábados", "12,80 € (17,10 € en los MD)"],
-      ["Alta velocidad de Renfe (Avant, AVE)", "Figueres-Vilafant, a 1,5 km del centro", "42 min – 1 h 05", "17 laborables, 11 los sábados", "Según tren y fecha"],
+      ["Alta velocidad de Renfe (Avant, AVE)", "Figueres-Vilafant, a 1,5 km del centro", "53 min – 1 h 05", "15 de lunes a jueves, 13 los viernes, 9 los sábados", "Según tren y fecha"],
     ],
-    tableNote: "R11 y precios según el planificador oficial de Rodalies y su horario R11 de 2026; alta velocidad según los datos abiertos de horarios de Renfe para el 29 y el 31 de octubre de 2026. Consultado el 28 de octubre de 2026.",
+    tableNote: "R11 y precios según el planificador oficial de Rodalies para el 24 y el 28 de noviembre de 2026; alta velocidad según los datos abiertos de horarios de Renfe para el 24, el 27 y el 28 de noviembre (la Fundació Dalí da también de 55 minutos a una hora). Consultado el 21 de noviembre de 2026.",
     trainTitle: "Qué tren coger al Museo Dalí",
     train: [
       "El **R11** es más lento pero te deja en el centro. Los laborables el primero sale de Sants a las 5:56 y el último a las 20:46 (de 6:46 a 20:16 los sábados); desde Passeig de Gràcia salen unos minutos después que desde Sants. El último R11 de vuelta sale de Figueres a las 20:46 los laborables.",
@@ -187,7 +188,7 @@ const COPY: Record<Locale, T> = {
     ],
     hoursTitle: "Horario del Museo Dalí",
     hours: [
-      "La última entrada es 45 minutos antes del cierre, y las salas cierran 15 minutos antes de la hora de cierre. El museo **cierra los lunes** fuera de julio y agosto, salvo el lunes 9 de noviembre y el lunes 7 de diciembre de 2026.",
+      "La última entrada es 45 minutos antes del cierre, y las salas cierran 15 minutos antes de la hora de cierre. El museo **cierra los lunes** fuera de julio y agosto; la próxima excepción es el lunes 7 de diciembre de 2026.",
     ],
     hoursCaption: "Horario del Teatro-Museo Dalí",
     hoursHeaders: ["Periodo", "Días", "Horario"],
@@ -199,7 +200,7 @@ const COPY: Record<Locale, T> = {
       ["1 de julio – 31 de agosto", "Todos los días", "9:00–20:00"],
       ["1 – 30 de septiembre", "Martes a domingo", "9:30–18:00"],
     ],
-    hoursNote: "Según la página oficial de visita de la Fundació Dalí, consultada el 28 de octubre de 2026.",
+    hoursNote: "Según la página oficial de visita de la Fundació Dalí, consultada el 21 de noviembre de 2026.",
     otherWaysTitle: "Cómo ir al Museo Dalí en autobús o en coche",
     otherWays: [
       "Según la Fundació Dalí, varias compañías hacen el trayecto diario en autobús de Barcelona a Figueres, en **2 horas a 2 horas y media**; la estación de autobuses está junto a la estación de tren del centro. En coche son unos **140 km**, alrededor de **1 hora y 40 minutos** por la AP-7 en dirección a Girona y Figueres, con aparcamientos públicos cerca del museo.",
@@ -216,12 +217,12 @@ const COPY: Record<Locale, T> = {
       "**Tarde:** la Rambla y la oficina de turismo de la plaza de l'Escorxador, a pocos metros del museo (de lunes a sábado de 9:30 a 18:00 y domingos de 10:00 a 15:00 en otoño e invierno), y tren de vuelta.",
     ],
     faq: [
-      { question: "¿Cómo ir de Barcelona al Museo Dalí?", answer: "En el regional R11 desde Sants o Passeig de Gràcia hasta la estación de Figueres (unas 2 horas, 12,80 €), o en alta velocidad hasta Figueres-Vilafant (de 42 minutos a 1 h 05) y lanzadera al centro." },
+      { question: "¿Cómo ir de Barcelona al Museo Dalí?", answer: "En el regional R11 desde Sants o Passeig de Gràcia hasta la estación de Figueres (unas 2 horas, 12,80 €), o en alta velocidad hasta Figueres-Vilafant (de 53 minutos a 1 h 05) y lanzadera al centro." },
       { question: "¿El Museo Dalí está en Barcelona?", answer: "No. El Teatro-Museo Dalí está en Figueres, la ciudad natal de Dalí, a unos 140 km al norte de Barcelona. Los otros dos museos de la Fundació son la Casa de Portlligat, en Cadaqués, y el Castillo de Púbol." },
       { question: "¿Cómo se va de la estación de Figueres-Vilafant al Museo Dalí?", answer: "A pie en unos 25 minutos o en taxi en unos 15, según la Fundació Dalí; también hay un autobús lanzadera al centro que espera cada tren de alta velocidad." },
       { question: "¿Cuánto cuesta la entrada combinada del Museo Dalí y La Pedrera?", answer: "44,50 €, o 30 € para residentes en Cataluña; los menores de 12 años no pagan. La vende la Fundació Dalí." },
-      { question: "¿Cuánto cuesta la entrada al Teatro-Museo Dalí?", answer: "Entrada general desde 18,50 € y reducida desde 15,00 € en la web oficial; niños hasta 8 años, gratis; visita guiada, 26,50 €." },
-      { question: "¿Abre el Museo Dalí los lunes?", answer: "No de septiembre a junio, salvo algunos lunes festivos (el 9 de noviembre y el 7 de diciembre de 2026). En julio y agosto abre todos los días." },
+      { question: "¿Cuánto cuesta la entrada al Museo Dalí de Figueres?", answer: "Entrada general desde 18,50 € y reducida desde 15,00 € en la web oficial; niños hasta 8 años, gratis; visita guiada, 26,50 €." },
+      { question: "¿Abre el Museo Dalí los lunes?", answer: "No de septiembre a junio, salvo algunos lunes festivos: el próximo, el 7 de diciembre de 2026. En julio y agosto abre todos los días." },
       { question: "¿El Museo Dalí es gratis algún día?", answer: "Sí, para todo el mundo el 6 de enero. No hay primer domingo gratuito." },
     ],
     note: "Los horarios del museo y de los trenes cambian: compruébalo en la Fundació Dalí y en Renfe antes de viajar.",
@@ -232,9 +233,9 @@ const COPY: Record<Locale, T> = {
     headers: ["Tren", "Arriba a", "Durada des de Sants", "Trens al dia", "Senzill"],
     rows: [
       ["Regional R11 (des de Sants i Passeig de Gràcia)", "Figueres, al centre", "1 h 50 – 2 h 18", "21 feiners, 14 els dissabtes", "12,80 € (17,10 € als MD)"],
-      ["Alta velocitat de Renfe (Avant, AVE)", "Figueres-Vilafant, a 1,5 km del centre", "42 min – 1 h 05", "17 feiners, 11 els dissabtes", "Segons tren i data"],
+      ["Alta velocitat de Renfe (Avant, AVE)", "Figueres-Vilafant, a 1,5 km del centre", "53 min – 1 h 05", "15 de dilluns a dijous, 13 els divendres, 9 els dissabtes", "Segons tren i data"],
     ],
-    tableNote: "R11 i preus segons el cercador oficial de Rodalies i el seu horari R11 de 2026; alta velocitat segons les dades obertes d'horaris de Renfe per al 29 i el 31 d'octubre de 2026. Consultat el 28 d'octubre de 2026.",
+    tableNote: "R11 i preus segons el cercador oficial de Rodalies per al 24 i el 28 de novembre de 2026; alta velocitat segons les dades obertes d'horaris de Renfe per al 24, el 27 i el 28 de novembre (la Fundació Dalí també en dona de 55 minuts a una hora). Consultat el 21 de novembre de 2026.",
     trainTitle: "Quin tren agafar al Museu Dalí",
     train: [
       "L'**R11** és més lent però et deixa al centre. Els feiners el primer surt de Sants a les 5:56 i l'últim a les 20:46 (de 6:46 a 20:16 els dissabtes); des de Passeig de Gràcia surten uns minuts després que des de Sants. L'últim R11 de tornada surt de Figueres a les 20:46 els feiners.",
@@ -249,7 +250,7 @@ const COPY: Record<Locale, T> = {
     ],
     hoursTitle: "Horari del Museu Dalí",
     hours: [
-      "L'última entrada és 45 minuts abans del tancament, i les sales tanquen 15 minuts abans de l'hora de tancament. El museu **tanca els dilluns** fora de juliol i agost, llevat del dilluns 9 de novembre i el dilluns 7 de desembre de 2026.",
+      "L'última entrada és 45 minuts abans del tancament, i les sales tanquen 15 minuts abans de l'hora de tancament. El museu **tanca els dilluns** fora de juliol i agost; la pròxima excepció és el dilluns 7 de desembre de 2026.",
     ],
     hoursCaption: "Horari del Teatre-Museu Dalí",
     hoursHeaders: ["Període", "Dies", "Horari"],
@@ -261,7 +262,7 @@ const COPY: Record<Locale, T> = {
       ["1 de juliol – 31 d'agost", "Cada dia", "9:00–20:00"],
       ["1 – 30 de setembre", "Dimarts a diumenge", "9:30–18:00"],
     ],
-    hoursNote: "Segons la pàgina oficial de visita de la Fundació Dalí, consultada el 28 d'octubre de 2026.",
+    hoursNote: "Segons la pàgina oficial de visita de la Fundació Dalí, consultada el 21 de novembre de 2026.",
     otherWaysTitle: "Com anar al Museu Dalí en autobús o en cotxe",
     otherWays: [
       "Segons la Fundació Dalí, diverses companyies fan el trajecte diari en autobús de Barcelona a Figueres, en **2 hores a 2 hores i mitja**; l'estació d'autobusos és al costat de l'estació de tren del centre. En cotxe són uns **140 km**, al voltant d'**1 hora i 40 minuts** per l'AP-7 en direcció a Girona i Figueres, amb aparcaments públics a prop del museu.",
@@ -278,25 +279,125 @@ const COPY: Record<Locale, T> = {
       "**Tarda:** la Rambla i l'oficina de turisme de la plaça de l'Escorxador, a pocs metres del museu (de dilluns a dissabte de 9:30 a 18:00 i diumenges de 10:00 a 15:00 a la tardor i l'hivern), i tren de tornada.",
     ],
     faq: [
-      { question: "Com anar de Barcelona al Museu Dalí?", answer: "Amb el regional R11 des de Sants o Passeig de Gràcia fins a l'estació de Figueres (unes 2 hores, 12,80 €), o amb alta velocitat fins a Figueres-Vilafant (de 42 minuts a 1 h 05) i llançadora al centre." },
+      { question: "Com anar de Barcelona al Museu Dalí?", answer: "Amb el regional R11 des de Sants o Passeig de Gràcia fins a l'estació de Figueres (unes 2 hores, 12,80 €), o amb alta velocitat fins a Figueres-Vilafant (de 53 minuts a 1 h 05) i llançadora al centre." },
       { question: "El Museu Dalí és a Barcelona?", answer: "No. El Teatre-Museu Dalí és a Figueres, la ciutat natal de Dalí, a uns 140 km al nord de Barcelona. Els altres dos museus de la Fundació són la Casa de Portlligat, a Cadaqués, i el Castell de Púbol." },
       { question: "Com s'hi va de l'estació de Figueres-Vilafant al Museu Dalí?", answer: "A peu en uns 25 minuts o en taxi en uns 15, segons la Fundació Dalí; també hi ha un autobús llançadora al centre que espera cada tren d'alta velocitat." },
-      { question: "Quant costa l'entrada al Teatre-Museu Dalí?", answer: "Entrada general des de 18,50 € i reduïda des de 15,00 € al web oficial; infants fins a 8 anys, gratis; visita guiada, 26,50 €." },
-      { question: "Obre el Museu Dalí els dilluns?", answer: "No de setembre a juny, llevat d'alguns dilluns festius (el 9 de novembre i el 7 de desembre de 2026). Al juliol i l'agost obre cada dia." },
+      { question: "Quant costa l'entrada al Museu Dalí de Figueres?", answer: "Entrada general des de 18,50 € i reduïda des de 15,00 € al web oficial; infants fins a 8 anys, gratis; visita guiada, 26,50 €." },
+      { question: "Obre el Museu Dalí els dilluns?", answer: "No de setembre a juny, llevat d'alguns dilluns festius: el pròxim, el 7 de desembre de 2026. Al juliol i l'agost obre cada dia." },
       { question: "El Museu Dalí és gratis algun dia?", answer: "Sí, per a tothom el 6 de gener. No hi ha primer diumenge gratuït." },
     ],
     note: "Els horaris del museu i dels trens canvien: comprova-ho a la Fundació Dalí i a Renfe abans de viatjar.",
   },
 };
 
+// 21 Nov 2026 (day-trips cluster push; ES queries "precio entradas museo dali
+// figueres", "museo dali figueres entradas precio", "precio museo dali"; EN
+// "figueres vilafant to dali museum", "barcelona to dali museum train"). Read
+// that day on salvador-dali.org: visit page (prices and hours unchanged; its
+// exceptional-opening list "5 January, 30 March, 6 April, 25 May, 12 October,
+// 9 November, 7 December" is the 2026 Mondays), FAQ ("It generally takes
+// between one and a half and two hours to see the whole museum"; "always
+// advisable to book"; ticket desk "subject to the museum's capacity"; no
+// rucksacks worn on the back, pushchairs or objects over 35 x 35 x 25 cm;
+// left-luggage office; wheelchair users and visitors with reduced mobility
+// free with a companion), combined-ticket page (44.5 / residents 30 / under
+// 12 free; high-speed "between 55 minutes and 1 hour"), Portlligat (15.50
+// online / 17.00 ticket office; July-August 18.50 / 20.50; reduced 12 / 14)
+// and Púbol (10 online / 12 desk; reduced 7 / 9). Trains: Rodalies planner
+// API for 24 and 28 Nov (R11 21 weekday / 14 Saturday trains, 1 h 50 - 2 h 18,
+// 12.80 / 17.10 EUR, last back 20:46 / 20:49); Renfe GTFS (Fichero_AV_LD) for
+// 23, 24, 27 and 28 Nov and 4 Dec: 15 high-speed departures Monday to
+// Thursday (13 on Fridays), 9 on Saturdays, 53 to 65 minutes to
+// Figueres-Vilafant; last back 19:35 weekdays, 19:08 Saturdays. Renfe's GTFS
+// also lists a 21:46 regional to Figueres that the Rodalies planner does not:
+// the planner's figures are kept.
+type FigX = {
+  pricesCaption: string; pricesHeaders: string[]; pricesRows: string[][]; pricesNote: string;
+  visit: string;
+  faq: { question: string; answer: string }[];
+};
+
+const FIG_21NOV: Record<Locale, FigX> = {
+  en: {
+    pricesCaption: "Dalí Theatre-Museum and the Foundation's other museums: 2026 ticket prices",
+    pricesHeaders: ["Ticket", "Price", "Who or what"],
+    pricesRows: [
+      ["Dalí Theatre-Museum, general", "From €18.50", "Adults"],
+      ["Dalí Theatre-Museum, reduced", "From €15.00", "Students over 18, ages 9 to 17, Carnet Jove, over 65, 33% disability and a companion, large and single-parent families"],
+      ["Dalí Theatre-Museum, free", "€0", "Children up to 8; visitors with a 50% disability, reduced mobility or a wheelchair, each with a companion; Friends of the Dalí Museums; press; ICOM"],
+      ["Free day for everyone", "6 January", "At the artist's request; there is no free first Sunday"],
+      ["Guided tour", "€26.50 (reduced €23.00)", "Dalí Theatre-Museum"],
+      ["Groups of 25 or more", "€14 online, €16 at the ticket office", "Per person"],
+      ["Dalí Theatre-Museum + La Pedrera (Barcelona)", "€44.50 (Catalonia residents €30)", "Under-12s free"],
+      ["Portlligat house and olive grove, Cadaqués", "€15.50 online, €17 at the ticket office (July and August €18.50 / €20.50)", "Booked date and time only; reduced €12 / €14"],
+      ["Gala Dalí Castle, Púbol", "€10 online, €12 at the ticket desk", "Reduced €7 / €9"],
+    ],
+    pricesNote: "Fundació Gala-Salvador Dalí: visit pages, FAQ and the combined-ticket page, read on 21 November 2026.",
+    visit: "Allow **one and a half to two hours** inside: that is the Dalí Foundation's own estimate for the whole Theatre-Museum. Bags are checked at the door, and rucksacks worn on the back, pushchairs, luggage and anything larger than 35 × 35 × 25 cm cannot go in; there is a left-luggage office. Visitors with reduced mobility use the entrance in Plaça Gala-Dalí; tell the admission staff in advance.",
+    faq: [
+      { question: "How long does a visit to the Dalí Museum take?", answer: "The Dalí Foundation says it generally takes one and a half to two hours to see the whole Theatre-Museum. Add about an hour each way by high-speed train from Barcelona, or two by R11." },
+      { question: "Can I take a backpack into the Dalí Museum?", answer: "Not on your back: rucksacks worn on the back, pushchairs, luggage and anything larger than 35 × 35 × 25 cm are not allowed in. Bags are inspected at the entrance and there is a left-luggage office." },
+      { question: "Do I need to book Dalí Museum tickets in advance?", answer: "The Foundation advises it. There is a ticket desk at the entrance, but entry depends on the museum's capacity. The Portlligat house can only be visited with a booked date and time." },
+    ],
+  },
+  es: {
+    pricesCaption: "Teatro-Museo Dalí y los otros museos de la Fundació: precios de las entradas en 2026",
+    pricesHeaders: ["Entrada", "Precio", "Quién o qué"],
+    pricesRows: [
+      ["Teatro-Museo Dalí, general", "Desde 18,50 €", "Adultos"],
+      ["Teatro-Museo Dalí, reducida", "Desde 15,00 €", "Estudiantes mayores de 18, de 9 a 17 años, Carnet Jove, mayores de 65, discapacidad del 33 % y acompañante, familias numerosas y monoparentales"],
+      ["Teatro-Museo Dalí, gratis", "0 €", "Niños hasta 8 años; personas con discapacidad del 50 %, movilidad reducida o en silla de ruedas, cada una con un acompañante; Amigos de los Museos Dalí; prensa; ICOM"],
+      ["Día gratis para todos", "6 de enero", "Por deseo del artista; no hay primer domingo gratuito"],
+      ["Visita guiada", "26,50 € (reducida 23,00 €)", "Teatro-Museo Dalí"],
+      ["Grupos de 25 o más", "14 € en línea, 16 € en taquilla", "Por persona"],
+      ["Teatro-Museo Dalí + La Pedrera (Barcelona)", "44,50 € (residentes en Cataluña, 30 €)", "Menores de 12, gratis"],
+      ["Casa y olivar de Portlligat, Cadaqués", "15,50 € en línea, 17 € en taquilla (julio y agosto, 18,50 € / 20,50 €)", "Solo con fecha y hora reservadas; reducida 12 € / 14 €"],
+      ["Castillo Gala Dalí, Púbol", "10 € en línea, 12 € en taquilla", "Reducida 7 € / 9 €"],
+    ],
+    pricesNote: "Fundació Gala-Salvador Dalí: páginas de visita, preguntas frecuentes y entrada combinada, consultadas el 21 de noviembre de 2026.",
+    visit: "Calcula **de hora y media a dos horas** dentro: es la estimación de la propia Fundació Dalí para ver todo el Teatro-Museo. En la entrada se revisan los bolsos, y no se puede entrar con mochilas a la espalda, carritos, maletas ni objetos de más de 35 × 35 × 25 cm; hay consigna. Las personas con movilidad reducida entran por la plaza Gala-Dalí; avisa antes al personal de acceso.",
+    faq: [
+      { question: "¿Cuánto dura la visita al Museo Dalí?", answer: "Según la Fundació Dalí, ver todo el Teatro-Museo suele llevar de hora y media a dos horas. Suma una hora por trayecto en alta velocidad desde Barcelona, o dos en el R11." },
+      { question: "¿Se puede entrar con mochila al Museo Dalí?", answer: "A la espalda, no: no se admiten mochilas a la espalda, carritos, maletas ni objetos de más de 35 × 35 × 25 cm. Los bolsos se revisan en la entrada y hay consigna." },
+      { question: "¿Hay que reservar la entrada del Museo Dalí?", answer: "La Fundació lo aconseja. Hay taquilla en la entrada, pero el acceso depende del aforo del museo. La Casa de Portlligat solo se visita con fecha y hora reservadas." },
+    ],
+  },
+  ca: {
+    pricesCaption: "Teatre-Museu Dalí i els altres museus de la Fundació: preus de les entrades el 2026",
+    pricesHeaders: ["Entrada", "Preu", "Qui o què"],
+    pricesRows: [
+      ["Teatre-Museu Dalí, general", "Des de 18,50 €", "Adults"],
+      ["Teatre-Museu Dalí, reduïda", "Des de 15,00 €", "Estudiants majors de 18, de 9 a 17 anys, Carnet Jove, majors de 65, discapacitat del 33 % i acompanyant, famílies nombroses i monoparentals"],
+      ["Teatre-Museu Dalí, gratis", "0 €", "Infants fins a 8 anys; persones amb discapacitat del 50 %, mobilitat reduïda o en cadira de rodes, cadascuna amb un acompanyant; Amics dels Museus Dalí; premsa; ICOM"],
+      ["Dia gratis per a tothom", "6 de gener", "Per desig de l'artista; no hi ha primer diumenge gratuït"],
+      ["Visita guiada", "26,50 € (reduïda 23,00 €)", "Teatre-Museu Dalí"],
+      ["Grups de 25 o més", "14 € en línia, 16 € a taquilla", "Per persona"],
+      ["Teatre-Museu Dalí + La Pedrera (Barcelona)", "44,50 € (residents a Catalunya, 30 €)", "Menors de 12, gratis"],
+      ["Casa i oliverar de Portlligat, Cadaqués", "15,50 € en línia, 17 € a taquilla (juliol i agost, 18,50 € / 20,50 €)", "Només amb data i hora reservades; reduïda 12 € / 14 €"],
+      ["Castell Gala Dalí, Púbol", "10 € en línia, 12 € a taquilla", "Reduïda 7 € / 9 €"],
+    ],
+    pricesNote: "Fundació Gala-Salvador Dalí: pàgines de visita, preguntes freqüents i entrada combinada, consultades el 21 de novembre de 2026.",
+    visit: "Calcula **d'una hora i mitja a dues hores** a dins: és l'estimació de la mateixa Fundació Dalí per veure tot el Teatre-Museu. A l'entrada es revisen les bosses, i no s'hi pot entrar amb motxilles a l'esquena, cotxets, maletes ni objectes de més de 35 × 35 × 25 cm; hi ha consigna. Les persones amb mobilitat reduïda entren per la plaça Gala-Dalí; avisa abans el personal d'accés.",
+    faq: [
+      { question: "Quant dura la visita al Museu Dalí?", answer: "Segons la Fundació Dalí, veure tot el Teatre-Museu sol portar d'una hora i mitja a dues hores. Suma-hi una hora per trajecte amb alta velocitat des de Barcelona, o dues amb l'R11." },
+      { question: "Es pot entrar amb motxilla al Museu Dalí?", answer: "A l'esquena, no: no s'hi admeten motxilles a l'esquena, cotxets, maletes ni objectes de més de 35 × 35 × 25 cm. Les bosses es revisen a l'entrada i hi ha consigna." },
+      { question: "Cal reservar l'entrada del Museu Dalí?", answer: "La Fundació ho aconsella. Hi ha taquilla a l'entrada, però l'accés depèn de l'aforament del museu. La Casa de Portlligat només es visita amb data i hora reservades." },
+    ],
+  },
+};
+
 function body(locale: Locale) {
   const t = COPY[locale];
+  const x = FIG_21NOV[locale];
   return [
     lead(t.lead),
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     ...h2(t.trainTitle, ...t.train),
-    ...h2(t.museumTitle, ...t.museum),
+    // 21 Nov 2026: the price table first, for "precio entradas museo dali figueres".
+    ...h2(t.museumTitle),
+    table(x.pricesCaption, x.pricesHeaders, x.pricesRows, x.pricesNote),
+    ...paras(...t.museum, x.visit),
     ...h2(t.hoursTitle, ...t.hours),
     table(t.hoursCaption, t.hoursHeaders, t.hoursRows, t.hoursNote),
     ...h2(t.otherWaysTitle, ...t.otherWays),
@@ -304,8 +405,8 @@ function body(locale: Locale) {
     list(...t.more),
     ...h2(t.planTitle),
     list(...t.plan),
-    faq(t.faq),
-    ...b2Related(["girona", "sitges", "tarragona", "museums", "christmas"], locale),
+    faq([...t.faq, ...x.faq]),
+    ...b2Related(["girona", "montserratFree", "sitges", "tarragona", "museums", "christmas"], locale),
   ];
 }
 

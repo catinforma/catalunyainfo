@@ -64,11 +64,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Day trips",
         items: [
-          ["montserratFree", "Montserrat: cable car or rack railway", "R5 train, then rack railway or cable car at €15 return."],
+          ["montserratFree", "Montserrat: cable car or rack railway", "R5 train, then rack railway or cable car at €15 return; which ticket to buy and the funiculars."],
           ["sitges", "Sitges by train", "31–37 minutes on the R2 Sud, €5.50 single; last train back 22:22."],
-          ["girona", "Girona by train", "R11 regional from €8.95 in 1 h 19–1 h 31, or high-speed in about 40 minutes."],
+          ["girona", "Girona by train: AVE and R11 times", "R11 regional from €8.95 in 1 h 19–1 h 41, or high-speed in 39–49 minutes; every AVE and Avant departure."],
           ["tarragona", "Tarragona by train", "69 minutes from Sants, €8.60 single; Roman sites €5 each or €15 for five."],
-          ["figueres", "Figueres and the Dalí Museum", "2 hours on the R11 or under an hour by high-speed; tickets from €18.50."],
+          ["figueres", "Figueres and the Dalí Museum", "2 hours on the R11 or about an hour by high-speed; tickets from €18.50, every price in one table."],
+          ["nuria", "Vall de Núria rack railway", "From Ribes de Freser by rack railway: timetables, fares and the R3 train."],
           ["portaventura", "PortAventura", "Open daily until 6 January; only the R17 and RT2 stop at the park."],
           ["andorra", "Andorra by bus", "About three hours, from €33, and what you can bring back."],
         ],
@@ -123,11 +124,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Excursiones",
         items: [
-          ["montserratFree", "Montserrat por libre", "Tren R5 y después cremallera o teleférico a 15 € ida y vuelta."],
+          ["montserratFree", "Cremallera o teleférico de Montserrat", "Tren R5 y después cremallera o teleférico a 15 € ida y vuelta; qué billete comprar y los funiculares."],
           ["sitges", "Sitges en tren", "De 31 a 37 minutos en la R2 Sud, 5,50 € el sencillo; último tren de vuelta a las 22:22."],
-          ["girona", "Girona en tren", "Regional R11 desde 8,95 € en 1 h 19–1 h 31, o alta velocidad en unos 40 minutos."],
+          ["girona", "Girona en tren: horarios del AVE y el R11", "Regional R11 desde 8,95 € en 1 h 19–1 h 41, o alta velocidad en 39–49 minutos; todas las salidas del AVE y el Avant."],
           ["tarragona", "Tarragona en tren", "69 minutos desde Sants, 8,60 € el sencillo; recintos romanos 5 € cada uno o 15 € los cinco."],
-          ["figueres", "Figueres y el Museo Dalí", "2 horas en la R11 o menos de una en alta velocidad; entradas desde 18,50 €."],
+          ["figueres", "Figueres y el Museo Dalí", "2 horas en el R11 o alrededor de una en alta velocidad; entradas desde 18,50 €, todos los precios en una tabla."],
+          ["nuria", "Cremallera de la Vall de Núria", "Desde Ribes de Freser en cremallera: horarios, precios y el tren R3."],
           ["portaventura", "PortAventura", "Abierto cada día hasta el 6 de enero; solo la R17 y la RT2 paran en el parque."],
           ["andorra", "Andorra en autobús", "Unas tres horas, desde 33 €, y lo que puedes traer de vuelta."],
         ],
@@ -182,11 +184,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Excursions",
         items: [
-          ["montserratFree", "Montserrat per lliure", "Tren R5 i després cremallera o aeri a 15 € anada i tornada."],
+          ["montserratFree", "Cremallera o Aeri de Montserrat", "Tren R5 i després cremallera o Aeri a 15 € anada i tornada; quin bitllet comprar i els funiculars."],
           ["sitges", "Sitges en tren", "De 31 a 37 minuts amb l'R2 Sud, 5,50 € el senzill; últim tren de tornada a les 22:22."],
-          ["girona", "Girona en tren", "Regional R11 des de 8,95 € en 1 h 19–1 h 31, o alta velocitat en uns 40 minuts."],
+          ["girona", "Girona en tren: horaris de l'AVE i l'R11", "Regional R11 des de 8,95 € en 1 h 19–1 h 41, o alta velocitat en 39–49 minuts; totes les sortides de l'AVE i l'Avant."],
           ["tarragona", "Tarragona en tren", "69 minuts des de Sants, 8,60 € el senzill; recintes romans 5 € cadascun o 15 € tots cinc."],
-          ["figueres", "Figueres i el Museu Dalí", "2 hores amb l'R11 o menys d'una en alta velocitat; entrades des de 18,50 €."],
+          ["figueres", "Figueres i el Museu Dalí", "2 hores amb l'R11 o al voltant d'una en alta velocitat; entrades des de 18,50 €, tots els preus en una taula."],
+          ["nuria", "Cremallera de la Vall de Núria", "Des de Ribes de Freser en cremallera: horaris, preus i el tren R3."],
           ["portaventura", "PortAventura", "Obert cada dia fins al 6 de gener; només l'R17 i l'RT2 paren al parc."],
           ["andorra", "Andorra en autobús", "Unes tres hores, des de 33 €, i el que pots tornar a portar."],
         ],
