@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
-import { NIE_TIE_AS_OF, NIE_TIE_GUIDE, NIE_TIE_REREAD_BY, NIE_TIE_URLS, buildNieTieBody } from "../src/lib/content/batch02/nie-tie.ts";
+import { NIE_TIE_AS_OF, NIE_TIE_GUIDE, NIE_TIE_NEXT_STEPS_AS_OF, NIE_TIE_REREAD_BY, NIE_TIE_URLS, buildNieTieBody } from "../src/lib/content/batch02/nie-tie.ts";
 import { PADRO } from "../src/lib/content/batch02/padro.ts";
 import { B2_PATHS, B2_TITLES, b2href } from "../src/lib/content/batch02/shared.ts";
 import { TSI_GUIDE } from "../src/lib/content/batch02/tsi.ts";
@@ -20,9 +20,10 @@ const tables = (locale: Locale) => (NIE_TIE_GUIDE.editions[locale].blocks as unk
  * Hosts of the sources read on 13 Nov 2026: BOE, the Ministry of Territorial
  * Policy's e-office and the Government Delegation in Catalonia, its enquiry
  * form, and the National Police e-office. inclusion.gob.es and interior.gob.es
- * answered 403 and are not linked.
+ * answered 403 and are not linked. 21 Nov 2026 ("After the NIE"): Social
+ * Security's Import@ss, Cl@ve and the FNMT.
  */
-const OFFICIAL = /^(www\.boe\.es|sede\.administracionespublicas\.gob\.es|mptmd\.gob\.es|ssweb\.seap\.minhap\.es|sede\.policia\.gob\.es)$/;
+const OFFICIAL = /^(www\.boe\.es|sede\.administracionespublicas\.gob\.es|mptmd\.gob\.es|ssweb\.seap\.minhap\.es|sede\.policia\.gob\.es|portal\.seg-social\.gob\.es|clave\.gob\.es|www\.sede\.fnmt\.gob\.es)$/;
 
 test("nie-tie: three editions on year-free registry paths, one entry", () => {
   assert.equal(NIE_TIE_GUIDE.key, "nieTie");
@@ -183,6 +184,37 @@ test("nie-tie: the padró and TSI guides and the Barcelona hub link to it in eve
     assert.ok(JSON.stringify(PADRO.editions[locale].blocks).includes(target), `padró ${locale}`);
     assert.ok(JSON.stringify(TSI_GUIDE.editions[locale].blocks).includes(target), `tsi ${locale}`);
     assert.ok(JSON.stringify(BARCELONA_HUB.editions[locale].blocks).includes(target), `hub ${locale}`);
+  }
+});
+
+test("nie-tie: 'After the NIE' (NUSS, Cl@ve, FNMT) as read on 21 Nov 2026, and FAQ entries in the queries' words", () => {
+  const heading = { ca: /^Després del NIE/, es: /^Después del NIE/, en: /^After the NIE/ } as const;
+  const how = { ca: "Com es demana el NIE a Barcelona?", es: "¿Cómo se pide el NIE en Barcelona?", en: "How do I get a NIE in Barcelona?" } as const;
+  const video = { ca: /només per a ciutadans espanyols amb DNI/, es: /solo para ciudadanos españoles con DNI/, en: /only for Spanish citizens with a DNI/ } as const;
+  const selfie = { ca: /selfie/, es: /selfie/, en: /selfie/ } as const;
+  const free = { ca: /gratis el certificat/, es: /gratis el certificado/, en: /free to any adult/ } as const;
+  assert.ok(NIE_TIE_NEXT_STEPS_AS_OF > NIE_TIE_AS_OF);
+  for (const locale of LOCALES) {
+    const all = NIE_TIE_GUIDE.editions[locale].blocks as unknown as { type: string; text?: string; items?: { question: string }[] }[];
+    assert.ok(all.some((b) => b.type === "heading" && heading[locale].test(b.text ?? "")), `${locale}: section heading`);
+    const body = text(locale);
+    assert.match(body, video[locale], `${locale}: Cl@ve video registration is for DNI holders only`);
+    assert.match(body, selfie[locale], `${locale}: NUSS without Cl@ve`);
+    assert.match(body, free[locale], `${locale}: FNMT certificate is free with a NIE`);
+    assert.match(body, /21 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: dated`);
+    const faq = all.find((b) => b.type === "faq")!;
+    assert.equal(faq.items![0]!.question, how[locale], `${locale}: the top query is the first FAQ`);
+    for (const must of [NIE_TIE_URLS.nuss, NIE_TIE_URLS.clave, NIE_TIE_URLS.claveLetter, NIE_TIE_URLS.fnmt]) assert.ok(links(locale).includes(must), `${locale}: links ${must}`);
+    for (const key of ["incomeTax", "beckhamLaw"] as const) assert.ok(links(locale).includes(b2href(key, locale)), `${locale}: links ${key}`);
+  }
+});
+
+test("padró: the first FAQ answers 'what do I need to register' from the page's own tables", () => {
+  const q = { ca: /^Què necessito per empadronar-me\?/, es: /^¿Qué necesito para empadronarme\?/, en: /^What do I need to register on the padrón\?/ } as const;
+  for (const locale of LOCALES) {
+    const faq = (PADRO.editions[locale].blocks as unknown as { type: string; items?: { question: string; answer: string }[] }[]).find((b) => b.type === "faq")!;
+    assert.match(faq.items![0]!.question, q[locale], locale);
+    assert.match(faq.items![0]!.answer, /NIE/, `${locale}: says no NIE is needed`);
   }
 });
 

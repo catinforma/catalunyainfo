@@ -83,6 +83,8 @@ import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
 import { FARMERS_MARKETS } from "@/lib/content/batch02/farmers-markets";
 import { DEATH_STEPS_GUIDE } from "@/lib/content/batch02/death-steps";
+import { BECKHAM_GUIDE } from "@/lib/content/batch02/beckham-law";
+import { INCOME_TAX_GUIDE } from "@/lib/content/batch02/income-tax";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -351,6 +353,15 @@ export async function POST(request: Request) {
     // calculators that link back to it (inheritance and gift tax, the 21-territory
     // comparison, plusvalía, widow's pension) are routes: they ship with the deploy.
     if (wants("fallecimiento")) published.push(await publishB2Article(DEATH_STEPS_GUIDE));
+    // 21 Nov 2026: guides for people moving to Catalonia (ca, es, en). Income tax
+    // brackets 2026 (State + Catalan scales) and the Beckham law, each on its own
+    // so the January re-read of its rules republishes only it. The NIE/TIE guide
+    // (new "After the NIE" section and FAQ), the padró guide (FAQ in the queries'
+    // words) and the Barcelona hub link to them: `expat-links`. The net salary
+    // calculator's links to both are a route: they ship with the deploy.
+    if (wants("irpf-tramos")) published.push(await publishB2Article(INCOME_TAX_GUIDE));
+    if (wants("ley-beckham")) published.push(await publishB2Article(BECKHAM_GUIDE));
+    if (wants("expat-links")) published.push(await publishB2Article(NIE_TIE_GUIDE), await publishB2Article(PADRO), await publishB2Article(BARCELONA_HUB));
     // 13 Nov 2026: the Montserrat guide (index 3 of BATCH_02) on its own, for the
     // cable car vs rack railway vs car/coach upgrade; `montserrat-links` sends
     // the two pages whose English anchor text changed (Beyond Montserrat,

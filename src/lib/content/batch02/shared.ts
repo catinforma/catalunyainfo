@@ -131,7 +131,11 @@ export type B2Key =
   // 17 Nov 2026: farmers' markets and the Generalitat's Venda de Proximitat label (farmers-markets.ts).
   | "farmersMarkets"
   // 19 Nov 2026: what to do when a relative dies, steps and deadlines, Spain-wide with Catalonia (death-steps.ts).
-  | "deathSteps";
+  | "deathSteps"
+  // 21 Nov 2026: income tax (IRPF) brackets 2026, State + Catalonia, for residents and newcomers (income-tax.ts).
+  | "incomeTax"
+  // 21 Nov 2026: the Beckham law (art. 93 LIRPF): who qualifies, modelo 149, deadlines (beckham-law.ts).
+  | "beckhamLaw";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -581,6 +585,18 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/que-cal-fer-quan-mor-un-familiar",
     es: "guias/que-hacer-cuando-fallece-un-familiar",
     en: "guides/what-to-do-when-someone-dies-spain",
+  },
+  // Evergreen: no year in the path (the year's scales move inside the page).
+  incomeTax: {
+    ca: "guies/trams-irpf-catalunya",
+    es: "guias/tramos-irpf-cataluna",
+    en: "guides/income-tax-spain-catalonia",
+  },
+  // Evergreen: no year in the path.
+  beckhamLaw: {
+    ca: "guies/llei-beckham-regim-impatriats",
+    es: "guias/ley-beckham-regimen-impatriados",
+    en: "guides/beckham-law-spain",
   },
 };
 
@@ -1050,6 +1066,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Què cal fer quan mor un familiar: tràmits i terminis",
     es: "Qué hacer cuando fallece un familiar: trámites y plazos",
     en: "What to do when someone dies in Spain: steps and deadlines",
+  },
+  incomeTax: {
+    ca: "Trams de l'IRPF 2026 a Catalunya: escala estatal i catalana",
+    es: "Tramos del IRPF 2026 en Cataluña: escala estatal y catalana",
+    en: "Income tax in Spain 2026: rates and brackets in Catalonia",
+  },
+  beckhamLaw: {
+    ca: "Llei Beckham: requisits, tipus del 24 % i model 149",
+    es: "Ley Beckham: requisitos, tipo del 24 % y modelo 149",
+    en: "Beckham law Spain: who qualifies, 24% tax and how to apply",
   },
 };
 

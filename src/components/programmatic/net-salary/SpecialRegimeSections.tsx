@@ -115,6 +115,14 @@ export function TaxInSpainSection({ locale }: { locale: NetLocale }) {
       </div>
       <p>{breakEven}</p>
       <p>{caveat}</p>
+      <p>
+        {L(locale, {
+          es: "Las escalas estatal y catalana completas, el tipo combinado y ejemplos de lo que sale en la Renta: ",
+          ca: "Les escales estatal i catalana completes, el tipus combinat i exemples del que surt a la renda: ",
+          en: "The full State and Catalan scales, the combined rate and examples of what the annual return settles: ",
+        })}
+        <Link href={b2href("incomeTax", locale)}>{B2_TITLES.incomeTax[locale]}</Link>.
+      </p>
       <p className="text-sm">
         {L(locale, {
           es: `Por encima de ${m(S.threshold, 0)} el tipo es del ${p0(S.topRate)} en el régimen especial: la última fila lo incluye.`,
@@ -282,6 +290,14 @@ export function SpecialRegimeSection({ locale }: { locale: NetLocale }) {
           </a>
         </li>
       </ul>
+      <p>
+        {L(locale, {
+          es: "Los requisitos uno a uno, el modelo 149 paso a paso, todos los plazos, la familia, la renuncia y la exclusión: ",
+          ca: "Els requisits un per un, el model 149 pas a pas, tots els terminis, la família, la renúncia i l'exclusió: ",
+          en: "Every condition, form 149 step by step, all the deadlines, your family, waiving and losing the regime: ",
+        })}
+        <Link href={b2href("beckhamLaw", locale)}>{B2_TITLES.beckhamLaw[locale]}</Link>.
+      </p>
       <p className="text-sm">{disclaimer}</p>
     </>
   );
