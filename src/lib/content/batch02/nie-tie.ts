@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
+import { REGISTRATION_LINKS } from "@/lib/programmatic/net-salary/special-regime";
 
 import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, keyFacts, lead, list, paras, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
@@ -102,6 +103,30 @@ import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, ke
  */
 export const NIE_TIE_AS_OF = "2026-11-13";
 export const NIE_TIE_REREAD_BY = "2027-01-15";
+/**
+ * 21 Nov 2026: section "After the NIE" (Social Security number, Cl@ve, digital
+ * certificate) and three FAQ entries in the queries' words, read that day
+ * (research_notes/expat-guides-nov2026.md, worktree copy):
+ *  - Import@ss, "Solicitar el número de la Seguridad Social": «Necesitarás el
+ *    NUSS para darte de alta por primera vez en la Seguridad Social cuando
+ *    inicies tu actividad laboral»; the health system uses it for the health
+ *    card; without Cl@ve or certificate, «copia de ambas caras del DNI/NIE y un
+ *    selfie».
+ *  - clave.gob.es, "¿Cómo puedo registrarme?": four ways, basic and advanced
+ *    level; video identification «Temporalmente solo [...] a ciudadanos
+ *    españoles con un DNI en vigor»; invitation letter: «Identifícate con tu
+ *    DNI o NIE» (NIE: «número de soporte»), sent «por correo postal a tu
+ *    domicilio fiscal», finished with the CSV → basic level; in person at a
+ *    registration office (AEAT, Social Security, SEPE, Government Delegations'
+ *    information offices; «muchas oficinas requieren cita previa») → advanced.
+ *  - FNMT, "Certificado electrónico de ciudadano": «Cualquier ciudadano
+ *    español o extranjero, mayor de edad o menor emancipado que esté en
+ *    posesión de su DNI o NIE, podrá solicitar y obtener su certificado
+ *    digital de forma gratuita»; ways: video identification, in person at an
+ *    office, with the DNIe.
+ * The rest of the page keeps NIE_TIE_AS_OF (Police pages time out from the VPS).
+ */
+export const NIE_TIE_NEXT_STEPS_AS_OF = "2026-11-21";
 
 const POL = "https://sede.policia.gob.es/portalCiudadano/_es";
 export const NIE_TIE_URLS = {
@@ -119,6 +144,10 @@ export const NIE_TIE_URLS = {
   policeEu: `${POL}/tramites_extranjeria_tramite_certificadoregistro_ciudadanoue.php`,
   policeTie: `${POL}/tramites_extranjeria_tramite_tarjeta_residencia_residenciaytrabajo.php`,
   policeOffices: "https://sede.policia.gob.es/portalciudadano/_es/dependencias_localizador_accesible.php",
+  nuss: REGISTRATION_LINKS.nuss,
+  clave: "https://clave.gob.es/registro/como-puedo-registrarme",
+  claveLetter: "https://clave.gob.es/registro/como-puedo-registrarme/registro-basico-internet-carta-de-invitacion",
+  fnmt: "https://www.sede.fnmt.gob.es/certificados/persona-fisica",
 } as const;
 
 const SOURCES: B2Source[] = [
@@ -136,6 +165,9 @@ const SOURCES: B2Source[] = [
   { name: "Certificado de registro de ciudadano de la Unión", url: NIE_TIE_URLS.policeEu, publisher: "Policía Nacional" },
   { name: "Tarjeta de identidad de extranjero (residencia o residencia y trabajo)", url: NIE_TIE_URLS.policeTie, publisher: "Policía Nacional" },
   { name: "Dependencias policiales", url: NIE_TIE_URLS.policeOffices, publisher: "Policía Nacional" },
+  { name: "Import@ss: solicitar el número de la Seguridad Social", url: NIE_TIE_URLS.nuss, publisher: "Seguridad Social" },
+  { name: "Cl@ve: ¿cómo puedo registrarme?", url: NIE_TIE_URLS.clave, publisher: "Gobierno de España (Cl@ve)" },
+  { name: "Certificado electrónico de ciudadano", url: NIE_TIE_URLS.fnmt, publisher: "FNMT-RCM" },
 ];
 
 /** A Markdown link. */
@@ -182,6 +214,12 @@ export function buildNieTieBody(locale: Locale): Block[] {
   const locator = a(U.policeOffices, { ca: "localitzador de dependències de la Policia", es: "localizador de dependencias de la Policía", en: "Police office locator" }[L]);
   const questions = a(U.officeQuestions, { ca: "formulari de consultes", es: "formulario de consultas", en: "enquiry form" }[L]);
   const eOffice = a(U.eOffice, { ca: "seu electrònica d'estrangeria", es: "sede electrónica de extranjería", en: "immigration e-office" }[L]);
+  const nuss = a(U.nuss, "Import@ss");
+  const clave = a(U.clave, { ca: "pàgina de registre de Cl@ve", es: "página de registro de Cl@ve", en: "Cl@ve registration page" }[L]);
+  const claveLetter = a(U.claveLetter, { ca: "carta d'invitació", es: "carta de invitación", en: "invitation letter" }[L]);
+  const fnmt = a(U.fnmt, { ca: "FNMT", es: "FNMT", en: "FNMT" }[L]);
+  const incomeTax = b2link("incomeTax", L, { ca: "guia dels trams de l'IRPF", es: "guía de los tramos del IRPF", en: "income tax guide" }[L]);
+  const beckham = b2link("beckhamLaw", L, { ca: "guia de la llei Beckham", es: "guía de la ley Beckham", en: "Beckham law guide" }[L]);
 
   const t = {
     ca: {
@@ -294,10 +332,18 @@ export function buildNieTieBody(locale: Locale): Block[] {
         `**Padró.** Per empadronar-te no et cal el NIE: n'hi ha prou amb el passaport o, si ets de la UE, el document d'identitat del teu país. Tot el procés és a la ${padro}. Les fitxes de la Policia per al NIE, la TIE i el certificat de la UE no inclouen el padró entre els documents (13 de novembre de 2026), però el necessitaràs igualment per a la targeta sanitària i altres tràmits.`,
         `**Targeta sanitària.** El CatSalut accepta el DNI, el NIE o el passaport com a document d'identitat, i demana estar empadronat. Si ets de la UE i no treballes aquí, primer passes per l'INSS. Tot plegat, a la ${tsi}.`,
       ],
+      nextH: "Després del NIE: número de la Seguretat Social, Cl@ve i certificat digital",
+      next: [
+        `**Número de la Seguretat Social (NUSS).** El necessites per donar-te d'alta per primer cop quan comences a treballar, i el sistema sanitari el fa servir per a la targeta sanitària. Es demana per internet a ${nuss} amb el DNI o el NIE, les dades de contacte i l'adreça; sense Cl@ve ni certificat digital, la Seguretat Social demana una còpia de les dues cares del DNI o NIE i una selfie amb la cara davantera del document.`,
+        `**Cl@ve.** És la identificació de l'Estat per fer tràmits per internet (Hisenda, Seguretat Social, cites). La ${clave} n'explica quatre maneres. Amb el NIE et pots registrar per internet demanant una ${claveLetter}: t'identifiques amb el NIE i el número de suport que porta el document, la carta arriba per correu postal al teu domicili fiscal i acabes el registre amb el codi (CSV) que conté; així obtens el nivell bàsic. El registre per videoidentificació és, de moment, només per a ciutadans espanyols amb DNI. El nivell avançat es dona en una oficina de registre (Agència Tributària, Seguretat Social, SEPE, oficines d'informació de les delegacions del Govern), moltes amb cita prèvia.`,
+        `**Certificat digital.** La ${fnmt} emet gratis el certificat electrònic de ciutadà a qualsevol persona, espanyola o estrangera, major d'edat i amb DNI o NIE. Ofereix diverses vies (videoidentificació, acreditació en persona en una oficina o DNI electrònic), i el certificat serveix per presentar impostos, consultar el padró o signar formularis per internet. Pàgines de la Seguretat Social, de Cl@ve i de la FNMT consultades el 21 de novembre de 2026.`,
+        `**Impostos.** Si véns a treballar, l'IRPF segueix l'escala estatal i la catalana (${incomeTax}), llevat que optis, en els sis mesos següents a l'alta a la Seguretat Social, pel règim especial per a qui es trasllada a Espanya (${beckham}).`,
+      ],
       askTitle: "Quan has de preguntar a l'oficina",
       ask: `Aquesta guia explica el procediment general; no substitueix la resolució del teu expedient ni l'atenció de l'administració. Si el teu cas no encaixa (canvi de situació, menors, protecció internacional, document caducat), pregunta abans de pagar o reservar: a l'Oficina d'Estrangeria pel ${questions} o el telèfon 935 201 410, i a la Policia, a la mateixa cita o a la comissaria. L'estat dels expedients es consulta a la ${eOffice}.`,
       faqH: "Preguntes freqüents",
       faq: [
+        { question: "Com es demana el NIE a Barcelona?", answer: "Demanes cita prèvia a la Policia al sistema de cita d'estrangeria, triant Barcelona i el tràmit del NIE; omples el formulari EX-15; generes la taxa 790-012 (9,84 €) al web de la Policia i la pagues al banc; i vas a la cita amb el formulari, el justificant, el passaport i el motiu pel qual necessites el número. La Policia ha de resoldre en cinc dies. Si ets de la UE i viuràs aquí més de tres mesos, demanes en canvi el certificat de registre (EX-18), que ja porta el NIE." },
         { question: "El NIE i la TIE són el mateix?", answer: "No. El NIE és el número d'identitat d'estranger; la TIE és la targeta que acredita la residència dels no comunitaris i porta imprès el NIE. Pots tenir NIE sense TIE (per exemple, si ets de la UE o no hi resideixes)." },
         { question: "Soc ciutadà de la UE: necessito la TIE?", answer: "No. Si et quedes més de tres mesos, demanes el certificat de registre de ciutadà de la UE (EX-18), que porta el NIE i costa 12 €. Si estàs menys de tres mesos, n'hi ha prou amb el passaport o el document d'identitat." },
         { question: "Quant costa el NIE?", answer: "9,84 € de taxa 790-012. El certificat de la UE costa 12 € i la primera TIE, 16,08 € (Ordre PJC/617/2025, imports vigents el 13 de novembre de 2026)." },
@@ -307,6 +353,8 @@ export function buildNieTieBody(locale: Locale): Block[] {
         { question: "He perdut la TIE. Què faig?", answer: "Demanes una targeta nova a la Policia, amb cita. No compta com a renovació i dura el que li quedava a l'anterior (Reglament d'Estrangeria, art. 209)." },
         { question: "La meva parella no és de la UE. Quin document necessita?", answer: "La targeta de residència de familiar de ciutadà de la Unió (EX-19, 12 €), que es demana a l'Oficina d'Estrangeria en els tres primers mesos. A Barcelona, la cita es demana per correu electrònic a citabarcelona@correo.gob.es." },
         { question: "Puc anar a una comissaria d'una altra província?", answer: "La norma diu que el certificat de la UE es demana a la província on vols viure, i que la TIE la lliura la comissaria on s'ha tramitat l'expedient. Demana cita a la teva província." },
+        { question: "Puc demanar el número de la Seguretat Social amb el NIE?", answer: "Sí. A Import@ss el pots demanar per internet amb el DNI o el NIE; sense Cl@ve ni certificat digital, hi adjuntes una còpia de les dues cares del document i una selfie." },
+        { question: "Un estranger pot tenir Cl@ve i certificat digital?", answer: "Sí. Amb el NIE et pots registrar a Cl@ve amb una carta d'invitació que arriba per correu al teu domicili fiscal, o en una oficina de registre; el registre per vídeo és, de moment, només per a espanyols amb DNI. La FNMT emet el certificat digital gratis a qualsevol persona major d'edat amb DNI o NIE." },
       ],
       official: `${rd1155} (arts. 205 i 209), ${rd240} (arts. 7, 8 i 10), ${order}, fitxes i taxes de la Policia Nacional, la ${offices}, la ${note} i la ${cita}. Les fitxes informatives del Ministeri d'Inclusió no s'han pogut consultar el 13 de novembre de 2026.`,
     },
@@ -420,10 +468,18 @@ export function buildNieTieBody(locale: Locale): Block[] {
         `**Padrón.** Para empadronarte no te hace falta el NIE: basta el pasaporte o, si eres de la UE, el documento de identidad de tu país. Todo el proceso está en la ${padro}. Las fichas de la Policía para el NIE, la TIE y el certificado de la UE no incluyen el padrón entre los documentos (13 de noviembre de 2026), pero lo necesitarás igualmente para la tarjeta sanitaria y otros trámites.`,
         `**Tarjeta sanitaria.** El CatSalut acepta el DNI, el NIE o el pasaporte como documento de identidad, y pide estar empadronado. Si eres de la UE y no trabajas aquí, primero pasas por el INSS. Todo, en la ${tsi}.`,
       ],
+      nextH: "Después del NIE: número de la Seguridad Social, Cl@ve y certificado digital",
+      next: [
+        `**Número de la Seguridad Social (NUSS).** Lo necesitas para darte de alta por primera vez cuando empiezas a trabajar, y el sistema sanitario lo usa para la tarjeta sanitaria. Se pide por internet en ${nuss} con el DNI o el NIE, los datos de contacto y la dirección; sin Cl@ve ni certificado digital, la Seguridad Social pide una copia de las dos caras del DNI o NIE y un selfie con la cara delantera del documento.`,
+        `**Cl@ve.** Es la identificación del Estado para hacer trámites por internet (Hacienda, Seguridad Social, citas). La ${clave} explica cuatro formas. Con el NIE puedes registrarte por internet pidiendo una ${claveLetter}: te identificas con el NIE y el número de soporte que aparece en el documento, la carta llega por correo postal a tu domicilio fiscal y terminas el registro con el código (CSV) que contiene; así obtienes el nivel básico. El registro por videoidentificación es, de momento, solo para ciudadanos españoles con DNI. El nivel avanzado se da en una oficina de registro (Agencia Tributaria, Seguridad Social, SEPE, oficinas de información de las delegaciones del Gobierno), muchas con cita previa.`,
+        `**Certificado digital.** La ${fnmt} emite gratis el certificado electrónico de ciudadano a cualquier persona, española o extranjera, mayor de edad y con DNI o NIE. Ofrece varias vías (videoidentificación, acreditación en persona en una oficina o DNI electrónico), y el certificado sirve para presentar impuestos, consultar el padrón o firmar formularios por internet. Páginas de la Seguridad Social, de Cl@ve y de la FNMT consultadas el 21 de noviembre de 2026.`,
+        `**Impuestos.** Si vienes a trabajar, el IRPF sigue la escala estatal y la catalana (${incomeTax}), salvo que optes, en los seis meses siguientes al alta en la Seguridad Social, por el régimen especial para quien se traslada a España (${beckham}).`,
+      ],
       askTitle: "Cuándo preguntar a la oficina",
       ask: `Esta guía explica el procedimiento general; no sustituye la resolución de tu expediente ni la atención de la administración. Si tu caso no encaja (cambio de situación, menores, protección internacional, documento caducado), pregunta antes de pagar o reservar: a la Oficina de Extranjería por el ${questions} o el teléfono 935 201 410, y a la Policía, en la propia cita o en la comisaría. El estado de los expedientes se consulta en la ${eOffice}.`,
       faqH: "Preguntas frecuentes",
       faq: [
+        { question: "¿Cómo se pide el NIE en Barcelona?", answer: "Pides cita previa con la Policía en el sistema de cita de extranjería, eligiendo Barcelona y el trámite del NIE; rellenas el formulario EX-15; generas la tasa 790-012 (9,84 €) en la web de la Policía y la pagas en el banco; y vas a la cita con el formulario, el justificante, el pasaporte y el motivo por el que necesitas el número. La Policía tiene que resolver en cinco días. Si eres de la UE y vivirás aquí más de tres meses, pides en cambio el certificado de registro (EX-18), que ya lleva el NIE." },
         { question: "¿El NIE y la TIE son lo mismo?", answer: "No. El NIE es el número de identidad de extranjero; la TIE es la tarjeta que acredita la residencia de los no comunitarios y lleva impreso el NIE. Puedes tener NIE sin TIE (por ejemplo, si eres de la UE o no resides aquí)." },
         { question: "Soy ciudadano de la UE: ¿necesito la TIE?", answer: "No. Si te quedas más de tres meses, pides el certificado de registro de ciudadano de la UE (EX-18), que lleva el NIE y cuesta 12 €. Si estás menos de tres meses, basta el pasaporte o el documento de identidad." },
         { question: "¿Cuánto cuesta el NIE?", answer: "9,84 € de tasa 790-012. El certificado de la UE cuesta 12 € y la primera TIE, 16,08 € (Orden PJC/617/2025, importes vigentes el 13 de noviembre de 2026)." },
@@ -433,6 +489,8 @@ export function buildNieTieBody(locale: Locale): Block[] {
         { question: "He perdido la TIE. ¿Qué hago?", answer: "Pides una tarjeta nueva en la Policía, con cita. No cuenta como renovación y dura lo que le quedaba a la anterior (Reglamento de Extranjería, art. 209)." },
         { question: "Mi pareja no es de la UE. ¿Qué documento necesita?", answer: "La tarjeta de residencia de familiar de ciudadano de la Unión (EX-19, 12 €), que se pide en la Oficina de Extranjería en los tres primeros meses. En Barcelona, la cita se pide por correo electrónico a citabarcelona@correo.gob.es." },
         { question: "¿Puedo ir a una comisaría de otra provincia?", answer: "La norma dice que el certificado de la UE se pide en la provincia donde quieres vivir, y que la TIE la entrega la comisaría donde se ha tramitado el expediente. Pide cita en tu provincia." },
+        { question: "¿Puedo pedir el número de la Seguridad Social con el NIE?", answer: "Sí. En Import@ss lo puedes pedir por internet con el DNI o el NIE; sin Cl@ve ni certificado digital, adjuntas una copia de las dos caras del documento y un selfie." },
+        { question: "¿Un extranjero puede tener Cl@ve y certificado digital?", answer: "Sí. Con el NIE puedes registrarte en Cl@ve con una carta de invitación que llega por correo a tu domicilio fiscal, o en una oficina de registro; el registro por vídeo es, de momento, solo para españoles con DNI. La FNMT emite el certificado digital gratis a cualquier persona mayor de edad con DNI o NIE." },
       ],
       official: `${rd1155} (arts. 205 y 209), ${rd240} (arts. 7, 8 y 10), ${order}, fichas y tasas de la Policía Nacional, la ${offices}, la ${note} y la ${cita}. Las hojas informativas del Ministerio de Inclusión no se pudieron consultar el 13 de noviembre de 2026.`,
     },
@@ -546,10 +604,18 @@ export function buildNieTieBody(locale: Locale): Block[] {
         `**Padró.** You do not need a NIE to register on the padró: a passport is enough or, for EU citizens, the national ID card. The whole process is in our ${padro}. The Police pages for the NIE, the TIE and the EU certificate do not list the padró among the documents (13 November 2026), but you will need it anyway for the health card and other paperwork.`,
         `**Health card.** CatSalut accepts a DNI, NIE or passport as ID and requires you to be on the padró. If you are an EU citizen who does not work here, you go through the INSS first. It is all in our ${tsi}.`,
       ],
+      nextH: "After the NIE: Social Security number, Cl@ve and digital certificate",
+      next: [
+        `**Social Security number (NUSS).** You need it to be registered for the first time when you start work, and the health system uses it for your health card. You request it online on ${nuss} with your DNI or NIE, contact details and address; without Cl@ve or a digital certificate, Social Security asks for a copy of both sides of your DNI or NIE and a selfie holding the front of the document.`,
+        `**Cl@ve.** It is the State's login for online procedures (tax, Social Security, appointments). The ${clave} lists four ways to register. With a NIE you can register online by requesting an ${claveLetter}: you identify yourself with your NIE and the support number printed on the document, the letter arrives by post at your tax address and you finish with the code (CSV) it carries; that gives the basic level. Registration by video identification is, for now, only for Spanish citizens with a DNI. The advanced level is given at a registration office (Tax Agency, Social Security, SEPE, the Government Delegations' information offices), many by appointment.`,
+        `**Digital certificate.** The ${fnmt} issues the citizen's electronic certificate free to any adult, Spanish or foreign, with a DNI or NIE. It offers several ways to get it (video identification, proving your identity in person at an office, or an electronic DNI), and the certificate lets you file taxes, check the padró or sign forms online. Social Security, Cl@ve and FNMT pages read on 21 November 2026.`,
+        `**Tax.** If you come to work, your income tax follows the State and Catalan scales (${incomeTax}), unless you opt, within six months of your Social Security registration, for the special regime for people moving to Spain (${beckham}).`,
+      ],
       askTitle: "When to ask the office",
       ask: `This guide explains the general procedure; it does not replace the decision on your own file or advice from the administration. If your case does not fit (change of status, minors, international protection, expired passport), ask before paying or booking: the Immigration Office through its ${questions} or on 935 201 410, and the Police at your appointment or at the station. You can check the status of a file on the ${eOffice}.`,
       faqH: "Frequently asked questions",
       faq: [
+        { question: "How do I get a NIE in Barcelona?", answer: "Book a Police appointment (cita previa) on the immigration appointment system, choosing Barcelona and the NIE procedure; fill in form EX-15; generate the 790-012 fee (€9.84) on the Police website and pay it at a bank; and go to the appointment with the form, the receipt, your passport and the reason you need the number. The Police must decide within five days. EU citizens who will live here for more than three months apply instead for the registration certificate (EX-18), which already carries the NIE." },
         { question: "Are the NIE and the TIE the same thing?", answer: "No. The NIE is your foreigner's identity number; the TIE is the card that proves residence for non-EU nationals, and it has the NIE printed on it. You can have a NIE without a TIE (for example as an EU citizen, or if you do not live here)." },
         { question: "I am an EU citizen. Do I need a TIE?", answer: "No. If you stay more than three months you apply for the EU citizen registration certificate (EX-18), which carries your NIE and costs €12. For less than three months your passport or ID card is enough." },
         { question: "How much does the NIE cost?", answer: "€9.84 with fee form 790-012. The EU certificate costs €12 and a first TIE €16.08 (Order PJC/617/2025, amounts in force on 13 November 2026)." },
@@ -559,6 +625,8 @@ export function buildNieTieBody(locale: Locale): Block[] {
         { question: "I lost my TIE. What now?", answer: "Apply for a new card at the Police, by appointment. It does not count as a renewal and lasts for the time the old one had left (immigration regulation, art. 209)." },
         { question: "My partner is not an EU citizen. Which document do they need?", answer: "The residence card for a family member of an EU citizen (EX-19, €12), requested at the Immigration Office within the first three months. In Barcelona, the appointment is requested by email to citabarcelona@correo.gob.es." },
         { question: "Can I go to a police station in another province?", answer: "The rules say the EU certificate is requested in the province where you want to live, and the TIE is issued by the police station that handled your file. Book in your own province." },
+        { question: "Can I get a Social Security number with a NIE?", answer: "Yes. On Import@ss you can request it online with your DNI or NIE; without Cl@ve or a digital certificate, you attach a copy of both sides of the document and a selfie." },
+        { question: "Can foreigners get Cl@ve and a digital certificate?", answer: "Yes. With a NIE you can register for Cl@ve with an invitation letter sent by post to your tax address, or at a registration office; video registration is, for now, only for Spaniards with a DNI. The FNMT issues the digital certificate free to any adult with a DNI or NIE." },
       ],
       official: `${rd1155} (arts. 205 and 209), ${rd240} (arts. 7, 8 and 10), ${order}, National Police procedure and fee pages, the ${offices}, the ${note} and the ${cita}. The Ministry of Inclusion's information sheets could not be read on 13 November 2026.`,
     },
@@ -584,11 +652,12 @@ export function buildNieTieBody(locale: Locale): Block[] {
     ...h2(t.mistakesH),
     list(...t.mistakes),
     ...h2(t.linksH, ...t.links),
+    ...h2(t.nextH, ...t.next),
     callout("tip", t.askTitle, t.ask),
     { type: "heading", level: 2, text: t.faqH } as Block,
     faq(t.faq),
     callout("official", verifiedLine(L, NIE_TIE_AS_OF), t.official),
-    ...b2Related(["padro", "tsi", "barcelonaHub", "foreignVote"], L, [netSalaryRelatedItem(L)]),
+    ...b2Related(["padro", "tsi", "incomeTax", "beckhamLaw", "barcelonaHub", "foreignVote"], L, [netSalaryRelatedItem(L)]),
   ];
 }
 

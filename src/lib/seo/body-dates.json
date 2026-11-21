@@ -23,8 +23,8 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-21T11:43:28.000Z",
-   "fingerprint": "v1:a81cf94eb39cef5db3c93c6ef922281d",
+   "date": "2026-11-21T13:56:05.031Z",
+   "fingerprint": "v1:d8320f746d667b5495c7dda835a999b5",
    "files": 15
   },
   "block:touristTax": {
@@ -173,8 +173,8 @@
    "files": 10
   },
   "net-salary": {
-   "date": "2026-11-18T16:39:39.000Z",
-   "fingerprint": "v1:bee2c0af98fe9ed6abd5ddf4f98685e6",
+   "date": "2026-11-21T13:56:05.031Z",
+   "fingerprint": "v1:57714881bcd3c04bc94278c4b37d0aed",
    "files": 12
   },
   "nino-check": {

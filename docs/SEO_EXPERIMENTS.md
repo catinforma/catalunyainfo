@@ -11301,4 +11301,86 @@ candidates`. IndexNow prefixes: `/ca/guies/com-votar-eleccions-catalunya`, `/es/
 `/ca/guies/candidats-eleccions-generals-catalunya`, `/es/guias/candidatos-elecciones-generales-cataluna`,
 `/en/guides/spain-general-election-candidates-catalonia`, `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
 
+---
+
+## 2026-11-21 — Guides for people moving to Catalonia: income tax brackets 2026 and the Beckham law (new), NIE/TIE "After the NIE" section, padró FAQ in the queries' words (ca/es/en; deploy first, then groups `irpf-tramos`, `ley-beckham`, `expat-links`)
+
+**Why.** Opportunities note row 25 (`research_notes/spain-utilities-opportunities-nov2026.md`, geo ES only): "income tax
+spain" 3.9k, "nie spain" 4.1k, "beckham law" 1.2k a month; row 7: "tramos irpf" ≈ 12k. The site had the NIE/TIE and padró
+guides (13 Nov) and a Beckham mode inside the net salary calculator (18 Nov), but no page with the IRPF scales and no
+page answering "beckham law requirements / how to apply / deadline". Results read on 21 Nov disagree on the Catalan scale
+(six, eight or nine bands; first rate 9.5, 10.5 or 12 %); the law has eight bands from 9.5 %.
+
+**Baseline (GSC 25 Oct–21 Nov; pages live since 13 Nov).**
+- NIE/TIE, three editions: 206 impressions, 2 clicks. EN: "nie barcelona" 33 impr. pos. 59.4, "get nie barcelona" 28 /
+  60.8, "get your nie barcelona" 11 / 58.6, "tie card barcelona" 8 / 67.4; ES "cita previa tie barcelona" 2 / 17.
+- Padró, three editions: 935 impressions, 3 clicks (66–207 a day). ES: "que necesito para empadronarme" 24 / 32.5,
+  "que se necesita para empadronarse" 19 / 41.5, "requisitos para empadronarse" 14 / 18.3, "documentos para
+  empadronarse" 5 / 6.4, "empadronamiento" 7 / 8.4.
+- Net salary: `/en/calculators/net-salary-spain/` 0 impressions; `/es/calculadoras/sueldo-neto/` 77; `/ca/calculadores/sou-net/` 2.
+- 90 days to 21 Nov: no query containing beckham, income tax, tax spain, irpf, tramos, cl@ve or social security reaches
+  the site. New URLs: 0.
+
+**What changed.**
+1. *New: income tax brackets 2026* (`src/lib/content/batch02/income-tax.ts`, key `incomeTax`):
+   `/ca/guies/trams-irpf-catalunya/`, `/es/guias/tramos-irpf-cataluna/`, `/en/guides/income-tax-spain-catalonia/`.
+   State scale (LIRPF art. 63.1, unchanged since 2021: 9.5–24.5 %), Catalan scale (art. 611-1 Codi tributari, rewritten by
+   Decret llei 5/2025 from 1 Jan 2025: 8 bands, 9.5–25.5 %; ATC lists no 2026 scale change), combined marginal table (19 %
+   to 50 % above 300,000 €, computed), savings scale (BOE 19–30 %), residence (art. 9, 183 days), worldwide income (art. 2,
+   art. 80 relief), non-residents (TRLIRNR 24 / 19 %), worked examples 25k–150k gross from the calculator engine (SS,
+   base, withholding) with both scales and the 5,550 € minimum (Catalonia keeps it: AEAT manual, art. 611-2), the Renta
+   difference, who files (art. 96: 22,000 / 15,876 €), Renta 2025 opened 8 Apr 2026, Renta WEB Open, Catalan deduction
+   names (no amounts), mistakes, 8-question FAQ. No photo (noPhotoReason).
+2. *New: the Beckham law* (`src/lib/content/batch02/beckham-law.ts`, key `beckhamLaw`): `/ca/guies/llei-beckham-regim-impatriats/`,
+   `/es/guias/ley-beckham-regimen-impatriados/`, `/en/guides/beckham-law-spain/`. Every rule from
+   `net-salary/special-regime.ts`, re-read 21 Nov (LIRPF art. 93; RIRPF 115–119; AEAT regime, G606, 151 instructions,
+   non-residents manual): conditions table (art. 93.1), what you pay (24 / 47 %, gross base, all pay deemed Spanish, other
+   foreign income untaxed, one scale 50/50, wealth tax obligación real, no treaty residence), comparison against the
+   income-tax guide's scales (crossover 55,040 € for a single person in Catalonia; −1,664 € at 40k, +8,348 € at 100k),
+   six steps to opt in, eight deadlines, family (93.3), waiver and exclusion (no return), what it does not change,
+   mistakes, 9-question FAQ in the query wording. No photo.
+3. *NIE/TIE* (body only; title, description, H1 and lead untouched, inside the 13 Nov window): new section "After the NIE:
+   Social Security number, Cl@ve and digital certificate" (Import@ss NUSS with NIE, selfie route; Cl@ve invitation letter
+   with NIE, video registration only for Spanish DNI holders, advanced level at an office; FNMT certificate free with a
+   NIE), read 21 Nov (`NIE_TIE_NEXT_STEPS_AS_OF`); FAQ "How do I get a NIE in Barcelona?" first, plus NUSS and Cl@ve
+   questions; related links to the two new guides.
+4. *Padró* (body only, inside the 13 Nov window): first FAQ "¿Qué necesito para empadronarme? (requisitos y documentos)"
+   and its ca/en twins, answered from the page's own verified tables.
+5. *Barcelona hub* (`Living in Barcelona` group) and the *net salary calculator* (`#tax-spain`, `#beckham`, body only,
+   inside its 13 and 18 Nov windows): links to the two new guides. `npm run seo:body-dates` refreshed net-salary (and
+   block:shopsChristmas, whose fingerprint includes `batch02/shared.ts`).
+
+Sources: fact pack `research_notes/expat-guides-nov2026.md` (worktree copy; move it to the main checkout's
+research_notes/). 27 external URLs answered 200 on 21 Nov; Hacienda's "Tributación autonómica 2026" PDF timed out and is
+not used. Conflict noted: ATC prints a 14 % top regional savings rate, the BOE (Ley 7/2024) 15 %: the BOE is printed.
+
+**Prediction.** Indexed by 1 Dec. By 15 Dec: the ES income tax page ≥ 200 impressions on "tramos irpf (2026) cataluña"
+type queries at positions ≤ 30; the EN Beckham page ≥ 50 impressions on "beckham law" queries (positions 20–50: law firms
+and expat blogs rank); padró ES "que necesito para empadronarme" moves from 32.5 to ≤ 20; NIE EN "get nie barcelona" from
+~60 to ≤ 40. Wrong if, with the pages indexed, the income tax ES page has < 50 impressions on 15 Dec, or the padró query
+does not move.
+
+**Measure.** `snapshot.py page tramos-irpf 28`, `page trams-irpf 28`, `page income-tax-spain 28`, `page beckham 28`,
+`page nie-tie 28`, `page padro 28`, `page net-salary-spain 28`; `gaps 28 600 | grep -iE 'irpf|tramos|trams|beckham|income
+tax|nie|empadron'`. **Review 2026-12-15** (24 days), then 2027-01-15 with the yearly re-read.
+
+**Confounders.** All six touched URL sets are inside earlier launch windows (13 and 18 Nov); January pay season and the
+Renta 2026 ramp from March; the 2027 net-salary rules on 1 Jan.
+
+**Upkeep / date guards.** `INCOME_TAX_REREAD_BY` 2027-01-15 (State budget or Catalan tax law can change a scale from
+1 Jan; the page keeps the 2026 scales for the Renta 2026 and adds 2027 when published); `BECKHAM_REREAD_BY` =
+`SPECIAL_REGIME_RECHECK_BY` 2027-01-01; NIE/TIE unchanged (`NIE_TIE_REREAD_BY` 2027-01-15). Tests:
+`tests/income-tax-guide.test.ts`, `tests/beckham-law-guide.test.ts`, `tests/nie-tie.test.ts` (new section, padró FAQ).
+
+**Go-live.** Deploy first (publish route code and the calculator component). Then publish `irpf-tramos`, `ley-beckham`,
+`expat-links` (NIE/TIE, padró, Barcelona hub). The publish route pings IndexNow for the articles; for the calculator
+route run `python scripts/indexnow-sitemap.py /en/calculators/net-salary-spain/ /es/calculadoras/sueldo-neto/
+/ca/calculadores/sou-net/`. IndexNow prefixes: `/ca/guies/trams-irpf-catalunya/`, `/es/guias/tramos-irpf-cataluna/`,
+`/en/guides/income-tax-spain-catalonia/`, `/ca/guies/llei-beckham-regim-impatriats/`,
+`/es/guias/ley-beckham-regimen-impatriados/`, `/en/guides/beckham-law-spain/`, `/ca/guies/nie-tie-barcelona-catalunya/`,
+`/es/guias/nie-tie-barcelona-cataluna/`, `/en/guides/nie-tie-barcelona-catalonia/`,
+`/ca/guies/empadronament-padro-barcelona-catalunya/`, `/es/guias/empadronarse-padron-barcelona-cataluna/`,
+`/en/guides/padron-registration-barcelona-catalonia/`, `/ca/guies/barcelona-guia-practica/`,
+`/es/guias/barcelona-guia-practica/`, `/en/guides/barcelona-practical-guide/`, plus the three calculator paths above.
+
 **Outcome:** _pending_
