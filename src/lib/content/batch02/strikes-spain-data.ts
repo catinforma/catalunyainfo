@@ -143,6 +143,26 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * students' 20N (on today, 12:00); Gipuzkoa's care homes (20 Nov, 22 and 23
  * Dec) and Bizkaia's (17 Dec, 21 Jan 2027) on the Basque list; CSIF Educación
  * Madrid; CESM (newest 12 Nov, still postponed).
+ *
+ * 21 Nov 2026 (~12:00 CET, Saturday): re-read (research_notes/x10/strikes-21nov-factpack.md).
+ * No change to any entry. The Ministry's rail list (newest still the 12 Nov
+ * Grupo Renfe resolution for the 17th: no new rail call) and air list (newest
+ * the 17N ones and ELA Bizkaia; SAERCO, Groundforce, Outsmart in force to 30
+ * Nov); SEMAF (newest item 20 Nov: an online assembly on the 23rd about "los
+ * hechos conseguidos que han supuesto la desconvocatoria de huelga"), SCF
+ * (SCFCOM 40, about the call-off agreement), SFF-CGT (newest 18 Nov, no date),
+ * ALFERRO, CCOO rail: no strike; Correos (Orden INT/1239/2026, BOE-A-2026-24259,
+ * unchanged; BOE of 21 Nov, núm. 290: no strike order; the Sindicato Libre's
+ * site, newest 17 Nov: no call-off); SMU (newest 19 Nov: "legalmente
+ * convocada del 16 al 27 de noviembre"); the Basque Government's list (newest
+ * still the two care-home orders of 17 Nov: Bizkaia 17 Dec and 21 Jan 2027,
+ * Gipuzkoa 22 and 23 Dec); CSIF Educación Madrid (stoppages on 24, 26 and 30
+ * Nov, 9:00-11:00 and 17:00-19:00) and CCOO Madrid ("plena huelga
+ * indefinida"); CESM (newest 13 Nov, still postponed). No new strike for 21
+ * Nov-5 Dec on those lists. Outside that window and not added yet: the Basque
+ * Government's order of 26 Oct for Osakidetza (SATSE, ELA, LAB, CCOO, UGT;
+ * 8-9 Dec Álava, 9-10 Bizkaia, 10-11 Gipuzkoa, 13-14 Dec all of Osakidetza,
+ * each from 22:00 to 22:00).
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-21";
 
@@ -151,7 +171,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-21";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-20";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-21";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";

@@ -59,6 +59,15 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * Correos, the doctors, Madrid's schools, the airports. Titles, descriptions,
  * leads, table and FAQ rewritten; URL kept. The 19 Nov measurement window
  * (docs/SEO_EXPERIMENTS.md) is overridden by this factual change, logged there.
+ *
+ * 21 Nov 2026: re-read (research_notes/x10/strikes-21nov-factpack.md). The
+ * 26th: the mediation of Thursday 19 Nov (convened by the Departament
+ * d'Empresa i Treball) ended with no proposal from Educació, USTEC·STEs, 20
+ * Nov; the strike stays on and its minimum services are still not out
+ * (Treball's list, e-Tauler). The fact comes from the Catalan entry; this page
+ * adds one FAQ ("¿Sigue en pie...?"). The 23rd: unchanged (no new rail call
+ * on the Ministry's list; Correos' order unchanged; no Renfe or Rodalies
+ * notice about the call-off yet).
  */
 
 export const STRIKE_DAY_2326 = { strike23n: "2026-11-23", strike26n: "2026-11-26" } as const;
@@ -90,9 +99,10 @@ export const DAY2326_URLS = {
   // SEMAF nº 2026-38 and nº 2026-39, 20 Nov 2026 (read that day): the 23rd called off, "Acuerdo de fin de huelga (art. 8.2 RDLRT)".
   semaf38: SPAIN_URLS.semaf38,
   semaf39: SPAIN_URLS.semaf39,
-  // Ministry of Transport's rail list: newest entry on 20 Nov 2026 still the resolution of 12 Nov (Grupo Renfe, 17 Nov); none for the 23rd.
+  // Ministry of Transport's rail list: newest entry on 20 and 21 Nov 2026 still the resolution of 12 Nov (Grupo Renfe, 17 Nov); none for the 23rd.
   ministryRail: SPAIN_URLS.ministryRail,
-  // The Departament d'Empresa i Treball's list: newest entry on 20 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th.
+  // The Departament d'Empresa i Treball's list: newest entry on 20 and 21 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th
+  // (nor in the newest 200 e-Tauler edicts, 16-20 Nov, read 21 Nov).
   treballMs: STRIKE_URLS.treballMs,
   rodaliesStatus: STRIKE_URLS.rodaliesStatus,
   renfe: STRIKE_URLS.renfe,
@@ -313,6 +323,8 @@ const COPY: Record<Locale, Copy> = {
         faq: (checked) => [
           { question: "¿Hay huelga el jueves 26 de noviembre de 2026?", answer: "Sí, pero no general: huelga en la educación en Cataluña, toda la jornada; siguen la huelga de médicos del Sindicato Médicos Unidos y la de Correos en la Comunidad de Madrid, y en Madrid CSIF convoca paros en la enseñanza pública. No hay huelga de trenes." },
           { question: "¿Hay huelga de educación el 26 de noviembre?", answer: "Sí, en Cataluña: la convocan USTEC·STEs, CGT, la Intersindical, la COS y la CNT con la Assemblea Educativa de Catalunya. Según el preaviso de la CGT, es de 0.00 a 24.00 h en toda Cataluña, cada trabajador durante su jornada, y llama al personal docente y no docente, a las escoles bressol y al personal de comedor, ocio y transporte escolar." },
+          // 21 Nov 2026: USTEC·STEs (20 Nov) on the mediation of the 19th, which ended with no proposal.
+          { question: "¿Sigue en pie la huelga de educación del 26 de noviembre?", answer: `Sí. La mediación que el Departament d'Empresa i Treball convocó la mañana del jueves 19 de noviembre para intentar evitarla terminó sin acuerdo: según USTEC·STEs, Educació no presentó ninguna propuesta. El ${checked}, la huelga seguía convocada.` },
           { question: "¿Hay clase el jueves 26 de noviembre en Cataluña?", answer: "Sí: los centros abren, porque es una huelga del personal, no un cierre, pero parte del profesorado y del personal de comedor y de transporte escolar puede hacer huelga. Cada centro dirá qué garantiza cuando salgan los servicios mínimos." },
           { question: "¿Qué servicios mínimos hay en los colegios el 26 de noviembre?", answer: `Aún no se conocen: los fija el Departament d'Empresa i Treball por orden, y el ${checked} no estaban publicados. Para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3, cinco días antes.` },
           { question: "¿Hay huelga de profesores en Madrid el 26 de noviembre?", answer: "Sí: la enseñanza pública madrileña sigue en huelga indefinida (CCOO, UGT y CSIF) y el jueves 26 CSIF convoca paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h." },
@@ -451,6 +463,7 @@ const COPY: Record<Locale, Copy> = {
         faq: (checked) => [
           { question: "Hi ha vaga el dijous 26 de novembre de 2026?", answer: "Sí, però no general: vaga a l'educació a Catalunya, tota la jornada; continuen la vaga de metges del Sindicato Médicos Unidos i la de Correus a la Comunitat de Madrid, i a Madrid CSIF convoca aturades a l'ensenyament públic. No hi ha vaga de trens." },
           { question: "Hi ha vaga d'educació el 26 de novembre?", answer: "Sí, a Catalunya: la convoquen USTEC·STEs, CGT, la Intersindical, la COS i la CNT amb l'Assemblea Educativa de Catalunya. Segons el preavís de la CGT, és de 0.00 a 24.00 h a tot Catalunya, cada treballador durant la seva jornada, i crida el personal docent i no docent, les escoles bressol i el personal de menjador, lleure i transport escolar." },
+          { question: "Es manté la vaga d'educació del 26 de novembre?", answer: `Sí. La mediació que el Departament d'Empresa i Treball va convocar el matí del dijous 19 de novembre per intentar evitar-la va acabar sense acord: segons USTEC·STEs, Educació no hi va presentar cap proposta. El ${checked}, la vaga continuava convocada.` },
           { question: "Hi ha classe el dijous 26 de novembre a Catalunya?", answer: "Sí: els centres obren, perquè és una vaga del personal, no un tancament, però part del professorat i del personal de menjador i de transport escolar pot fer vaga. Cada centre dirà què garanteix quan surtin els serveis mínims." },
           { question: "Quins serveis mínims hi ha a les escoles el 26 de novembre?", answer: `Encara no es coneixen: els fixa el Departament d'Empresa i Treball per ordre, i el ${checked} no s'havien publicat. Per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3, cinc dies abans.` },
           { question: "Hi ha vaga de professors a Madrid el 26 de novembre?", answer: "Sí: l'ensenyament públic madrileny continua en vaga indefinida (CCOO, UGT i CSIF) i el dijous 26 CSIF hi convoca aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h." },
@@ -589,6 +602,7 @@ const COPY: Record<Locale, Copy> = {
         faq: (checked) => [
           { question: "Is there a strike in Spain on Thursday 26 November 2026?", answer: "Yes, but not a general strike: an education strike in Catalonia for the whole day; the Sindicato Médicos Unidos doctors' strike and Correos' strike in the Community of Madrid go on, and in Madrid CSIF calls stoppages in state schools. There is no rail strike." },
           { question: "Is there an education strike on 26 November?", answer: "Yes, in Catalonia: USTEC·STEs, CGT, La Intersindical, COS and CNT call it with the Assemblea Educativa de Catalunya. According to CGT's notice, it runs from 00:00 to 24:00 across Catalonia, each worker during their own working day, and calls out teaching and non-teaching staff, nursery schools and lunchtime, leisure and school-transport staff." },
+          { question: "Is the 26 November education strike still on?", answer: `Yes. The mediation the Department of Business and Labour called on the morning of Thursday 19 November to try to avoid it ended without agreement: according to USTEC·STEs, the Education Department put forward no proposal. On ${checked}, the strike was still on.` },
           { question: "Is there school in Catalonia on Thursday 26 November?", answer: "Yes: schools open, because it is a strike by staff, not a closure, but some teachers and lunchtime and school-transport staff may strike. Each school will say what it can provide once the minimum services are out." },
           { question: "What minimum services are there in schools on 26 November?", answer: `Not known yet: the Department of Business and Labour sets them by order, and they had not been published by ${checked}. For the education strike of 8 September 2026, the order was signed on the 3rd, five days before.` },
           { question: "Are Madrid's teachers on strike on 26 November?", answer: "Yes: Madrid's state schools stay on an open-ended strike (CCOO, UGT and CSIF), and on Thursday 26 CSIF calls partial stoppages from 09:00 to 11:00 and 17:00 to 19:00." },

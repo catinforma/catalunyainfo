@@ -164,7 +164,9 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
   assert.match(text(STRIKE_19N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
   // Said before and on the day (20 Nov 2026: the published page is past by now, so built as of the 18th).
   assert.match(text(buildStrikeDayBody("strike19n", "es", "2026-11-18")), /Renfe no estaba convocada/);
-  assert.match(text(STRIKE_20N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
+  // 21 Nov 2026: the published 20N page is past too (its lead is in the past tense), so the present-tense line is checked as of the day.
+  assert.match(text(buildStrikeDayBody("strike20n", "es", "2026-11-20")), /No hay huelga general ni de trenes/);
+  assert.match(text(STRIKE_20N_GUIDE.editions.es.blocks), /No fue una huelga general/);
   // The Rodalies figures of the 17th are never printed as the 19th's.
   for (const locale of LOCALES) {
     const catalonia = text(buildStrikeDayBody("strike19n", locale)).split(/\n/).filter((line) => /66 ?%/.test(line));

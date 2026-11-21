@@ -619,9 +619,16 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   // Re-checked 2 Nov 2026: the joint press release of 28 Oct (PDF on cgtensenyament.cat) lists the 26 November strike too.
   // 17 Nov 2026: plus USTEC·STEs' unitary 21N manifesto (the march's time and place).
   // 19 Nov 2026: plus CGT Ensenyament's 26N call of 18 Nov and the strike notice it links (hours and who is called out).
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs"]);
+  // 21 Nov 2026: plus USTEC·STEs' notice of 20 Nov on the mediation of the 19th (no proposal, no agreement; the strike stays on).
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs"]);
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.cgtEns26Notice));
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustecMediation26));
+  for (const locale of LOCALES) {
+    const facts = schools.facts[locale].join(" ");
+    assert.ok(facts.includes("«incapaç de presentar ni una sola proposta»") || facts.includes('"incapaç de presentar ni una sola proposta"'), `${locale}: USTEC's own words on the mediation`);
+    assert.ok(facts.includes(`](${STRIKE_URLS.ustecMediation26})`), `${locale}: links the mediation notice`);
+  }
   for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /00:00 hores i fins les 24:00 hores/, `${locale}: the notice's own hours`);
   assert.match(STRIKE_URLS.edu26Joint, /^https:\/\/www\.cgtensenyament\.cat\/.+\.pdf$/);
   assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");

@@ -10592,3 +10592,45 @@ current time.
 permission before any ad on the six PVPC URLs (unchanged).
 
 **Outcome:** _pending_
+
+## 2026-11-21 — Strikes re-read (Saturday): 26N mediation ended without agreement, the strike stays on; minimum services still not out; no new strike to 5 Dec. Education guide, 26N page, both hubs, es + ca + en (deploy; group `strikes`, which also republishes `huelgas-espana` and `huelga-23-26n` pages)
+
+**Why (factual, not an experiment).** The 00:05 timer moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 2026-11-21 with
+VERIFIED pinned to the 20th; every source was re-read today and both VERIFIED constants are now 2026-11-21. No title, seoTitle,
+description or lead template changed (the 23N and 26N measurement windows of 19–20 Nov stand); the only new copy is one fact and
+one FAQ about the mediation.
+
+**Sources re-read 21 Nov 2026, ~11:50–12:30 CET** (curl with a browser UA; fact pack `research_notes/x10/strikes-21nov-factpack.md`):
+USTEC·STEs 20/11/26 «El matí de dijous dia 19 de novembre s'ha celebrat la mediació convocada pel Departament d'Empresa i Treball
+[...] amb l'objectiu d'intentar evitar la vaga», Educació «incapaç de presentar ni una sola proposta» (no agreement; strike on);
+CGT Ensenyament (newest 18 Nov, 26N call); Treball's list (newest still 17/11, the 23N order) and e-Tauler (newest 200 edicts,
+16–20 Nov: no 26N order; 659191 ACTIU, not amended); Metges de Catalunya (newest 18 Nov, «es troben en situació de vaga
+indefinida»); SMU (newest 19 Nov, «legalmente convocada del 16 al 27 de noviembre»); Ministry rail list (newest still 12 Nov
+for the 17th: no new rail call) and air list (unchanged; SAERCO/Groundforce/Outsmart to 30 Nov); SEMAF (newest 20 Nov: online
+assembly on the 23rd about the call-off), SCF (SCFCOM 40), SFF-CGT (18 Nov, no date), ALFERRO, CCOO rail: no strike; Basque
+list (newest the two care-home orders of 17 Nov); BOE 21 Nov (núm. 290) no strike order, BOE-A-2026-24259 (Correos) unchanged;
+CSIF Madrid (24, 26, 30 Nov stoppages), CCOO Madrid (indefinite strike on), CESM (still postponed); Rodalies (no notice; unlisted
+23N page still 19.11), TMB, FGC: no strike. Not added (outside the 2-week window): Basque order of 26 Oct, Osakidetza 8–14 Dec.
+
+**What changed.**
+- `strikes.ts`: education 26N entry gains "Mediació, sense acord / Mediación, sin acuerdo / Mediation, no agreement" (USTEC's
+  words, linked; new source `ustecMediation26`), minimum services "consultat el 21 de novembre"; Metges de Catalunya "el 21 de
+  novembre de 2026 la vaga continuava"; the 23N call-off line "El 21 de novembre Renfe i Rodalies encara no havien publicat cap
+  avís"; `STRIKES_VERIFIED` 2026-11-21.
+- `strikes-spain-data.ts`: no entry changed; `STRIKES_SPAIN_VERIFIED` 2026-11-21 (all "fuentes revisadas" lines on the Spain hub
+  and the 19N/20N/23N/26N pages print the 21st).
+- `strike-days-2326n.ts`: 26N FAQ "¿Sigue en pie la huelga de educación del 26 de noviembre?" / "Es manté la vaga d'educació…?" /
+  "Is the 26 November education strike still on?" (third question); the mediation fact shows in the page's education section.
+- Tests: education sources now 4 CGT + 3 USTEC, mediation quote and link asserted; the 20N present-tense line checked as of the
+  20th (the published page is past).
+
+**Go-live.** Deploy (or let the 00:05 timer deploy main, once this is merged), then publish `strikes` (hub, Renfe and education
+guides, Spain hub, 17N/19N/20N/23N/26N pages). IndexNow: `/ca/guies/vaga-avui-catalunya/ /es/guias/huelga-hoy-cataluna/
+/en/guides/strike-barcelona-catalonia-today/ /ca/guies/vaga-educacio-novembre/ /es/guias/huelga-educacion-noviembre/
+/en/guides/catalonia-teachers-strike-november/ /ca/guies/vaga-26-novembre/ /es/guias/huelga-26-noviembre/
+/en/guides/spain-strike-26-november/ /ca/guies/vagues-espanya/ /es/guias/huelgas-espana/ /en/guides/strikes-spain/`.
+
+**Next re-read.** Daily to the 26th: the 26N order (Treball's list, e-Tauler; for 8 Sep it was signed five days before, so it
+is due about now; Monday 23 is the likely day), Metges/SMU (the SMU strike ends 08:00 28 Nov), Correos (from the 23rd).
+
+**Outcome:** _factual update, no review_
