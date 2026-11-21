@@ -312,7 +312,7 @@ function body(locale: Locale): Block[] {
         `Les mateixes paperetes, província per província, són al ${a("web del Ministeri de l'Interior per al 29N", URL.ballots)}: tenen les mateixes candidatures que les llistes proclamades, i hi pots veure en quin ordre surten a la papereta del Senat. Si vius a Espanya, només per consultar-les: el dia de la votació en tindràs a la mesa.`,
       ),
       ...paras(
-        `On has de votar, el vot per correu i quin document cal portar són a ${b2link("voting", "ca", "com votar el 29 de novembre a Catalunya")}. Si t'ha tocat ser-hi, a ${b2link("mesa", "ca", "membre de mesa electoral")}; per a la nit del 29, ${b2link("electionNight", "ca", "a quina hora surten els resultats")}, i per als d'altres anys, ${b2link("congressResults", "ca", "els resultats de les eleccions generals a Catalunya")}.`,
+        `On has de votar, el vot per correu i quin document cal portar són a ${b2link("voting", "ca", "com votar el 29 de novembre a Catalunya")}. Si t'ha tocat ser-hi, a ${b2link("mesa", "ca", "membre de mesa electoral")}; per a la nit del 29, ${b2link("electionNight", "ca", "a quina hora surten els resultats i com es reparteixen els escons (llei d'Hondt, vot en blanc i nul)")}, i per als d'altres anys, ${b2link("congressResults", "ca", "els resultats de les eleccions generals a Catalunya")}.`,
         `Les estimacions de vot i escons dels dos organismes públics que fan enquestes, el CIS i el CEO, amb la fitxa tècnica de cada estudi, són a [enquestes oficials del 29N a Catalunya](${pollsPath("ca")}).`,
       ),
       faq([
@@ -423,7 +423,7 @@ function body(locale: Locale): Block[] {
         `Las mismas papeletas, provincia por provincia, están en la ${a("web del Ministerio del Interior para el 29N", URL.ballots)}: llevan las mismas candidaturas que las listas proclamadas, y en ellas puedes ver en qué orden aparecen en la papeleta del Senado. Si vives en España, solo para consultarlas: el día de la votación las tendrás en la mesa.`,
       ),
       ...paras(
-        `Dónde te toca votar, el voto por correo y qué documento llevar están en ${b2link("voting", "es", "cómo votar el 29 de noviembre en Cataluña")}. Si te ha tocado estar en una mesa, mira ${b2link("mesa", "es", "miembro de mesa electoral")}; para la noche del 29, ${b2link("electionNight", "es", "a qué hora salen los resultados")}, y para los de otros años, ${b2link("congressResults", "es", "los resultados de las elecciones generales en Cataluña")}.`,
+        `Dónde te toca votar, el voto por correo y qué documento llevar están en ${b2link("voting", "es", "cómo votar el 29 de noviembre en Cataluña")}. Si te ha tocado estar en una mesa, mira ${b2link("mesa", "es", "miembro de mesa electoral")}; para la noche del 29, ${b2link("electionNight", "es", "a qué hora salen los resultados y cómo se reparten los escaños (ley D'Hondt, voto en blanco y nulo)")}, y para los de otros años, ${b2link("congressResults", "es", "los resultados de las elecciones generales en Cataluña")}.`,
         `Las estimaciones de voto y escaños de los dos organismos públicos que hacen encuestas, el CIS y el CEO, con la ficha técnica de cada estudio, están en [encuestas oficiales del 29N en Cataluña](${pollsPath("es")}).`,
       ),
       faq([
@@ -533,7 +533,7 @@ function body(locale: Locale): Block[] {
       `The same ballot papers, province by province, are on the ${a("Interior Ministry's 29 November website", URL.ballots)}: they carry the same lists as the proclaimed ones, and show the order in which the lists appear on the Senate ballot. If you live in Spain, use them only to look: there will be ballot papers at your polling table on the day.`,
     ),
     ...paras(
-      `Where you vote, the postal vote and what ID to bring are in ${b2link("voting", "en", "how to vote in Catalonia on 29 November")}. If you have been drawn to staff a polling table, see ${b2link("mesa", "en", "polling-station duty in Spain")}; for the night of the 29th, ${b2link("electionNight", "en", "when the results come out")}; and for earlier years, ${b2link("congressResults", "en", "general election results in Catalonia")}.`,
+      `Where you vote, the postal vote and what ID to bring are in ${b2link("voting", "en", "how to vote in Catalonia on 29 November")}. If you have been drawn to staff a polling table, see ${b2link("mesa", "en", "polling-station duty in Spain")}; for the night of the 29th, ${b2link("electionNight", "en", "when the results come out and how seats are shared out (D'Hondt, blank and null votes)")}; and for earlier years, ${b2link("congressResults", "en", "general election results in Catalonia")}.`,
       `Vote and seat estimates from the two public bodies that run polls, the CIS and the CEO, with each study's technical sheet, are on [official 29 November polls in Catalonia](${pollsPath("en")}).`,
     ),
     faq([

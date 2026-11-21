@@ -74,15 +74,51 @@ import {
  * within 40 days of the proclamation of the elected). Interior's note of
  * 20 Oct names 29neleccionesgenerales.es as the official election website;
  * it says nothing about results, so the page says exactly that.
+ *
+ * 21 Nov 2026 (body only; titles, descriptions and leads inside the 11 Nov
+ * window, logged in docs/SEO_EXPERIMENTS.md, "21 Nov 2026 — 29N election-week
+ * questions"). Election-week questions no page answered: blank vs null vote,
+ * the 3 % threshold, D'Hondt, how senators are elected, seats per province
+ * from the decree. Read that day on the BOE (open-data API, consolidated
+ * LOREG; research_notes/el-week-29n-2026-11-21.md):
+ *  - art. 96.1-96.3 (null: "sobre o papeleta diferente del modelo oficial",
+ *    "papeleta sin sobre", "más de una papeleta de distinta candidatura";
+ *    Congress names "modificado, añadido, señalado o tachado"; Senate "más de
+ *    tres nombres"), 96.5 ("Se considera voto en blanco, pero válido, el sobre
+ *    que no contenga papeleta y, además, en las elecciones para el Senado, las
+ *    papeletas que no contengan indicación a favor de ninguno de los
+ *    candidatos"), 97.2 (null and blank counted apart), 103.1 ("el quinto día
+ *    siguiente al de la votación"), 163.1 (the 3 % "de los votos válidos
+ *    emitidos en la circunscripción", divisors 1, 2, 3..., ties to the most
+ *    votes, list order) and its own worked example (480.000 votes, 8 seats,
+ *    A 4, B 2, C 1, D 1), 166.1 (up to three Senate names; the most voted are
+ *    elected);
+ *  - RD 806/2026 art. 3.2 ("en cada circunscripción provincial se eligen
+ *    cuatro Senadores") and annex (Barcelona "Treinta y dos", Girona "Seis",
+ *    Lleida "Cuatro", Tarragona "Seis").
+ * The only D'Hondt figures printed are the law's own example: no real result,
+ * no poll, no projection. 29neleccionesgenerales.es home re-read 21 Nov: still
+ * no results page or link (Infoelectoral 403 from here). VERIFIED stays 3 Nov:
+ * the rest of the page was not re-read.
  */
 
 const VERIFIED = "2026-11-03";
+
+/** LOREG on the BOE (consolidated text) and the article anchors the 21 Nov sections cite. */
+const LOREG_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672";
+const LOREG_ART = {
+  null: `${LOREG_URL}#anoventayseis`,
+  general: `${LOREG_URL}#acientotres`,
+  seats: `${LOREG_URL}#acientosesentaytres`,
+  senate: `${LOREG_URL}#acientosesentayseis`,
+} as const;
+const RD_806 = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742";
 
 /** The official results site, from the shared switch (null until Interior announces it). */
 const SITE = ELECTION_NIGHT_RESULTS_URL;
 
 const BASE_SOURCES: B2Source[] = [
-  { name: "Ley Orgánica 5/1985, del Régimen Electoral General (arts. 69, 88, 97, 98, 103 y 108)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "Boletín Oficial del Estado" },
+  { name: "Ley Orgánica 5/1985, del Régimen Electoral General (arts. 69, 88, 96, 97, 98, 103, 108, 163 y 166: voto en blanco y nulo, mínimo del 3 %, D'Hondt y Senado; consultada el 21 de noviembre de 2026)", url: LOREG_URL, publisher: "Boletín Oficial del Estado" },
   { name: "Preguntas frecuentes: resultados electorales", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/preguntas-frecuentes/resultados-electorales/", publisher: "Ministerio del Interior" },
   { name: "Preguntas frecuentes: escrutinio y final de la jornada electoral", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/preguntas-frecuentes/escrutinio-y-final-de-la-jornada-electoral/", publisher: "Ministerio del Interior" },
   { name: "Calendario electoral, elecciones generales 2026", url: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf", publisher: "Junta Electoral Central" },
@@ -92,7 +128,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Datos abiertos de resultados electorales", url: "https://infoelectoral.interior.gob.es/es/elecciones-celebradas/datos-abiertos/", publisher: "Ministerio del Interior" },
   { name: "Voting in person: polling hours, 9:00 to 20:00 (29neleccionesgenerales.es)", url: "https://29neleccionesgenerales.es/en/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
   { name: "Elecciones a las Cortes Generales 2026, web oficial (portada consultada el 13 de noviembre de 2026: todavía sin página ni enlace de resultados)", url: "https://29neleccionesgenerales.es/", publisher: "Ministerio del Interior" },
-  { name: "Real Decreto 806/2026, de convocatoria de elecciones", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742", publisher: "Boletín Oficial del Estado" },
+  { name: "Real Decreto 806/2026, de convocatoria de elecciones (artículo 3 y anexo: diputados y senadores de cada provincia)", url: RD_806, publisher: "Boletín Oficial del Estado" },
 ];
 
 /** Once the switch is set: the results site and the official note that names it. */
@@ -150,6 +186,26 @@ type T = {
   final: string[];
   catTitle: string;
   cat: string[];
+  /** 21 Nov 2026: seats per province from RD 806/2026, then blank/null, D'Hondt and the Senate (LOREG). */
+  catCaption: string;
+  catHeaders: string[];
+  catRows: string[][];
+  catNote: string;
+  blankTitle: string;
+  blank: string[];
+  blankCaption: string;
+  blankHeaders: string[];
+  blankRows: string[][];
+  blankNote: string;
+  dhondtTitle: string;
+  dhondt: string;
+  dhondtSteps: string[];
+  dhondtCaption: string;
+  dhondtHeaders: string[];
+  dhondtRows: string[][];
+  dhondtNote: string;
+  senateTitle: string;
+  senate: string;
   pollsTitle: string;
   polls: string[];
   warnTitle: string;
@@ -192,15 +248,61 @@ const COPY: Record<Locale, T> = {
     ],
     finalTitle: "Quan són oficials",
     final: [
-      "Del 4 al 7 de desembre, les juntes electorals provincials fan l'escrutini general: revisen les actes i hi afegeixen el vot CERA. Després resolen les reclamacions i proclamen els electes, entre el 8 i el 16 de desembre segons el calendari oficial. La Junta Electoral Central publica els resultats al BOE en els 40 dies següents. Interior ho resumeix així: els resultats oficials són els que es publiquen al BOE.",
+      `La llei fixa l'escrutini general «el quinto día siguiente al de la votación» ([LOREG, article 103](${LOREG_ART.general})): el divendres 4 de desembre. Del 4 al 7 de desembre, les juntes electorals provincials fan l'escrutini general: revisen les actes i hi afegeixen el vot CERA. Després resolen les reclamacions i proclamen els electes, entre el 8 i el 16 de desembre segons el calendari oficial. La Junta Electoral Central publica els resultats al BOE en els 40 dies següents. Interior ho resumeix així: els resultats oficials són els que es publiquen al BOE.`,
       "Les dades definitives, en format obert, les publica Interior a Infoelectoral (llicència CC BY 4.0). Quan hi siguin, les afegirem a la pàgina de resultats històrics de les eleccions generals a Catalunya.",
       `Per als ${PAGES_PER_LOCALE.ca} municipis de Catalunya, els resultats del 29N també s'afegiran a les [pàgines de resultats electorals per municipi](${hubPath("ca")}), al costat de les municipals del 2023.`,
     ],
     catTitle: "Què s'elegeix a Catalunya",
     cat: [
-      "Catalunya tria **48 diputats**: 32 per Barcelona, 6 per Girona, 4 per Lleida i 6 per Tarragona. També elegeix **16 senadors**, quatre per província.",
+      `Catalunya tria **48 diputats**: 32 per Barcelona, 6 per Girona, 4 per Lleida i 6 per Tarragona. També elegeix **16 senadors**, quatre per província. Ho fixa el decret de convocatòria: el nombre de diputats de cada circumscripció és al seu annex, i «en cada circunscripción provincial se eligen cuatro Senadores» ([Reial decret 806/2026, article 3](${RD_806})).`,
       `Qui es presenta a cada província: ${b2link("candidates", "ca", "les llistes de candidats del 29N a Catalunya")}.`,
     ],
+    catCaption: "Escons que elegeix cada província catalana el 29 de novembre",
+    catHeaders: ["Província", "Diputats (Congrés)", "Senadors"],
+    catRows: [
+      ["Barcelona", "32", "4"],
+      ["Girona", "6", "4"],
+      ["Lleida", "4", "4"],
+      ["Tarragona", "6", "4"],
+      ["**Catalunya**", "**48** de 350", "**16**"],
+    ],
+    catNote: "Font: Reial decret 806/2026, article 3 i annex (BOE del 6 d'octubre del 2026). Els altres senadors que representen Catalunya els designa el Parlament i no es voten el 29N.",
+    blankTitle: "Vot en blanc i vot nul: diferències i com compta cadascun",
+    blank: [
+      `La llei ho diu així: «Se considera voto en blanco, pero válido, el sobre que no contenga papeleta y, además, en las elecciones para el Senado, las papeletas que no contengan indicación a favor de ninguno de los candidatos» ([LOREG, article 96](${LOREG_ART.null})). Com que és un vot vàlid, el vot en blanc entra al total de vots vàlids de la província, que és la base del mínim del 3 %: cada vot en blanc fa pujar una mica els vots que necessita una candidatura per entrar al repartiment. No dona cap escó.`,
+      "El vot nul no és vàlid i no compta per al repartiment: només surt a l'acta com a papereta nul·la. És nul el vot en un sobre o una papereta que no són el model oficial, la papereta sense sobre i el sobre amb paperetes de candidatures diferents; al Congrés, també la papereta amb noms ratllats, afegits o marcats o amb l'ordre canviat, i al Senat, la que té més de tres creus. Dues paperetes de la mateixa candidatura en un sobre compten com un sol vot vàlid.",
+    ],
+    blankCaption: "Vot en blanc i vot nul, segons la llei electoral",
+    blankHeaders: ["", "Vot en blanc", "Vot nul"],
+    blankRows: [
+      ["Què és", "El sobre sense papereta; al Senat, també la papereta sense cap creu", "Sobre o papereta que no són l'oficial, papereta sense sobre, paperetes de candidatures diferents, papereta del Congrés modificada o del Senat amb més de tres creus"],
+      ["És un vot vàlid?", "**Sí**", "**No**"],
+      ["Compta per al mínim del 3 %?", "**Sí**: entra al total de vots vàlids", "**No**"],
+      ["Dona escons?", "No", "No"],
+      ["Compta com a votant?", "Sí", "Sí: la mesa el compta a part"],
+    ],
+    blankNote: "Font: LOREG, articles 96, 97.2 i 163.1 (text consolidat al BOE, consultat el 21 de novembre del 2026).",
+    dhondtTitle: "Com es reparteixen els escons: la llei d'Hondt i el mínim del 3 %",
+    dhondt: `Al Congrés, cada província reparteix els seus escons per separat, amb les regles de l'[article 163 de la LOREG](${LOREG_ART.seats}). La nit electoral, Interior ja les aplica a l'escrutini provisional; els escons definitius surten de l'escrutini general.`,
+    dhondtSteps: [
+      "**1. Fora qui no arriba al 3 %:** «No se tienen en cuenta aquellas candidaturas que no hubieran obtenido, al menos, el 3 por 100 de los votos válidos emitidos en la circunscripción».",
+      "**2. Divisions:** els vots de cada candidatura que queda es divideixen per 1, 2, 3… fins al nombre d'escons de la província (32 a Barcelona).",
+      "**3. Els cocients més alts s'emporten els escons**, de més gran a més petit. Si dos cocients empaten, l'escó és de la candidatura amb més vots en total.",
+      "**4. Dins de cada llista**, els escons van als candidats per l'ordre en què surten a la papereta.",
+    ],
+    dhondtCaption: "L'exemple de la mateixa llei: 480.000 vots vàlids i 8 escons",
+    dhondtHeaders: ["Candidatura", "Vots (÷1)", "÷2", "÷3", "÷4", "Escons"],
+    dhondtRows: [
+      ["A", "**168.000**", "**84.000**", "**56.000**", "**42.000**", "4"],
+      ["B", "**104.000**", "**52.000**", "34.666", "26.000", "2"],
+      ["C", "**72.000**", "36.000", "24.000", "18.000", "1"],
+      ["D", "**64.000**", "32.000", "21.333", "16.000", "1"],
+      ["E", "40.000", "20.000", "13.333", "10.000", "0"],
+      ["F", "32.000", "16.000", "10.666", "8.000", "0"],
+    ],
+    dhondtNote: "LOREG, article 163.1.c. En negreta, els vuit cocients més alts, que s'emporten els vuit escons. La llei divideix fins a ÷8, però a partir de ÷4 cap cocient no entra entre els vuit primers. E i F superen el 3 % i no treuen cap escó.",
+    senateTitle: "Com s'elegeixen els senadors: els quatre més votats de cada província",
+    senate: `Al Senat no hi ha llei d'Hondt ni mínim del 3 %: cada elector marca fins a tres candidats de la seva província, i «serán proclamados electos aquellos candidatos que obtengan mayor número de votos hasta complementar el de Senadores asignados a la circunscripción» ([LOREG, article 166](${LOREG_ART.senate})). A cada província catalana en surten quatre. Una papereta del Senat sense cap creu és vot en blanc; amb més de tres, és nul·la. Els noms de cada província són a les llistes de candidats enllaçades més amunt.`,
     pollsTitle: "Enquestes i jornada de reflexió",
     polls: [
       "Del **24 al 28 de novembre** és prohibit publicar, difondre o reproduir enquestes electorals per qualsevol mitjà. La campanya va del 13 al 27 de novembre, i el 28 és la jornada de reflexió.",
@@ -214,7 +316,9 @@ const COPY: Record<Locale, T> = {
       { question: "Quan són les eleccions generals del 2026?", answer: `El diumenge 29 de novembre de 2026, de 9 a 20 h: s'escullen el Congrés i el Senat, i els resultats comencen a arribar després de les 20 h. La campanya va del 13 al 27 de novembre i el dissabte 28 és la jornada de reflexió. Totes les dates i què et cal per votar: ${b2link("voting", "ca", "quan són les eleccions i com votar el 29N")}.` },
       { question: "Què és l'escrutini provisional? És el resultat oficial?", answer: "No. És l'escrutini provisional que publica Interior. El resultat oficial surt de l'escrutini general de les juntes electorals (del 4 al 7 de desembre) i es publica al BOE." },
       { question: "S'inclou el vot dels catalans que viuen a l'estranger?", answer: "No a la nit electoral. El vot CERA es compta a l'escrutini general, uns dies després." },
-      { question: "Es poden publicar enquestes la setmana de les eleccions?", answer: "No del 24 al 28 de novembre: la llei electoral prohibeix publicar-ne durant els cinc dies anteriors a la votació." },
+      { question: "Quina diferència hi ha entre el vot en blanc i el vot nul?", answer: "El vot en blanc (el sobre sense papereta, o al Senat la papereta sense cap creu) és un vot vàlid: entra al total sobre el qual es calcula el mínim del 3 % de cada província, però no dona escons. El vot nul (papereta no oficial, papereta del Congrés ratllada o modificada, més de tres creus al Senat, paperetes de candidatures diferents al mateix sobre) no és vàlid i no compta per al repartiment (LOREG, articles 96 i 163)." },
+      { question: "Com funciona la llei d'Hondt a les eleccions generals?", answer: "A cada província, les candidatures que no arriben al 3 % dels vots vàlids queden fora; els vots de les altres es divideixen per 1, 2, 3… fins al nombre d'escons, i els escons van als cocients més alts (LOREG, article 163). Al Senat no s'aplica: hi surten els quatre candidats més votats de cada província catalana." },
+      { question: "Es poden publicar enquestes la setmana de les eleccions?", answer: "No del 24 al 28 de novembre:la llei electoral prohibeix publicar-ne durant els cinc dies anteriors a la votació." },
     ],
   },
   es: {
@@ -251,15 +355,61 @@ const COPY: Record<Locale, T> = {
     ],
     finalTitle: "Cuándo son oficiales",
     final: [
-      "Del 4 al 7 de diciembre, las juntas electorales provinciales hacen el escrutinio general: revisan las actas y añaden el voto CERA. Después resuelven las reclamaciones y proclaman a los electos, entre el 8 y el 16 de diciembre según el calendario oficial. La Junta Electoral Central publica los resultados en el BOE en los 40 días siguientes. Interior lo resume así: los resultados oficiales son los que se publican en el BOE.",
+      `La ley fija el escrutinio general «el quinto día siguiente al de la votación» ([LOREG, artículo 103](${LOREG_ART.general})): el viernes 4 de diciembre. Del 4 al 7 de diciembre, las juntas electorales provinciales hacen el escrutinio general: revisan las actas y añaden el voto CERA. Después resuelven las reclamaciones y proclaman a los electos, entre el 8 y el 16 de diciembre según el calendario oficial. La Junta Electoral Central publica los resultados en el BOE en los 40 días siguientes. Interior lo resume así: los resultados oficiales son los que se publican en el BOE.`,
       "Los datos definitivos, en formato abierto, los publica Interior en Infoelectoral (licencia CC BY 4.0). Cuando estén, los añadiremos a la página de resultados históricos de las elecciones generales en Cataluña.",
       `Para los ${PAGES_PER_LOCALE.es} municipios de Cataluña, los resultados del 29N también se añadirán a las [páginas de resultados electorales por municipio](${hubPath("es")}), junto a las municipales de 2023.`,
     ],
     catTitle: "Qué se elige en Cataluña",
     cat: [
-      "Cataluña elige **48 diputados**: 32 por Barcelona, 6 por Girona, 4 por Lleida y 6 por Tarragona. También elige **16 senadores**, cuatro por provincia.",
+      `Cataluña elige **48 diputados**: 32 por Barcelona, 6 por Girona, 4 por Lleida y 6 por Tarragona. También elige **16 senadores**, cuatro por provincia. Lo fija el decreto de convocatoria: el número de diputados de cada circunscripción está en su anexo, y «en cada circunscripción provincial se eligen cuatro Senadores» ([Real Decreto 806/2026, artículo 3](${RD_806})).`,
       `Quién se presenta en cada provincia: ${b2link("candidates", "es", "las listas de candidatos del 29N en Cataluña")}.`,
     ],
+    catCaption: "Escaños que elige cada provincia catalana el 29 de noviembre",
+    catHeaders: ["Provincia", "Diputados (Congreso)", "Senadores"],
+    catRows: [
+      ["Barcelona", "32", "4"],
+      ["Girona", "6", "4"],
+      ["Lleida", "4", "4"],
+      ["Tarragona", "6", "4"],
+      ["**Cataluña**", "**48** de 350", "**16**"],
+    ],
+    catNote: "Fuente: Real Decreto 806/2026, artículo 3 y anexo (BOE del 6 de octubre de 2026). Los demás senadores que representan a Cataluña los designa el Parlament y no se votan el 29N.",
+    blankTitle: "Voto en blanco y voto nulo: diferencias y cómo cuenta cada uno",
+    blank: [
+      `La ley lo dice así: «Se considera voto en blanco, pero válido, el sobre que no contenga papeleta y, además, en las elecciones para el Senado, las papeletas que no contengan indicación a favor de ninguno de los candidatos» ([LOREG, artículo 96](${LOREG_ART.null})). Como es un voto válido, el voto en blanco entra en el total de votos válidos de la provincia, que es la base del mínimo del 3 %: cada voto en blanco sube un poco los votos que necesita una candidatura para entrar en el reparto. No da ningún escaño.`,
+      "El voto nulo no es válido y no cuenta para el reparto: solo figura en el acta como papeleta nula. Es nulo el voto en un sobre o una papeleta que no son el modelo oficial, la papeleta sin sobre y el sobre con papeletas de candidaturas distintas; en el Congreso, también la papeleta con nombres tachados, añadidos o marcados o con el orden cambiado, y en el Senado, la que tiene más de tres cruces. Dos papeletas de la misma candidatura en un sobre cuentan como un solo voto válido.",
+    ],
+    blankCaption: "Voto en blanco y voto nulo, según la ley electoral",
+    blankHeaders: ["", "Voto en blanco", "Voto nulo"],
+    blankRows: [
+      ["Qué es", "El sobre sin papeleta; en el Senado, también la papeleta sin ninguna cruz", "Sobre o papeleta que no son los oficiales, papeleta sin sobre, papeletas de candidaturas distintas, papeleta del Congreso modificada o del Senado con más de tres cruces"],
+      ["¿Es un voto válido?", "**Sí**", "**No**"],
+      ["¿Cuenta para el mínimo del 3 %?", "**Sí**: entra en el total de votos válidos", "**No**"],
+      ["¿Da escaños?", "No", "No"],
+      ["¿Cuenta como votante?", "Sí", "Sí: la mesa lo cuenta aparte"],
+    ],
+    blankNote: "Fuente: LOREG, artículos 96, 97.2 y 163.1 (texto consolidado en el BOE, consultado el 21 de noviembre de 2026).",
+    dhondtTitle: "Cómo se reparten los escaños: la ley D'Hondt y el mínimo del 3 %",
+    dhondt: `En el Congreso, cada provincia reparte sus escaños por separado, con las reglas del [artículo 163 de la LOREG](${LOREG_ART.seats}). En la noche electoral, Interior ya las aplica al escrutinio provisional; los escaños definitivos salen del escrutinio general.`,
+    dhondtSteps: [
+      "**1. Fuera quien no llega al 3 %:** «No se tienen en cuenta aquellas candidaturas que no hubieran obtenido, al menos, el 3 por 100 de los votos válidos emitidos en la circunscripción».",
+      "**2. Divisiones:** los votos de cada candidatura que queda se dividen por 1, 2, 3… hasta el número de escaños de la provincia (32 en Barcelona).",
+      "**3. Los cocientes más altos se llevan los escaños**, de mayor a menor. Si dos cocientes empatan, el escaño es de la candidatura con más votos en total.",
+      "**4. Dentro de cada lista**, los escaños van a los candidatos por el orden en que aparecen en la papeleta.",
+    ],
+    dhondtCaption: "El ejemplo de la propia ley: 480.000 votos válidos y 8 escaños",
+    dhondtHeaders: ["Candidatura", "Votos (÷1)", "÷2", "÷3", "÷4", "Escaños"],
+    dhondtRows: [
+      ["A", "**168.000**", "**84.000**", "**56.000**", "**42.000**", "4"],
+      ["B", "**104.000**", "**52.000**", "34.666", "26.000", "2"],
+      ["C", "**72.000**", "36.000", "24.000", "18.000", "1"],
+      ["D", "**64.000**", "32.000", "21.333", "16.000", "1"],
+      ["E", "40.000", "20.000", "13.333", "10.000", "0"],
+      ["F", "32.000", "16.000", "10.666", "8.000", "0"],
+    ],
+    dhondtNote: "LOREG, artículo 163.1.c. En negrita, los ocho cocientes más altos, que se llevan los ocho escaños. La ley divide hasta ÷8, pero a partir de ÷4 ningún cociente entra entre los ocho primeros. E y F superan el 3 % y no sacan ningún escaño.",
+    senateTitle: "Cómo se eligen los senadores: los cuatro más votados de cada provincia",
+    senate: `En el Senado no hay ley D'Hondt ni mínimo del 3 %: cada elector marca hasta tres candidatos de su provincia, y «serán proclamados electos aquellos candidatos que obtengan mayor número de votos hasta complementar el de Senadores asignados a la circunscripción» ([LOREG, artículo 166](${LOREG_ART.senate})). En cada provincia catalana salen cuatro. Una papeleta del Senado sin ninguna cruz es voto en blanco; con más de tres, es nula. Los nombres de cada provincia están en las listas de candidatos enlazadas más arriba.`,
     pollsTitle: "Encuestas y jornada de reflexión",
     polls: [
       "Del **24 al 28 de noviembre** está prohibido publicar, difundir o reproducir sondeos electorales por cualquier medio. La campaña va del 13 al 27 de noviembre, y el 28 es la jornada de reflexión.",
@@ -273,6 +423,8 @@ const COPY: Record<Locale, T> = {
       { question: "¿Cuándo son las elecciones generales de 2026?", answer: `El domingo 29 de noviembre de 2026, de 9 a 20 h: se eligen el Congreso y el Senado, y los resultados empiezan a llegar después de las 20 h. La campaña va del 13 al 27 de noviembre y el sábado 28 es la jornada de reflexión. Todas las fechas y qué necesitas para votar: ${b2link("voting", "es", "cuándo son las elecciones y cómo votar el 29N")}.` },
       { question: "¿Qué es el escrutinio provisional? ¿Es el resultado oficial?", answer: "No. Es el escrutinio provisional que publica Interior. El resultado oficial sale del escrutinio general de las juntas electorales (del 4 al 7 de diciembre) y se publica en el BOE." },
       { question: "¿Se incluye el voto de los españoles que viven en el extranjero?", answer: "No en la noche electoral. El voto CERA se cuenta en el escrutinio general, unos días después." },
+      { question: "¿Qué diferencia hay entre el voto en blanco y el voto nulo?", answer: "El voto en blanco (el sobre sin papeleta, o en el Senado la papeleta sin ninguna cruz) es un voto válido: entra en el total sobre el que se calcula el mínimo del 3 % de cada provincia, pero no da escaños. El voto nulo (papeleta no oficial, papeleta del Congreso tachada o modificada, más de tres cruces en el Senado, papeletas de candidaturas distintas en el mismo sobre) no es válido y no cuenta para el reparto (LOREG, artículos 96 y 163)." },
+      { question: "¿Cómo funciona la ley D'Hondt en las elecciones generales?", answer: "En cada provincia, las candidaturas que no llegan al 3 % de los votos válidos quedan fuera; los votos de las demás se dividen por 1, 2, 3… hasta el número de escaños, y los escaños van a los cocientes más altos (LOREG, artículo 163). En el Senado no se aplica: salen los cuatro candidatos más votados de cada provincia catalana." },
       { question: "¿Se pueden publicar encuestas la semana de las elecciones?", answer: "No del 24 al 28 de noviembre: la ley electoral prohíbe publicarlas durante los cinco días anteriores a la votación." },
     ],
   },
@@ -310,15 +462,61 @@ const COPY: Record<Locale, T> = {
     ],
     finalTitle: "When results become official",
     final: [
-      "From 4 to 7 December the provincial electoral boards carry out the general count: they check the returns and add the CERA votes. They then settle complaints and declare who is elected, between 8 and 16 December under the official calendar. The Central Electoral Board publishes the results in the BOE within the following 40 days. As the ministry puts it, the official results are the ones published in the BOE.",
+      `The law sets the general count for "el quinto día siguiente al de la votación", the fifth day after polling day ([electoral law, article 103](${LOREG_ART.general})): Friday 4 December. From 4 to 7 December the provincial electoral boards carry out the general count: they check the returns and add the CERA votes. They then settle complaints and declare who is elected, between 8 and 16 December under the official calendar. The Central Electoral Board publishes the results in the BOE within the following 40 days. As the ministry puts it, the official results are the ones published in the BOE.`,
       "The final data, as open data, is published by the ministry on Infoelectoral (CC BY 4.0 licence). Once it is there, we will add it to our page of past general election results in Catalonia.",
       `For ${PAGES_PER_LOCALE.en} towns, the largest and the main resorts, the 29 November results will also be added to our [election results by town](${hubPath("en")}), beside the 2023 local election.`,
     ],
     catTitle: "What Catalonia elects",
     cat: [
-      "Catalonia elects **48 members of Congress**: 32 for Barcelona, 6 for Girona, 4 for Lleida and 6 for Tarragona. It also elects **16 senators**, four per province.",
+      `Catalonia elects **48 members of Congress**: 32 for Barcelona, 6 for Girona, 4 for Lleida and 6 for Tarragona. It also elects **16 senators**, four per province. The decree calling the election sets them: the deputies per constituency are in its annex, and "en cada circunscripción provincial se eligen cuatro Senadores", four senators in each provincial constituency ([Royal Decree 806/2026, article 3](${RD_806})).`,
       `Who is standing in each province: ${b2link("candidates", "en", "the 29 November candidate lists in Catalonia")}.`,
     ],
+    catCaption: "Seats each Catalan province elects on 29 November",
+    catHeaders: ["Province", "Deputies (Congress)", "Senators"],
+    catRows: [
+      ["Barcelona", "32", "4"],
+      ["Girona", "6", "4"],
+      ["Lleida", "4", "4"],
+      ["Tarragona", "6", "4"],
+      ["**Catalonia**", "**48** of 350", "**16**"],
+    ],
+    catNote: "Source: Royal Decree 806/2026, article 3 and annex (BOE, 6 October 2026). The other senators who represent Catalonia are appointed by the Catalan Parliament and are not elected on 29 November.",
+    blankTitle: "Blank vote and spoilt (null) vote in Spain: the difference and how each counts",
+    blank: [
+      `The law puts it this way: "Se considera voto en blanco, pero válido, el sobre que no contenga papeleta y, además, en las elecciones para el Senado, las papeletas que no contengan indicación a favor de ninguno de los candidatos": an empty envelope, and a Senate ballot with no name marked, is a blank but valid vote ([electoral law, article 96](${LOREG_ART.null})). Because it is valid, a blank vote is part of the province's total of valid votes, the base of the 3 % threshold: each blank vote slightly raises the number of votes a list needs to share in the seats. It wins no seat.`,
+      "A null (spoilt) vote is not valid and plays no part in the seat count: it only appears in the return as a null ballot. A vote is null if the envelope or ballot is not the official one, if the ballot has no envelope or if the envelope holds ballots of different lists; on the Congress ballot, also if names are crossed out, added or marked or their order is changed, and on the Senate ballot, if more than three names are marked. Two ballots of the same list in one envelope count as one valid vote.",
+    ],
+    blankCaption: "Blank and null votes under Spanish electoral law",
+    blankHeaders: ["", "Blank vote", "Null vote"],
+    blankRows: [
+      ["What it is", "An envelope with no ballot; for the Senate, also a ballot with no name marked", "A non-official envelope or ballot, a ballot with no envelope, ballots of different lists, an altered Congress ballot or a Senate ballot with more than three marks"],
+      ["Is it a valid vote?", "**Yes**", "**No**"],
+      ["Does it count towards the 3 % threshold?", "**Yes**: it is part of the valid votes", "**No**"],
+      ["Does it win seats?", "No", "No"],
+      ["Does the voter count as having voted?", "Yes", "Yes: the table counts it separately"],
+    ],
+    blankNote: "Source: electoral law (LOREG), articles 96, 97.2 and 163.1 (consolidated text in the BOE, checked on 21 November 2026).",
+    dhondtTitle: "How seats are allocated: the D'Hondt method and the 3 % threshold",
+    dhondt: `For Congress, each province shares out its own seats, under [article 163 of the electoral law](${LOREG_ART.seats}). On election night the Interior Ministry already applies these rules to the provisional count; the final seats come from the general count.`,
+    dhondtSteps: [
+      "**1. Lists under 3 % are left out:** \"No se tienen en cuenta aquellas candidaturas que no hubieran obtenido, al menos, el 3 por 100 de los votos válidos emitidos en la circunscripción\" (lists with less than 3 % of the constituency's valid votes are not counted).",
+      "**2. Divide:** each remaining list's votes are divided by 1, 2, 3… up to the number of seats in the province (32 in Barcelona).",
+      "**3. The highest quotients win the seats**, from the largest down. If two quotients tie, the seat goes to the list with more votes in total.",
+      "**4. Within each list**, seats go to the candidates in the order they appear on the ballot.",
+    ],
+    dhondtCaption: "The law's own example: 480,000 valid votes and 8 seats",
+    dhondtHeaders: ["List", "Votes (÷1)", "÷2", "÷3", "÷4", "Seats"],
+    dhondtRows: [
+      ["A", "**168,000**", "**84,000**", "**56,000**", "**42,000**", "4"],
+      ["B", "**104,000**", "**52,000**", "34,666", "26,000", "2"],
+      ["C", "**72,000**", "36,000", "24,000", "18,000", "1"],
+      ["D", "**64,000**", "32,000", "21,333", "16,000", "1"],
+      ["E", "40,000", "20,000", "13,333", "10,000", "0"],
+      ["F", "32,000", "16,000", "10,666", "8,000", "0"],
+    ],
+    dhondtNote: "Electoral law, article 163.1.c. In bold, the eight highest quotients, which take the eight seats. The law divides up to ÷8, but from ÷4 on no quotient makes the top eight. E and F pass 3 % and win no seat.",
+    senateTitle: "How senators are elected: the four most voted in each province",
+    senate: `The Senate has no D'Hondt and no 3 % threshold: each voter marks up to three candidates in their province, and "serán proclamados electos aquellos candidatos que obtengan mayor número de votos hasta complementar el de Senadores asignados a la circunscripción", the candidates with most votes fill the province's seats ([electoral law, article 166](${LOREG_ART.senate})). Each Catalan province elects four. A Senate ballot with no name marked is a blank vote; with more than three, it is null. The names in each province are in the candidate lists linked above.`,
     pollsTitle: "Polls and the day of reflection",
     polls: [
       "From **24 to 28 November** it is illegal to publish, broadcast or reproduce election polls in any medium. The campaign runs from 13 to 27 November, and 28 November is the day of reflection.",
@@ -333,6 +531,8 @@ const COPY: Record<Locale, T> = {
       { question: "What time do the polls open in the Spanish election on 29 November?", answer: "Voting runs from 9:00 to 20:00. Polling stations open earlier for the officers to set up, and anyone still inside at 20:00 may still vote. Where your polling station is, and what ID to bring, is in [how to vote in Spain's general election](/en/guides/how-to-vote-catalonia/)." },
       { question: "What is the provisional count (escrutinio)? Is it the official result?", answer: "No. It is the ministry's provisional count. The official result comes from the electoral boards' general count (4 to 7 December) and is published in the BOE." },
       { question: "Does it include votes from Spaniards living abroad?", answer: "Not on election night. CERA votes are counted in the general count a few days later." },
+      { question: "What is the difference between a blank vote and a null vote in Spain?", answer: "A blank vote (an envelope with no ballot, or a Senate ballot with no name marked) is valid: it is part of the total on which each province's 3 % threshold is worked out, but it wins no seat. A null vote (a non-official ballot, a Congress ballot with names crossed out or changed, more than three marks on the Senate ballot, ballots of different lists in one envelope) is not valid and plays no part in the seat count (electoral law, articles 96 and 163)." },
+      { question: "How does the D'Hondt method work in Spain's general election?", answer: "In each province, lists with less than 3 % of the valid votes are left out; the others' votes are divided by 1, 2, 3… up to the number of seats, and the seats go to the highest quotients (electoral law, article 163). It does not apply to the Senate, where the four candidates with most votes in each Catalan province are elected." },
       { question: "Can polls be published in the week of the election?", answer: "Not from 24 to 28 November: the electoral law bans publishing them in the five days before the vote." },
     ],
   },
@@ -353,6 +553,14 @@ function body(locale: Locale) {
     list(...t.read),
     ...h2(t.finalTitle, ...t.final),
     ...h2(t.catTitle, ...t.cat),
+    table(t.catCaption, t.catHeaders, t.catRows, t.catNote),
+    // 21 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "21 Nov 2026 — 29N election-week questions"): how each vote counts.
+    ...h2(t.blankTitle, ...t.blank),
+    table(t.blankCaption, t.blankHeaders, t.blankRows, t.blankNote),
+    ...h2(t.dhondtTitle, t.dhondt),
+    list(...t.dhondtSteps),
+    table(t.dhondtCaption, t.dhondtHeaders, t.dhondtRows, t.dhondtNote),
+    ...h2(t.senateTitle, t.senate),
     ...h2(t.pollsTitle, ...t.polls),
     callout("warning", t.warnTitle, t.warn),
     faq(t.faq),

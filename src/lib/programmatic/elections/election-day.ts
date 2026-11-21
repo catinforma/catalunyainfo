@@ -49,6 +49,13 @@ import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED } from "./results-nigh
  *    disposición de las mesas" (LOREG art. 85.1 admits it at the table).
  *  - Working that day: up to four paid hours (Interior's "voto presencial"
  *    page; RD 605/1999 art. 13).
+ *  - 21 Nov 2026: in Catalonia, Ordre EMT/232/2026 (DOGC núm. 9799,
+ *    20 Nov 2026; PDF read 21 Nov) sets them: art. 1.2 none if the shift
+ *    overlaps polling hours by "com a màxim, de dues hores", two "si és de
+ *    més de dues hores i de menys de quatre", four "si aquesta coincidència
+ *    és de quatre o més hores"; art. 2 the employer picks the moment; art.
+ *    4.1 mesa members get "les cinc primeres hores de la jornada laboral del
+ *    dia immediatament posterior". Every page with this block is Catalan.
  *  - Mesa members: at the polling place at 8:00 (LOREG art. 80.1); employees
  *    and civil servants who sat get five fewer working hours on Monday
  *    30 Nov (LOREG art. 28.1).
@@ -158,6 +165,8 @@ const JEC_334 = "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?a
 export const INE_29N_URL = "https://www.ine.es/dyngs/CEL/index.htm?cid=1700";
 const INE_29N = INE_29N_URL;
 const PRESENCIAL = "https://29neleccionesgenerales.es/informacion-general/como-votar/voto-presencial";
+/** The Generalitat's 29N voter-leave order (DOGC núm. 9799, 20 Nov 2026). */
+const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
 
 const CHECKED_DAY: Record<Locale, (iso: string) => string> = {
   ca: (iso) => `${Number(iso.slice(8, 10))} de ${["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"][Number(iso.slice(5, 7)) - 1]} de ${iso.slice(0, 4)}`,
@@ -212,10 +221,10 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Horari:** de 9:00 a 20:00. Si a les 20:00 ets dins del local o a l'entrada, encara pots votar ([LOREG, articles 84 i 88](${LOREG})).`,
-          `**Què cal portar:** el DNI, el passaport o el carnet de conduir originals, amb foto; valen encara que estiguin caducats, però no fotocòpies. També val l'app **MiDNI**: la mesa en comprova el codi QR ([Junta Electoral Central, 5 de novembre de 2026](${JEC_334})). L'app MiDGT no val.`,
+          `**Què cal portar:** el DNI, el passaport o el carnet de conduir originals, amb foto; valen encara que estiguin caducats, però no fotocòpies ([Ministeri de l'Interior](${PRESENCIAL})). També val l'app **MiDNI**: la mesa en comprova el codi QR ([Junta Electoral Central, 5 de novembre de 2026](${JEC_334})). L'app MiDGT no val.`,
           where,
           `**Si no surts a la llista o tens dubtes:** l'Oficina del Cens Electoral atén gratis al 900 343 232, el diumenge 29 de 8:00 a 20:00, i fins al mateix dia la seva delegació provincial pot expedir una certificació censal específica, que acredita que ets al cens encara que no figuris a la llista de la mesa ([INE](${INE_29N})).`,
-          `**Si treballes ${tomorrow ? "demà" : "avui"}:** tens dret a fins a quatre hores retribuïdes per votar ([Ministeri de l'Interior](${PRESENCIAL})). **Membres de mesa:** a les 8:00 al local, amb la notificació ([LOREG, article 80](${LOREG})); [què fer si t'ha tocat](${b2href("mesa", "ca")}).`,
+          `**Si treballes ${tomorrow ? "demà" : "avui"}:** tens dret a fins a quatre hores retribuïdes per votar: quatre si la jornada coincideix quatre hores o més amb l'horari de votació, dues si en coincideix més de dues i menys de quatre, cap si en coincideix dues o menys; l'empresa tria el moment ([Ordre EMT/232/2026](${EMT_232})). **Membres de mesa:** a les 8:00 al local, amb la notificació ([LOREG, article 80](${LOREG})); [què fer si t'ha tocat](${b2href("mesa", "ca")}).`,
           ...(tomorrow ? ["**Avui, dissabte 28, és la jornada de reflexió:** la campanya va acabar a mitjanit i ja no s'hi poden fer actes ni difondre propaganda (LOREG, article 53)."] : []),
           results,
         ];
@@ -237,7 +246,7 @@ const COPY: Record<Locale, Copy> = {
           : `**Escrutini provisional:** el difon el Ministeri de l'Interior (LOREG, article 98); no havia anunciat el web on el publicarà (comprovat el ${checked}).`,
         "**Escrutini general:** el fan les juntes electorals provincials del 4 al 7 de desembre; el resultat oficial es publica al BOE.",
         ...townLine,
-        `**Membres de mesa:** si treballes per compte d'altri o ets funcionari, el dilluns 30 de novembre tens dret a cinc hores menys de feina ([LOREG, article 28](${LOREG})).`,
+        `**Membres de mesa:** si treballes per compte d'altri o ets funcionari, el dilluns 30 de novembre tens dret a cinc hores menys de feina, les cinc primeres de la jornada ([LOREG, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
   },
@@ -260,10 +269,10 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Horario:** de 9:00 a 20:00. Si a las 20:00 estás dentro del local o en el acceso, todavía puedes votar ([LOREG, artículos 84 y 88](${LOREG})).`,
-          `**Qué llevar:** el DNI, el pasaporte o el carné de conducir originales, con foto; valen aunque estén caducados, pero no fotocopias. También vale la app **MiDNI**: la mesa comprueba su código QR ([Junta Electoral Central, 5 de noviembre de 2026](${JEC_334})). La app MiDGT no vale.`,
+          `**Qué llevar:** el DNI, el pasaporte o el carné de conducir originales, con foto; valen aunque estén caducados, pero no fotocopias ([Ministerio del Interior](${PRESENCIAL})). También vale la app **MiDNI**: la mesa comprueba su código QR ([Junta Electoral Central, 5 de noviembre de 2026](${JEC_334})). La app MiDGT no vale.`,
           where,
           `**Si no apareces en la lista o tienes dudas:** la Oficina del Censo Electoral atiende gratis en el 900 343 232, el domingo 29 de 8:00 a 20:00, y hasta el mismo día su delegación provincial puede expedir una certificación censal específica, que acredita que estás en el censo aunque no figures en la lista de la mesa ([INE](${INE_29N})).`,
-          `**Si trabajas ${tomorrow ? "mañana" : "hoy"}:** tienes derecho a hasta cuatro horas retribuidas para votar ([Ministerio del Interior](${PRESENCIAL})). **Miembros de mesa:** a las 8:00 en el local, con la notificación ([LOREG, artículo 80](${LOREG})); [qué hacer si te ha tocado](${b2href("mesa", "es")}).`,
+          `**Si trabajas ${tomorrow ? "mañana" : "hoy"}:** tienes derecho a hasta cuatro horas retribuidas para votar: cuatro si tu jornada coincide cuatro horas o más con el horario de votación, dos si coincide más de dos y menos de cuatro, ninguna si coincide dos o menos; la empresa elige el momento ([Ordre EMT/232/2026](${EMT_232})). **Miembros de mesa:** a las 8:00 en el local, con la notificación ([LOREG, artículo 80](${LOREG})); [qué hacer si te ha tocado](${b2href("mesa", "es")}).`,
           ...(tomorrow ? ["**Hoy, sábado 28, es la jornada de reflexión:** la campaña terminó a medianoche y ya no se pueden hacer actos ni difundir propaganda (LOREG, artículo 53)."] : []),
           results,
         ];
@@ -285,7 +294,7 @@ const COPY: Record<Locale, Copy> = {
           : `**Escrutinio provisional:** lo difunde el Ministerio del Interior (LOREG, artículo 98); no había anunciado la web donde lo publicará (comprobado el ${checked}).`,
         "**Escrutinio general:** lo hacen las juntas electorales provinciales del 4 al 7 de diciembre; el resultado oficial se publica en el BOE.",
         ...townLine,
-        `**Miembros de mesa:** si trabajas por cuenta ajena o eres funcionario, el lunes 30 de noviembre tienes derecho a cinco horas menos de jornada ([LOREG, artículo 28](${LOREG})).`,
+        `**Miembros de mesa:** si trabajas por cuenta ajena o eres funcionario, el lunes 30 de noviembre tienes derecho a cinco horas menos de jornada, las cinco primeras ([LOREG, artículo 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
   },
@@ -308,10 +317,10 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Hours:** 9:00 to 20:00. If you are inside the polling place or at its entrance at 20:00, you can still vote ([electoral law, articles 84 and 88](${LOREG})).`,
-          `**What to bring:** your original DNI, passport or driving licence, with a photo; they are valid even if expired, but photocopies are not. The **MiDNI** app is accepted too: the table checks its QR code ([Central Electoral Board, 5 November 2026](${JEC_334})). The MiDGT app is not. Only Spanish citizens on the electoral roll can vote.`,
+          `**What to bring:** your original DNI, passport or driving licence, with a photo; they are valid even if expired, but photocopies are not ([Interior Ministry](${PRESENCIAL})). The **MiDNI** app is accepted too: the table checks its QR code ([Central Electoral Board, 5 November 2026](${JEC_334})). The MiDGT app is not. Only Spanish citizens on the electoral roll can vote.`,
           where,
           `**Not on the list, or unsure?** The census office's free line, 900 343 232, is open from 8:00 to 20:00 on Sunday 29 November, and until that day its provincial office can issue a specific census certificate (certificación censal específica), which proves you are on the roll even if you are missing from your table's list ([INE](${INE_29N})).`,
-          `**Working ${tomorrow ? "tomorrow" : "today"}?** You are entitled to up to four paid hours to vote ([Interior Ministry](${PRESENCIAL})). **Polling-station members:** at the polling place at 8:00 with your notice ([electoral law, article 80](${LOREG})); [what to do if you were drawn](${b2href("mesa", "en")}).`,
+          `**Working ${tomorrow ? "tomorrow" : "today"}?** You are entitled to up to four paid hours to vote: four if your shift overlaps polling hours by four hours or more, two if by more than two and less than four, none if by two or less; your employer picks the time ([Ordre EMT/232/2026](${EMT_232})). **Polling-station members:** at the polling place at 8:00 with your notice ([electoral law, article 80](${LOREG})); [what to do if you were drawn](${b2href("mesa", "en")}).`,
           ...(tomorrow ? ["**Today, Saturday 28, is the day of reflection:** the campaign ended at midnight and no campaign event or material is allowed (electoral law, article 53)."] : []),
           results,
         ];
@@ -333,7 +342,7 @@ const COPY: Record<Locale, Copy> = {
           : `**Provisional count:** published by the Interior Ministry (electoral law, article 98); it had not announced the website it will use (checked on ${checked}).`,
         "**Official count:** the provincial electoral boards hold the general count from 4 to 7 December; the official result is published in the BOE.",
         ...townLine,
-        `**Polling-station members:** employees and civil servants who sat at a table are entitled to five fewer working hours on Monday 30 November ([electoral law, article 28](${LOREG})).`,
+        `**Polling-station members:** employees and civil servants who sat at a table are entitled to five fewer working hours on Monday 30 November, the first five of their day ([electoral law, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
   },

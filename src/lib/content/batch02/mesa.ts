@@ -141,6 +141,32 @@ const VERIFIED = "2026-11-05";
  */
 const EXCUSE_APP = "https://www.mesaselectorales.es/web-excusas-form/#/login";
 
+/*
+ * 21 Nov 2026 (body only; titles and descriptions frozen to 30 Nov by the
+ * 11 Nov entry, logged in docs/SEO_EXPERIMENTS.md, "21 Nov 2026 — 29N
+ * election-week questions"). The Generalitat's 29N order is out: Ordre
+ * EMT/232/2026, de 17 de novembre (DOGC núm. 9799, 20 Nov 2026; PDF read
+ * 21 Nov, research_notes/el-week-29n-2026-11-21.md). For mesa members and
+ * interventors, art. 4.1: "el permís corresponent a la jornada completa del
+ * dia 29 de novembre de 2026 i, a més, un permís corresponent a les cinc
+ * primeres hores de la jornada laboral del dia immediatament posterior";
+ * 4.2 the night shift starting on polling day counts as that day; 4.3 the
+ * employer pays "un cop es justifiqui l'actuació com a membre de mesa"; art.
+ * 5 the five hours also for those on weekly rest on the 29th; art. 7 a night
+ * shift the night before is changed "a petició de la persona interessada".
+ * For voters, art. 1: four hours if the shift overlaps polling hours by four
+ * or more, two if by more than two and less than four, none if by two or
+ * less; art. 2 the employer picks the moment. The "not yet in the DOGC"
+ * lines (ca/en work list, es Catalonia section) now give it. Also read that
+ * day on the BOE: LOREG art. 80.1 ("se reúnen a las ocho horas del día
+ * fijado para la votación en el local correspondiente", new FAQ on what time
+ * to be there) and art. 143 (now linked from the penalty box); Orden
+ * INT/650/2026 (75,00 euros, unchanged); Interior's 29N "Permisos y dietas"
+ * page ("cobrarán una dieta de 75 €"). VERIFIED stays 5 Nov.
+ */
+const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
+const LOREG_143 = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientocuarentaytres";
+
 /**
  * The 29N facts this guide prints, as data, for the town election pages
  * (`src/lib/programmatic/elections/mesa-duty.ts`): they import these instead
@@ -179,6 +205,7 @@ const SOURCES: B2Source[] = [
   { name: "Acuerdo 300/2026 de la Junta Electoral Central (adelanto del sorteo de las mesas)", url: "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=154736&idsesion=1117&template=Doctrina%2FJEC_Detalle", publisher: "Junta Electoral Central" },
   { name: "Instrucción 6/2011 de la Junta Electoral Central, sobre excusas de miembros de mesa (consolidada)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2011-7705", publisher: "BOE" },
   { name: "Real Decreto 605/1999, de regulación complementaria de los procesos electorales", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1999-8583", publisher: "BOE" },
+  { name: "Ordre EMT/232/2026, de 17 de novembre, instruccions per a la participació de les persones treballadores en les eleccions al Congrés i al Senat del 29 de novembre de 2026: permisos de membres de mesa, interventors i votants (DOGC núm. 9799, 20 de novembre de 2026; consultada el 21 de novembre de 2026)", url: "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf", publisher: "DOGC" },
   { name: "Calendario electoral, elecciones generales 2026", url: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf", publisher: "Junta Electoral Central" },
   { name: "Miembros de mesa: permisos y dietas", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/miembros-de-mesa/informacion-general/permisos-y-dietas/", publisher: "Ministerio del Interior" },
   { name: "Calendario electoral, elecciones a Cortes Generales 29-N", url: "https://infoelectoral.interior.gob.es/export/sites/default/pdf/procesos_electorales/Elecciones-Generales-29-N/Calendario-mural-elecciones-Cortes-Generales-2026.pdf", publisher: "Ministerio del Interior" },
@@ -330,7 +357,7 @@ const COPY: Record<Locale, T> = {
     lateTitle: "Si et surt un impediment més tard",
     late: "Si després del termini de set dies passa alguna cosa que t'impedeix anar-hi, l'has de comunicar a la Junta Electoral de Zona **almenys 72 hores abans** de les 8.00 del dia de la votació, amb justificants. Si passa encara més tard, avisa **immediatament**, i sempre abans que es constitueixi la mesa.",
     penaltyTitle: "Què passa si no hi vas",
-    penalty: "No presentar-te, abandonar el lloc sense causa legítima o no fer l'excusa o l'avís que demana la llei és un **delicte** (article 143 de la LOREG): presó de **tres mesos a un any o multa de sis a vint-i-quatre mesos**. També s'aplica als suplents.",
+    penalty: "No presentar-te, abandonar el lloc sense causa legítima o no fer l'excusa o l'avís que demana la llei és un **delicte** ([article 143 de la LOREG](" + LOREG_143 + ")): presó de **tres mesos a un any o multa de sis a vint-i-quatre mesos**. També s'aplica als suplents.",
     payTitle: "Quant es cobra per ser a una mesa electoral el 2026",
     payCaption: "Dieta per ser a la mesa electoral el 29 de novembre",
     payHeaders: ["Lloc a la mesa", "Dieta"],
@@ -355,7 +382,8 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Membres de mesa:** si el dia de la votació és laborable per a tu, tens permís retribuït de jornada completa, i **en tots els casos** una reducció de **cinc hores** de la jornada l'endemà. Per al 29N, que és diumenge, això vol dir el **dilluns 30 de novembre**. Els suplents que acaben a la mesa tenen els mateixos drets. El justificant te'l dona la Junta Electoral de Zona.",
       "**Torn de nit:** segons el Ministeri de l'Interior, el torn de nit que comença el 29 de novembre compta com a jornada del dia electoral, i la reducció de cinc hores es pot fer al torn de nit següent si comença el dia 30. Has de complir a la mesa encara que hagis treballat la jornada anterior.",
-      "**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda. A Catalunya la Generalitat fixa el detall per a cada elecció: el 2023 eren dues hores si l'horari coincidia més de dues i menys de quatre amb el de votació, i quatre si coincidia quatre o més, i l'empresa decidia en quin moment. L'ordre per al 29N encara no és al DOGC (consultat el 13 de novembre, fins al número 9794); la del 2023 (Ordre EMT/178/2023) va sortir el 7 de juliol, 16 dies abans de votar.",
+      `**Membres de mesa, segons l'ordre de la Generalitat per al 29N:** les cinc hores de l'endemà són **les cinc primeres** de la teva jornada del dilluns 30, també si el diumenge fas festa; si el dissabte 28 et toca torn de nit, l'empresa te l'ha de canviar si li ho demanes, i et paga el permís quan justifiques que has estat a la mesa ([Ordre EMT/232/2026](${EMT_232}), DOGC del 20 de novembre del 2026, articles 4, 5 i 7).`,
+      `**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda (Reial decret 605/1999, article 13). La mateixa ordre en fixa el repartiment per al 29N: quatre hores si la jornada coincideix quatre o més amb l'horari de votació, dues si coincideix més de dues i menys de quatre, i cap si coincideix dues o menys; l'empresa decideix en quin moment (articles 1 i 2).`,
       "**Seguretat Social:** titulars i suplents estan coberts aquell dia; qualsevol lesió, també anant-hi o tornant, es considera accident de treball.",
     ],
     dayTitle: "Com és el dia",
@@ -376,6 +404,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "Què he de fer si m'ha tocat ser membre de mesa?", answer: "Llegeix el manual que arriba amb la notificació i presenta't a les 8.00 del diumenge 29 de novembre al local que s'hi indica. Si no hi pots anar, tens set dies des de la notificació per presentar una excusa documentada a la Junta Electoral de Zona; a partir dels 65 anys, hi pots renunciar en el mateix termini." },
+      { question: "A quina hora he de ser a la mesa electoral?", answer: "A les 8.00 del diumenge 29 de novembre, al local que diu la notificació: presidència, vocals i suplents «se reúnen a las ocho horas del día fijado para la votación en el local correspondiente» (LOREG, article 80.1). Es vota de 9.00 a 20.00, i la jornada s'acaba quan la mesa ha lliurat la documentació, sense hora fixa." },
       { question: "Puc presentar l'excusa per internet?", answer: "Sí, si tens Cl@ve: a la plataforma d'excuses del Ministeri de l'Interior, que enllaça el web oficial del 29N i que la Junta Electoral Central va habilitar amb la Instrucció 2/2023. També la pots presentar en paper a la Junta Electoral de Zona. En tots dos casos, dins dels set dies des de la notificació i amb el document que justifica la causa." },
       { question: "Quant es cobra per ser a una mesa electoral el 2026?", answer: "75 € per la jornada del 29 de novembre, segons l'Orden INT/650/2026, que s'aplica a aquestes eleccions. Els suplents només la cobren si acaben a la mesa, i la dieta no tributa a l'IRPF." },
       { question: "Quan es cobra per ser a una mesa electoral el 2026?", answer: "La dieta es guanya el dia de la votació, però cap norma oficial no fixa quan ni com es paga: no ho diuen ni l'Orden INT/650/2026 ni el manual oficial del 29N. L'ordre només indica que aquests pagaments encara es fan majoritàriament en efectiu. Pregunta-ho a la Junta Electoral de Zona o a l'Ajuntament." },
@@ -443,7 +472,7 @@ const COPY: Record<Locale, T> = {
     lateTitle: "Si te surge un impedimento más tarde",
     late: "Si después del plazo de siete días ocurre algo que te impide ir, debes comunicarlo a la Junta Electoral de Zona **al menos 72 horas antes** de las 8.00 del día de la votación, con justificantes. Si ocurre aún más tarde, avisa **de inmediato**, y siempre antes de que se constituya la mesa.",
     penaltyTitle: "Qué pasa si no te presentas a la mesa electoral",
-    penalty: "No presentarte, abandonar el puesto sin causa legítima o no hacer la excusa o el aviso que exige la ley es un **delito** (artículo 143 de la LOREG): prisión de **tres meses a un año o multa de seis a veinticuatro meses**. También se aplica a los suplentes.",
+    penalty: "No presentarte, abandonar el puesto sin causa legítima o no hacer la excusa o el aviso que exige la ley es un **delito** ([artículo 143 de la LOREG](" + LOREG_143 + ")): prisión de **tres meses a un año o multa de seis a veinticuatro meses**. También se aplica a los suplentes.",
     payTitle: "Cuánto pagan por estar en una mesa electoral en 2026",
     payCaption: "Dieta por estar en la mesa electoral el 29 de noviembre",
     payHeaders: ["Puesto en la mesa", "Dieta"],
@@ -491,11 +520,13 @@ const COPY: Record<Locale, T> = {
       title: "Si te ha tocado mesa en Cataluña",
       items: [
         `**Tu Junta Electoral de Zona:** en Cataluña hay ${CATALONIA_JEZ.boards} (${CATALONIA_JEZ.barcelona} en la provincia de Barcelona, ${CATALONIA_JEZ.girona} en la de Girona, ${CATALONIA_JEZ.lleida} en la de Lleida y ${CATALONIA_JEZ.tarragona} en la de Tarragona), menos que partidos judiciales (${CATALONIA_JEZ.districts}), porque la LOREG las sitúa en las cabeceras de los partidos judiciales de las elecciones locales de 1979 (artículo 8). Por eso, en ${CATALONIA_JEZ.elsewhere} municipios la sede de la Junta no es la cabecera de su partido judicial actual. La dirección y el teléfono de la tuya, tal como los publica la Junta Electoral Central, están en la página de tu municipio: búscalo en [las elecciones en Cataluña por municipio](${hubPath("es")}).`,
-        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 13 de noviembre, hasta el número 9794); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
+        `**Permisos en Cataluña para el 29N:** la Generalitat los ha fijado en la [Ordre EMT/232/2026](${EMT_232}) (DOGC núm. 9799, 20 de noviembre de 2026). Miembros de mesa e interventores: jornada completa el domingo 29 y **las cinco primeras horas** de su jornada del lunes 30, también si el domingo libran; el turno de noche que empieza el 29 cuenta como jornada de ese día; si te toca turno de noche el sábado 28, la empresa debe cambiártelo si se lo pides, y te paga el permiso cuando justificas que has estado en la mesa (artículos 4, 5 y 7).`,
+        "**Permiso para votar si trabajas el 29:** según la misma orden, cuatro horas si la jornada coincide cuatro o más con el horario de votación, dos si coincide más de dos y menos de cuatro, y ninguna si coincide dos o menos; la empresa decide en qué momento (artículos 1 y 2).",
       ],
     },
     faq: [
       { question: "¿Qué tengo que hacer si me ha tocado mesa electoral?", answer: "Lee el manual que llega con la notificación y preséntate a las 8:00 del domingo 29 de noviembre en el local que indica. Si no puedes ir, tienes siete días desde la notificación para presentar una excusa documentada ante la Junta Electoral de Zona; a partir de los 65 años, puedes renunciar en el mismo plazo." },
+      { question: "¿A qué hora hay que estar en la mesa electoral?", answer: "A las 8:00 del domingo 29 de noviembre, en el local que indica la notificación: presidencia, vocales y suplentes «se reúnen a las ocho horas del día fijado para la votación en el local correspondiente» (LOREG, artículo 80.1). Se vota de 9:00 a 20:00, y la jornada termina cuando la mesa ha entregado la documentación, sin hora fija." },
       { question: "¿Puedo presentar la excusa por internet?", answer: "Sí, si tienes Cl@ve: en la plataforma de excusas del Ministerio del Interior, que enlaza la web oficial del 29N y que la Junta Electoral Central habilitó con la Instrucción 2/2023. También puedes presentarla en papel ante la Junta Electoral de Zona. En los dos casos, dentro de los siete días desde la notificación y con el documento que justifica la causa." },
       { question: "¿Cuánto pagan por estar en una mesa electoral en 2026?", answer: "75 € por la jornada del 29 de noviembre, según la Orden INT/650/2026, que se aplica a estas elecciones. Los suplentes solo la cobran si acaban en la mesa, y la dieta no tributa en el IRPF." },
       { question: "¿Cuándo se cobra por estar en una mesa electoral en 2026?", answer: "La dieta se gana el día de la votación, pero ninguna norma oficial fija cuándo ni cómo se paga: no lo dicen ni la Orden INT/650/2026 ni el manual oficial del 29N. La orden solo indica que estos pagos aún se hacen mayoritariamente en efectivo. Pregúntalo a la Junta Electoral de Zona o al Ayuntamiento." },
@@ -563,7 +594,7 @@ const COPY: Record<Locale, T> = {
     lateTitle: "If something comes up later",
     late: "If, after the seven days, something prevents you from going, tell the Junta Electoral de Zona **at least 72 hours before** 08:00 on polling day, with proof. If it happens even later, tell them **immediately**, and always before the table is formed.",
     penaltyTitle: "What happens if you don't turn up",
-    penalty: "Failing to turn up, leaving without a legitimate reason, or not giving the excuse or notice the law requires is a **criminal offence** (article 143 of the electoral law): **three months to a year in prison, or a fine of six to twenty-four months** (a day-fine). It applies to substitutes too.",
+    penalty: "Failing to turn up, leaving without a legitimate reason, or not giving the excuse or notice the law requires is a **criminal offence** ([article 143 of the electoral law](" + LOREG_143 + ")): **three months to a year in prison, or a fine of six to twenty-four months** (a day-fine). It applies to substitutes too.",
     payTitle: "How much polling-station duty pays in 2026",
     payCaption: "Allowance for sitting on a polling-station table on 29 November",
     payHeaders: ["Role", "Allowance"],
@@ -588,7 +619,8 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Mesa members:** if polling day is a working day for you, you get the whole day off with pay, and **in every case** five fewer hours of work the next day. For 29 November, a Sunday, that is **Monday 30 November**. Substitutes who end up sitting get the same. The electoral board issues the certificate.",
       "**Night shifts:** according to the Interior Ministry, a night shift that starts on 29 November counts as polling-day work, and the five-hour reduction can be taken on your next night shift if it starts on the 30th. You must serve at the table even if you worked the day before.",
-      "**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work. In Catalonia the Generalitat sets the detail for each election: in 2023 it was two hours if your shift overlapped voting hours by more than two and less than four, and four if it overlapped by four or more, with the employer choosing when. The order for 29 November was still not in the DOGC on 13 November (issues up to no. 9794 checked); the 2023 one (Ordre EMT/178/2023) came out on 7 July, 16 days before the vote.",
+      `**Mesa members, under the Generalitat's order for 29 November:** the five hours the next day are **the first five** of your working day on Monday 30 November, even if Sunday is your day off; if you are on a night shift on Saturday 28, your employer must change it if you ask, and pays the leave once you show you sat at the table ([Ordre EMT/232/2026](${EMT_232}), DOGC, 20 November 2026, articles 4, 5 and 7).`,
+      `**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work (Royal Decree 605/1999, article 13). The same order sets them for 29 November in Catalonia: four hours if your shift overlaps polling hours by four or more, two if by more than two and less than four, and none if by two or less; your employer decides when (articles 1 and 2).`,
       "**Social Security:** chairs, members and substitutes are covered that day; any injury, including on the way there or back, counts as a work accident.",
     ],
     dayTitle: "How the day goes",
@@ -609,6 +641,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "What do I have to do if I have been drawn?", answer: "Read the manual that comes with the notification and be at the polling station it names at 08:00 on Sunday 29 November. If you cannot go, you have seven days from the notification to give the Junta Electoral de Zona a documented excuse; from age 65 you can decline within the same seven days." },
+      { question: "What time do I have to be at the polling station?", answer: "At 08:00 on Sunday 29 November, at the polling station named on your notification: the chair, members and substitutes \"se reúnen a las ocho horas del día fijado para la votación en el local correspondiente\", meet at eight o'clock on polling day (electoral law, article 80.1). Voting runs from 09:00 to 20:00, and the day ends when the table has handed in its documents, at no fixed time." },
       { question: "Can I file my excuse online?", answer: "Yes, with Cl@ve: through the Interior Ministry's excuse platform, which the official 29 November website links to and the Central Electoral Board enabled in Instruction 2/2023. You can also file it on paper with the Junta Electoral de Zona. Either way, within seven days of the notification and with the document that proves your reason." },
       { question: "How much does polling-station duty pay in Spain in 2026?", answer: "€75 for polling day, 29 November, under Orden INT/650/2026, which applies to this election. Substitutes are paid only if they sit, and the allowance is not taxed." },
       { question: "When do you get paid for polling-station duty in 2026?", answer: "The allowance is earned on polling day, but no official rule sets when or how it is paid: neither Orden INT/650/2026 nor the official 29 November manual says. The order only notes that these payments are still mostly made in cash. Ask the Junta Electoral de Zona or your town hall." },

@@ -673,7 +673,10 @@ test("election night: provisional, no CERA, no forecasts, no invented site", () 
   for (const locale of ["ca", "es", "en"] as const) {
     const text = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
     for (const pattern of words[locale]!) assert.match(text, pattern, `${locale}: ${pattern}`);
-    assert.deepEqual(text.match(/\d+(,\d+)? ?%/g), ["30 %"], `${locale}: only the worked example is a percentage`);
+    // 21 Nov 2026: the legal 3 % threshold (LOREG art. 163.1.a) joins the 30 % reading example; no result percentage.
+    const percentages = text.match(/\d+(,\d+)? ?%/g) ?? [];
+    assert.ok(percentages.includes("30 %"), `${locale}: the reading example`);
+    assert.deepEqual([...new Set(percentages)].sort(), ["3 %", "30 %"], `${locale}: only the worked example and the legal threshold are percentages`);
     assert.doesNotMatch(text, /sondeig a peu d'urna|sondeo a pie de urna|exit poll|majoria absoluta|mayoría absoluta|absolute majority|guanyador|ganador|winner|is winning/i);
     assert.doesNotMatch(text, /resultados\.[a-z]|generales\d+j?\.es|https?:\/\/resultados/i);
   }

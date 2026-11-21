@@ -165,10 +165,11 @@ test("voting: where to vote = the INE finder, the census card, the 19 Nov list, 
     const text = bodyToPlainText(VOTING.editions[locale].blocks);
     assert.match(text, /2 (i|y|and) (el )?10 (de )?(novembre|noviembre|November)/, `${locale}: census card window`);
     assert.match(text, /19 (de )?(novembre|noviembre|November)[^.]*(INE|definitiv|final)|(INE|definitiv|final)[^.]*19 (de )?(novembre|noviembre|November)/, `${locale}: final list`);
-    // Every outbound link in the body goes to an official or primary source.
+    // Every outbound link in the body goes to an official or primary source
+    // (21 Nov 2026: the DOGC, portaldogc.gencat.cat, for Ordre EMT/232/2026).
     const hosts = [...raw.matchAll(/\]\((https?:\/\/[^/)]+)/g)].map((m) => new URL(m[1]!).hostname);
     for (const host of hosts) {
-      assert.match(host, /(^|\.)((ine|boe|correos)\.es|gob\.es|29neleccionesgenerales\.es|juntaelectoralcentral\.es)$/, `${locale}: ${host}`);
+      assert.match(host, /(^|\.)((ine|boe|correos)\.es|gob\.es|29neleccionesgenerales\.es|juntaelectoralcentral\.es|portaldogc\.gencat\.cat)$/, `${locale}: ${host}`);
     }
   }
 });

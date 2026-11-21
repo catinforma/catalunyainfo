@@ -11206,3 +11206,99 @@ Wrong if on 28 Dec the Reis ES page has dropped below 8 on its two head queries.
 cap-d-any-barcelona 14`; town queries with `gaps 14 400 | grep -iE 'reis|reyes|cavalcada|cabalgata'`) and **2027-01-08**.
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — 29N election-week questions: one page answers each first, the official rule quoted and linked; Catalonia's 29N voter-leave order (Ordre EMT/232/2026, DOGC 20 Nov) replaces every "not yet in the DOGC" line, ca + es + en (body only; deploy, then groups `voting`, `mesa`, `election-night`, `candidates`) (review 2026-11-30 and 2026-12-07)
+
+**Why.** Searches peak Thu 26 – Sun 29 Nov (target 30,000 sessions on 29 Nov, `docs/MEDIA_PLAN.md`); the pages must be
+right and recrawled before then. Each election-week question was checked against the cluster (how-to-vote, postal vote,
+mesa, election night, candidates, town pages): most already had a page that answers it, five did not, and one fact was
+stale on three pages and the town-page layer. **Titles, descriptions and leads untouched** (11, 16 and 20 Nov windows;
+26 Nov elections review). Low-demand noindex list, strike files, consent, AdSense: untouched.
+
+**Question → page (already answered / added here).**
+| Question | Page that answers it first | Status |
+| --- | --- | --- |
+| Mesa: 2026 dieta (75 €, Orden INT/650/2026), day-off rights, art. 143 penalty, excuses, late impediment | mesa guide | already; added: FAQ "¿A qué hora hay que estar en la mesa electoral?" quoting LOREG 80.1, penalty box links art. 143 on the BOE, Catalan order's first five hours / night shift / shift change |
+| Paid time off to vote (and for mesa members) | how-to-vote, new H2 "¿Cuántas horas te dan para ir a votar si trabajas el 29N?" / "Quantes hores…" / "Paid time off to vote on 29 November: how many hours do you get?" with the order's table | **added** (was "the order is not out yet", dated 13 Nov) |
+| Valid ID, vote without DNI, expired DNI, MiDNI | how-to-vote | already (expired, MiDNI); added FAQ "¿Se puede votar sin DNI?" / "Puc votar sense DNI?" / "Can I vote without a DNI?" quoting LOREG 85.1, day item links art. 85 |
+| Polling hours, INE lookup, CERA/ERTA (closed) | how-to-vote | already (no change) |
+| Blank vs null vote and how each counts; 3 % per constituency | election night, new H2 + table | **added** |
+| D'Hondt, seats per Catalan province (RD 806/2026), Senate (up to 3) | election night (D'Hondt with the LOREG's own worked example; seats table from the decree's annex; Senate H2); candidates keeps the ballot rules | **added** (seats table, D'Hondt, Senate count); Senate ballot already on candidates |
+| When results are known (provisional from 20:00; general count) | election night | already; added LOREG 103.1 quote ("el quinto día siguiente al de la votación", Fri 4 Dec) |
+| Is 29 Nov a holiday / are shops open | how-to-vote FAQ | already (holiday); added: shops may open on Sunday 29 except Gironella, Martorell and Salt (`closedOn("2026-11-29")` from shops.ts), link to the shops guide |
+
+**Sources read on 21 Nov 2026** (curl, browser UA; fact pack `research_notes/el-week-29n-2026-11-21.md`):
+- **Ordre EMT/232/2026, de 17 de novembre** (DOGC núm. 9799, 20.11.2026; found in the DOGC summary API, PDF
+  https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf, 200): art. 1.1 "un permís de fins a quatre hores … retribuït i
+  no recuperable"; 1.2 none "si la coincidència és, com a màxim, de dues hores", two "si és de més de dues hores i de menys
+  de quatre", four "si aquesta coincidència és de quatre o més hores"; art. 2 the employer picks the moment; art. 3 the
+  "justificant acreditatiu d'haver votat, expedit per la mesa electoral"; art. 4.1 mesa members "la jornada completa del dia
+  29 de novembre de 2026 i, a més, … les cinc primeres hores de la jornada laboral del dia immediatament posterior"; 4.2 night
+  shift; art. 5 also on weekly rest; art. 7 shift change on request; art. 10 public staff.
+- BOE, consolidated texts: RD 605/1999 art. 13.1 ("hasta cuatro horas libres para el ejercicio del derecho del voto, que serán
+  retribuidas"); LOREG (open-data API) arts. 28.1, 80.1, 84.1, 85.1, 96, 97.2, 98.2, 103.1, 143, 163.1 (incl. its worked
+  example) and 166.1; RD 806/2026 art. 2, art. 3.2 ("en cada circunscripción provincial se eligen cuatro Senadores") and annex
+  (Barcelona 32, Girona 6, Lleida 4, Tarragona 6); Orden INT/650/2026 (BOE 156, 27.6.2026: "una dieta de 75,00 euros").
+- Interior, 29neleccionesgenerales.es: "voto presencial" (DNI/MiDNI, "Pasaporte (con fotografía)", "Permiso (carné) de
+  conducir (con fotografía)", "No importa que estos documentos estén caducados, pero deben ser los originales, no valen
+  fotocopias"), "Permisos y dietas" ("cobrarán una dieta de 75 €"); home page: still no results link. INE cid=1700 (postal
+  hand-in "antes de las 14 horas del día 26 de noviembre"); JEC session list (latest 19 Nov, nothing on ID/leave/results);
+  JEC 29N calendar (general count 4–7 Dec). Not reachable from the VPS: infoelectoral (403), sede.ine.gob.es (timeout),
+  lamoncloa.gob.es (timeout).
+
+**What changed.**
+1. `voting.ts` (ca/es/en, body): the leave H2 + table + five items (when, proof of voting, public staff, mesa members → mesa
+   guide, outside Catalonia); the "working that day" item and the paid-hours FAQ give the order's tiers; the postal-vote
+   four hours are said to have ended on 19 Nov; FAQ "without a DNI" (LOREG 85.1 quoted); the holiday FAQ's shops sentence
+   and link; the election-night onward link now names blank/null and the seat count. Ordre EMT/178/2023 left the sources;
+   EMT/232/2026 joined. VERIFIED stays 3 Nov (CERA pages and the INE finder not re-read).
+2. `election-night.ts` (ca/es/en, body): seats-per-province table (RD 806/2026 art. 3 quoted, linked); H2s "Voto en blanco y
+   voto nulo: diferencias y cómo cuenta cada uno" (LOREG 96.5 quoted, table), "Cómo se reparten los escaños: la ley D'Hondt y
+   el mínimo del 3 %" (163.1.a quoted, four steps, the law's own example A–F with the eight winning quotients in bold),
+   "Cómo se eligen los senadores: los cuatro más votados de cada provincia" (166.1.b quoted); two FAQs (blank vs null,
+   D'Hondt); 103.1 quoted in "when official". No real result, poll or projection; the candidates and hub links stay once.
+3. `mesa.ts` (ca/es/en, body): Catalan order for mesa members (first five hours on Mon 30, night shift, shift change, paid
+   once justified) and voters; FAQ on what time to be there (LOREG 80.1); penalty box links LOREG 143. VERIFIED stays 5 Nov.
+4. `candidates.ts` (ca/es/en, body): the election-night link label says "y cómo se reparten los escaños (ley D'Hondt, voto
+   en blanco y nulo)".
+5. `election-day.ts` (town pages, comarca pages, hubs; shows from 28 Nov 00:00): the "working today" line gives the Catalan
+   tiers and links the DOGC order; the 30 Nov mesa line says "the first five hours"; the ID line cites Interior's page.
+6. Tests: new `tests/election-week.test.ts` (5); `tests/batch02.test.ts` election-night percentage rule now allows the legal
+   "3 %"; `tests/election-cluster.test.ts` official-host list adds `portaldogc.gencat.cat`. `npm run seo:body-dates`
+   (elections family).
+
+**Baseline** (GSC 8–21 Nov, 14 d, 21 Nov partial; clicks / impressions / CTR / mean position, `snapshot.py page <substr> 14`):
+- how-to-vote: ES `como-votar` 131 / 8,793 / 1.5 % / 6.9; CA `com-votar` 40 / 1,748 / 2.3 % / 6.9; EN `how-to-vote` 131 /
+  6,932 / 1.9 % / 6.4.
+- election night: EN `spain-election-night` 117 / 4,339 / 2.7 % / 6.8 ("election results" 248 at 9.0); ES `noche-electoral`
+  16 / 502 / 3.2 % / 7.1 ("cuando salen los resultados de las elecciones" 72 at 7.9); CA `nit-electoral` 2 / 79 / 2.5 % / 9.0.
+- mesa: ES `miembro-mesa` 21 / 548 / 3.8 % / 8.0; CA `membre-mesa` 47 / 1,342 / 3.5 % / 6.3; EN `polling-station` 16 / 1,594 /
+  1.0 % / 4.0.
+- candidates: ES 1,161 / 11,405 / 10.2 % / 5.7; CA 439 / 5,993 / 7.3 % / 6.4; EN 71 / 1,290 / 5.5 % / 5.6.
+- town families: `/es/elecciones/` 751 / 14,807 / 5.1 % / 5.6; `/ca/eleccions/` 552 / 15,336 / 3.6 % / 6.1; `/en/elections/`
+  21 / 436 / 4.8 % / 5.6.
+- Target queries, whole site, 28 d (regex en blanco|vot en blanc|blank vote|nulo|vot nul|null vote|hondt|permiso para
+  votar|horas para votar|hores per votar|sin dni|sense dni|a que hora.*mesa|tiendas.*29|botigues.*29): **1 impression**
+  ("votos nulos" → `/en/elections/badalona/`). Demand for these arrives in election week.
+
+**Prediction.** 26–29 Nov: election night ES/CA rank ≤ 10 for "voto en blanco y nulo" / "diferencia voto en blanco y nulo" /
+"ley d'hondt" / "vot en blanc" and get ≥ 500 impressions on them together; how-to-vote ES/CA ≤ 10 for "horas para votar
+trabajo 29n" / "permiso para votar" / "votar sin dni"; mesa ES "a qué hora hay que ir a la mesa electoral" ≤ 8. Wrong if on
+30 Nov the new H2 queries are still under 50 impressions together.
+
+**Review 2026-11-30** (`snapshot.py page noche-electoral 3`, `page nit-electoral 3`, `page spain-election-night 3`, `page
+como-votar 3`, `page com-votar 3`, `page miembro-mesa 3`, `page membre-mesa 3`; `gaps 7 600 | grep -iE
+'blanco|nulo|blanc|nul|hondt|permis|dni|hora.*mesa'`, plus a GSC query filter on the target regex above) and
+**2026-12-07** (same, 14 d; then rewrite the dated sections for the May 2027 municipal elections: 5 % threshold, no Senate).
+No revert rule: body facts, not a snippet test. Confounders: the 26 Nov title review, the 28 Nov election-day layer, the
+news cycle.
+
+**Go-live.** Deploy (`election-day.ts` and the B2 modules the publish route reads), then publish `voting mesa election-night
+candidates`. IndexNow prefixes: `/ca/guies/com-votar-eleccions-catalunya`, `/es/guias/como-votar-elecciones-cataluna`,
+`/en/guides/how-to-vote-catalonia`, `/ca/guies/nit-electoral-resultats-escrutini`,
+`/es/guias/noche-electoral-resultados-escrutinio`, `/en/guides/spain-election-night-results`,
+`/ca/guies/membre-mesa-electoral`, `/es/guias/miembro-mesa-electoral`, `/en/guides/polling-station-duty-spain`,
+`/ca/guies/candidats-eleccions-generals-catalunya`, `/es/guias/candidatos-elecciones-generales-cataluna`,
+`/en/guides/spain-general-election-candidates-catalonia`, `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
+
+**Outcome:** _pending_
