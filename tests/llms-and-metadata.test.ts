@@ -17,6 +17,7 @@ const { LOCALES } = await import("../src/lib/i18n/config.ts");
 // Every family's own list of URLs (what its sitemap emits).
 const { holidayFamilyPaths } = await import("../src/lib/programmatic/holidays/paths.ts");
 const { fuelFamilyPaths } = await import("../src/lib/programmatic/fuel/sitemap.ts");
+const { spainFamilyPaths } = await import("../src/lib/programmatic/fuel/spain-sitemap.ts");
 const { rodaliesFamilyPaths } = await import("../src/lib/programmatic/rodalies/pages.ts");
 const { reservoirFamilyPaths } = await import("../src/lib/programmatic/reservoirs/pages.ts");
 const { pvpcFamilyPaths } = await import("../src/lib/programmatic/pvpc/pages.ts");
@@ -120,6 +121,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
   const known = new Set<string>([
     ...holidayFamilyPaths().map((p) => p.path),
     ...fuelFamilyPaths().map((p) => p.path),
+    ...spainFamilyPaths().map((p) => p.path),
     ...rodaliesFamilyPaths().map((p) => p.path),
     ...reservoirFamilyPaths().map((p) => p.path),
     ...pvpcFamilyPaths().map((p) => p.path),

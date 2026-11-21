@@ -11,6 +11,7 @@ import { fuelHubPath, fuelPath, placeLocaleFor, type FuelHubLocale } from "@/lib
 
 import { FuelPrices } from "./FuelPrices";
 import { DriverGuides, Guidance, Sources } from "./parts";
+import { RestOfSpain } from "./SpainPages";
 
 export function hubTotals(): { stations: number; towns: number } {
   return { stations: STATIONS.stations.length, towns: MUNICIPALITIES.municipalities.length };
@@ -193,6 +194,8 @@ export function FuelHubPage({ locale, prices = null, now }: { locale: FuelHubLoc
               </li>
             ))}
           </ul>
+
+          <RestOfSpain locale={locale} />
 
           <Guidance locale={locale} />
         </div>

@@ -1,0 +1,216 @@
+{
+ "readOn": "2026-11-21",
+ "ministryTimestamp": "21/11/2026 11:52:04",
+ "api": "https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/",
+ "stations": 11541,
+ "provinces": {
+  "10": {
+   "stations": 159,
+   "towns": 78
+  },
+  "11": {
+   "stations": 293,
+   "towns": 38
+  },
+  "12": {
+   "stations": 200,
+   "towns": 55
+  },
+  "13": {
+   "stations": 218,
+   "towns": 64
+  },
+  "14": {
+   "stations": 208,
+   "towns": 56
+  },
+  "15": {
+   "stations": 291,
+   "towns": 78
+  },
+  "16": {
+   "stations": 121,
+   "towns": 63
+  },
+  "17": {
+   "stations": 276,
+   "towns": 101
+  },
+  "18": {
+   "stations": 288,
+   "towns": 90
+  },
+  "19": {
+   "stations": 94,
+   "towns": 43
+  },
+  "20": {
+   "stations": 148,
+   "towns": 41
+  },
+  "21": {
+   "stations": 143,
+   "towns": 54
+  },
+  "22": {
+   "stations": 125,
+   "towns": 67
+  },
+  "23": {
+   "stations": 212,
+   "towns": 74
+  },
+  "24": {
+   "stations": 168,
+   "towns": 73
+  },
+  "25": {
+   "stations": 184,
+   "towns": 91
+  },
+  "26": {
+   "stations": 86,
+   "towns": 36
+  },
+  "27": {
+   "stations": 130,
+   "towns": 50
+  },
+  "28": {
+   "stations": 894,
+   "towns": 112
+  },
+  "29": {
+   "stations": 314,
+   "towns": 57
+  },
+  "30": {
+   "stations": 471,
+   "towns": 39
+  },
+  "31": {
+   "stations": 256,
+   "towns": 108
+  },
+  "32": {
+   "stations": 91,
+   "towns": 46
+  },
+  "33": {
+   "stations": 242,
+   "towns": 54
+  },
+  "34": {
+   "stations": 73,
+   "towns": 34
+  },
+  "35": {
+   "stations": 257,
+   "towns": 33
+  },
+  "36": {
+   "stations": 230,
+   "towns": 55
+  },
+  "37": {
+   "stations": 112,
+   "towns": 50
+  },
+  "38": {
+   "stations": 242,
+   "towns": 50
+  },
+  "39": {
+   "stations": 166,
+   "towns": 60
+  },
+  "40": {
+   "stations": 77,
+   "towns": 45
+  },
+  "41": {
+   "stations": 445,
+   "towns": 93
+  },
+  "42": {
+   "stations": 43,
+   "towns": 21
+  },
+  "43": {
+   "stations": 233,
+   "towns": 71
+  },
+  "44": {
+   "stations": 69,
+   "towns": 43
+  },
+  "45": {
+   "stations": 244,
+   "towns": 101
+  },
+  "46": {
+   "stations": 649,
+   "towns": 159
+  },
+  "47": {
+   "stations": 151,
+   "towns": 53
+  },
+  "48": {
+   "stations": 133,
+   "towns": 55
+  },
+  "49": {
+   "stations": 91,
+   "towns": 48
+  },
+  "50": {
+   "stations": 237,
+   "towns": 75
+  },
+  "51": {
+   "stations": 10,
+   "towns": 1
+  },
+  "52": {
+   "stations": 11,
+   "towns": 1
+  },
+  "01": {
+   "stations": 75,
+   "towns": 20
+  },
+  "02": {
+   "stations": 157,
+   "towns": 49
+  },
+  "03": {
+   "stations": 481,
+   "towns": 78
+  },
+  "04": {
+   "stations": 227,
+   "towns": 52
+  },
+  "05": {
+   "stations": 71,
+   "towns": 39
+  },
+  "06": {
+   "stations": 284,
+   "towns": 103
+  },
+  "07": {
+   "stations": 222,
+   "towns": 52
+  },
+  "08": {
+   "stations": 800,
+   "towns": 184
+  },
+  "09": {
+   "stations": 139,
+   "towns": 64
+  }
+ }
+}

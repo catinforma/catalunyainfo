@@ -4,16 +4,40 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { fuelDescription, fuelTitle, hubMeta } from "@/lib/programmatic/fuel/copy";
-import type { Place } from "@/lib/programmatic/fuel/data";
+import { MUNICIPALITIES, type Place } from "@/lib/programmatic/fuel/data";
 import { freshness, type LivePayload } from "@/lib/programmatic/fuel/live";
 import { loadServerPrices } from "@/lib/programmatic/fuel/server";
-import { fuelHubPath, fuelHubTranslations, fuelPath, fuelTranslations, type FuelHubLocale, type FuelLocale } from "@/lib/programmatic/fuel/paths";
+import {
+  fuelHubPath,
+  fuelHubTranslations,
+  fuelPath,
+  fuelTranslations,
+  spainHubPath,
+  spainHubTranslations,
+  spainProvincePath,
+  spainProvinceTranslations,
+  type FuelHubLocale,
+  type FuelLocale,
+} from "@/lib/programmatic/fuel/paths";
+import { spainSummary, type SpainProvince, type SpainSummary } from "@/lib/programmatic/fuel/spain";
+import {
+  provinceLabel,
+  spainHubDescription,
+  spainHubFaq,
+  spainHubMeta,
+  spainProvinceDescription,
+  spainProvinceFaq,
+  spainProvinceH1,
+  spainProvinceTitle,
+} from "@/lib/programmatic/fuel/spain-copy";
+import { loadSpainPrices } from "@/lib/programmatic/fuel/spain-server";
 import { fuelHubDataset, fuelPlaceDataset } from "@/lib/programmatic/fuel/structured";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { breadcrumbSchema, datasetSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { FuelHubPage, hubCrumbs, hubTotals } from "./FuelHubPage";
 import { FuelPlacePage, placeCrumbs } from "./FuelPlacePage";
+import { SpainHubPage, SpainProvincePage, spainHubCrumbs, spainProvinceCrumbs } from "./SpainPages";
 
 /**
  * Route bodies for the fuel family. Each `page.tsx` under
@@ -45,6 +69,100 @@ export async function FuelHubRoute({ locale }: { locale: FuelHubLocale }) {
         <FuelHubPage locale={locale} prices={prices} now={now} />
       </main>
       <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), fuelHubDataset(locale, dateModified)])} />
+      <SiteFooter locale={locale} />
+    </>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Spain by province (21 Nov 2026)                                            */
+/* -------------------------------------------------------------------------- */
+
+/** The national list for this render, reduced once per list (spain.ts); null when none under a day old. */
+async function spainForRender(): Promise<SpainSummary | null> {
+  return spainSummary(await loadSpainPrices(), Date.now());
+}
+
+function spainDataset(input: { path: string; name: string; description: string; locale: FuelHubLocale; spatial: string; dateModified?: string | null }) {
+  const prices = MUNICIPALITIES.sources.prices;
+  return datasetSchema({
+    path: input.path,
+    name: input.name,
+    description: input.description,
+    locale: input.locale,
+    creator: prices.publisher,
+    license: prices.licenceUrl,
+    isBasedOn: [prices.url],
+    spatialCoverage: input.spatial,
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+  });
+}
+
+function faqPage(faq: { q: string; a: string }[]) {
+  return { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+}
+
+const SPAIN: Record<FuelHubLocale, string> = { es: "España", ca: "Espanya", en: "Spain" };
+
+export async function spainHubMetadata(locale: FuelHubLocale): Promise<Metadata> {
+  const summary = await spainForRender();
+  return buildMetadata({ locale, path: spainHubPath(locale), title: spainHubMeta(locale).title, description: spainHubDescription(locale, summary), translations: spainHubTranslations() });
+}
+
+export async function SpainHubRoute({ locale }: { locale: FuelHubLocale }) {
+  const summary = await spainForRender();
+  const meta = spainHubMeta(locale);
+  return (
+    <>
+      <SiteHeader locale={locale} translations={spainHubTranslations()} activeSection={null} />
+      <main id="main">
+        <SpainHubPage locale={locale} summary={summary} />
+      </main>
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(spainHubCrumbs(locale)),
+          spainDataset({ path: spainHubPath(locale), name: meta.h1, description: spainHubDescription(locale, summary), locale, spatial: SPAIN[locale], dateModified: summary?.updated }),
+          summary ? faqPage(spainHubFaq(locale, summary)) : null,
+        ])}
+      />
+      <SiteFooter locale={locale} />
+    </>
+  );
+}
+
+export async function spainProvinceMetadata(locale: FuelHubLocale, province: SpainProvince): Promise<Metadata> {
+  const summary = await spainForRender();
+  return buildMetadata({
+    locale,
+    path: spainProvincePath(locale, province.slug),
+    title: spainProvinceTitle(province, locale),
+    description: spainProvinceDescription(province, locale, summary),
+    translations: spainProvinceTranslations(province.slug),
+  });
+}
+
+export async function SpainProvinceRoute({ locale, province }: { locale: FuelHubLocale; province: SpainProvince }) {
+  const summary = await spainForRender();
+  return (
+    <>
+      <SiteHeader locale={locale} translations={spainProvinceTranslations(province.slug)} activeSection={null} />
+      <main id="main">
+        <SpainProvincePage province={province} locale={locale} summary={summary} />
+      </main>
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(spainProvinceCrumbs(province, locale)),
+          spainDataset({
+            path: spainProvincePath(locale, province.slug),
+            name: spainProvinceH1(province, locale),
+            description: spainProvinceDescription(province, locale, summary),
+            locale,
+            spatial: `${provinceLabel(province, locale)}, ${SPAIN[locale]}`,
+            dateModified: summary?.updated,
+          }),
+          summary?.provinces[province.code] ? faqPage(spainProvinceFaq(province, locale, summary)) : null,
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );

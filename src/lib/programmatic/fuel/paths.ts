@@ -59,3 +59,42 @@ export function fuelTranslations(kind: PathKind, slug: string): Record<FuelLocal
 export function fuelHubTranslations(): Record<FuelHubLocale, string> {
   return { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("en") };
 }
+
+/*
+ * Spain by province (21 Nov 2026; lib/programmatic/fuel/spain.ts). The 48
+ * provinces and autonomous cities outside Catalonia, in all three languages:
+ *
+ *   es  /es/gasolineras/provincia/               every province of Spain, one table
+ *       /es/gasolineras/provincia/<provincia>/   madrid, a-coruna, illes-balears, ceuta, …
+ *   ca  /ca/benzineres/provincia/ …              the same shapes
+ *   en  /en/fuel-prices-spain/                   the same table
+ *       /en/fuel-prices-spain/<province>/        the same slugs
+ *
+ * In es and ca a Spanish province sits in the segment the four Catalan ones
+ * already use (/provincia/barcelona/), so "province" means one thing in the
+ * family and the index of all of them is that segment itself. English had a
+ * Catalonia-only hub (/en/fuel-prices-catalonia/), which cannot hold Madrid:
+ * the smallest consistent option is a sibling named like the other Spain-wide
+ * English pages (/en/butane-price-spain/, /en/electricity-price-spain/), with
+ * the provinces under it. Slugs are the INE names' (gordo/provinces.ts), the
+ * same in every language. The Catalan provinces keep their own pages (ca/es,
+ * noindex, lib/seo/low-demand.ts); the Spain table links them, and in English
+ * the Catalonia hub's area table.
+ */
+export const EN_SPAIN_FUEL_SEGMENT = "fuel-prices-spain";
+
+export function spainHubPath(locale: FuelHubLocale): string {
+  return locale === "en" ? `/en/${EN_SPAIN_FUEL_SEGMENT}/` : `/${locale}/${FUEL_ROUTE[locale].root}/${FUEL_ROUTE[locale].province}/`;
+}
+
+export function spainProvincePath(locale: FuelHubLocale, slug: string): string {
+  return `${spainHubPath(locale)}${slug}/`;
+}
+
+export function spainHubTranslations(): Record<FuelHubLocale, string> {
+  return { ca: spainHubPath("ca"), es: spainHubPath("es"), en: spainHubPath("en") };
+}
+
+export function spainProvinceTranslations(slug: string): Record<FuelHubLocale, string> {
+  return { ca: spainProvincePath("ca", slug), es: spainProvincePath("es", slug), en: spainProvincePath("en", slug) };
+}

@@ -10592,3 +10592,87 @@ current time.
 permission before any ad on the six PVPC URLs (unchanged).
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — Fuel prices in every province of Spain: 48 province pages and one Spain table, in es, ca and en, from the Ministry's national list (deploy only; no publish group; no existing title, description or lead touched)
+
+**Why.** `research_notes/spain-utilities-opportunities-nov2026.md` item #20: "gasolinera" 197k/month, "precio gasolina" 94k,
+"precio gasoil" 53k, "precio diésel" 37k, "precio gasolina hoy" 19k; the competitors on google.es are stale news with fixed
+prices, lead-gen, or the Geoportal itself. The fuel family only covered Catalonia, and its searched pages (towns, chains) are
+noindex since 11 Nov (owner, AdSense), so the family had two indexable URLs plus the English hub.
+
+**What was built (code only; ships with the deploy).**
+1. **One national read** (`fuel/spain-upstream.ts`, `fuel/spain-server.ts`): the same MITECO REST service as the Catalan pages,
+   without the community filter (`…/EstacionesTerrestres/`; second host `sedeaplicaciones.minetur.gob.es`; both answered
+   21 Nov). Measured 21 Nov 11:52: 11,541 stations, 12.3 MB uncompressed, 8.6–10.9 s. Over the Next data cache's 2 MB limit
+   (in development it throws), so the fetch carries no cache option and the process memo is the cache: one promise shared by
+   every page and the sitemap (single flight), kept 30 min (= the routes' `revalidate` and the Ministry's own refresh), a
+   failure kept 1 min, 25 s timeout. ~50 reads/day (~600 MB). Reduced once per list (`spain.ts summarize`, WeakMap) to what
+   the pages print. Public sale only, as on the Catalan pages; petrol 95 E5 and gasóleo A.
+2. **Pages** (paths chosen for consistency with the module): es `/es/gasolineras/provincia/<slug>/`, ca
+   `/ca/benzineres/provincia/<slug>/` (the segment the four Catalan provinces already use, so "provincia" means one thing in
+   the family; the existing `[provincia]` routes try the Catalan page first, then the Spain one), and the index of all of them
+   at the segment itself (`/es/gasolineras/provincia/`, `/ca/benzineres/provincia/`). English had only
+   `/en/fuel-prices-catalonia/`, which cannot hold Madrid: the smallest consistent option is a sibling named like the other
+   Spain-wide English pages (`/en/butane-price-spain/`, `/en/electricity-price-spain/`): `/en/fuel-prices-spain/` and
+   `/en/fuel-prices-spain/<slug>/`. Slugs are INE's names (`gordo/provinces.ts`), the same in all three. 48 provinces ×
+   3 + 3 tables = **147 URLs, 49 per language**. The four Catalan provinces are not duplicated: the Spain table links their
+   existing (noindex) pages in es/ca and the English Catalonia hub's area table in en. No page per station or town.
+3. **Each province page** (server HTML only, no client component, ISR 1800 s + `dynamicParams` like the Catalan area pages):
+   lead with today's cheapest and median 95 and diesel, the Ministry's time and Spain's median; "Hoy, en cifras" (cheapest,
+   province median, Spain's median, difference in cents); the 10 cheapest stations for 95 and for diesel (brand, address,
+   municipality, opening hours exactly as published, OpenStreetMap link) with a legend of the Ministry's abbreviations
+   ("L-D", "24H"); the 12 municipalities with most stations (cheapest and median of each); FAQ in the searched words
+   ("¿Cuál es el precio de la gasolina hoy en X?", "¿Cuál es la gasolinera más barata de X hoy?", province vs Spain, update
+   frequency) with FAQPage JSON-LD; the family's guidance (one sentence adapted: read at most every half hour); links to
+   every other province, the Spain table and the Catalonia hub; sources and the CC BY 4.0 attribution ("el Ministerio no
+   participa en esta página ni la patrocina"). Dataset JSON-LD with `dateModified` = the Ministry's time. Title static (query
+   words, no price); description with today's cheapest 95 and diesel and the Ministry's day and time when there is a list.
+4. **The Spain table** (3 hubs): Spain's median, the provinces with the lowest and highest median, and all 52 rows (stations,
+   cheapest with brand and town, median, for 95 and diesel), FAQ.
+5. **Fallback.** No list, or one over a day old (the Catalan rule): no price anywhere in the HTML or metadata; the lead gives
+   the snapshot's station and municipality counts with their date (`fuel/spain-provinces.json`, 21 Nov 2026, written by
+   `npm run fuel:spain-snapshot -- build`), and a callout links the Geoportal. A list 4–24 h old is shown under the warning.
+6. **Sitemap**: the 147 URLs with three-language hreflang (x-default English), `lastmod` = the Ministry's time of the list the
+   pages print (same memoised read; the snapshot's day without one), `hourly`. Not in `low-demand.ts`: indexable.
+7. **Internal links**: the three Catalonia hubs get a section "Precio de la gasolina en el resto de España" (the table + 48
+   province links) after the chains, before the guidance; the today page's fuel item gets a second link ("Precio de la
+   gasolina hoy en cada provincia de España"); llms.txt lists the Spain table.
+
+**Not changed, on purpose.** Titles, descriptions, H1s and leads of the existing fuel hubs, the Catalan place pages and the
+today pages (13 and 20 Nov windows). The noindex of the Catalan town, comarca, province and chain fuel pages (owner decision
+pending). No ad, consent or AdSense change.
+
+**Baseline (GSC, 8–21 Nov, 14 days, `snapshot.py page … 14`; clicks / impressions, average position).**
+`page gasolin 14`: **4 / 1,409**, daily positions 11.7–17.6 (21 Nov not yet in). Top queries: "gasolinera" 37 @ 8.6,
+"gasolineras baratas barcelona" 35 @ 27.1, "gasolinera bonarea" 23 @ 17.9, "precio gasolina terrassa" 21 @ 18.1,
+"precio gasolina barcelona" 18 @ 18.0, "precio gasolina girona" 16 @ 23.8. `page benziner 14`: **6 / 502**, 6.2–18.6; top
+"preu gasolina esclat avui" 46 @ 11.2 (1 click), "benzineres" 35 @ 30.3. `page fuel-prices 14`: 0 / 0. No Spain-province URL
+exists yet (baseline 0).
+
+**Prediction.** Within 14 days Google indexes most of the 147 URLs and the family (pages containing `gasolin`, `benziner`,
+`fuel-prices`) rises from ~1,900 to ≥ 5,000 impressions in 14 days, the new ones on "precio gasolina <provincia>", "gasolineras
+baratas <provincia>", "precio gasolina hoy"; within 28 days ≥ 40 clicks / 14 days from the Spain pages, positions ≤ 15 on
+"precio gasolina hoy <provincia>" for some provinces. The research note expects authority to cap it (our Catalan pages sat at
+15–40): wrong if on 19 Dec the Spain pages have under 1,000 impressions in 14 days or most are "Discovered – currently not
+indexed".
+
+**Confounders.** The 20 Nov live-data entry measures the same hubs (reviews 4 and 18 Dec): read both together. The core update
+still rolling out (18 Nov entry). Fuel price news (a price shock raises every fuel query).
+
+**Review 2026-12-05 (14 days) and 2026-12-19 (28 days).** `snapshot.py page gasolin 14`, `page benziner 14`,
+`page fuel-prices 14`, `page gasolineras/provincia 14`, `page benzineres/provincia 14`, `page fuel-prices-spain 14`;
+`batch_url_inspection` on `/es/gasolineras/provincia/`,
+`/es/gasolineras/provincia/madrid/`, `/valencia/`, `/sevilla/`, `/malaga/`, `/alicante/`, `/en/fuel-prices-spain/`; the live
+sitemap's `lastmod` for `/es/gasolineras/provincia/madrid/` is the Ministry's time of that day; the HTML of a province page
+prints "Precios del Ministerio a las …" of the same day.
+
+**Go-live.** Deploy only; **no publish group**. IndexNow prefixes after the deploy: `/es/gasolineras/ /ca/benzineres/
+/en/fuel-prices-spain/ /en/fuel-prices-catalonia/ /es/hoy/ /ca/avui/ /en/today/` (only sitemap URLs are sent, so the
+noindex Catalan place pages stay out). List: `npm run fuel:spain-snapshot -- urls`.
+
+**Owner.** (a) Search Console "Request indexing" (no API) for the three Spain tables and the biggest provinces in Spanish
+(Madrid, Valencia, Alicante, Sevilla, Málaga, Murcia). (b) The Catalan town/chain fuel noindex stays as decided; these pages
+do not change it. (c) Monthly with the Catalan snapshot: `npm run fuel:spain-snapshot -- build` (only the counts used without a
+list; nothing breaks if skipped).
+
+**Outcome:** _pending_

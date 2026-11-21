@@ -14,6 +14,7 @@ import { totals } from "../src/lib/content/reservoirs/levels.ts";
 import { weekendWindow } from "../src/lib/content/weekend/agenda.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { fuelFamilyPaths } from "../src/lib/programmatic/fuel/sitemap.ts";
+import { spainFamilyPaths } from "../src/lib/programmatic/fuel/spain-sitemap.ts";
 import type { LiveStation } from "../src/lib/programmatic/fuel/live.ts";
 import { NEXT_YEAR, SNAPSHOT as HOLIDAYS } from "../src/lib/programmatic/holidays/data.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
@@ -504,6 +505,7 @@ test("every internal link resolves to a real page (family routes or the path its
     ...rodaliesFamilyPaths().map((p) => p.path),
     ...weekendFamilyPaths().map((p) => p.path),
     ...fuelFamilyPaths().map((p) => p.path),
+    ...spainFamilyPaths().map((p) => p.path),
     ...warningsFamilyPaths().map((p) => p.path),
   ]);
   for (const locale of LOCALES) {
@@ -526,6 +528,7 @@ test("every internal link resolves to a real page (family routes or the path its
       l.reservoirs.hub,
       l.reservoirs.guide,
       l.fuel.hub,
+      l.fuel.spain,
       l.weekend.agenda,
       l.weekend.hub,
       l.weekend.bridge,
