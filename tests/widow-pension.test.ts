@@ -16,13 +16,15 @@ import {
   BURDENS_CEILING_SS,
   BURDEN_THRESHOLD,
   COMPLEMENT_CAP,
-  CONVALIDATION_RECHECK_BY,
   INCOME_LIMIT,
   LGSS_ANCHOR,
   MAX_PENSION,
   OFFICIAL_PROCEDURE,
   QUOTE,
   RDL31_CHECKED,
+  RDL31_CONVALIDATED,
+  RDL31_CONVALIDATION_BOE,
+  RDL31_IN_FORCE,
   RDL31_STATUS,
   REMARRIAGE_INCOME_LIMIT,
   RULES_AS_OF,
@@ -107,11 +109,12 @@ test("sources: official hosts over https, read on the as-of day; BOE ids and art
     const url = new URL(s.url);
     assert.equal(url.protocol, "https:", key);
     assert.ok(hosts.has(url.host), `${key}: ${url.host}`);
-    assert.equal(s.read, RULES_AS_OF, key);
+    assert.equal(s.read, key === "rdl31Convalidation" ? RDL31_CHECKED : RULES_AS_OF, key);
   }
   assert.match(SOURCES.lgss.url, /BOE-A-2015-11724$/);
   assert.match(SOURCES.lgss.ref, /11\/11\/2026/);
   assert.match(SOURCES.rdl31.url, /BOE-A-2026-21872$/);
+  assert.equal(SOURCES.rdl31Convalidation.url, "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24292");
   assert.match(SOURCES.ley21.url, /BOE-A-2021-21652$/);
   assert.match(SOURCES.d3158.url, /BOE-A-1966-21116#atreintayuno$/);
   assert.match(SOURCES.rd1795.url, /BOE-A-2003-23712$/);
@@ -130,14 +133,25 @@ test(`date guard: re-read the 2027 minimums, the income limit and the SMI before
   );
 });
 
-test(`RDL 31/2026 (parejas de hecho with children): re-read its convalidación before ${CONVALIDATION_RECHECK_BY}`, () => {
-  assert.ok(RDL31_CHECKED >= RULES_AS_OF);
-  if (RDL31_STATUS === "pending") {
-    assert.ok(
-      today() < CONVALIDATION_RECHECK_BY,
-      "RDL 31/2026 (BOE-A-2026-21872) needed the Congress's convalidación within 30 days of 20 Oct 2026. Look in the BOE for the 'Resolución … convalidación' (or derogación); set RDL31_STATUS and RDL31_CHECKED here, the page's 'Convalidación pendiente' paragraph and FAQ, and the sick-leave module's CONVALIDATION_RECHECK_BY note. If repealed, art. 221.2 returns to the Ley 21/2021 wording (QUOTE.art221children2021).",
-    );
-  }
+test("RDL 31/2026 (parejas de hecho with children): convalidated on 18 Nov 2026 (BOE-A-2026-24292), and the page and FAQ say so", () => {
+  // Resolución de 18 de noviembre de 2026, del Congreso de los Diputados (Diputación Permanente), BOE of 20 Nov 2026,
+  // read on 21 Nov 2026; no "tramitación como proyecto de ley". Art. 221.2 applies from the RDL's entry into force.
+  assert.equal(RDL31_STATUS, "convalidated");
+  assert.equal(RDL31_IN_FORCE, "2026-10-21");
+  assert.equal(RDL31_CONVALIDATED, "2026-11-18");
+  assert.equal(RDL31_CONVALIDATION_BOE, "2026-11-20");
+  assert.ok(RDL31_CHECKED >= RULES_AS_OF && RDL31_CHECKED >= RDL31_CONVALIDATION_BOE);
+  assert.match(SOURCES.rdl31.ref, /convalidado el 18\/11\/2026/);
+  assert.match(QUOTE.rdl31convalidation, /acordó convalidar el Real Decreto-ley 31\/2026, de 20 de octubre/);
+  const page = read("src/components/programmatic/widow-pension/WidowPensionPage.tsx");
+  assert.match(page, /text=\{QUOTE\.rdl31convalidation\}/);
+  assert.doesNotMatch(page, /Convalidación pendiente|Convalidació pendent|Ratification pending/);
+  const partner = (l: (typeof WP_LOCALES)[number]) => widowFaq(l).find((f) => /parejas de hecho|parelles de fet|unmarried partners/i.test(f.q))!.a;
+  assert.match(partner("es"), /convalidado por el Congreso el 18 de noviembre de 2026\)/);
+  assert.match(partner("ca"), /convalidat pel Congrés el 18 de novembre de 2026\)/);
+  assert.match(partner("en"), /ratified by Congress on 18 November 2026\)/);
+  for (const l of WP_LOCALES) assert.doesNotMatch(partner(l), /pendiente|pendent|awaiting/);
+  assert.doesNotMatch(read("src/lib/seo/llms.ts"), /31\/2026, awaiting ratification/);
 });
 
 /* ----------------------------------------------------------------- engine */

@@ -6,12 +6,13 @@ import { test } from "node:test";
 import { CALC_COPY, SL_LOCALES, daysFromEnd, endFromDays, ofMonthYear, readHash, sickLeaveEditions, sickLeavePath, writeHash } from "../src/lib/programmatic/sick-leave/copy.ts";
 import { DEFAULT_INPUT, SPECIAL_KINDS, baseFromAnnualGross, calculateSickLeave, referenceMonth, regimeFor, type SickLeaveInput } from "../src/lib/programmatic/sick-leave/engine.ts";
 import {
-  CONVALIDATION_RECHECK_BY,
   DAYS,
   MAX_BASE_2026,
   OFFICIAL_LINKS,
   PCT,
   QUOTE,
+  RDL31_CHECKED,
+  RDL31_CONVALIDATED,
   REFORM_FROM,
   RULES_AS_OF,
   RULES_UNTIL,
@@ -289,12 +290,19 @@ test("date guard: the rules' as-of date is not in the future", () => {
   assert.ok(Date.parse(`${RULES_AS_OF}T00:00:00Z`) <= Date.now(), "RULES_AS_OF in the future");
 });
 
-test("date guard: re-read the BOE for the convalidación of RDL 31/2026 before its 1 Dec 2026 changes", () => {
-  // Search the BOE (sumarios from 22 Oct 2026; analysis of BOE-A-2026-21872, "Referencias posteriores") for the
-  // Congress resolution ratifying (convalidación) or rejecting (derogación) Royal Decree-law 31/2026. If ratified,
-  // say so in the page's reform section (reformText.status) and add the resolution to SOURCES. If rejected, the
-  // 1 Dec changes never happen: set REFORM_FROM out of reach and rewrite the reform section. Then move this date.
-  assert.ok(Date.now() < Date.parse(`${CONVALIDATION_RECHECK_BY}T00:00:00Z`), "Baja laboral: check the convalidación of RDL 31/2026");
+test("RDL 31/2026 is convalidated (BOE-A-2026-24292, 20 Nov 2026) and the page says so, with the resolution quoted", () => {
+  // Resolución de 18 de noviembre de 2026, del Congreso de los Diputados (Diputación Permanente), read on 21 Nov 2026;
+  // no "tramitación como proyecto de ley". The 1 Dec 2026 date is the RDL's own (disposición final cuarta.2).
+  assert.equal(RDL31_CONVALIDATED, "2026-11-18");
+  assert.equal(REFORM_FROM, "2026-12-01");
+  assert.ok(RDL31_CONVALIDATED < REFORM_FROM && RDL31_CHECKED >= RDL31_CONVALIDATED);
+  assert.equal(SOURCES.rdl31Convalidation.url, "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24292");
+  assert.equal(SOURCES.rdl31Convalidation.date, "2026-11-20");
+  assert.match(QUOTE.rdl31convalidation, /acordó convalidar el Real Decreto-ley 31\/2026, de 20 de octubre/);
+  const page = read("src/components/programmatic/sick-leave/SickLeavePage.tsx");
+  assert.match(page, /quote\(QUOTE\.rdl31convalidation, SOURCES\.rdl31Convalidation\.url/);
+  assert.match(page, /SOURCES\.rdl31Convalidation, SOURCES\.d3158/);
+  assert.doesNotMatch(page, /no ha publicado su convalidación|no n'ha publicat la convalidació|published no ratification/);
 });
 
 test("date guard: from 1 January 2027 the calculator needs the year's rules re-read", () => {

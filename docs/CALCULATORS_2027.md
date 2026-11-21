@@ -98,7 +98,7 @@ module's guard, and update this table. `tests/calculators-2027.test.ts` fails on
 |---|---|---|---|
 | 25 Nov | INE EPA wage deciles 2025 | ine.es | average-salary snapshot (guard 26 Nov) |
 | 27 Nov | INE CPI flash for November: 12th month of the revaluation mean | ine.es | pensions-2027 NOVEMBER_FLASH (guard 28 Nov) |
-| 28 Nov | RDL 31/2026 guard (sick leave, widow) | **already convalidated**: Diputación Permanente 18 Nov, BOE 20 Nov, BOE-A-2026-24292 | update `sick-leave` status text and `widow-pension` RDL31_STATUS before 28 Nov |
+| ~~28 Nov~~ done 21 Nov | RDL 31/2026 (sick leave, widow) | convalidated: Diputación Permanente 18 Nov, BOE 20 Nov, BOE-A-2026-24292 (no tramitación como proyecto de ley) | done: both pages state it and quote the resolution; `CONVALIDATION_RECHECK_BY` removed, `RDL31_STATUS` = convalidated; dates unchanged (21 Oct 2026, 1 Dec 2026) |
 | 15 Dec | INE final November CPI; Tesoro 2027 calendar due; self-employed 2027 recheck | ine.es, tesoro.es, BOE | pensions-2027 final %; CALENDAR_2027; STATUS_2027 |
 | 16 Dec | rent DF 6.ª and rent-zone rechecks | BOE, DOGC | rent-update, zona-tensionada |
 | by 17–18 Dec | RDL 38/2026 convalidation (IRPF deduction 2027) | BOE (Congress resolution) | drop the caveat, or remove `irpfSmi2027` if derogated |

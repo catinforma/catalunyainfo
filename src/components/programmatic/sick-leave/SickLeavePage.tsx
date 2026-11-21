@@ -13,7 +13,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { CALC_COPY, bandDays, money, monthYear, ofMonthYear, payerText, percent, sickLeaveEditions, sickLeavePath, type SlLocale } from "@/lib/programmatic/sick-leave/copy";
 import { DEFAULT_INPUT, calculateSickLeave, referenceMonth, type Band, type Contingency, type SickLeaveResult, type SpecialKind } from "@/lib/programmatic/sick-leave/engine";
-import { DAYS, MAX_BASE_2026, OFFICIAL_LINKS, PCT, QUOTE, REFORM_FROM, RULES_AS_OF, SOURCES } from "@/lib/programmatic/sick-leave/rules";
+import { DAYS, MAX_BASE_2026, OFFICIAL_LINKS, PCT, QUOTE, RDL31_CHECKED, RDL31_CONVALIDATED, REFORM_FROM, RULES_AS_OF, SOURCES } from "@/lib/programmatic/sick-leave/rules";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -120,6 +120,8 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
   const pc = (v: number) => percent(v, locale, 0);
   const asOf = dayMonthYear(RULES_AS_OF, locale);
   const reform = dayMonthYear(REFORM_FROM, locale);
+  const convalidated = dayMonthYear(RDL31_CONVALIDATED, locale);
+  const convalidationBoe = dayMonthYear(SOURCES.rdl31Convalidation.date, locale);
   const exStart = dayMonthYear(DEFAULT_INPUT.start, locale);
   const exBand = (from: number) => ex.bands.find((b) => b.from === from)!;
   // A baja on 1 December 2026: the October base now; under the old rule (the month before) it would have been November's.
@@ -172,7 +174,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
         "Todas las situaciones especiales se cobran desde el día siguiente a la baja, y el día de la baja la empresa paga el salario íntegro. Hasta ahora, la menstruación incapacitante y la donación se cobraban desde el mismo día de la baja.",
       ],
       transitional: "Para las situaciones especiales, la norma dice expresamente que se aplica a las bajas que empiezan después:",
-      status: `Un real decreto-ley tiene que ser convalidado por el Congreso (Constitución, art. 86). A ${asOf}, el BOE no ha publicado su convalidación. Si el Congreso lo deroga, esta página volverá a las normas anteriores.`,
+      status: `La Diputación Permanente del Congreso convalidó el Real Decreto-ley 31/2026 el ${convalidated} (BOE del ${convalidationBoe}). Los cambios de la incapacidad temporal se aplican desde el ${reform}, como fija su disposición final cuarta.`,
     },
     ca: {
       intro: `El Reial decret llei 31/2026, de 20 d'octubre (BOE del 21 d'octubre), canvia la incapacitat temporal des de l'${reform}. Els percentatges, els dies a càrrec de l'empresa i la durada màxima no canvien. Canvia això:`,
@@ -182,7 +184,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
         "Totes les situacions especials es cobren des de l'endemà de la baixa, i el dia de la baixa l'empresa paga el salari íntegre. Fins ara, la menstruació incapacitant i la donació es cobraven des del mateix dia de la baixa.",
       ],
       transitional: "Per a les situacions especials, la norma diu expressament que s'aplica a les baixes que comencen després:",
-      status: `Un reial decret llei ha de ser convalidat pel Congrés (Constitució, art. 86). A ${asOf}, el BOE no n'ha publicat la convalidació. Si el Congrés el deroga, aquesta pàgina tornarà a les normes anteriors.`,
+      status: `La Diputació Permanent del Congrés va convalidar el Reial decret llei 31/2026 el ${convalidated} (BOE del ${convalidationBoe}). Els canvis de la incapacitat temporal s'apliquen des de l'${reform}, com fixa la seva disposició final quarta.`,
     },
     en: {
       intro: `Royal Decree-law 31/2026 of 20 October (BOE, 21 October) changes sick leave (incapacidad temporal) from ${reform}. The percentages, the employer's days and the maximum length do not change. This does:`,
@@ -192,7 +194,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
         "Every special case is paid from the day after the leave starts, with the employer paying that first day's full salary. Until now, incapacitating menstruation and donation were paid from the first day.",
       ],
       transitional: "For the special cases, the decree says expressly that it applies to leave starting afterwards:",
-      status: `A royal decree-law must be ratified by Congress (Constitution, art. 86). As of ${asOf}, the BOE has published no ratification. If Congress rejects it, this page will go back to the previous rules.`,
+      status: `Congress's Standing Committee (Diputación Permanente) ratified Royal Decree-law 31/2026 on ${convalidated} (BOE, ${convalidationBoe}). The sick-leave changes apply from ${reform}, as its fourth final provision sets.`,
     },
   });
 
@@ -301,11 +303,11 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
     ],
   });
 
-  const sourceList = [SOURCES.lgss, SOURCES.rdl31, SOURCES.d3158, SOURCES.rd53, SOURCES.d1646, SOURCES.orden1967, SOURCES.orden2026, SOURCES.irpf, SOURCES.ssInfo, SOURCES.ssAmount];
+  const sourceList = [SOURCES.lgss, SOURCES.rdl31, SOURCES.rdl31Convalidation, SOURCES.d3158, SOURCES.rd53, SOURCES.d1646, SOURCES.orden1967, SOURCES.orden2026, SOURCES.irpf, SOURCES.ssInfo, SOURCES.ssAmount];
   const sourcesLead = L(locale, {
-    es: `Solo fuentes oficiales, leídas el ${asOf}. Las citas son del BOE y de la Seguridad Social. Las páginas de la Seguridad Social aún no recogen los cambios del ${reform}.`,
-    ca: `Només fonts oficials, llegides el ${asOf}. Les cites són del BOE i de la Seguretat Social. Les pàgines de la Seguretat Social encara no recullen els canvis de l'${reform}.`,
-    en: `Official sources only, read on ${asOf}. Quotes are from the BOE and Social Security (in Spanish). Social Security's pages do not show the ${reform} changes yet.`,
+    es: `Solo fuentes oficiales, leídas el ${asOf}; la convalidación del Real Decreto-ley 31/2026, el ${dayMonthYear(RDL31_CHECKED, locale)}. Las citas son del BOE y de la Seguridad Social. Las páginas de la Seguridad Social aún no recogen los cambios del ${reform}.`,
+    ca: `Només fonts oficials, llegides el ${asOf}; la convalidació del Reial decret llei 31/2026, el ${dayMonthYear(RDL31_CHECKED, locale)}. Les cites són del BOE i de la Seguretat Social. Les pàgines de la Seguretat Social encara no recullen els canvis de l'${reform}.`,
+    en: `Official sources only, read on ${asOf}; the ratification of Royal Decree-law 31/2026, on ${dayMonthYear(RDL31_CHECKED, locale)}. Quotes are from the BOE and Social Security (in Spanish). Social Security's pages do not show the ${reform} changes yet.`,
   });
   const limits = L(locale, {
     es: [
@@ -397,6 +399,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
               <p>{reformText.transitional}</p>
               {quote(QUOTE.rdl31transitional, SOURCES.rdl31.url, `Real Decreto-ley 31/2026, disposición transitoria primera (${SOURCES.rdl31.ref.split(",")[0]})`)}
               <p>{reformText.status}</p>
+              {quote(QUOTE.rdl31convalidation, SOURCES.rdl31Convalidation.url, `Resolución de 18 de noviembre de 2026, del Congreso de los Diputados (${SOURCES.rdl31Convalidation.ref})`)}
 
               <h2 id="base-reguladora">{h.base}</h2>
               <p>{baseText[0]}</p>

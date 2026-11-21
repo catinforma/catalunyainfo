@@ -8,7 +8,7 @@ import {
   PNC_2026_ANNUAL,
   type MinimumId,
 } from "@/lib/programmatic/pensions-2027/rules";
-import { CONVALIDATION_RECHECK_BY } from "@/lib/programmatic/sick-leave/rules";
+import { QUOTE as SICK_LEAVE_QUOTE, RDL31_CHECKED, RDL31_CONVALIDATED, SOURCES as SICK_LEAVE_SOURCES } from "@/lib/programmatic/sick-leave/rules";
 import { SMI_2026, boeUrl as smiBoeUrl } from "@/lib/programmatic/smi/rules";
 
 /**
@@ -39,11 +39,13 @@ import { SMI_2026, boeUrl as smiBoeUrl } from "@/lib/programmatic/smi/rules";
  *    years' cohabitation. RDL 31/2026 turned it round: with common children,
  *    two years' cohabitation by padrón and no registration.
  *  - RDL 31/2026 (BOE-A-2026-21872, BOE 21 Oct 2026, in force that day,
- *    disposición final cuarta.1): it needs the Congress's convalidación
- *    within 30 days (Constitución, art. 86.2). The BOE's daily summaries
- *    from 22 Oct to 19 Nov 2026 carry none (RDL 29/2026's was published on
- *    13 Nov); the sick-leave module's CONVALIDATION_RECHECK_BY makes a test
- *    fail on 28 Nov 2026 in both modules.
+ *    disposición final cuarta.1; its 4.2 sets no later date for art. 221):
+ *    convalidated by the Congreso's Diputación Permanente on 18 Nov 2026,
+ *    "Resolución de 18 de noviembre de 2026, del Congreso de los Diputados,
+ *    por la que se ordena la publicación del Acuerdo de convalidación del
+ *    Real Decreto-ley 31/2026" (BOE-A-2026-24292, BOE 20 Nov 2026), read on
+ *    21 Nov 2026 (RDL31_CHECKED, shared with the sick-leave module). It says
+ *    nothing of processing it as a bill.
  *  - Decreto 3158/1966 (BOE-A-1966-21116), art. 31 ("Última actualización,
  *    publicada el 27/12/2003"): 52 % (RD 1795/2003), 70 % with family
  *    burdens, main source of income and the income ceiling, 31.3 reduction,
@@ -92,7 +94,7 @@ import { SMI_2026, boeUrl as smiBoeUrl } from "@/lib/programmatic/smi/rules";
  * one); the orphan's or the lump sum's amounts.
  *
  * A test fails from RULES_UNTIL (1 Jan 2027, when the 2027 minimums, income
- * limit and SMI replace the 2026 ones) and from CONVALIDATION_RECHECK_BY.
+ * limit and SMI replace the 2026 ones).
  */
 
 export const RULES_AS_OF = "2026-11-18";
@@ -220,10 +222,11 @@ export const DT13 = { yearsSinceDivorce: 10, marriageYears: 10, age: 50, age65: 
 
 /** RDL 31/2026: published and in force on this day (disposición final cuarta.1). */
 export const RDL31_IN_FORCE = "2026-10-21";
-/** No convalidación in the BOE's summaries up to RDL31_CHECKED; a test fails from CONVALIDATION_RECHECK_BY (shared with the sick-leave module). */
-export const RDL31_STATUS: "pending" | "convalidated" | "repealed" = "pending";
-export const RDL31_CHECKED = "2026-11-19";
-export { CONVALIDATION_RECHECK_BY };
+/** Convalidated on RDL31_CONVALIDATED (BOE-A-2026-24292), read on RDL31_CHECKED: both from the sick-leave module. */
+export const RDL31_STATUS = "convalidated";
+export { RDL31_CHECKED, RDL31_CONVALIDATED };
+/** The BOE issue that published the convalidation. */
+export const RDL31_CONVALIDATION_BOE = SICK_LEAVE_SOURCES.rdl31Convalidation.date;
 
 /* -------------------------------------------------------------------------- */
 /* Sources                                                                    */
@@ -270,8 +273,15 @@ export const SOURCES = {
     name: "Real Decreto-ley 31/2026, de 20 de octubre, para la mejora de la acción protectora de la Seguridad Social y de otras normas sociales (art. 1.10: parejas de hecho; art. 1.18: DT 13ª; DT 48ª)",
     url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-21872",
     publisher: "BOE",
-    ref: "BOE-A-2026-21872, en vigor desde el 21/10/2026; convalidación pendiente",
+    ref: "BOE-A-2026-21872, en vigor desde el 21/10/2026; convalidado el 18/11/2026",
     read: RULES_AS_OF,
+  },
+  rdl31Convalidation: {
+    name: SICK_LEAVE_SOURCES.rdl31Convalidation.name,
+    url: SICK_LEAVE_SOURCES.rdl31Convalidation.url,
+    publisher: "BOE",
+    ref: "BOE-A-2026-24292, de 20/11/2026",
+    read: RDL31_CHECKED,
   },
   ley21: {
     name: "Ley 21/2021, de 28 de diciembre, de garantía del poder adquisitivo de las pensiones (arts. 221, 222 y 223 LGSS)",
@@ -430,6 +440,8 @@ export const QUOTE = {
     "En el caso de que existan hijos en común únicamente será exigible el requisito de una convivencia estable y notoria durante un periodo de al menos dos años ininterrumpidos, con carácter inmediato al fallecimiento del causante. Dicha convivencia deberá ser acreditada mediante el correspondiente certificado de empadronamiento.",
   /** LGSS art. 221.2 as worded by Ley 21/2021 (1 Jan 2022 to 20 Oct 2026), the end of its first paragraph. */
   art221children2021: "salvo que existan hijos en común, en cuyo caso solo deberán acreditar la constitución de la pareja de hecho de conformidad con lo previsto en el párrafo siguiente.",
+  /** Resolución de 18 de noviembre de 2026, del Congreso de los Diputados (BOE-A-2026-24292). */
+  rdl31convalidation: SICK_LEAVE_QUOTE.rdl31convalidation,
   /** RDL 31/2026, preamble. */
   rdl31why:
     "se flexibilizan determinados requisitos de acceso a la pensión de viudedad de las parejas de hecho que tengan hijos o hijas en común, eliminando exigencias formales que han venido generando situaciones de desprotección y una elevada litigiosidad.",

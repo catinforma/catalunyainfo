@@ -11518,3 +11518,33 @@ warning is in the HTML after the first January deploy.
 **Go-live.** Deploy only (code routes). IndexNow prefixes: `/es/calculadoras/ /ca/calculadores/ /en/calculators/`.
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — RDL 31/2026 convalidated: sick-leave and widow's pension pages say so (factual correction, body only; deploy only, no publish group; no title, description, H1 or lead touched)
+
+**Source (read 21 Nov 2026, curl + grep).** BOE-A-2026-24292 (BOE núm. 289, 20 Nov 2026), "Resolución de 18 de noviembre de
+2026, del Congreso de los Diputados, por la que se ordena la publicación del Acuerdo de convalidación del Real Decreto-ley
+31/2026, de 20 de octubre": "la Diputación Permanente del Congreso de los Diputados, en su sesión del día de hoy, acordó
+convalidar el Real Decreto-ley 31/2026". It says nothing of "tramitación como proyecto de ley". The RDL (BOE-A-2026-21872)
+re-read the same day: DF 4.ª.1 in force on publication (21 Oct 2026); DF 4.ª.2 arts. 169.1.a), 171, 172 and 173.1 from "el
+día primero del segundo mes siguiente al de la publicación" (1 Dec 2026). Both dates are unchanged.
+
+**What changed (ca/es/en).** Sick leave: the reform section's status paragraph (it said the BOE had published no
+convalidation and the page would revert if repealed) now gives the convalidation date and the BOE issue, quotes the resolution
+with its link, and lists it in the sources; the sources lead gives the 21 Nov reading. Widow's pension: the "Convalidación
+pendiente" paragraph is now "Convalidado" with the dates and the quoted resolution; the parejas de hecho FAQ answer (also in
+the FAQPage JSON-LD) and the llms.txt line said "pending/awaiting ratification" and now say convalidated on 18 Nov 2026;
+source ref and the new source added. Code: `CONVALIDATION_RECHECK_BY` (the 28 Nov guard) removed;
+`RDL31_CONVALIDATED`/`RDL31_CHECKED` in sick-leave rules, shared by widow-pension (`RDL31_STATUS` = "convalidated"); the
+two guard tests now assert the recorded convalidation and that the pending wording is gone. `docs/CALCULATORS_2027.md`
+watch-list row marked done. `npm run seo:body-dates`: sick-leave and widow-pension re-dated.
+
+**Measurement windows.** Both URLs are in open windows (sick leave 13 Nov entry: 15 Dec, 1 Feb, 15 Feb; widow's pension
+18 Nov entry: 26 Nov, 17 Dec, 14 Jan; calculators 19 Nov and 21 Nov entries). Titles, descriptions, H1s and leads did not state
+the pending status and are untouched; the changed clauses are body text and a FAQ answer, logged here as a factual correction
+and not a test variable.
+
+**Go-live.** Deploy only (code routes). IndexNow prefixes: `/es/calculadoras/baja-laboral/ /ca/calculadores/baixa-laboral/
+/en/calculators/sick-leave-pay-spain/ /es/calculadoras/pension-viudedad/ /ca/calculadores/pensio-viduitat/
+/en/calculators/spain-widows-pension/` (and `/llms.txt`).
+
+**Outcome:** n/a (factual correction).

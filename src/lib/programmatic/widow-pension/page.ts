@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/lib/site";
 
-import { WP_LOCALES, euros, perMonth, whole, widowEditions, type WpLocale } from "./copy";
+import { WP_LOCALES, day, euros, perMonth, whole, widowEditions, type WpLocale } from "./copy";
 import { calculateOk, widowCase, type WidowInput, type WidowResult } from "./engine";
 import {
   BURDEN_THRESHOLD,
@@ -17,6 +17,7 @@ import {
   PARTNER_COHABITATION_YEARS,
   PARTNER_REGISTRATION_YEARS,
   PAYMENTS_ORDINARY,
+  RDL31_CONVALIDATED,
   REMARRIAGE_AGE,
   REMARRIAGE_INCOME_LIMIT,
   RETRO_MONTHS,
@@ -157,6 +158,7 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
   const P = (n: number) => whole(n, locale);
   const E = (n: number) => euros(n, locale);
   const M = (n: number) => perMonth(n, locale);
+  const convalidated = day(RDL31_CONVALIDATED, locale);
   return {
     es: [
       {
@@ -169,7 +171,7 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
       },
       {
         q: "¿Tienen derecho las parejas de hecho?",
-        a: `Sí. Sin hijos en común, hacen falta ${h.cohabitation} años de convivencia empadronados justo antes del fallecimiento y la inscripción de la pareja en un registro (o una escritura pública) con ${h.registration} años de antelación. Con hijos en común, desde el 21 de octubre de 2026 basta con ${h.childrenCohabitation} años de convivencia empadronados, sin inscripción (Real Decreto-ley 31/2026, pendiente de convalidación por el Congreso).`,
+        a: `Sí. Sin hijos en común, hacen falta ${h.cohabitation} años de convivencia empadronados justo antes del fallecimiento y la inscripción de la pareja en un registro (o una escritura pública) con ${h.registration} años de antelación. Con hijos en común, desde el 21 de octubre de 2026 basta con ${h.childrenCohabitation} años de convivencia empadronados, sin inscripción (Real Decreto-ley 31/2026, convalidado por el Congreso el ${convalidated}).`,
       },
       {
         q: "¿Cobra la viudedad un divorciado o separado?",
@@ -203,7 +205,7 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
       },
       {
         q: "Hi tenen dret les parelles de fet?",
-        a: `Sí. Sense fills en comú, calen ${h.cohabitation} anys de convivència empadronats just abans de la mort i la inscripció de la parella en un registre (o una escriptura pública) amb ${h.registration} anys d'antelació. Amb fills en comú, des del 21 d'octubre de 2026 n'hi ha prou amb ${h.childrenCohabitation} anys de convivència empadronats, sense inscripció (Reial decret llei 31/2026, pendent de convalidació pel Congrés).`,
+        a: `Sí. Sense fills en comú, calen ${h.cohabitation} anys de convivència empadronats just abans de la mort i la inscripció de la parella en un registre (o una escriptura pública) amb ${h.registration} anys d'antelació. Amb fills en comú, des del 21 d'octubre de 2026 n'hi ha prou amb ${h.childrenCohabitation} anys de convivència empadronats, sense inscripció (Reial decret llei 31/2026, convalidat pel Congrés el ${convalidated}).`,
       },
       {
         q: "Cobra la viduïtat un divorciat o separat?",
@@ -237,7 +239,7 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
       },
       {
         q: "Are unmarried partners (parejas de hecho) entitled?",
-        a: `Yes. Without children together, you need ${h.cohabitation} years living together on the padrón right before the death and the partnership registered (or set up by public deed) ${h.registration} years before. With children together, since 21 October 2026 ${h.childrenCohabitation} years living together on the padrón are enough, with no registration (Royal Decree-law 31/2026, awaiting ratification by Congress).`,
+        a: `Yes. Without children together, you need ${h.cohabitation} years living together on the padrón right before the death and the partnership registered (or set up by public deed) ${h.registration} years before. With children together, since 21 October 2026 ${h.childrenCohabitation} years living together on the padrón are enough, with no registration (Royal Decree-law 31/2026, ratified by Congress on ${convalidated}).`,
       },
       {
         q: "Can a divorced or separated spouse get it?",

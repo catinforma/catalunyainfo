@@ -32,6 +32,8 @@ import {
   PAYMENTS_ORDINARY,
   QUOTE,
   RDL31_CHECKED,
+  RDL31_CONVALIDATED,
+  RDL31_CONVALIDATION_BOE,
   RDL31_IN_FORCE,
   RULES_AS_OF,
   SOURCES,
@@ -325,19 +327,19 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
   const partnerText = L(locale, {
     es: [
       "La inscripción es en un registro de parejas de hecho de la comunidad autónoma o del ayuntamiento, o una escritura pública. Ninguno de los dos podía estar casado con otra persona ni tener otra pareja de hecho.",
-      `**Convalidación pendiente.** El Real Decreto-ley 31/2026 está en vigor desde ${on(RDL31_IN_FORCE)}, pero el Congreso tiene que convalidarlo en 30 días; hasta ${on(RDL31_CHECKED)} el BOE no publica la convalidación. Si no se convalidara, quedaría derogado y volvería la regla anterior. Lo revisamos.`,
+      `**Convalidado.** El Real Decreto-ley 31/2026 está en vigor desde ${on(RDL31_IN_FORCE)} y la Diputación Permanente del Congreso lo convalidó ${on(RDL31_CONVALIDATED)} (BOE del ${D(RDL31_CONVALIDATION_BOE)}).`,
       "**Fallecimientos anteriores al 21/10/2026**: si entonces no se pudo causar la pensión y hoy cumplís la nueva regla, se puede pedir en los 12 meses siguientes a esa fecha, con efectos desde el mes siguiente a la solicitud (disposición transitoria 48ª).",
       "Si la pareja de hecho se había roto antes de la muerte, se aplica lo mismo que a los divorciados: hace falta pensión compensatoria (art. 221.3).",
     ],
     ca: [
       "La inscripció és en un registre de parelles de fet de la comunitat autònoma o de l'ajuntament, o una escriptura pública. Cap dels dos no podia estar casat amb una altra persona ni tenir una altra parella de fet.",
-      `**Convalidació pendent.** El Reial decret llei 31/2026 és vigent des del ${D(RDL31_IN_FORCE)}, però el Congrés l'ha de convalidar en 30 dies; fins al ${D(RDL31_CHECKED)} el BOE no en publica la convalidació. Si no es convalidés, quedaria derogat i tornaria la regla anterior. Ho revisem.`,
+      `**Convalidat.** El Reial decret llei 31/2026 és vigent des del ${D(RDL31_IN_FORCE)} i la Diputació Permanent del Congrés el va convalidar ${on(RDL31_CONVALIDATED)} (BOE del ${D(RDL31_CONVALIDATION_BOE)}).`,
       "**Morts anteriors al 21/10/2026**: si aleshores no es va poder causar la pensió i avui compliu la nova regla, es pot demanar en els 12 mesos següents a aquella data, amb efectes des del mes següent a la sol·licitud (disposició transitòria 48a).",
       "Si la parella de fet s'havia trencat abans de la mort, s'aplica el mateix que als divorciats: cal pensió compensatòria (art. 221.3).",
     ],
     en: [
       "Registration means a regional or municipal register of unmarried couples, or a public deed. Neither could be married to someone else or have another registered partner.",
-      `**Ratification pending.** Royal Decree-law 31/2026 has been in force since ${D(RDL31_IN_FORCE)}, but Congress must ratify it within 30 days; up to ${D(RDL31_CHECKED)} the BOE publishes no ratification. If it were not ratified, it would lapse and the previous rule would return. We are checking.`,
+      `**Ratified.** Royal Decree-law 31/2026 has been in force since ${D(RDL31_IN_FORCE)}, and Congress's Standing Committee (Diputación Permanente) ratified it ${on(RDL31_CONVALIDATED)} (BOE of ${D(RDL31_CONVALIDATION_BOE)}).`,
       "**Deaths before 21/10/2026**: if no pension could be caused then and you meet the new rule now, you can apply within 12 months of that date, with effect from the month after applying (forty-eighth transitional provision).",
       "If the partnership had ended before the death, the divorce rule applies: a compensatory pension is needed (art. 221.3).",
     ],
@@ -642,6 +644,15 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
               <Quote text={QUOTE.art221children} href={LGSS_ANCHOR.art221} label={lgss(L(locale, { es: "art. 221.2, desde el 21/10/2026", ca: "art. 221.2, des del 21/10/2026", en: "art. 221.2, from 21/10/2026" }))} />
               <Quote text={QUOTE.art221children2021} href={SOURCES.ley21.url} label={lgss(L(locale, { es: "art. 221.2 en la redacción de la Ley 21/2021 (hasta el 20/10/2026)", ca: "art. 221.2 en la redacció de la Llei 21/2021 (fins al 20/10/2026)", en: "art. 221.2 as worded by Law 21/2021 (until 20/10/2026)" }))} />
               <Quote text={QUOTE.rdl31why} href={SOURCES.rdl31.url} label={rdl31(L(locale, { es: "preámbulo", ca: "preàmbul", en: "preamble" }))} />
+              <Quote
+                text={QUOTE.rdl31convalidation}
+                href={SOURCES.rdl31Convalidation.url}
+                label={L(locale, {
+                  es: "Resolución de 18 de noviembre de 2026, del Congreso de los Diputados (BOE-A-2026-24292)",
+                  ca: "Resolució de 18 de novembre de 2026, del Congrés dels Diputats (BOE-A-2026-24292)",
+                  en: "Resolution of 18 November 2026, Congress of Deputies (BOE-A-2026-24292)",
+                })}
+              />
               <Quote text={QUOTE.dt48} href={SOURCES.rdl31.url} label={lgss(L(locale, { es: "disposición transitoria 48ª.1.c", ca: "disposició transitòria 48a.1.c", en: "forty-eighth transitional provision, 1.c" }))} />
 
               <h2 id="divorcio">{hd.divorce}</h2>

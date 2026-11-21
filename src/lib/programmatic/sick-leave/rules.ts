@@ -31,10 +31,14 @@
  *    only take effect on 1 Dec 2026, the calculator applies the rules in
  *    force on the baja's first day (and says so). Unchanged: 60 % / 75 %, the
  *    employer's days 4 to 15, the 365 + 180 days, the 545-day end.
- *  - RDL 31/2026 needs Congress's ratification (Constitución, art. 86.2).
- *    The BOE sumarios of 22 Oct to 13 Nov 2026 carry no resolution of
- *    convalidación or derogación; `CONVALIDATION_RECHECK_BY` makes a test
- *    fail before 1 Dec so someone looks again.
+ *  - RDL 31/2026 is convalidated (Constitución, art. 86.2): "Resolución de
+ *    18 de noviembre de 2026, del Congreso de los Diputados, por la que se
+ *    ordena la publicación del Acuerdo de convalidación del Real
+ *    Decreto-ley 31/2026" (BOE-A-2026-24292, BOE núm. 289, 20 Nov 2026):
+ *    "la Diputación Permanente del Congreso de los Diputados, en su sesión
+ *    del día de hoy, acordó convalidar el Real Decreto-ley 31/2026". It says
+ *    nothing of processing it as a bill. Read on 21 Nov 2026 (RDL31_CHECKED),
+ *    with the RDL's disposición final cuarta again: 1 Dec 2026 stands.
  *  - Decreto 3158/1966, art. 2.1 (75 %), with Real Decreto 53/1980, artículo
  *    único (60 % "entre el cuarto día ... y hasta el veinteavo día,
  *    inclusive" for common illness and non-work accidents).
@@ -57,8 +61,10 @@ export const RULES_AS_OF = "2026-11-13";
 export const RULES_UNTIL = "2027-01-01";
 /** RDL 31/2026 changes apply from this day (disposición final cuarta.2). */
 export const REFORM_FROM = "2026-12-01";
-/** Re-read the BOE for the convalidación (or derogación) of RDL 31/2026 before its changes start: a test fails from this day. */
-export const CONVALIDATION_RECHECK_BY = "2026-11-28";
+/** RDL 31/2026 convalidated on this day by the Congreso's Diputación Permanente (BOE-A-2026-24292). */
+export const RDL31_CONVALIDATED = "2026-11-18";
+/** The day the convalidation and the RDL's disposición final cuarta were read in the BOE. */
+export const RDL31_CHECKED = "2026-11-21";
 
 /** Benefit percentages of the base reguladora. */
 export const PCT = {
@@ -114,6 +120,12 @@ export const SOURCES = {
     ref: "BOE-A-2026-21872, art. 1.3 a 1.6, disposición transitoria primera y disposición final cuarta",
     url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-21872",
     date: "2026-10-21",
+  },
+  rdl31Convalidation: {
+    name: "Resolución de 18 de noviembre de 2026, del Congreso de los Diputados, por la que se ordena la publicación del Acuerdo de convalidación del Real Decreto-ley 31/2026",
+    ref: "BOE-A-2026-24292",
+    url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24292",
+    date: "2026-11-20",
   },
   d3158: {
     name: "Decreto 3158/1966, de 23 de diciembre, Reglamento general de la cuantía de las prestaciones económicas del Régimen General, art. 2",
@@ -189,6 +201,8 @@ export const QUOTE = {
     "Las pensiones y haberes pasivos percibidos de los regímenes públicos de la Seguridad Social y clases pasivas y demás prestaciones públicas por situaciones de incapacidad, jubilación, accidente, enfermedad, viudedad, o similares",
   rdl31transitional:
     "Las modificaciones introducidas por este real decreto-ley en materia de situaciones especiales de incapacidad temporal por contingencias comunes serán aplicables a los procesos de incapacidad temporal iniciados a partir de su entrada en vigor.",
+  rdl31convalidation:
+    "la Diputación Permanente del Congreso de los Diputados, en su sesión del día de hoy, acordó convalidar el Real Decreto-ley 31/2026, de 20 de octubre, para la mejora de la acción protectora de la Seguridad Social y de otras normas sociales",
 } as const;
 
 /** The Seguridad Social's own pages, linked from the page. */
