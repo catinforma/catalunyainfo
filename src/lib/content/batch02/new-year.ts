@@ -1,8 +1,10 @@
 import { MONTJUIC } from "./hills";
 import type { Locale } from "@/lib/i18n/config";
 
+import type { Block } from "@/lib/content/blocks";
+
 import { CHECKED, cavalcadaSentence, metroTable, when } from "./christmas-barcelona";
-import { christmasTransportMention } from "./christmas-transport";
+import { ANNOUNCED_2026_27, TRANSPORT_URLS, christmasTransportMention, oneDayTable } from "./christmas-transport";
 import {
   ANNOUNCED_2026,
   DAYS,
@@ -23,6 +25,7 @@ import {
   lead,
   list,
   paras,
+  table,
   verifiedLine,
   type B2Article,
   type B2Source,
@@ -57,6 +60,35 @@ import {
  * an article without one.
  */
 
+/**
+ * 21 Nov 2026 (December events cluster, body only; title, description and
+ * lead untouched, in their window to 23 Nov): the City Council has still
+ * published nothing for 2026-27 (press room tag "nadal-2026", latest 17 Nov;
+ * barcelona.cat/nadal still "Nadal 2025"; the Cap d'Any page still the 2025
+ * show, 23:50 to 00:10). Added: the 2025 night hour by hour, the transport
+ * on the night of 31 December from the Christmas transport page's data (FGC
+ * all night on six lines, its 19 Nov 2026 notice), and FAQ in the searched
+ * words (what time the fireworks are, the nearest metro, Rodalies and FGC
+ * that night, what opens on 1 January).
+ */
+
+/** The day the City Council's press room and Christmas site were last read for the 2026-27 New Year's Eve. */
+export const NEW_YEAR_CHECKED = "2026-11-21";
+
+/**
+ * The re-read checkpoints: from each day NEW_YEAR_CHECKED must be on or after
+ * it (a test fails otherwise). 1 Dec: the 2025 Christmas programme with the
+ * New Year's Eve show came out on 12 Nov, so it is late; 15 Dec: halfway;
+ * 29 Dec: the entry and transport plan came out on 29 Dec in 2024 and 2025.
+ */
+export const NEW_YEAR_REREAD_BY = ["2026-12-01", "2026-12-15", "2026-12-29"] as const;
+
+/** The last checkpoint `today` has reached, or null before the first. */
+export function newYearRereadDue(today: string): string | null {
+  const passed = NEW_YEAR_REREAD_BY.filter((day) => today >= day);
+  return passed.length ? passed[passed.length - 1]! : null;
+}
+
 const SOURCES: B2Source[] = [
   { name: "Cap d'Any 2025", url: PAST.newYear2025.url, publisher: "Ajuntament de Barcelona" },
   { name: "Dispositiu per a la nit de Cap d'Any (2025)", url: PAST.newYearOps2025.url, publisher: "Ajuntament de Barcelona" },
@@ -75,6 +107,10 @@ const SOURCES: B2Source[] = [
   { name: "MNAC: horaris i preus", url: SIGHT_SOURCES.mnac, publisher: "Museu Nacional d'Art de Catalunya" },
   { name: "Museu Picasso: tickets and opening hours", url: SIGHT_SOURCES.picasso, publisher: "Museu Picasso" },
   { name: "Els Reis d'Orient tornen a Barcelona (recorregut del 2026)", url: PAST.cavalcada2026.url, publisher: "Ajuntament de Barcelona" },
+  { name: "Per Cap d'Any, el metro funcionarà 43 hores sense interrupció (30/12/2025)", url: TRANSPORT_URLS.tmbNewYear2025, publisher: "TMB" },
+  ...(ANNOUNCED_2026_27.fgc
+    ? [{ name: "Ferrocarrils reforça el servei els caps de setmana i festius previs a les festes de Nadal (19/11/2026)", url: ANNOUNCED_2026_27.fgc.url, publisher: "Govern de la Generalitat / FGC" }]
+    : []),
 ];
 
 export const NEW_YEAR_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
@@ -150,9 +186,9 @@ function plansSentence(locale: Locale, facts: Announcements): string {
     }[locale];
   }
   return {
-    ca: `Per al 2026-27 l'Ajuntament encara no ha publicat res. El 2025 va anunciar la festa de Cap d'Any dins del programa de Nadal, el ${dateYear(PAST.programme2025.published, "ca")}, i el dispositiu d'accessos i transport el ${dateYear(PAST.newYearOps2025.published, "ca")}, com el ${dateYear(PAST.newYearOps2024.published, "ca")}.`,
-    es: `Para 2026-27 el Ayuntamiento aún no ha publicado nada. En 2025 anunció la fiesta de fin de año dentro del programa de Navidad, el ${dateYear(PAST.programme2025.published, "es")}, y el dispositivo de accesos y transporte el ${dateYear(PAST.newYearOps2025.published, "es")}, como el ${dateYear(PAST.newYearOps2024.published, "es")}.`,
-    en: `For 2026-27 the City Council has published nothing yet. In 2025 it announced the New Year's Eve show in its Christmas programme on ${dateYear(PAST.programme2025.published, "en")}, and the entry and transport arrangements on ${dateYear(PAST.newYearOps2025.published, "en")}, as it had on ${dateYear(PAST.newYearOps2024.published, "en")}.`,
+    ca: `Per al 2026-27 l'Ajuntament encara no ha publicat res (comprovat el ${dateYear(NEW_YEAR_CHECKED, "ca")}). El 2025 va anunciar la festa de Cap d'Any dins del programa de Nadal, el ${dateYear(PAST.programme2025.published, "ca")}, i el dispositiu d'accessos i transport el ${dateYear(PAST.newYearOps2025.published, "ca")}, com el ${dateYear(PAST.newYearOps2024.published, "ca")}.`,
+    es: `Para 2026-27 el Ayuntamiento aún no ha publicado nada (comprobado el ${dateYear(NEW_YEAR_CHECKED, "es")}). En 2025 anunció la fiesta de fin de año dentro del programa de Navidad, el ${dateYear(PAST.programme2025.published, "es")}, y el dispositivo de accesos y transporte el ${dateYear(PAST.newYearOps2025.published, "es")}, como el ${dateYear(PAST.newYearOps2024.published, "es")}.`,
+    en: `For 2026-27 the City Council has published nothing yet (checked on ${dateYear(NEW_YEAR_CHECKED, "en")}). In 2025 it announced the New Year's Eve show in its Christmas programme on ${dateYear(PAST.programme2025.published, "en")}, and the entry and transport arrangements on ${dateYear(PAST.newYearOps2025.published, "en")}, as it had on ${dateYear(PAST.newYearOps2024.published, "en")}.`,
   }[locale];
 }
 
@@ -169,6 +205,113 @@ function whereAnswer(locale: Locale, facts: Announcements): string {
   }
   const pending = { ca: "El lloc del 2026-27 encara no s'ha anunciat.", es: "El lugar de 2026-27 aún no se ha anunciado.", en: "The 2026-27 venue has not been announced yet." }[locale];
   return `${past} ${pending}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/* The night at a glance (21 Nov 2026)                                        */
+/* -------------------------------------------------------------------------- */
+
+const CHECKED_NYE: Record<Locale, string> = {
+  ca: `comprovat el ${dateYear(NEW_YEAR_CHECKED, "ca")}`,
+  es: `comprobado el ${dateYear(NEW_YEAR_CHECKED, "es")}`,
+  en: `checked on ${dateYear(NEW_YEAR_CHECKED, "en")}`,
+};
+
+/** The 2025 night hour by hour (City Council and TMB, 2025), always labelled 2025. */
+export function nightTable(locale: Locale): Block {
+  const rows: Record<Locale, string[][]> = {
+    ca: [
+      ["19:00", "Desviaments de bus per la festa: línies 13, 23, 150 i X3 i ruta vermella del Bus Turístic"],
+      ["20:00", "També es desvien la D20, H12, H16, 46, 65, 91, 109 i X2"],
+      ["22:00", "Espectacle especial de les fonts màgiques"],
+      ["23:50", "Comença l'espectacle central a l'avinguda de la Reina Maria Cristina: focs, drons i música, gratuït i sense límit d'aforament"],
+      ["00:00", "Campanades i dotze grans de raïm"],
+      ["00:10", "Acaba l'espectacle; la sortida, per l'avinguda de Rius i Taulet, la de Francesc Ferrer i Guàrdia i la de Maria Cristina"],
+      ["Tota la nit", "Metro obert sense parar: 43 hores, de les 5:00 del 31 de desembre a la mitjanit de l'1 de gener"],
+    ],
+    es: [
+      ["19:00", "Desvíos de bus por la fiesta: líneas 13, 23, 150 y X3 y ruta roja del Bus Turístic"],
+      ["20:00", "También se desvían la D20, H12, H16, 46, 65, 91, 109 y X2"],
+      ["22:00", "Espectáculo especial de las fuentes mágicas"],
+      ["23:50", "Empieza el espectáculo central en la avenida de la Reina Maria Cristina: fuegos artificiales, drones y música, gratis y sin límite de aforo"],
+      ["00:00", "Campanadas y doce uvas"],
+      ["00:10", "Termina el espectáculo; la salida, por la avenida de Rius i Taulet, la de Francesc Ferrer i Guàrdia y la de Maria Cristina"],
+      ["Toda la noche", "Metro abierto sin parar: 43 horas, de las 5:00 del 31 de diciembre a la medianoche del 1 de enero"],
+    ],
+    en: [
+      ["19:00", "Bus diversions for the show: lines 13, 23, 150 and X3 and the Bus Turístic red route"],
+      ["20:00", "Lines D20, H12, H16, 46, 65, 91, 109 and X2 are diverted too"],
+      ["22:00", "Special Magic Fountain show"],
+      ["23:50", "The main show starts on Avinguda de la Reina Maria Cristina: fireworks, drones and music, free and with no capacity limit"],
+      ["00:00", "Midnight chimes and the twelve grapes"],
+      ["00:10", "The show ends; the way out is along Avinguda de Rius i Taulet, Avinguda de Francesc Ferrer i Guàrdia and Avinguda de Maria Cristina"],
+      ["All night", "Metro open non-stop: 43 hours, from 5:00 on 31 December to midnight on 1 January"],
+    ],
+  };
+  return table(
+    { ca: "La nit de Cap d'Any del 2025 a Barcelona, hora a hora", es: "La Nochevieja de 2025 en Barcelona, hora a hora", en: "New Year's Eve 2025 in Barcelona, hour by hour" }[locale],
+    { ca: ["Hora (2025)", "Què va passar"], es: ["Hora (2025)", "Qué pasó"], en: ["Time (2025)", "What happened"] }[locale],
+    rows[locale],
+    {
+      ca: `Ajuntament de Barcelona i TMB, desembre del 2025. El programa del 2026-27 encara no s'ha publicat (${CHECKED_NYE.ca}).`,
+      es: `Ayuntamiento de Barcelona y TMB, diciembre de 2025. El programa de 2026-27 aún no se ha publicado (${CHECKED_NYE.es}).`,
+      en: `Barcelona City Council and TMB, December 2025. The 2026-27 programme is not out yet (${CHECKED_NYE.en}).`,
+    }[locale],
+  );
+}
+
+/** Every operator on the night of 31 December, from the Christmas transport page's data. */
+function nightTransportTable(locale: Locale): Block {
+  return oneDayTable(
+    "newYearsEve",
+    { ca: "Transport la nit de Cap d'Any, 31 de desembre de 2026", es: "Transporte en Nochevieja, 31 de diciembre de 2026", en: "Transport on New Year's Eve, 31 December 2026" }[locale],
+    locale,
+  );
+}
+
+/** The FAQ added on 21 Nov 2026, in the searched words. */
+function moreFaq(locale: Locale, facts: Announcements): { question: string; answer: string }[] {
+  const L = <T,>(v: Record<Locale, T>) => v[locale];
+  const a = facts.newYearShow;
+  const fgc = ANNOUNCED_2026_27.fgc;
+  const fgcNye = fgc?.days.newYearsEve;
+  const rodNye = ANNOUNCED_2026_27.rodalies?.days.newYearsEve;
+  return [
+    {
+      question: L({ ca: "A quina hora són els focs de Cap d'Any a Barcelona?", es: "¿A qué hora son los fuegos artificiales de Nochevieja en Barcelona?", en: "What time are the New Year's Eve fireworks in Barcelona?" }),
+      answer: a
+        ? L({ ca: `El 2026-27, segons l'Ajuntament, ${when(a, "ca")}.`, es: `En 2026-27, según el Ayuntamiento, ${when(a, "es")}.`, en: `For 2026-27, according to the City Council, ${when(a, "en")}.` })
+        : L({
+            ca: `L'hora del 2026-27 encara no s'ha anunciat (${CHECKED_NYE.ca}). El 2025 l'espectacle central, amb focs, drons i música, va anar de 23:50 a 00:10 a l'avinguda de la Reina Maria Cristina, i abans, des de les 22:00, hi va haver un espectacle especial de les fonts màgiques.`,
+            es: `La hora de 2026-27 aún no se ha anunciado (${CHECKED_NYE.es}). En 2025 el espectáculo central, con fuegos artificiales, drones y música, fue de 23:50 a 00:10 en la avenida de la Reina Maria Cristina, y antes, desde las 22:00, hubo un espectáculo especial de las fuentes mágicas.`,
+            en: `The 2026-27 time has not been announced yet (${CHECKED_NYE.en}). In 2025 the main show, with fireworks, drones and music, ran from 23:50 to 00:10 on Avinguda de la Reina Maria Cristina, after a special Magic Fountain show from 22:00.`,
+          }),
+    },
+    {
+      question: L({ ca: "Quina és la parada de metro més propera a la festa de Cap d'Any?", es: "¿Cuál es la parada de metro más cercana a la fiesta de Nochevieja?", en: "Which metro station is nearest the New Year's Eve show?" }),
+      answer: L({
+        ca: "El 2024 i el 2025, Espanya (L1 i L3). El 2025 l'Ajuntament recomanava també Hostafrancs (L1), Tarragona (L3), Rocafort (L1) i Poble Sec (L3), amb personal per regular el pas de gent a l'entrada i a la sortida. El metro no tanca en tota la nit del 31 de desembre.",
+        es: "En 2024 y 2025, Espanya (L1 y L3). En 2025 el Ayuntamiento recomendaba también Hostafrancs (L1), Tarragona (L3), Rocafort (L1) y Poble Sec (L3), con personal para regular el paso de gente a la entrada y a la salida. El metro no cierra en toda la noche del 31 de diciembre.",
+        en: "In 2024 and 2025, Espanya (L1, L3). In 2025 the City Council also recommended Hostafrancs (L1), Tarragona (L3), Rocafort (L1) and Poble Sec (L3), with staff managing the crowds on the way in and out. The metro runs all night on 31 December.",
+      }),
+    },
+    {
+      question: L({ ca: "Funcionen Rodalies i FGC la nit de Cap d'Any?", es: "¿Funcionan Rodalies y FGC en Nochevieja?", en: "Do Rodalies and FGC trains run on New Year's Eve?" }),
+      answer: L({
+        ca: `${fgcNye ? `FGC, sí: el 2026-27 ${fgcNye.ca} (nota del ${dateYear(fgc!.published ?? fgc!.read, "ca")}).` : "FGC, el 2025, va circular tota la nit, com cada any, a la zona urbana de Barcelona i fins a Sabadell i Terrassa; el 2026-27, per confirmar."} ${rodNye ? `Rodalies, el 2026-27: ${rodNye.ca}.` : `Rodalies no ha anunciat cap servei especial per a aquesta nit (${CHECKED_NYE.ca}), i el 2025 tampoc.`} El metro no tanca en tota la nit.`,
+        es: `${fgcNye ? `FGC, sí: en 2026-27 ${fgcNye.es} (nota del ${dateYear(fgc!.published ?? fgc!.read, "es")}).` : "FGC, en 2025, circuló toda la noche, como cada año, en la zona urbana de Barcelona y hasta Sabadell y Terrassa; en 2026-27, por confirmar."} ${rodNye ? `Rodalies, en 2026-27: ${rodNye.es}.` : `Rodalies no ha anunciado ningún servicio especial para esa noche (${CHECKED_NYE.es}), y en 2025 tampoco.`} El metro no cierra en toda la noche.`,
+        en: `${fgcNye ? `FGC does: for 2026-27, ${fgcNye.en} (note of ${dateYear(fgc!.published ?? fgc!.read, "en")}).` : "FGC ran all night in 2025, as every year, in Barcelona and out to Sabadell and Terrassa; 2026-27 to be confirmed."} ${rodNye ? `Rodalies, for 2026-27: ${rodNye.en}.` : `Rodalies has announced no special service for that night (${CHECKED_NYE.en}), and it announced none in 2025 either.`} The metro runs all night.`,
+      }),
+    },
+    {
+      question: L({ ca: "Què obre l'1 de gener a Barcelona?", es: "¿Qué abre el 1 de enero en Barcelona?", en: "What is open on 1 January in Barcelona?" }),
+      answer: L({
+        ca: "L'1 de gener de 2027 és divendres i festiu: les botigues amb horari general tanquen, i poden obrir els forns, les botigues de conveniència, les farmàcies i les botigues de fins a 300 m² d'alimentació o de petites empreses. La Sagrada Família obre de 9:00 a 14:00 i la Pedrera, d'11:00 a 20:30; el MNAC i el Museu Picasso tanquen.",
+        es: "El 1 de enero de 2027 es viernes y festivo: las tiendas con horario general cierran, y pueden abrir las panaderías, las tiendas de conveniencia, las farmacias y las tiendas de hasta 300 m² de alimentación o de pequeñas empresas. La Sagrada Familia abre de 9:00 a 14:00 y La Pedrera, de 11:00 a 20:30; el MNAC y el Museu Picasso cierran.",
+        en: "1 January 2027 is a Friday and a public holiday: shops on the general timetable close, while bakeries, convenience stores, pharmacies and shops of up to 300 m² selling everyday food or run by small businesses may open. The Sagrada Família opens 9:00 to 14:00 and La Pedrera 11:00 to 20:30; MNAC and the Museu Picasso are closed.",
+      }),
+    },
+  ];
 }
 
 /* -------------------------------------------------------------------------- */
@@ -202,6 +345,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "El 2025 la vetllada va començar a les 22:00 amb un espectacle especial de les fonts màgiques, i l'espectacle central va anar de 23:50 a 00:10: començava deu minuts abans de les campanades i s'allargava els deu primers minuts de l'any.",
         plansSentence("ca", facts),
       ),
+      nightTable("ca"),
       ...h2(
         "Com s'hi entra: accessos, què no hi pots portar i espai reservat",
         "Així va funcionar el 2025; els detalls del 2026-27 arribaran amb el dispositiu de l'Ajuntament:",
@@ -221,6 +365,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Aquesta taula aplica l'horari general de TMB a la nit de Cap d'Any i als dies de Reis. L'1 de gener de 2027 és divendres, i els divendres l'horari general arriba fins a les 2:00; TMB ho confirmarà al desembre:",
       ),
       metroTable("ca", NYE_METRO_DAYS),
+      nightTransportTable("ca"),
       ...paras(christmasTransportMention("ca")),
       ...h2(
         "Els dotze grans de raïm i altres tradicions",
@@ -258,6 +403,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
           question: "Què són els dotze grans de raïm?",
           answer: "A mitjanit es menja un gra de raïm a cada una de les dotze campanades i es demana un desig. Després es brinda amb cava.",
         },
+        ...moreFaq("ca", facts),
       ]),
       ...paras(verifiedLine("ca", FESTIVE_VERIFIED)),
       ...b2Related([...RELATED], "ca"),
@@ -286,6 +432,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "En 2025 la velada empezó a las 22:00 con un espectáculo especial de las fuentes mágicas, y el espectáculo central fue de 23:50 a 00:10: empezaba diez minutos antes de las campanadas y se alargaba los diez primeros minutos del año.",
         plansSentence("es", facts),
       ),
+      nightTable("es"),
       ...h2(
         "Cómo se entra: accesos, qué no puedes llevar y espacio reservado",
         "Así funcionó en 2025; los detalles de 2026-27 llegarán con el dispositivo del Ayuntamiento:",
@@ -305,6 +452,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Esta tabla aplica el horario general de TMB a la Nochevieja y a los días de Reyes. El 1 de enero de 2027 es viernes, y los viernes el horario general llega hasta las 2:00; TMB lo confirmará en diciembre:",
       ),
       metroTable("es", NYE_METRO_DAYS),
+      nightTransportTable("es"),
       ...paras(christmasTransportMention("es")),
       ...h2(
         "Las 12 uvas y otras tradiciones",
@@ -342,6 +490,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
           question: "¿Qué son las 12 uvas?",
           answer: "A medianoche se come una uva con cada una de las doce campanadas y se pide un deseo. Después se brinda con cava.",
         },
+        ...moreFaq("es", facts),
       ]),
       ...paras(verifiedLine("es", FESTIVE_VERIFIED)),
       ...b2Related([...RELATED], "es"),
@@ -369,6 +518,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "In 2025 the evening began at 22:00 with a special Magic Fountains show, and the main show ran from 23:50 to 00:10, starting ten minutes before the midnight chimes and running into the first ten minutes of the year.",
       plansSentence("en", facts),
     ),
+    nightTable("en"),
     ...h2(
       "Getting in: entry points, what you cannot bring, accessible area",
       "This is how it worked in 2025; the 2026-27 details will come with the City Council's plan:",
@@ -388,6 +538,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "This table applies TMB's standing timetable to New Year's Eve and the Three Kings days. 1 January 2027 is a Friday, and on Fridays the standing timetable runs to 2:00; TMB will confirm in December:",
     ),
     metroTable("en", NYE_METRO_DAYS),
+    nightTransportTable("en"),
     ...paras(christmasTransportMention("en")),
     ...h2(
       "The 12 grapes and other New Year traditions",
@@ -425,6 +576,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         question: "What are the 12 grapes?",
         answer: "At midnight you eat one grape with each of the twelve chimes and make a wish. Then everyone toasts with cava.",
       },
+      ...moreFaq("en", facts),
     ]),
     ...paras(verifiedLine("en", FESTIVE_VERIFIED)),
     ...b2Related([...RELATED], "en"),

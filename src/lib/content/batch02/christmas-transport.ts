@@ -68,7 +68,20 @@ import {
  * City Council's Christmas-site metro line for 25 Dec (it carries 2024's
  * weekday and contradicts TMB), and every press report.
  *
- * HOW TO UPDATE (by 18 December 2026, when a test starts failing):
+ * 21 Nov 2026 (December events cluster): FGC published its 2026-27 hours on
+ * 19 Nov (Govern press room): 24 Dec until 23:00, Christmas Day until 2:00,
+ * all night on New Year's Eve on S1, S2, L6, L7, L12 and L8, and extra
+ * trains on the weekends before Christmas (FGC_PRE_CHRISTMAS_2026). Filled
+ * as ANNOUNCED_2026_27.fgc; the lead's pre-registered "some operators have
+ * published" switch follows (its bold first sentence is unchanged). TMB,
+ * ATM, Rodalies and TRAM re-read: nothing yet. Added: a day-by-day table of
+ * every operator (glanceRows; operatorRowsFor/oneDayTable give the New
+ * Year's Eve guide its night table), FGC's weekend trains, FAQ in the
+ * searched words (Rodalies on New Year's Eve, metro on 26 Dec, on 1 Jan and
+ * on 5-6 Jan), and links to what is open on 25-26 Dec and to shops on 1 and
+ * 6 Jan. Re-read checkpoints: TRANSPORT_NADAL_REREAD_BY (7, 17, 23, 30 Dec).
+ *
+ * HOW TO UPDATE (from each TRANSPORT_NADAL_REREAD_BY day, when a test starts failing):
  *  - Read each operator's `watch` page. When its 2026-27 notice is out, fill
  *    ANNOUNCED_2026_27[key] with the notice's URL, the read date and, for
  *    each day it covers, what it says (ca/es/en). That line replaces last
@@ -81,16 +94,20 @@ import {
  * keyed by file; a test holds the copy equal to HOURS.
  */
 
-/** The day every operator below was last read. Every "checked" line reads this, never the clock. */
-export const TRANSPORT_NADAL_AS_OF = "2026-11-05";
+/**
+ * The day every operator below was last read. Every "checked" line reads this, never the clock.
+ * 21 Nov 2026: FGC has published its 2026-27 hours (Govern press room, 19 Nov); TMB, ATM, Rodalies and TRAM nothing yet.
+ */
+export const TRANSPORT_NADAL_AS_OF = "2026-11-21";
 
 /**
- * From this day the page must have been re-read (a test fails otherwise). In
- * 2025 the operators published between 26 Nov (TMB's season preview) and
- * 23 Dec (TMB's special hours); FGC on 18 Dec, Rodalies on 16 Dec, ATM on
- * 5 Dec.
+ * The re-read checkpoints: from each of these days TRANSPORT_NADAL_AS_OF must
+ * be on or after it (a test fails otherwise). They follow last season's
+ * publication days, one day later: the ATM's joint note on 5 Dec 2025 (so
+ * 7 Dec), Rodalies on 16 Dec (17 Dec), TMB's Christmas Eve hours on 23 Dec
+ * (23 Dec, the day they come out) and its New Year's Eve note on 30 Dec.
  */
-export const TRANSPORT_NADAL_REREAD_BY = "2026-12-18";
+export const TRANSPORT_NADAL_REREAD_BY = ["2026-12-07", "2026-12-17", "2026-12-23", "2026-12-30"] as const;
 
 /** The first day this page checked the operators: no 2026-27 notice can be read before it. */
 const FIRST_CHECKED = "2026-11-05";
@@ -138,8 +155,16 @@ export interface Announced {
   url: string;
   /** The day it was read, ISO. */
   read: string;
+  /** The day the operator published it, ISO, when the page shows it. */
+  published?: string;
+  /** The full line for each day it covers, without the season. */
   days: Partial<Record<DayKey, Record<Locale, string>>>;
+  /** Short forms for the key facts and the day-by-day table ("fins a les 23:00"). */
+  short?: Partial<Record<DayKey, Record<Locale, string>>>;
 }
+
+/** FGC's 2026-27 notice (Govern press room, 19 Nov 2026 10:00). */
+const FGC_2026_27_URL = "https://govern.cat/salapremsa/notes-premsa/894036/ferrocarrils-reforca-servei-caps-setmana-festius-previs-festes-nadal";
 
 /**
  * The operators' 2026-27 notices, as each publishes. `null` = nothing on
@@ -151,9 +176,47 @@ export const ANNOUNCED_2026_27: Record<OperatorKey, Announced | null> = {
   tmbBus: null,
   nitbus: null,
   rodalies: null,
-  fgc: null,
+  // "el dia 24 de desembre, vigília de Nadal, el servei de trens finalitzarà a les 23.00 h i el dia de Nadal els trens
+  // circularan fins a les 2.00 h. Per Cap d'Any els trens circularan durant tota la nit a les línies S1 (Terrassa),
+  // S2 (Sabadell), L6 (Sarrià), L7 (Av. Tibidabo), L12 (Reina Elisenda) i L8 (Molí Nou)." (19 Nov 2026). Sant Esteve,
+  // 1 and 6 January are not in the note: those days keep last season's line.
+  fgc: {
+    url: FGC_2026_27_URL,
+    read: "2026-11-21",
+    published: "2026-11-19",
+    days: {
+      christmasEve: { ca: "el servei de trens acaba a les 23:00", es: "el servicio de trenes termina a las 23:00", en: "train service ends at 23:00" },
+      christmas: { ca: "els trens circulen fins a les 2:00", es: "los trenes circulan hasta las 2:00", en: "trains run until 2:00" },
+      newYearsEve: {
+        ca: "els trens circulen tota la nit a les línies S1 (Terrassa), S2 (Sabadell), L6 (Sarrià), L7 (Av. Tibidabo), L12 (Reina Elisenda) i L8 (Molí Nou)",
+        es: "los trenes circulan toda la noche en las líneas S1 (Terrassa), S2 (Sabadell), L6 (Sarrià), L7 (Av. Tibidabo), L12 (Reina Elisenda) y L8 (Molí Nou)",
+        en: "trains run all night on lines S1 (Terrassa), S2 (Sabadell), L6 (Sarrià), L7 (Av. Tibidabo), L12 (Reina Elisenda) and L8 (Molí Nou)",
+      },
+    },
+    short: {
+      christmasEve: { ca: "fins a les 23:00", es: "hasta las 23:00", en: "until 23:00" },
+      christmas: { ca: "fins a les 2:00", es: "hasta las 2:00", en: "until 2:00" },
+      newYearsEve: { ca: "tota la nit a S1, S2, L6, L7, L12 i L8", es: "toda la noche en S1, S2, L6, L7, L12 y L8", en: "all night on S1, S2, L6, L7, L12 and L8" },
+    },
+  },
   tram: null,
 };
+
+/**
+ * FGC's extra trains on the weekends and holiday before Christmas 2026 (same
+ * note, 19 Nov 2026): "els caps de setmana del 21 i 22 de novembre, 28 i 29 de
+ * novembre, 5, 6, 12, 13, 19 i 20 de desembre i el festiu del 8 de desembre";
+ * Barcelona-Vallès "onze circulacions noves en la franja horària de 16.00 h a
+ * 21.00 h: cinc a l'S1 (Terrassa), cinc a l'S2 (Sabadell) i una a l'L6
+ * (Sarrià)"; Llobregat-Anoia "entre les 14.00 h i les 19.00 h amb trens de
+ * composició doble, és a dir, formats per sis cotxes".
+ */
+export const FGC_PRE_CHRISTMAS_2026 = {
+  days: ["2026-11-21", "2026-11-22", "2026-11-28", "2026-11-29", "2026-12-05", "2026-12-06", "2026-12-08", "2026-12-12", "2026-12-13", "2026-12-19", "2026-12-20"],
+  vallesExtra: { trains: 11, s1: 5, s2: 5, l6: 1, from: "16:00", to: "21:00" },
+  anoiaDouble: { from: "14:00", to: "19:00", cars: 6 },
+  url: FGC_2026_27_URL,
+} as const;
 
 /* -------------------------------------------------------------------------- */
 /* Sources                                                                    */
@@ -575,9 +638,16 @@ export function announcedProblems(slot: Announced, op: Operator): string[] {
   return problems;
 }
 
-/** True once `today` is on or after the re-read day while the page was last read before it. */
+/** The last re-read checkpoint `today` has reached, or null before the first. */
+export function rereadDueOn(today: string): string | null {
+  const passed = TRANSPORT_NADAL_REREAD_BY.filter((day) => today >= day);
+  return passed.length ? passed[passed.length - 1]! : null;
+}
+
+/** True once `today` has reached a checkpoint while the page was last read before it. */
 export function needsReread(today: string, asOf: string = TRANSPORT_NADAL_AS_OF): boolean {
-  return today >= TRANSPORT_NADAL_REREAD_BY && asOf < TRANSPORT_NADAL_REREAD_BY;
+  const due = rereadDueOn(today);
+  return due !== null && asOf < due;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -601,7 +671,7 @@ function operatorLine(op: Operator, day: DayKey, locale: Locale, announced: Reco
   const slot = announced[op.key];
   const now = slot?.days[day];
   if (slot && now) {
-    return `**${op.name[locale]}** (2026-27): ${now[locale]} ([${SOURCE[locale]}](${slot.url}))`;
+    return `**${op.name[locale]}** (2026-27): ${now[locale]} ([${SOURCE[locale]}](${slot.url})).`;
   }
   const fact = op.days[day];
   if (!fact) return null;
@@ -621,7 +691,7 @@ export function dayItems(day: DayKey, locale: Locale, announced: Record<Operator
   const metroSlot = announced.metro?.days[day];
   items.push(
     metroSlot
-      ? `**${operatorByKey("metro").name[locale]}** (2026-27): ${metroSlot[locale]} ([${SOURCE[locale]}](${announced.metro!.url}))`
+      ? `**${operatorByKey("metro").name[locale]}** (2026-27): ${metroSlot[locale]} ([${SOURCE[locale]}](${announced.metro!.url})).`
       : `**${STANDING[locale].metro}:** ${metroLine(iso, locale)}.`,
   );
   const metroLast = operatorByKey("metro").days[day];
@@ -633,7 +703,7 @@ export function dayItems(day: DayKey, locale: Locale, announced: Record<Operator
     if (line) items.push(line);
   }
   const tramSlot = announced.tram?.days[day];
-  if (tramSlot) items.push(`**${operatorByKey("tram").name[locale]}** (2026-27): ${tramSlot[locale]} ([${SOURCE[locale]}](${announced.tram!.url}))`);
+  if (tramSlot) items.push(`**${operatorByKey("tram").name[locale]}** (2026-27): ${tramSlot[locale]} ([${SOURCE[locale]}](${announced.tram!.url})).`);
   else {
     items.push(`**${STANDING[locale].tram}:** ${tramLine(iso, locale)}.`);
     const tramLast = operatorLine(operatorByKey("tram"), day, locale, { ...announced, tram: null });
@@ -643,10 +713,65 @@ export function dayItems(day: DayKey, locale: Locale, announced: Record<Operator
 }
 
 /* -------------------------------------------------------------------------- */
+/* Compact tables: one day, or every day, at a glance                         */
+/* -------------------------------------------------------------------------- */
+
+const NO_NOTICE: Record<Locale, string> = { ca: "sense avís especial", es: "sin aviso especial", en: "no special notice" };
+const STANDING_SHORT: Record<Locale, string> = { ca: "horari general", es: "horario general", en: "standing timetable" };
+
+/** The tram's closing in a few words, from its standing rules. */
+function tramShort(iso: string, locale: Locale): string {
+  return {
+    ca: { midnight: "fins a mitjanit", two: "fins a les 2:00", allNight: "tota la nit", tenThirty: "fins a les 22:30" },
+    es: { midnight: "hasta medianoche", two: "hasta las 2:00", allNight: "toda la noche", tenThirty: "hasta las 22:30" },
+    en: { midnight: "until midnight", two: "until 2:00", allNight: "all night", tenThirty: "until 22:30" },
+  }[locale][tramDay(iso).close];
+}
+
+/**
+ * One operator on one day, in a few words: the 2026-27 notice when out
+ * ("fins a les 23:00 (2026-27)"), else last season's with its year, else "no
+ * special notice". Metro and tram: the standing timetable, labelled so.
+ */
+export function shortCell(key: OperatorKey, day: DayKey, locale: Locale, announced: Record<OperatorKey, Announced | null> = ANNOUNCED_2026_27): string {
+  const slot = announced[key];
+  const now = slot?.short?.[day] ?? slot?.days[day];
+  if (now) return `${now[locale]} (2026-27)`;
+  if (key === "metro") return `${metroShort(DAYS[day], locale)} (${STANDING_SHORT[locale]})`;
+  if (key === "tram") return `${tramShort(DAYS[day], locale)} (${STANDING_SHORT[locale]})`;
+  const last = operatorByKey(key).days[day];
+  return last ? `${last.short[locale]} (${last.year})` : NO_NOTICE[locale];
+}
+
+const TABLE_KEYS: readonly OperatorKey[] = ["metro", "tmbBus", "nitbus", "rodalies", "fgc", "tram"];
+
+const TABLE_NOTE: Record<Locale, string> = {
+  ca: "«Horari general»: l'horari de l'operador aplicat als dies d'aquest any. «2026-27»: el que ja ha publicat l'operador. Un any (2025, 2026): el que va fer el Nadal passat, per confirmar. «Sense avís especial»: l'any passat no en va publicar cap per a aquell dia.",
+  es: "«Horario general»: el horario del operador aplicado a los días de este año. «2026-27»: lo que ya ha publicado el operador. Un año (2025, 2026): lo que hizo la Navidad pasada, por confirmar. «Sin aviso especial»: el año pasado no publicó ninguno para ese día.",
+  en: "'Standing timetable': the operator's timetable applied to this year's days. '2026-27': what the operator has already published. A year (2025, 2026): what it did last Christmas, to be confirmed. 'No special notice': it published none for that day last year.",
+};
+
+/** Every operator on one day: [operator, hours]. The New Year's Eve guide prints the 31 December one. */
+export function operatorRowsFor(day: DayKey, locale: Locale, announced: Record<OperatorKey, Announced | null> = ANNOUNCED_2026_27): string[][] {
+  return TABLE_KEYS.map((key) => [operatorByKey(key).name[locale], shortCell(key, day, locale, announced)]);
+}
+
+/** The one-day table ("Transport la nit de Cap d'Any"), with the same note as the page's table. */
+export function oneDayTable(day: DayKey, caption: string, locale: Locale, announced: Record<OperatorKey, Announced | null> = ANNOUNCED_2026_27): Block {
+  const headers = { ca: ["Transport", "Horari"], es: ["Transporte", "Horario"], en: ["Service", "Hours"] }[locale];
+  return table(caption, headers, operatorRowsFor(day, locale, announced), `${TABLE_NOTE[locale]} ${{ ca: "Comprovat el", es: "Comprobado el", en: "Checked on" }[locale]} ${dateYear(TRANSPORT_NADAL_AS_OF, locale)}.`);
+}
+
+/** Every day × every operator, for the page's "at a glance" table. */
+export function glanceRows(locale: Locale, announced: Record<OperatorKey, Announced | null> = ANNOUNCED_2026_27): string[][] {
+  return TRANSPORT_DAYS.map((day) => [cap(`${DAY_NAME[day][locale]}, ${dayDate(DAYS[day], locale, false)}`), ...TABLE_KEYS.map((key) => shortCell(key, day, locale, announced))]);
+}
+
+/* -------------------------------------------------------------------------- */
 /* Meta                                                                       */
 /* -------------------------------------------------------------------------- */
 
-type Meta = { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
+type Meta ={ path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
 
 export const TRANSPORT_NADAL_META: Record<Locale, Meta> = {
   ca: {
@@ -702,6 +827,24 @@ function dayExtra(day: DayKey, locale: Locale): string[] {
       }),
     ];
   }
+  if (day === "santEsteve") {
+    return [
+      L({
+        ca: `Què obre a Barcelona el 25 i el 26 de desembre (monuments, museus i botigues), a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
+        es: `Qué abre en Barcelona el 25 y el 26 de diciembre (monumentos, museos y tiendas), en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
+        en: `What is open in Barcelona on 25 and 26 December (sights, museums and shops) is in ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
+      }),
+    ];
+  }
+  if (day === "newYear") {
+    return [
+      L({
+        ca: `Quines botigues poden obrir l'1 i el 6 de gener, i els diumenges i festius de tot l'any, a ${b2link("shops", "ca", "botigues obertes en festius a Catalunya")}.`,
+        es: `Qué tiendas pueden abrir el 1 y el 6 de enero, y los domingos y festivos de todo el año, en ${b2link("shops", "es", "tiendas abiertas en festivos en Cataluña")}.`,
+        en: `Which shops may open on 1 and 6 January, and on Sundays and holidays all year, is in ${b2link("shops", "en", "shops open on Sundays and holidays in Catalonia")}.`,
+      }),
+    ];
+  }
   if (day === "reisEve") {
     return [
       L({
@@ -725,33 +868,100 @@ function noticeRows(locale: Locale): string[][] {
   };
   return OPERATORS.filter((op) => op.key !== "metro").map((op) => {
     const last = op.notices.map((n) => dateYear(n.published, locale)).filter((v, i, a) => a.indexOf(v) === i).join("; ");
-    const status = ANNOUNCED_2026_27[op.key] ? { ca: "Publicat", es: "Publicado", en: "Published" }[locale] : cap(PENDING[locale]);
+    const slot = ANNOUNCED_2026_27[op.key];
+    const status = slot
+      ? slot.published
+        ? { ca: `Publicat el ${dateYear(slot.published, "ca")}`, es: `Publicado el ${dateYear(slot.published, "es")}`, en: `Published on ${dateYear(slot.published, "en")}` }[locale]
+        : { ca: "Publicat", es: "Publicado", en: "Published" }[locale]
+      : cap(PENDING[locale]);
     return [op.name[locale], last, where[op.key][locale], status];
   });
 }
 
 const RELATED: B2Key[] = ["hours", "newYear", "reis", "christmasBarcelona", "transport", "barcelonaDecember", "strikes"];
 
+const MONTH_NAME: Record<Locale, Record<string, string>> = {
+  ca: { "11": "de novembre", "12": "de desembre" },
+  es: { "11": "de noviembre", "12": "de diciembre" },
+  en: { "11": "November", "12": "December" },
+};
+
+/** "21, 22, 28 i 29 de novembre i 5, 6, 8, ... de desembre" from ISO days in November and December. */
+export function daysByMonth(days: readonly string[], locale: Locale): string {
+  const and = { ca: "i", es: "y", en: "and" }[locale];
+  const list = (items: string[]) => (items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")} ${and} ${items[items.length - 1]}`);
+  const months = [...new Set(days.map((d) => d.slice(5, 7)))];
+  return list(
+    months.map((mm) => {
+      const name = MONTH_NAME[locale][mm];
+      if (!name) throw new Error(`christmas-transport: no month name for ${mm}`);
+      return `${list(days.filter((d) => d.slice(5, 7) === mm).map((d) => String(Number(d.slice(8, 10)))))} ${name}`;
+    }),
+  );
+}
+
+/** FGC's extra trains on the weekends before Christmas (19 Nov 2026 note). */
+function fgcPreChristmas(locale: Locale): Block[] {
+  const f = FGC_PRE_CHRISTMAS_2026;
+  const days = daysByMonth(f.days, locale);
+  const v = f.vallesExtra;
+  const a = f.anoiaDouble;
+  const note = { ca: "nota del Govern del 19 de novembre de 2026", es: "nota del Govern del 19 de noviembre de 2026", en: "Generalitat note of 19 November 2026" }[locale];
+  return h2(
+    { ca: "Abans de Nadal: més trens d'FGC els caps de setmana", es: "Antes de Navidad: más trenes de FGC los fines de semana", en: "Before Christmas: extra FGC trains at weekends" }[locale],
+    {
+      ca: `FGC reforça el servei els caps de setmana i el festiu abans de Nadal: el ${days}. A la línia Barcelona-Vallès hi afegeix ${v.trains} trens entre les ${v.from} i les ${v.to} (${v.s1} a l'S1 de Terrassa, ${v.s2} a l'S2 de Sabadell i ${v.l6} a l'L6 de Sarrià), i a la Llobregat-Anoia hi posa trens dobles, de ${a.cars} cotxes, entre les ${a.from} i les ${a.to} ([${note}](${f.url})). Segons FGC, el detall es pot consultar al seu web, a l'app i a les estacions.`,
+      es: `FGC refuerza el servicio los fines de semana y el festivo antes de Navidad: el ${days}. En la línea Barcelona-Vallès añade ${v.trains} trenes entre las ${v.from} y las ${v.to} (${v.s1} en la S1 de Terrassa, ${v.s2} en la S2 de Sabadell y ${v.l6} en la L6 de Sarrià), y en la Llobregat-Anoia pone trenes dobles, de ${a.cars} coches, entre las ${a.from} y las ${a.to} ([${note}](${f.url})). Según FGC, el detalle se puede consultar en su web, en la app y en las estaciones.`,
+      en: `FGC is running extra trains on the weekends and the holiday before Christmas: ${days}. On the Barcelona-Vallès line it adds ${v.trains} trains between ${v.from} and ${v.to} (${v.s1} on the S1 to Terrassa, ${v.s2} on the S2 to Sabadell and ${v.l6} on the L6 to Sarrià), and on the Llobregat-Anoia line it runs double, ${a.cars}-car trains between ${a.from} and ${a.to} ([${note}](${f.url})). FGC says the details are on its website, its app and at stations.`,
+    }[locale],
+  );
+}
+
 export function buildTransportBody(locale: Locale, announced: Record<OperatorKey, Announced | null> = ANNOUNCED_2026_27): Block[] {
   const L = <T,>(v: Record<Locale, T>) => v[locale];
   const anyOut = (Object.values(announced) as (Announced | null)[]).some(Boolean);
+  const outOps = OPERATORS.filter((op) => announced[op.key]).map((op) => op.name);
+  const outCount = outOps.length;
+  /** "FGC", "FGC i Rodalies", "TMB, FGC i Rodalies": the operators with a 2026-27 notice, for the lead. */
+  const outNames = Object.fromEntries(
+    (["ca", "es", "en"] as Locale[]).map((loc) => {
+      const names = outOps.map((n) => n[loc].split(" (")[0]!);
+      const and = { ca: "i", es: "y", en: "and" }[loc];
+      return [loc, names.length <= 1 ? names.join("") : `${names.slice(0, -1).join(", ")} ${and} ${names[names.length - 1]}`];
+    }),
+  ) as Record<Locale, string>;
   const eve = dayDate(DAYS.christmasEve, locale, false);
   const nye = dayDate(DAYS.newYearsEve, locale, false);
   const fgc = operatorByKey("fgc");
   const rod = operatorByKey("rodalies");
+  const fgcSlot = announced.fgc;
+  const fgcNye = fgcSlot?.days.newYearsEve;
+  const rodSlot = announced.rodalies;
+  const rodNye = rodSlot?.days.newYearsEve;
+  /** "FGC, el 19 de novembre de 2026": the operators that have published this season, with the day. */
+  const outSoFar = OPERATORS.filter((op) => announced[op.key])
+    .map((op) => {
+      const slot = announced[op.key]!;
+      const day = slot.published ? { ca: `, el ${dateYear(slot.published, "ca")}`, es: `, el ${dateYear(slot.published, "es")}`, en: ` on ${dateYear(slot.published, "en")}` }[locale] : "";
+      return `${op.name[locale].split(" (")[0]}${day}`;
+    })
+    .join("; ");
 
   const leadText = L({
-    ca: `**Per Nadal i Cap d'Any 2026-27, el metro de Barcelona tanca a les 23:00 la Nit de Nadal (${eve}) i no tanca en tota la nit de Cap d'Any (${nye}), segons l'horari general de TMB.** ${anyOut ? `Alguns operadors ja han publicat els horaris d'aquest any (marcats amb 2026-27); per als altres, el del Nadal passat, amb l'any i ${PENDING.ca}.` : `Cap operador no ha publicat encara els horaris especials d'aquest any (${AS_OF.ca}): per al bus, el NitBus, Rodalies, FGC i el tram, aquí tens el que van fer el Nadal passat, amb l'any al costat i ${PENDING.ca}; els del 2026-27 els afegim el dia que surtin.`} El 2025, Rodalies i FGC van acabar el servei cap a les 23:00 la Nit de Nadal, i FGC i el tram van circular tota la nit de Cap d'Any.`,
-    es: `**En Navidad y Nochevieja 2026-27, el metro de Barcelona cierra a las 23:00 en Nochebuena (${eve}) y no cierra en toda la noche de Fin de Año (${nye}), según el horario general de TMB.** ${anyOut ? `Algunos operadores ya han publicado los horarios de este año (marcados con 2026-27); para los demás, el de la Navidad pasada, con el año y ${PENDING.es}.` : `Ningún operador ha publicado aún los horarios especiales de este año (${AS_OF.es}): para el bus, el NitBus, Rodalies, FGC y el tranvía, aquí tienes lo que hicieron la Navidad pasada, con el año al lado y ${PENDING.es}; los de 2026-27 los añadimos el día que salgan.`} En 2025, Rodalies y FGC terminaron el servicio hacia las 23:00 en Nochebuena, y FGC y el tranvía circularon toda la noche de Fin de Año.`,
-    en: `**Over Christmas and New Year 2026-27, the Barcelona metro closes at 23:00 on Christmas Eve (${eve}) and runs all night on New Year's Eve (${nye}), according to TMB's standing timetable.** ${anyOut ? `Some operators have published this year's hours (marked 2026-27); for the others, last Christmas's, with the year and ${PENDING.en}.` : `No operator has published this year's special hours yet (${AS_OF.en}): for buses, the NitBus, Rodalies, FGC and the tram, here is what they did last Christmas, with the year next to it and ${PENDING.en}; the 2026-27 hours go in the day they come out.`} In 2025 Rodalies and FGC stopped at about 23:00 on Christmas Eve, and FGC and the tram ran all night on New Year's Eve.`,
+    ca: `**Per Nadal i Cap d'Any 2026-27, el metro de Barcelona tanca a les 23:00 la Nit de Nadal (${eve}) i no tanca en tota la nit de Cap d'Any (${nye}), segons l'horari general de TMB.** ${anyOut ? `${outNames.ca} ja ${outCount > 1 ? "han" : "ha"} publicat els horaris d'aquest any (marcats amb 2026-27); per als altres, el del Nadal passat, amb l'any i ${PENDING.ca}.` : `Cap operador no ha publicat encara els horaris especials d'aquest any (${AS_OF.ca}): per al bus, el NitBus, Rodalies, FGC i el tram, aquí tens el que van fer el Nadal passat, amb l'any al costat i ${PENDING.ca}; els del 2026-27 els afegim el dia que surtin.`} El 2025, Rodalies i FGC van acabar el servei cap a les 23:00 la Nit de Nadal, i FGC i el tram van circular tota la nit de Cap d'Any.`,
+    es: `**En Navidad y Nochevieja 2026-27, el metro de Barcelona cierra a las 23:00 en Nochebuena (${eve}) y no cierra en toda la noche de Fin de Año (${nye}), según el horario general de TMB.** ${anyOut ? `${outNames.es} ya ${outCount > 1 ? "han" : "ha"} publicado los horarios de este año (marcados con 2026-27); para los demás, el de la Navidad pasada, con el año y ${PENDING.es}.` : `Ningún operador ha publicado aún los horarios especiales de este año (${AS_OF.es}): para el bus, el NitBus, Rodalies, FGC y el tranvía, aquí tienes lo que hicieron la Navidad pasada, con el año al lado y ${PENDING.es}; los de 2026-27 los añadimos el día que salgan.`} En 2025, Rodalies y FGC terminaron el servicio hacia las 23:00 en Nochebuena, y FGC y el tranvía circularon toda la noche de Fin de Año.`,
+    en: `**Over Christmas and New Year 2026-27, the Barcelona metro closes at 23:00 on Christmas Eve (${eve}) and runs all night on New Year's Eve (${nye}), according to TMB's standing timetable.** ${anyOut ? `${outNames.en} ${outCount > 1 ? "have" : "has"} published this year's hours (marked 2026-27); for the others, last Christmas's, with the year and ${PENDING.en}.` : `No operator has published this year's special hours yet (${AS_OF.en}): for buses, the NitBus, Rodalies, FGC and the tram, here is what they did last Christmas, with the year next to it and ${PENDING.en}; the 2026-27 hours go in the day they come out.`} In 2025 Rodalies and FGC stopped at about 23:00 on Christmas Eve, and FGC and the tram ran all night on New Year's Eve.`,
   });
 
   const keyItems = (["christmasEve", "christmas", "santEsteve", "newYearsEve", "newYear", "reis"] as DayKey[]).map((day) => {
     const metro = metroShort(DAYS[day], locale);
     const extra = (["rodalies", "fgc"] as const)
       .map((key) => {
+        const name = operatorByKey(key).name[locale].split(" (")[0];
+        const now = announced[key]?.short?.[day];
+        if (now) return `${name} ${now[locale]} (2026-27)`;
         const f = operatorByKey(key).days[day];
-        return f ? `${operatorByKey(key).name[locale].split(" (")[0]} ${f.short[locale]} (${f.year})` : "";
+        return f ? `${name} ${f.short[locale]} (${f.year})` : "";
       })
       .filter(Boolean);
     return {
@@ -821,14 +1031,29 @@ export function buildTransportBody(locale: Locale, announced: Record<OperatorKey
       metroRows(locale, TRANSPORT_DAYS.map((d) => DAYS[d])),
       metroNote,
     ),
+    ...h2(
+      L({ ca: "Què funciona cada dia: metro, bus, NitBus, Rodalies, FGC i tram", es: "Qué funciona cada día: metro, bus, NitBus, Rodalies, FGC y tranvía", en: "What runs each day: metro, buses, NitBus, Rodalies, FGC and tram" }),
+      L({
+        ca: "Cada servei, dia a dia, en una taula. Al costat de cada horari hi ha d'on surt: l'horari general de l'operador, el que ja ha publicat per a aquest Nadal (2026-27) o el que va fer el Nadal passat (amb l'any). Sota la taula, el detall de cada dia amb les fonts.",
+        es: "Cada servicio, día a día, en una tabla. Junto a cada horario está de dónde sale: el horario general del operador, lo que ya ha publicado para esta Navidad (2026-27) o lo que hizo la Navidad pasada (con el año). Debajo de la tabla, el detalle de cada día con las fuentes.",
+        en: "Every service, day by day, in one table. Each entry says where it comes from: the operator's standing timetable, what it has already published for this Christmas (2026-27) or what it did last Christmas (with the year). Below the table, each day in detail with its sources.",
+      }),
+    ),
+    table(
+      L({ ca: "Transport a Barcelona per Nadal, Cap d'Any i Reis 2026-27, dia a dia", es: "Transporte en Barcelona en Navidad, Nochevieja y Reyes 2026-27, día a día", en: "Barcelona transport over Christmas, New Year and Reis 2026-27, day by day" }),
+      [L({ ca: "Dia", es: "Día", en: "Day" }), ...TABLE_KEYS.map((key) => operatorByKey(key).name[locale].split(" (")[0]!)],
+      glanceRows(locale, announced),
+      `${TABLE_NOTE[locale]} ${L({ ca: "Comprovat el", es: "Comprobado el", en: "Checked on" })} ${dateYear(TRANSPORT_NADAL_AS_OF, locale)}.`,
+    ),
+    ...fgcPreChristmas(locale),
     ...daySections,
     ...trafficBlocks("christmas", locale),
     ...h2(
       L({ ca: "Quan es publiquen els horaris del 2026-27?", es: "¿Cuándo se publican los horarios de 2026-27?", en: "When do the 2026-27 hours come out?" }),
       L({
-        ca: `Cada operador publica el seu avís entre finals de novembre i la vigília de Nadal. El 2025, l'ATM (la nota conjunta del NitBus, el tram i FGC) va sortir el ${dateYear("2025-12-05", "ca")}, Rodalies el ${dateYear(rod.notices[0]!.published, "ca")}, FGC el ${dateYear(fgc.notices[0]!.published, "ca")} i TMB el ${dateYear(PAST.tmbChristmas2025.published, "ca")} (i el ${dateYear("2025-12-30", "ca")} per a Cap d'Any). Revisem cada font i actualitzem aquesta pàgina el dia que surt.`,
-        es: `Cada operador publica su aviso entre finales de noviembre y la víspera de Navidad. En 2025, la ATM (la nota conjunta del NitBus, el tranvía y FGC) salió el ${dateYear("2025-12-05", "es")}, Rodalies el ${dateYear(rod.notices[0]!.published, "es")}, FGC el ${dateYear(fgc.notices[0]!.published, "es")} y TMB el ${dateYear(PAST.tmbChristmas2025.published, "es")} (y el ${dateYear("2025-12-30", "es")} para Nochevieja). Revisamos cada fuente y actualizamos esta página el día que sale.`,
-        en: `Each operator publishes its notice between late November and Christmas Eve. In 2025 the ATM (the joint note covering the NitBus, the tram and FGC) came out on ${dateYear("2025-12-05", "en")}, Rodalies on ${dateYear(rod.notices[0]!.published, "en")}, FGC on ${dateYear(fgc.notices[0]!.published, "en")} and TMB on ${dateYear(PAST.tmbChristmas2025.published, "en")} (and on ${dateYear("2025-12-30", "en")} for New Year's Eve). We check each source and update this page the day it comes out.`,
+        ca: `Cada operador publica el seu avís entre finals de novembre i la vigília de Nadal. El 2025, l'ATM (la nota conjunta del NitBus, el tram i FGC) va sortir el ${dateYear("2025-12-05", "ca")}, Rodalies el ${dateYear(rod.notices[0]!.published, "ca")}, FGC el ${dateYear(fgc.notices[0]!.published, "ca")} i TMB el ${dateYear(PAST.tmbChristmas2025.published, "ca")} (i el ${dateYear("2025-12-30", "ca")} per a Cap d'Any).${outSoFar ? ` Aquest any ja ho ha fet: ${outSoFar}; la resta, encara no (${AS_OF.ca}).` : ""} Revisem cada font i actualitzem aquesta pàgina el dia que surt.`,
+        es: `Cada operador publica su aviso entre finales de noviembre y la víspera de Navidad. En 2025, la ATM (la nota conjunta del NitBus, el tranvía y FGC) salió el ${dateYear("2025-12-05", "es")}, Rodalies el ${dateYear(rod.notices[0]!.published, "es")}, FGC el ${dateYear(fgc.notices[0]!.published, "es")} y TMB el ${dateYear(PAST.tmbChristmas2025.published, "es")} (y el ${dateYear("2025-12-30", "es")} para Nochevieja).${outSoFar ? ` Este año ya lo ha hecho: ${outSoFar}; el resto, aún no (${AS_OF.es}).` : ""} Revisamos cada fuente y actualizamos esta página el día que sale.`,
+        en: `Each operator publishes its notice between late November and Christmas Eve. In 2025 the ATM (the joint note covering the NitBus, the tram and FGC) came out on ${dateYear("2025-12-05", "en")}, Rodalies on ${dateYear(rod.notices[0]!.published, "en")}, FGC on ${dateYear(fgc.notices[0]!.published, "en")} and TMB on ${dateYear(PAST.tmbChristmas2025.published, "en")} (and on ${dateYear("2025-12-30", "en")} for New Year's Eve).${outSoFar ? ` This year so far: ${outSoFar}; the others, not yet (${AS_OF.en}).` : ""} We check each source and update this page the day it comes out.`,
       }),
     ),
     noticeTable,
@@ -858,10 +1083,50 @@ export function buildTransportBody(locale: Locale, announced: Record<OperatorKey
       },
       {
         question: L({ ca: "Quins trens d'FGC funcionen tota la nit de Cap d'Any?", es: "¿Qué trenes de FGC funcionan toda la noche de Fin de Año?", en: "Which FGC trains run all night on New Year's Eve?" }),
+        answer: fgcNye
+          ? L({
+              ca: `El 2026-27, FGC ja ho ha anunciat: ${fgcNye.ca} ([nota del ${dateYear(fgcSlot!.published ?? fgcSlot!.read, "ca")}](${fgcSlot!.url})); les freqüències encara no les ha donat. El 2025 ${fgc.days.newYearsEve!.text.ca}.`,
+              es: `En 2026-27, FGC ya lo ha anunciado: ${fgcNye.es} ([nota del ${dateYear(fgcSlot!.published ?? fgcSlot!.read, "es")}](${fgcSlot!.url})); las frecuencias aún no las ha dado. En 2025 ${fgc.days.newYearsEve!.text.es}.`,
+              en: `For 2026-27 FGC has already announced it: ${fgcNye.en} ([note of ${dateYear(fgcSlot!.published ?? fgcSlot!.read, "en")}](${fgcSlot!.url})); it has not given the frequencies yet. In 2025 ${fgc.days.newYearsEve!.text.en}.`,
+            })
+          : L({
+              ca: `El 2025, les línies S1 (Terrassa), S2 (Sabadell), L6, L7, L12 i L8 i el Funicular de Vallvidrera; FGC diu que ho fa "com és habitual". Les freqüències són a la secció de Cap d'Any. El 2026-27, ${PENDING.ca}.`,
+              es: `En 2025, las líneas S1 (Terrassa), S2 (Sabadell), L6, L7, L12 y L8 y el Funicular de Vallvidrera; FGC dice que lo hace "como es habitual". Las frecuencias están en la sección de Nochevieja. En 2026-27, ${PENDING.es}.`,
+              en: `In 2025, lines S1 (Terrassa), S2 (Sabadell), L6, L7, L12 and L8 and the Vallvidrera funicular; FGC calls it its usual New Year's Eve service. The frequencies are in the New Year's Eve section. For 2026-27, ${PENDING.en}.`,
+            }),
+      },
+      {
+        question: L({ ca: "Hi ha trens de Rodalies la nit de Cap d'Any?", es: "¿Hay trenes de Rodalies la noche de Fin de Año?", en: "Do Rodalies trains run all night on New Year's Eve?" }),
+        answer: rodNye
+          ? L({ ca: `El 2026-27: ${rodNye.ca} ([font](${rodSlot!.url})).`, es: `En 2026-27: ${rodNye.es} ([fuente](${rodSlot!.url})).`, en: `For 2026-27: ${rodNye.en} ([source](${rodSlot!.url})).` })
+          : L({
+              ca: `Rodalies no ha anunciat cap servei especial per a aquesta nit (${AS_OF.ca}), i el 2025 tampoc: el seu avís de Nadal només parlava del 24 i el 25 de desembre i dels horaris de festiu del 26 i de l'1 i el 6 de gener. Aquella nit, el que sí circula tota la nit és el metro (horari general de TMB)${fgcNye ? " i FGC a les línies S1, S2, L6, L7, L12 i L8 (FGC, 2026-27)" : ""}.`,
+              es: `Rodalies no ha anunciado ningún servicio especial para esa noche (${AS_OF.es}), y en 2025 tampoco: su aviso de Navidad solo hablaba del 24 y el 25 de diciembre y de los horarios de festivo del 26 y del 1 y el 6 de enero. Esa noche, lo que sí circula toda la noche es el metro (horario general de TMB)${fgcNye ? " y FGC en las líneas S1, S2, L6, L7, L12 y L8 (FGC, 2026-27)" : ""}.`,
+              en: `Rodalies has announced no special service for that night (${AS_OF.en}), and it announced none in 2025 either: its Christmas notice covered only 24 and 25 December and the holiday timetables on 26 December and 1 and 6 January. What does run all night is the metro (TMB's standing timetable)${fgcNye ? " and FGC on lines S1, S2, L6, L7, L12 and L8 (FGC, 2026-27)" : ""}.`,
+            }),
+      },
+      {
+        question: L({ ca: "Hi ha metro tota la nit per Sant Esteve, el 26 de desembre?", es: "¿Hay metro toda la noche en San Esteban, el 26 de diciembre?", en: "Does the metro run all night on 26 December (Sant Esteve)?" }),
         answer: L({
-          ca: `El 2025, les línies S1 (Terrassa), S2 (Sabadell), L6, L7, L12 i L8 i el Funicular de Vallvidrera; FGC diu que ho fa "com és habitual". Les freqüències són a la secció de Cap d'Any. El 2026-27, ${PENDING.ca}.`,
-          es: `En 2025, las líneas S1 (Terrassa), S2 (Sabadell), L6, L7, L12 y L8 y el Funicular de Vallvidrera; FGC dice que lo hace "como es habitual". Las frecuencias están en la sección de Nochevieja. En 2026-27, ${PENDING.es}.`,
-          en: `In 2025, lines S1 (Terrassa), S2 (Sabadell), L6, L7, L12 and L8 and the Vallvidrera funicular; FGC calls it its usual New Year's Eve service. The frequencies are in the New Year's Eve section. For 2026-27, ${PENDING.en}.`,
+          ca: `Segons l'horari general de TMB, el ${dayDate(DAYS.santEsteve, "ca", false)} el metro ${metroLine(DAYS.santEsteve, "ca")}${weekdayIndex(DAYS.santEsteve) === 6 ? ", com cada dissabte" : ""}. El 2025, que Sant Esteve va caure en divendres, va funcionar de 5:00 a 2:00. TMB confirma l'horari de Nadal al desembre.`,
+          es: `Según el horario general de TMB, el ${dayDate(DAYS.santEsteve, "es", false)} el metro ${metroLine(DAYS.santEsteve, "es")}${weekdayIndex(DAYS.santEsteve) === 6 ? ", como cada sábado" : ""}. En 2025, cuando San Esteban cayó en viernes, funcionó de 5:00 a 2:00. TMB confirma el horario de Navidad en diciembre.`,
+          en: `Under TMB's standing timetable, on ${dayDate(DAYS.santEsteve, "en", false)} the metro ${metroLine(DAYS.santEsteve, "en")}${weekdayIndex(DAYS.santEsteve) === 6 ? ", as on every Saturday" : ""}. In 2025, when Sant Esteve fell on a Friday, it ran from 5:00 to 2:00. TMB confirms its Christmas hours in December.`,
+        }),
+      },
+      {
+        question: L({ ca: "Fins a quina hora hi ha metro l'1 de gener?", es: "¿Hasta qué hora hay metro el 1 de enero?", en: "Until what time does the metro run on 1 January?" }),
+        answer: L({
+          ca: `Segons l'horari general de TMB, el ${dayDate(DAYS.newYear, "ca", false)} el metro ${metroLine(DAYS.newYear, "ca")}. El 2026, que l'1 de gener va caure en dijous, va tancar a mitjanit, després de 43 hores seguides.`,
+          es: `Según el horario general de TMB, el ${dayDate(DAYS.newYear, "es", false)} el metro ${metroLine(DAYS.newYear, "es")}. En 2026, cuando el 1 de enero cayó en jueves, cerró a medianoche, tras 43 horas seguidas.`,
+          en: `Under TMB's standing timetable, on ${dayDate(DAYS.newYear, "en", false)} the metro ${metroLine(DAYS.newYear, "en")}. In 2026, when 1 January was a Thursday, it closed at midnight after 43 hours non-stop.`,
+        }),
+      },
+      {
+        question: L({ ca: "Quin horari fa el metro el 5 i el 6 de gener?", es: "¿Qué horario tiene el metro el 5 y el 6 de enero?", en: "What are the metro hours on 5 and 6 January?" }),
+        answer: L({
+          ca: `Segons l'horari general de TMB, el ${dayDate(DAYS.reisEve, "ca", false)}, dia de la cavalcada i vigília de festiu, el metro ${metroLine(DAYS.reisEve, "ca")}, i el ${dayDate(DAYS.reis, "ca", false)}, Reis, ${metroLine(DAYS.reis, "ca")}. El 2026, el dia de la cavalcada TMB hi va posar més trens a partir de les ${TRANSPORT_2026.reinforcedFrom}.`,
+          es: `Según el horario general de TMB, el ${dayDate(DAYS.reisEve, "es", false)}, día de la cabalgata y víspera de festivo, el metro ${metroLine(DAYS.reisEve, "es")}, y el ${dayDate(DAYS.reis, "es", false)}, Reyes, ${metroLine(DAYS.reis, "es")}. En 2026, el día de la cabalgata TMB puso más trenes a partir de las ${TRANSPORT_2026.reinforcedFrom}.`,
+          en: `Under TMB's standing timetable, on ${dayDate(DAYS.reisEve, "en", false)}, the day of the parade and the eve of a holiday, the metro ${metroLine(DAYS.reisEve, "en")}, and on ${dayDate(DAYS.reis, "en", false)}, Three Kings' Day, it ${metroLine(DAYS.reis, "en")}. In 2026 TMB added trains from ${TRANSPORT_2026.reinforcedFrom} on the day of the parade.`,
         }),
       },
       {
@@ -891,9 +1156,9 @@ export function buildTransportBody(locale: Locale, announced: Record<OperatorKey
       {
         question: L({ ca: "Quan publiquen TMB, Rodalies i FGC els horaris de Nadal 2026?", es: "¿Cuándo publican TMB, Rodalies y FGC los horarios de Navidad 2026?", en: "When do TMB, Rodalies and FGC publish their Christmas 2026 hours?" }),
         answer: L({
-          ca: `El 2025, l'ATM el ${dateYear("2025-12-05", "ca")}, Rodalies el ${dateYear(rod.notices[0]!.published, "ca")}, FGC el ${dateYear(fgc.notices[0]!.published, "ca")} i TMB el ${dateYear(PAST.tmbChristmas2025.published, "ca")}. Ho afegim aquí el dia que surten.`,
-          es: `En 2025, la ATM el ${dateYear("2025-12-05", "es")}, Rodalies el ${dateYear(rod.notices[0]!.published, "es")}, FGC el ${dateYear(fgc.notices[0]!.published, "es")} y TMB el ${dateYear(PAST.tmbChristmas2025.published, "es")}. Lo añadimos aquí el día que salen.`,
-          en: `In 2025: the ATM on ${dateYear("2025-12-05", "en")}, Rodalies on ${dateYear(rod.notices[0]!.published, "en")}, FGC on ${dateYear(fgc.notices[0]!.published, "en")} and TMB on ${dateYear(PAST.tmbChristmas2025.published, "en")}. We add them here the day they come out.`,
+          ca: `El 2025, l'ATM el ${dateYear("2025-12-05", "ca")}, Rodalies el ${dateYear(rod.notices[0]!.published, "ca")}, FGC el ${dateYear(fgc.notices[0]!.published, "ca")} i TMB el ${dateYear(PAST.tmbChristmas2025.published, "ca")}.${outSoFar ? ` Aquest any ja ho ha fet: ${outSoFar}.` : ""} Ho afegim aquí el dia que surten.`,
+          es: `En 2025, la ATM el ${dateYear("2025-12-05", "es")}, Rodalies el ${dateYear(rod.notices[0]!.published, "es")}, FGC el ${dateYear(fgc.notices[0]!.published, "es")} y TMB el ${dateYear(PAST.tmbChristmas2025.published, "es")}.${outSoFar ? ` Este año ya lo ha hecho: ${outSoFar}.` : ""} Lo añadimos aquí el día que salen.`,
+          en: `In 2025: the ATM on ${dateYear("2025-12-05", "en")}, Rodalies on ${dateYear(rod.notices[0]!.published, "en")}, FGC on ${dateYear(fgc.notices[0]!.published, "en")} and TMB on ${dateYear(PAST.tmbChristmas2025.published, "en")}.${outSoFar ? ` Published this year so far: ${outSoFar}.` : ""} We add them here the day they come out.`,
         }),
       },
     ]),

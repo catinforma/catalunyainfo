@@ -62,6 +62,8 @@ export interface DateContent {
   answerNote: string[];
   /** One sentence with one link, after the answer (11 November: the general strike; the others: `noticeFor`). */
   notice?: { before: string; label: string; href: string; after: string };
+  /** 21 Nov 2026: a second one-link sentence on the Christmas and New Year date pages (`transportNoticeFor`). */
+  transportNotice?: { before: string; label: string; href: string; after: string };
   /**
    * 20 Nov 2026, 7 and 8 December 2026 only: the Spain-wide December bridge
    * page under the answer, as "¿Y en el resto de España? <label>" (the 2027
@@ -301,7 +303,48 @@ export function dateTitle(iso: DatePage, locale: DateLocale): string {
   return promise && `${title} ${promise}`.length <= 60 ? `${title} ${promise}` : title;
 }
 
+/**
+ * 21 Nov 2026 (December events cluster): a second one-link sentence on the
+ * Christmas and New Year date pages, to the page that answers that night's
+ * transport (24, 25 and 26 December, 1 and 6 January) or the city's New
+ * Year's Eve (31 December). Link lines only: titles, descriptions and answers
+ * are untouched.
+ */
+export function transportNoticeFor(iso: string, locale: DateLocale): DateContent["transportNotice"] {
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const transport = (before: string) => ({
+    before,
+    label: L("transport per Nadal i Cap d'Any 2026-27", "transporte en Navidad y Nochevieja 2026-27", "public transport at Christmas and New Year 2026-27"),
+    href: GUIDES.christmasTransport[locale],
+    after: ".",
+  });
+  switch (iso) {
+    case "2026-12-24":
+      return transport(L("Fins a quina hora hi ha metro, bus, Rodalies i FGC aquesta nit, a ", "Hasta qué hora hay metro, bus, Rodalies y FGC esta noche, en ", "How late the metro, buses, Rodalies and FGC run tonight is in "));
+    case "2026-12-25":
+    case "2026-12-26":
+    case "2027-01-01":
+    case "2027-01-06":
+      return transport(L("Els horaris del metro, el bus, Rodalies i FGC aquest dia festiu, a ", "Los horarios del metro, el bus, Rodalies y FGC este festivo, en ", "Metro, bus, Rodalies and FGC hours on this holiday are in "));
+    case "2026-12-31":
+      return {
+        before: L("La festa de Cap d'Any de Barcelona, el metro tota la nit i els trens d'aquella nit, a ", "La fiesta de Nochevieja de Barcelona, el metro toda la noche y los trenes de esa noche, en ", "Barcelona's New Year's Eve show, the all-night metro and that night's trains are in "),
+        label: L("Cap d'Any a Barcelona", "Nochevieja en Barcelona", "New Year's Eve in Barcelona"),
+        href: GUIDES.newYear[locale],
+        after: ".",
+      };
+    default:
+      return undefined;
+  }
+}
+
 export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
+  const content = baseDateContent(iso, locale);
+  const transportNotice = transportNoticeFor(iso, locale);
+  return transportNotice ? { ...content, transportNotice } : content;
+}
+
+function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
   // Tranche 4 (2 Nov 2026): the 2027 pages, written from the data rather than date by date.
   if (isTranche4(iso)) return dateContent2027(iso, locale);
   const name = regionalName(iso, locale);

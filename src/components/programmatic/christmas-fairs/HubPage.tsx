@@ -46,7 +46,8 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
     province: g.province,
     towns: g.towns.filter((town) => locale !== "en" || hasEnglish(town)),
   }));
-  const guides = (["christmas", "christmasBarcelona", "decemberBridge", "marato", "barcelonaDecember", "pessebres", "reis", "christmasTraditions", "shops"] as const).map((key) => ({
+  // 21 Nov 2026: New Year's Eve and the Christmas transport timetable join the list (link lines only).
+  const guides = (["christmas", "christmasBarcelona", "decemberBridge", "marato", "barcelonaDecember", "pessebres", "reis", "newYear", "christmasTransport", "christmasTraditions", "shops"] as const).map((key) => ({
     label: B2_TITLES[key][locale],
     href: b2href(key, locale),
   }));
