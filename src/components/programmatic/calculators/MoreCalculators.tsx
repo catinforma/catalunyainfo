@@ -7,6 +7,8 @@ import { calculatorCard } from "@/lib/programmatic/calculators/hub";
 import { CALCULATOR_IDS, calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "@/lib/programmatic/calculators/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 
+import { Year2027Status } from "./Year2027Status";
+
 /**
  * "Más calculadoras", at the bottom of every calculator page: the other tools
  * of the registry (never the page itself), each with its hub one-liner, then
@@ -44,10 +46,18 @@ export function MoreCalculators({ current, locale, extra }: { current: Calculato
 /**
  * The "next useful step" right under a tool (lib/engagement/next-step-calculators.ts):
  * the one or two related tools, where "Más calculadoras" lists them all at the foot.
+ * Before it, on every registry tool, the 2027 block (Year2027Status: what is
+ * already official for 2027, and from the tool's guard date a warning that
+ * its figures are 2026's).
  */
 export function CalculatorNextStep({ current, locale }: { current: Extract<NextToolKey, CalculatorId | "leave-2027">; locale: CalcLocale }) {
   const self = current === "leave-2027" ? leavePath(locale) : calcPath(current, locale);
-  return <NextStep step={calculatorNextStep(current, locale, self)} locale={locale} />;
+  return (
+    <>
+      {current === "leave-2027" ? null : <Year2027Status id={current} locale={locale} />}
+      <NextStep step={calculatorNextStep(current, locale, self)} locale={locale} />
+    </>
+  );
 }
 
 /** One sentence pointing to the calculators hub, for the guides and hubs that link it. */

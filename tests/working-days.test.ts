@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { BOE_2026_ROWS } from "../src/lib/programmatic/holidays/boe-2026.ts";
-import { REGIONS, type Region } from "../src/lib/programmatic/holidays/boe-2027.ts";
+import { REGIONS, boeDatesFor, type Region } from "../src/lib/programmatic/holidays/boe-2027.ts";
 import { municipalities, municipalityBySlug, regionalDays } from "../src/lib/programmatic/holidays/data.ts";
 import { calcEditions } from "../src/lib/programmatic/calculators/paths.ts";
 import { hubCards } from "../src/lib/programmatic/calculators/hub.ts";
@@ -27,6 +27,7 @@ import { WD_META, calendarFor, findItem, pageFigures } from "../src/lib/programm
 import { nationalDates, region2026, workingDaysData, workingDaysSitemapEntries } from "../src/lib/programmatic/working-days/places.ts";
 import {
   AGE_2026_ANNEX,
+  AGE_2027_ANNEX,
   AGE_2027,
   AGE_2027_RECHECK_BY,
   COVER_EXTEND_BY,
@@ -245,6 +246,19 @@ test("data: the 2026 BOE list matches the AGE's 2026 calendar of días inhábile
   const ct = regionalDays(2026).map((d) => d.date).filter((d) => weekday(d) !== 0 && weekday(d) !== 6);
   assert.deepEqual(ct, AGE_2026_ANNEX.filter((r) => r.where === "ALL" || r.where.includes("CT")).map((r) => r.date));
   assert.ok(BOE_2026_ROWS.length > 30);
+});
+
+test("data: the 2027 BOE list matches the AGE's 2027 calendar of días inhábiles (BOE-A-2026-23826) for every community", () => {
+  assert.equal(AGE_2027?.ref, "BOE-A-2026-23826");
+  for (const region of REGIONS.filter((r) => r !== "CT") as Region[]) {
+    const weekdays = boeDatesFor(region).filter((d) => weekday(d) !== 0 && weekday(d) !== 6);
+    const annex = AGE_2027_ANNEX.filter((r) => r.where === "ALL" || r.where.includes(region)).map((r) => r.date);
+    assert.deepEqual(weekdays, annex, region);
+  }
+  const ct = regionalDays(2027).map((d) => d.date).filter((d) => weekday(d) !== 0 && weekday(d) !== 6);
+  assert.deepEqual(ct, AGE_2027_ANNEX.filter((r) => r.where === "ALL" || r.where.includes("CT")).map((r) => r.date));
+  // Every annex date is a weekday: the annex lists Saturdays and Sundays apart.
+  assert.ok(AGE_2027_ANNEX.every((r) => weekday(r.date) !== 0 && weekday(r.date) !== 6));
 });
 
 /* ------------------------------------------------------------ the page --- */

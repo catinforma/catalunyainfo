@@ -11482,3 +11482,39 @@ file's end).
 `/en/rodalies/r2-nord/`, `/en/rodalies/r1/`, `/es/rodalies/r1/`, `/es/rodalies/r2-sud/`, `/es/rodalies/r4/`.
 
 **Outcome:** _pending_
+
+## 21 Nov 2026 — Calculators: 2027 figures already official, and a fail-safe for 1 January (body only; deploy only, no publish group; no title, description, H1 or lead touched)
+
+**What changed.** `lib/programmatic/calculators/year-2027.ts` + `components/programmatic/calculators/Year2027Status.tsx`
+(rendered inside `CalculatorNextStep`, under every registry tool), inventory and watch-list in `docs/CALCULATORS_2027.md`,
+tests in `tests/calculators-2027.test.ts` (BOE fixtures read today).
+1. **Visible now**, a "Ya oficial para 2027" / "Ja oficial per al 2027" / "Already official for 2027" box (ca/es/en), each line
+   with its BOE link: SMI 2027 (RD 1013/2026) on net salary, extra pay and dismissal; IRPF earned-income deduction 2027
+   (RDL 38/2026 arts. 5–6, convalidation pending), MEI 2027 (LGSS DT 43.ª) and solidarity contribution 2027 (DT 42.ª) on net
+   salary and extra pay; MEI 2027 and the flat-rate SMI threshold on self-employed; the subsidy income limit 2027 (964,50 €,
+   75 % of the 2027 SMI) on the subsidy; the two SMI thresholds 2027 (11.574 €, 36.008 €) on the widow's pension. Each box
+   also lists what is still unpublished and which norm will set it.
+2. **Working days**: the AGE calendar of días inhábiles 2027 (BOE-A-2026-23826, BOE 14 Nov) is loaded; the sources paragraph now
+   names it (instead of "not in the BOE yet") and links it. The count does not change: the annex matches the BOE 2027 holiday
+   list for every community (test).
+3. **From 1 Jan 2027 only** (browser date, or a build after that day): the 10 yearly tools still on 2026 figures show a warning
+   ("Cifras de 2026: las de 2027 aún no están en esta calculadora", in force until 31 Dec 2026, official links); the 16
+   law-based tools read before 2027 show "Normas revisadas el …" and where a 2027 change would be published. Nothing before.
+
+**Baselines (GSC, ES pages, 8–21 Nov, clicks / impressions / position):** sueldo-neto 0 / 80 / 10.1; paga-extra 0 / 0;
+cuota-autonomos 1 / 182 / 20.2; indemnizacion-despido 0 / 171 / 43.7; subsidio-desempleo 1 / 202 / 8.2; pension-viudedad 0 / 0;
+dias-habiles 2 / 508 / 9.3.
+
+**Prediction.** By 17 Dec, "smi 2027", "mei 2027", "cotización solidaridad 2027" and "deducción smi irpf 2027" variants show
+impressions on sueldo-neto / cuota-autonomos (none today); no changed page loses ≥ 2 positions at equal impressions.
+
+**Confounders.** Same URLs as the 19 Nov calculators entry (review 3 Dec and 17 Dec; its revert rule applies to the box too)
+and the 13 Nov title windows (to 15 Dec), untouched here. The SMI page's own 2027 flip (19 Nov).
+
+**Review 2026-12-03 and 2026-12-17** with the 19 Nov entry: `snapshot.py page sueldo-neto 14`, `page cuota-autonomos 14`,
+`page subsidio-desempleo 14`, `page dias-habiles 14`. **2027-01-02**: curl one yearly and one law tool per language and check the
+warning is in the HTML after the first January deploy.
+
+**Go-live.** Deploy only (code routes). IndexNow prefixes: `/es/calculadoras/ /ca/calculadores/ /en/calculators/`.
+
+**Outcome:** _pending_

@@ -1,0 +1,43 @@
+BOE-A-2015-11724 (LGSS consolidada), bloques dt-13 y dt-14, API datosabiertos del BOE, leído el 2026-11-21
+
+Disposición transitoria cuadragésima segunda. Aplicación de la cotización adicional de solidaridad.
+La cuota adicional de solidaridad a la que se refiere el artículo 19 bis será el resultado de aplicar a cada tramo de retribución que supere la base máxima de cotización los siguientes porcentajes expresados en tanto por ciento, durante cada año desde el año 2025 hasta el año 2045:
+Tipo cotización %
+La distribución de los tipos de cotización por solidaridad entre empresario y trabajador mantendrá la misma proporción que la distribución del tipo general de cotización a la seguridad social por contingencias comunes.
+Se añade por el art. único.42 del Real Decreto-ley 2/2023, de 16 de marzo. Ref. BOE-A-2023-6967#au
+Año | Retribuciones desde base máxima hasta 10 % adicional de la base máxima | Retribuciones desde el 10 % adicional de la base máxima hasta 50 % adicional de la base máxima | Retribuciones superiores al 50 % adicional de la base máxima
+Tipo cotización % | Tipo cotización % | Tipo cotización %
+2025 | 0,92 | 1 | 1,17
+2026 | 1,15 | 1,25 | 1,46
+2027 | 1,38 | 1,5 | 1,75
+2028 | 1,60 | 1,75 | 2,04
+2029 | 1,83 | 2 | 2,33
+2030 | 2,06 | 2,25 | 2,63
+2031 | 2,29 | 2,5 | 2,92
+2032 | 2,52 | 2,75 | 3,21
+2033 | 2,75 | 3 | 3,50
+2034 | 2,98 | 3,25 | 3,79
+2035 | 3,21 | 3,5 | 4,08
+2036 | 3,44 | 3,75 | 4,38
+2037 | 3,67 | 4 | 4,67
+2038 | 3,90 | 4,25 | 4,96
+2039 | 4,13 | 4,5 | 5,25
+2040 | 4,35 | 4,75 | 5,54
+2041 | 4,58 | 5 | 5,83
+2042 | 4,81 | 5,25 | 6,13
+2043 | 5,04 | 5,5 | 6,42
+2044 | 5,27 | 5,75 | 6,71
+2045 | 5,50 | 6,00 | 7,00
+
+Disposición transitoria cuadragésima tercera. Aplicación del Mecanismo de Equidad Intergeneracional.
+La cotización finalista del Mecanismo de Equidad Intergeneracional prevista en el artículo 127 bis tendrá efectos desde el 1 de enero de 2023 hasta el 31 de diciembre de 2050, con arreglo a la siguiente escala:
+En el año 2023, será de 0,60 puntos porcentuales, de los que el 0,50 corresponderá a la empresa y el 0,10 al trabajador.
+En el año 2024, será de 0,70 puntos porcentuales, de los que el 0,58 corresponderá a la empresa y el 0,12 al trabajador.
+En el año 2025, será de 0,80 puntos porcentuales, de los que el 0,67 corresponderá a la empresa y el 0,13 al trabajador.
+En el año 2026, será de 0,90 puntos porcentuales, de los que el 0,75 corresponderá a la empresa y el 0,15 al trabajador.
+En el año 2027, será de 1 punto porcentual, del que el 0,83 corresponderá a la empresa y el 0,17 al trabajador.
+En el año 2028, será de 1,10 puntos porcentuales, de los que el 0,92 corresponderá a la empresa y el 0,18 al trabajador.
+En el año 2029, será de 1,2 puntos porcentuales, de los que el 1,00 corresponderá a la empresa y el 0,2 al trabajador.
+Desde el año 2030 hasta 2050 se mantendrá el mismo porcentaje del 1,2, con igual distribución entre empresario y trabajador.
+Se añade por el art. único.43 del Real Decreto-ley 2/2023, de 16 de marzo. Ref. BOE-A-2023-6967#au
+

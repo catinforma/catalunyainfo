@@ -119,16 +119,22 @@ export const AGE_2026: AgeCalendar = {
 };
 
 /**
- * The 2027 calendar: not in the BOE yet. The BOE's daily summaries were read
- * up to `AGE_2027_CHECKED_ON` (the 2026 one came out on 24 November 2025).
- * When it is out: fill `AGE_2027` and `AGE_2027_ANNEX` (the test then holds
- * it to the 2027 holiday list), and the page names it. Until then the
- * calculator counts the BOE's 2027 list of fiestas laborales (BOE-A-2026-21254),
- * which the AGE calendar has to follow ("con sujeción al calendario laboral
- * oficial", art. 30.7), and says so.
+ * The 2027 calendar: Resolución de 5 de noviembre de 2026 (BOE 14 Nov 2026,
+ * BOE-A-2026-23826), read in the BOE's XML on `AGE_2027_CHECKED_ON`. Its
+ * annex is `AGE_2027_ANNEX`; a test holds it to the BOE's 2027 list of
+ * fiestas laborales (BOE-A-2026-21254), the data the calculator counts with,
+ * which the AGE calendar follows ("con sujeción al calendario laboral
+ * oficial", art. 30.7). The annex's note 2 is the Aran swap (17 June for
+ * Easter Monday, Ordre EMT/52/2026), already in the Catalan data.
  */
-export const AGE_2027: AgeCalendar | null = null;
-export const AGE_2027_CHECKED_ON = "2026-11-13";
+export const AGE_2027: AgeCalendar | null = {
+  year: 2027,
+  name: "Resolución de 5 de noviembre de 2026, de la Secretaría de Estado de Función Pública, por la que se establece a efectos de cómputo de plazos, el calendario de días inhábiles en el ámbito de la Administración General del Estado para el año 2027",
+  ref: "BOE-A-2026-23826",
+  url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23826",
+  published: "2026-11-14",
+};
+export const AGE_2027_CHECKED_ON = "2026-11-21";
 /** tests/working-days.test.ts fails from this day while `AGE_2027` is null. */
 export const AGE_2027_RECHECK_BY = "2026-12-31";
 
@@ -163,6 +169,35 @@ export const AGE_2026_ANNEX: readonly AnnexRow[] = [
   { date: "2026-12-07", where: ["AN", "AR", "AS", "CB", "EX", "MC", "RI", "CL", "MD", "ML"] },
   { date: "2026-12-08", where: "ALL" },
   { date: "2026-12-25", where: "ALL" },
+];
+
+/** BOE-A-2026-23826, annex, every "Día N" line (1 May, 15 Aug and 25 Dec 2027 fall on a weekend). */
+export const AGE_2027_ANNEX: readonly AnnexRow[] = [
+  { date: "2027-01-01", where: "ALL" },
+  { date: "2027-01-06", where: "ALL" },
+  { date: "2027-03-01", where: ["AN", "IB"] },
+  { date: "2027-03-10", where: ["ML"] },
+  { date: "2027-03-19", where: ["GA", "MD", "MC", "VC", "NC"] },
+  { date: "2027-03-25", where: ["AN", "AR", "AS", "IB", "CN", "CB", "CM", "EX", "GA", "MC", "PV", "RI", "CL", "MD", "NC", "CE", "ML"] },
+  { date: "2027-03-26", where: "ALL" },
+  { date: "2027-03-29", where: ["IB", "CT", "PV", "RI", "NC", "VC"] },
+  { date: "2027-04-23", where: ["AR", "CL"] },
+  { date: "2027-05-17", where: ["GA", "CE", "ML"] },
+  { date: "2027-05-27", where: ["CM"] },
+  { date: "2027-05-31", where: ["CM"] },
+  { date: "2027-06-09", where: ["RI", "MC"] },
+  { date: "2027-06-24", where: ["CT"] },
+  { date: "2027-07-28", where: ["CB"] },
+  { date: "2027-08-05", where: ["CE"] },
+  { date: "2027-08-16", where: ["AN", "AR", "AS", "CN", "CL", "MD"] },
+  { date: "2027-09-08", where: ["AS", "EX"] },
+  { date: "2027-09-15", where: ["CB"] },
+  { date: "2027-10-07", where: ["PV"] },
+  { date: "2027-10-11", where: ["EX"] },
+  { date: "2027-10-12", where: "ALL" },
+  { date: "2027-11-01", where: "ALL" },
+  { date: "2027-12-06", where: "ALL" },
+  { date: "2027-12-08", where: "ALL" },
 ];
 
 /**
