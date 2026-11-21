@@ -241,14 +241,35 @@ export interface Guidance {
 }
 
 /** The block of original guidance every page carries. Inline Markdown links only. */
-export function guidance(locale: FuelHubLocale): Guidance[] {
+/**
+ * How a page reads the Ministry's list: "open" (the Catalan pages: the browser
+ * reads it again when the page opens) or "render" (the Spain pages, 21 Nov
+ * 2026: server HTML only, the list read at most every half hour).
+ */
+export type GuidanceRead = "open" | "render";
+
+const READ_SENTENCE: Record<GuidanceRead, Record<FuelHubLocale, string>> = {
+  open: {
+    en: "This page reads that service when you open it; we keep no old prices.",
+    es: "Esta página consulta ese servicio cuando la abres; no guardamos precios antiguos.",
+    ca: "Aquesta pàgina consulta aquest servei quan l'obres; no desem preus antics.",
+  },
+  render: {
+    en: "This page reads that service at most every half hour and gives the time of the list it shows; we keep no old prices.",
+    es: "Esta página consulta ese servicio como mucho cada media hora y da la hora de la lista que muestra; no guardamos precios antiguos.",
+    ca: "Aquesta pàgina consulta aquest servei com a màxim cada mitja hora i dona l'hora de la llista que mostra; no desem preus antics.",
+  },
+};
+
+export function guidance(locale: FuelHubLocale, read: GuidanceRead = "open"): Guidance[] {
+  const readSentence = READ_SENTENCE[read][locale];
   if (locale === "en") {
     return [
       {
         title: "Where these prices come from",
         paragraphs: [
           `Every filling station reports its prices to Spain's Ministry for the Ecological Transition and the Demographic Challenge: every Monday and whenever it changes them, at least one hour before applying them ([Orden ITC/2308/2007, article 6](${BOE_ORDER_URL})). A station that belongs to a network may instead declare that it applies its operator's maximum or recommended prices.`,
-          `The Ministry publishes them on the [Geoportal Gasolineras](${GEOPORTAL_HOME}) and in an open-data service refreshed every half hour with the prices in force at that moment. This page reads that service when you open it; we keep no old prices.`,
+          `The Ministry publishes them on the [Geoportal Gasolineras](${GEOPORTAL_HOME}) and in an open-data service refreshed every half hour with the prices in force at that moment. ${readSentence}`,
         ],
       },
       {
@@ -268,7 +289,7 @@ export function guidance(locale: FuelHubLocale): Guidance[] {
         title: "De dónde salen estos precios",
         paragraphs: [
           `Los comunica cada gasolinera al Ministerio para la Transición Ecológica y el Reto Demográfico: todos los lunes y cada vez que los cambia, como mínimo una hora antes de aplicarlos ([Orden ITC/2308/2007, artículo 6](${BOE_ORDER_URL})). Una gasolinera de una red puede, en lugar de eso, declarar que aplica los precios máximos o recomendados por su operador.`,
-          `El Ministerio los publica en el [Geoportal Gasolineras](${GEOPORTAL_HOME}) y en un servicio de datos abiertos que se actualiza cada media hora con los precios en vigor en ese momento. Esta página consulta ese servicio cuando la abres; no guardamos precios antiguos.`,
+          `El Ministerio los publica en el [Geoportal Gasolineras](${GEOPORTAL_HOME}) y en un servicio de datos abiertos que se actualiza cada media hora con los precios en vigor en ese momento. ${readSentence}`,
         ],
       },
       {
@@ -287,7 +308,7 @@ export function guidance(locale: FuelHubLocale): Guidance[] {
       title: "D'on surten aquests preus",
       paragraphs: [
         `Els comunica cada benzinera al Ministeri per a la Transició Ecològica i el Repte Demogràfic: cada dilluns i cada vegada que els canvia, com a mínim una hora abans d'aplicar-los ([Ordre ITC/2308/2007, article 6](${BOE_ORDER_URL})). Una benzinera d'una xarxa pot, en lloc d'això, declarar que aplica els preus màxims o recomanats pel seu operador.`,
-        `El Ministeri els publica al [Geoportal Gasolineras](${GEOPORTAL_HOME}) i en un servei de dades obertes que s'actualitza cada mitja hora amb els preus vigents en aquell moment. Aquesta pàgina consulta aquest servei quan l'obres; no desem preus antics.`,
+        `El Ministeri els publica al [Geoportal Gasolineras](${GEOPORTAL_HOME}) i en un servei de dades obertes que s'actualitza cada mitja hora amb els preus vigents en aquell moment. ${readSentence}`,
       ],
     },
     {

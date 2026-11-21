@@ -27,7 +27,7 @@ import { NEXT, NEXT_YEAR, SNAPSHOT as HOLIDAYS, YEAR, localThrough, nextYearFor,
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath as holidayHubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { NucleusDays, SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
-import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
+import { fuelHubPath, spainHubPath } from "@/lib/programmatic/fuel/paths";
 import { warningsPath } from "@/lib/programmatic/warnings/paths";
 import { SNAPSHOT as RESERVOIRS, snapshotReadings } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
@@ -187,7 +187,8 @@ export function todayLinks(locale: Locale) {
     rodalies: { hub: rodaliesHubPath(locale), official: rodaliesOfficial.status(locale) },
     reservoirs: { hub: reservoirHubPath(locale), guide: tool("reservoirs", locale) },
     // Every edition has its fuel hub since 20 Nov 2026 (/en/fuel-prices-catalonia/).
-    fuel: { hub: fuelHubPath(locale), sameLanguage: true },
+    // And the table of every Spanish province since 21 Nov 2026 (/es/gasolineras/provincia/, /en/fuel-prices-spain/).
+    fuel: { hub: fuelHubPath(locale), spain: spainHubPath(locale), sameLanguage: true },
     weekend: {
       agenda: tool("weekend", locale),
       hub: muni ? weekendHubPath(muni) : null,

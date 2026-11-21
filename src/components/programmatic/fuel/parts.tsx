@@ -1,16 +1,16 @@
 import Link from "next/link";
 
 import { renderInline } from "@/lib/content/inline";
-import { attribution, BOE_ORDER_URL, driverGuides, guidance, sectionTitles } from "@/lib/programmatic/fuel/copy";
+import { attribution, BOE_ORDER_URL, driverGuides, guidance, sectionTitles, type GuidanceRead } from "@/lib/programmatic/fuel/copy";
 import { MUNICIPALITIES } from "@/lib/programmatic/fuel/data";
 import type { FuelHubLocale } from "@/lib/programmatic/fuel/paths";
 
 /** Shared pieces of the fuel pages, all server-rendered and price-free. */
 
-export function Guidance({ locale }: { locale: FuelHubLocale }) {
+export function Guidance({ locale, read = "open" }: { locale: FuelHubLocale; read?: GuidanceRead }) {
   return (
     <>
-      {guidance(locale).map((section, i) => (
+      {guidance(locale, read).map((section, i) => (
         <section key={section.title} aria-labelledby={`ci-fuel-guide-${i}`}>
           <h2 id={`ci-fuel-guide-${i}`}>{section.title}</h2>
           {section.paragraphs.map((text) => (

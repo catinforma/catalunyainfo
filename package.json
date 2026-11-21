@@ -33,6 +33,7 @@
     "mushrooms:refresh": "node --experimental-strip-types scripts/mushroom-conditions.ts",
     "holidays:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/holidays-snapshot.ts",
     "fuel:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/fuel-snapshot.ts",
+    "fuel:spain-snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/fuel-spain-snapshot.ts",
     "rodalies:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rodalies-snapshot.ts",
     "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts",
     "rent:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rent-index-snapshot.ts",

@@ -10,6 +10,8 @@ import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { electionsSitemap } from "@/lib/programmatic/elections/pages";
 import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
 import { fuelSitemapEntries } from "@/lib/programmatic/fuel/sitemap";
+import { spainFuelSitemapEntries } from "@/lib/programmatic/fuel/spain-sitemap";
+import { loadSpainReadingTime } from "@/lib/programmatic/fuel/spain-server";
 import { rodaliesSitemap } from "@/lib/programmatic/rodalies/pages";
 import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
 import { loadLatestReadingDate } from "@/lib/programmatic/reservoirs/server";
@@ -280,6 +282,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // The live pages are dated by what they print now: today for the fuel prices and the
     // Rodalies notices (both read at render), the ACA's latest reading for the reservoirs.
     ...fuelSitemapEntries(madridDate(Date.now())),
+    // Spain by province (es, ca, en): dated by the Ministry's time of the list the pages print (same memoised read).
+    ...spainFuelSitemapEntries(await loadSpainReadingTime()),
     ...rodaliesSitemap(madridDate(Date.now())),
     ...reservoirSitemapEntries(await loadLatestReadingDate()),
     ...weekendSitemapEntries(),

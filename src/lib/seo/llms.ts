@@ -78,7 +78,8 @@ import { FAIRS as CHRISTMAS_FAIRS, englishTowns as christmasEnglishTowns, towns 
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { hubPath as electionsHub, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 import { STATIONS, selectPages } from "@/lib/programmatic/fuel/data";
-import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
+import { fuelHubPath, spainHubTranslations } from "@/lib/programmatic/fuel/paths";
+import { spainProvinces } from "@/lib/programmatic/fuel/spain";
 import { SNAPSHOT as HOLIDAYS, YEAR } from "@/lib/programmatic/holidays/data";
 import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { reportEditions } from "@/lib/programmatic/holidays/report-copy";
@@ -457,6 +458,11 @@ export function liveTools(today?: string): LiveTool[] {
       name: "Cheapest petrol stations",
       hubs: { ca: fuelHubPath("ca"), es: fuelHubPath("es"), en: fuelHubPath("en") },
       description: `today's petrol and diesel prices at Catalonia's ${STATIONS.stations.length} public stations, cheapest first, with today's cheapest and median price in every province, city and chain, and ${fuelPages} area pages per language in Catalan and Spanish, from the Ministry for the Ecological Transition (CC BY 4.0).`,
+    },
+    {
+      name: "Petrol and diesel prices in every province of Spain",
+      hubs: spainHubTranslations(),
+      description: `today's cheapest and median petrol 95 and diesel price in each of Spain's 52 provinces and autonomous cities against the national median, and one page for each of the ${spainProvinces().length} outside Catalonia with its ten cheapest stations (brand, address, opening hours) and its main towns, read every half hour from the Ministry for the Ecological Transition's national list (CC BY 4.0) with the Ministry's time.`,
     },
     {
       name: "Electricity price in Spain today and tomorrow (PVPC)",

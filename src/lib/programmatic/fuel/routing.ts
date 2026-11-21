@@ -1,5 +1,6 @@
 import { cities, cityOrChainBySlug, comarques, placeBySlug, provinces, type ChainPlace, type CityPlace, type ComarcaPlace, type ProvincePlace } from "./data";
 import type { FuelHubLocale, FuelLocale } from "./paths";
+import { spainProvinceBySlug, spainProvinces, type SpainProvince } from "./spain";
 
 /**
  * Which request each fuel route answers. Every route folder serves one locale
@@ -55,4 +56,23 @@ export function cityStaticParams<K extends string>(route: FuelLocale, key: K): (
   return cities()
     .slice(0, PRERENDERED_CITIES)
     .map((c) => ({ locale: route, [key]: c.slug }) as { locale: FuelLocale } & Record<K, string>);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Spain by province (21 Nov 2026)                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A Spain province page: the route's own locale and a province outside
+ * Catalonia (the Catalan four resolve through `resolveProvince`, their own
+ * page). The es and ca `provincia/[provincia]` routes try both; the English
+ * route (/en/fuel-prices-spain/<province>/) only this one.
+ */
+export function resolveSpainProvince(route: FuelHubLocale, locale: string, slug: string): SpainProvince | null {
+  return route === locale ? spainProvinceBySlug(slug) : null;
+}
+
+/** All 48 built at deploy in each language: they are the family's indexable province pages. */
+export function spainProvinceStaticParams<K extends string>(route: FuelHubLocale, key: K): ({ locale: FuelHubLocale } & Record<K, string>)[] {
+  return spainProvinces().map((p) => ({ locale: route, [key]: p.slug }) as { locale: FuelHubLocale } & Record<K, string>);
 }
