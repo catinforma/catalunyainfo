@@ -19,6 +19,7 @@ import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read"
 import type { EntryDetail } from "@/lib/content/types";
 import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
+import { HERO_SIZES } from "@/lib/layout/hero-image";
 import { formatDate, formatDateAndTime, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -95,7 +96,9 @@ export function EntryArticle({
         alt={entry.hero.alt}
         width={entry.hero.width ?? 1920}
         height={entry.hero.height ?? 1080}
-        sizes="100vw"
+        // Full width, but phones at >= 2.5 dppx fetch a ~2x variant, not a
+        // 3x-4x one (lib/layout/hero-image.ts).
+        sizes={HERO_SIZES}
         // Next.js 16 deprecated `priority` in favour of `preload`. The hero
         // is the LCP element on most articles, so it is preloaded from the
         // head and fetched at high priority.
