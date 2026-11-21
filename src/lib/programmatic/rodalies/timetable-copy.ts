@@ -264,14 +264,15 @@ function directionView(t: LineTimetable, d: DirectionTimetable, cols: Column[], 
   return view;
 }
 
+// 21 Nov 2026: a day range missing from the feed is worded as missing data, never as "no trains" (readers took it for a closure).
 function feedSentence(locale: Locale): string {
   const f = TIMETABLE.feed;
   const gap = f.gaps.length
     ? locale === "ca"
-      ? ` (sense trens de Rodalies ${runsText(f.gaps, locale)})`
+      ? `; encara no hi consten els horaris de Rodalies ${runsText(f.gaps, locale)}, cosa que no vol dir que aquells dies no hi hagi trens`
       : locale === "es"
-        ? ` (sin trenes de Rodalies ${runsText(f.gaps, locale)})`
-        : ` (no Rodalies trains in it ${runsText(f.gaps, locale)})`
+        ? `; aún no incluye los horarios de Rodalies ${runsText(f.gaps, locale)}, lo que no significa que esos días no haya trenes`
+        : `; it does not yet include Rodalies timetables ${runsText(f.gaps, locale)}, which does not mean there are no trains on those days`
     : "";
   if (locale === "ca") return `El fitxer cobreix ${runText([f.from, f.to], locale)} de ${f.to.slice(0, 4)}${gap}.`;
   if (locale === "es") return `El fichero cubre ${runText([f.from, f.to], locale)} de ${f.to.slice(0, 4)}${gap}.`;
