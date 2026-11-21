@@ -350,7 +350,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * list, e-Tauler, the Ministry's lists or the BOE (21 Nov, núm. 290: no strike
  * order), nor on CCOO, UGT or CGT Catalunya's home pages.
  */
-export const STRIKES_AS_OF: string = "2026-11-21";
+export const STRIKES_AS_OF: string = "2026-11-22";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts

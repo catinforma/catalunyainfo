@@ -164,7 +164,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * 8-9 Dec Álava, 9-10 Bizkaia, 10-11 Gipuzkoa, 13-14 Dec all of Osakidetza,
  * each from 22:00 to 22:00).
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-21";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-22";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.
