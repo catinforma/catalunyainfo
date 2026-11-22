@@ -11548,3 +11548,91 @@ and not a test variable.
 /en/calculators/spain-widows-pension/` (and `/llms.txt`).
 
 **Outcome:** n/a (factual correction).
+
+## 2026-11-22 — Strikes re-read (Sunday, eve of the 23rd): nothing changed on the sources; 26N minimum services still not out; no new strike to 6 Dec. Only the "checked on" dates move, es + ca + en (deploy; group `strikes`, which also republishes `huelgas-espana` and `huelga-23-26n` pages)
+
+**Why (factual, not an experiment).** The 00:05 timer moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 2026-11-22 with
+VERIFIED pinned to the 21st; every strike on the site was re-read on its official source today and both VERIFIED constants are now
+2026-11-22. Nothing had changed on any source, so no title, seoTitle, description, lead template, fact or figure changed (the
+23N and 26N measurement windows of 19–20 Nov stand); the only copy that moves is the date in the "last checked" sentences.
+No baseline (pure re-check).
+
+**Sources re-read 22 Nov 2026, 13:20–13:40 CET** (curl with a browser UA; downloads kept outside the repo, no fact-pack file today).
+- **Education, Thu 26 Nov (Catalonia): still on, minimum services still not published.** Treball's list
+  (`https://treball.gencat.cat/ca/ambits/relacions_laborals/vagues/serveis-minims/`): newest entry still 17/11/2026 (the 23N
+  Rodalies order). e-Tauler (`https://tauler.seu-e.cat/api/edictes?ens=1&size=100&page=0` and `page=1`): the newest 200 edicts
+  are of 16–20 Nov, none published at the weekend; the only Treball/Vagues edicts are still 659191, 658922 and 658823. DOGC
+  (`https://portaldogc.gencat.cat/eadop-rest/api/dogc/summaryLastPublishedDOGC`, the backend of dogc.gencat.cat): last issue
+  núm. 9799, Friday 20 Nov 2026 (none on Saturday or Sunday); its title search for "garanteix" since 09/11/2026 ends at
+  Ordre EMT/231/2026 of 16 Nov (the 23N Rodalies order, DOGC 19/11/2026); no order for the 26th. USTEC·STEs
+  (`https://www.sindicat.net/`): newest strike item still 20/11/26, «Educació es presenta a la mediació sense proposta per
+  evitar la vaga del 26N». CGT Ensenyament (`https://www.cgtensenyament.cat/`): newest still «Vaga educativa – 26 de novembre»
+  (18 Nov). No call-off.
+- **Correos, 23–27 Nov (Madrid) and 23–25 Nov (Cádiz, Córdoba, Huelva, Málaga, Sevilla): stands.** Orden INT/1239/2026
+  (`https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259`) unchanged: «huelgas de jornada completa convocadas para los
+  días 23 a 27 de noviembre de 2026 en Madrid y de 23 a 25 de noviembre de 2026 en Cádiz, Córdoba, Huelva, Málaga y Sevilla».
+  BOE of 21 Nov (`https://www.boe.es/boe/dias/2026/11/21/`, núm. 290): no strike order; no BOE on Sunday 22. Sindicato Libre
+  (`https://sindicatolibre.com/`, `/comunicados/`): newest 17 Nov, no call-off or agreement. Correos' press room
+  (`https://www.correos.com/sala-prensa/`): newest 20 Nov (postal-vote figures, the JEC's extension), no strike notice.
+- **Doctors: both stand; the weekend is covered.** SMU's strike notice
+  (`https://cdn.medicosunidos.es/huelga-2026-16N/Preavisos/_ESTATAL.pdf`): «comenzará a las 08:00 horas del lunes 16 de
+  noviembre de 2026 […] Consistirá en el cese total de la actividad del personal convocado […] La primera fase se extenderá
+  desde ese momento hasta las 08:00 horas del sábado 28 de noviembre de 2026»; the Generalitat's order (e-Tauler 658823, still
+  ACTIU): «des de les 8.00h del dia 16 de novembre fins les 8.00h del dia 28 de novembre». Continuous, so Saturday 21 and
+  Sunday 22 are strike days and the twelve dates (16–27 Nov) in both hubs are right. `https://medicosunidos.es/actualidad/`:
+  newest 19/11/2026, no call-off and no second-phase notice. Metges de Catalunya
+  (`https://metgesdecatalunya.cat/ca/actualitat/noticies`, home page): newest items 18 Nov, the home page still counts the days
+  «en Vaga indefinida»; no agreement, no end date.
+- **Renfe / Adif: nothing new called; the 23rd stays called off.** SEMAF (`https://www.semaf.org/informaciones/`): newest items
+  still 20/11/2026 (the call-off, its analysis, an online assembly on the 23rd). Ministry of Transport's rail list
+  (`https://www.transportes.gob.es/transporte-terrestre/resoluciones-de-servicios-minimos-ferroviarios`): newest still the
+  resolution of 12 Nov for the 17th. SCF (SCFCOM 40, 21 Nov, on its call-off agreement), SFF-CGT (newest 18/11, no date),
+  ALFERRO (newest 83/2026), CCOO rail: no strike. e-Tauler 659191 (the 23N order) still ACTIU, not amended. Renfe's press room,
+  read today through the news feed its page loads
+  (`https://grupo.renfe.com/content/grupo-renfe/es/es/sala-de-prensa/jcr:content/root/responsivegrid/wrglayoutcontainer/responsivegrid/wrgnewsview_copy_cop.newsresults.json`):
+  newest item 17 Nov, nothing about the 23rd. Rodalies (`https://rodalies.gencat.cat/ca/alteracions_del_servei/`): no strike
+  notice (newest 18/11/2026); the unlisted `/ca/detalls/article/11_23_Vaga_23` still dated 19.11.2026 and still showing the
+  strike with 66% / 33%. So "Renfe and Rodalies had not yet published a notice" holds on the 22nd.
+- **New strikes, 23 Nov–6 Dec: none found** on Treball's list, e-Tauler, the DOGC, the Ministry's rail and air lists
+  (`https://www.transportes.gob.es/aviacion-civil/informacion-util-al-pasajero/huelga-servicios-minimos`: newest still the 17N
+  ones and ELA Bizkaia; SAERCO, Groundforce and Outsmart resolutions run to 30 Nov, none yet from 1 Dec), the BOE, the Basque
+  Government's list (newest still the two care-home orders of 17 Nov), TMB's service notices, FGC, CCOO/UGT/CGT Catalunya,
+  CCOO and UGT's national pages, CESM (still postponed). Madrid schools: CSIF's calendar
+  (`https://www.csif.es/es/articulo/comunidaddemadrid/educacion/97107`) unchanged («24, 26 y 30 de noviembre de 2026 y 1, 10,
+  11, 16 y 18 de diciembre de 2026», 9:00–11:00 and 17:00–19:00); CCOO Madrid: indefinite strike on, no call-off.
+- **Not readable from this server:** Adif's press room (403), cgt.org.es (expired certificate), intersindical.cat (certificate
+  name mismatch). None is the source of a fact on the pages. Still outside the two-week window and not added: the Basque order
+  of 26 Oct, Osakidetza 8–14 Dec.
+
+**What changed.**
+- `strikes.ts`: `STRIKES_VERIFIED` 2026-11-22; three dated sentences move from the 21st to the 22nd in ca/es/en: Metges de
+  Catalunya ("el 22 de novembre de 2026 la vaga continuava", and the source name "consultades el 22/11/2026"), education 26N
+  minimum services ("consultat el 22 de novembre de 2026"), the 23N call-off line ("El 22 de novembre Renfe i Rodalies encara no
+  havien publicat cap avís"). Header comment and the call-off comment log the re-read.
+- `strikes-spain-data.ts`: no entry changed; `STRIKES_SPAIN_VERIFIED` 2026-11-22 (every "fuentes revisadas" line on the Spain
+  hub and the day pages prints the 22nd). Header comment logs the re-read.
+- `strike-days-2326n.ts`: comments only.
+- Tests: none changed (no test hard-codes the 21st for these sentences).
+
+**Left as written, for the next editor.** (1) The Correos entry ends "Si se amplía el plazo de admisión del voto, siguen los
+servicios rurales": the condition is now met (JEC, Acuerdo 418/2026: deposit until 26 Nov, 14:00, on the voting pages since 20
+Nov). The sentence is not wrong; turning it into a statement is a copy change, not a re-check. (2) The DOGC numbers of two
+orders the pages cite by date now exist: Ordre EMT/229/2026 of 13 Nov (SMU, DOGC 16/11/2026) and Ordre EMT/231/2026 of 16 Nov
+(the called-off 23N, DOGC 19/11/2026). (3) The airport resolutions end on 30 Nov: check the air list on 30 Nov / 1 Dec.
+(4) The education entry's "**Abans:** el dissabte 21 de novembre, manifestació […] a la plaça d'Urquinaona" line now describes a
+day that has passed. It is still true as written (it quotes the 17 Nov manifesto) and neither USTEC·STEs nor CGT Ensenyament had
+published anything about the march by 13:40, so there is no official source for a past-tense rewrite; left untouched.
+
+**Go-live.** Deploy (or let the 00:05 timer deploy main, once this is merged), then publish `strikes` (hub, Renfe and education
+guides, Spain hub, 17N/19N/20N/23N/26N pages). IndexNow: `/ca/guies/vaga-avui-catalunya/ /es/guias/huelga-hoy-cataluna/
+/en/guides/strike-barcelona-catalonia-today/ /ca/guies/vaga-renfe-rodalies-novembre/ /es/guias/huelga-renfe-rodalies-noviembre/
+/en/guides/renfe-rodalies-strike-november/ /ca/guies/vaga-educacio-novembre/ /es/guias/huelga-educacion-noviembre/
+/en/guides/catalonia-teachers-strike-november/ /ca/guies/vaga-23-novembre/ /es/guias/huelga-23-noviembre/
+/en/guides/spain-strike-23-november/ /ca/guies/vaga-26-novembre/ /es/guias/huelga-26-noviembre/
+/en/guides/spain-strike-26-november/ /ca/guies/vagues-espanya/ /es/guias/huelgas-espana/ /en/guides/strikes-spain/`.
+
+**Next re-read.** Monday 23 Nov, early: the 26N order (Treball's list, e-Tauler, DOGC; due any day now), Renfe and Rodalies on
+the morning of the called-off 23rd, Correos' first strike day; then daily to the 27th (SMU's first phase ends 08:00 Sat 28 Nov;
+a later phase needs ten days' notice).
+
+**Outcome:** _factual re-check, no review_
