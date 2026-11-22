@@ -58,6 +58,17 @@ export interface AnswerCell {
 }
 
 /**
+ * The authority with its article. Its names are Catalan and start with a vowel
+ * ("l'Ajuntament", "l'Àrea"); Spanish takes "el" for both; English takes none.
+ */
+export function authorityAs(city: Pick<ZbeCity, "authority">, locale: ZbeLocale, role: "subject" | "of" | "with"): string {
+  const name = city.authority;
+  if (locale === "en") return name;
+  if (locale === "ca") return role === "subject" ? `L'${name}` : role === "of" ? `de l'${name}` : `amb l'${name}`;
+  return role === "subject" ? `El ${name}` : role === "of" ? `del ${name}` : `con el ${name}`;
+}
+
+/**
  * One row of the answer table. "Yes" is never more than "no restriction by
  * label"; a "no" carries its days, its hours and who is still let in; a
  * "depends" prints the condition the council gives.
@@ -74,8 +85,8 @@ export function answerCell(city: Pick<ZbeCity, "authority">, answer: LabelAnswer
       verdict: pick(locale, "Depende", "Depèn", "It depends"),
       detail: pick(
         locale,
-        `La página oficial de la zona no dice si esta etiqueta puede entrar: hay que consultarlo con ${city.authority}.`,
-        `La pàgina oficial de la zona no diu si aquesta etiqueta pot entrar: cal consultar-ho amb ${city.authority}.`,
+        `La página oficial de la zona no dice si esta etiqueta puede entrar: hay que consultarlo ${authorityAs(city, locale, "with")}.`,
+        `La pàgina oficial de la zona no diu si aquesta etiqueta pot entrar: cal consultar-ho ${authorityAs(city, locale, "with")}.`,
         `The zone's official page does not say whether this label may drive in: check with ${city.authority}.`,
       ),
     };
@@ -241,8 +252,8 @@ export function cityCopy(city: ZbeCity, locale: ZbeLocale): CityCopy {
     tableSource: pick(locale, "Fuente de la tabla", "Font de la taula", "Source of the table"),
     checkedLine: pick(
       locale,
-      `Regla leída en la web de ${city.authority} y comprobada el ${checked}.`,
-      `Regla llegida al web de ${city.authority} i comprovada el ${checked}.`,
+      `Regla leída en la web ${authorityAs(city, locale, "of")} y comprobada el ${checked}.`,
+      `Regla llegida al web ${authorityAs(city, locale, "of")} i comprovada el ${checked}.`,
       `Rule read on the website of ${city.authority} and checked on ${checked}.`,
     ),
     whenTitle: pick(locale, `Días y horas: ¿se aplica hoy la ZBE ${of}?`, `Dies i hores: s'aplica avui la ZBE ${of}?`, `Days and hours: does the ${name} ZBE apply today?`),
@@ -277,8 +288,8 @@ export function cityCopy(city: ZbeCity, locale: ZbeLocale): CityCopy {
     ),
     dgtAttribution: pick(
       locale,
-      `La regla de acceso de esta página no sale de ese fichero, sino de la web de ${city.authority}.`,
-      `La regla d'accés d'aquesta pàgina no surt d'aquest fitxer, sinó del web de ${city.authority}.`,
+      `La regla de acceso de esta página no sale de ese fichero, sino de la web ${authorityAs(city, locale, "of")}.`,
+      `La regla d'accés d'aquesta pàgina no surt d'aquest fitxer, sinó del web ${authorityAs(city, locale, "of")}.`,
       `The access rule on this page does not come from that file but from the website of ${city.authority}.`,
     ),
     notPublishedTitle: pick(locale, "Lo que esta página no publica", "El que aquesta pàgina no publica", "What this page does not publish"),
@@ -345,8 +356,8 @@ export function cityFaq(city: ZbeCity, locale: ZbeLocale): { q: string; a: strin
     a: [
       pick(
         locale,
-        `${city.authority} publica el [mapa oficial de la zona](${city.mapUrl}).`,
-        `${city.authority} publica el [mapa oficial de la zona](${city.mapUrl}).`,
+        `${authorityAs(city, locale, "subject")} publica el [mapa oficial de la zona](${city.mapUrl}).`,
+        `${authorityAs(city, locale, "subject")} publica el [mapa oficial de la zona](${city.mapUrl}).`,
         `${city.authority} publishes the [official map of the zone](${city.mapUrl}).`,
       ),
       area,
@@ -359,7 +370,8 @@ export function cityFaq(city: ZbeCity, locale: ZbeLocale): { q: string; a: strin
   const next = textOf(factsOf(city, "next"), locale);
   faq.push({
     q: pick(locale, `¿Puedo entrar en la ZBE ${of} con etiqueta B?`, `Puc entrar a la ZBE ${of} amb etiqueta B?`, `Can I drive into the ${name} ZBE with a B label?`),
-    a: [`${sentence(b.verdict)} ${b.detail}`, next ? `${pick(locale, "Cambio anunciado:", "Canvi anunciat:", "Announced change:")} ${next}` : ""].filter(Boolean).join(" "),
+    // A condition that already opens with the verdict ("Depends on the fuel…") is not said twice.
+    a: [b.detail.toLowerCase().startsWith(b.verdict.toLowerCase()) ? b.detail : `${sentence(b.verdict)} ${b.detail}`, next ? `${pick(locale, "Cambio anunciado:", "Canvi anunciat:", "Announced change:")} ${next}` : ""].filter(Boolean).join(" "),
   });
 
   faq.push({

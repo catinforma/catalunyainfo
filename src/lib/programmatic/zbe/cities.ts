@@ -534,6 +534,16 @@ const REUS: ZbeCity = {
         "Foreign-registered vehicles that meet the technology and emission requirements are on the council's list of exemptions.",
       ),
     },
+    {
+      kind: "control",
+      source: 2,
+      quote: "Es fa automàticament mitjançat càmeres que contrastaran les matrícules amb la correspondència del llistat de vehicles amb del distintiu ambiental de la DGT i amb el Registre de Municipal de Vehicles autoritzats.",
+      text: l(
+        "El control es automático, con cámaras que leen la matrícula en puntos de entrada de la zona y la comparan con la lista de vehículos con distintivo de la DGT y con el registro municipal de vehículos autorizados.",
+        "El control és automàtic, amb càmeres que llegeixen la matrícula en punts d'entrada de la zona i la comparen amb la llista de vehicles amb distintiu de la DGT i amb el registre municipal de vehicles autoritzats.",
+        "Enforcement is automatic: cameras read number plates at entry points to the zone and check them against the DGT's list of labelled vehicles and the council's register of authorised vehicles.",
+      ),
+    },
     nationalFine(3),
   ],
   mapUrl: "https://mobilitat.reus.cat/zbe",
@@ -551,9 +561,9 @@ const REUS: ZbeCity = {
   ),
   notPublished: [
     l(
-      "Cómo se controla el acceso (cámaras) y qué horario tienen las restricciones a los diésel con etiqueta B en un episodio de NO2: las páginas municipales consultadas no lo dicen.",
-      "Com es controla l'accés (càmeres) i quin horari tenen les restriccions als dièsel amb etiqueta B en un episodi de NO2: les pàgines municipals consultades no ho diuen.",
-      "How access is enforced (cameras) and what hours the restrictions on diesel B-label vehicles keep during an NO2 episode: the council pages read do not say.",
+      "Qué horario tienen las restricciones a los diésel con etiqueta B en un episodio de NO2: las páginas municipales consultadas no lo dicen.",
+      "Quin horari tenen les restriccions als dièsel amb etiqueta B en un episodi de NO2: les pàgines municipals consultades no ho diuen.",
+      "What hours the restrictions on diesel B-label vehicles keep during an NO2 episode: the council pages read do not say.",
     ),
     l(
       "El trámite para un vehículo con matrícula extranjera: el Ayuntamiento lo lista como exención sin detallar el procedimiento en las páginas consultadas.",
