@@ -163,6 +163,34 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * Government's order of 26 Oct for Osakidetza (SATSE, ELA, LAB, CCOO, UGT;
  * 8-9 Dec Álava, 9-10 Bizkaia, 10-11 Gipuzkoa, 13-14 Dec all of Osakidetza,
  * each from 22:00 to 22:00).
+ *
+ * 22 Nov 2026 (13:20-13:40 CET, Sunday): re-read (docs/SEO_EXPERIMENTS.md,
+ * "2026-11-22 — Strikes re-read (Sunday)"). No change to any entry and no copy
+ * changed. Correos: Orden INT/1239/2026 (BOE-A-2026-24259) unchanged ("días 23
+ * a 27 de noviembre de 2026 en Madrid y de 23 a 25 de noviembre de 2026 en
+ * Cádiz, Córdoba, Huelva, Málaga y Sevilla"); BOE of 21 Nov (núm. 290): no
+ * strike order, no issue on Sunday 22; the Sindicato Libre's site (newest 17
+ * Nov) and Correos' press room (newest 20 Nov, postal vote): no call-off, no
+ * agreement. Its order's clause "en el caso de ampliación del plazo de
+ * admisión del voto, se dará continuidad a los servicios mínimos de los
+ * servicios rurales" now applies: the Junta Electoral Central extended the
+ * deposit of postal votes to 26 Nov, 14:00 (Acuerdo 418/2026, on the voting
+ * pages since 20 Nov); the entry's conditional sentence is left as written.
+ * SMU: the notice's first phase runs "hasta las 08:00 horas del sábado 28 de
+ * noviembre de 2026" with "cese total de la actividad", so the weekend of 21
+ * and 22 Nov is covered and the twelve dates stand; no call-off, no second
+ * phase announced (newest item 19 Nov). Rail: SEMAF (newest 20 Nov), SCF
+ * (SCFCOM 40, 21 Nov), SFF-CGT (newest 18 Nov, no date), ALFERRO (newest
+ * 83/2026), CCOO and the Ministry's rail list (newest still 12 Nov): no new
+ * call; Renfe's press room feed (newest item 17 Nov): nothing about the 23rd.
+ * Air list: newest still the 17N ones and ELA Bizkaia; SAERCO, Groundforce,
+ * Outsmart in force to 30 Nov, no resolution from 1 Dec yet. The Basque
+ * Government's list (newest still the two care-home orders of 17 Nov); CSIF
+ * Educación Madrid (calendar unchanged: 24, 26 and 30 Nov, 1, 10, 11, 16 and
+ * 18 Dec, 9:00-11:00 and 17:00-19:00) and CCOO Madrid (newest items 16-18 Nov,
+ * "plena huelga indefinida", no call-off); CESM (newest 12-13 Nov, still
+ * postponed); CCOO and UGT's national home pages (only the 11N). No new strike
+ * for 23 Nov-6 Dec on those lists.
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-22";
 
@@ -171,7 +199,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-22";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-21";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-22";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";

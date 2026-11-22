@@ -68,6 +68,18 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * adds one FAQ ("¿Sigue en pie...?"). The 23rd: unchanged (no new rail call
  * on the Ministry's list; Correos' order unchanged; no Renfe or Rodalies
  * notice about the call-off yet).
+ *
+ * 22 Nov 2026 (13:20-13:40 CET, the eve of the 23rd): re-read
+ * (docs/SEO_EXPERIMENTS.md, "2026-11-22 — Strikes re-read (Sunday)"). Nothing
+ * changed, no copy changed. The 23rd: SEMAF's call-off stands (newest items
+ * still 20 Nov), no new rail call (Ministry's list, SCF, SFF-CGT, ALFERRO,
+ * CCOO), Correos' order unchanged and no call-off, SMU's first phase runs to
+ * 08:00 on Saturday 28; Renfe (press room feed, newest item 17 Nov) and
+ * Rodalies (alterations list; the unlisted 23N page still dated 19.11.2026)
+ * have still published nothing about the call-off, which is what the "what to
+ * do" line says with the re-read date. The 26th: the strike stays on and its
+ * minimum services are still not out (Treball's list, e-Tauler, DOGC: last
+ * issue núm. 9799 of Friday 20 Nov).
  */
 
 export const STRIKE_DAY_2326 = { strike23n: "2026-11-23", strike26n: "2026-11-26" } as const;
@@ -99,10 +111,10 @@ export const DAY2326_URLS = {
   // SEMAF nº 2026-38 and nº 2026-39, 20 Nov 2026 (read that day): the 23rd called off, "Acuerdo de fin de huelga (art. 8.2 RDLRT)".
   semaf38: SPAIN_URLS.semaf38,
   semaf39: SPAIN_URLS.semaf39,
-  // Ministry of Transport's rail list: newest entry on 20 and 21 Nov 2026 still the resolution of 12 Nov (Grupo Renfe, 17 Nov); none for the 23rd.
+  // Ministry of Transport's rail list: newest entry on 20, 21 and 22 Nov 2026 still the resolution of 12 Nov (Grupo Renfe, 17 Nov); none for the 23rd.
   ministryRail: SPAIN_URLS.ministryRail,
-  // The Departament d'Empresa i Treball's list: newest entry on 20 and 21 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th
-  // (nor in the newest 200 e-Tauler edicts, 16-20 Nov, read 21 Nov).
+  // The Departament d'Empresa i Treball's list: newest entry on 20, 21 and 22 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th
+  // (nor in the newest 200 e-Tauler edicts, 16-20 Nov, read 21 and 22 Nov, nor in the DOGC, last issue núm. 9799 of 20 Nov).
   treballMs: STRIKE_URLS.treballMs,
   rodaliesStatus: STRIKE_URLS.rodaliesStatus,
   renfe: STRIKE_URLS.renfe,
