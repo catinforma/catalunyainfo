@@ -6,6 +6,10 @@ import { inWindow } from "./logic";
 import { BARCELONA_GUIDE, zaCityPath } from "./paths";
 import type { City, DaySchedule, L, PaidRule, PriceStep, Range, Season, SpecialDay, Zone, ZaLocale } from "./types";
 
+/** The longest title and description the search result prints whole (the site-wide limits). */
+export const TITLE_LIMIT = 60;
+export const DESCRIPTION_LIMIT = 155;
+
 /**
  * Every sentence of the family, built from the data file: nothing here states
  * a fact of its own. The server render never says "today": the day-dependent
@@ -177,7 +181,8 @@ export interface PriceRow {
 }
 
 function stepCell(step: PriceStep | null, locale: ZaLocale): string {
-  return step ? `${eur(step.eur, locale)} (${shortDuration(step.minutes)})` : NOT_PUBLISHED[locale];
+  if (!step) return NOT_PUBLISHED[locale];
+  return step.minutes === null ? eur(step.eur, locale) : `${eur(step.eur, locale)} (${shortDuration(step.minutes)})`;
 }
 
 function hourCell(value: number | null, minutes: number, zone: Zone, locale: ZaLocale): string {
@@ -215,8 +220,9 @@ function priceLine(zone: Zone, locale: ZaLocale): string | null {
   const parts: string[] = [];
   if (p.hour1 !== null) parts.push(`${w.h1}, ${eur(p.hour1, locale)}`);
   if (p.hour2 !== null) parts.push(`${w.h2}, ${eur(p.hour2, locale)}`);
-  if (p.min) parts.push(`${w.min}, ${eur(p.min.eur, locale)} (${duration(p.min.minutes, locale)})`);
-  if (p.max) parts.push(`${w.max}, ${eur(p.max.eur, locale)} (${duration(p.max.minutes, locale)})`);
+  const step = (label: string, s: PriceStep) => `${label}, ${eur(s.eur, locale)}${s.minutes === null ? "" : ` (${duration(s.minutes, locale)})`}`;
+  if (p.min) parts.push(step(w.min, p.min));
+  if (p.max) parts.push(step(w.max, p.max));
   return parts.length > 0 ? `${zone.name[locale]}: ${parts.join("; ")}.` : null;
 }
 
@@ -287,8 +293,8 @@ export function cityFaq(city: City, locale: ZaLocale): Faq[] {
 
   const prices = city.zones.map((z) => priceLine(z, locale)).filter((x): x is string => x !== null).join(" ");
   const stays = city.zones
-    .filter((z) => z.maxStayMinutes !== null)
-    .map((z) => `${z.name[locale]}: ${duration(z.maxStayMinutes!, locale)}.`)
+    .filter((z) => z.maxStayMinutes !== null || z.maxStayNote)
+    .map((z) => `${z.name[locale]}: ${maxStay(z, locale)}.`)
     .join(" ");
 
   const cancel =
@@ -429,7 +435,7 @@ export function cityDescription(city: City, locale: ZaLocale): string {
       : "";
   const head = { es: `Zona azul de ${name}: ${rule}.${price}`, ca: `Zona blava ${caDe(name)}: ${rule}.${price}`, en: `${name} blue zone: ${rule}.${price}` }[locale];
   const tail = { es: " Con fuente oficial.", ca: " Amb font oficial.", en: " Official sources." }[locale];
-  return head.length + tail.length <= 160 ? head + tail : head;
+  return head.length + tail.length <= DESCRIPTION_LIMIT ? head + tail : head;
 }
 
 export function cityLead(city: City, locale: ZaLocale): string {
@@ -738,8 +744,8 @@ export function hubView(locale: ZaLocale): HubView {
     title: { es: "Zona azul por ciudad: horarios y precios", ca: "Zona blava per ciutat: horaris i preus", en: "Blue zone parking in Spain by city: hours and prices" }[locale],
     description: {
       es: `Horario y precio de la zona azul en ${list}${more ? " y más ciudades" : ""}: lunes a viernes, sábados, domingos y festivos, precio por hora y máximo.`,
-      ca: `Horari i preu de la zona blava a ${list}${more ? " i més ciutats" : ""}: de dilluns a divendres, dissabtes, diumenges i festius, preu per hora i màxim.`,
-      en: `Blue zone parking hours and prices in ${list}${more ? " and more cities" : ""}: weekdays, Saturdays, Sundays and holidays, price per hour, maximum stay.`,
+      ca: `Horari i preu de la zona blava a ${list}${more ? " i més ciutats" : ""}: feiners, dissabtes, diumenges i festius, preu per hora i màxim.`,
+      en: `Blue zone hours and prices in ${list}${more ? " and more cities" : ""}: weekdays, Saturdays, Sundays and holidays, price per hour, maximum stay.`,
     }[locale],
     h1: { es: "Zona azul por ciudad: horarios y precios", ca: "Zona blava per ciutat: horaris i preus", en: "Blue zone parking by city: hours and prices" }[locale],
     lead: {

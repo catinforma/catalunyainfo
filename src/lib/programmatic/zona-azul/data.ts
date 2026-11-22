@@ -1,4 +1,4 @@
-import type { City, DaySchedule, HubOnlyRow, PaidRule } from "./types";
+import type { City, DaySchedule, HubOnlyRow, L, PaidRule, Prices } from "./types";
 
 /**
  * Regulated street parking ("zona azul", SER, ORA…) by city: the one data
@@ -623,7 +623,243 @@ const SEVILLA: City = {
 /* -------------------------------------------------------------------------- */
 
 /** Every city with a page, in the order of the hub table (search demand, 22 Nov 2026). */
-export const CITIES: readonly City[] = [MADRID, VALENCIA, SEVILLA];
+/* -------------------------------------------------------------------------- */
+/* Girona: zona blava i zona verda                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Hours from the council's "Tarifes i horaris" page (the fee ordinance leaves
+ * them to a mayoral decree); every amount from the 2026 fee ordinance, which
+ * matches the page. The page still words the blue tariff as "durant l'any
+ * 2024": the tariffs date from 24 June 2024 and the 2026 book keeps them.
+ */
+const GIRONA_BLUE: PaidRule = {
+  base: schedule(
+    [
+      ["09:30", "13:00"],
+      ["16:00", "20:00"],
+    ],
+    [
+      ["09:30", "13:00"],
+      ["16:00", "20:00"],
+    ],
+  ),
+  seasons: [],
+  special: [],
+};
+const GIRONA_GUELL: PaidRule = { base: schedule([["08:00", "20:00"]], [["08:00", "20:00"]]), seasons: [], special: [] };
+const GIRONA_PEDRERES: PaidRule = {
+  base: schedule(
+    [
+      ["09:30", "13:00"],
+      ["17:00", "20:00"],
+    ],
+    [["09:30", "13:00"]],
+  ),
+  seasons: [],
+  special: [],
+};
+const GIRONA_GREEN_WHO: L = {
+  es: "Preferencia para los residentes de la zona; cualquier otro vehículo puede aparcar con tique, con tarifa y tiempo máximo según dónde resida el titular.",
+  ca: "Preferència per als residents de la zona; qualsevol altre vehicle hi pot aparcar amb tiquet, amb tarifa i temps màxim segons on resideixi el titular.",
+  en: "Residents of the zone have priority; any other vehicle may park with a ticket, with a tariff and maximum stay that depend on where the owner lives.",
+};
+const GIRONA_GREEN_STAY: L = {
+  es: "2 horas (6 horas los vehículos de residentes en Girona)",
+  ca: "2 hores (6 hores els vehicles de residents a Girona)",
+  en: "2 hours (6 hours for vehicles of Girona residents)",
+};
+const GIRONA_GREEN_PRICES: Prices = { min: { minutes: null, eur: 0.4 }, hour1: 1.2, hour2: 2.4, max: { minutes: 120, eur: 2.4 } };
+const GIRONA_GREEN_PRICES_NOTE: L = {
+  es: "Tarifa de quien no reside en Girona. Los residentes en Girona que no son de la zona pagan 0,65 € por hora (mínimo 0,30 €), hasta 6 horas.",
+  ca: "Tarifa de qui no resideix a Girona. Els residents a Girona que no són de la zona paguen 0,65 € per hora (mínim 0,30 €), fins a 6 hores.",
+  en: "Tariff for vehicles from outside Girona. Girona residents from outside the zone pay €0.65 an hour (minimum €0.30), for up to 6 hours.",
+};
+
+const GIRONA: City = {
+  slug: "girona",
+  name: { es: "Girona", ca: "Girona", en: "Girona" },
+  service: null,
+  operator: {
+    es: "Ayuntamiento de Girona (gestión municipal); incidencias con los parquímetros: 972 426 748",
+    ca: "Ajuntament de Girona (gestió municipal); incidències amb els parquímetres: 972 426 748",
+    en: "Girona City Council (run by the council itself); parking-meter problems: 972 426 748",
+  },
+  holidays: { kind: "catalonia", slug: "girona" },
+  zones: [
+    {
+      id: "blue",
+      colour: "blue",
+      name: { es: "Zona azul", ca: "Zona blava", en: "Blue zone" },
+      who: {
+        es: "Cualquier vehículo con tique, con la misma tarifa para todos.",
+        ca: "Qualsevol vehicle amb tiquet, amb la mateixa tarifa per a tothom.",
+        en: "Any vehicle with a ticket; the tariff is the same for everyone.",
+      },
+      rule: GIRONA_BLUE,
+      hoursNote: {
+        es: "En la zona azul del barrio de Sant Narcís se paga de lunes a viernes laborables de 9:30 a 13:00 y de 17:00 a 20:00, y los sábados laborables de 9:30 a 13:00.",
+        ca: "A la zona blava del barri de Sant Narcís es paga de dilluns a divendres feiners de 9.30 a 13.00 i de 17.00 a 20.00, i els dissabtes feiners de 9.30 a 13.00.",
+        en: "In the blue zone of the Sant Narcís district the paid hours are Monday to Friday on working days, 9:30 to 13:00 and 17:00 to 20:00, and working Saturdays, 9:30 to 13:00.",
+      },
+      maxStayMinutes: 120,
+      prices: { min: { minutes: null, eur: 0.35 }, hour1: 1.2, hour2: 2.4, max: { minutes: 120, eur: 2.4 } },
+      src: ["tarifes", "of-2026"],
+    },
+    {
+      id: "green-guell",
+      colour: "green",
+      name: { es: "Zona verde de Güell-Devesa", ca: "Zona verda de Güell-Devesa", en: "Güell-Devesa green zone" },
+      who: GIRONA_GREEN_WHO,
+      rule: GIRONA_GUELL,
+      maxStayMinutes: 120,
+      maxStayNote: GIRONA_GREEN_STAY,
+      prices: GIRONA_GREEN_PRICES,
+      pricesNote: GIRONA_GREEN_PRICES_NOTE,
+      src: ["tarifes", "of-2026", "verda"],
+    },
+    {
+      id: "green-pedreres",
+      colour: "green",
+      name: {
+        es: "Zona verde de Les Pedreres-Vista Alegre",
+        ca: "Zona verda de les Pedreres-Vista Alegre",
+        en: "Les Pedreres-Vista Alegre green zone",
+      },
+      who: GIRONA_GREEN_WHO,
+      rule: GIRONA_PEDRERES,
+      maxStayMinutes: 120,
+      maxStayNote: GIRONA_GREEN_STAY,
+      prices: GIRONA_GREEN_PRICES,
+      pricesNote: GIRONA_GREEN_PRICES_NOTE,
+      src: ["tarifes", "of-2026", "verda"],
+    },
+  ],
+  cancel: {
+    eur: 6.85,
+    text: {
+      es: "Quien ha superado el tiempo del tique o ha aparcado sin tique puede anular la denuncia pagando 6,85 €, siempre que no hayan pasado 24 horas desde la denuncia. Se paga en cualquier parquímetro, o en la aplicación si el tique se sacó con ella.",
+      ca: "Qui ha superat el temps del tiquet o ha aparcat sense tiquet pot anul·lar la denúncia pagant 6,85 €, sempre que no hagin passat 24 hores des de la denúncia. Es paga a qualsevol parquímetre, o a l'aplicació si el tiquet es va treure amb ella.",
+      en: "A driver who has overstayed the ticket or parked without one can cancel the notice by paying €6.85, as long as 24 hours have not passed since the notice. It is paid at any parking meter, or in the app if the ticket was bought there.",
+    },
+    src: ["of-2026", "faqs"],
+  },
+  apps: { names: ["mot: APARCAR"], src: ["app"] },
+  payNote: {
+    text: {
+      es: "Los parquímetros aceptan monedas y tarjetas (con chip, banda o sin contacto). Con la aplicación se inicia y se termina la estancia y solo se paga el tiempo usado, sin el redondeo a 5 céntimos. EasyPark dejó de funcionar en Girona el 1 de enero de 2024.",
+      ca: "Els parquímetres accepten monedes i targetes (amb xip, banda o sense contacte). Amb l'aplicació s'inicia i es finalitza l'estada i només es paga el temps utilitzat, sense l'arrodoniment a 5 cèntims. EasyPark va deixar de funcionar a Girona l'1 de gener de 2024.",
+      en: "Parking meters take coins and cards (chip, magnetic stripe or contactless). In the app you start and end the stay and pay only for the time used, without the rounding to 5 cents. EasyPark stopped working in Girona on 1 January 2024.",
+    },
+    src: ["faqs", "app", "of-2026"],
+  },
+  exemptions: {
+    electric: null,
+    pmr: {
+      text: {
+        es: "Con la tarjeta de aparcamiento para personas con discapacidad se puede aparcar en las zonas de horario limitado sin sacar el comprobante de pago.",
+        ca: "Amb la targeta d'aparcament per a persones amb discapacitat es pot aparcar a les zones d'horari limitat sense haver d'obtenir el comprovant de pagament.",
+        en: "Holders of the parking card for people with disabilities may park in the time-limited zones without getting a payment ticket.",
+      },
+      src: ["pmr"],
+    },
+    other: [
+      {
+        text: {
+          es: "La tasa solo grava el estacionamiento de vehículos de más de dos ruedas: las motos de dos ruedas no están sujetas.",
+          ca: "La taxa només grava l'estacionament de vehicles de més de dues rodes: les motos de dues rodes no hi estan subjectes.",
+          en: "The fee applies only to vehicles with more than two wheels: two-wheeled motorcycles are outside it.",
+        },
+        src: ["of-2026"],
+      },
+    ],
+  },
+  seasonal: [
+    {
+      text: {
+        es: "Días de mercado (martes y sábados), de 8:00 a 14:00: las dos primeras horas son gratis en el aparcamiento de superficie de Güell-Devesa (calle Riu Güell, entre las rotondas del Rellotge y de la Devesa). Solo sacando el tique en el parquímetro.",
+        ca: "Dies de mercat (dimarts i dissabtes), de 8.00 a 14.00: les dues primeres hores són gratuïtes a l'aparcament de superfície de Güell-Devesa (carrer Riu Güell, entre les rotondes del Rellotge i de la Devesa). Només traient el tiquet al parquímetre.",
+        en: "Market days (Tuesdays and Saturdays), 8:00 to 14:00: the first two hours are free in the Güell-Devesa surface car park (Carrer Riu Güell, between the Rellotge and Devesa roundabouts). Only with a ticket taken at the parking meter.",
+      },
+      src: ["tarifes", "of-2026"],
+    },
+  ],
+  notes: [
+    {
+      text: {
+        es: "Las tarifas están en vigor desde el 24 de junio de 2024 y las ordenanzas fiscales de 2026 las mantienen. En el parquímetro se paga en fracciones de 5 céntimos.",
+        ca: "Les tarifes són vigents des del 24 de juny de 2024 i les ordenances fiscals de 2026 les mantenen. Al parquímetre es paga en fraccions de 5 cèntims.",
+        en: "The tariffs have applied since 24 June 2024 and the 2026 fee ordinances keep them. At the parking meter you pay in 5-cent steps.",
+      },
+      src: ["tarifes", "of-2026"],
+    },
+    {
+      text: {
+        es: "Residentes de una zona verde: 0,35 € al día, 1,70 € a la semana o 22,10 € al trimestre. La cuota trimestral se paga por internet y solo en cuatro periodos: del 20 de diciembre al 15 de enero, del 20 de marzo al 15 de abril, del 20 de junio al 15 de julio y del 20 de septiembre al 15 de octubre.",
+        ca: "Residents d'una zona verda: 0,35 € al dia, 1,70 € a la setmana o 22,10 € al trimestre. La quota trimestral es paga per internet i només en quatre períodes: del 20 de desembre al 15 de gener, del 20 de març al 15 d'abril, del 20 de juny al 15 de juliol i del 20 de setembre al 15 d'octubre.",
+        en: "Residents of a green zone: €0.35 a day, €1.70 a week or €22.10 a quarter. The quarterly fee is paid online and only in four windows: 20 December to 15 January, 20 March to 15 April, 20 June to 15 July and 20 September to 15 October.",
+      },
+      src: ["of-2026", "tarifes"],
+    },
+    {
+      text: {
+        es: "Las tarifas reducidas de residente exigen no tener pendiente ningún recibo del impuesto de vehículos (IVTM) del coche aparcado.",
+        ca: "Les tarifes reduïdes de resident exigeixen no tenir pendent cap rebut de l'impost de vehicles (IVTM) del cotxe aparcat.",
+        en: "The reduced resident tariffs require that no vehicle-tax (IVTM) bill for the parked car is unpaid.",
+      },
+      src: ["of-2026"],
+    },
+    {
+      text: {
+        es: "Aunque la tarifa de residente cubre hasta una semana, la ordenanza de circulación limita a 72 horas el tiempo que un vehículo puede estar en la misma plaza.",
+        ca: "Tot i que la tarifa de resident cobreix fins a una setmana, l'ordenança de circulació limita a 72 hores el temps que un vehicle pot estar a la mateixa plaça.",
+        en: "Although the resident tariff covers up to a week, the traffic ordinance limits a vehicle to 72 hours in the same space.",
+      },
+      src: ["faqs"],
+    },
+  ],
+  sources: [
+    {
+      id: "tarifes",
+      name: "Tarifes i horaris de la zona verda i la zona blava",
+      url: "https://web.girona.cat/mobilitat/aparcaments/zones/tarifes",
+      publisher: "Ajuntament de Girona",
+    },
+    {
+      id: "of-2026",
+      name: "Ordenança fiscal reguladora de la taxa per estacionament limitat de vehicles de tracció mecànica en les vies públiques municipals (Ordenances fiscals 2026)",
+      url: "https://seu.girona.cat/cdn/dades/ordenances/ordfiscals2026.pdf",
+      publisher: "Ajuntament de Girona",
+    },
+    {
+      id: "verda",
+      name: "La zona verda",
+      url: "https://web.girona.cat/mobilitat/aparcaments/zones/verda",
+      publisher: "Ajuntament de Girona",
+    },
+    {
+      id: "faqs",
+      name: "Zona verda i blava: preguntes freqüents",
+      url: "https://web.girona.cat/mobilitat/aparcaments/zones/faqs",
+      publisher: "Ajuntament de Girona",
+    },
+    {
+      id: "app",
+      name: "Pagament amb mòbil mot: APARCAR",
+      url: "https://web.girona.cat/mobilitat/aparcaments/zones/pagaments-mobil",
+      publisher: "Ajuntament de Girona",
+    },
+    {
+      id: "pmr",
+      name: "Targetes d'estacionament per a persones amb discapacitat",
+      url: "https://web.girona.cat/mobilitat/accessibilitat",
+      publisher: "Ajuntament de Girona",
+    },
+  ],
+  verified: "2026-11-22",
+};
+
+export const CITIES: readonly City[] = [MADRID, VALENCIA, SEVILLA, GIRONA];
 
 export function cityBySlug(slug: string): City | null {
   return CITIES.find((c) => c.slug === slug) ?? null;

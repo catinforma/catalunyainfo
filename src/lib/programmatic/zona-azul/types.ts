@@ -50,7 +50,8 @@ export interface PaidRule {
 }
 
 export interface PriceStep {
-  minutes: number;
+  /** How long the amount buys; null when the tariff fixes only the amount (Girona's minimum charge). */
+  minutes: number | null;
   eur: number;
 }
 
