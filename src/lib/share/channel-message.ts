@@ -146,6 +146,13 @@ function percent(value: number): string {
   return `${new Intl.NumberFormat("ca-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value)} %`;
 }
 
+/** The last day of the run of consecutive strike days that `from` is in (`from` itself for a one-day strike). */
+function runEnd(dates: readonly string[], from: string): string {
+  let end = from;
+  while (dates.includes(addDays(end, 1))) end = addDays(end, 1);
+  return end;
+}
+
 /** Midday in Madrid on `date`, as an instant: inside the date whatever the offset. */
 const middayOf = (date: string) => Date.parse(`${date}T11:00:00Z`);
 
@@ -219,15 +226,23 @@ export function buildChannelMessage(input: ChannelInput): ChannelMessage {
     );
   } else {
     const now = strikesOn(date, input.strikes);
-    const then = strikesOn(tomorrow, input.strikes).filter((s) => !s.indefinite);
+    // 22 Nov 2026: a strike of several days in a row is one line ("Avui i demà…", "…(fins divendres 27)"),
+    // not the same sentence twice as today's and tomorrow's; the line it frees goes to the next fact.
+    const runs = new Map(now.filter((s) => !s.indefinite).map((s) => [s.id, runEnd(s.dates, date)]));
+    const then = strikesOn(tomorrow, input.strikes).filter((s) => !s.indefinite && !runs.has(s.id));
     anyStrikeToday = now.length > 0;
     for (const strike of now) {
       if (strike.indefinite) {
         facts.push({ text: `Continua la ${strike.title}.`, priority: 3, order: ORDER.ongoing });
       } else {
         strikeToday = true;
-        facts.push({ text: `⚠️ Avui hi ha ${strike.title}. ${strike.ms}.`, priority: 0, order: ORDER.strikeToday });
-        candidates.push({ path: strike.href, label: "Què funciona i serveis mínims", rank: 0 });
+        const end = runs.get(strike.id) ?? date;
+        const when = end === tomorrow ? "Avui i demà hi ha" : "Avui hi ha";
+        const until = end > tomorrow ? ` (fins ${weekdayDayMonth(end, "ca")})` : "";
+        facts.push({ text: `⚠️ ${when} ${strike.title}${until}. ${strike.ms}.`, priority: 0, order: ORDER.strikeToday });
+        // The strike that starts today is the news and gets the link; one that has run for days comes after it.
+        const startsToday = !strike.dates.includes(addDays(date, -1));
+        candidates.push({ path: strike.href, label: "Què funciona i serveis mínims", rank: startsToday ? 0 : 0.5 });
       }
     }
     for (const strike of then) {
@@ -237,7 +252,12 @@ export function buildChannelMessage(input: ChannelInput): ChannelMessage {
     if (then.length === 0) {
       const upcoming = input.strikes
         .filter((s) => !s.indefinite)
-        .flatMap((s) => s.dates.filter((d) => d > tomorrow).map((d) => ({ strike: s, date: d })))
+        .flatMap((s) => {
+          // Past tomorrow, and past the run today's line already covers.
+          const end = runs.get(s.id);
+          const after = end && end > tomorrow ? end : tomorrow;
+          return s.dates.filter((d) => d > after).map((d) => ({ strike: s, date: d }));
+        })
         .sort((a, b) => a.date.localeCompare(b.date))[0];
       if (upcoming && daysBetween(date, upcoming.date) <= NEXT_STRIKE_DAYS) {
         facts.push({ text: `Propera vaga, ${weekdayDayMonth(upcoming.date, "ca")}: ${upcoming.strike.title}.`, priority: 4, order: ORDER.nextStrike });

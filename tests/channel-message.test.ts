@@ -113,6 +113,44 @@ test("channel post: the day before a strike warns about tomorrow and links it", 
   assert.ok(m.link.includes("#vaga-ferroviaria-2026-11-17"));
 });
 
+test("channel post: a strike of several days in a row is one line, and the next strike is another one", () => {
+  const strikes: TodayStrike[] = [
+    {
+      id: "vaga-metges-smu-2026-11-16",
+      dates: ["2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+      title: "vaga de metges",
+      ms: "Serveis mínims publicats",
+      href: "/ca/guies/vaga-avui-catalunya/#vaga-metges-smu-2026-11-16",
+    },
+    {
+      id: "vaga-educacio-2026-11-26",
+      dates: ["2026-11-26"],
+      title: "vaga a l'educació",
+      ms: "Serveis mínims encara no publicats",
+      href: "/ca/guies/vaga-avui-catalunya/#vaga-educacio-2026-11-26",
+    },
+  ];
+  const first = buildChannelMessage(input("2026-11-22", { strikes }));
+  assertShape(first.text, first.lines);
+  assert.match(first.text, /⚠️ Avui hi ha vaga de metges \(fins divendres 27 de novembre\)\. Serveis mínims publicats\./);
+  assert.doesNotMatch(first.text, /Demà hi ha vaga de metges/);
+  assert.match(first.text, /Propera vaga, dijous 26 de novembre: vaga a l'educació\./);
+
+  // The day before another strike starts: that one is tomorrow's line, the running one stays one line.
+  const eve = buildChannelMessage(input("2026-11-25", { strikes }));
+  assert.match(eve.text, /⚠️ Avui hi ha vaga de metges \(fins divendres 27 de novembre\)\./);
+  assert.match(eve.text, /⚠️ Demà hi ha vaga a l'educació\./);
+  assert.equal(eve.text.match(/vaga de metges/g)?.length, 1);
+
+  // Its last two days, then its last day. The strike that starts that day gets the link, not the one running since Sunday.
+  const both = buildChannelMessage(input("2026-11-26", { strikes }));
+  assert.match(both.text, /⚠️ Avui i demà hi ha vaga de metges\. /);
+  assert.ok(both.link.endsWith("#vaga-educacio-2026-11-26"), both.link);
+  const last = buildChannelMessage(input("2026-11-27", { strikes })).text;
+  assert.match(last, /⚠️ Avui hi ha vaga de metges\. /);
+  assert.doesNotMatch(last, /fins |Propera vaga/);
+});
+
 test("channel post: a Catalonia-wide holiday, linked to its date page", () => {
   const m = buildChannelMessage(input("2026-12-08"));
   assertShape(m.text, m.lines);
