@@ -54,6 +54,7 @@ import { euriborSitemapEntries } from "@/lib/programmatic/euribor/page";
 import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
 import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
+import { zonaAzulSitemapEntries } from "@/lib/programmatic/zona-azul/sitemap";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { pcSitemapEntries } from "@/lib/programmatic/purchase-costs/page";
 import { pvSitemapEntries } from "@/lib/programmatic/plusvalia/page";
@@ -258,6 +259,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...dated("mortgage", [...mortgageSitemapEntries(EURIBOR_SNAPSHOT.series)]),
     // "¿Cuándo me toca pasar la ITV?" (calculators family, group "vehicle"), in es, ca and en.
     ...dated("itv", [...itvSitemapEntries()]),
+    // Regulated street parking ("zona azul", SER, ORA) city by city (ordinances and council pages), in es, ca and en.
+    ...dated("zona-azul", [...zonaAzulSitemapEntries()]),
     // Taxes on buying a home: ITP or IVA + AJD by community (calculators family, group "housing"), in es, ca and en.
     ...dated("home-purchase-tax", [...htSitemapEntries()]),
     // Home buying costs: notary and Land Registry fees on their official scales plus the taxes above (calculators family, group "housing"), in es, ca and en.

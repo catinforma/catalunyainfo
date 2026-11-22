@@ -9,6 +9,7 @@ import {
 } from "@/lib/content/transport-cards/rates";
 import { fuelPath } from "@/lib/programmatic/fuel/paths";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
+import { zaHubPath } from "@/lib/programmatic/zona-azul/paths";
 
 import {
   b2Related,
@@ -1605,6 +1606,13 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
   },
 };
 
+/** The "zona azul" hub (every other city, same questions), as one more related link. */
+const ZONA_AZUL_HUB_LABEL = {
+  ca: "Zona blava per ciutat: horaris i preus",
+  es: "Zona azul por ciudad: horarios y precios",
+  en: "Blue zone parking in Spain by city: hours and prices",
+};
+
 function parkingBody(locale: "ca" | "es" | "en"): Block[] {
   const t = PARKING_COPY[locale];
   const blue = locale === "en" ? BLUE_ROWS_EN : locale === "es" ? BLUE_ROWS_ES : BLUE_ROWS;
@@ -1641,7 +1649,7 @@ function parkingBody(locale: "ca" | "es" | "en"): Block[] {
     ...h2(t.carTitle, `${t.car} ${b2link("transport", locale, passes)}.`),
     faq(t.faq),
     ...paras(verifiedLine(locale, PARKING_VERIFIED)),
-    ...b2Related(["zbe", "transport", "airport"], locale),
+    ...b2Related(["zbe", "transport", "airport"], locale, [`[${ZONA_AZUL_HUB_LABEL[locale]}](${zaHubPath(locale)})`]),
   ];
 }
 

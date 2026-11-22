@@ -11653,3 +11653,52 @@ a later phase needs ten days' notice).
 strike-days-2326n 8/8, strike-guides 25/25.
 
 **Outcome:** _factual correction, no review_
+
+## 22 Nov 2026 — New family: zona azul by city (Madrid, Valencia, Sevilla, Girona + a Barcelona row), hours, prices and "is it paid today?", ca + es + en (deploy, then group `zona-azul`) (review 2026-12-06 and 2026-12-20)
+
+**Why.** Half of the visits still come from strikes and other one-day events. The evergreen research of 22 Nov
+(`research_notes/x10/`, ChatGPT pack checked URL by URL) left two families that fit what Search Console says works here
+(concrete answer + place + date, asked every day of the year, weak results: old pages, apps and PDFs): regulated street
+parking by city, and low emission zones by city. This is the first. The second (ZBE) is half-built on a branch.
+
+**What ships (15 URLs).**
+
+- Hub: `/es/zona-azul/`, `/ca/zona-blava/`, `/en/blue-zone-parking/`: one table with every city's general hours (Mon–Fri,
+  Saturday, Sunday and holidays), the price of one hour and the maximum stay; a Barcelona row that links to the existing
+  Barcelona parking guide (no Barcelona page in this family: the guide is the page); summer and special dates; FAQ; sources.
+- One page per city in the three languages, same slug: `madrid`, `valencia`, `sevilla`, `girona`. First screen: the general
+  rule and, computed in the browser with the clock of Spain and the city's public holidays, whether it is paid today, until
+  what time, tomorrow and the next public holiday (`data-nosnippet`; the server render never says "today"). Then the
+  timetable by zone, who may park in each zone, prices (minimum, 1 h, 2 h, maximum), the fee to cancel a fine, August and
+  special dates, how to pay, exemptions (electric vehicles, reduced-mobility card), FAQ with FAQPage markup for exactly the
+  printed questions, the official sources fact by fact, and a link to the city's holiday calendar on this site.
+- Titles: "Zona azul Madrid (SER): horario, precios y si se paga hoy" / "Zona blava Girona: horari, preus i si es paga avui" /
+  "Girona blue zone parking: hours, prices, free days". All ≤ 60; descriptions ≤ 155 (held by `tests/zona-azul.test.ts`).
+
+**Sources (all read on 20–22 Nov 2026; every fact in `src/lib/programmatic/zona-azul/data.ts` carries the ids of the texts
+that back it; "not published" is printed where the council's texts are silent).** Madrid: Ordenanza de Movilidad Sostenible
+(BOCM 23/10/2018 and 21/09/2021) and the 2026 fee ordinances book. Valencia: the ORA fee ordinance at the council's sede and
+the council's own notes (hours restored, Petxina zone, new contract, Fallas). Sevilla: BOP notice of 2025 and the 2026 fee
+ordinance. Girona: the council's tariff, green zone, FAQ, mobile payment and accessibility pages and the 2026 fee ordinances
+book (the tariff page still says "durant l'any 2024"; the amounts match the 2026 book, and the page says the tariff dates
+from 24 June 2024). Barcelona row: AREA (B:SM), the same figures as the guide (a test fails if the guide's text changes).
+Murcia was read (BORM no. 136, 16 June 2025) and left out: three sectors with prices before VAT and the hours not yet
+checked on a live council page. It goes in with the next batch, not half-verified.
+
+**Also touched (body only, inside the 20 Nov window of the Barcelona parking guide — logged here).** One related link to the
+hub at the foot of `aparcar-barcelona-zona-azul-verde` (ca/es/en). No title, description, H1 or lead of any existing page
+changed.
+
+**Wiring.** Sitemap family `zona-azul` (dated by `scripts/body-dates.ts`), publish group `zona-azul`, hreflang ca/es/en with
+x-default to English. `ZONA_AZUL_REVIEW_BY = 2027-01-08`: a test fails from that day until every city's 2027 fee ordinance
+has been re-read.
+
+**Baseline.** New URLs: 0 impressions, 0 clicks.
+
+**Go-live.** Deploy, publish `zona-azul`, IndexNow `/es/zona-azul/ /ca/zona-blava/ /en/blue-zone-parking/`, sitemap resubmit.
+
+**Review.** 6 Dec: are the 15 URLs indexed, which queries show them, position. 20 Dec: impressions and CTR per city against
+the municipality-page curve; decide the next cities (Catalan cities first: Tarragona, Lleida, Sabadell, Terrassa, Reus;
+then the large Spanish ones) and whether the today box earns the click (queries with "hoy", "festivo", "sábado").
+
+**Outcome:** _pending_
