@@ -98,6 +98,7 @@ import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
+import { zbeFamilyPaths } from "@/lib/programmatic/zbe/sitemap";
 import { grossaCheckPublishPaths } from "@/lib/programmatic/grossa-check/sitemap";
 import { ninoCheckPublishPaths } from "@/lib/programmatic/nino-check/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
@@ -572,6 +573,13 @@ export async function POST(request: Request) {
     // hubs that link it (/ca/festius/ … are dynamicParams = false: a revalidate
     // would 404 them) nor the CSV (/data/…, rebuilt by every deploy).
     if (wants("festius-locals-dades")) codePaths.push(...Object.values(reportEditions()));
+    // Low-emission zones city by city (/es/zbe/…, /ca/zbe/…,
+    // /en/low-emission-zones/…): code routes (dynamicParams = true) built from
+    // lib/programmatic/zbe/cities.ts and the committed DGT snapshot, shipped by
+    // the deploy; this group revalidates, purges and IndexNow-pings the three
+    // hubs and every city page. Re-run it after a deploy that adds or
+    // re-checks a city.
+    if (wants("zbe")) codePaths.push(...zbeFamilyPaths().map((entry) => entry.path));
     // The net salary and working-days calculators gained an "embed this" box
     // (lib/programmatic/embed-calc/): the six pages (dynamicParams = true).
     // Never the /embed/ widgets: noindex, and rebuilt by every deploy.

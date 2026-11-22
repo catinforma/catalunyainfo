@@ -62,6 +62,7 @@ import { retirementSitemapEntries } from "@/lib/programmatic/retirement-age/page
 import { widowSitemapEntries } from "@/lib/programmatic/widow-pension/page";
 import { ncSitemapEntries } from "@/lib/programmatic/non-contributory-pension/page";
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
+import { zbeSitemapEntries } from "@/lib/programmatic/zbe/sitemap";
 import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { DATA_BLOCK_COMPONENTS, blockBodyKey } from "@/lib/seo/body-dates";
@@ -143,6 +144,7 @@ export const BODY_FAMILIES: Record<string, FamilySource> = {
   "widow-pension": urls(() => widowSitemapEntries()),
   "non-contributory-pension": urls(() => ncSitemapEntries()),
   "traffic-fines": urls(() => trafficFinesSitemapEntries()),
+  zbe: urls(() => zbeSitemapEntries()),
   "zona-tensionada": urls(() => ztSitemapEntries()),
   fuel: urls(() => fuelSitemapEntries(TODAY)),
   "fuel-spain": urls(() => spainFuelSitemapEntries()),

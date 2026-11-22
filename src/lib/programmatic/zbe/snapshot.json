@@ -1,0 +1,2203 @@
+{
+ "builtOn": "2026-11-22",
+ "index": "https://nap.dgt.es/datex2/v3/dgt/zbe/ControledZonePublication/",
+ "dataset": "https://nap.dgt.es/dataset/zonas-de-bajas-emisiones",
+ "licence": "https://creativecommons.org/licenses/by/4.0/deed.es",
+ "publisher": "Dirección General de Tráfico (DGT), Punto de Acceso Nacional de Tráfico y Movilidad",
+ "zones": [
+  {
+   "file": "ACoruña.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "15001_A Coruña - Marina",
+   "ine": "15001",
+   "name": "A Coruña - Marina",
+   "description": "Permitido acceso a servicios públicos, emergencias y autorizados. Carga y descarga de 6h a 11h.",
+   "recordVersion": "2023-10-25T08:12:19.611Z",
+   "url": "https://www.coruna.gal/mobilidade/gl/detalle-contenido/proxecto-piloto-de-zonas-de-baixas-emisions/contenido/1453823979361",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B"
+   ],
+   "negated": true,
+   "start": "2023-01-06",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 537,
+   "bbox": [
+    43.36811,
+    -8.39983,
+    43.3703,
+    -8.39058
+   ]
+  },
+  {
+   "file": "ACoruña.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "15001_A Coruña - Ciudad Vieja",
+   "ine": "15001",
+   "name": "A Coruña - Ciudad Vieja",
+   "description": "Permitido acceso a servicios públicos, emergencias y autorizados. Carga y descarga de 6h a 11h.",
+   "recordVersion": "2023-10-25T08:45:20.923Z",
+   "url": "https://www.coruna.gal/mobilidade/gl/detalle-contenido/proxecto-piloto-de-zonas-de-baixas-emisions/contenido/1453823979361",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B"
+   ],
+   "negated": true,
+   "start": "2023-01-06",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 2,
+   "corners": 489,
+   "bbox": [
+    43.36841,
+    -8.39535,
+    43.3717,
+    -8.39025
+   ]
+  },
+  {
+   "file": "AlcalaDeHenares.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28005_Ayuntamiento de Alcalá de Henares",
+   "ine": "28005",
+   "name": "Ayuntamiento de Alcalá de Henares",
+   "description": "Se podrá acceder sin restricciones mientras que no se superen en dos estaciones de medida durante dos horas consecutivas y una de ellas en Alcalá los 180 microgramos por m3 de NO2. En caso de restricciones, se limitará el acceso por etiquetas (0, ECO, B y C) indicando la información ellos en los paneles situados en aquellos accesos.",
+   "recordVersion": "2025-10-27T11:18:46.622Z",
+   "url": "https://movilidad.ayto-alcaladehenares.es/zon/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B"
+   ],
+   "negated": true,
+   "start": "2025-10-27",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 26,
+   "bbox": [
+    40.4772,
+    -3.37409,
+    40.48597,
+    -3.35889
+   ]
+  },
+  {
+   "file": "Alicante.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "3014_ZBE Alicante",
+   "ine": "3014",
+   "name": "ZBE Alicante",
+   "description": "Vehículos con clasificación ambiental B, C, ECO o 0 y autorizados",
+   "recordVersion": "2025-06-19T12:07:01.226Z",
+   "url": "https://zbe.alicante.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-06-19",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 21,
+   "bbox": [
+    38.34421,
+    -0.48473,
+    38.34865,
+    -0.47657
+   ]
+  },
+  {
+   "file": "Alicante.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "3014_Anillo 1 Casco Histórico ZBE Alicante",
+   "ine": "3014",
+   "name": "Anillo 1 Casco Histórico ZBE Alicante",
+   "description": null,
+   "recordVersion": "2025-01-22T09:56:06.348Z",
+   "url": null,
+   "status": "inactive",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": null,
+   "periods": [],
+   "polygons": 1,
+   "corners": 26,
+   "bbox": [
+    4247009,
+    719800.6,
+    4247494,
+    720518.56
+   ]
+  },
+  {
+   "file": "Avila.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "5019_Ávila ZBE",
+   "ine": "5019",
+   "name": "Ávila ZBE",
+   "description": "Plataforma información ZBE Ávila",
+   "recordVersion": "2025-01-24T12:36:22.499Z",
+   "url": "https://zbe.avila.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-01-31",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "19:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "07:00",
+     "to": "19:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 169,
+   "bbox": [
+    40.6537,
+    -4.70778,
+    40.65967,
+    -4.69395
+   ]
+  },
+  {
+   "file": "Barcelona.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8019_Barcelona",
+   "ine": "8019",
+   "name": "Barcelona",
+   "description": null,
+   "recordVersion": "2023-08-24T09:54:48.178Z",
+   "url": "https://ajuntament.barcelona.cat/es/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "B"
+   ],
+   "negated": true,
+   "start": "2021-10-17",
+   "periods": [
+    {
+     "name": "L",
+     "from": "08:00",
+     "to": "12:00",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "08:00",
+     "to": "12:00",
+     "holiday": true
+    }
+   ],
+   "polygons": 34,
+   "corners": 2558,
+   "bbox": [
+    41.34008,
+    2.08844,
+    41.46825,
+    2.23738
+   ]
+  },
+  {
+   "file": "Benidorm.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "3031_ZBE Benidorm",
+   "ine": "3031",
+   "name": "ZBE Benidorm",
+   "description": "Vehículos con clasificación ambiental B, C, ECO o 0 y autorizados",
+   "recordVersion": "2025-07-16T12:38:49.064Z",
+   "url": "https://zbe.benidorm.org",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-07-16",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 78,
+   "bbox": [
+    38.5337,
+    -0.15151,
+    38.54384,
+    -0.12045
+   ]
+  },
+  {
+   "file": "Bilbao.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "48020_ZBE Bilbao",
+   "ine": "48020",
+   "name": "ZBE Bilbao",
+   "description": "Restricciones de acceso",
+   "recordVersion": "2025-09-24T11:38:52.493Z",
+   "url": "https://www.bilbao.eus/cs/Satellite?cid=1279231359138&language=es&pagename=Bilbaonet%2FPage%2FBIO_contenidoFinal",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-09-25",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 133,
+   "bbox": [
+    43.25668,
+    -2.94683,
+    43.27073,
+    -2.92405
+   ]
+  },
+  {
+   "file": "Cartagena.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "30016_Cartagena ensanche",
+   "ine": "30016",
+   "name": "Cartagena ensanche",
+   "description": "Condiciones Cartagena Ensanche",
+   "recordVersion": "2025-07-10T11:14:43.762Z",
+   "url": "https://www.cartagena.es/gestion/documentos/acuerdosynormativas/65196.pdf",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0"
+   ],
+   "negated": true,
+   "start": "2025-10-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 9,
+   "bbox": [
+    37.6067,
+    -0.99257,
+    37.61008,
+    -0.98141
+   ]
+  },
+  {
+   "file": "Cartagena.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "30016_Cartagena centro",
+   "ine": "30016",
+   "name": "Cartagena centro",
+   "description": "Condiciones Cartagena Centro",
+   "recordVersion": "2025-07-10T10:51:31.468Z",
+   "url": "https://www.cartagena.es/gestion/documentos/acuerdosynormativas/65196.pdf",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-10-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 24,
+   "bbox": [
+    37.59791,
+    -0.99249,
+    37.60695,
+    -0.97776
+   ]
+  },
+  {
+   "file": "Castellon.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "12040_Castellon ZBE",
+   "ine": "12040",
+   "name": "Castellon ZBE",
+   "description": "Condiciones definidas por el ayuntamiento",
+   "recordVersion": "2025-02-19T10:41:09.559Z",
+   "url": "https://zbe.castello.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-19",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 188,
+   "bbox": [
+    39.97955,
+    -0.04357,
+    39.99223,
+    -0.03388
+   ]
+  },
+  {
+   "file": "CerdanyolaDelValles.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8266_Cerdanyola del Valles",
+   "ine": "8266",
+   "name": "Cerdanyola del Valles",
+   "description": null,
+   "recordVersion": "2025-04-29T10:06:10.070Z",
+   "url": "https://zbe.amb.cat/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-04-29",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 5,
+   "corners": 876,
+   "bbox": [
+    41.47586,
+    2.07725,
+    41.51149,
+    2.15708
+   ]
+  },
+  {
+   "file": "Donostia-SanSebastian.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "20069_ZBE Donostia / San Sebastián",
+   "ine": "20069",
+   "name": "ZBE Donostia / San Sebastián",
+   "description": "Isuri Gutxiko Eremua (IGE) Zirkulazio murriztua baldintzak betetzen dituzten ibilgailuentzako. Gainerakoek baimena eskatu behar dute. Zona de Bajas Emisiones (ZBE) Circulación restringida a vehículos que cumplan las condiciones de acceso. El resto deben solicitar autorización.",
+   "recordVersion": "2025-03-04T11:39:51.842Z",
+   "url": "https://www.donostia.eus/ige",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-03-04",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 264,
+   "bbox": [
+    43.31035,
+    -1.99416,
+    43.32748,
+    -1.97889
+   ]
+  },
+  {
+   "file": "DosHermanas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "41038_ZBE Dos Hermanas-Parque Tecnológico",
+   "ine": "41038",
+   "name": "ZBE Dos Hermanas-Parque Tecnológico",
+   "description": "Se prohíbe el acceso a vehículos sin distintivo ambiental y etiqueta B en días laborables de 07:00 a 20:00, salvo excepciones recogidas en la ordenanza municipal.Ver excepciones en el enlace a la ordenanza.",
+   "recordVersion": "2025-10-03T11:28:46.094Z",
+   "url": "https://bopsevilla.dipusevilla.es/publica/buscador-anuncios/anuncio/Aprobacion-definitiva-de-la-ordenanza-reguladora-de-la-zona-de-bajas-emisiones-y-de-las-zonas-de-especial-sensibilidad/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0"
+   ],
+   "negated": true,
+   "start": "2025-10-04",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:30",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 44,
+   "bbox": [
+    37.30356,
+    -5.94405,
+    37.31107,
+    -5.93585
+   ]
+  },
+  {
+   "file": "ElPratDeLlobregat.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8169_ZBE El Prat del Llobregat",
+   "ine": "8169",
+   "name": "ZBE El Prat del Llobregat",
+   "description": null,
+   "recordVersion": "2025-04-09T10:25:33.336Z",
+   "url": "https://zbe.amb.cat/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-04-09",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 156,
+   "bbox": [
+    41.31343,
+    2.0755,
+    41.33603,
+    2.10907
+   ]
+  },
+  {
+   "file": "Fuenlabrada.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28058_Fuenlabrada",
+   "ine": "28058",
+   "name": "Fuenlabrada",
+   "description": "Vehículos con clasificación ambiental B, C, ECO o 0 y autorizados",
+   "recordVersion": "2025-02-05T18:41:27.203Z",
+   "url": "https://www.ayto-fuenlabrada.es/web/portal/zona-de-bajas-emisiones",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-07",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 247,
+   "bbox": [
+    40.27979,
+    -3.80005,
+    40.28807,
+    -3.78651
+   ]
+  },
+  {
+   "file": "Gava.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8089_ZBE Gavà",
+   "ine": "8089",
+   "name": "ZBE Gavà",
+   "description": null,
+   "recordVersion": "2025-02-20T09:26:31.719Z",
+   "url": "https://zbe.amb.cat/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-20",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 192,
+   "bbox": [
+    41.29829,
+    1.98619,
+    41.31402,
+    2.01279
+   ]
+  },
+  {
+   "file": "Girona.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "17079_ZBE Girona",
+   "ine": "17079",
+   "name": "ZBE Girona",
+   "description": "Restricciones de acceso a vehículos sin etiqueta, de lunes a viernes laborables de 7 h a 20 h.",
+   "recordVersion": "2026-01-14T11:16:32.844Z",
+   "url": "https://web.girona.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 183,
+   "bbox": [
+    41.97405,
+    2.80892,
+    41.9902,
+    2.8289
+   ]
+  },
+  {
+   "file": "Granada.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "18087_Granada",
+   "ine": "18087",
+   "name": "Granada",
+   "description": "Los vehículos Sin Distintivo ambiental cuyo domicilio fiscal no esté dentro de Granada no pueden acceder a la ZBE de Granada",
+   "recordVersion": "2025-03-31T11:44:50.241Z",
+   "url": "http://www.movilidadgranada.com/zbe.php",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-10-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 1501,
+   "bbox": [
+    37.14716,
+    -3.63423,
+    37.21254,
+    -3.56829
+   ]
+  },
+  {
+   "file": "Granollers.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8096_Granollers",
+   "ine": "8096",
+   "name": "Granollers",
+   "description": "Cristeris d'accés i circulació de vehicles a la ZBE",
+   "recordVersion": "2025-02-10T13:55:15.573Z",
+   "url": "https://seuelectronica.granollers.cat/portal/sede/RecursosWeb/DOCUMENTOS/1/0_7677_1.pdf",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-11",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 7,
+   "bbox": [
+    41.60243,
+    2.28281,
+    41.6108,
+    2.29076
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_El Montecillo",
+   "ine": "28127",
+   "name": "El Montecillo",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:37.315Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 106,
+   "bbox": [
+    40.49551,
+    -3.88734,
+    40.50913,
+    -3.87586
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Casco Urbano",
+   "ine": "28127",
+   "name": "Casco Urbano",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:37.544Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 2,
+   "corners": 123,
+   "bbox": [
+    40.47512,
+    -3.89442,
+    40.50378,
+    -3.83673
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Los Castillos",
+   "ine": "28127",
+   "name": "Los Castillos",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:37.746Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 62,
+   "bbox": [
+    40.49508,
+    -3.89849,
+    40.51303,
+    -3.88233
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_El Golf",
+   "ine": "28127",
+   "name": "El Golf",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:38.181Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 309,
+   "bbox": [
+    40.5263,
+    -3.94978,
+    40.55098,
+    -3.89707
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Valle del Roncal y Urb. Coruña XXI",
+   "ine": "28127",
+   "name": "Valle del Roncal y Urb. Coruña XXI",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:37.916Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 2,
+   "corners": 79,
+   "bbox": [
+    40.48098,
+    -3.89443,
+    40.52716,
+    -3.85186
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Parque Empresarial",
+   "ine": "28127",
+   "name": "Parque Empresarial",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:38.352Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 3,
+   "corners": 409,
+   "bbox": [
+    40.50362,
+    -3.91579,
+    40.54863,
+    -3.88717
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Lazarejo",
+   "ine": "28127",
+   "name": "Lazarejo",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:38.516Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 392,
+   "bbox": [
+    40.51037,
+    -3.9375,
+    40.53695,
+    -3.90258
+   ]
+  },
+  {
+   "file": "LasRozas.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28127_Los Peñascales - Pedrosillo",
+   "ine": "28127",
+   "name": "Los Peñascales - Pedrosillo",
+   "description": "Acceso libre",
+   "recordVersion": "2025-04-23T14:53:38.689Z",
+   "url": "https://www.lasrozas.es/node/11035",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [],
+   "negated": false,
+   "start": "2025-04-23",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 2,
+   "corners": 107,
+   "bbox": [
+    40.5312,
+    -3.91267,
+    40.57152,
+    -3.88274
+   ]
+  },
+  {
+   "file": "Lleida.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "25120_ZBE Lleida",
+   "ine": "25120",
+   "name": "ZBE Lleida",
+   "description": "Restricciones de acceso",
+   "recordVersion": "2025-10-20T17:44:39.589Z",
+   "url": "https://www.paeria.cat/ca/serveis/zona-de-baixes-emissions-de-lleida/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-10-20",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 274,
+   "bbox": [
+    41.61067,
+    0.61952,
+    41.62252,
+    0.63193
+   ]
+  },
+  {
+   "file": "Lleida.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "25120_ZBE Terrassa",
+   "ine": "25120",
+   "name": "ZBE Terrassa",
+   "description": "Restricciones de acceso",
+   "recordVersion": "2025-11-26T17:25:38.629Z",
+   "url": "https://www.terrassa.cat/es/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-11-30",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "00:00",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 38,
+   "bbox": [
+    41.48498,
+    2.02861,
+    41.49495,
+    2.03762
+   ]
+  },
+  {
+   "file": "Madrid.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28079_Madrid (Madrid ZBE)",
+   "ine": "28079",
+   "name": "Madrid (Madrid ZBE)",
+   "description": "Condiciones Madrid (Madrid ZBE)",
+   "recordVersion": "2025-06-03T08:03:02.458Z",
+   "url": "https://madrid.es/go/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-06-03",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 45,
+   "corners": 20702,
+   "bbox": [
+    40.31206,
+    -3.88896,
+    40.64328,
+    -3.51813
+   ]
+  },
+  {
+   "file": "Madrid.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28079_Madrid (ZBEDEP Plaza Elíptica)",
+   "ine": "28079",
+   "name": "Madrid (ZBEDEP Plaza Elíptica)",
+   "description": "Condiciones Madrid (ZBEDEP Plaza Elíptica)",
+   "recordVersion": "2025-06-03T11:11:49.039Z",
+   "url": "https://madrid.es/go/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-06-03",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 799,
+   "bbox": [
+    40.37908,
+    -3.7268,
+    40.39009,
+    -3.71178
+   ]
+  },
+  {
+   "file": "Madrid.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "28079_Madrid (ZBEDPE Distrito Centro)",
+   "ine": "28079",
+   "name": "Madrid (ZBEDPE Distrito Centro)",
+   "description": "Condiciones Madrid (ZBEDPE Distrito Centro)",
+   "recordVersion": "2025-06-03T11:11:39.659Z",
+   "url": "https://madrid.es/go/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-06-03",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 6,
+   "corners": 1670,
+   "bbox": [
+    40.40523,
+    -3.71802,
+    40.43026,
+    -3.69113
+   ]
+  },
+  {
+   "file": "Malaga.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "29067_Ayuntamiento de Malaga ZBE",
+   "ine": "29067",
+   "name": "Ayuntamiento de Malaga ZBE",
+   "description": "https://movilidad.malaga.eu/opencms/export/sites/movilidad/.content/galerias/Documentos-del-site/Ordenanza-de-Movilidad-de-la-ciudad-de-Malaga.-2024.pdf",
+   "recordVersion": "2024-12-12T11:46:14.580Z",
+   "url": "https://zbe.malaga.eu",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2024-12-12",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 337,
+   "bbox": [
+    36.70943,
+    -4.43627,
+    36.73387,
+    -4.3992
+   ]
+  },
+  {
+   "file": "Manlleu.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8112_ZBE Manlleu",
+   "ine": "8112",
+   "name": "ZBE Manlleu",
+   "description": "Restricciones de acceso a vehículos de 12 toneladas o más sin etiqueta, B y C",
+   "recordVersion": "2026-01-14T11:19:31.859Z",
+   "url": "https://www.manlleu.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 129,
+   "bbox": [
+    41.99619,
+    2.27111,
+    42.01142,
+    2.29192
+   ]
+  },
+  {
+   "file": "Mataro.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8121_ZBE Mataró",
+   "ine": "8121",
+   "name": "ZBE Mataró",
+   "description": "Restricciones de acceso a vehículos sin etiqueta, de lunes a viernes laborables de 7 h a 20 h.",
+   "recordVersion": "2026-01-14T11:19:42.663Z",
+   "url": "https://www.mataro.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 20,
+   "bbox": [
+    41.53772,
+    2.44271,
+    41.54202,
+    2.44922
+   ]
+  },
+  {
+   "file": "MolinaDeSegura.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "30027_Molina de Segura",
+   "ine": "30027",
+   "name": "Molina de Segura",
+   "description": null,
+   "recordVersion": "2024-05-03T12:59:15.581Z",
+   "url": "https://zbe.molinadesegura.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "B"
+   ],
+   "negated": true,
+   "start": "2025-01-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 72,
+   "bbox": [
+    38.04627,
+    -1.21782,
+    38.05633,
+    -1.20756
+   ]
+  },
+  {
+   "file": "Motril.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "18140_Motril ZBE",
+   "ine": "18140",
+   "name": "Motril ZBE",
+   "description": "condiciones definidas por el ayuntamiento",
+   "recordVersion": "2025-11-27T07:29:39.092Z",
+   "url": "https://zbe.motril.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO"
+   ],
+   "negated": true,
+   "start": "2026-01-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 50,
+   "bbox": [
+    36.74344,
+    -3.52194,
+    36.74751,
+    -3.51675
+   ]
+  },
+  {
+   "file": "Oviedo.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "33044_Ayuntamiento de Oviedo - Anillo Interior",
+   "ine": "33044",
+   "name": "Ayuntamiento de Oviedo - Anillo Interior",
+   "description": "Permitido acceso a todos los vehículos con etiqueta medioambiental (0, ECO, B y C) y a estas excepciones: Vehículos de residentes empadronados en un domicilio situado en la ZBE, Vehículos destinados al desplazamiento de personas con movilidad reducida (PMR), Vehículos de transporte de mercancías y actividades profesionales, Vehículos de las empresas concesionarias de servicios públicos, Vehículos del personal al servicio de las administraciones públicas, Vehículos de servicios de emergencia y esenciales, Vehículos de servicio de transporte público, Vehículos con matrícula extranjera, Vehículos que transporten residentes dependientes empadronados (no siendo el vehículo de su propiedad), Vehículos vinculados con establecimientos o comercios, Vehículos de propietarios de inmuebles no empadronados en zona ZBE, Vehículos de propietarios o arrendatarios de una plaza de garaje, Vehículos de clientes con pernoctación en establecimientos hoteleros o similares, Vehículos que acceden a taller de mantenimiento y reparación de vehículos, Vehículos vinculados a obras, Vehículos de residentes empadronados en un domicilio situado en la ZBE, Vehículos históricos, Vehículos de clientes de aparcamientos subterráneos públicos, Vehículos adaptados y homologados para prestar servicios singulares.",
+   "recordVersion": "2025-11-11T16:07:58.483Z",
+   "url": "https://www.oviedo.es/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 65,
+   "bbox": [
+    43.35778,
+    -5.85332,
+    43.36575,
+    -5.83896
+   ]
+  },
+  {
+   "file": "Palma.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "7040_Ayuntamiento de Palma",
+   "ine": "7040",
+   "name": "Ayuntamiento de Palma",
+   "description": "condiciones definidas por el ayuntamiento",
+   "recordVersion": "2024-12-23T12:30:51.967Z",
+   "url": "https://www.mobipalma.mobi/informacio-zona-baixes-emissions-zbe/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2024-12-29",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 99,
+   "bbox": [
+    39.56513,
+    2.64142,
+    39.57838,
+    2.65724
+   ]
+  },
+  {
+   "file": "PamplonaEnsanche.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "32044_Pamplona - Ensanche",
+   "ine": "32044",
+   "name": "Pamplona - Ensanche",
+   "description": null,
+   "recordVersion": "2024-12-11T10:13:52.735Z",
+   "url": null,
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B"
+   ],
+   "negated": true,
+   "start": "2024-12-11",
+   "periods": [
+    {
+     "name": "L",
+     "from": "10:30",
+     "to": "15:00",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "12:30",
+     "to": "17:00",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 108,
+   "bbox": [
+    42.80707,
+    -1.64627,
+    42.81794,
+    -1.62924
+   ]
+  },
+  {
+   "file": "Pontevedra.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "36038_ZBE Pontevedra",
+   "ine": "36038",
+   "name": "ZBE Pontevedra",
+   "description": "Condiciones definidas por el ayuntamiento",
+   "recordVersion": "2025-08-08T13:28:13.673Z",
+   "url": "https://pmus.pontevedra.gal/zona-de-baixas-emisions/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "0",
+    "ECO",
+    "C",
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-08-09",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 4,
+   "corners": 259,
+   "bbox": [
+    42.39765,
+    -8.69122,
+    42.45139,
+    -8.61807
+   ]
+  },
+  {
+   "file": "Reus.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "43123_ZBE Reus",
+   "ine": "43123",
+   "name": "ZBE Reus",
+   "description": "Sancions als vehicles sense distintiu ambiental que accedeixin, circulin o estacionin a la ZBE en l'horari establert, excepte exempts o autoritzats. Sanciones a los vehículos sin distintivo ambiental que accedan, circulen o estacionen en la ZBE en el horario establecido, excepto exentos o autorizados.",
+   "recordVersion": "2025-12-11T07:05:08.885Z",
+   "url": "https://mobilitat.reus.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-12-12",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "19:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 1290,
+   "bbox": [
+    41.14378,
+    1.09602,
+    41.16425,
+    1.11777
+   ]
+  },
+  {
+   "file": "RondasDeBarcelona.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8019_ZBE Rondes Barcelona",
+   "ine": "8019",
+   "name": "ZBE Rondes Barcelona",
+   "description": null,
+   "recordVersion": "2025-02-06T12:56:55.965Z",
+   "url": "https://zbe.barcelona/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-06",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 2051,
+   "bbox": [
+    41.33973,
+    2.0863,
+    41.46825,
+    2.23737
+   ]
+  },
+  {
+   "file": "Rubi.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8184_ZBE Rubí",
+   "ine": "8184",
+   "name": "ZBE Rubí",
+   "description": "Restricciones de acceso a vehículos sin etiqueta y a los vehículos diésel con distintivo ambiental B cuando se active el nivel 1 reforzado o el nivel 2 del Plan de acción a corto plazo para el contaminante NO2.",
+   "recordVersion": "2026-01-14T11:19:54.738Z",
+   "url": "https://www.rubi.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 106,
+   "bbox": [
+    41.48505,
+    2.0276,
+    41.49488,
+    2.03745
+   ]
+  },
+  {
+   "file": "Sabadell.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8187_Sabadell",
+   "ine": "8187",
+   "name": "Sabadell",
+   "description": "Restricción de acceso, circulación y estacionamiento de vehículos más contaminantes",
+   "recordVersion": "2025-11-11T10:23:44.601Z",
+   "url": "https://web.sabadell.cat/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-11-11",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 146,
+   "bbox": [
+    41.53829,
+    2.09853,
+    41.55365,
+    2.11702
+   ]
+  },
+  {
+   "file": "Salamanca.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "37274_Salamanca ZBE",
+   "ine": "37274",
+   "name": "Salamanca ZBE",
+   "description": "Condiciones definidas por el Ayuntamiento de Salamanca",
+   "recordVersion": "2025-01-15T09:07:33.415Z",
+   "url": "https://www.aytosalamanca.es/w/zona-de-bajas-emisiones",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2029-01-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 58,
+   "bbox": [
+    40.95914,
+    -5.67184,
+    40.96988,
+    -5.65881
+   ]
+  },
+  {
+   "file": "SantBoiDeLlobregat.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8200_ZBE Sant Boi de Llobregat",
+   "ine": "8200",
+   "name": "ZBE Sant Boi de Llobregat",
+   "description": null,
+   "recordVersion": "2025-04-29T09:56:00.235Z",
+   "url": "https://zbe.amb.cat/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-04-29",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 4,
+   "corners": 1455,
+   "bbox": [
+    41.33323,
+    2.02272,
+    41.35795,
+    2.05069
+   ]
+  },
+  {
+   "file": "SantCugatDelValles.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8205_ZBE Sant Cugat del Valles",
+   "ine": "8205",
+   "name": "ZBE Sant Cugat del Valles",
+   "description": null,
+   "recordVersion": "2025-05-14T07:06:30.083Z",
+   "url": "https://zbe.barcelona/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-05-14",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 210,
+   "bbox": [
+    41.45981,
+    2.0665,
+    41.48278,
+    2.09761
+   ]
+  },
+  {
+   "file": "SantJoanDespi.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8217_Sant Joan Despi",
+   "ine": "8217",
+   "name": "Sant Joan Despi",
+   "description": null,
+   "recordVersion": "2025-02-20T09:25:52.399Z",
+   "url": "https://zbe.barcelona/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-20",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 335,
+   "bbox": [
+    41.35865,
+    2.04336,
+    41.37954,
+    2.07908
+   ]
+  },
+  {
+   "file": "SevillaCartuja.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "41091_ZBE SEVILLA CARTUJA",
+   "ine": "41091",
+   "name": "ZBE SEVILLA CARTUJA",
+   "description": null,
+   "recordVersion": "2024-07-24T09:08:02.725Z",
+   "url": "https://www.sevilla.org/servicios/movilidad",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2024-07-25",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "18:59",
+     "holiday": false
+    }
+   ],
+   "polygons": 2,
+   "corners": 70,
+   "bbox": [
+    37.39537,
+    -6.01222,
+    37.41306,
+    -5.99618
+   ]
+  },
+  {
+   "file": "Tarragona.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "43148_ZBE Tarragona",
+   "ine": "43148",
+   "name": "ZBE Tarragona",
+   "description": "Restricciones de acceso a vehículos sin etiqueta, de lunes a viernes laborables de 7 h a 19 h.",
+   "recordVersion": "2026-01-19T16:13:31.789Z",
+   "url": "https://www.tarragona.cat/mobilitat/zona-de-baixes-emissions-zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-20",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "19:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 56,
+   "bbox": [
+    41.10978,
+    1.23951,
+    41.12322,
+    1.26162
+   ]
+  },
+  {
+   "file": "Terrasa.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8279_ZBE Terrassa",
+   "ine": "8279",
+   "name": "ZBE Terrassa",
+   "description": "Restricciones de acceso a vehículos sin etiqueta, de lunes a viernes laborables de 7 h a 20 h.",
+   "recordVersion": "2026-01-14T11:20:26.767Z",
+   "url": "https://www.terrassa.cat/es/zbe",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-01-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 105,
+   "bbox": [
+    41.55539,
+    1.99565,
+    41.57007,
+    2.02168
+   ]
+  },
+  {
+   "file": "Torremolinos.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "29901_Torremolinos",
+   "ine": "29901",
+   "name": "Torremolinos",
+   "description": "Solo los vehiculos empadronados en Torremolinos",
+   "recordVersion": "2025-02-03T15:08:01.905Z",
+   "url": "http://www.torremolinos.es/zbe-zonas-de-bajas-emisiones/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "B",
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-15",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 26,
+   "bbox": [
+    36.62278,
+    -4.50311,
+    36.6292,
+    -4.49936
+   ]
+  },
+  {
+   "file": "Valencia.xml",
+   "modified": "2026-07-31T06:42",
+   "id": "46250_Valencia",
+   "ine": "46250",
+   "name": "Valencia",
+   "description": "Se aplican restricciones de acceso a los vehículos sin Distintivo Ambiental (Vehículos tipo A), y que sean del tipo turismo, motocicleta o ciclomotor.",
+   "recordVersion": "2026-03-11T12:41:35.058Z",
+   "url": "https://www.valencia.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2026-06-01",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 121,
+   "bbox": [
+    39.44502,
+    -0.40786,
+    39.50077,
+    -0.33357
+   ]
+  },
+  {
+   "file": "Valladolid.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "47186_Valladolid",
+   "ine": "47186",
+   "name": "Valladolid",
+   "description": "Vehículos con clasificación ambiental B (hasta 31/12/2027), C (hasta 01/01/2030), ECO o 0, y autorizados",
+   "recordVersion": "2025-02-28T17:32:57.462Z",
+   "url": "https://zbe.valladolid.es",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-28",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 54,
+   "bbox": [
+    41.6471,
+    -4.73275,
+    41.65883,
+    -4.71782
+   ]
+  },
+  {
+   "file": "Viladecans.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "8301_ZBE Viladecans",
+   "ine": "8301",
+   "name": "ZBE Viladecans",
+   "description": null,
+   "recordVersion": "2025-02-20T09:25:09.915Z",
+   "url": "https://zbe.amb.cat/",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-02-20",
+   "periods": [
+    {
+     "name": "L",
+     "from": "07:00",
+     "to": "20:00",
+     "holiday": false
+    }
+   ],
+   "polygons": 1,
+   "corners": 242,
+   "bbox": [
+    41.30638,
+    1.99483,
+    41.32684,
+    2.03127
+   ]
+  },
+  {
+   "file": "VitoriaGasteiz.xml",
+   "modified": "2026-07-08T12:24",
+   "id": "1059_Ayuntamiento de Vitoria-Gasteiz",
+   "ine": "1059",
+   "name": "Ayuntamiento de Vitoria-Gasteiz",
+   "description": "Permitido acceso a todos los vehículos con etiqueta medioambiental (0, ECO, B y C) y a todas las excepciones recogidas en la Ordenanza Reguladora ZBE",
+   "recordVersion": "2025-09-27T06:02:12.495Z",
+   "url": "https://www.vitoria-gasteiz.org/wb021/was/contenidoAction.do?idioma=es&uid=u7627e050_18b933a5b58__2031#summary_title_3",
+   "status": "active",
+   "regulation": "noEntry",
+   "stickers": [
+    "Sin distintivo"
+   ],
+   "negated": true,
+   "start": "2025-09-27",
+   "periods": [
+    {
+     "name": "L",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": false
+    },
+    {
+     "name": "F",
+     "from": "00:00",
+     "to": "23:59",
+     "holiday": true
+    }
+   ],
+   "polygons": 1,
+   "corners": 29,
+   "bbox": [
+    42.8423,
+    -2.67879,
+    42.85308,
+    -2.66785
+   ]
+  }
+ ]
+}

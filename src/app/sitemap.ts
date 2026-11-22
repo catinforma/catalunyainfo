@@ -67,6 +67,7 @@ import { retirementSitemapEntries } from "@/lib/programmatic/retirement-age/page
 import { widowSitemapEntries } from "@/lib/programmatic/widow-pension/page";
 import { ncSitemapEntries } from "@/lib/programmatic/non-contributory-pension/page";
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
+import { zbeSitemapEntries } from "@/lib/programmatic/zbe/sitemap";
 import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
 import { electionPhaseStart } from "@/lib/programmatic/elections/election-day";
 import { contentLastModified, dated, latestDate } from "@/lib/seo/body-dates";
@@ -283,6 +284,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...dated("non-contributory-pension", [...ncSitemapEntries()]),
     // Traffic fines: deadlines, the 50 % and points (Ley de Tráfico; calculators family, group "vehicle"), in es, ca and en.
     ...dated("traffic-fines", [...trafficFinesSitemapEntries()]),
+    // Low-emission zones city by city (council pages + the DGT's DATEX II directory), in es, ca and en.
+    ...dated("zbe", [...zbeSitemapEntries()]),
     // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
     ...dated("zona-tensionada", [...ztSitemapEntries()]),
     // The live pages are dated by what they print now: today for the fuel prices and the
