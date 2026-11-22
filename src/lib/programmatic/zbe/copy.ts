@@ -1,4 +1,6 @@
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
+import { CITIES as ZA_CITIES } from "@/lib/programmatic/zona-azul/data";
+import { BARCELONA_GUIDE, zaCityPath, zaHubPath } from "@/lib/programmatic/zona-azul/paths";
 
 import { labelAnswer, mainRestriction } from "./logic";
 import { offText, scheduleText } from "./schedule-text";
@@ -605,6 +607,30 @@ export function hubFaq(
       ),
     },
   ];
+}
+
+/**
+ * Where to read about street parking for a ZBE city: its own blue zone page
+ * when the family has one, the Barcelona parking guide, or the blue zone hub.
+ */
+export function parkingLink(city: Pick<ZbeCity, "slug" | "name">, locale: ZbeLocale): { href: string; label: string } {
+  const name = city.name[locale];
+  if (city.slug === "barcelona") {
+    return {
+      href: BARCELONA_GUIDE[locale],
+      label: pick(locale, "Aparcar en Barcelona: zona azul y verde, horarios y precios", "Aparcar a Barcelona: zona blava i verda, horaris i preus", "Parking in Barcelona: blue and green zones, hours and prices"),
+    };
+  }
+  if (ZA_CITIES.some((c) => c.slug === city.slug)) {
+    return {
+      href: zaCityPath(locale, city.slug),
+      label: pick(locale, `Zona azul ${ofCity(name, locale)}: horario y precio`, `Zona blava ${ofCity(name, locale)}: horari i preu`, `${name} blue zone parking: hours and prices`),
+    };
+  }
+  return {
+    href: zaHubPath(locale),
+    label: pick(locale, "Zona azul por ciudades: horario y precio", "Zona blava per ciutats: horari i preu", "Blue zone parking by city: hours and prices"),
+  };
 }
 
 export const HOME_ZBE_LABEL: Record<ZbeLocale, string> = { es: "ZBE", ca: "ZBE", en: "Low-emission zones" };

@@ -25,6 +25,7 @@ import {
   hubFaq,
   hubMeta,
   labelName,
+  parkingLink,
   restrictedLabels,
 } from "@/lib/programmatic/zbe/copy";
 import { DGT_ZBE_DATASET, DGT_ZBE_INDEX, DGT_ZBE_LICENCE, DGT_ZBE_PUBLISHER, dgtHolidays, dgtWorkingHours } from "@/lib/programmatic/zbe/datex";
@@ -146,6 +147,7 @@ export function ZbeCityPage({ locale, city }: { locale: ZbeLocale; city: ZbeCity
   const tableSources = [...new Set([...city.restrictions.map((r) => r.source), city.allowed.source])].map((index) => sourceOf(city, index));
   const others = zbeCities().filter((other) => other.slug !== city.slug);
   const hasControl = city.facts.some((fact) => fact.kind === "control");
+  const parking = parkingLink(city, locale);
 
   return (
     <article>
@@ -300,6 +302,9 @@ export function ZbeCityPage({ locale, city }: { locale: ZbeLocale; city: ZbeCity
           </ul>
           <p className="mt-4 text-sm">
             <Link href={zbeHubPath(locale)}>{copy.hubLink}</Link>
+          </p>
+          <p className="mt-2 text-sm">
+            <Link href={parking.href}>{parking.label}</Link>
           </p>
         </section>
 

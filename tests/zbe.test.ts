@@ -19,7 +19,7 @@ process.env.VERCEL_ENV = "production";
 process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 
 import { TRAFFIC_LAW, zbeCities, zbeCityBySlug } from "../src/lib/programmatic/zbe/cities.ts";
-import { answerCell, cityAnswers, cityCopy, cityFaq, cityLead, cityMeta, hubCopy, hubFaq, hubMeta, ofCity, plain } from "../src/lib/programmatic/zbe/copy.ts";
+import { answerCell, authorityAs, cityAnswers, cityCopy, cityFaq, cityLead, cityMeta, hubCopy, hubFaq, hubMeta, ofCity, parkingLink, plain } from "../src/lib/programmatic/zbe/copy.ts";
 import {
   DGT_ZBE_DATASET,
   DGT_ZBE_INDEX,
@@ -515,4 +515,45 @@ test("wiring: sitemap.ts, the body-date generator and the publish group `zbe` al
   const dates = JSON.parse(read("src/lib/seo/body-dates.json")) as { families: Record<string, unknown> };
   assert.ok(dates.families.zbe, "run `npm run seo:body-dates`: the family has no body date");
   assert.match(read("package.json"), /"zbe:snapshot": /);
+});
+
+test("the authority takes its article: l'Ajuntament / del Ajuntament; no 'de Ajuntament' and no doubled verdict anywhere", () => {
+  const reus = city("reus");
+  assert.equal(authorityAs(reus, "ca", "of"), "de l'Ajuntament de Reus");
+  assert.equal(authorityAs(reus, "ca", "subject"), "L'Ajuntament de Reus");
+  assert.equal(authorityAs(reus, "es", "with"), "con el Ajuntament de Reus");
+  assert.equal(authorityAs(reus, "en", "of"), "Ajuntament de Reus");
+  for (const c of zbeCities()) {
+    for (const locale of ZBE_LOCALES) {
+      const text = JSON.stringify([cityCopy(c, locale), cityFaq(c, locale), cityAnswers(c).map((a) => answerCell(c, a, locale))]);
+      assert.doesNotMatch(text, / de (Ajuntament|Àrea) /, `${c.slug} ${locale}: the authority without its article`);
+      assert.doesNotMatch(text, /(Depèn|Depende|It depends)\. (Depèn|Depende|It depends)/, `${c.slug} ${locale}: the verdict twice`);
+    }
+  }
+});
+
+test("Reus: the council's FAQ says how the zone is enforced (cameras), so the page says it and does not list it as unpublished", () => {
+  const reus = city("reus");
+  const control = reus.facts.filter((fact) => fact.kind === "control");
+  const [only, ...rest] = control;
+  assert.ok(only && rest.length === 0);
+  assert.match(only.quote, /càmeres/);
+  assert.equal(reus.sources[only.source]?.url, "https://mobilitat.reus.cat/zbe/faqs");
+  for (const locale of ZBE_LOCALES) {
+    assert.doesNotMatch(JSON.stringify(reus.notPublished.map((item) => item[locale])), /càmeres|cámaras|cameras/);
+    const cameras = cityFaq(reus, locale).find((item) => /càmeres|cámaras|cameras/.test(item.q));
+    assert.ok(cameras && cameras.a !== cityCopy(reus, locale).noControl, `${locale}: the camera question still answers "not published"`);
+  }
+});
+
+test("parking link: Girona to its blue zone page, Barcelona to the parking guide, the others to the blue zone hub", () => {
+  assert.equal(parkingLink(city("girona"), "ca").href, "/ca/zona-blava/girona/");
+  assert.equal(parkingLink(city("girona"), "es").href, "/es/zona-azul/girona/");
+  assert.equal(parkingLink(city("girona"), "en").href, "/en/blue-zone-parking/girona/");
+  assert.equal(parkingLink(city("barcelona"), "ca").href, "/ca/guies/aparcar-barcelona-zona-blava-verda/");
+  assert.equal(parkingLink(city("tarragona"), "es").href, "/es/zona-azul/");
+  assert.equal(parkingLink(city("reus"), "en").href, "/en/blue-zone-parking/");
+  // The way back: the blue zone city page and the Barcelona ZBE guide name the family.
+  assert.match(read("src/components/programmatic/zona-azul/CityPage.tsx"), /zbeLink\(city, locale\)/);
+  assert.equal((read("src/lib/content/batch02/barcelona-practical.ts").match(/zbeFamilyLinks\("(ca|es|en)"\)/g) ?? []).length, 3);
 });

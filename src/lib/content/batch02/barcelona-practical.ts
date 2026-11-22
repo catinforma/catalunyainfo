@@ -9,6 +9,7 @@ import {
 } from "@/lib/content/transport-cards/rates";
 import { fuelPath } from "@/lib/programmatic/fuel/paths";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
+import { zbeCityPath, zbeHubPath } from "@/lib/programmatic/zbe/paths";
 import { zaHubPath } from "@/lib/programmatic/zona-azul/paths";
 
 import {
@@ -730,6 +731,17 @@ function zbeDayPermit(locale: "ca" | "es" | "en"): Block[] {
   return [...h2(t.title, ...t.paragraphs), steps(t.stepsTitle, t.steps)];
 }
 
+/**
+ * The city-by-city family as two more related links: the Barcelona page answers
+ * by DGT label (this guide is about permits and foreign plates) and the hub
+ * lists the other cities.
+ */
+function zbeFamilyLinks(locale: "ca" | "es" | "en"): string[] {
+  const city = { ca: "ZBE de Barcelona per etiqueta: 0, ECO, C, B i sense etiqueta", es: "ZBE de Barcelona por etiqueta: 0, ECO, C, B y sin etiqueta", en: "Barcelona's low-emission zone by DGT label: 0, ECO, C, B and none" };
+  const hub = { ca: "ZBE per ciutats: Tarragona, Girona, Reus i la resta d'Espanya", es: "ZBE por ciudades: Tarragona, Girona, Reus y el resto de España", en: "Low-emission zones by city: Tarragona, Girona, Reus and the rest of Spain" };
+  return [`[${city[locale]}](${zbeCityPath(locale, "barcelona")})`, `[${hub[locale]}](${zbeHubPath(locale)})`];
+}
+
 export const ZBE: B2Article = {
   key: "zbe",
   entryKey: "guide-barcelona-lez-foreign-vehicles",
@@ -867,7 +879,7 @@ export const ZBE: B2Article = {
           { question: "Quina multa hi ha si entro sense registrar?", answer: "Segons l'AMB, un vehicle que compleix els requisits però no s'ha registrat pot rebre una multa a partir de 200 euros." },
         ]),
         ...paras(verifiedLine("ca", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "ca"),
+        ...b2Related(["parking", "transport"], "ca", zbeFamilyLinks("ca")),
       ],
     },
 
@@ -973,7 +985,7 @@ export const ZBE: B2Article = {
           { question: "¿Qué multa hay si entro sin registrar?", answer: "Según la AMB, un vehículo que cumple los requisitos pero no se ha registrado puede recibir una multa a partir de 200 euros." },
         ]),
         ...paras(verifiedLine("es", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "es"),
+        ...b2Related(["parking", "transport"], "es", zbeFamilyLinks("es")),
       ],
     },
 
@@ -1081,7 +1093,7 @@ export const ZBE: B2Article = {
           { question: "What is the fine for driving in without registering?", answer: "According to the AMB, a qualifying vehicle that was not registered can be fined from €200." },
         ]),
         ...paras(verifiedLine("en", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "en"),
+        ...b2Related(["parking", "transport"], "en", zbeFamilyLinks("en")),
       ],
     },
   },

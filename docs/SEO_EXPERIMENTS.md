@@ -11702,3 +11702,67 @@ the municipality-page curve; decide the next cities (Catalan cities first: Tarra
 then the large Spanish ones) and whether the today box earns the click (queries with "hoy", "festivo", "sábado").
 
 **Outcome:** _pending_
+
+## 22 Nov 2026 — New family: ZBE (low-emission zones) by city — Barcelona, Tarragona, Girona, Reus + a hub with the DGT's list for the rest of Spain, "can I drive in with my label?" and "does it apply today?", ca + es + en (deploy, then group `zbe`) (review 2026-12-06 and 2026-12-20)
+
+**Why.** Second of the two evergreen families chosen on 22 Nov (the first, zona azul by city, is the entry above): a concrete
+answer + place + date, asked every day of the year, where the results are council PDFs, old news and pages without the
+rule of the day.
+
+**What ships (15 URLs).**
+
+- Hub: `/es/zbe/`, `/ca/zbe/`, `/en/low-emission-zones/`. The four Catalan cities with their rule, the Catalan zones not yet
+  written, and the rest of the DGT's zones as a list (name, municipality, link to the council) **without access rules**:
+  a rule is printed only for a city whose council pages have been read.
+- One page per city in the three languages, same slug: `barcelona`, `tarragona`, `girona`, `reus`. First screen: the answer
+  by DGT label (0, ECO, C, B, none) as a table — "yes" only where the council names the label, "no" with its days and
+  hours and who is still let in, "it depends" with the council's condition (Reus: label B in NO2 episodes; no label by
+  where the vehicle pays its tax) — and, computed in the browser with the clock of Spain and the city's public holidays,
+  whether the restriction applies today and at this hour. Then days and hours, map and streets, since when and announced
+  changes, exemptions and permits (residents, occasional days, car parks, foreign plates), cameras and fine, what the DGT
+  file says and where it differs from the council, **what the page does not publish** (the official pages are silent),
+  FAQ in the searched words, official sources.
+- Titles: "ZBE Tarragona: etiquetas, horario, mapa y multa" / "ZBE Girona: etiquetes, horari, mapa i multa" / "Reus
+  low-emission zone (ZBE): labels, hours, fines". All ≤ 60; descriptions ≤ 155 (held by `tests/zbe.test.ts`).
+
+**Sources and method.** Every restriction and fact in `src/lib/programmatic/zbe/cities.ts` carries the index of its
+source and the council's own sentence, verbatim. Barcelona: zbe.barcelona (AMB) and the AMB register pages. Tarragona:
+tarragona.cat (FAQ, calendar, map). Girona: web.girona.cat/zbe (characteristics, calendar, exemptions, control, FAQ).
+Reus: mobilitat.reus.cat/zbe (zone, calendar, FAQ). Fine where the council gives no amount: the traffic act
+(BOE-A-2015-11722, arts. 76 z3, 80.1 and 94). Hub list: the DGT's DATEX II files at the National Access Point
+(`nap.dgt.es`, CC BY 4.0), committed as a snapshot of 22 Nov 2026 (59 zones).
+
+Re-check by hand on 22 Nov, 23:00 (after the agent that built the branch stopped): all 16 source URLs answered 200 and
+each of the 40 quoted sentences was found on its live page (three only after ignoring the spaces the pages' inline tags
+leave: "laborables .", "A qui afecta :", "NO 2"). The figures the text adds around the quotes were read too (24 daily
+authorisations and the yearly fee, 15 days for the foreign-plate check, 12 and 24 occasional days, the 30 % for repeat
+offences, 100 euros for prompt payment in Girona). One correction came out of it: Reus's FAQ 1.6 does say how the zone
+is enforced (cameras that read plates against the DGT list and the council register); the page said "not published" and
+now quotes it.
+
+**Also touched (body only; logged here).**
+
+- Barcelona ZBE guide (`zbe-barcelona-vehicles-estrangers` and its es/en editions, key `zbe`, inside its measurement window): two related links at the foot, to the
+  new Barcelona page ("by label") and to the hub. No title, description, H1 or lead changed. The guide is about permits
+  and foreign plates (its queries in Search Console are "autorización / permiso zbe"); the new page answers by label.
+- Zona azul city pages (live since today): one more link in "other cities", to the ZBE page of the same city (Girona)
+  or to the ZBE hub. ZBE city pages link the parking page of the same city (Girona), the Barcelona parking guide
+  (Barcelona) or the zona azul hub.
+
+**Wiring.** Sitemap family `zbe` (dated by `scripts/body-dates.ts`), publish group `zbe` (also republishes the Barcelona
+guide), hreflang ca/es/en with x-default to English. Guard: `tests/zbe.test.ts` fails when the committed DGT snapshot is
+more than 30 days old (from 23 Dec 2026): `npm run zbe:snapshot -- build`.
+
+**Baseline.** New URLs: 0 impressions, 0 clicks. Barcelona ZBE guide, 26 Oct–21 Nov (28 days, all three languages):
+9 clicks, ~1,000 impressions, position 7–9; last 7 days 10–20 impressions a day.
+
+**Go-live.** Deploy, publish `zbe`, IndexNow `/es/zbe/ /ca/zbe/ /en/low-emission-zones/`, sitemap resubmit on 23 Nov (the
+22 Nov resubmit was already used for zona azul).
+
+**Review.** 6 Dec: are the 15 URLs indexed, which queries show them, position; does the Barcelona guide keep its permit
+queries (if the new Barcelona page takes them at a worse position, point the guide's queries back with the lead of the
+new page, not the guide's). 20 Dec: impressions and CTR per city; next cities by demand from the DGT list (Catalan ones
+first: Lleida, Sabadell, Terrassa, Sant Cugat…; then Madrid, Sevilla, Valencia, Bilbao), each only with its council
+pages read and quoted; rebuild the DGT snapshot.
+
+**Outcome:** _pending_

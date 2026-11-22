@@ -10,9 +10,29 @@ import { CITIES } from "@/lib/programmatic/zona-azul/data";
 import { caDe, listText } from "@/lib/programmatic/zona-azul/format";
 import { cityHolidays, holidayCalendarPath, holidayEntries } from "@/lib/programmatic/zona-azul/holidays";
 import { BARCELONA_GUIDE, zaCityPath, zaHubPath } from "@/lib/programmatic/zona-azul/paths";
+import { zbeCityBySlug } from "@/lib/programmatic/zbe/cities";
+import { zbeCityPath, zbeHubPath } from "@/lib/programmatic/zbe/paths";
 import type { City, Source, ZaLocale } from "@/lib/programmatic/zona-azul/types";
 
 import { TodayStatus } from "./TodayStatus";
+
+/** The low-emission zone of the same city when the ZBE family has it; its hub otherwise. */
+function zbeLink(city: City, locale: ZaLocale): { label: string; href: string; note: string } {
+  const pick = (es: string, ca: string, en: string) => (locale === "es" ? es : locale === "ca" ? ca : en);
+  if (zbeCityBySlug(city.slug)) {
+    const name = city.name[locale];
+    return {
+      label: pick(`ZBE de ${name}`, `ZBE ${caDe(name)}`, `${name} low-emission zone (ZBE)`),
+      href: zbeCityPath(locale, city.slug),
+      note: pick("Etiquetas, horario y multa", "Etiquetes, horari i multa", "Labels, hours and fine"),
+    };
+  }
+  return {
+    label: pick("ZBE en España", "ZBE a Espanya", "Low-emission zones in Spain"),
+    href: zbeHubPath(locale),
+    note: pick("Etiquetas y horarios por ciudad", "Etiquetes i horaris per ciutat", "Labels and hours by city"),
+  };
+}
 
 export const HUB_CRUMB: Record<ZaLocale, string> = { es: "Zona azul", ca: "Zona blava", en: "Blue zone parking" };
 
@@ -132,6 +152,7 @@ export function CityPage({ city, locale }: { city: City; locale: ZaLocale }) {
     { label: more.hub, href: zaHubPath(locale), note: more.hubNote },
     ...CITIES.filter((c) => c.slug !== city.slug).map((c) => ({ label: c.name[locale], href: zaCityPath(locale, c.slug), note: hubRow(c, locale).weekday })),
     { label: more.barcelona, href: BARCELONA_GUIDE[locale], note: more.barcelonaNote },
+    zbeLink(city, locale),
   ];
 
   return (
