@@ -11636,3 +11636,20 @@ the morning of the called-off 23rd, Correos' first strike day; then daily to the
 a later phase needs ten days' notice).
 
 **Outcome:** _factual re-check, no review_
+
+## 2026-11-22 — Strikes, two sentences brought up to date (factual correction, body only, es + ca + en; no title, description, H1 or lead touched)
+
+**What changed.**
+- Correos 23–27 Nov (`strikes-spain-data.ts`): the conditional "if the deadline for accepting votes is extended, rural services
+  carry on" is now a statement. The Central Electoral Board extended the deadline for handing in the postal vote to Thursday
+  26 Nov, 14:00 at the latest (Acuerdo 418/2026 of 19 Nov, read 22 Nov: "esta Junta acuerda ampliar el plazo de depósito del
+  voto por correo hasta el 26 de noviembre de 2026 […] y como máximo hasta las 14:00 horas"), and Orden INT/1239/2026 says
+  "en el caso de ampliación del plazo de admisión del voto, se dará continuidad a los servicios mínimos de los servicios
+  rurales coincidiendo con dicho plazo". The agreement is added to the entry's sources (`U.jec418`).
+- Education 26N (`strikes.ts`): the "Before that: Saturday 21 November, demonstration…" line is in the past tense ("had been
+  called"). No claim about attendance or what happened: no official source read for it.
+
+**Baseline.** None needed (body sentences inside existing entries). Tests: strikes-spain 24/24, strikes-hub 33/33,
+strike-days-2326n 8/8, strike-guides 25/25.
+
+**Outcome:** _factual correction, no review_
