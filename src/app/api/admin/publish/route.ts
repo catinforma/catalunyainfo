@@ -100,6 +100,7 @@ import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
 import { grossaCheckPublishPaths } from "@/lib/programmatic/grossa-check/sitemap";
 import { ninoCheckPublishPaths } from "@/lib/programmatic/nino-check/sitemap";
+import { zonaAzulPaths } from "@/lib/programmatic/zona-azul/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 
@@ -576,6 +577,13 @@ export async function POST(request: Request) {
     // (lib/programmatic/embed-calc/): the six pages (dynamicParams = true).
     // Never the /embed/ widgets: noindex, and rebuilt by every deploy.
     if (wants("widgets-calculadores")) codePaths.push(...Object.values(netSalaryEditions()), ...Object.values(workingDaysEditions()));
+    // Regulated street parking city by city (/es/zona-azul/…, /ca/zona-blava/…,
+    // /en/blue-zone-parking/…): static code routes (dynamicParams = true) built
+    // from lib/programmatic/zona-azul/data.ts, shipped by the deploy; this
+    // group revalidates, purges and IndexNow-pings the three hubs and every
+    // city page. Re-run it after a deploy that adds or re-reads a city. The
+    // Barcelona guide that links the hub goes out with `parking`.
+    if (wants("zona-azul")) codePaths.push(...zonaAzulPaths().map((entry) => entry.path));
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());
