@@ -381,7 +381,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * the BOE (21 Nov, núm. 290: no strike order; no issue on Sunday 22), nor on
  * TMB, FGC or CCOO, UGT and CGT Catalunya's home pages.
  */
-export const STRIKES_AS_OF: string = "2026-11-22";
+export const STRIKES_AS_OF: string = "2026-11-23";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts

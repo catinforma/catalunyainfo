@@ -192,7 +192,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * postponed); CCOO and UGT's national home pages (only the 11N). No new strike
  * for 23 Nov-6 Dec on those lists.
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-22";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-23";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.
