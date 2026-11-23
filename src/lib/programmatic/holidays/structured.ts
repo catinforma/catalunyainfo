@@ -125,10 +125,20 @@ export function dateDataset(iso: DatePage, locale: DateLocale) {
   });
 }
 
-/** The page's questions and the answers it prints (tranche 4), as FAQPage; null for the earlier date pages. */
+/**
+ * The page's questions and the answers it prints, as FAQPage. Tranche 4 (2027)
+ * lists its own; since 23 Nov 2026 the earlier date pages give their one
+ * question, the H1, with the answer and notes printed right under it
+ * (docs/SEO_EXPERIMENTS.md). Nothing in the markup is off the page.
+ */
+export function dateFaqItems(iso: DatePage, locale: DateLocale): { question: string; answer: string }[] {
+  const content = dateContent(iso, locale);
+  if (content.faq?.length) return content.faq;
+  return [{ question: dateQuestion(iso, locale), answer: [content.answer, ...content.answerNote].join(" ") }];
+}
+
 export function dateFaq(iso: DatePage, locale: DateLocale) {
-  const items = dateContent(iso, locale).faq;
-  return items?.length ? faqSchema([{ type: "faq", items }]) : null;
+  return faqSchema([{ type: "faq", items: dateFaqItems(iso, locale) }]);
 }
 
 export function holidayHubDataset(locale: MuniLocale) {

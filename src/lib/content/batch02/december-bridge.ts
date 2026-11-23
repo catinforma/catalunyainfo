@@ -55,7 +55,8 @@ import {
  *  - Ordre EMT/77/2025 (shops, 2026): 6 December is a general opening day;
  *    art. 6 makes 8 December a default municipal day. Resolució EMT/4342/2025
  *    lists Barcelona with "6, 8, 13, 20 i 27 de desembre".
- *  - Baqueira Beret, news of 28/07/2026: opening planned for 28 November
+ *  - Baqueira Beret, news of 28/07/2026 (since 23 Nov 2026, its news of
+ *    11/11/2026, which says the same): opening planned for 28 November
  *    "siempre que las condiciones meteorológicas y de nieve lo permitan".
  *  - Ajuntament d'Espinelves (45a Fira de l'Avet, 28 Nov - 8 Dec 2026) and
  *    Ajuntament de Vic agenda (Mercat Medieval from 5 Dec 2026; the listing's
@@ -98,8 +99,20 @@ import {
  * Purísima / Puríssima wording and promise the day-by-day table; the
  * descriptions keep the dates and add the table, leave, schools and the
  * traffic section (all on the page). EN follows. No new fact.
+ *
+ * 23 Nov 2026 (docs/SEO_EXPERIMENTS.md): every variable fact re-read on
+ * its official page (fact pack research_notes/december-bridge-23nov.md):
+ * Ordre EMT/66/2025 art. 1 (8, 25 and 26 December; Aran 17 June), the
+ * BOE list (ten "**" on the 7th, nineteen "*" on the 8th, no correction),
+ * Ordre EMT/208/2025 (43 towns plus Escart and Escaladei), the shop and
+ * school orders, the SCT calendar and December restrictions, Espinelves,
+ * Vic, Santa Llúcia, MNAC and the council museum list. Nothing changed but
+ * Baqueira's source: its news of 11 Nov 2026 repeats the 28 November
+ * opening "siempre que las condiciones lo permitan". The page had gained
+ * the traffic section, the Spain hand-offs, Santa Llúcia and museums since
+ * 26 Oct but still showed "26 Oct" as its only date.
  */
-export const BRIDGE_VERIFIED = "2026-10-26";
+export const BRIDGE_VERIFIED = "2026-11-23";
 
 /** The days the page is about. Weekdays are computed, never typed. */
 export const BRIDGE_DAYS = {
@@ -335,7 +348,7 @@ const SOURCES: B2Source[] = [
   { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Resolució EMT/4342/2025, dies festius d'obertura comercial dels municipis per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1030324&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Llei 18/2017, de comerç, serveis i fires (text consolidat, article 37)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320", publisher: "BOE" },
-  { name: "Baqueira Beret activa el invierno en pleno verano", url: "https://www.baqueira.es/es/noticia/baqueira-beret-activa-el-invierno-en-pleno-verano", publisher: "Baqueira Beret" },
+  { name: "Baqueira Beret invierte 24 millones de euros en el nuevo Mirador y la renovación total de Baqueira 1800", url: "https://www.baqueira.es/es/noticia/baqueira-beret-invierte-24-millones-de-euros-en-el-nuevo-mirador-y-la-renovacion-total-de", publisher: "Baqueira Beret" },
   { name: "Fira de l'Avet 2026", url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/", publisher: "Ajuntament d'Espinelves" },
   { name: "Mercat Medieval Vic 2026", url: "https://www.vic.cat/ciutat/agenda/mercat-medieval-vic-2026", publisher: "Ajuntament de Vic" },
   { name: "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona", url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020", publisher: "Agenda Cultural de la Generalitat" },
@@ -502,7 +515,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       callout(
         "official",
         "D'on surten aquestes dates",
-        "Del calendari oficial de festes laborals del 2026, l'Ordre EMT/66/2025 (DOGC del 6 de maig de 2025), que fixa dotze festius a tot Catalunya; del desembre, només el 8, el 25 i el 26. L'hem tornat a llegir al DOGC el 26 d'octubre de 2026 i no ha estat modificada.",
+        "Del calendari oficial de festes laborals del 2026, l'Ordre EMT/66/2025 (DOGC del 6 de maig de 2025), que fixa dotze festius a tot Catalunya; del desembre, només el 8, el 25 i el 26. L'hem tornat a llegir al DOGC el 23 de novembre de 2026 i no ha estat modificada.",
       ),
       outsideCataloniaCallout("ca"),
       ...h2(
@@ -555,7 +568,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         bridgeMuseums("ca"),
         `**Pessebres vivents.** El calendari, amb les dates de cada un quan les publiquen, és a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
-        `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el 28 de novembre, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
+        `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el dissabte 28 de novembre, si les condicions ho permeten (notícia de l'estació de l'11 de novembre de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
         `**El temps.** Les mitjanes del desembre són a ${b2link("climate", "ca", "la guia del temps a Barcelona mes a mes")}.`,
       ),
       ...paras(
@@ -593,7 +606,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       callout(
         "official",
         "De dónde salen estas fechas",
-        "Del calendario oficial de fiestas laborales de 2026, la Orden EMT/66/2025 (DOGC del 6 de mayo de 2025), que fija doce festivos en toda Cataluña; de diciembre, solo el 8, el 25 y el 26. La hemos vuelto a leer en el DOGC el 26 de octubre de 2026 y no ha sido modificada.",
+        "Del calendario oficial de fiestas laborales de 2026, la Orden EMT/66/2025 (DOGC del 6 de mayo de 2025), que fija doce festivos en toda Cataluña; de diciembre, solo el 8, el 25 y el 26. La hemos vuelto a leer en el DOGC el 23 de noviembre de 2026 y no ha sido modificada.",
       ),
       outsideCataloniaCallout("es"),
       ...h2(
@@ -646,7 +659,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         bridgeMuseums("es"),
         `**Belenes vivientes.** El calendario, con las fechas de cada uno cuando se publican, está en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
-        `**Nieve y esquí.** Baqueira Beret tiene previsto abrir la temporada el 28 de noviembre «siempre que las condiciones meteorológicas y de nieve lo permitan» (noticia de la estación del 28 de julio de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
+        `**Nieve y esquí.** Baqueira Beret tiene prevista la apertura para el sábado 28 de noviembre «siempre que las condiciones lo permitan» (noticia de la estación del 11 de noviembre de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
         `**El tiempo.** Las medias de diciembre están en ${b2link("climate", "es", "la guía del tiempo en Barcelona mes a mes")}.`,
       ),
       ...paras(
@@ -683,7 +696,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     callout(
       "official",
       "Where these dates come from",
-      "The official 2026 holiday calendar, Order EMT/66/2025 (DOGC, Catalonia's official gazette, 6 May 2025), which sets twelve holidays across Catalonia; in December, only the 8th, 25th and 26th. We re-read it in the DOGC on 26 October 2026; it has not been amended.",
+      "The official 2026 holiday calendar, Order EMT/66/2025 (DOGC, Catalonia's official gazette, 6 May 2025), which sets twelve holidays across Catalonia; in December, only the 8th, 25th and 26th. We re-read it in the DOGC on 23 November 2026; it has not been amended.",
     ),
     outsideCataloniaCallout("en"),
     ...h2(
@@ -736,7 +749,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       bridgeMuseums("en"),
       `**Living nativity scenes.** The calendar, with each one's dates once published, is in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
-      `**Snow and skiing.** Baqueira Beret plans to open its season on 28 November, weather and snow permitting (the resort's news item of 28 July 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
+      `**Snow and skiing.** Baqueira Beret plans to open its season on Saturday 28 November, conditions permitting (the resort's news item of 11 November 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
       `**Weather.** December averages are in ${b2link("climate", "en", "our Barcelona weather by month guide")}.`,
     ),
     ...paras(

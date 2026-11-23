@@ -659,6 +659,43 @@ function searchedFaq(locale: Locale): { question: string; answer: string }[] {
 }
 
 /**
+ * 23 Nov 2026 (docs/SEO_EXPERIMENTS.md): the bridge's other names. GSC 27 Oct-
+ * 23 Nov: "puente de la purisima 2026" 1,051 impressions at 6.3 with no click,
+ * "puente purisima 2026" 638 at 6.2, "cuando es el puente de la purisima" 285,
+ * "puente constitucion 2026" 91 and "puente inmaculada 2026" 85, all on the
+ * Catalan bridge page, whose title says "en Cataluña"; this page never said
+ * "Purísima". Readers outside Catalonia want this page's answer, so it now
+ * names the bridge as they do. Every date is computed from the BOE rows.
+ */
+export const BRIDGE_NAMES: Record<Locale, string> = {
+  es: "Es el puente de la Constitución y la Inmaculada, también llamado puente de la Purísima.",
+  ca: "És el pont de la Constitució i la Immaculada, també anomenat pont de la Puríssima.",
+  en: "This is the Constitution Day and Immaculate Conception long weekend, also called the puente de la Purísima (or de la Inmaculada).",
+};
+
+export function purisimaFaq(locale: Locale): { question: string; answer: string } {
+  const bridge = runIn("MD", SPAIN_DAYS.immaculada);
+  const withMonday = inRegion("bridge", "CT");
+  const n7 = countWords(MONDAY_7, locale);
+  if (locale === "es") {
+    return {
+      question: "¿Cuándo es el puente de la Purísima de 2026?",
+      answer: `En ${n7}, donde el lunes 7 es festivo, el puente de la Purísima va ${runWords(bridge, locale)}: ${bridge.days} días sin pedir ninguno. En el resto de España el único festivo del puente es el martes 8, la Purísima o Inmaculada, y hay que pedir el lunes 7 para tener los mismos ${withMonday.run.days} días.`,
+    };
+  }
+  if (locale === "ca") {
+    return {
+      question: "Quan és el pont de la Puríssima del 2026?",
+      answer: `En ${n7}, on el dilluns 7 és festiu, el pont de la Puríssima va ${runWords(bridge, locale)}: ${bridge.days} dies sense demanar-ne cap. A la resta d'Espanya, Catalunya inclosa, l'únic festiu del pont és el dimarts 8, la Puríssima o Immaculada, i cal demanar el dilluns 7 per tenir els mateixos ${withMonday.run.days} dies.`,
+    };
+  }
+  return {
+    question: "When is the Purísima long weekend in 2026?",
+    answer: `In ${n7}, where Monday the 7th is a public holiday, the Purísima long weekend runs ${runWords(bridge, locale)}: ${bridge.days} days without booking any leave. Everywhere else the long weekend's only holiday is Tuesday the 8th, the Purísima or Immaculate Conception, and it takes Monday the 7th off to get the same ${withMonday.run.days} days.`,
+  };
+}
+
+/**
  * "¿Y este diciembre?" on the Spain-wide 2027 hub and community pages (20 Nov
  * 2026; component DecemberBridgeLine): readers of the 2027 calendar in
  * November ask about this December's bridge, and the holiday hubs barely
@@ -773,7 +810,7 @@ function bodyEs(): Block[] {
     monday7RuleTable(L),
     ...h2(
       "Puente de diciembre 2026: cuántos días libres salen y cuántos hay que pedir",
-      `Donde el lunes 7 es festivo, el puente sale solo: ${bridge.days} días, ${runWords(bridge, L)}, sin gastar vacaciones. Donde es laborable, cuesta ${withMonday.leave.length} día (el lunes 7) para tener los mismos ${withMonday.run.days}. Y quien quiera la semana entera, ${runWords(week.run, L)}, necesita ${week.leave.length} días de vacaciones donde el 7 es festivo y ${weekOthers.leave.length} donde no lo es.`,
+      `${BRIDGE_NAMES.es} Donde el lunes 7 es festivo, el puente sale solo: ${bridge.days} días, ${runWords(bridge, L)}, sin gastar vacaciones. Donde es laborable, cuesta ${withMonday.leave.length} día (el lunes 7) para tener los mismos ${withMonday.run.days}. Y quien quiera la semana entera, ${runWords(week.run, L)}, necesita ${week.leave.length} días de vacaciones donde el 7 es festivo y ${weekOthers.leave.length} donde no lo es.`,
       `Estas son todas las combinaciones de diciembre y enero para quien trabaja de lunes a viernes. Son cálculos nuestros, no un derecho: las vacaciones se piden y se pactan con la empresa, y los turnos y los convenios pueden cambiarlo todo.`,
     ),
     optionTable(L),
@@ -822,6 +859,7 @@ function bodyEs(): Block[] {
         answer: `Solo en ${n7}. En el resto, el domingo 6 no se traslada: cada comunidad podía pasarlo al lunes o cambiarlo por una fiesta propia, y ${proseList(MONDAY_7_WORKING, L)} eligieron lo segundo.`,
       },
       ...searchedFaq(L),
+      purisimaFaq(L),
       { question: "¿Es festivo el 8 de diciembre de 2026?", answer: "Sí, en toda España. El martes 8, Inmaculada Concepción, es una fiesta nacional que ninguna comunidad puede cambiar." },
       {
         question: "¿Cuántos días hay que pedir para el puente de diciembre?",
@@ -882,7 +920,7 @@ function bodyCa(): Block[] {
     monday7RuleTable(L),
     ...h2(
       "Quants dies de festa surten i quants cal demanar",
-      "Per a qui treballa de dilluns a divendres. És un càlcul nostre, no un dret: les vacances s'han de demanar i pactar amb l'empresa.",
+      `${BRIDGE_NAMES.ca} Per a qui treballa de dilluns a divendres. És un càlcul nostre, no un dret: les vacances s'han de demanar i pactar amb l'empresa.`,
     ),
     optionTable(L),
     ...paras(
@@ -903,6 +941,7 @@ function bodyCa(): Block[] {
     faq([
       { question: "El 7 de desembre de 2026 és festiu?", answer: `Depèn de la comunitat: ho és a ${proseList(MONDAY_7, L)}. A Catalunya és feiner, llevat de ${local} municipis amb festa local.` },
       ...searchedFaq(L),
+      purisimaFaq(L),
       { question: "El 8 de desembre de 2026 és festiu a tot Espanya?", answer: "Sí. El dimarts 8, la Immaculada, és una festa nacional que cap comunitat no pot canviar." },
       { question: "El 26 de desembre de 2026 és festiu?", answer: `Només a ${proseList(stStephen, L)} (a l'Aran, no). Cau en dissabte i no es passa al dilluns.` },
       { question: "El 6 de gener de 2027 és festiu?", answer: "Sí, a tot Espanya, i cau en dimecres." },
@@ -955,7 +994,7 @@ function bodyEn(): Block[] {
     monday7RuleTable(L),
     ...h2(
       "How many days off, for how much leave",
-      `Where Monday the 7th is a holiday, the long weekend comes free: ${bridge.days} days, ${runWords(bridge, L)}. Elsewhere it takes ${withMonday.leave.length} day of leave (Monday the 7th) to get the same ${withMonday.run.days}. These are all the December and January combinations for a Monday-to-Friday job; leave still has to be agreed with your employer.`,
+      `${BRIDGE_NAMES.en} Where Monday the 7th is a holiday, the long weekend comes free: ${bridge.days} days, ${runWords(bridge, L)}. Elsewhere it takes ${withMonday.leave.length} day of leave (Monday the 7th) to get the same ${withMonday.run.days}. These are all the December and January combinations for a Monday-to-Friday job; leave still has to be agreed with your employer.`,
     ),
     optionTable(L),
     ...paras(
@@ -980,6 +1019,7 @@ function bodyEn(): Block[] {
     faq([
       { question: "Is 7 December 2026 a holiday in Spain?", answer: `Only in some regions: ${proseList(MONDAY_7, L)}, which moved Sunday's Constitution Day to the Monday. In ${proseList(MONDAY_7_WORKING, L)} it is a working day.` },
       ...searchedFaq(L),
+      purisimaFaq(L),
       { question: "Is 8 December 2026 a holiday in Spain?", answer: "Yes, everywhere. Tuesday 8 December, the Immaculate Conception, is a national holiday no region can swap." },
       { question: "Is 26 December a holiday in Spain?", answer: `Only in ${proseList(stStephen, L)} (not in Aran). In 2026 it is a Saturday and is not moved to the Monday.` },
       { question: "Are Christmas Eve and New Year's Eve holidays in Spain?", answer: "No. Neither is a public holiday in any region." },
