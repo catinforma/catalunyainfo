@@ -11766,3 +11766,114 @@ first: Lleida, Sabadell, Terrassa, Sant Cugat…; then Madrid, Sevilla, Valencia
 pages read and quoted; rebuild the DGT snapshot.
 
 **Outcome:** _pending_
+
+## 2026-11-23 — Internal links: strike pages hand on to evergreen pages ("Útil ahora"), related cards stop linking noindex and strike pages, the zona azul and ZBE hubs link each other, ca/es/en (deploy only; no publish group; no title, description, H1 or lead touched) (review 2026-12-07 and 2026-12-21)
+
+**Why.** GSC 26 Oct–23 Nov (`snapshot.py families 28`): /es/guias/ + /ca/guies/ took 68 % of the impressions, most of
+them strike pages (last 7 days: huelga-20-noviembre 52k, huelgas-espana 19k, huelga-hoy-cataluna 12k, vaga-20-novembre
+12k, huelga-26-noviembre 11k). The equity those pages earn did not flow to the evergreen families. Live crawl of
+23 Nov (`site:audit`, ≤ 1.8 requests/s, every sitemap URL and every page they link):
+
+- **Depth.** Of the 3,090 sitemap URLs, 3 are home pages, 111 at 1 click, 2,914 at 2, 41 at 3 and **21 at 4, all of
+  them zona azul and ZBE city pages**; the two families' hubs (6 URLs) are at 3, with 7–8 in-content links each
+  (`/es/zbe/` 8, `/es/zona-azul/` 7), the city pages 4–5. Nothing is orphaned; every other evergreen family is ≤ 2
+  (holiday towns and date pages, Spain 2027, calculators, fuel, Rodalies lines, school calendars).
+- **Strike pages link no evergreen page.** In `<main>`: `/es/guias/huelga-26-noviembre/`, `huelgas-espana`,
+  `/ca/guies/vaga-20-novembre/` link none of the December bridge, shops, parking, zona azul, ZBE, Spain school or Spain
+  2027 pages; `huelga-hoy-cataluna` links the shops page once, the education guide the work calendar once. Their
+  onward links are other strike pages, the header and the footer.
+- **Related cards leak to strike and noindex pages.** On 50 non-strike pages the automatic "Contenido relacionado"
+  cards point at strike pages, mostly past ones and often the noindex 11N city pages: the Barcelona parking guide →
+  the Catalan strikes hub + 11N Palma, Bilbao, Valladolid; "Lugares sorprendentes" → 11N Las Palmas, Bilbao; Núria →
+  three rail strike pages; the tax-brackets and polling-station guides → 11N Alicante, Málaga.
+- **The homepage** links 40 URLs: the menu, the footer and 10 cards, all strike, election or tax guides (owner's layout
+  of 12 Nov, not changed here). The sitewide alert strip links four dated pages from every page (owner's, not changed).
+- **The driving hubs** (zona azul, ZBE, both live 22 Nov) did not link each other.
+
+**What changed.**
+
+1. **"Útil ahora" / "Útil ara" / "Useful now"** (`lib/engagement/useful-now.ts`, `components/UsefulNow.tsx`, rendered by
+   `EntryArticle` after the body and the end boxes, before the sources). On every strike page of the registry (Catalonia:
+   strikes hub, 11N, Renfe, education guides; rest of Spain: Spain calendar, 17N rail, 19N, 20N, 23N, 26N), in ca, es
+   and en. Not on the 11N city pages (noindex, and they already carry "Y ahora en <ciudad>"). 3–5 plain links, the
+   neutral callout, a paragraph title (no heading: the outline and "In this page" index stay as they were), links
+   prefetch on intent only (`IntentLink`). Anchors are the targets' own titles (Spain links: the sentences the 11N Spain
+   page already uses for them). Never the page itself nor a link of the page's "Siguiente paso útil" box. Dated by
+   STRIKES_AS_OF / STRIKES_SPAIN_AS_OF, like the strike pages (no clock). The Catalan list carries the two driving
+   hubs because the strikes hub is the header's "Huelgas" entry in every edition: from it the hubs are 2 clicks deep
+   and their 24 city pages 3. The 2027 work calendar is not in it (the header's "Festivos" entry, 1,000+ links in).
+
+   | Scope | Links (as of 23 Nov) | After 8 Dec | After 7 Jan |
+   | --- | --- | --- | --- |
+   | Catalonia | December bridge (Catalonia), shops on Sundays and holidays, Barcelona parking, ZBE hub, zona azul hub | Christmas transport replaces the bridge | the 2027 bridges replace it |
+   | Rest of Spain | December bridge by community, shops 6–8 Dec by community, Christmas school holidays by community, zona azul hub, ZBE hub | the two December links go; Spain 2027 comes in | school holidays go |
+
+2. **Automatic related cards** (`repository.ts relatedFill`, rule in `lib/content/related-filter.ts`): the fill no longer
+   picks a page that is out of the index (`isLowDemandPath`: the 11N city pages, expired date pages, low-demand towns)
+   nor, on a page that is not about a strike, a strike page. It asks the database for 12 extra rows and filters them in
+   rank order, so a page still gets four cards. Hand-picked relations and the stored "Lee también" boxes are not touched;
+   strike pages still fill with each other.
+
+3. **Driving hubs link each other** (`lib/nav/driving-hubs.ts`): one sentence under the city table of `/es/zona-azul/`
+   (+ ca, en) to the ZBE hub, and in the Catalonia section of `/es/zbe/` (+ ca, en) to the zona azul hub, each anchored
+   with the other hub's own title. Both families are in their first window (22 Nov entries above): this adds one link,
+   no fact, no title, description, H1 or lead.
+
+4. Clicks: `related_content_click` with `link_context: "useful_now"` (`RELATED_LINK_CONTEXTS`; docs/ANALYTICS.md).
+
+**Baseline** (GSC, `snapshot.py pages 28` / `pages 7`, clicks · impressions · position; GA4 `snapshot.py landing
+2026-11-16 2026-11-22`).
+
+| Target | 28 days | 7 days (17–23 Nov) |
+| --- | --- | --- |
+| /es/guias/puente-diciembre-cataluna/ | 371 · 20.4k · 6.0 | 33 · 3.1k · 6.2 |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ | 528 · 24.3k · 6.0 | 96 · 6.6k · 6.2 |
+| /es/guias/aparcar-barcelona-zona-azul-verde/ | 58 · 18.4k · 7.8 | 16 · 4.2k · 7.3 |
+| /ca/guies/aparcar-barcelona-zona-blava-verda/ | 43 · 4.6k · 5.6 | 15 · 1.2k · 5.6 |
+| /es/guias/puente-diciembre-espana/ | 509 · 17.3k · 7.7 | 9 · 2.0k · 9.2 |
+| /es/guias/tiendas-abiertas-diciembre-espana/ | 0 · 0 (URL inspection 23 Nov: "Crawled - currently not indexed", crawled 21 Nov) | 0 · 0 |
+| /es/guias/calendario-escolar-espana/ | 6 · 1.1k · 10.0 | 1 · 40 · 11.8 |
+| /es/festivos/2027/ | 1 · 140 · 26.8 | 1 · 71 · 19.6 |
+| zona azul + ZBE families (30 URLs, live 22 Nov) | 0 · ~15 | 0 · 14 |
+
+GA4 16–22 Nov, strike landing pages: 4,025 sessions, **1.133 views/session**, next-step box 1.49 clicks per 100 views.
+
+**Hypothesis.** The strike pages are crawled daily and carry most of the site's links in; contextual links from them in
+the targets' own words (1) get /es/guias/tiendas-abiertas-diciembre-espana/ indexed before 6 Dec, (2) bring the zona
+azul and ZBE city pages to depth 3 and give them impressions sooner (crawl again on the review day), (3) lift the
+Barcelona parking guide (position 7–8, 0.3 % CTR) and the December pages by a position, and (4) add ≥ 0.02
+views/session on strike landings, with ≥ 1 click per 100 views in the new box. The related-card filter should not
+cost the 50 pages it touches anything: their new cards are siblings by text or category.
+
+**Review 7 Dec 2026** (14 days): URL inspection of /es/guias/tiendas-abiertas-diciembre-espana/ and the ZBE/zona azul
+hubs; `snapshot.py page` for each target (position ranges above); GA4 Explore `related_content_click` ×
+`link_context = useful_now` × Link URL; `snapshot.py landing 2026-11-24 2026-12-07` (strikes v/sess against 1.133).
+Rule: < 0.5 clicks per 100 strike page views and no target moved → remove the box (one line in `EntryArticle`). **21 Dec:**
+the evergreen targets' positions over 28 days against the table.
+
+**Confounders.** Strike traffic falls after 26 Nov whatever we do; the December bridge and shops pages rise on their own
+until 8 Dec; another agent is editing the December bridge, holiday and shops bodies at the same time (read their entries).
+The "Siguiente paso útil" review of 2 Dec reads strike views/session: this box adds to it from the deploy (its clicks are
+told apart by `link_context`). The strike reviews of 24 and 27 Nov (23N/26N pages) read titles and snippets, which this
+does not touch. The related-card change moves links on ~50 evergreen pages (counted in the crawl) at once.
+
+**Technical findings of the same crawl (not changed here; for the owner).**
+
+- Canonical, robots and hreflang are clean on the 3,084 sitemap URLs fetched: every page self-canonical, none noindex,
+  hreflang self-referencing and equal to the sitemap's. One transient: `/en/fuel-prices-spain/cadiz/` came back once
+  with no canonical and no H1 (an empty render), so the es/ca Cádiz pages' `en` alternate failed reciprocity in that
+  run; refetched at once it was complete (200, 0.5 s).
+- `/es/guias/tiendas-abiertas-diciembre-espana/`: "Crawled - currently not indexed" (URL inspection 23 Nov, crawled
+  21 Nov), 0 impressions in 28 days, 2 clicks deep with 22 in-content links. Now linked from the Spain strike pages.
+- "calendario laboral 2027 cataluña" is split across five URLs of ours (13–22 Nov): the guide at 28–57, `/es/festivos/2027/`
+  at 6–15, `/es/festivos/2027/cataluna/` at 47, `/ca/festius/2027/` at 8–12 and the embed page `/es/festivos/2027/en-tu-web/`
+  at 4–10. The guide's daily position went from ~10 (27–30 Oct) to 16–22 (1–12 Nov) and 43–60 (from 13 Nov). Which
+  URL answers that query (canonical, title, internal anchors) is the owner's call; this entry adds no link to any of them.
+- Election town pages are `s-maxage=300` and re-render on a miss: in the crawl the slowest sitemap URLs were election
+  and holiday town pages (Súria 11.6 s, Alcanar 9.5 s, Vilassar de Dalt 8.5 s; 290 URLs over 3 s; median 1.2 s with 2
+  requests in flight). Cached responses answer in 0.2–0.6 s. Worth a look before the 29N peak, not changed here.
+
+**Deploy.** Deploy only (template-rendered; nothing stored in a body). `npm run -s seo:body-dates` re-dated the zona azul
+and ZBE families.
+
+**Outcome:** _pending_
