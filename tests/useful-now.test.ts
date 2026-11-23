@@ -21,7 +21,6 @@ import {
   USEFUL_NOW_MAX_LINKS,
   USEFUL_NOW_MIN_LINKS,
   USEFUL_NOW_TITLE,
-  ZBE_BARCELONA_LABEL,
   ZBE_HUB_LABEL,
   ZONA_AZUL_HUB_LABEL,
   usefulNow,
@@ -29,10 +28,10 @@ import {
   type UsefulNow,
 } from "../src/lib/engagement/useful-now.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { MENU_PATHS } from "../src/lib/nav/menu.ts";
 import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
 import { hubEditions as spain2027HubEditions } from "../src/lib/programmatic/spain-2027/editions.ts";
-import { cityMeta as zbeCityMeta, hubMeta as zbeHubMeta } from "../src/lib/programmatic/zbe/copy.ts";
-import { zbeCityBySlug } from "../src/lib/programmatic/zbe/cities.ts";
+import { hubMeta as zbeHubMeta } from "../src/lib/programmatic/zbe/copy.ts";
 import { zbeHubPath } from "../src/lib/programmatic/zbe/paths.ts";
 import { zbeFamilyPaths } from "../src/lib/programmatic/zbe/sitemap.ts";
 import { hubView as zonaAzulHubView } from "../src/lib/programmatic/zona-azul/copy.ts";
@@ -107,15 +106,20 @@ test("off the strike families, and on the 11N pages for the rest of Spain (their
   assert.equal(usefulNowScope({ href: "/es/guias/no-existe/", key: null }), null);
 });
 
-test("Catalonia: the December bridge, shops, the 2027 work calendar, Barcelona parking and the Barcelona ZBE, in that order", () => {
+test("Catalonia: the December bridge, shops, Barcelona parking, then the ZBE and zona azul hubs (2 clicks from the header's strikes hub)", () => {
   for (const locale of LOCALES) {
     const href = b2href("strikeEducation", locale);
     const data = usefulNow({ href, key: null, locale }, null, AS_OF)!;
     assert.deepEqual(
       data.links.map((l) => l.href),
-      [b2href("decemberBridge", locale), b2href("shops", locale), b2href("workCalendar", locale), b2href("parking", locale), `/${locale}/${locale === "en" ? "low-emission-zones" : "zbe"}/barcelona/`],
+      [b2href("decemberBridge", locale), b2href("shops", locale), b2href("parking", locale), zbeHubPath(locale), zaHubPath(locale)],
     );
-    for (const key of ["decemberBridge", "shops", "workCalendar", "parking"] as B2Key[]) {
+    // The header's strikes entry is the Catalan hub: the two family hubs sit one click below it.
+    assert.equal(MENU_PATHS.strikes[locale], b2href("strikes", locale));
+    const self = b2href("strikes", locale);
+    const hub = usefulNow({ href: self, key: null, locale }, entryNextStep({ href: self, key: null, locale }, AS_OF), AS_OF)!;
+    assert.ok(hub.links.some((l) => l.href === zbeHubPath(locale)) && hub.links.some((l) => l.href === zaHubPath(locale)), `${locale}: strikes hub without the two hubs`);
+    for (const key of ["decemberBridge", "shops", "parking"] as B2Key[]) {
       assert.ok(data.links.some((l) => l.label === B2_TITLES[key][locale]), `${locale}: ${key} anchor is not the page's title`);
     }
   }
@@ -150,12 +154,9 @@ test("the seasonal links move with the strikes as-of date and never point at a p
 });
 
 test("anchors are the targets' own titles, or the sentence the 11N pages already link them with", () => {
-  const zbeBarcelona = zbeCityBySlug("barcelona");
-  assert.ok(zbeBarcelona, "no Barcelona ZBE page");
   for (const locale of LOCALES) {
     assert.equal(ZONA_AZUL_HUB_LABEL[locale], zonaAzulHubView(locale).title, `${locale}: zona azul hub title`);
     assert.equal(ZBE_HUB_LABEL[locale], zbeHubMeta(locale).title, `${locale}: ZBE hub title`);
-    assert.equal(ZBE_BARCELONA_LABEL[locale], zbeCityMeta(zbeBarcelona, locale).title, `${locale}: Barcelona ZBE title`);
     const spain = spainNextLinks(locale).join("\n");
     for (const label of [SPAIN_SCHOOL_LABEL[locale], SPAIN_2027_LABEL[locale], SPAIN_DECEMBER_LABELS.bridge[locale], SPAIN_DECEMBER_LABELS.shops[locale]]) {
       assert.ok(spain.includes(`[${label}](`), `${locale}: "${label}" is not the 11N Spain page's anchor`);

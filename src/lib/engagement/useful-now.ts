@@ -4,7 +4,7 @@ import { STRIKES_SPAIN_AS_OF } from "@/lib/content/batch02/strikes-spain-data";
 import { HUB_PATHS as SCHOOL_SPAIN_HUB_PATHS } from "@/lib/content/school-spain/regions";
 import type { Locale } from "@/lib/i18n/config";
 import { hubEditions as spain2027HubEditions } from "@/lib/programmatic/spain-2027/editions";
-import { zbeCityPath, zbeHubPath } from "@/lib/programmatic/zbe/paths";
+import { zbeHubPath } from "@/lib/programmatic/zbe/paths";
 import { zaHubPath } from "@/lib/programmatic/zona-azul/paths";
 
 import { CATALONIA_STRIKE_KEYS, DECEMBER_BRIDGE_LAST_DAY, SPAIN_STRIKE_KEYS, STRIKE_11N_SPAIN_KEY_PREFIX, b2KeyForHref, type NextStep } from "./next-step";
@@ -21,8 +21,8 @@ import { pathOnly, type NextStepLink } from "./next-step-core";
  * huelga-hoy-cataluna 83k, vaga-20-novembre 12k, huelga-26-noviembre 11k).
  * Their links pointed only at other strike pages, the header and the footer:
  * the live crawl of 23 Nov found no link from any of them to the December
- * bridge, the shops, the 2027 work calendar (position 21), the Barcelona
- * parking guide (0.3 % CTR at 7.8) or the new zona azul and ZBE families.
+ * bridge, the shops, the Barcelona parking guide (0.3 % CTR at 7.8) or the
+ * new zona azul and ZBE families (whose hubs sat 3 clicks deep).
  * These are the pages a strike reader asks about next (is the Monday a
  * holiday, are the shops open, can I drive into the city if the trains
  * stop), and they rank on demand that lasts all year.
@@ -100,18 +100,19 @@ export const ZBE_HUB_LABEL: Record<Locale, string> = {
   ca: "ZBE a Espanya: ciutats, etiquetes i horaris",
   en: "Low-emission zones in Spain (ZBE): cities, labels, hours",
 };
-/** The Barcelona ZBE page's own title (zbe/copy.ts cityMeta). */
-export const ZBE_BARCELONA_LABEL: Record<Locale, string> = {
-  es: "ZBE Barcelona: etiquetas, horario, mapa y multa",
-  ca: "ZBE Barcelona: etiquetes, horari, mapa i multa",
-  en: "Barcelona low-emission zone (ZBE): labels, hours, fines",
-};
 
 /**
  * Catalonia (the strikes hub, 11N, Renfe and education guides): the season's
  * holiday page (December bridge to 8 Dec, Christmas transport to 7 Jan, then
- * the 2027 bridges), shops on Sundays and holidays, the 2027 work calendar,
- * then driving into Barcelona (parking, ZBE).
+ * the 2027 bridges), shops on Sundays and holidays, then driving in instead
+ * of the train (Barcelona parking, the ZBE hub, the zona azul hub).
+ *
+ * The two hubs rather than the Barcelona ZBE page: the crawl of 23 Nov found
+ * them 3 clicks from the home pages and their 24 city pages 4, the only
+ * sitemap URLs that deep. The strikes hub is in the header of every edition,
+ * so from it the hubs are 2 clicks deep and every city page 3, for as long as
+ * the menu stays. The 2027 work calendar is left out: it is the header's
+ * "Festivos" entry and already has over a thousand links in.
  */
 function cataloniaLinks(locale: Locale, asOf: string): NextStepLink[] {
   const season =
@@ -119,9 +120,9 @@ function cataloniaLinks(locale: Locale, asOf: string): NextStepLink[] {
   return [
     season,
     b("shops", locale),
-    b("workCalendar", locale),
     b("parking", locale),
-    { href: zbeCityPath(locale, "barcelona"), label: ZBE_BARCELONA_LABEL[locale] },
+    { href: zbeHubPath(locale), label: ZBE_HUB_LABEL[locale] },
+    { href: zaHubPath(locale), label: ZONA_AZUL_HUB_LABEL[locale] },
   ];
 }
 
