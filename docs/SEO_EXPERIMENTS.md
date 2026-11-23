@@ -11854,3 +11854,49 @@ guides, Spain hub, 17N/19N/20N/23N/26N pages) — today, the 26N pages and the e
 list), Correos and SMU; then daily to the 27th (SMU's first phase ends 08:00 Sat 28 Nov).
 
 **Outcome:** _factual re-check and correction, no review_
+
+## 2026-11-23 — Calçots re-read: Calçofest (21 Nov) in the past tense, 2027 programme still not out (body only, ca + es + en; no title, description, H1 or lead template touched; deploy, then group `calcots`)
+
+**Why (factual, not an experiment).** `tests/calcots.test.ts` ("re-read guard") failed from the 23rd: Calçofest (Saturday 21
+Nov 2026) had passed and the page still described it in the future ("fa la segona edició", "els tiquets es compren"). The 26 Oct
+/ 13 Nov measurement of the titles and descriptions (review 24 Nov) is not affected: they do not mention Calçofest and were not
+touched. No baseline (factual change).
+
+**Sources read 23 Nov 2026, ~18:40–19:00 CET** (curl, HTTP 200 each; downloads outside the repo, read with `python3 -I`).
+- Press room `https://festacalcotadavalls.cat/premsa/`: newest posts are «Calçotades amb descompte i packs d'allotjament per
+  completar l'experiència del Calçofest a Valls» (datePublished 2026-11-19) and «Lo Pau de Ponts enceta la temporada de
+  calçotades a Valls amb l'arrencada del primer manat de calçots» (2026-11-23,
+  `https://festacalcotadavalls.cat/premsa/lo-pau-de-ponts-enceta-la-temporada-de-calcotades-a-valls-amb-larrencada-del-primer-manat-de-calcots/`):
+  «El passat dissabte 21 de novembre, en un camp de la IGP Calçot de Valls, el cantautor i humorista Pau Pinós i Bergé, Lo Pau de
+  Ponts, va arrencar simbòlicament el primer manat de calçots de la temporada»; «Només el dissabte es van cuinar més de 30.000
+  calçots entre la calçotada popular, amb els 1.500 tiquets esgotats, i els restaurants de la ciutat i la comarca»; «El gran punt
+  de trobada de la temporada serà la 45a Gran Festa de la Calçotada, el diumenge 31 de gener de 2027 a Valls. Una jornada […] que
+  inclou cercaviles, mercat i tastets, demostracions, concursos, degustació popular i la participació de les colles castelleres».
+  **No 2027 programme, times, price or advance sale**: `PROGRAMME_2027` stays `null`.
+- `https://calcofest.cat/`: «Calçofest 2026 · Gràcies per venir! Estem acabant de tancar aquesta edició del Calçofest».
+- `https://www.valls.cat/la-ciutat/noticies`: newest Calçofest item 19 Nov («Valls ultima els preparatius…»); nothing after it.
+- `https://festacalcotadavalls.cat/` (home) no longer shows a price or pack; the tasting page
+  (`https://festacalcotadavalls.cat/informacio/degustacio/`) does, under the 2027 date, with the 2026 edition's figures and
+  contents. The pending paragraph said "the home page"; it now says "the official website" (same claim, right page).
+
+**What changed** (`src/lib/content/batch02/calcots.ts`, ca/es/en).
+- Calçofest section in the past tense: "va fer la segona edició", the bus "va programar"/"arranged", the line-up "l'encapçalaven";
+  the popular calçotada line adds that the 1,500 tickets sold out; a new item from the Cambra's 23 Nov post (Lo Pau de Ponts and
+  the season's first bunch, 30,000+ calçots cooked that day); the "concert prices rise as the date approaches" sentence is gone;
+  sources line names the Cambra's 23 Nov post and quotes calcofest.cat. Key fact label "Calçofest 2026 (ja s'ha fet / ya
+  celebrado / already held)"; FAQ "What is Calçofest?" in the past. New source: the Cambra's 23 Nov post (`festaSeasonOpen2026`).
+- The pending paragraph adds the Cambra's 23 Nov description of the 2027 day ("cercaviles, mercat i tastets, demostracions,
+  concursos, degustació popular i la participació de les colles castelleres"), saying there are no times or prices yet.
+- The lead's "not published (checked on …)" date: 13 → 23 Nov 2026 (the press room was re-read today). `CALCOTS_VERIFIED`
+  stays 2026-11-13: the IGP, Generalitat, Rodalies and Monbus pages were not re-read today, so the page's general check date is
+  not moved.
+- `CALCOTS_REREAD_BY` 2026-11-22 → 2027-01-08 (the 2026 advance sale opened on 8 Jan 2026). Tests: none changed (calçots 22/22).
+
+**Go-live.** Deploy, then publish `calcots` (the guide and food-fairs features 4–5). IndexNow:
+`/ca/tradicions/calcotada-valls-temporada-calcots/ /es/tradiciones/calcotada-valls-temporada-calcots/
+/en/traditions/calcotada-valls-calcot-season/`.
+
+**Next re-read.** By 8 Jan 2027 (the test fails after it): the press room for the 2027 programme and advance sale; fill
+`PROGRAMME_2027` with the organiser's post when it is out.
+
+**Outcome:** _factual update, no review_
