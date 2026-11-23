@@ -27,6 +27,9 @@ export const GUIDES = {
   schoolFreeDays: { ca: "/ca/guies/dies-lliure-disposicio-escoles/", es: "/es/guias/dias-libre-disposicion-colegios/", en: "/en/guides/catalonia-school-free-days/" },
   // 12 Nov 2026: Spain-wide December bridge (where Monday 7 December is a holiday), for the date pages read outside Catalonia.
   decemberBridgeSpain: { ca: "/ca/guies/pont-desembre-espanya/", es: "/es/guias/puente-diciembre-espana/", en: "/en/guides/december-holidays-spain/" },
+  // 23 Nov 2026: shops open on 6, 7 and 8 December in every region, for the 7 and 8 Dec date pages read outside Catalonia
+  // (the page was "Crawled - currently not indexed" on 21 Nov, linked only from its own editions and two guides).
+  shopsSpainDecember: { ca: "/ca/guies/botigues-obertes-desembre-espanya/", es: "/es/guias/tiendas-abiertas-diciembre-espana/", en: "/en/guides/shops-open-december-spain/" },
   // 21 Nov 2026: transport over Christmas, New Year and Reis, for the 24-26 Dec and 1 and 6 Jan date pages.
   christmasTransport: { ca: "/ca/guies/transport-nadal-cap-d-any-barcelona/", es: "/es/guias/transporte-navidad-nochevieja-barcelona/", en: "/en/guides/barcelona-public-transport-christmas-new-year/" },
 } as const satisfies Record<string, Record<DateLocale, string>>;

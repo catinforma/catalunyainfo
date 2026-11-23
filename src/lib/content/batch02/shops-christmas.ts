@@ -25,8 +25,15 @@ import type { Locale } from "@/lib/i18n/config";
  * section, which renders nothing on a build after it.
  */
 
-/** The day every source below was read. */
-export const CHRISTMAS_SHOPS_CHECKED = "2026-11-05";
+/**
+ * The day every source below was read. 23 Nov 2026: DOGC summaries 9786-9800
+ * scanned (no correction of the 2026 order, resolution or holiday orders, no
+ * 2027 municipal list); each DOGC document URL answers 200; the BOE
+ * consolidated Llei 18/2017 still "Última actualización publicada el
+ * 31/12/2025", art. 36.2.d and 37.1.a-k as quoted; Barcelona's commerce page
+ * lists no 2027 days (ZGAT 15 May-15 Sep).
+ */
+export const CHRISTMAS_SHOPS_CHECKED = "2026-11-23";
 
 /** From this day the 2027 municipal list must have been read: a test fails. */
 export const CHRISTMAS_SHOPS_STALE_FROM = "2027-01-01";

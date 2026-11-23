@@ -12,6 +12,7 @@ import { MetroTonight } from "@/components/blocks/MetroTonight";
 import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ShopsChristmas } from "@/components/blocks/ShopsChristmas";
+import { ShopsToday } from "@/components/blocks/ShopsToday";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
 import { ClockChange } from "@/components/blocks/ClockChange";
@@ -430,6 +431,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "shopsChristmas":
       // Server-rendered table of every municipality; the filter only hides rows.
       return <ShopsChristmas locale={context.locale} />;
+
+    case "shopsToday":
+      // Server-rendered for the same reason as holidayToday; the nightly cron keeps the date.
+      return <ShopsToday locale={context.locale} />;
 
     case "reservoirLevels":
       // Async server component: the ACA's daily reading, cached three hours.

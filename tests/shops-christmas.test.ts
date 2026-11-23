@@ -97,8 +97,10 @@ test("guide: the December block comes first; titles, descriptions and H1s are un
     const h2 = blocks.filter((b) => b.type === "heading") as { text: string }[];
     // 16 Nov 2026: "when do shops start opening on Sundays" (for Christmas) comes first, then the date table and your town.
     assert.match(h2[0]!.text, /diumenges per Nadal|domingos en Navidad|Sundays for Christmas/, `${locale}: first section (Sundays)`);
-    assert.match(h2[1]!.text, firstH2[locale]!, `${locale}: second section (date table)`);
-    assert.match(h2[2]!.text, firstH2[locale]!, `${locale}: third section (your town)`);
+    // 23 Nov 2026: "today / this Sunday" (the shopsToday block) between the Sundays answer and the date table.
+    assert.match(h2[1]!.text, /avui|hoy|today/, `${locale}: second section (today)`);
+    assert.match(h2[2]!.text, firstH2[locale]!, `${locale}: third section (date table)`);
+    assert.match(h2[3]!.text, firstH2[locale]!, `${locale}: fourth section (your town)`);
     const town = blocks.findIndex((b) => b.type === "shopsChristmas");
     const election = blocks.findIndex((b) => b.type === "heading" && /eleccions|elecciones|election/.test((b as { text: string }).text));
     assert.ok(town > 0 && town < election, `${locale}: per-town table before the election section`);
@@ -189,7 +191,8 @@ test("town section words: Obertura comercial a Nadal, the swapped days, Aran and
   assert.doesNotMatch(vajol.after, /laborable/, "24 and 31 Dec are local holidays in la Vajol");
   for (const locale of ["ca", "es"] as const) {
     const t = christmasShopsCopy(municipalityBySlug("girona")!, locale);
-    assert.match(t.source, /5 de (novembre|noviembre) de 2026/);
+    // 23 Nov 2026 re-read (CHRISTMAS_SHOPS_CHECKED).
+    assert.match(t.source, /23 de (novembre|noviembre) de 2026/);
     assert.ok(t.rows.every((r) => r.verdict === "Sí" || r.verdict === "No"));
   }
   assert.ok(showChristmasShops("2027-01-06"));

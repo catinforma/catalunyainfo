@@ -17,12 +17,14 @@ import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, 
  * Only the general regional calendars: municipal swaps, tourist zones (ZGAT)
  * and small shops' own regimes are explained, never turned into dates.
  * SHOPS_SPAIN_AS_OF moves when re-read; a test fails after 31 Dec 2026.
+ * Re-read 23 Nov 2026: the PDF is byte-identical to the 9 Nov copy; the
+ * 29 November column (NOVEMBER_29_2026) was added from it.
  *
  * Three editions since 10 Nov 2026 (owner rule: every page in ca, es and en).
  * The days come from the same two tables in the three languages; only the
  * words differ. One body builder, so no edition can gain or lose a section.
  */
-export const SHOPS_SPAIN_AS_OF = "2026-11-09";
+export const SHOPS_SPAIN_AS_OF = "2026-11-23";
 const PDF = "https://comercio.gob.es/ComercioInterior/EjercicioActividadComercial/Documents/CALENDARIO_DOMINGOS_FESTIVOS_APERTURA_COMERCIAL_2026.pdf";
 const LAW = "https://www.boe.es/buscar/act.php?id=BOE-A-2004-21421";
 const link = (href: string, label: string) => `[${label}](${href})`;
@@ -56,6 +58,43 @@ export const CANARY_ISLANDS: Row[] = [
   { name: "Lanzarote", days: [8, 13, 20, 27] },
   { name: "Tenerife", days: [8, 13, 20, 27] },
 ];
+
+/**
+ * Sunday 29 November 2026 in the same Ministry calendar (re-downloaded with
+ * `curl -k` on 23 Nov 2026: byte-identical to the 9 Nov copy, sha256
+ * 4e694a78…5e2fb; read with `pdftotext -raw`). Each region's list prints
+ * "- 29 de noviembre" for: Andalucía (Orden de 23 de junio de 2025), Aragón
+ * (ORDEN PEJ/1615/2025), Asturias (Resolución de 19 de noviembre de 2025),
+ * Baleares, Cantabria (Orden IND/54/2025), Castilla-La Mancha (Orden
+ * 147/2025), Cataluña, Comunidad Valenciana (Resolución de 10 de septiembre
+ * de 2025), Extremadura (Resolución de 27 de octubre de 2025), Galicia and
+ * Murcia; and, island by island, Gran Canaria and Tenerife. It is absent from
+ * Castilla y León (first: Tuesday 8 December), Navarra (Thursday 3 December)
+ * and La Rioja (Monday 7 December); Madrid has no calendar (Ley 2/2012, free
+ * opening) and the País Vasco no regional one.
+ */
+export const NOVEMBER_29_2026 = new Set([
+  "Andalucía",
+  "Aragón",
+  "Asturias",
+  "Baleares",
+  "Cantabria",
+  "Castilla-La Mancha",
+  "Cataluña",
+  "Comunidad Valenciana",
+  "Extremadura",
+  "Galicia",
+  "Murcia",
+  "Gran Canaria",
+  "Tenerife",
+]);
+
+const DECEMBER_SUNDAYS = [6, 13, 20, 27];
+
+/** The Sundays from 29 November to 27 December 2026 when shops may open in one region or island ("29" stands for 29 Nov). */
+export function christmasSundays(r: Row): number[] {
+  return [...(NOVEMBER_29_2026.has(r.name) ? [29] : []), ...r.days.filter((d) => DECEMBER_SUNDAYS.includes(d))];
+}
 
 type Other = Exclude<Locale, "es">;
 
@@ -122,6 +161,48 @@ export function bridgeShopsParagraph(L: Locale): string {
   return `It depends on the region: each one sets its own Sunday and holiday opening days. On **Tuesday 8** shops may open in ${j(8)}; on **Monday 7**, in ${j(7)}; and on **Sunday 6**, in ${j(6)}. In Catalonia, Extremadura and Navarre each town council adds days of its own: in Barcelona and most Catalan towns, Tuesday 8 too. In Madrid each shop decides which days it opens, and in the Canary Islands it depends on the island. Being allowed to open does not mean every shop will. The full table, with the islands: ${to}.`;
 }
 
+/**
+ * "¿Cuándo empiezan a abrir las tiendas los domingos (en Navidad)?" across
+ * Spain (23 Nov 2026), from NOVEMBER_29_2026 and the December table. Search
+ * Console, 27 Oct-23 Nov 2026: "cuando abren las tiendas los domingos" 1,656
+ * impressions at 10.5 and "cuando empiezan a abrir las tiendas los domingos"
+ * 965 at 7.7 (about 4,100 in the family, 4 clicks), all landing on the
+ * Catalan guide, with no city in the query. `withCatalonia: false` for the
+ * Catalan guide, which answers Catalonia itself just before.
+ */
+export function christmasSundaysParagraph(L: Locale, withCatalonia = true): string {
+  const regions = DECEMBER_2026.filter((r) => withCatalonia || r.name !== "Cataluña");
+  const first = (r: Row) => christmasSundays(r)[0];
+  const at29 = regions.filter((r) => first(r) === 29).map((r) => proseName(r, L));
+  const islands29 = CANARY_ISLANDS.filter((r) => first(r) === 29).map((r) => r.name);
+  const later = new Map<number, string[]>();
+  for (const r of regions) {
+    const f = first(r);
+    if (f !== undefined && f !== 29) later.set(f, [...(later.get(f) ?? []), proseName(r, L)]);
+  }
+  const laterIslands = new Map<number, string[]>();
+  for (const r of CANARY_ISLANDS) {
+    const f = first(r);
+    if (f !== undefined && f !== 29) laterIslands.set(f, [...(laterIslands.get(f) ?? []), r.name]);
+  }
+  const j = (names: string[]) => joinList(names, L);
+  const groups = [...later.entries()].sort(([a], [b]) => a - b);
+  const islandGroups = [...laterIslands.entries()].sort(([a], [b]) => a - b);
+  if (L === "es") {
+    const rest = groups.map(([d, names], i) => (i === 0 ? `En ${j(names)}, el primero es el domingo ${d} de diciembre` : `en ${j(names)}, el ${d}`)).join("; ");
+    const isl = islandGroups.map(([d, names], i) => (i === 0 ? `el ${d} de diciembre en ${j(names)}` : `el ${d} en ${j(names)}`)).join(", y ");
+    return `El **domingo 29 de noviembre** es el primer domingo de apertura de la Navidad en ${j(at29)}, y en ${j(islands29)}. ${rest}. En las demás islas de Canarias, el primero es ${isl}. En Madrid cada comercio decide qué días abre, y el País Vasco no tiene calendario autonómico de apertura.`;
+  }
+  if (L === "ca") {
+    const rest = groups.map(([d, names], i) => (i === 0 ? `A ${j(names)}, el primer és el diumenge ${d} de desembre` : `a ${j(names)}, el ${d}`)).join("; ");
+    const isl = islandGroups.map(([d, names], i) => (i === 0 ? `el ${d} de desembre a ${j(names)}` : `el ${d} a ${j(names)}`)).join(", i ");
+    return `El **diumenge 29 de novembre** és el primer diumenge d'obertura de Nadal a ${j(at29)}, i a ${j(islands29)}. ${rest}. A les altres illes de Canàries, el primer és ${isl}. A Madrid cada comerç decideix quins dies obre, i el País Basc no té calendari autonòmic d'obertura.`;
+  }
+  const rest = groups.map(([d, names], i) => (i === 0 ? `In ${j(names)} the first is Sunday ${d} December` : `in ${j(names)}, Sunday ${d} December`)).join("; ");
+  const isl = islandGroups.map(([d, names]) => `${d} December on ${j(names)}`).join(", and ");
+  return `**Sunday 29 November** is the first Christmas Sunday opening in ${j(at29)}, and on ${j(islands29)}. ${rest}. On the other Canary Islands the first is ${isl}. In Madrid each shop decides which days it opens, and the Basque Country has no regional opening calendar.`;
+}
+
 interface ShopsCopy {
   yes: string;
   yesFree: string;
@@ -130,6 +211,8 @@ interface ShopsCopy {
   lead: (on: { on6: string; on7: string; on8: string; and7: string }) => string;
   table: { caption: string; headers: string[]; note: string };
   islands: { heading: string; caption: string; headers: string[]; note: string };
+  /** 23 Nov 2026: "¿Cuándo empiezan a abrir las tiendas los domingos en Navidad?", Spain-wide. */
+  sundays: { heading: string; question: string };
   christmas: { heading: string; text: string };
   exceptions: { heading: string; items: (catalonia: (label: string) => string) => string[] };
   callout: { title: string; text: string };
@@ -146,7 +229,11 @@ const COPY: Record<Locale, ShopsCopy> = {
     table: {
       caption: "Domingos y festivos de apertura comercial autorizada en diciembre de 2026, por comunidad",
       headers: ["Comunidad", "Dom. 6", "Lun. 7", "Mar. 8", "Todos los de diciembre"],
-      note: `Fuente: ${link(PDF, "calendario de apertura comercial de 2026 del Ministerio de Economía, Comercio y Empresa")}, que recoge las órdenes de cada comunidad. Consultado el 9 de noviembre de 2026.`,
+      note: `Fuente: ${link(PDF, "calendario de apertura comercial de 2026 del Ministerio de Economía, Comercio y Empresa")}, que recoge las órdenes de cada comunidad. Consultado el 23 de noviembre de 2026.`,
+    },
+    sundays: {
+      heading: "¿Cuándo empiezan a abrir las tiendas los domingos en Navidad?",
+      question: "¿Cuándo empiezan a abrir las tiendas los domingos en Navidad de 2026?",
     },
     islands: {
       heading: "Canarias, isla por isla",
@@ -186,7 +273,11 @@ const COPY: Record<Locale, ShopsCopy> = {
     table: {
       caption: "Diumenges i festius d'obertura comercial autoritzada el desembre de 2026, per comunitat",
       headers: ["Comunitat", "Dg. 6", "Dl. 7", "Dt. 8", "Tots els de desembre"],
-      note: `Font: ${link(PDF, "calendari d'obertura comercial de 2026 del Ministeri d'Economia, Comerç i Empresa")}, que recull les ordres de cada comunitat. Consultat el 9 de novembre de 2026.`,
+      note: `Font: ${link(PDF, "calendari d'obertura comercial de 2026 del Ministeri d'Economia, Comerç i Empresa")}, que recull les ordres de cada comunitat. Consultat el 23 de novembre de 2026.`,
+    },
+    sundays: {
+      heading: "Quan comencen a obrir les botigues els diumenges per Nadal?",
+      question: "Quan comencen a obrir les botigues els diumenges per Nadal del 2026?",
     },
     islands: {
       heading: "Canàries, illa per illa",
@@ -226,7 +317,11 @@ const COPY: Record<Locale, ShopsCopy> = {
     table: {
       caption: "Sundays and public holidays with authorised shop opening in December 2026, by region",
       headers: ["Region", "Sun 6", "Mon 7", "Tue 8", "All in December"],
-      note: `Source: the ${link(PDF, "2026 shop-opening calendar from the Ministry of Economy, Trade and Business")}, which compiles each region's orders. Checked on 9 November 2026.`,
+      note: `Source: the ${link(PDF, "2026 shop-opening calendar from the Ministry of Economy, Trade and Business")}, which compiles each region's orders. Checked on 23 November 2026.`,
+    },
+    sundays: {
+      heading: "When do shops start opening on Sundays for Christmas?",
+      question: "When do shops in Spain start opening on Sundays for Christmas 2026?",
     },
     islands: {
       heading: "The Canary Islands, island by island",
@@ -278,13 +373,14 @@ export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   return [
     lead(t.lead(on)),
     table(t.table.caption, t.table.headers, rows, t.table.note),
+    ...h2(t.sundays.heading, christmasSundaysParagraph(L)),
     ...h2(t.islands.heading),
     table(t.islands.caption, t.islands.headers, islands, t.islands.note),
     ...h2(t.christmas.heading, t.christmas.text),
     ...h2(t.exceptions.heading),
     list(...t.exceptions.items((label) => b2link("shops", L, label))),
     callout("info", t.callout.title, t.callout.text),
-    faq(t.faq(on)),
+    faq([{ question: t.sundays.question, answer: christmasSundaysParagraph(L).replace(/\*\*/g, "") }, ...t.faq(on)]),
   ];
 }
 

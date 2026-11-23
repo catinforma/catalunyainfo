@@ -699,7 +699,7 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
           ],
         },
       ],
-      guides: ["schoolFreeDays", "decemberBridge", "decemberBridgeSpain", "shops", "school", "metroHours", "localHolidays", "workCalendar"],
+      guides: ["schoolFreeDays", "decemberBridge", "decemberBridgeSpain", "shops", "shopsSpainDecember", "school", "metroHours", "localHolidays", "workCalendar"],
     };
   }
 
@@ -779,7 +779,7 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
         },
         { title: L("Transport", "Transporte", "Getting around"), paragraphs: [metroPointer] },
       ],
-      guides: ["decemberBridge", "decemberBridgeSpain", "schoolFreeDays", "shops", "metroHours", "holidayToday", "workCalendar"],
+      guides: ["decemberBridge", "decemberBridgeSpain", "schoolFreeDays", "shops", "shopsSpainDecember", "metroHours", "holidayToday", "workCalendar"],
     };
   }
 

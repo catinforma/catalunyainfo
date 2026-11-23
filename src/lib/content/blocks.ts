@@ -447,6 +447,16 @@ export const shopsChristmasBlock = z.object({
 });
 
 /**
+ * "Can shops open today in Barcelona? And this Sunday?" (23 Nov 2026), worked
+ * out from the official calendars in `batch02/shops-today.ts`. Configuration-
+ * free and day-dependent: the date is today's, so it cannot be left answering
+ * a day that has passed.
+ */
+export const shopsTodayBlock = z.object({
+  type: z.literal("shopsToday"),
+});
+
+/**
  * Today's reservoir levels, read from the water agency's open data.
  * Configuration-free: the reading date comes from the data, so the block
  * cannot be left showing a day that has passed.
@@ -557,6 +567,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   weekendAgendaBlock,
   localHolidaysBlock,
   shopsChristmasBlock,
+  shopsTodayBlock,
   reservoirLevelsBlock,
   schoolCalendarBlock,
   electionHistoryBlock,

@@ -11766,3 +11766,136 @@ first: Lleida, Sabadell, Terrassa, Sant Cugat…; then Madrid, Sevilla, Valencia
 pages read and quoted; rebuild the DGT snapshot.
 
 **Outcome:** _pending_
+
+## 2026-11-23 — Shops open on Sundays and holidays: "today / this Sunday" answered from the date, the rest of Spain's first Christmas Sunday, the Barcelona-area malls by town, all sources re-read (body, links and dates only; deploy, then groups `tiendas-espana` and `shops` on/after 26 Nov) (review 2026-12-03 and 2026-12-10)
+
+**Brief.** Owner: average position 7–8 → 3, traffic from many pages; this area is shops open on Sundays and holidays
+before the December shopping Sundays. **No title, description, H1 or lead touched**: the ES and EN snippets are inside
+the 11 Nov retitle window (to 9 Dec), the CA ones inside the 18 Nov revert window; the 16 Nov first H2 ("cuándo empiezan
+a abrir las tiendas los domingos en Navidad") and the 20 Nov FAQ pair are still under review (25 Nov) and the `shops`
+publish is not before 26 Nov. Body, internal links, structured data and the verification date only.
+
+**Baseline** (`snapshot.py page <substr> 28` and a query × page pull, 27 Oct–23 Nov 2026, 23 Nov partial; clicks /
+impressions / CTR / position; the page family counts #anchor URLs):
+
+| URL | Window | Numbers |
+| --- | --- | --- |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ (family, anchors included) | 10–23 Nov (14 d) | 166 / 21,675 / 0.8 % / daily 5.2–8.1 (7.6 and 8.1 on 21–22 Nov, the two biggest days) |
+| same, exact URL (`pages 7 40`) | 17–23 Nov | 96 / 6,626 / 1.4 % / 6.2 |
+| /ca/guies/botigues-obertes-festius-catalunya/ | 17–23 Nov | 17 / 953 / ~1.8 % / daily 5.5–6.5 |
+| /en/guides/shops-open-sundays-holidays-catalonia/ | 17–23 Nov | 5 / 136 / ~3.7 % / daily 4.3–10.1 |
+| /es/guias/tiendas-abiertas-diciembre-espana/ (+ ca, en) | 28 d | 0 impressions. URL Inspection 23 Nov: **"Crawled – currently not indexed"**, last crawl 21 Nov, referrers only its own ca/en editions |
+| /es/festivos/dia/7-diciembre-2026/ | 17–23 Nov | 45 / 1,971 / 2.3 % / 5.0 (8 Dec page 6 / 1,699 / 0.4 % / 7.2 in 7–20 Nov) |
+
+Query families on the shops pages (28 d, shop words in the query):
+
+| Family | Impr. | Clicks | Pos. | Examples |
+| --- | --- | --- | --- | --- |
+| When do Sunday openings start | 4,133 | 4 | 9.1 | cuando abren las tiendas los domingos 1,656 at 10.5; cuando empiezan a abrir las tiendas los domingos 965 at 7.7; … los domingos las tiendas 314 at 7.4; a partir de cuando … 161 at 9.6. **No city in the query** |
+| Festivos | 917 | 3 | 9.3 | festivos abiertos centros comerciales barcelona 2026 334 at 10.6 (0); apertura festivos 41 at 9.8 |
+| Domingos | 799 | 6 | 9.3 | tiendas abiertas domingo barcelona 86 at 9.7; domingos abiertos 2026 95 at 8.0 |
+| Today / this Sunday | 759 | 6 | 8.0 | tiendas abiertas hoy en barcelona 2026 262 at 8.9; tiendas abiertas mañana en barcelona 2026 96 at 7.7; este domingo abren las tiendas en barcelona (2026) 75 + 70 at 8.5–9.1; hoy abren las tiendas en barcelona 60 at 10.2 |
+| Christmas / December | 300 | 2 | 6.1 | cuando abren las tiendas los domingos en navidad 83 at 4.9 |
+| Other cities | ~110 | 0 | 5.5–8.4 | festivos abiertos / apertura lleida 2026 (on /es/festivos/lleida/), tarragona, terrassa, vic: answered by the town pages' "Obertura comercial a Nadal" section |
+
+**Why we sit at 7–11 (read 23 Nov).** Results for three queries (WebSearch): "cuando abren las tiendas los domingos" →
+national guides and Madrid/Bilbao pieces; the leading Barcelona answer (barcelonaurbana) says "el próximo domingo es el
+29 de noviembre". "festivos abiertos centros comerciales barcelona 2026" → enterat.com lists each mall's own days, then
+Barcelona's commerce page and the Ministry's national PDF. "este domingo abren las tiendas en barcelona" → barcelonaurbana
+and Time Out, "the next Sunday is 29 Nov". What they answer that we did not: (1) **the next Sunday, by date**, without
+scanning a 13-row table; (2) **outside Catalonia**: the biggest family has no city and is national, and our page only said
+"each region sets its days" with a link to an unindexed page; (3) **malls by place**: we said malls follow their town but
+listed no towns.
+
+**What changed (ca/es/en everywhere).**
+1. **Shops guide** (`shops.ts`, group `shops`):
+   - New H2 right after the 16 Nov Sundays section, before the date table: "¿Abren hoy las tiendas en Barcelona? Hoy y
+     este domingo" / "Obren avui les botigues a Barcelona? Avui i aquest diumenge" / "Are shops open today in Barcelona?
+     Today and this Sunday", with a new **server-rendered, day-dependent block `shopsToday`** (`ShopsToday.tsx`,
+     `shops-today.ts`): a dated sentence for today in Barcelona (one of its ten days / not one / closed by law / 3 Jan
+     2027 pending / working day), "this Sunday" with the rest of Catalonia's exceptions from the 947-town table, and the
+     next Sunday or holiday opening. After 6 Jan 2027 it gives no verdict (the 2027 list is needed). `shopsToday` is in
+     `DAY_DEPENDENT_BLOCKS`: the nightly cron revalidates the page and the sitemap dates it today.
+   - Sundays section, new second paragraph "¿Y en el resto de España?": Sunday 29 November is the first Christmas Sunday
+     opening in Andalucía, Aragón, Asturias, Baleares, Cantabria, Castilla-La Mancha, Comunidad Valenciana, Extremadura,
+     Galicia and Murcia, and on Gran Canaria and Tenerife; Castilla y León 13 Dec; Navarra and La Rioja 20 Dec; the other
+     islands 6 or 13 Dec; Madrid free; País Vasco no regional calendar (`christmasSundaysParagraph`), then the Spain-page
+     link that used to be the whole sentence.
+   - Malls section: a table of 15 Barcelona-area towns where the big centres are (Barcelona, l'Hospitalet, Badalona,
+     Santa Coloma, Sant Adrià, Cornellà, el Prat, Sant Boi, Viladecans, Gavà, Sant Cugat, Sabadell, Terrassa, Mataró,
+     Granollers) with their 29 Nov–31 Dec days, computed like the per-town table. **No centre is named**: the official
+     texts set days per municipality, and a centre's own timetable is not an official source.
+   - Factual date updates: "a 5 de noviembre … el DOGC aún no ha publicado la lista [de 2027]" and "[Barcelona] a 5 de
+     noviembre aún no ha publicado sus dos días de 2027" → 23 de noviembre (both re-read today).
+2. **Spain page** (`shops-spain-december.ts`, group `tiendas-espana`): new H2 "¿Cuándo empiezan a abrir las tiendas los
+   domingos en Navidad?" after the main table with the same paragraph (Catalonia included), and the same question first
+   in its FAQ (FAQPage 3 → 4). Check date 9 → 23 Nov (`SHOPS_SPAIN_AS_OF`; table notes "Consultado el 23 de noviembre").
+3. **7 and 8 December date pages** (`dates.ts`, `links.ts`, `parts.tsx`; deploy): one more guide link, "Tiendas abiertas
+   el 6, 7 y 8 de diciembre en cada comunidad" (ca/en alike) → the Spain page, after the Catalan shops guide. These pages
+   take ~2,000 impressions a week and are read outside Catalonia; the Spain page had no referrer but its own editions.
+   (The strike guides and the December bridge pages already link the shops guide: strikes `RELATED`, bridge `RELATED`
+   and its shops FAQ; the Spain bridge page links the Spain page since 16 Nov. Nothing added there.)
+4. **Verification date** of the Christmas shops data (`CHRISTMAS_SHOPS_CHECKED`) 5 → 23 Nov: the guide's callout and
+   Article `dateModified`, the per-town table note and the town pages' "Consultada el …" line (deploy). Live JSON-LD read
+   on 23 Nov on the four shops URLs: Article + BreadcrumbList + FAQPage, valid, no duplicate or empty answers.
+
+**Facts read 23 Nov 2026** (curl + grep / pdftotext, downloads in fresh scratchpad dirs, Python with -I):
+- DOGC summaries **9786–9800** (POST `portaldogc.gencat.cat/eadop-rest/api/dogc/summaryDOGC`; 9800 = Monday 23 Nov): no
+  title with "obertura comercial / horaris comercials / festius d'obertura", no correction of Ordre EMT/77/2025, Resolució
+  EMT/4342/2025, Ordre EMT/89/2026, Ordre EMT/66/2025 or EMT/52/2026. **The 2027 municipal list is not published**
+  (last year: 27 Nov). The five `dogc.gencat.cat/ca/document-del-dogc/?documentId=…` URLs answer 200.
+- BOE consolidated Llei 18/2017 (`https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320`): "Última actualización
+  publicada el 31/12/2025"; art. 36.2.d "deben permanecer cerrados con carácter general en los días 1 y 6 de enero, el
+  domingo y el lunes de Pascua, 1 de mayo, 24 de junio, 11 de septiembre y los días 25 y 26 de diciembre"; art. 37.1.j
+  and k (300 m²) as printed.
+- Barcelona "Horaris comercials" (`https://ajuntament.barcelona.cat/comerc/ca/el-comerc-barcelona/horaris-comercials`):
+  ZGAT "diumenges i festius, de 12 a 20 hores, entre el 15 de maig i el 15 de setembre"; the documents listed are the
+  2026 resolution, the 2026 sheet and Ordre EMT/77/2025: **no 2027 days**.
+- Ministry calendar 2026 (`https://comercio.gob.es/ComercioInterior/EjercicioActividadComercial/Documents/CALENDARIO_DOMINGOS_FESTIVOS_APERTURA_COMERCIAL_2026.pdf`,
+  `curl -k`): byte-identical to the 9 Nov copy (sha256 4e694a78…5e2fb). "- 29 de noviembre" in the lists of the eleven
+  regions above and of Gran Canaria and Tenerife; absent from Castilla y León (first "8 de diciembre"), Navarra ("3 de
+  diciembre"), La Rioja ("7 de diciembre") and the other five islands; Madrid "no regula calendario de apertura comercial"
+  (Ley 2/2012). December rows re-checked (Asturias prints "20 diciembre" without "de"; the table's 8, 20, 27 is right).
+- Not printed: any centre's own opening days (enterat.com and Westfield pages are commercial; Westfield Glòries' own list
+  even includes 25 and 26 Dec, closing days for the general timetable); La Roca Village (tourist-municipality status not
+  verified; research note "do not print").
+
+**Prediction.** By 10 Dec: "cuando (empiezan a) abren las tiendas los domingos" from 7.7–10.5 to ≤ 7 with first clicks;
+"tiendas abiertas hoy / este domingo … barcelona" from 8–10 to ≤ 6; "festivos abiertos centros comerciales barcelona
+2026" from 10.6 to ≤ 8; the Spain page indexed (inspect 3 Dec) and showing for "tiendas abiertas 8 de diciembre".
+
+**Revert rule.** If the ES guide loses more than 1.5 positions mix-free (same queries, both windows) with no gain on the
+today/this-Sunday or when-start families, move the `shopsToday` H2 and block below the date table (do not delete it). The
+Spain-wide paragraph stays unless the Barcelona queries ("tiendas abiertas domingo barcelona") drop more than 2 positions.
+
+**Confounders.** Demand climbs steeply to 29 Nov and 5–8 Dec (compare position and CTR at equal query, not clicks); the
+29N election day; the 16 Nov H2 and the 20 Nov FAQ go out in the same publish; the page becomes day-dependent (nightly
+revalidation, daily sitemap lastmod); the 25 Nov CA revert reading; the core update from 10 Nov.
+
+**Tests.** New `tests/shops-today.test.ts`: Barcelona day by day from the resolution and the law, 3 Jan 2027 pending, 10
+Jan never given; Catalonia exceptions from the 947-town table (so Gironella counts on 29 Nov: the 917-town snapshot alone
+misses it); dated lines in three languages; block registered, server-rendered, day-dependent; guide order Sundays → today
+→ date table; malls rows equal the per-town table and name no centre; Spain 29 Nov set and first Sundays; 7/8 Dec pages
+link the Spain page. Updated: `shops-christmas.test.ts` (H2 order; town section "23 de novembre"), `batch02.test.ts`
+(verifiedAt 23 Nov).
+
+**Go-live.** **Deploy first**: new block type and component, date pages, town pages' check date. Publish reads the deployed
+modules, and a `shops` publish served by an older build would store a `shopsToday` block its renderer cannot draw. Then
+publish **`tiendas-espana`** and, on or after 26 Nov as already scheduled, **`shops`**. IndexNow:
+`/es/guias/tiendas-abiertas-festivos-cataluna/ /ca/guies/botigues-obertes-festius-catalunya/
+/en/guides/shops-open-sundays-holidays-catalonia/ /es/guias/tiendas-abiertas-diciembre-espana/
+/ca/guies/botigues-obertes-desembre-espanya/ /en/guides/shops-open-december-spain/ /es/festivos/dia/7-diciembre-2026/
+/es/festivos/dia/8-diciembre-2026/ /ca/festius/dia/7-desembre-2026/ /ca/festius/dia/8-desembre-2026/
+/en/holidays/day/7-december-2026/ /en/holidays/day/8-december-2026/`. After the publish, the owner requests indexing of
+the ES Spain page in GSC (browser).
+
+**Still open.** The DOGC 2027 municipal list (re-scan from 24 Nov; last year 27 Nov): when it lands, Barcelona's and every
+town's 3 and 10 Jan 2027 answers, the 2027 table and `shopsToday` after 6 Jan. Girona, Tarragona and Lleida get no section
+of their own: their 2026 days are the resolution's defaults (in the 947-town table and the "these towns open on all these
+days" sentence) and none of the three councils has 2027 days in the DOGC.
+
+**Review.** **3 Dec** (day 7 after the 26 Nov publish): `snapshot.py page tiendas-abiertas 7`, the query × page split for
+the four families, URL Inspection of the Spain page. **10 Dec** (14 days): the same, plus `page botigues-obertes 14`,
+`page shops-open 14`, `page /es/festivos/dia/8-diciembre-2026/ 14`.
+
+**Outcome:** _pending_

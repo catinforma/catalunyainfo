@@ -39,6 +39,7 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   reis: { ca: "Cavalcada de Reis a Barcelona", es: "Cabalgata de Reyes en Barcelona", en: "Three Kings parade in Barcelona" },
   schoolFreeDays: { ca: "Hi ha escola el 7 de desembre? Dies de lliure disposició", es: "¿Hay colegio el 7 de diciembre? Días de libre disposición", en: "School free days 2026-27: is there school on 7 December?" },
   decemberBridgeSpain: { ca: "On és festiu el 7 de desembre a Espanya, comunitat per comunitat", es: "Dónde es festivo el 7 de diciembre en España, comunidad por comunidad", en: "Where 7 December is a holiday in Spain, region by region" },
+  shopsSpainDecember: { ca: "Botigues obertes el 6, 7 i 8 de desembre a cada comunitat", es: "Tiendas abiertas el 6, 7 y 8 de diciembre en cada comunidad", en: "Shops open on 6, 7 and 8 December in each Spanish region" },
   christmasTransport: { ca: "Metro i trens per Nadal i Cap d'Any 2026-27", es: "Metro y trenes en Navidad y Nochevieja 2026-27", en: "Metro and trains at Christmas and New Year 2026-27" },
 };
 
