@@ -12394,3 +12394,15 @@ touched. No baseline (factual change).
 `PROGRAMME_2027` with the organiser's post when it is out.
 
 **Outcome:** _factual update, no review_
+
+## 2026-11-23 — Go-live note: `shops` published three days early (deviation from the 20 Nov hold)
+
+The 20 Nov December-cluster entry held the `shops` group until on/after 26 Nov, so the 25 Nov shops review could read its
+window undisturbed. On 23 Nov ~19:20 CET `shops` was published together with `tiendas-espana` (release
+20261123T175956Z-e851218), carrying the "today / this Sunday" block and the body changes of the 23 Nov shops entry above.
+Consequence: the 25 Nov shops review reads a window whose last two days include the new body. Read it with that caveat, or
+judge the 20 Nov change on 13–22 Nov only. No title, description, H1 or lead changed. The 10 Dec review stands.
+Same go-live, also published: `strikes` (26N minimum-services order, e-Tauler 660276, PDF checked by hand: «un docent per
+cada 3 unitats o aules», 50 % special education, 33 % llars d'infants, USTEC/COS/La Intersindical/CGT), `calcots`,
+`puente-diciembre-espana`, `pont-desembre`, `ski`, `nuria`, `portaventura`, `batch02-b` (all 200, failedCalls 0);
+IndexNow 169 URLs. 3,075 tests pass.
