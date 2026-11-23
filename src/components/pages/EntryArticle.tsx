@@ -6,6 +6,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
 import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
+import { UsefulNow } from "@/components/UsefulNow";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
@@ -18,6 +19,7 @@ import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
 import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
+import { usefulNow } from "@/lib/engagement/useful-now";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
 import { HERO_SIZES } from "@/lib/layout/hero-image";
 import { formatDate, formatDateAndTime, formatDistance, formatDuration, isoDate } from "@/lib/format";
@@ -66,6 +68,9 @@ export function EntryArticle({
   // summary, or after the answer in the body (key facts, else the lead).
   const step = entryNextStep({ href: entry.href, key: entry.key, locale }, todayInCatalonia());
   const nextStepInSummary = Boolean(step && layout?.summary);
+  // "Útil ahora" (lib/engagement/useful-now.ts): strike pages hand on to the
+  // evergreen pages their readers need next, after the body.
+  const useful = usefulNow({ href: entry.href, key: entry.key, locale }, step);
   const bodyInsert =
     step && !nextStepInSummary ? { at: nextStepIndex(body), node: <NextStep step={step} locale={locale} /> } : undefined;
 
@@ -239,6 +244,8 @@ export function EntryArticle({
                 <BlockRenderer body={endBlocks} context={context} />
               </div>
             ) : null}
+
+            <UsefulNow data={useful} locale={locale} />
 
             {entry.sources.length > 0 ? (
               <section className="ci-measure mt-12">

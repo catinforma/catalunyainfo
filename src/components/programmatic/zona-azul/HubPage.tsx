@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShareBar } from "@/components/share/ShareBar";
+import { zbeHubLine } from "@/lib/nav/driving-hubs";
 import { hubView } from "@/lib/programmatic/zona-azul/copy";
 import { BARCELONA_ROW, CITIES } from "@/lib/programmatic/zona-azul/data";
 import { zaHubPath } from "@/lib/programmatic/zona-azul/paths";
@@ -19,6 +20,7 @@ function hubSources(): Source[] {
 export function HubPage({ locale }: { locale: ZaLocale }) {
   const v = hubView(locale);
   const path = zaHubPath(locale);
+  const zbe = zbeHubLine(locale);
   const cells = (row: typeof v.barcelona) => (
     <>
       <th scope="row">
@@ -69,6 +71,9 @@ export function HubPage({ locale }: { locale: ZaLocale }) {
           <p>{v.tableNote}</p>
           <p>
             <Link href={v.barcelona.href}>{v.barcelona.name}</Link>: {v.barcelonaNote}
+          </p>
+          <p>
+            {zbe.text} <Link href={zbe.href}>{zbe.label}</Link>
           </p>
 
           <h2 id="verano">{v.headings.summer}</h2>
