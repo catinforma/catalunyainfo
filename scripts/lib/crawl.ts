@@ -19,6 +19,21 @@ export const BROWSER_UA =
 
 export const CONCURRENCY = Math.max(1, Math.min(8, Number(process.env.SEO_CONCURRENCY ?? 4) || 4));
 
+/**
+ * `SEO_MAX_RPS` (optional): at most this many requests per second across the
+ * whole run, every redirect hop counted. Unset = only the concurrency cap.
+ */
+const MAX_RPS = Number(process.env.SEO_MAX_RPS ?? 0) || 0;
+let nextSlot = 0;
+
+async function rateLimit(): Promise<void> {
+  if (MAX_RPS <= 0) return;
+  const now = Date.now();
+  const slot = Math.max(now, nextSlot);
+  nextSlot = slot + 1000 / MAX_RPS;
+  if (slot > now) await new Promise((resolve) => setTimeout(resolve, slot - now));
+}
+
 export interface Hop {
   url: string;
   status: number;
@@ -69,6 +84,7 @@ export async function fetchPage(
 
   for (let hop = 0; hop <= maxHops; hop += 1) {
     let response: Response;
+    await rateLimit();
     try {
       response = await fetch(current, {
         method,

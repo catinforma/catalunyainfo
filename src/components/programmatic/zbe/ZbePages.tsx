@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
+import { parkingHubLine } from "@/lib/nav/driving-hubs";
 import { getMessages } from "@/lib/i18n";
 import { REGION_NAME } from "@/lib/programmatic/holidays/boe-2027";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
@@ -348,6 +349,7 @@ export function ZbeHubPage({ locale }: { locale: ZbeLocale }) {
   const meta = hubMeta(locale);
   const counts = hubCounts();
   const copy = hubCopy(locale, counts);
+  const parking = parkingHubLine(locale);
   const crumbs = hubCrumbs(locale);
   const cities = [...zbeCities()].sort((a, b) => a.name[locale].localeCompare(b.name[locale], locale));
   const catalan = cities.filter((city) => city.catalonia);
@@ -410,6 +412,9 @@ export function ZbeHubPage({ locale }: { locale: ZbeLocale }) {
             <CityLinks cities={catalan} locale={locale} conditional={copy.conditional} />
             <p>
               {copy.guideLine} <Link href={b2href("zbe", locale)}>{copy.guideLink}</Link>
+            </p>
+            <p>
+              {parking.text} <Link href={parking.href}>{parking.label}</Link>
             </p>
             <p>{copy.cataloniaPending}</p>
             {pendingCatalan.length > 0 ? <PlaceList places={pendingCatalan} /> : <p>{copy.none}</p>}

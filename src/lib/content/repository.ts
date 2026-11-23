@@ -21,6 +21,7 @@ import type {
 import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
 import { DATA_BLOCK_TYPES, dataBlockPattern, type DataBlockType } from "@/lib/seo/body-dates";
+import { RELATED_FILL_HEADROOM, relatedFillAllowed } from "./related-filter";
 import { relatedTerms } from "./related-terms";
 import { anyWordTsQuery } from "./search-query";
 import { isRegionSchoolPage } from "./school-spain/regions";
@@ -843,7 +844,8 @@ const RELATED_SHOWN = 4;
  * not indexed"). The order is a hash of both ids rather than recency, so every
  * entry of a category gets picked by some of its siblings instead of the
  * newest few being picked by all of them; it is stable, so a page does not
- * change its links on every render.
+ * change its links on every render. Noindex pages, and strike pages on a page
+ * that is not about a strike, are left out (related-filter.ts, 23 Nov 2026).
  */
 async function relatedFill(
   locale: Locale,
@@ -862,6 +864,7 @@ async function relatedFill(
         categoryId: entries.primaryCategoryId,
         title: entryTranslations.title,
         excerpt: entryTranslations.excerpt,
+        path: entryTranslations.path,
       })
       .from(entries)
       .leftJoin(
@@ -871,6 +874,7 @@ async function relatedFill(
       .where(eq(entries.id, entryId))
       .limit(1);
     if (!own) return [];
+    const ownHref = hrefFor(locale, own.path ?? "");
 
     const sameCategory = own.categoryId
       ? eq(entries.primaryCategoryId, own.categoryId)
@@ -902,8 +906,13 @@ async function relatedFill(
         ...(own.categoryId ? [desc(sql`(${sameCategory})`)] : []),
         sql`md5(${entries.id}::text || ${entryId})`,
       )
-      .limit(count);
-    return rows.map((row) => mapSummary(row as SummaryRow, locale));
+      // Headroom for the filter below (no noindex page, no strike page on a
+      // page that is not about one: related-filter.ts); the order is kept.
+      .limit(count + RELATED_FILL_HEADROOM);
+    return rows
+      .map((row) => mapSummary(row as SummaryRow, locale))
+      .filter((summary) => relatedFillAllowed(ownHref, summary.href))
+      .slice(0, count);
   });
 }
 
