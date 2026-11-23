@@ -191,6 +191,19 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * "plena huelga indefinida", no call-off); CESM (newest 12-13 Nov, still
  * postponed); CCOO and UGT's national home pages (only the 11N). No new strike
  * for 23 Nov-6 Dec on those lists.
+ *
+ * 23 Nov 2026 (18:05-18:40 CET, Monday): re-read (docs/SEO_EXPERIMENTS.md,
+ * "2026-11-23 — Strikes re-read (Monday)"). No change to any entry here.
+ * Correos: Orden INT/1239/2026 (BOE-A-2026-24259) unchanged; BOE of 23 Nov
+ * (núm. 291): no strike order; Sindicato Libre (newest 17 Nov) and Correos'
+ * press room (newest 20 Nov): no call-off. SMU: notice unchanged ("hasta las
+ * 08:00 horas del sábado 28 de noviembre de 2026"), newest item 19 Nov. Rail:
+ * SEMAF (newest 20 Nov), SCF (SCFCOM 40, 21 Nov), SFF-CGT (newest 18 Nov),
+ * ALFERRO (newest 83/2026), CCOO and the Ministry's rail list (newest 12 Nov):
+ * no new call. Air list unchanged (resolutions to 30 Nov). Basque list: newest
+ * still 17 Nov. CSIF Madrid's calendar unchanged; CESM (newest 23 Nov, not a
+ * strike). The one change of the day is Catalan (the 26N education order,
+ * strikes.ts); the Spain hub prints it through the Catalan entry.
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-23";
 
@@ -199,7 +212,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-23";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-22";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-23";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";

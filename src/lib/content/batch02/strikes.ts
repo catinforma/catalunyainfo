@@ -380,6 +380,37 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * in Catalonia on Treball's list, e-Tauler, the DOGC, the Ministry's lists or
  * the BOE (21 Nov, núm. 290: no strike order; no issue on Sunday 22), nor on
  * TMB, FGC or CCOO, UGT and CGT Catalunya's home pages.
+ *
+ * 23 Nov 2026 (18:05-18:40 CET, Monday): re-read (docs/SEO_EXPERIMENTS.md,
+ * "2026-11-23 — Strikes re-read (Monday)"). One source changed: the 26 Nov
+ * education strike's minimum services are out. Treball's list now opens with
+ * an entry dated 23/11/2026, "Servei essencial que presta el personal
+ * funcionari i laboral docent i no docent, en els centres educatius públics, i
+ * el personal de lleure educatiu a les escoles dins de Catalunya", linking
+ * e-Tauler 660276 (published 23/11/2026, "ACTIU"): Ordre EMT/ /2026, de 23 de
+ * novembre, signed by Miquel Sàmper that day. It names the calls of USTEC,
+ * COS and La Intersindical (registered 13 Nov) and CGT (14 Nov) and sets one
+ * member of the head team per school plus "un docent per cada 3 unitats o
+ * aules" (infant, primary, secondary), 50% at special-needs schools, 33% at
+ * llars d'infants, 50% of lunchtime, kitchen, before-school care, after-school,
+ * camp-house and SEN support staff, and the Tarragona education complex. The
+ * entry's minimum services are now "published" (text, msShort, advice); the
+ * order is cited through Treball's list (e-Tauler withdraws its notices,
+ * 21/12/2026 for this one; not in DOGC núm. 9800 of 23 Nov). Facts added: the
+ * registered calls (from the order) and USTEC·STEs' march on the 26th (its
+ * notice of 23 Nov: columns at 10:30 from Pl. Espanya and El Clot, march at
+ * 12:30 from Pl. Tetuan). The strike stays on (USTEC·STEs, 23 Nov, "Tot el que
+ * cal saber de la vaga del 26N"; CGT Ensenyament's agenda). Nothing else
+ * changed: Metges de Catalunya (newest item 23 Nov, an aid for SISCAT staff;
+ * the home-page counter still counts from data-start="2026-10-28", no end);
+ * SMU's notice unchanged (to 08:00 on Sat 28 Nov), 658823 and 659191 still
+ * "ACTIU", not amended; SEMAF's newest items still 20 Nov; the Ministry's rail
+ * list (newest 12 Nov) and air list unchanged; Renfe's press room feed: one
+ * new item (23 Nov, Gipuzkoa Cercanías timetable, not about the strike);
+ * Rodalies' alterations list: no strike notice (newest 18/11/2026), the
+ * unlisted 23N page still dated 19.11.2026. No new strike for 23 Nov-6 Dec on
+ * Treball's list, e-Tauler, the DOGC (núm. 9800), the BOE (núm. 291) or the
+ * Ministry's lists, nor on CCOO, UGT and CGT Catalunya's home pages.
  */
 export const STRIKES_AS_OF: string = "2026-11-23";
 
@@ -390,7 +421,7 @@ export const STRIKES_AS_OF: string = "2026-11-23";
  * a re-read must not make the page claim one. Typed as string so a test that
  * compares the two never narrows it to `never`.
  */
-export const STRIKES_VERIFIED: string = "2026-11-22";
+export const STRIKES_VERIFIED: string = "2026-11-23";
 
 /** The date a "checked on" line may claim for a page built as of `asOf`: the last re-read, never later than the as-of day. */
 export function checkedOn(asOf: string, verified: string = STRIKES_VERIFIED): string {
@@ -566,6 +597,18 @@ export const STRIKE_URLS = {
   // s'ha celebrat la mediació convocada pel Departament d'Empresa i Treball [...] amb l'objectiu d'intentar evitar la vaga"; the
   // Administration "incapaç de presentar ni una sola proposta".
   ustecMediation26: "https://www.sindicat.net/2026/11/20/educacio-es-presenta-a-la-mediacio-sense-proposta-per-evitar-la-vaga-del-26n/",
+  // 23 Nov 2026 (read that day, ~18:10 CET; e-Tauler API /api/edictes/660276, published 23/11/2026, "ACTIU", and the signed PDF, signed
+  // by Miquel Sàmper on 23/11/2026): Ordre EMT/ /2026, de 23 de novembre, the 26N education minimum services. Calls registered by USTEC,
+  // COS and La Intersindical (13 Nov) and CGT (14 Nov). Art. 1: "Una persona de l'equip directiu per cada centre [...] Per a
+  // l'ensenyament infantil, de primària i secundària: un docent per cada 3 unitats o aules. Per a l'educació especial: 50% de les
+  // plantilles dels centres. Per a les llars d'infants: 33% de les plantilles." b) "50% del personal de monitoratge de menjador, del
+  // servei de cuina, del servei d'acollida, del servei d'extraescolars, de les cases de colònies i del servei d'atenció a l'alumnat amb
+  // necessitats educatives especials". Listed on Treball's page with the date 23/11/2026. e-Tauler until the DOGC numbers it
+  // (not in DOGC núm. 9800 of 23 Nov).
+  ordreEdu26: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=660276",
+  // USTEC·STEs, 23 Nov 2026 (read that day): "Manifestacions a Barcelona 10:30 h · Columnes des de Pl. Espanya i El Clot. 12:30 h ·
+  // Manifestació des de Pl. Tetuan."
+  ustec26All: "https://www.sindicat.net/2026/11/23/tot-el-que-cal-saber-de-la-vaga-del-26n/",
   constitution: "https://www.boe.es/buscar/act.php?id=BOE-A-1978-31229",
   rdl17: "https://www.boe.es/buscar/act.php?id=BOE-A-1977-6061",
   emt201: "https://portaljuridic.gencat.cat/eli/es-ct/o/2024/09/25/emt201/dof/cat/html",
@@ -672,21 +715,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 22 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 23 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 22 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 23 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 22 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 23 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -721,7 +764,7 @@ export const STRIKES: Strike[] = [
     sources: [
       { name: "Ordre EMT/209/2026, de 22 d'octubre: servei essencial d'assistència sanitària dels centres del SISCAT (DOGC núm. 9780, 26/10/2026)", url: U.ordreMetges, publisher: "DOGC" },
       { name: "MC: «Prou d'excuses, Salut pot negociar si vol i fins ara no ha volgut» (28/10/2026)", url: U.metgesStrike, publisher: "Metges de Catalunya" },
-      { name: "Notícies de Metges de Catalunya (consultades el 22/11/2026)", url: U.metgesNews, publisher: "Metges de Catalunya" },
+      { name: "Notícies de Metges de Catalunya (consultades el 23/11/2026)", url: U.metgesNews, publisher: "Metges de Catalunya" },
       { name: "Els sindicats mèdics acorden iniciar la vaga indefinida de facultatius el proper 28 d'octubre (10/09/2026)", url: U.metgesCall, publisher: "Metges de Catalunya" },
     ],
   },
@@ -1146,45 +1189,52 @@ export const STRIKES: Strike[] = [
       ca: [
         `**Convocatòria:** el sindicat docent USTEC·STEs, que la va anunciar el 28 d'octubre de 2026 en ${link(U.ustec26, "el seu comunicat «Aquest novembre, blindem la pública!»")} («El 26N, vaga educativa»), i CGT Ensenyament, que el mateix dia ${link(U.cgtEns26, "crida a preparar")} «la vaga educativa del 26 de novembre».`,
         `**Amb qui:** segons ${link(U.edu26Joint, "la nota de premsa conjunta del 28 d'octubre")}, el calendari de mobilitzacions el marquen USTEC·STEs, la CGT, La Intersindical, la COS i la CNT amb l'Assemblea Educativa de Catalunya, i el 26 de novembre hi consta com a «vaga de les treballadores de l'educació».`,
+        `**Convocatòries registrades:** segons l'ordre de serveis mínims del 23 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}), USTEC, la COS i La Intersindical van registrar la convocatòria de vaga el 13 de novembre i la CGT, el 14.`,
         `**Dia i hores:** dijous 26 de novembre de 2026, dia lectiu, a tot Catalunya, «de les 00:00 hores i fins les 24:00 hores», cada treballador durant la seva jornada, segons ${link(U.cgtEns26Notice, "el preavís de vaga de la CGT")} que CGT Ensenyament va publicar el 18 de novembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}).`,
         "**Qui hi està cridat:** segons aquest preavís, el personal docent i no docent dels centres educatius públics (també cuina, neteja i administració), les escoles bressol, els EAP i els CREDA, i el personal de lleure, menjador, acollida, extraescolars i transport escolar de les escoles públiques, privades i concertades.",
         `**Mediació, sense acord:** el matí del dijous 19 de novembre, el Departament d'Empresa i Treball va reunir el Departament d'Educació i els sindicats convocants en una mediació «amb l'objectiu d'intentar evitar la vaga». Segons ${link(U.ustecMediation26, "USTEC·STEs, el 20 de novembre")}, Educació s'hi va mostrar «incapaç de presentar ni una sola proposta», i la vaga continua convocada.`,
         `**El dissabte 21 de novembre** hi havia convocada una manifestació de la comunitat educativa a Barcelona, a les 12 h a la plaça d'Urquinaona: «Fem una crida a omplir els carrers de Barcelona el dissabte 21 de novembre, a les 12 h, a la plaça d'Urquinaona», segons ${link(U.ustec21n, "el manifest unitari que USTEC·STEs va publicar el 17 de novembre")}.`,
+        `**Manifestació el dia 26:** a Barcelona, columnes a les 10.30 h des de la plaça d'Espanya i des del Clot i manifestació a les 12.30 h des de la plaça de Tetuan, segons ${link(U.ustec26All, "USTEC·STEs, el 23 de novembre")}.`,
       ],
       es: [
         `**Convocatoria:** el sindicato docente USTEC·STEs, que la anunció el 28 de octubre de 2026 en ${link(U.ustec26, "su comunicado «Aquest novembre, blindem la pública!»")} («El 26N, vaga educativa»), y CGT Ensenyament, que ese mismo día ${link(U.cgtEns26, "llama a preparar")} «la vaga educativa del 26 de novembre».`,
         `**Con quién:** según ${link(U.edu26Joint, "la nota de prensa conjunta del 28 de octubre")}, el calendario de movilizaciones lo marcan USTEC·STEs, la CGT, La Intersindical, la COS y la CNT con la Assemblea Educativa de Catalunya, y el 26 de noviembre figura en él como «vaga de les treballadores de l'educació» (huelga de las trabajadoras de la educación).`,
+        `**Convocatorias registradas:** según la orden de servicios mínimos del 23 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}), USTEC, la COS y La Intersindical registraron la convocatoria de huelga el 13 de noviembre y la CGT, el 14.`,
         `**Día y horas:** jueves 26 de noviembre de 2026, día lectivo, en toda Cataluña, «de les 00:00 hores i fins les 24:00 hores» (de 0.00 a 24.00 h), cada trabajador durante su jornada, según ${link(U.cgtEns26Notice, "el preaviso de huelga de la CGT")} que CGT Ensenyament publicó el 18 de noviembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}).`,
         "**A quién llama:** según ese preaviso, al personal docente y no docente de los centros educativos públicos (también cocina, limpieza y administración), las escuelas infantiles (escoles bressol), los EAP y los CREDA, y al personal de ocio, comedor, acogida, extraescolares y transporte escolar de las escuelas públicas, privadas y concertadas.",
         `**Mediación, sin acuerdo:** la mañana del jueves 19 de noviembre, el Departament d'Empresa i Treball reunió al Departament d'Educació y a los sindicatos convocantes en una mediación «amb l'objectiu d'intentar evitar la vaga» (con el objetivo de intentar evitar la huelga). Según ${link(U.ustecMediation26, "USTEC·STEs, el 20 de noviembre")}, Educació se mostró «incapaç de presentar ni una sola proposta» (incapaz de presentar una sola propuesta), y la huelga sigue convocada.`,
         `**El sábado 21 de noviembre** estaba convocada una manifestación de la comunidad educativa en Barcelona, a las 12 h en la plaza Urquinaona: «Fem una crida a omplir els carrers de Barcelona el dissabte 21 de novembre, a les 12 h, a la plaça d'Urquinaona», según ${link(U.ustec21n, "el manifiesto unitario que USTEC·STEs publicó el 17 de noviembre")}.`,
+        `**Manifestación el día 26:** en Barcelona, columnas a las 10.30 h desde la plaza de España y desde El Clot y manifestación a las 12.30 h desde la plaza de Tetuán, según ${link(U.ustec26All, "USTEC·STEs, el 23 de noviembre")}.`,
       ],
       en: [
         `**Called by:** the teachers' union USTEC·STEs, which announced it on 28 October 2026 in ${link(U.ustec26, "its statement \"Aquest novembre, blindem la pública!\"")} ("El 26N, vaga educativa"), and CGT Ensenyament, which on the same day ${link(U.cgtEns26, "called on staff to prepare")} "la vaga educativa del 26 de novembre".`,
         `**With whom:** according to ${link(U.edu26Joint, "the joint press release of 28 October")}, the calendar of protests is set by USTEC·STEs, CGT, La Intersindical, COS and CNT together with the Assemblea Educativa de Catalunya, and it lists 26 November as a "vaga de les treballadores de l'educació" (a strike of education workers).`,
+        `**Calls registered:** according to the minimum-services order of 23 November (${link(U.treballMs, "the Department of Business and Labour's list")}), USTEC, COS and La Intersindical registered their strike calls on 13 November and CGT on the 14th.`,
         `**Day and hours:** Thursday 26 November 2026, a school day, across Catalonia, "de les 00:00 hores i fins les 24:00 hores" (midnight to midnight), each worker during their own working day, according to ${link(U.cgtEns26Notice, "CGT's strike notice")}, which CGT Ensenyament published on 18 November (${link(U.cgtEns26Call, "\"us convoquem a la vaga\"")}, we call you out on strike).`,
         "**Who is called out:** according to that notice, teaching and non-teaching staff at state schools (kitchen, cleaning and office staff included), nursery schools (escoles bressol), the EAP and CREDA support teams, and the leisure, lunchtime, before- and after-school care, after-school activities and school-transport staff of state, private and concertada (state-funded private) schools.",
         `**Mediation, no agreement:** on the morning of Thursday 19 November, the Department of Business and Labour brought the Education Department and the unions calling the strike together for mediation "amb l'objectiu d'intentar evitar la vaga" (to try to avoid the strike). According to ${link(U.ustecMediation26, "USTEC·STEs on 20 November")}, the Education Department proved "incapaç de presentar ni una sola proposta" (unable to put forward a single proposal), and the strike is still on.`,
         `**On Saturday 21 November** a demonstration of the school community had been called in Barcelona, at 12 noon in Plaça d'Urquinaona: "Fem una crida a omplir els carrers de Barcelona el dissabte 21 de novembre, a les 12 h, a la plaça d'Urquinaona" (we call on everyone to fill the streets of Barcelona on Saturday 21 November at 12 noon in Plaça d'Urquinaona), according to ${link(U.ustec21n, "the unitary manifesto USTEC·STEs published on 17 November")}.`,
+        `**March on the day:** in Barcelona, feeder marches at 10:30 from Plaça d'Espanya and from El Clot, then a demonstration at 12:30 from Plaça de Tetuan, according to ${link(U.ustec26All, "USTEC·STEs on 23 November")}.`,
       ],
     },
     minimumServices: {
-      status: "pending",
+      // 23 Nov 2026: the order is out (e-Tauler 660276, signed and published that day; listed on Treball's page with the date 23/11/2026).
+      status: "published",
       msShort: {
-        ca: "Serveis mínims encara no publicats",
-        es: "Servicios mínimos aún no publicados",
-        en: "Minimum services not published yet",
+        ca: "Serveis mínims: una persona de la direcció i un docent per cada 3 aules",
+        es: "Servicios mínimos: una persona de la dirección y un docente por cada 3 aulas",
+        en: "Minimum services: one head-team member and one teacher per 3 classes",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 22 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 22 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 22 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
+        ca: `Els fixa l'ordre del Departament d'Empresa i Treball del 23 de novembre de 2026, a ${link(U.treballMs, "la llista de vagues amb serveis mínims")}. A cada centre educatiu públic, una persona de l'equip directiu (direcció, coordinació pedagògica, cap d'estudis o secretaria; a les llars d'infants, un membre del claustre) i, a més, a infantil, primària i secundària, «un docent per cada 3 unitats o aules»; a l'educació especial, el 50% de la plantilla, i a les llars d'infants, el 33%. Al lleure educatiu, el 50% del personal de monitoratge de menjador, de cuina, d'acollida, d'extraescolars, de les cases de colònies i d'atenció a l'alumnat amb necessitats educatives especials. Al complex educatiu de Tarragona, el 50% del personal de menjador i cuina, una persona de manteniment per torn i el servei habitual d'infermeria, de vigilància i del torn de nit dels tutors. La direcció de cada centre, un cop escoltat el comitè de vaga, designa qui fa els serveis mínims i li ho ha de comunicar formalment.`,
+        es: `Los fija la orden del Departament d'Empresa i Treball del 23 de noviembre de 2026, en ${link(U.treballMs, "la lista de huelgas con servicios mínimos")}. En cada centro educativo público, una persona del equipo directivo (dirección, coordinación pedagógica, jefatura de estudios o secretaría; en las escuelas infantiles, un miembro del claustro) y, además, en infantil, primaria y secundaria, «un docent per cada 3 unitats o aules» (un docente por cada 3 unidades o aulas); en educación especial, el 50% de la plantilla, y en las escuelas infantiles (llars d'infants), el 33%. En el ocio educativo, el 50% del personal de monitores de comedor, de cocina, de acogida, de extraescolares, de las casas de colonias y de atención al alumnado con necesidades educativas especiales. En el complejo educativo de Tarragona, el 50% del personal de comedor y cocina, una persona de mantenimiento por turno y el servicio habitual de enfermería, de vigilancia y del turno de noche de los tutores. La dirección de cada centro, tras escuchar al comité de huelga, designa quién hace los servicios mínimos y debe comunicárselo formalmente.`,
+        en: `They are set by the Department of Business and Labour's order of 23 November 2026, on ${link(U.treballMs, "the list of strikes with minimum services")}. At each state school, one member of the head team (head teacher, head of studies, curriculum coordinator or school secretary; at nursery schools, one member of the teaching staff) plus, in infant, primary and secondary schools, "un docent per cada 3 unitats o aules" (one teacher for every 3 classes or classrooms); at special-needs schools, 50% of the staff, and at nursery schools (llars d'infants), 33%. In school leisure services, 50% of lunchtime monitors, kitchen, before-school care, after-school activities, school camp houses and support staff for pupils with special educational needs. At the Tarragona education complex, 50% of dining and kitchen staff, one maintenance worker per shift and the usual nursing, supervision and night-shift tutor service. Each school's management, after hearing the strike committee, names who covers the minimum services and must tell them formally.`,
       },
     },
     advice: {
-      ca: ["Famílies: l'escola no tanca, però alguns docents poden fer vaga. Quan surti l'ordre de serveis mínims, l'escola us dirà què pot garantir aquell dia."],
-      es: ["Familias: la escuela no cierra, pero algunos docentes pueden hacer huelga. Cuando salga la orden de servicios mínimos, la escuela os dirá qué puede garantizar ese día."],
-      en: ["Parents: schools do not close, but some teachers may strike. Once the minimum-services order is out, your school will tell you what it can provide that day."],
+      ca: ["Famílies: l'escola no tanca, però part del personal pot fer vaga. Amb els serveis mínims (una persona de la direcció i un docent per cada 3 aules, i la meitat del personal de menjador i d'acollida), pregunteu a l'escola què pot garantir aquell dia."],
+      es: ["Familias: la escuela no cierra, pero parte del personal puede hacer huelga. Con los servicios mínimos (una persona de la dirección y un docente por cada 3 aulas, y la mitad del personal de comedor y de acogida), preguntad en la escuela qué puede garantizar ese día."],
+      en: ["Parents: schools do not close, but some staff may strike. With the minimum services (one member of the head team and one teacher per 3 classes, and half the lunchtime and before-school care staff), ask your school what it can provide that day."],
     },
     sources: [
       { name: "Aquest novembre, blindem la pública! (28/10/2026)", url: U.ustec26, publisher: "USTEC·STEs" },
@@ -1194,6 +1244,8 @@ export const STRIKES: Strike[] = [
       { name: "Vaga educativa – 26 de novembre (18/11/2026)", url: U.cgtEns26Call, publisher: "CGT Ensenyament" },
       { name: "Preavís de vaga de la CGT per al 26 de novembre de 2026, adreçat al Departament d'Empresa i Treball (PDF)", url: U.cgtEns26Notice, publisher: "CGT Ensenyament" },
       { name: "Educació es presenta a la mediació sense proposta per evitar la vaga del 26N (20/11/2026)", url: U.ustecMediation26, publisher: "USTEC·STEs" },
+      { name: "Informació de vagues amb serveis mínims: ordre del 23 de novembre de 2026, personal docent i no docent dels centres educatius públics i personal de lleure educatiu a les escoles (vaga del 26 de novembre)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+      { name: "Tot el que cal saber de la vaga del 26N (23/11/2026)", url: U.ustec26All, publisher: "USTEC·STEs" },
     ],
     guide: "strikeEducation",
   },
@@ -1242,6 +1294,8 @@ export const STRIKES_CALLED_OFF: CalledOffStrike[] = [
     // (Rodalies' alterations list does not carry its 23N page, which still showed the strike, updated 19.11.2026).
     // 21 Nov 2026 (re-read): still no notice on Rodalies' alterations list, the unlisted 23N page unchanged (19.11.2026), 659191 still
     // "ACTIU" and not amended; SEMAF's newest item (20 Nov) calls an online assembly on the 23rd about the call-off.
+    // 23 Nov 2026 (re-read, ~18:10 CET, the day itself): still no Renfe or Rodalies notice about the call-off (Renfe's feed: one new item, Gipuzkoa
+    // Cercanías, 23 Nov; Rodalies' alterations list newest 18/11/2026; the unlisted 23N page still 19.11.2026); 659191 still "ACTIU".
     // 22 Nov 2026 (re-read, 13:20-13:40 CET): the same. Renfe's press room news feed (grupo.renfe.com, readable today): newest item 17 Nov,
     // nothing about the 23rd; Rodalies' alterations list: no strike notice (newest 18/11/2026); the unlisted 23N page unchanged (19.11.2026).
     id: "vaga-renfe-2026-11-23-desconvocada",
@@ -1254,9 +1308,9 @@ export const STRIKES_CALLED_OFF: CalledOffStrike[] = [
       en: "The Renfe Group train drivers' strike (SEMAF) on Monday 23 November is called off",
     },
     text: {
-      ca: `El sindicat de maquinistes SEMAF ho va anunciar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», segons ${link(U.semaf38, "el seu comunicat 2026-38")}, que en ${link(U.semaf39, "el comunicat 2026-39")} qualifica d'«Acuerdo de fin de huelga». Sense vaga no hi ha serveis mínims: Rodalies, els regionals i la resta de trens de Renfe circulen amb l'horari habitual, llevat que Renfe avisi del contrari. El 22 de novembre Renfe i Rodalies encara no havien publicat cap avís sobre la decisió de SEMAF: abans de viatjar, mira ${link(U.rodaliesStatus, "l'estat del servei")}.`,
-      es: `El sindicato de maquinistas SEMAF lo anunció el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», según ${link(U.semaf38, "su comunicado 2026-38")}, que en ${link(U.semaf39, "el comunicado 2026-39")} califica de «Acuerdo de fin de huelga». Sin huelga no hay servicios mínimos: Rodalies, los regionales y el resto de trenes de Renfe circulan con su horario habitual, salvo que Renfe avise de lo contrario. El 22 de noviembre Renfe y Rodalies aún no habían publicado ningún aviso sobre la decisión de SEMAF: antes de viajar, mira ${link(U.rodaliesStatus, "el estado del servicio")}.`,
-      en: `The train drivers' union SEMAF announced it on 20 November: "SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo" (SEMAF has called off the strike day planned for 23 November after reaching an agreement), according to ${link(U.semaf38, "its notice 2026-38")}; ${link(U.semaf39, "notice 2026-39")} calls it an "Acuerdo de fin de huelga" (an agreement ending the strike). With no strike there are no minimum services: Rodalies, regional trains and the rest of Renfe's trains run to their usual timetable unless Renfe says otherwise. On 22 November neither Renfe nor Rodalies had yet published a notice about SEMAF's decision: before you travel, check ${link(U.rodaliesStatus, "the live service status")}.`,
+      ca: `El sindicat de maquinistes SEMAF ho va anunciar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», segons ${link(U.semaf38, "el seu comunicat 2026-38")}, que en ${link(U.semaf39, "el comunicat 2026-39")} qualifica d'«Acuerdo de fin de huelga». Sense vaga no hi ha serveis mínims: Rodalies, els regionals i la resta de trens de Renfe circulen amb l'horari habitual, llevat que Renfe avisi del contrari. El 23 de novembre Renfe i Rodalies encara no havien publicat cap avís sobre la decisió de SEMAF: abans de viatjar, mira ${link(U.rodaliesStatus, "l'estat del servei")}.`,
+      es: `El sindicato de maquinistas SEMAF lo anunció el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», según ${link(U.semaf38, "su comunicado 2026-38")}, que en ${link(U.semaf39, "el comunicado 2026-39")} califica de «Acuerdo de fin de huelga». Sin huelga no hay servicios mínimos: Rodalies, los regionales y el resto de trenes de Renfe circulan con su horario habitual, salvo que Renfe avise de lo contrario. El 23 de noviembre Renfe y Rodalies aún no habían publicado ningún aviso sobre la decisión de SEMAF: antes de viajar, mira ${link(U.rodaliesStatus, "el estado del servicio")}.`,
+      en: `The train drivers' union SEMAF announced it on 20 November: "SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo" (SEMAF has called off the strike day planned for 23 November after reaching an agreement), according to ${link(U.semaf38, "its notice 2026-38")}; ${link(U.semaf39, "notice 2026-39")} calls it an "Acuerdo de fin de huelga" (an agreement ending the strike). With no strike there are no minimum services: Rodalies, regional trains and the rest of Renfe's trains run to their usual timetable unless Renfe says otherwise. On 23 November neither Renfe nor Rodalies had yet published a notice about SEMAF's decision: before you travel, check ${link(U.rodaliesStatus, "the live service status")}.`,
     },
     heading: {
       ca: "Dilluns 23 de novembre: vaga de Renfe desconvocada",

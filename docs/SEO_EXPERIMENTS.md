@@ -11766,3 +11766,91 @@ first: Lleida, Sabadell, Terrassa, Sant Cugat…; then Madrid, Sevilla, Valencia
 pages read and quoted; rebuild the DGT snapshot.
 
 **Outcome:** _pending_
+
+## 2026-11-23 — Strikes re-read (Monday): the 26N education minimum services are out (factual correction on the 26N pages and the education guide, es + ca + en); nothing else changed; no new strike to 6 Dec (deploy; group `strikes`, which also republishes `huelgas-espana` and `huelga-23-26n` pages)
+
+**Why (factual, not an experiment).** The 00:05 timer moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 2026-11-23 with
+VERIFIED pinned to the 22nd; every strike on the site was re-read on its official source today and both VERIFIED constants are
+now 2026-11-23. One source changed: the Generalitat's minimum-services order for the 26 Nov education strike, which every 26N
+page and the education guide printed as "pending". **This factual correction overrides the 19 Nov measurement window of the
+26N pages** (descriptions and lead template changed; titles, seoTitles, H1s and URLs not touched). The education guide's
+description is built from the entry's `msShort`, so it changes with it. No baseline (factual change).
+
+**Sources re-read 23 Nov 2026, 18:05–18:40 CET** (curl with a browser UA; downloads kept outside the repo, read with `python3 -I`).
+- **Education, Thu 26 Nov (Catalonia): minimum services published; strike still on.** Treball's list
+  (`https://treball.gencat.cat/ca/ambits/relacions_laborals/vagues/serveis-minims/`): newest entry dated **23/11/2026**, «Servei
+  essencial que presta el personal funcionari i laboral docent i no docent, en els centres educatius públics, i el personal de
+  lleure educatiu a les escoles dins de Catalunya», linking e-Tauler 660276. e-Tauler (`/api/edictes/660276?ens=1`): «Ordre EMT/
+  /2026, de 23 de novembre, per la qual es garanteix el servei essencial […]», published 23/11/2026, ACTIU, withdrawal
+  21/12/2026; the signed PDF (via `/api/documents/<uuid>/info?ens=1`), «Doc.original signat per: Miquel Sàmper Rodríguez
+  23/11/2026». It names the calls: USTEC (registered 13 Nov, «de 0.00 a 24.00 hores»), COS (13 Nov, «de 0.00 a 23.59 hores»), La
+  Intersindical (13 Nov, 0.00–23.59) and CGT (14 Nov, 0.00–24.00). Article 1: «a) Centres educatius: Una persona de l'equip
+  directiu per cada centre. […] En el cas de les llars d'infants, un membre del claustre. A més de les persones esmentades: Per a
+  l'ensenyament infantil, de primària i secundària: un docent per cada 3 unitats o aules. Per a l'educació especial: 50% de les
+  plantilles dels centres. Per a les llars d'infants: 33% de les plantilles. Per al complex educatiu de Tarragona: 50% del
+  personal de menjador i cuina, una persona de manteniment per torn i manteniment del servei habitual en infermeria, vigilància
+  i el torn de nit dels tutors. b) 50% del personal de monitoratge de menjador, del servei de cuina, del servei d'acollida, del
+  servei d'extraescolars, de les cases de colònies i del servei d'atenció a l'alumnat amb necessitats educatives especials»;
+  Article 2: the school's management, «un cop escoltat el Comitè de Vaga», names the staff and gives them «una comunicació formal i
+  efectiva de la designació». Not yet in the DOGC (núm. 9800, Monday 23 Nov: no strike order). USTEC·STEs
+  (`https://www.sindicat.net/2026/11/23/tot-el-que-cal-saber-de-la-vaga-del-26n/`, 23/11/26): the strike stays on; «Manifestacions
+  a Barcelona 10:30 h · Columnes des de Pl. Espanya i El Clot. 12:30 h · Manifestació des de Pl. Tetuan.» CGT Ensenyament
+  (`https://www.cgtensenyament.cat/`): agenda «nov. 26 Tot el dia Vaga educativa». No call-off.
+- **Correos, 23–27 Nov (Madrid) and 23–25 Nov (five Andalusian provinces): stands.** Orden INT/1239/2026
+  (`https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259`) unchanged («días 23 a 27 de noviembre de 2026 en Madrid y de 23 a
+  25 de noviembre de 2026 en Cádiz, Córdoba, Huelva, Málaga y Sevilla»). BOE of 23 Nov (núm. 291): no strike order. Sindicato
+  Libre (`/comunicados/`, newest 17 Nov) and Correos' press room (newest 20 Nov): no call-off, no agreement.
+- **Doctors: both stand.** SMU's notice (`https://cdn.medicosunidos.es/huelga-2026-16N/Preavisos/_ESTATAL.pdf`) unchanged: «hasta
+  las 08:00 horas del sábado 28 de noviembre de 2026»; `https://medicosunidos.es/actualidad/` newest 19/11/2026; e-Tauler 658823
+  (the Generalitat's order) ACTIU, not amended. Metges de Catalunya: newest news item 23 Nov («Es recupera l'ajut econòmic per als
+  professionals del SISCAT amb fills amb discapacitat», not about the strike); the home page's counter is still
+  `data-start="2026-10-28"` «dies en Vaga indefinida», no end date.
+- **Renfe / Adif: nothing new called; the 23rd stays called off.** SEMAF (`/informaciones/`): newest items still 20/11/2026.
+  Ministry of Transport's rail list: newest still the resolution of 12 Nov. SCF (SCFCOM 40, 21 Nov), SFF-CGT (newest 18/11),
+  ALFERRO (newest 83/2026), CCOO rail: no strike. e-Tauler 659191 still ACTIU. Renfe's press room feed: one new item (23 Nov,
+  «Renfe amplía los servicios de Cercanías en Gipuzkoa hasta recuperar la normalidad», a timetable change from 26 Nov), nothing
+  about the 23rd. Rodalies' alterations list: no strike notice (newest 18/11/2026); the unlisted 23N page still «Data
+  d'actualització: 19.11.2026». So "Renfe and Rodalies had not yet published a notice" holds on the 23rd.
+- **New strikes, 23 Nov–6 Dec: none found** on Treball's list, e-Tauler (newest 200 edicts, 16–23 Nov: the only Treball/Vagues
+  edicts are 660276, 659191 and 658922), the DOGC (núm. 9800), the BOE (núm. 291), the Ministry's rail and air lists (air: newest
+  still the 17N ones; SAERCO, Groundforce, Outsmart to 30 Nov), the Basque Government's list (newest still 17 Nov), CESM (newest
+  23 Nov, primary care, no strike), CSIF Madrid (calendar unchanged: «24, 26 y 30 de noviembre de 2026 y 1, 10, 11, 16 y 18 de
+  diciembre de 2026»), CCOO Madrid (newest 17 Nov), CCOO/UGT/CGT Catalunya and CCOO/UGT national home pages. TMB's notices and
+  FGC's home page carry no strike text.
+
+**What changed.**
+- `strikes.ts`, entry `vaga-educacio-2026-11-26` (ca/es/en): `minimumServices` → `published`; `text` from the order's Articles 1–2
+  (quoting «un docent per cada 3 unitats o aules»), `msShort` «Serveis mínims: una persona de la direcció i un docent per cada 3
+  aules» / «Servicios mínimos: una persona de la dirección y un docente por cada 3 aulas» / "Minimum services: one head-team member
+  and one teacher per 3 classes" (short so the guide's 155-character description keeps it); `advice` gives the figures instead of
+  "once the order is out". Two facts added: «Convocatòries registrades» (from the order: USTEC, COS, La Intersindical 13 Nov; CGT
+  14 Nov) and the march on the 26th (USTEC·STEs, 23 Nov). Sources: the order, cited through Treball's list (e-Tauler withdraws its
+  notices; the hub test forbids e-Tauler links in sources; the e-Tauler URL is kept as `STRIKE_URLS.ordreEdu26` with the quote),
+  and USTEC·STEs' 23 Nov notice. `STRIKES_VERIFIED` 2026-11-23; dated sentences moved to the 23rd (Metges de Catalunya + its source
+  name, the 23N call-off line); the 26N "consultat el …" sentence is gone with the pending text.
+- `strike-days-2326n.ts`, the 26N page (ca/es/en): descriptions before/eve/today now «(mínims: un docent per cada 3 aules)»
+  instead of «(serveis mínims, pendents)» (136–150 characters); lead: the order's figures, and "called by USTEC·STEs, CGT, COS and
+  La Intersindical" (the four calls the order lists; the joint calendar's CNT registered none); the "Is there school?" paragraph,
+  the table's minimum-services column and two FAQ answers give the order's figures; the FAQ "Is there an education strike…?"
+  says who registered the call and when. Titles, seoTitles and URLs unchanged.
+- `strikes-spain-data.ts`: no entry changed; `STRIKES_SPAIN_VERIFIED` 2026-11-23. Header comment logs the re-read.
+- Tests: `strikes-hub.test.ts` ("known answers … 26 November education strike") now pins `published`, the order's words and
+  figures and the two new sources instead of `pending` and the 8 Sept precedent; `strike-guides.test.ts` ("the education
+  guide…") allowed "registered" only with the order's dates (it had forbidden it while no source said so).
+
+**Left as written, for the next editor.** (1) The guides' generic "Quan surtin els serveis mínims o canviï la convocatòria, ho
+veuràs aquí" line (both guides, status-independent). (2) The entry's title and `short` still name only "USTEC·STEs, CGT" (titles
+and descriptions measured since 19 Nov; the facts now name all four registered calls). (3) Once the DOGC numbers the order, cite it
+by its ELI as for Ordres EMT/209 and 210. (4) The airport resolutions end on 30 Nov: check the air list on 30 Nov / 1 Dec.
+
+**Go-live.** Deploy (or let the 00:05 timer deploy main once this is merged), then publish `strikes` (hub, Renfe and education
+guides, Spain hub, 17N/19N/20N/23N/26N pages) — today, the 26N pages and the education guide are the top traffic. IndexNow:
+`/ca/guies/vaga-26-novembre/ /es/guias/huelga-26-noviembre/ /en/guides/spain-strike-26-november/ /ca/guies/vaga-educacio-novembre/
+/es/guias/huelga-educacion-noviembre/ /en/guides/catalonia-teachers-strike-november/ /ca/guies/vaga-avui-catalunya/
+/es/guias/huelga-hoy-cataluna/ /en/guides/strike-barcelona-catalonia-today/ /ca/guies/vagues-espanya/ /es/guias/huelgas-espana/
+/en/guides/strikes-spain/ /ca/guies/vaga-23-novembre/ /es/guias/huelga-23-noviembre/ /en/guides/spain-strike-23-november/`.
+
+**Next re-read.** Tuesday 24 Nov: the 26N order in the DOGC, any call-off or agreement (USTEC·STEs, CGT Ensenyament, Treball's
+list), Correos and SMU; then daily to the 27th (SMU's first phase ends 08:00 Sat 28 Nov).
+
+**Outcome:** _factual re-check and correction, no review_
