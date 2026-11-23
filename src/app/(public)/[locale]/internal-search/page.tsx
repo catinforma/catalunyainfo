@@ -74,7 +74,6 @@ export default async function SearchPage({
         locale={locale}
         translations={translations}
         activeSection="search"
-        showSearch={false}
       />
 
       <main id="main" className="ci-shell py-10">

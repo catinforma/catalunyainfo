@@ -7,7 +7,6 @@ import { nonEmptySections } from "@/lib/content/repository";
 import { MENU_BUTTON_LABEL, MORE_LABEL, moreItems, primaryItems } from "@/lib/nav/menu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { NewsAlerts } from "./NewsAlerts";
-import { SearchBox } from "./SearchBox";
 import { Wordmark } from "@/components/Wordmark";
 import { MenuDisclosure } from "@/components/nav/MenuDisclosure";
 import { ShareIcon } from "@/components/share/icons";
@@ -47,13 +46,10 @@ export async function SiteHeader({
   locale,
   translations,
   activeSection,
-  /** Hides the header search on the homepage, where the hero already has one. */
-  showSearch = true,
 }: {
   locale: Locale;
   translations: Partial<Record<Locale, string>>;
   activeSection?: SectionKey | null;
-  showSearch?: boolean;
 }) {
   const t = getMessages(locale);
   const filled = await nonEmptySections(locale, PRIMARY);
@@ -118,11 +114,6 @@ export async function SiteHeader({
           {/* shrink-0: on a narrow phone the wordmark gives way (globals.css,
               .ci-wordmark), never the language links or the menu button. */}
           <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:ml-0">
-            {showSearch ? (
-              <div className="hidden xl:block">
-                <SearchBox locale={locale} />
-              </div>
-            ) : null}
             <LanguageSwitcher
               locale={locale}
               translations={translations}

@@ -95,7 +95,7 @@ export default async function HomePage({
 
   return (
     <>
-      <SiteHeader locale={locale} translations={homeTranslations()} showSearch={false} />
+      <SiteHeader locale={locale} translations={homeTranslations()} />
 
       <main id="main">
         {/* The hero opens with the question, not with a stock photograph.
