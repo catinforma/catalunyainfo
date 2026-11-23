@@ -149,7 +149,7 @@ const COPY: Record<Locale, T> = {
     fares: [
       "El bitllet inclou el **Telefèric Coma del Clot**, l'entrada a la **basílica**, les exposicions i una audioguia. Els gossos viatgen gratis, lligats i amb morrió (a la taquilla en venen per 5 €).",
       "Si hi pujaràs sovint, hi ha un **abonament de temporada** de 104 € (a partir de 14 anys) i 66 € (de 4 a 13 anys), vàlid un any des del dia de la compra.",
-      "Per a l'hivern, FGC ja ha publicat l'abonament de temporada del cremallera, vàlid de l'1 de desembre del 2026 al 30 d'abril del 2027: 62,50 € adults i 39,50 € infants. Els bitllets senzills d'hivern i els forfets d'esquí de la temporada 2026-2027 encara no eren públics el 28 d'octubre.",
+      "Per a l'hivern, FGC ja ha publicat l'abonament de temporada del cremallera, vàlid de l'1 de desembre del 2026 al 30 d'abril del 2027: 62,50 € adults i 39,50 € infants. El 23 de novembre, la pàgina de tarifes de la Vall de Núria ja venia els forfets de temporada 2026-2027: el **Ripollès** (Vallter i Vall de Núria), a **387 €** fins al 8 de desembre i 455 € després, i el **Pirineu365**, per a les sis estacions d'FGC, a 730 € (adults de 25 a 64 anys). El forfet de dia hi surt a 23,50 € i el de dia amb cremallera, a 41 € (adults de 14 a 64 anys), sense dir de quina temporada són.",
     ],
     getTitle: "Com arribar a Núria des de Barcelona",
     get: [
@@ -186,7 +186,7 @@ const COPY: Record<Locale, T> = {
       { question: "Què inclou el bitllet TreNatura?", answer: "El tren de Rodalies d'anada i tornada des de qualsevol estació fins a Ribes de Freser i el cremallera fins a Núria. Costa 40,20 € adults i 30,70 € infants." },
       { question: "El cremallera funciona al novembre?", answer: "El calendari de l'estació per al novembre del 2026 marca tancats els dies feiners i oberts els caps de setmana. Comprova-ho a FGC abans d'anar-hi." },
       { question: "El cremallera de Núria és gratis per a algú?", answer: "Per als infants de 0 a 3 anys, que no paguen, i per als gossos, que viatgen gratis lligats i amb morrió. Els altres paguen la tarifa: 34 € anada i tornada des de Ribes per a un adult." },
-      { question: "Quant costa el forfet d'esquí de Vall de Núria?", answer: "El 28 d'octubre FGC encara no havia publicat els forfets de la temporada 2026-2027. Sí que hi havia l'abonament d'hivern del cremallera: 62,50 € adults i 39,50 € infants, de l'1 de desembre del 2026 al 30 d'abril del 2027." },
+      { question: "Quant costa el forfet d'esquí de Vall de Núria?", answer: "Segons la pàgina de tarifes de la Vall de Núria (consultada el 23 de novembre de 2026), el forfet de temporada Ripollès 2026-2027, vàlid també a Vallter, costa 387 € fins al 8 de desembre i 455 € després; el de dia, 23,50 €, i el de dia amb cremallera, 41 € per a adults, sense indicar la temporada. També hi ha l'abonament d'hivern del cremallera: 62,50 € adults i 39,50 € infants, de l'1 de desembre del 2026 al 30 d'abril del 2027." },
     ],
   },
   es: {
@@ -216,7 +216,7 @@ const COPY: Record<Locale, T> = {
     fares: [
       "El billete incluye el **Telefèric Coma del Clot**, la entrada a la **basílica**, las exposiciones y una audioguía. Los perros viajan gratis, atados y con bozal (en la taquilla venden bozales por 5 €).",
       "Si vas a subir a menudo, hay un **abono de temporada** de 104 € (a partir de 14 años) y 66 € (de 4 a 13 años), válido un año desde el día de la compra.",
-      "Para el invierno, FGC ya ha publicado el abono de temporada del cremallera, válido del 1 de diciembre de 2026 al 30 de abril de 2027: 62,50 € adultos y 39,50 € niños. Los billetes sencillos de invierno y los forfaits de esquí de la temporada 2026-2027 aún no eran públicos el 28 de octubre.",
+      "Para el invierno, FGC ya ha publicado el abono de temporada del cremallera, válido del 1 de diciembre de 2026 al 30 de abril de 2027: 62,50 € adultos y 39,50 € niños. El 23 de noviembre, la página de tarifas de la Vall de Núria ya vendía los forfaits de temporada 2026-2027: el **Ripollès** (Vallter y Vall de Núria), a **387 €** hasta el 8 de diciembre y 455 € después, y el **Pirineu365**, para las seis estaciones de FGC, a 730 € (adultos de 25 a 64 años). El forfait de día aparece a 23,50 € y el de día con cremallera, a 41 € (adultos de 14 a 64 años), sin decir de qué temporada son.",
     ],
     getTitle: "Cómo llegar a Núria desde Barcelona",
     get: [
@@ -253,7 +253,7 @@ const COPY: Record<Locale, T> = {
       { question: "¿Qué incluye el billete TreNatura?", answer: "El tren de Rodalies de ida y vuelta desde cualquier estación hasta Ribes de Freser y el cremallera hasta Núria. Cuesta 40,20 € adultos y 30,70 € niños." },
       { question: "¿Funciona el cremallera en noviembre?", answer: "El calendario de la estación para noviembre de 2026 marca cerrados los días laborables y abiertos los fines de semana. Compruébalo en FGC antes de ir." },
       { question: "¿Es gratis el cremallera de Núria para alguien?", answer: "Para los niños de 0 a 3 años, que no pagan, y para los perros, que viajan gratis atados y con bozal. Los demás pagan la tarifa: 34 € ida y vuelta desde Ribes para un adulto." },
-      { question: "¿Cuánto cuesta el forfait de Vall de Núria?", answer: "El 28 de octubre FGC aún no había publicado los forfaits de la temporada 2026-2027. Sí estaba el abono de invierno del cremallera: 62,50 € adultos y 39,50 € niños, del 1 de diciembre de 2026 al 30 de abril de 2027." },
+      { question: "¿Cuánto cuesta el forfait de Vall de Núria?", answer: "Según la página de tarifas de la Vall de Núria (consultada el 23 de noviembre de 2026), el forfait de temporada Ripollès 2026-2027, válido también en Vallter, cuesta 387 € hasta el 8 de diciembre y 455 € después; el de día, 23,50 €, y el de día con cremallera, 41 € para adultos, sin indicar la temporada. También está el abono de invierno del cremallera: 62,50 € adultos y 39,50 € niños, del 1 de diciembre de 2026 al 30 de abril de 2027." },
     ],
   },
   en: {
@@ -283,7 +283,7 @@ const COPY: Record<Locale, T> = {
     fares: [
       "The ticket includes the **Coma del Clot cable car** (Telefèric), entry to the **basilica**, the exhibitions and an audio guide. Dogs travel free, on a lead and muzzled (the ticket office sells muzzles for €5).",
       "If you will go up often, there is a **season ticket**: €104 from age 14 and €66 for ages 4 to 13, valid for a year from the day you buy it.",
-      "For winter, FGC has already published the rack railway season ticket, valid from 1 December 2026 to 30 April 2027: €62.50 for adults and €39.50 for children. Winter single and return fares and the 2026-27 ski passes were not out yet on 28 October.",
+      "For winter, FGC has already published the rack railway season ticket, valid from 1 December 2026 to 30 April 2027: €62.50 for adults and €39.50 for children. On 23 November Vall de Núria's rates page was selling the 2026-27 season passes: **Ripollès** (Vallter and Vall de Núria) at **€387** until 8 December and €455 after, and **Pirineu365**, for all six FGC resorts, at €730 (adults 25 to 64). The day pass is listed at €23.50 and the day pass with the rack railway at €41 (adults 14 to 64), with no season stated.",
     ],
     getTitle: "Getting there from Barcelona",
     get: [
@@ -320,7 +320,7 @@ const COPY: Record<Locale, T> = {
       { question: "What does the TreNatura ticket include?", answer: "The return Rodalies train from any station to Ribes de Freser and the rack railway to Núria. It costs €40.20 for adults and €30.70 for children." },
       { question: "Does the Núria rack railway run in November?", answer: "The resort's calendar for November 2026 shows weekdays closed and weekends open. Check with FGC before you go." },
       { question: "Is the Núria rack railway free for anyone?", answer: "For children under 4, who ride free, and for dogs, which travel free on a lead and muzzled. Everyone else pays the fare: €34 return from Ribes for an adult." },
-      { question: "How much is a Vall de Núria ski pass?", answer: "On 28 October FGC had not yet published the 2026-27 ski passes. The winter rack railway season ticket was out: €62.50 for adults and €39.50 for children, from 1 December 2026 to 30 April 2027." },
+      { question: "How much is a Vall de Núria ski pass?", answer: "According to Vall de Núria's rates page (checked 23 November 2026), the 2026-27 Ripollès season pass, also valid at Vallter, costs €387 until 8 December and €455 after; a day pass is €23.50 and a day pass with the rack railway €41 for adults, with no season stated. There is also the winter rack railway season ticket: €62.50 for adults and €39.50 for children, from 1 December 2026 to 30 April 2027." },
     ],
   },
 };

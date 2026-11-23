@@ -12039,4 +12039,115 @@ wording), `holiday-dates-2027.test.ts` (one-question FAQPage on the earlier date
 `snapshot.py page puente-diciembre 7`, `page /es/festivos/dia/8-diciembre-2026/ 7`, `page pont-desembre-catalunya 7`,
 plus a query × page split for the Purísima queries and "8 de diciembre es festivo".
 
+## 2026-11-23 — Evergreen pages in striking distance: the snow season re-read before it opens (ski guide, Vall de Núria, Setcases) and PortAventura after Halloween; the bigger pages checked and left in their windows (body only + factual corrections in two leads; deploy, then groups `ski`, `nuria`, `batch02-b`, `portaventura`) (review 2026-12-01 and 2026-12-10)
+
+Owner goal: average position from ~7–8 to ~3, traffic from many pages. Brief: evergreen pages at positions ~5–15 with the
+most impressions × room to climb, excluding strikes, holidays/December bridge and shops-open pages. Inventory
+`snapshot.py gaps 28 150`, `ctr 28 300`, `pages 28 3000` and `page <url> 28` (26 Oct–23 Nov 2026).
+
+### 1. Candidates read against this log: why most were not touched
+
+| Page (28 d: clicks / impr. / pos) | State in this log | Decision |
+| --- | --- | --- |
+| `/en/guides/barcelona-weather-by-month/` (39 / 11,796 / 7.8; "january" 978 at 9.0, "august" 828 at 7.7, "by month" 623 at 9.6, "temperature by month" 479 at 9.4) | Month sections with anchors, AEMET 0076 normals, the Raval sheet and records are already there; the month H3s in the query's words went live 19 Nov, **review 26 Nov and 3 Dec**; title not before 9 Dec | **No change.** A body change now would confound the 26 Nov read. What ranks above us on the month queries are single-month pages (barcelona.com, TUI, easyJet, weather2travel, all `/january`); sea temperature and daylight are the sub-intents we lack, and neither had an official monthly source readable today (Puertos del Estado buoy reports not reached; IGN's sunrise table is a JS form). For the 3 Dec review |
+| `/es/guias/aparcar-barcelona-zona-azul-verde/` (58 / 18,407 / 7.8) + CA (43 / 4,631 / 5.6) | Body 20 Nov (2026 ordinance); Trinitat Vella zone 36, Saturday / Sunday / August / holiday FAQs present; ES title review 1 Dec | **No change.** The open queries ("horario zona azul barcelona" 170 at 10.7, "zona verde trinitat vella" 133 at 9.9) are already answered in the query's words: authority (areaverda.cat, barcelona.cat), not content |
+| `/es/guias/tarjetas-transporte-barcelona/` (20 / 9,636 / 8.4), EN passes (43 / 5,382 / 7.6) | Body 20 Nov; title proposal queued for 28 Nov | **No change.** Prices per zone, where to buy and sharing are answered; bare "t casual" at 12.0 is navigational (TMB/ATM) |
+| `/ca/guies/la-marato-tv3-3cat/` (39 / 6,004 / 6.6; "marató tv3 2026 data" 624 at 6.6) | Title 18 Nov, review 25 Nov and 2 Dec; body 13 Nov, measure 1 Dec | **No change.** Re-read 23 Nov with curl: 3Cat's La Marató home (newest item an interview with the presenters, 3439358, no new fact), the 2026 hub, the donation page (Bizum 33333, certificate "abans del 31 de desembre", still no phone on it) and marato.voluntariat.org ("Tancat el període de preinscripcions"). Nothing new to print |
+| La Grossa CA (17 / 2,374 / 8.6), ES (40 / 1,374 / 7.6) | Lottery-cluster body 20 Nov; group `grossa` held until the 8 Dec review | **No change** (it could not go live before 8 Dec) |
+| Christmas lights / Christmas hub (ES 42 / 5,926, CA 19 / 2,148) | Lights review 27 Nov; switch-on 26 Nov | **No change.** The ES hub handed its lights queries to the lights page on 5 Nov, as planned; the CA hub still takes "encesa llums nadal barcelona 2026" (456 at 8.7 against 167 at 9.0 on the lights page): for the 27 Nov review |
+| Espinelves, Canyelles, Cardedeu fairs | 20 Nov programmes; Canyelles' fair was 21–22 Nov (past) | **No change** |
+| Calculators (`/es/calculadoras/letras-del-tesoro/` 15 / 1,352 / 7.0; the rest small) | 13–21 Nov entries, reviews 1 and 15 Dec | **No change** |
+| Ski CA (16 / 853 / 5.8), ES (18 / 1,143 / 12.4), EN (5 / 140 / 5.5) | Body 5 Nov (measure 10 Dec); the 5 Nov entry asked for a re-read ~20 Nov, not done | **Changed** (2). The season opens on 28 Nov (Baqueira) and 4 Dec (FGC), so demand climbs now, and the page still printed offers that had ended |
+| Vall de Núria CA (10 / 490 / 7.2), EN (25 / 827 / 8.0), ES (7 / 665 / 16.3) | Titles 28 Oct (measured 28 Nov) | **Changed, body only** (3) |
+| PortAventura EN (10 / 789 / 8.3), CA (0 / 174 / 13.1), ES (0 / 259 / 25.7) | Last re-read 30 Oct | **Changed** (4): the lead and FAQs still announced Halloween and its discount "until 15 November" |
+
+### 2. Ski resorts (`/ca/guies/estacions-esqui-catalunya/`, `/es/guias/estaciones-esqui-cataluna/`, `/en/guides/ski-resorts-catalonia/`; group `ski`)
+
+Every page re-read on 23 Nov 2026 with curl (fact pack `research_notes/ski-reread-23nov.md`, gitignored, in the worktree).
+
+- **Opening dates unchanged, with the newer sources.** Baqueira's news of 11 Nov 2026: "La apertura está prevista para el
+  sábado 28 de noviembre de 2026 y el cierre para el domingo 4 de abril de 2027, siempre que las condiciones lo permitan"
+  (added as a source; the text says the date was repeated on 11 Nov). The six FGC "Calendari de l'estació" tables still
+  open on 4 Dec (Espot 5 Dec) and close on 4 Apr; Vall de Núria in December: 4–8, 12–13 and from the 19th.
+  **Conflict printed:** FGC's season note of 6 Nov says the six "obriran les seves instal·lacions del 4 de desembre al 4
+  d'abril amb 189 km esquiables i 180 pistes", while Espot's calendar marks 4 Dec closed: the table keeps 5 Dec (the later
+  day) and the text names both. Masella (blog, post 9926), Port del Comte and Tavascan still give no date.
+- **Factual corrections.** Ripollès season pass (Vallter + Vall de Núria): **387 € to 8 Dec, 455 € after** on both FGC rates
+  pages ("Promoció fins el 08/12 | Adult (25 – 64 anys) 455.00 € 387,00"); the page said 420 / 495 (30 Oct read). Vallter
+  day pass **29 € low season (weekdays) / 35 € high** (children 23 / 26,50 €); it said 30 / 36,50 (24–27,50). This moves
+  the lead's cheapest day pass (30 → 29 €): **factual correction inside the lead**, no other lead word changed. The same
+  correction on the Setcases page (`/ca/destinacions/setcases/`, `/es/destinos/setcases/`, `/en/destinations/setcases/`).
+- **Ended offers in the past tense.** Alp2500 1.090 € (the 950 € offer ended 22 Nov), Masella 840 € (730 € ended 22 Nov),
+  Tot Nòrdic 175 € (131 € was before 15 Nov), Guils' 25 % "fins el 17 de Novembre" (its page still shows 75 €: printed as
+  such, with "confirm it before you buy"); the Masella FAQ likewise.
+- **Added (the season's sub-intents):** the Pirineu365 season pass for the six FGC resorts (730 €); FGC's "Dia de
+  l'esquiador" (Wednesdays, every pass half price with the FlexiPass; FlexiPass 15 € renewal / 25 € new, free from the
+  17th ski day) as a prices bullet and a new FAQ "Hi ha forfets més barats entre setmana?" / "¿Hay forfaits más baratos
+  entre semana?" / "Are lift passes cheaper midweek?". Four sources added (Baqueira 11 Nov, FGC 6 Nov, the Vall de Núria
+  and Vallter rates pages). "Consultat el" dates 5 Nov → 23 Nov where the page was re-read; the ski-bus sentences keep
+  31 Oct (Bus Blanc 403, FGC "com arribar" 404: not re-read). `VERIFIED` 2026-11-23.
+- Not printed: PIRINEU365's "Black Friday" 50 % Wednesday passes (500 units, terms behind the purchase button).
+- Title, description and H1 untouched (titles 28 Oct; the 5 Nov body window to 10 Dec is a confounder).
+
+### 3. Vall de Núria (`/ca/escapades/vall-de-nuria-cremallera/`, `/es/escapadas/vall-de-nuria-cremallera/`, `/en/day-trips/vall-de-nuria-rack-railway/`; group `nuria`)
+
+Body only. The winter paragraph and the ski-pass FAQ said FGC had not yet published the 2026-27 ski passes (28 Oct). Now,
+from the Vall de Núria rates page read on 23 Nov: Ripollès 387 € to 8 Dec / 455 €, Pirineu365 730 €, day pass 23,50 € and
+day pass + rack railway 41 € (adults 14–64), "with no season stated" (the page prints none). The rack-railway fares and
+their "vigents fins al 30 de novembre" stay: the ski site shows the same 34 / 31 € with no season label, so winter fares
+are still unconfirmed (re-read after 30 Nov, when FGC's dated PDF expires).
+
+### 4. PortAventura (`/en/day-trips/portaventura-from-barcelona/`, `/es/escapadas/portaventura-desde-barcelona/`, `/ca/escapades/portaventura-des-de-barcelona/`; group `portaventura`)
+
+Factual correction: Halloween ended on 15 Nov. Re-read 23 Nov: the calendar feed
+(`/api/club/calendar/influx/portaventura/11|12/2026`, `01/2027`, `ferrari-land/11|12/2026`), unchanged (Christmas daily
+10:30–18:00, to 19:00 on 5–7 Dec, 27–30 Dec and 1–4 Jan; closed from 7 Jan; Ferrari Land as printed); the Christmas page
+("PortAventura Park: From 20 November 2026 to 6 January 2027"); the ticket cards ("1 day PortAventura Park" adult from €43
+crossed out to €37, junior/senior €39 → €33; "1 day, 2 parks" €55 → €44, €50 → €40; Ferrari Land €19 / €17).
+- **Lead (factual correction):** "usually 10:30 to 18:00 on weekdays and later at weekends, with Halloween until 15
+  November and the Christmas season from 20 November" → "usually 10:30 to 18:00, and until 19:00 on some Christmas
+  days, with the Christmas season from 20 November to 6 January"; the Halloween discount parenthesis goes (the
+  lead keeps "from €43"). Title and description untouched (they never had it).
+- Body: the Halloween row leaves the hours table (caption "November 2026 to March 2027"); Ferrari Land's "until 1 Nov"
+  clause goes; the tickets paragraph gives the 23 Nov online prices with their date and no promotion name (the site runs
+  several, Black Friday included, with changing terms); the hours, price and Halloween FAQs follow. The Halloween
+  promotion source is replaced by the promotions page.
+
+### 5. Baselines (GSC 26 Oct–23 Nov 2026, 28 days; clicks / impressions / CTR / position)
+
+| URL | Baseline |
+| --- | --- |
+| `/ca/guies/estacions-esqui-catalunya/` | 16 / 853 / 1.9 % / 5.8 |
+| `/es/guias/estaciones-esqui-cataluna/` | 18 / 1,143 / 1.6 % / 12.4 (head queries "pistas de esqui cataluña", "esquí catalunya", "estaciones de esquí de cataluña" at 42–60; "cuando abren las pistas de esqui en catalunya" 12 at 7.5; "cuando abre la molina" 10 at 9.0) |
+| `/en/guides/ski-resorts-catalonia/` | 5 / 140 / 3.6 % / 5.5 |
+| `/ca/escapades/vall-de-nuria-cremallera/` | 10 / 490 / 2.0 % / 7.2 |
+| `/es/escapadas/vall-de-nuria-cremallera/` | 7 / 665 / 1.1 % / 16.3 |
+| `/en/day-trips/vall-de-nuria-rack-railway/` | 25 / 827 / 3.0 % / 8.0 ("horaris cremallera núria 2026" 60 at 6.2; "2x1 cremallera vall de núria 2026" 28 at 9.4) |
+| `/en/day-trips/portaventura-from-barcelona/` | 10 / 789 / 1.3 % / 8.3 |
+| `/es/escapadas/portaventura-desde-barcelona/` · CA | 0 / 259 / 25.7 · 0 / 174 / 13.1 |
+| `/es/destinos/setcases/` · CA · EN | 2 / 176 / 12.1 · 0 / 22 / 7.4 · 0 / 35 / 10.3 |
+
+**Prediction.** Ski: with the season opening, "cuándo abre(n) …" and resort-name queries climb to ≤ 6 on the ES page and the
+CA page stays ≤ 6; the midweek FAQ picks up "miércoles" / "dia de l'esquiador" variants. Núria: "forfet vall de núria"
+variants (8 at 30.5 on 21 Nov) start ranking on the CA/EN pages. PortAventura EN: CTR at equal position does not fall.
+
+**Review 2026-12-01** (`snapshot.py page esqui 7`, `page ski-resorts 7`, `page vall-de-nuria 7`, `page portaventura 7`) and
+**2026-12-10** (with the 5 Nov ski measure, 14 days). Revert a body item whose page loses > 1.5 positions with no gain on
+its target query. Confounders: the 5 Nov ski body window and the season itself (demand rises regardless): compare
+position and CTR, not clicks.
+
+**Guards.** `tests/ski-reread-23nov.test.ts`: ended offers never printed as current; the Ripollès, Vallter and Pirineu365
+rows as read; the midweek FAQ and the Espot conflict; the Núria ski-pass sentence; **fails from 29 Nov 2026** until the
+ski page is re-read after Baqueira's planned opening (rewrite the opening section in the past tense where it applies,
+move `VERIFIED`, then move the guard to the FGC opening, 4 Dec). `tests/batch02.test.ts`: the Alp2500 and Tot Nòrdic
+assertions pin the past-tense rows; the PortAventura test forbids Halloween and the 37 € price in the lead.
+
+**Go-live.** Published articles: deploy so the modules are live, then publish `ski`, `nuria`, `portaventura` and
+`batch02-b` (Setcases; it also republishes Montserrat and Ripollès from the same code, unchanged here). IndexNow:
+`/ca/guies/estacions-esqui-catalunya/ /es/guias/estaciones-esqui-cataluna/ /en/guides/ski-resorts-catalonia/
+/ca/escapades/vall-de-nuria-cremallera/ /es/escapadas/vall-de-nuria-cremallera/ /en/day-trips/vall-de-nuria-rack-railway/
+/en/day-trips/portaventura-from-barcelona/ /es/escapadas/portaventura-desde-barcelona/
+/ca/escapades/portaventura-des-de-barcelona/ /ca/destinacions/setcases/ /es/destinos/setcases/ /en/destinations/setcases/`.
+If this goes live after 27 Nov, re-read Baqueira's opening news first (the guard fails on 29 Nov).
+
 **Outcome:** _pending_

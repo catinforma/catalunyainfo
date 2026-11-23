@@ -1137,8 +1137,9 @@ test("ski: opening dates answered first, from Baqueira's news and the FGC calend
   const fgc = { ca: /4 de desembre/, es: /4 de diciembre/, en: /4 December/ } as const;
   const fgcEspot = { ca: /5 de desembre/, es: /5 de diciembre/, en: /5 December/ } as const;
   const resortFaq = { ca: /^Quan obre (Baqueira|la Molina|Masella)/, es: /^¿Cuándo abre (Baqueira|La Molina|Masella)/, en: /^When does (Baqueira|La Molina|Masella)/ } as const;
-  const alpEarly = { ca: /950 € fins al 22 de novembre/, es: /950 € hasta el 22 de noviembre/, en: /€950 until 22 November/ } as const;
-  const nordic = { ca: /131 € fins al 15 de novembre; 175 € després/, es: /131 € hasta el 15 de noviembre; 175 € después/, en: /€131 until 15 November; €175 after/ } as const;
+  // 23 Nov 2026: both offers are over, so each row leads with today's price and keeps the old one as history.
+  const alpEarly = { ca: /1\.090 € \(el preu d'oferta, 950 € fins al 22 de novembre, ja ha acabat\)/, es: /1\.090 € \(el precio de oferta, 950 € hasta el 22 de noviembre, ya terminó\)/, en: /€1,090 \(the €950 offer price, until 22 November, has ended\)/ } as const;
+  const nordic = { ca: /175 € \(el preu de 131 € era fins al 15 de novembre\)/, es: /175 € \(el precio de 131 € era hasta el 15 de noviembre\)/, en: /€175 \(the €131 price was until 15 November\)/ } as const;
   for (const locale of LOCALES) {
     const edition = SKI.editions[locale];
     const blocks = edition.blocks as { type: string; lead?: boolean; text?: string; rows?: string[][]; items?: { question: string }[] }[];
@@ -1168,8 +1169,8 @@ test("ski: opening dates answered first, from Baqueira's news and the FGC calend
     assert.ok(faqItems.filter((q) => resortFaq[locale].test(q.question)).length >= 3, `${locale}: resort opening FAQs`);
     // Season passes updated to the 2026-27 terms read on 30-31 Oct.
     const text = bodyToPlainText(edition.blocks);
-    assert.match(text, alpEarly[locale], `${locale}: Alp2500 early price ends 22 Nov`);
-    assert.match(text, nordic[locale], `${locale}: Tot Nòrdic 131 € before 15 Nov, 175 € after`);
+    assert.match(text, alpEarly[locale], `${locale}: Alp2500 early price ended 22 Nov`);
+    assert.match(text, nordic[locale], `${locale}: Tot Nòrdic 175 € now, 131 € was before 15 Nov`);
     assert.match(text, /436/, `${locale}: Pallars early price`);
     // Description with the official dates, inside the snippet budget.
     assert.ok(edition.seoDescription.length <= 155, `${locale}: description ${edition.seoDescription.length}`);
@@ -1228,7 +1229,7 @@ test("montserrat: the Aeri table covers 1 Nov and 7 Dec, the free question and t
   }
 });
 
-test("portaventura: the standard price leads, the Halloween price is labelled, the winter closure and the walk are stated", () => {
+test("portaventura: the standard price leads, no ended promotion, the winter closure and the walk are stated", () => {
   const walk = { ca: /10 minuts a peu/, es: /10 minutos a pie/, en: /10-minute walk/ } as const;
   for (const locale of LOCALES) {
     const edition = PORTAVENTURA.editions[locale];
@@ -1237,7 +1238,12 @@ test("portaventura: the standard price leads, the Halloween price is labelled, t
     const blocks = edition.blocks as { type: string; lead?: boolean; text?: string }[];
     const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
     assert.match(lead, /43/, `${locale}: lead gives the standard price`);
-    assert.match(lead, /Halloween/, `${locale}: the 37 EUR price is tied to the promotion`);
+    // 23 Nov 2026: Halloween ended on 15 Nov, so the lead names neither it nor a promotional price.
+    assert.doesNotMatch(lead, /Halloween|37/, `${locale}: no ended season or promotional price in the lead`);
+    assert.match(lead, /20 (de )?(novembre|noviembre|November) (al|to) 6 (de )?(gener|enero|January)/, `${locale}: Christmas season in the lead`);
+    const text = bodyToPlainText(edition.blocks);
+    assert.doesNotMatch(text, /descompte de Halloween|descuento de Halloween|Halloween discount|Halloween promotion|promoció de Halloween|promoción de Halloween/, `${locale}: ended promotion`);
+    assert.match(text, /23 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the discounted price carries its date`);
     assert.match(lead, /19 (de )?(febrer|febrero|February)/, `${locale}: winter closure`);
     assert.match(bodyToPlainText(edition.blocks), walk[locale], `${locale}: walk from the station`);
     assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
