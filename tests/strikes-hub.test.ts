@@ -611,16 +611,20 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   assert.ok(ouigo.sources.some((s) => s.url === STRIKE_URLS.semafOuigo && s.publisher === "SEMAF"));
   for (const locale of LOCALES) assert.match(ouigo.facts[locale].join(" "), /desconvoca|called off/, locale);
   assert.match(STRIKE_URLS.ouigoResolution, /^https:\/\/cdn\.transportes\.gob\.es\/.+ouigo\.pdf$/);
-  // USTEC·STEs and CGT Ensenyament (28 Oct): education strike on Thursday 26 Nov; no order yet.
+  // USTEC·STEs and CGT Ensenyament (28 Oct): education strike on Thursday 26 Nov.
   assert.deepEqual(schools.dates, ["2026-11-26"]);
   assert.equal(weekdayIndex("2026-11-26"), 4); // Thursday
   assert.deepEqual(schools.affects, ["schools"]);
-  assert.equal(schools.minimumServices.status, "pending");
+  // 23 Nov 2026: the Departament d'Empresa i Treball's order of 23 Nov is out (e-Tauler 660276, listed on its page that day).
+  assert.equal(schools.minimumServices.status, "published");
   // Re-checked 2 Nov 2026: the joint press release of 28 Oct (PDF on cgtensenyament.cat) lists the 26 November strike too.
   // 17 Nov 2026: plus USTEC·STEs' unitary 21N manifesto (the march's time and place).
   // 19 Nov 2026: plus CGT Ensenyament's 26N call of 18 Nov and the strike notice it links (hours and who is called out).
   // 21 Nov 2026: plus USTEC·STEs' notice of 20 Nov on the mediation of the 19th (no proposal, no agreement; the strike stays on).
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs"]);
+  // 23 Nov 2026: plus the minimum-services order (cited on Treball's list, as e-Tauler withdraws its notices) and USTEC·STEs' 23 Nov notice (the march on the 26th).
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "Departament d'Empresa i Treball", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs"]);
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.treballMs && /23 de novembre de 2026/.test(s.name)));
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustec26All));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.cgtEns26Notice));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustecMediation26));
@@ -636,7 +640,11 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
     assert.match(ouigo.minimumServices.text[locale], /72[,.]41%/, locale);
     assert.ok(ouigo.minimumServices.text[locale].includes(`](${STRIKE_URLS.ouigoResolution})`), locale);
     assert.ok(schools.facts[locale].join(" ").includes("El 26N, vaga educativa"), `${locale}: USTEC's own words`);
-    assert.match(schools.minimumServices.text[locale], /8 (de setembre|de septiembre|September) (de )?2026/, locale);
+    // The order's own figures (Art. 1): one of the head team per school, one teacher per 3 classes, 50% special education, 33% nursery schools, 50% leisure staff.
+    assert.match(schools.minimumServices.text[locale], /23 (de novembre|de noviembre|November) (de )?2026/, locale);
+    assert.ok(schools.minimumServices.text[locale].includes("un docent per cada 3 unitats o aules"), `${locale}: the order's own words`);
+    assert.match(schools.minimumServices.text[locale], /50%[^.]*33%/, locale);
+    assert.ok(schools.minimumServices.text[locale].includes(`](${STRIKE_URLS.treballMs})`), locale);
     // The day the doctors' strike was last seen still on is the as-of day (re-read 3 Nov 2026): moving
     // STRIKES_AS_OF means re-reading Metges de Catalunya and saying so in the entry.
     assert.match(

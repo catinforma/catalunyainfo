@@ -39,8 +39,8 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * conflictividad"), the Basque Government's list (no order for the 23rd yet),
  * the table of what runs in Catalonia on the 26th and CSIF's stoppage days.
  *
- * Pending, printed as pending: the Generalitat's order for the 26th (the
- * Catalan entry's status; a test keeps the copy in step with it). The 19 Nov
+ * Pending, printed as pending until 23 Nov: the Generalitat's order for the
+ * 26th (the Catalan entry's status; a test keeps the copy in step with it). The 19 Nov
  * flag for the Ministry's resolution on the 23rd (MINISTRY_23N_PUBLISHED) went
  * with the call-off of 20 Nov: no resolution is due for a strike that is off.
  *
@@ -80,6 +80,17 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * do" line says with the re-read date. The 26th: the strike stays on and its
  * minimum services are still not out (Treball's list, e-Tauler, DOGC: last
  * issue núm. 9799 of Friday 20 Nov).
+ *
+ * 23 Nov 2026 (18:05-18:40 CET): re-read (docs/SEO_EXPERIMENTS.md,
+ * "2026-11-23 — Strikes re-read (Monday)"). The 26th: the Generalitat's
+ * minimum-services order is out (Ordre EMT/ /2026 of 23 Nov, e-Tauler 660276,
+ * on Treball's list dated 23/11/2026). Factual correction, overriding the 19 Nov
+ * measurement window: the descriptions (before / eve / today), the lead, the
+ * "Is there school?" paragraph and table, and two FAQ answers now give the
+ * order's figures instead of "pending"; the lead and the FAQ name the four
+ * unions whose calls the order lists (USTEC·STEs, CGT, COS, La Intersindical)
+ * instead of the joint calendar's five (CNT registered none). Titles and URLs
+ * unchanged. The 23rd: unchanged (still no Renfe or Rodalies notice).
  */
 
 export const STRIKE_DAY_2326 = { strike23n: "2026-11-23", strike26n: "2026-11-26" } as const;
@@ -115,6 +126,7 @@ export const DAY2326_URLS = {
   ministryRail: SPAIN_URLS.ministryRail,
   // The Departament d'Empresa i Treball's list: newest entry on 20, 21 and 22 Nov 2026 still the 23rd's Rodalies order (17/11); none for the 26th
   // (nor in the newest 200 e-Tauler edicts, 16-20 Nov, read 21 and 22 Nov, nor in the DOGC, last issue núm. 9799 of 20 Nov).
+  // 23 Nov 2026: the 26th's order is out, listed with the date 23/11/2026 (e-Tauler 660276; strikes.ts, STRIKE_URLS.ordreEdu26).
   treballMs: STRIKE_URLS.treballMs,
   rodaliesStatus: STRIKE_URLS.rodaliesStatus,
   renfe: STRIKE_URLS.renfe,
@@ -289,7 +301,7 @@ const COPY: Record<Locale, Copy> = {
       },
       strike26n: {
         lead: (phase, checked) => {
-          const what = `huelga en la educación en toda Cataluña, de 0.00 a 24.00 h y cada trabajador durante su jornada, convocada por USTEC·STEs, CGT, la Intersindical, la COS y la CNT con la Assemblea Educativa de Catalunya: los colegios abren, pero están llamados el profesorado, el personal no docente y el de comedor, ocio y transporte escolar, y los servicios mínimos, que fija la Generalitat, aún no estaban publicados el ${checked}. Siguen la huelga de médicos del Sindicato Médicos Unidos, con las urgencias garantizadas, y la de Correos en la Comunidad de Madrid; en Madrid, CSIF convoca paros en la enseñanza pública de 9.00 a 11.00 y de 17.00 a 19.00 h. No hay huelga general ni de trenes.`;
+          const what = `huelga en la educación en toda Cataluña, de 0.00 a 24.00 h y cada trabajador durante su jornada, convocada por USTEC·STEs, la CGT, la COS y la Intersindical: los colegios abren, pero están llamados el profesorado, el personal no docente y el de comedor, ocio y transporte escolar. Los servicios mínimos, publicados por la Generalitat el 23 de noviembre, son una persona del equipo directivo y un docente por cada 3 aulas en cada centro, el 50% de la plantilla en educación especial y el 50% del personal de comedor y acogida. Siguen la huelga de médicos del Sindicato Médicos Unidos, con las urgencias garantizadas, y la de Correos en la Comunidad de Madrid; en Madrid, CSIF convoca paros en la enseñanza pública de 9.00 a 11.00 y de 17.00 a 19.00 h. No hay huelga general ni de trenes.`;
           if (phase === "after") return "**El jueves 26 de noviembre de 2026 hubo huelga en la educación en Cataluña,** siguieron la de médicos del Sindicato Médicos Unidos y la de Correos en Madrid, y CSIF convocó paros en la enseñanza pública madrileña. No fue una huelga general. Más abajo, quién convocó cada una.";
           if (phase === "today") return `**Hoy, jueves 26 de noviembre, hay** ${what}`;
           if (phase === "eve") return `**Mañana, jueves 26 de noviembre, hay** ${what}`;
@@ -300,9 +312,10 @@ const COPY: Record<Locale, Copy> = {
         title: "Huelga 26 de noviembre de 2026: educación en Cataluña, médicos y Madrid. ¿Hay clase?",
         seoTitle: "Huelga 26 de noviembre de 2026: educación en Cataluña",
         description: {
-          before: "Jueves 26: huelga en la educación en Cataluña (toda la jornada; servicios mínimos, pendientes), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
-          eve: "Mañana jueves 26: huelga en la educación en Cataluña (servicios mínimos, pendientes), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
-          today: "Hoy jueves 26: huelga en la educación en Cataluña (servicios mínimos, pendientes), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
+          // 23 Nov 2026: the Generalitat's order is out (factual correction, docs/SEO_EXPERIMENTS.md, "2026-11-23 — Strikes re-read (Monday)").
+          before: "Jueves 26: huelga en la educación en Cataluña (mínimos: un docente por cada 3 aulas), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
+          eve: "Mañana jueves 26: huelga en la educación en Cataluña (mínimos: un docente por cada 3 aulas), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
+          today: "Hoy jueves 26: huelga en la educación en Cataluña (mínimos: un docente por cada 3 aulas), de médicos (SMU) y de Correos en Madrid; paros en Madrid.",
           after: "El 26 de noviembre de 2026 hubo huelga en la educación en Cataluña, de médicos (SMU) y de Correos en Madrid, y paros de CSIF en Madrid. Quién convocó.",
         },
         excerpt: "Las huelgas del jueves 26 de noviembre de 2026: educación en Cataluña (¿hay clase?), médicos (SMU), Correos en Madrid, paros en los colegios de Madrid y aeropuertos.",
@@ -311,21 +324,21 @@ const COPY: Record<Locale, Copy> = {
         extra: (checked) => [
           ...paras(
             `**Sí, los centros abren:** es una huelga del personal, no un cierre, y el jueves 26 es día lectivo. Según ${link(U.cgtEns26Notice, "el preaviso de la CGT")}, que CGT Ensenyament publicó el 18 de noviembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), están llamados el personal docente y no docente de los centros públicos, las escuelas infantiles (escoles bressol), los EAP y los CREDA, y el personal de comedor, acogida, ocio, extraescolares y transporte escolar de los centros públicos, privados y concertados.`,
-            `**Servicios mínimos:** los fija el Departament d'Empresa i Treball por orden y el ${checked} aún no estaban en ${link(U.treballMs, "su lista")}. Cuando salgan, cada centro dirá qué garantiza ese día.`,
+            `**Servicios mínimos:** los fijó el Departament d'Empresa i Treball por una orden del 23 de noviembre, en ${link(U.treballMs, "su lista")}: en cada centro, una persona del equipo directivo y, además, un docente por cada 3 aulas en infantil, primaria y secundaria; el 50% de la plantilla en educación especial y el 33% en las escuelas infantiles (llars d'infants); y el 50% del personal de comedor, cocina, acogida y extraescolares. La dirección de cada centro designa quién los cubre: pregunta en el tuyo qué garantiza ese día.`,
           ),
           table(
             "Qué funciona el jueves 26 de noviembre de 2026 en Cataluña",
             ["Servicio", "El jueves 26", "Servicios mínimos"],
             [
-              ["Escuelas e institutos públicos", "Abren; el profesorado y el personal no docente están convocados", "Pendientes (Generalitat)"],
-              ["Escoles bressol, EAP y CREDA", "Convocados", "Pendientes (Generalitat)"],
-              ["Comedor, acogida, extraescolares y transporte escolar", "Convocados también en la concertada y la privada: pregunta al centro o a la empresa", "Pendientes (Generalitat)"],
+              ["Escuelas e institutos públicos", "Abren; el profesorado y el personal no docente están convocados", "Una persona del equipo directivo y un docente por cada 3 aulas; educación especial, 50% de la plantilla"],
+              ["Escoles bressol, EAP y CREDA", "Convocados", "Escuelas infantiles (llars d'infants): 33% de la plantilla"],
+              ["Comedor, acogida, extraescolares y transporte escolar", "Convocados también en la concertada y la privada: pregunta al centro o a la empresa", "50% del personal de comedor, cocina, acogida y extraescolares"],
               ["Sanidad pública", "Huelgas de médicos (Sindicato Médicos Unidos y Metges de Catalunya)", "Publicados: urgencias y unidades especiales con normalidad"],
               ["Rodalies, metro, autobuses y FGC", "Sin huelga convocada ese día en las fuentes revisadas", "—"],
             ],
             `Revisado el ${checked}.`,
           ),
-          ...paras(`Con las novedades de la huelga en la educación, los servicios mínimos en cuanto salgan y qué deben saber las familias: ${b2link("strikeEducation", "es", "Huelga en la educación del 26 de noviembre en Cataluña: ¿hay colegio?")}.`),
+          ...paras(`Con las novedades de la huelga en la educación, sus servicios mínimos y qué deben saber las familias: ${b2link("strikeEducation", "es", "Huelga en la educación del 26 de noviembre en Cataluña: ¿hay colegio?")}.`),
         ],
         madridDay: "**El jueves 26:** CSIF convoca paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h, según su calendario.",
         madridValue: "Huelga indefinida desde el 14 de octubre; CSIF, paros de 9.00 a 11.00 y de 17.00 a 19.00 h",
@@ -334,11 +347,11 @@ const COPY: Record<Locale, Copy> = {
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "¿Hay huelga el jueves 26 de noviembre de 2026?", answer: "Sí, pero no general: huelga en la educación en Cataluña, toda la jornada; siguen la huelga de médicos del Sindicato Médicos Unidos y la de Correos en la Comunidad de Madrid, y en Madrid CSIF convoca paros en la enseñanza pública. No hay huelga de trenes." },
-          { question: "¿Hay huelga de educación el 26 de noviembre?", answer: "Sí, en Cataluña: la convocan USTEC·STEs, CGT, la Intersindical, la COS y la CNT con la Assemblea Educativa de Catalunya. Según el preaviso de la CGT, es de 0.00 a 24.00 h en toda Cataluña, cada trabajador durante su jornada, y llama al personal docente y no docente, a las escoles bressol y al personal de comedor, ocio y transporte escolar." },
+          { question: "¿Hay huelga de educación el 26 de noviembre?", answer: "Sí, en Cataluña: USTEC, la COS y la Intersindical registraron la convocatoria el 13 de noviembre y la CGT el 14, según la orden de servicios mínimos; el calendario lo marcan con la CNT y la Assemblea Educativa de Catalunya. Según el preaviso de la CGT, es de 0.00 a 24.00 h en toda Cataluña, cada trabajador durante su jornada, y llama al personal docente y no docente, a las escoles bressol y al personal de comedor, ocio y transporte escolar." },
           // 21 Nov 2026: USTEC·STEs (20 Nov) on the mediation of the 19th, which ended with no proposal.
           { question: "¿Sigue en pie la huelga de educación del 26 de noviembre?", answer: `Sí. La mediación que el Departament d'Empresa i Treball convocó la mañana del jueves 19 de noviembre para intentar evitarla terminó sin acuerdo: según USTEC·STEs, Educació no presentó ninguna propuesta. El ${checked}, la huelga seguía convocada.` },
-          { question: "¿Hay clase el jueves 26 de noviembre en Cataluña?", answer: "Sí: los centros abren, porque es una huelga del personal, no un cierre, pero parte del profesorado y del personal de comedor y de transporte escolar puede hacer huelga. Cada centro dirá qué garantiza cuando salgan los servicios mínimos." },
-          { question: "¿Qué servicios mínimos hay en los colegios el 26 de noviembre?", answer: `Aún no se conocen: los fija el Departament d'Empresa i Treball por orden, y el ${checked} no estaban publicados. Para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3, cinco días antes.` },
+          { question: "¿Hay clase el jueves 26 de noviembre en Cataluña?", answer: "Sí: los centros abren, porque es una huelga del personal, no un cierre, pero parte del profesorado y del personal de comedor y de transporte escolar puede hacer huelga. Los servicios mínimos garantizan en cada centro una persona del equipo directivo y un docente por cada 3 aulas: pregunta en el tuyo qué garantiza ese día." },
+          { question: "¿Qué servicios mínimos hay en los colegios el 26 de noviembre?", answer: "Los fijó el Departament d'Empresa i Treball por una orden del 23 de noviembre: una persona del equipo directivo en cada centro y, además, un docente por cada 3 aulas en infantil, primaria y secundaria; el 50% de la plantilla en educación especial y el 33% en las escuelas infantiles; y el 50% del personal de comedor, cocina, acogida y extraescolares." },
           { question: "¿Hay huelga de profesores en Madrid el 26 de noviembre?", answer: "Sí: la enseñanza pública madrileña sigue en huelga indefinida (CCOO, UGT y CSIF) y el jueves 26 CSIF convoca paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h." },
         ],
       },
@@ -430,7 +443,7 @@ const COPY: Record<Locale, Copy> = {
       },
       strike26n: {
         lead: (phase, checked) => {
-          const what = `vaga a l'educació a tot Catalunya, de 0.00 a 24.00 h i cada treballador durant la seva jornada, convocada per USTEC·STEs, CGT, la Intersindical, la COS i la CNT amb l'Assemblea Educativa de Catalunya: les escoles obren, però hi estan cridats el professorat, el personal no docent i el de menjador, lleure i transport escolar, i els serveis mínims, que fixa la Generalitat, encara no s'havien publicat el ${checked}. Continuen la vaga de metges del Sindicato Médicos Unidos, amb les urgències garantides, i la de Correus a la Comunitat de Madrid; a Madrid, CSIF convoca aturades a l'ensenyament públic de 9.00 a 11.00 i de 17.00 a 19.00 h. No hi ha vaga general ni de trens.`;
+          const what = `vaga a l'educació a tot Catalunya, de 0.00 a 24.00 h i cada treballador durant la seva jornada, convocada per USTEC·STEs, la CGT, la COS i La Intersindical: les escoles obren, però hi estan cridats el professorat, el personal no docent i el de menjador, lleure i transport escolar. Els serveis mínims, publicats per la Generalitat el 23 de novembre, són una persona de l'equip directiu i un docent per cada 3 aules a cada centre, el 50% de la plantilla a l'educació especial i el 50% del personal de menjador i d'acollida. Continuen la vaga de metges del Sindicato Médicos Unidos, amb les urgències garantides, i la de Correus a la Comunitat de Madrid; a Madrid, CSIF convoca aturades a l'ensenyament públic de 9.00 a 11.00 i de 17.00 a 19.00 h. No hi ha vaga general ni de trens.`;
           if (phase === "after") return "**El dijous 26 de novembre de 2026 hi va haver vaga a l'educació a Catalunya,** van continuar la de metges del Sindicato Médicos Unidos i la de Correus a Madrid, i CSIF va convocar aturades a l'ensenyament públic madrileny. No va ser una vaga general. Més avall, qui va convocar cadascuna.";
           if (phase === "today") return `**Avui, dijous 26 de novembre, hi ha** ${what}`;
           if (phase === "eve") return `**Demà, dijous 26 de novembre, hi ha** ${what}`;
@@ -440,9 +453,9 @@ const COPY: Record<Locale, Copy> = {
         title: "Vaga 26 de novembre de 2026: educació a Catalunya, metges i Madrid. Hi ha classe?",
         seoTitle: "Vaga 26 de novembre de 2026: educació a Catalunya",
         description: {
-          before: "Dijous 26: vaga a l'educació a Catalunya (tota la jornada; serveis mínims, pendents), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
-          eve: "Demà dijous 26: vaga a l'educació a Catalunya (serveis mínims, pendents), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
-          today: "Avui dijous 26: vaga a l'educació a Catalunya (serveis mínims, pendents), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
+          before: "Dijous 26: vaga a l'educació a Catalunya (mínims: un docent per cada 3 aules), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
+          eve: "Demà dijous 26: vaga a l'educació a Catalunya (mínims: un docent per cada 3 aules), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
+          today: "Avui dijous 26: vaga a l'educació a Catalunya (mínims: un docent per cada 3 aules), de metges (SMU) i de Correus a Madrid; aturades a Madrid.",
           after: "El 26 de novembre de 2026 hi va haver vaga a l'educació a Catalunya, de metges (SMU) i de Correus a Madrid, i aturades de CSIF a Madrid.",
         },
         excerpt: "Les vagues del dijous 26 de novembre de 2026: educació a Catalunya (hi ha classe?), metges (SMU), Correus a Madrid, aturades a les escoles de Madrid i aeroports.",
@@ -451,21 +464,21 @@ const COPY: Record<Locale, Copy> = {
         extra: (checked) => [
           ...paras(
             `**Sí, els centres obren:** és una vaga del personal, no un tancament, i el dijous 26 és dia lectiu. Segons ${link(U.cgtEns26Notice, "el preavís de la CGT")}, que CGT Ensenyament va publicar el 18 de novembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), hi estan cridats el personal docent i no docent dels centres públics, les escoles bressol, els EAP i els CREDA, i el personal de menjador, acollida, lleure, extraescolars i transport escolar dels centres públics, privats i concertats.`,
-            `**Serveis mínims:** els fixa el Departament d'Empresa i Treball per ordre i el ${checked} encara no eren a ${link(U.treballMs, "la seva llista")}. Quan surtin, cada centre dirà què garanteix aquell dia.`,
+            `**Serveis mínims:** els va fixar el Departament d'Empresa i Treball per una ordre del 23 de novembre, a ${link(U.treballMs, "la seva llista")}: a cada centre, una persona de l'equip directiu i, a més, un docent per cada 3 aules a infantil, primària i secundària; el 50% de la plantilla a l'educació especial i el 33% a les llars d'infants; i el 50% del personal de menjador, cuina, acollida i extraescolars. La direcció de cada centre designa qui els cobreix: pregunta al teu què garanteix aquell dia.`,
           ),
           table(
             "Què funciona el dijous 26 de novembre de 2026 a Catalunya",
             ["Servei", "El dijous 26", "Serveis mínims"],
             [
-              ["Escoles i instituts públics", "Obren; el professorat i el personal no docent hi estan convocats", "Pendents (Generalitat)"],
-              ["Escoles bressol, EAP i CREDA", "Convocats", "Pendents (Generalitat)"],
-              ["Menjador, acollida, extraescolars i transport escolar", "Convocats també a la concertada i la privada: pregunta al centre o a l'empresa", "Pendents (Generalitat)"],
+              ["Escoles i instituts públics", "Obren; el professorat i el personal no docent hi estan convocats", "Una persona de l'equip directiu i un docent per cada 3 aules; educació especial, 50% de la plantilla"],
+              ["Escoles bressol, EAP i CREDA", "Convocats", "Llars d'infants: 33% de la plantilla"],
+              ["Menjador, acollida, extraescolars i transport escolar", "Convocats també a la concertada i la privada: pregunta al centre o a l'empresa", "50% del personal de menjador, cuina, acollida i extraescolars"],
               ["Sanitat pública", "Vagues de metges (Sindicato Médicos Unidos i Metges de Catalunya)", "Publicats: urgències i unitats especials amb normalitat"],
               ["Rodalies, metro, autobusos i FGC", "Sense vaga convocada aquell dia a les fonts revisades", "—"],
             ],
             `Revisat el ${checked}.`,
           ),
-          ...paras(`Amb les novetats de la vaga a l'educació, els serveis mínims quan surtin i què han de saber les famílies: ${b2link("strikeEducation", "ca", "Vaga a l'educació del 26 de novembre a Catalunya: hi ha escola?")}.`),
+          ...paras(`Amb les novetats de la vaga a l'educació, els seus serveis mínims i què han de saber les famílies: ${b2link("strikeEducation", "ca", "Vaga a l'educació del 26 de novembre a Catalunya: hi ha escola?")}.`),
         ],
         madridDay: "**El dijous 26:** CSIF hi convoca aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h, segons el seu calendari.",
         madridValue: "Vaga indefinida des del 14 d'octubre; CSIF, aturades de 9.00 a 11.00 i de 17.00 a 19.00 h",
@@ -474,10 +487,10 @@ const COPY: Record<Locale, Copy> = {
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "Hi ha vaga el dijous 26 de novembre de 2026?", answer: "Sí, però no general: vaga a l'educació a Catalunya, tota la jornada; continuen la vaga de metges del Sindicato Médicos Unidos i la de Correus a la Comunitat de Madrid, i a Madrid CSIF convoca aturades a l'ensenyament públic. No hi ha vaga de trens." },
-          { question: "Hi ha vaga d'educació el 26 de novembre?", answer: "Sí, a Catalunya: la convoquen USTEC·STEs, CGT, la Intersindical, la COS i la CNT amb l'Assemblea Educativa de Catalunya. Segons el preavís de la CGT, és de 0.00 a 24.00 h a tot Catalunya, cada treballador durant la seva jornada, i crida el personal docent i no docent, les escoles bressol i el personal de menjador, lleure i transport escolar." },
+          { question: "Hi ha vaga d'educació el 26 de novembre?", answer: "Sí, a Catalunya: USTEC, la COS i La Intersindical en van registrar la convocatòria el 13 de novembre i la CGT el 14, segons l'ordre de serveis mínims; el calendari el marquen amb la CNT i l'Assemblea Educativa de Catalunya. Segons el preavís de la CGT, és de 0.00 a 24.00 h a tot Catalunya, cada treballador durant la seva jornada, i crida el personal docent i no docent, les escoles bressol i el personal de menjador, lleure i transport escolar." },
           { question: "Es manté la vaga d'educació del 26 de novembre?", answer: `Sí. La mediació que el Departament d'Empresa i Treball va convocar el matí del dijous 19 de novembre per intentar evitar-la va acabar sense acord: segons USTEC·STEs, Educació no hi va presentar cap proposta. El ${checked}, la vaga continuava convocada.` },
-          { question: "Hi ha classe el dijous 26 de novembre a Catalunya?", answer: "Sí: els centres obren, perquè és una vaga del personal, no un tancament, però part del professorat i del personal de menjador i de transport escolar pot fer vaga. Cada centre dirà què garanteix quan surtin els serveis mínims." },
-          { question: "Quins serveis mínims hi ha a les escoles el 26 de novembre?", answer: `Encara no es coneixen: els fixa el Departament d'Empresa i Treball per ordre, i el ${checked} no s'havien publicat. Per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3, cinc dies abans.` },
+          { question: "Hi ha classe el dijous 26 de novembre a Catalunya?", answer: "Sí: els centres obren, perquè és una vaga del personal, no un tancament, però part del professorat i del personal de menjador i de transport escolar pot fer vaga. Els serveis mínims garanteixen a cada centre una persona de l'equip directiu i un docent per cada 3 aules: pregunta al teu què garanteix aquell dia." },
+          { question: "Quins serveis mínims hi ha a les escoles el 26 de novembre?", answer: "Els va fixar el Departament d'Empresa i Treball per una ordre del 23 de novembre: una persona de l'equip directiu a cada centre i, a més, un docent per cada 3 aules a infantil, primària i secundària; el 50% de la plantilla a l'educació especial i el 33% a les llars d'infants; i el 50% del personal de menjador, cuina, acollida i extraescolars." },
           { question: "Hi ha vaga de professors a Madrid el 26 de novembre?", answer: "Sí: l'ensenyament públic madrileny continua en vaga indefinida (CCOO, UGT i CSIF) i el dijous 26 CSIF hi convoca aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h." },
         ],
       },
@@ -569,7 +582,7 @@ const COPY: Record<Locale, Copy> = {
       },
       strike26n: {
         lead: (phase, checked) => {
-          const what = `an education strike across Catalonia, 00:00 to 24:00 and each worker during their own working day, called by USTEC·STEs, CGT, La Intersindical, COS and CNT with the Assemblea Educativa de Catalunya: schools open, but teachers, non-teaching staff and lunchtime, leisure and school-transport staff are called out, and the minimum services, which the Generalitat sets, had not been published by ${checked}. The Sindicato Médicos Unidos doctors' strike goes on, with A&E guaranteed, and so does Correos' strike in the Community of Madrid; in Madrid, CSIF calls stoppages in state schools from 09:00 to 11:00 and 17:00 to 19:00. There is no general strike and no rail strike.`;
+          const what = `an education strike across Catalonia, 00:00 to 24:00 and each worker during their own working day, called by USTEC·STEs, CGT, COS and La Intersindical: schools open, but teachers, non-teaching staff and lunchtime, leisure and school-transport staff are called out. The minimum services, which the Generalitat published on 23 November, are one member of the head team and one teacher per 3 classes at each school, 50% of staff at special-needs schools and 50% of lunchtime and before-school care staff. The Sindicato Médicos Unidos doctors' strike goes on, with A&E guaranteed, and so does Correos' strike in the Community of Madrid; in Madrid, CSIF calls stoppages in state schools from 09:00 to 11:00 and 17:00 to 19:00. There is no general strike and no rail strike.`;
           if (phase === "after") return "**On Thursday 26 November 2026 there was an education strike in Catalonia,** the Sindicato Médicos Unidos doctors' strike and Correos' strike in Madrid went on, and CSIF called stoppages in Madrid's state schools. It was not a general strike. Who called each one is below.";
           if (phase === "today") return `**Today, Thursday 26 November, there is** ${what}`;
           if (phase === "eve") return `**Tomorrow, Thursday 26 November, there is** ${what}`;
@@ -579,9 +592,9 @@ const COPY: Record<Locale, Copy> = {
         title: "Strike on 26 November 2026: Catalonia schools, doctors and Madrid. Is there school?",
         seoTitle: "Spain strike 26 November 2026: Catalonia schools, doctors",
         description: {
-          before: "Thursday 26: education strike in Catalonia (whole day; minimum services pending), SMU doctors' strike, Correos in Madrid; Madrid school stoppages.",
-          eve: "Tomorrow, Thursday 26: education strike in Catalonia (minimum services pending), SMU doctors' strike, Correos in Madrid; Madrid stoppages.",
-          today: "Today, Thursday 26: education strike in Catalonia (minimum services pending), SMU doctors' strike, Correos in Madrid; Madrid stoppages.",
+          before: "Thursday 26: education strike in Catalonia (minimum: one teacher per 3 classes), SMU doctors' strike, Correos in Madrid; Madrid school stoppages.",
+          eve: "Tomorrow, Thursday 26: education strike in Catalonia (minimum: one teacher per 3 classes), SMU doctors' strike, Correos in Madrid; Madrid stoppages.",
+          today: "Today, Thursday 26: education strike in Catalonia (minimum: one teacher per 3 classes), SMU doctors' strike, Correos in Madrid; Madrid stoppages.",
           after: "On 26 November 2026 there was an education strike in Catalonia, SMU doctors and Correos in Madrid struck, and CSIF stopped work in Madrid's schools.",
         },
         excerpt: "Strikes on Thursday 26 November 2026: education in Catalonia (is there school?), SMU doctors, Correos in Madrid, Madrid school stoppages and airports.",
@@ -590,21 +603,21 @@ const COPY: Record<Locale, Copy> = {
         extra: (checked) => [
           ...paras(
             `**Yes, schools open:** it is a strike by staff, not a closure, and Thursday 26 is a school day. According to ${link(U.cgtEns26Notice, "CGT's strike notice")}, which CGT Ensenyament published on 18 November (${link(U.cgtEns26Call, "\"us convoquem a la vaga\"")}, we call you out on strike), teaching and non-teaching staff at state schools, nursery schools (escoles bressol), the EAP and CREDA support teams, and lunchtime, before- and after-school, leisure and school-transport staff at state, private and concertada (state-funded private) schools are called out.`,
-            `**Minimum services:** the Department of Business and Labour sets them by order, and on ${checked} they were not on ${link(U.treballMs, "its list")} yet. Once they are out, your school will tell you what it can provide that day.`,
+            `**Minimum services:** the Department of Business and Labour set them by an order of 23 November, on ${link(U.treballMs, "its list")}: at each school, one member of the head team plus one teacher per 3 classes in infant, primary and secondary schools; 50% of staff at special-needs schools and 33% at nursery schools (llars d'infants); and 50% of lunchtime, kitchen, before-school care and after-school activity staff. Each school's management names who covers them: ask yours what it can provide that day.`,
           ),
           table(
             "What runs in Catalonia on Thursday 26 November 2026",
             ["Service", "On Thursday 26", "Minimum services"],
             [
-              ["State schools", "Open; teachers and non-teaching staff are called out", "Pending (Generalitat)"],
-              ["Nursery schools (escoles bressol), EAP and CREDA", "Called out", "Pending (Generalitat)"],
-              ["Lunchtime, before- and after-school care, school transport", "Called out at concertada and private schools too: ask your school or the provider", "Pending (Generalitat)"],
+              ["State schools", "Open; teachers and non-teaching staff are called out", "One member of the head team and one teacher per 3 classes; special-needs schools, 50% of staff"],
+              ["Nursery schools (escoles bressol), EAP and CREDA", "Called out", "Nursery schools (llars d'infants): 33% of staff"],
+              ["Lunchtime, before- and after-school care, school transport", "Called out at concertada and private schools too: ask your school or the provider", "50% of lunchtime, kitchen, before-school care and after-school activity staff"],
               ["Public healthcare", "Doctors' strikes (Sindicato Médicos Unidos and Metges de Catalunya)", "Published: A&E and special units run normally"],
               ["Rodalies, metro, buses and FGC", "No strike called that day in the sources checked", "—"],
             ],
             `Checked on ${checked}.`,
           ),
-          ...paras(`For the latest on the education strike, the minimum services as soon as they are out and what parents need to know: ${b2link("strikeEducation", "en", "Catalonia teachers' strike on 26 November: is there school?")}.`),
+          ...paras(`For the latest on the education strike, its minimum services and what parents need to know: ${b2link("strikeEducation", "en", "Catalonia teachers' strike on 26 November: is there school?")}.`),
         ],
         madridDay: "**On Thursday 26:** CSIF calls partial stoppages from 09:00 to 11:00 and from 17:00 to 19:00, according to its calendar.",
         madridValue: "Open-ended strike since 14 October; CSIF stoppages 09:00-11:00 and 17:00-19:00",
@@ -613,10 +626,10 @@ const COPY: Record<Locale, Copy> = {
         catalanGuide: (locale) => b2link("strikeEducation", locale, B2_TITLES.strikeEducation[locale]),
         faq: (checked) => [
           { question: "Is there a strike in Spain on Thursday 26 November 2026?", answer: "Yes, but not a general strike: an education strike in Catalonia for the whole day; the Sindicato Médicos Unidos doctors' strike and Correos' strike in the Community of Madrid go on, and in Madrid CSIF calls stoppages in state schools. There is no rail strike." },
-          { question: "Is there an education strike on 26 November?", answer: "Yes, in Catalonia: USTEC·STEs, CGT, La Intersindical, COS and CNT call it with the Assemblea Educativa de Catalunya. According to CGT's notice, it runs from 00:00 to 24:00 across Catalonia, each worker during their own working day, and calls out teaching and non-teaching staff, nursery schools and lunchtime, leisure and school-transport staff." },
+          { question: "Is there an education strike on 26 November?", answer: "Yes, in Catalonia: USTEC, COS and La Intersindical registered their calls on 13 November and CGT on the 14th, according to the minimum-services order; they set the calendar with CNT and the Assemblea Educativa de Catalunya. According to CGT's notice, it runs from 00:00 to 24:00 across Catalonia, each worker during their own working day, and calls out teaching and non-teaching staff, nursery schools and lunchtime, leisure and school-transport staff." },
           { question: "Is the 26 November education strike still on?", answer: `Yes. The mediation the Department of Business and Labour called on the morning of Thursday 19 November to try to avoid it ended without agreement: according to USTEC·STEs, the Education Department put forward no proposal. On ${checked}, the strike was still on.` },
-          { question: "Is there school in Catalonia on Thursday 26 November?", answer: "Yes: schools open, because it is a strike by staff, not a closure, but some teachers and lunchtime and school-transport staff may strike. Each school will say what it can provide once the minimum services are out." },
-          { question: "What minimum services are there in schools on 26 November?", answer: `Not known yet: the Department of Business and Labour sets them by order, and they had not been published by ${checked}. For the education strike of 8 September 2026, the order was signed on the 3rd, five days before.` },
+          { question: "Is there school in Catalonia on Thursday 26 November?", answer: "Yes: schools open, because it is a strike by staff, not a closure, but some teachers and lunchtime and school-transport staff may strike. The minimum services keep one member of the head team and one teacher per 3 classes at each school: ask yours what it can provide that day." },
+          { question: "What minimum services are there in schools on 26 November?", answer: "The Department of Business and Labour set them by an order of 23 November: one member of the head team at each school plus one teacher per 3 classes in infant, primary and secondary schools; 50% of staff at special-needs schools and 33% at nursery schools; and 50% of lunchtime, kitchen, before-school care and after-school activity staff." },
           { question: "Are Madrid's teachers on strike on 26 November?", answer: "Yes: Madrid's state schools stay on an open-ended strike (CCOO, UGT and CSIF), and on Thursday 26 CSIF calls partial stoppages from 09:00 to 11:00 and 17:00 to 19:00." },
         ],
       },

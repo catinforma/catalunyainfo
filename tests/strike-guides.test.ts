@@ -430,8 +430,10 @@ test("the education guide: 26 November is a school day; families and staff get t
     const body = text(STRIKE_EDUCATION_GUIDE.editions[locale].blocks);
     assert.match(body, line[locale], locale);
     assert.ok(JSON.stringify(STRIKE_EDUCATION_GUIDE.editions[locale].blocks).includes(`](/${locale}/${TOOL_PATHS.school[locale]}/)`), locale);
-    // The call is the unions' own: never "registered" or formally notified, which no source says yet.
-    assert.doesNotMatch(body, /registrad|registered|registre|formalment|formalmente|formally/i, locale);
+    // 23 Nov 2026: "registered" only from the Generalitat's minimum-services order of 23 Nov, which names the
+    // calls (USTEC, COS, La Intersindical on 13 Nov; CGT on 14 Nov); before it, no source said so.
+    if (/registrad|registered|registre/i.test(body)) assert.match(body, /13 (de novembre|de noviembre|November)[^.]*14/, `${locale}: registration without the order's dates`);
+    assert.equal(entry("vaga-educacio-2026-11-26").minimumServices.status, "published", "registration is printed only once the order that states it is out");
   }
 });
 

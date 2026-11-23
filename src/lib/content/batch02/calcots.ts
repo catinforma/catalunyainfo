@@ -84,6 +84,18 @@ import {
  * CALCOTS_REREAD_BY: Calçofest (21 Nov 2026) turns past tense, and the 2027
  * programme is due before the Gran Festa; the test fails after that day.
  *
+ * 23 Nov 2026 (docs/SEO_EXPERIMENTS.md, "2026-11-23 — Calçots re-read"):
+ * Calçofest rewritten in the past tense (ca/es/en) from the Cambra de Comerç's
+ * post of 23 Nov (the 1,500 popular-calçotada tickets "esgotats", 30,000+
+ * calçots cooked that day, Lo Pau de Ponts pulled up the season's first bunch)
+ * and calcofest.cat ("Gràcies per venir! Estem acabant de tancar aquesta
+ * edició"). Press room re-read: newest posts 19 and 23 Nov, no 2027 programme,
+ * so PROGRAMME_2027 stays null; the "not published" check date is now the
+ * 23rd. The festival's price and pack are on its tasting page now, not the home
+ * page (still the 2026 figures): the sentence says "the official website".
+ * CALCOTS_VERIFIED stays 2026-11-13 (the IGP, Rodalies and Monbus pages were
+ * not re-read today). Next re-read by 8 Jan 2027 (the 2026 advance sale's day).
+ *
  * No new photograph: the hero is the Rodalies-at-Estació-de-França picture
  * already in the manifest (the rail day-trips guide's lead image), which is
  * also where the R13 to Valls starts. Its alt and caption are TRAINS's own,
@@ -92,8 +104,11 @@ import {
 
 export const CALCOTS_VERIFIED = "2026-11-13";
 
-/** After this day the Calçofest section reads as future: rewrite it in the past and re-read the press room. */
-export const CALCOTS_REREAD_BY = "2026-11-22";
+/**
+ * Re-read the press room by this day: the 2026 advance sale opened on 8 Jan 2026, so the 2027 programme, price or advance
+ * sale may be out (23 Nov 2026: Calçofest rewritten in the past tense, press room re-read, no 2027 programme).
+ */
+export const CALCOTS_REREAD_BY = "2027-01-08";
 
 export const FESTA_2027 = { date: "2027-01-31", edition: 45 } as const;
 export const CALCOFEST_2026 = { date: "2026-11-21", edition: 2 } as const;
@@ -145,6 +160,12 @@ export function programmeProblems(notice: ProgrammeNotice): string[] {
 const URLS = {
   festaPress2027: "https://festacalcotadavalls.cat/premsa/es-presenta-la-45a-gran-festa-de-la-calcotada/",
   festaPressRoom: "https://festacalcotadavalls.cat/premsa/",
+  // 23 Nov 2026 (datePublished 2026-11-23, read that day): "El passat dissabte 21 de novembre, en un camp de la IGP Calçot de Valls, el
+  // cantautor i humorista Pau Pinós i Bergé, Lo Pau de Ponts, va arrencar simbòlicament el primer manat de calçots de la temporada";
+  // "Només el dissabte es van cuinar més de 30.000 calçots entre la calçotada popular, amb els 1.500 tiquets esgotats, i els restaurants
+  // de la ciutat i la comarca"; the 2027 Gran Festa "inclou cercaviles, mercat i tastets, demostracions, concursos, degustació popular i
+  // la participació de les colles castelleres" (no programme, times or price).
+  festaSeasonOpen2026: "https://festacalcotadavalls.cat/premsa/lo-pau-de-ponts-enceta-la-temporada-de-calcotades-a-valls-amb-larrencada-del-primer-manat-de-calcots/",
   festaHome: "https://festacalcotadavalls.cat/",
   festaHowTo: "https://festacalcotadavalls.cat/la-festa/com-fer-una-calcotada/",
   festaHistory: "https://festacalcotadavalls.cat/la-festa/historia-tradicio/",
@@ -187,6 +208,7 @@ const SOURCES: B2Source[] = [
   { name: "El Festival Calçofest posa a la venda els tiquets de la calçotada popular (15 d'octubre de 2026)", url: URLS.vallsCalcofest, publisher: "Ajuntament de Valls" },
   { name: "Transport públic: bus, tren i taxis", url: URLS.vallsTransport, publisher: "Ajuntament de Valls" },
   { name: "Calçofest 2026", url: URLS.calcofest, publisher: "Calçofest" },
+  { name: "Lo Pau de Ponts enceta la temporada de calçotades a Valls amb l'arrencada del primer manat de calçots (23 de novembre de 2026)", url: URLS.festaSeasonOpen2026, publisher: "Cambra de Comerç de Valls" },
   { name: "IGP Calçot de Valls", url: URLS.igp, publisher: "Consell Regulador de la IGP Calçot de Valls" },
   { name: "El Calçot, un cultiu ancestral", url: URLS.igpProcess, publisher: "Consell Regulador de la IGP Calçot de Valls" },
   { name: "On comprar Calçots? Compra directa als productors", url: URLS.igpProducers, publisher: "Consell Regulador de la IGP Calçot de Valls" },
@@ -235,9 +257,10 @@ export const CALCOTS_META: Record<Locale, { path: string; title: string; seoTitl
 /* -------------------------------------------------------------------------- */
 
 const CHECKED: Record<Locale, string> = {
-  ca: "consultat el 13 de novembre de 2026",
-  es: "consultado el 13 de noviembre de 2026",
-  en: "checked on 13 November 2026",
+  // 23 Nov 2026: the press room, the home page and the tasting page re-read; no 2027 programme.
+  ca: "consultat el 23 de novembre de 2026",
+  es: "consultado el 23 de noviembre de 2026",
+  en: "checked on 23 November 2026",
 };
 
 function check(programme: ProgrammeNotice | null): ProgrammeNotice | null {
@@ -299,9 +322,9 @@ function pendingParagraph(locale: Locale, programme: ProgrammeNotice | null): st
     }[locale];
   }
   return {
-    ca: `**El que encara no se sap:** el programa d'actes, el preu del tiquet i el contingut del lot de degustació del 2027. La nota del 19 d'octubre diu que els detalls del programa «es donaran a conèixer en els propers dies». La pàgina d'inici de la web oficial ja esmenta un preu i un lot, però són els mateixos de l'edició del 2026, i per això aquí no els donem com a definitius. Quan es presenti el programa, sortirà a la [sala de premsa de la festa](${press}).`,
-    es: `**Lo que aún no se sabe:** el programa de actos, el precio del ticket y el contenido del lote de degustación de 2027. La nota del 19 de octubre dice que los detalles del programa se darán a conocer «en els propers dies» (en los próximos días). La portada de la web oficial ya menciona un precio y un lote, pero son los mismos de la edición de 2026, así que aquí no los damos por definitivos. Cuando se presente el programa, saldrá en la [sala de prensa de la fiesta](${press}).`,
-    en: `**What is not known yet:** the 2027 programme of events, the ticket price and what the tasting pack includes. The 19 October note says the programme details will be announced "in the coming days". The festival's home page already mentions a price and a pack, but they are the same as in the 2026 edition, so we do not treat them as final. When the programme is presented it will appear in the [festival's press room](${press}).`,
+    ca: `**El que encara no se sap:** el programa d'actes, el preu del tiquet i el contingut del lot de degustació del 2027. La nota del 19 d'octubre diu que els detalls del programa «es donaran a conèixer en els propers dies», i la del 23 de novembre avança que la jornada «inclou cercaviles, mercat i tastets, demostracions, concursos, degustació popular i la participació de les colles castelleres», sense horaris ni preus. La web oficial ja esmenta un preu i un lot, però són els mateixos de l'edició del 2026, i per això aquí no els donem com a definitius. Quan es presenti el programa, sortirà a la [sala de premsa de la festa](${press}).`,
+    es: `**Lo que aún no se sabe:** el programa de actos, el precio del ticket y el contenido del lote de degustación de 2027. La nota del 19 de octubre dice que los detalles del programa se darán a conocer «en els propers dies» (en los próximos días), y la del 23 de noviembre adelanta que la jornada incluye pasacalles, mercado y degustaciones, demostraciones, concursos, degustación popular y la participación de las collas castelleras, sin horarios ni precios. La web oficial ya menciona un precio y un lote, pero son los mismos de la edición de 2026, así que aquí no los damos por definitivos. Cuando se presente el programa, saldrá en la [sala de prensa de la fiesta](${press}).`,
+    en: `**What is not known yet:** the 2027 programme of events, the ticket price and what the tasting pack includes. The 19 October note says the programme details will be announced "in the coming days", and the 23 November note says the day includes parades, a market and tastings, demonstrations, contests, the popular tasting and the castellers' teams, with no times or prices. The festival's website already mentions a price and a pack, but they are the same as in the 2026 edition, so we do not treat them as final. When the programme is presented it will appear in the [festival's press room](${press}).`,
   }[locale];
 }
 
@@ -407,7 +430,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         { label: "Gran Festa de la Calçotada 2027", value: `${festa.charAt(0).toUpperCase()}${festa.slice(1)}, a Valls (45a edició)` },
         { label: "Qui l'organitza", value: "La Cambra de Comerç de Valls i l'Ajuntament de Valls" },
         { label: "Programa i tiquets del 2027", value: programmeFact("ca", programme) },
-        { label: "Abans: el Calçofest", value: `${calcofest.charAt(0).toUpperCase()}${calcofest.slice(1)}, a Valls (2a edició)` },
+        { label: "Calçofest 2026 (ja s'ha fet)", value: `${calcofest.charAt(0).toUpperCase()}${calcofest.slice(1)}, a Valls (2a edició)` },
         { label: "Sense cotxe des de Barcelona", value: "Tren R13 de Rodalies o bus Valls – Barcelona de Monbus" },
       ]),
       callout(
@@ -444,15 +467,16 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       ),
       ...h2(
         `Calçofest 2026: el dissabte 21 de novembre a Valls`,
-        `Abans de la Gran Festa, Valls té una altra cita: el **Calçofest**, que fa la segona edició el **${calcofest}**. Segons l'Ajuntament de Valls, s'ha consolidat com una de les cites que donen el tret de sortida a la temporada de calçotades, i combina activitats gratuïtes al matí, una calçotada popular i concerts a la tarda i al vespre.`,
+        `Abans de la Gran Festa, Valls va tenir una altra cita: el **Calçofest**, que va fer la segona edició el **${calcofest}**. Segons l'Ajuntament de Valls, s'ha consolidat com una de les cites que donen el tret de sortida a la temporada de calçotades, i va combinar activitats gratuïtes al matí, una calçotada popular i concerts a la tarda i al vespre.`,
       ),
       list(
-        `**Calçotada popular:** de 13:00 a 15:00 a l'aparcament de la Cooperativa, amb 1.500 degustacions a 15 € més despeses de gestió. Els tiquets es compren al [web del Calçofest](${URLS.calcofest}).`,
-        "**Concerts:** Figa Flawas, The Tyets, Els Pets i Els Amics de les Arts, entre d'altres.",
-        "**Bus des de Barcelona:** l'organització del Calçofest ha programat un autobús oficial d'anada i tornada des de la zona de l'Estació de França, amb sortida a les 14:30, pensat per als concerts (no arriba a la calçotada de 13:00 a 15:00), subjecte a un mínim d'ocupació i amb tornada en acabar la música. A Valls, un bus llançadora gratuït uneix l'estació d'autobusos amb el recinte.",
+        `**Calçotada popular:** de 13:00 a 15:00 a l'aparcament de la Cooperativa, amb 1.500 degustacions a 15 € més despeses de gestió; segons la [Cambra de Comerç de Valls](${URLS.festaSeasonOpen2026}), els 1.500 tiquets es van esgotar.`,
+        "**Concerts:** el cartell l'encapçalaven Figa Flawas, amb The Tyets, Els Pets i Els Amics de les Arts, entre d'altres.",
+        "**Bus des de Barcelona:** l'organització del Calçofest va programar un autobús oficial d'anada i tornada des de la zona de l'Estació de França, amb sortida a les 14:30, pensat per als concerts (no arribava a la calçotada de 13:00 a 15:00), subjecte a un mínim d'ocupació i amb tornada en acabar la música. A Valls, un bus llançadora gratuït unia l'estació d'autobusos amb el recinte.",
+        `**El primer manat:** el mateix dissabte, en un camp de la IGP, el cantautor Lo Pau de Ponts va arrencar simbòlicament el primer manat de calçots de la temporada, i aquell dia es van cuinar més de 30.000 calçots entre la calçotada popular i els restaurants de la ciutat i la comarca, segons la [Cambra de Comerç de Valls](${URLS.festaSeasonOpen2026}).`,
       ),
       ...paras(
-        `Font: [Ajuntament de Valls, 15 d'octubre de 2026](${URLS.vallsCalcofest}). Els preus de les entrades dels concerts pugen a mesura que s'acosta la data; consulta'ls al web del festival. Per a les altres fires gastronòmiques de la tardor, ${link("foodfairs", "ca", "mira el nostre calendari")}.`,
+        `Fonts: [Ajuntament de Valls, 15 d'octubre de 2026](${URLS.vallsCalcofest}), i Cambra de Comerç de Valls, 23 de novembre de 2026. El [web del Calçofest](${URLS.calcofest}) ja dona l'edició per tancada («Gràcies per venir!»). Per a les altres fires gastronòmiques de la tardor, ${link("foodfairs", "ca", "mira el nostre calendari")}.`,
       ),
       ...h2(
         "Què és un calçot i què garanteix la IGP Calçot de Valls?",
@@ -569,7 +593,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "Què és el Calçofest?",
-          answer: `Un festival de música i gastronomia a Valls que fa la segona edició el ${calcofest}, amb activitats gratuïtes al matí, una calçotada popular de 13:00 a 15:00 i concerts a la tarda i al vespre.`,
+          answer: `Un festival de música i gastronomia a Valls. La segona edició va ser el ${calcofest}, amb activitats gratuïtes al matí, una calçotada popular de 13:00 a 15:00, amb els 1.500 tiquets esgotats, i concerts a la tarda i al vespre.`,
         },
       ]),
       ...paras(verifiedLine("ca", CALCOTS_VERIFIED)),
@@ -586,7 +610,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         { label: "Gran Festa de la Calçotada 2027", value: `${festa.charAt(0).toUpperCase()}${festa.slice(1)}, en Valls (45.ª edición)` },
         { label: "Quién la organiza", value: "La Cambra de Comerç de Valls y el Ayuntamiento de Valls" },
         { label: "Programa y tickets de 2027", value: programmeFact("es", programme) },
-        { label: "Antes: el Calçofest", value: `${calcofest.charAt(0).toUpperCase()}${calcofest.slice(1)}, en Valls (2.ª edición)` },
+        { label: "Calçofest 2026 (ya celebrado)", value: `${calcofest.charAt(0).toUpperCase()}${calcofest.slice(1)}, en Valls (2.ª edición)` },
         { label: "Sin coche desde Barcelona", value: "Tren R13 de Rodalies o autobús Valls – Barcelona de Monbus" },
       ]),
       callout(
@@ -623,15 +647,16 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       ),
       ...h2(
         "Calçofest 2026: el sábado 21 de noviembre en Valls",
-        `Antes de la Gran Festa, Valls tiene otra cita: el **Calçofest**, que celebra su segunda edición el **${calcofest}**. Según el Ayuntamiento de Valls, se ha consolidado como una de las citas que dan el pistoletazo de salida a la temporada de calçotadas, y combina actividades gratuitas por la mañana, una calçotada popular y conciertos por la tarde y la noche.`,
+        `Antes de la Gran Festa, Valls tuvo otra cita: el **Calçofest**, que celebró su segunda edición el **${calcofest}**. Según el Ayuntamiento de Valls, se ha consolidado como una de las citas que dan el pistoletazo de salida a la temporada de calçotadas, y combinó actividades gratuitas por la mañana, una calçotada popular y conciertos por la tarde y la noche.`,
       ),
       list(
-        `**Calçotada popular:** de 13:00 a 15:00 en el aparcamiento de la Cooperativa, con 1.500 degustaciones a 15 € más gastos de gestión. Los tickets se compran en la [web del Calçofest](${URLS.calcofest}).`,
-        "**Conciertos:** Figa Flawas, The Tyets, Els Pets y Els Amics de les Arts, entre otros.",
-        "**Autobús desde Barcelona:** la organización del Calçofest ha programado un autobús oficial de ida y vuelta desde la zona de la Estació de França, con salida a las 14:30, pensado para los conciertos (no llega a la calçotada de 13:00 a 15:00), sujeto a un mínimo de ocupación y con vuelta al acabar la música. En Valls, un autobús lanzadera gratuito une la estación de autobuses con el recinto.",
+        `**Calçotada popular:** de 13:00 a 15:00 en el aparcamiento de la Cooperativa, con 1.500 degustaciones a 15 € más gastos de gestión; según la [Cambra de Comerç de Valls](${URLS.festaSeasonOpen2026}), los 1.500 tickets se agotaron.`,
+        "**Conciertos:** el cartel lo encabezaban Figa Flawas, con The Tyets, Els Pets y Els Amics de les Arts, entre otros.",
+        "**Autobús desde Barcelona:** la organización del Calçofest programó un autobús oficial de ida y vuelta desde la zona de la Estació de França, con salida a las 14:30, pensado para los conciertos (no llegaba a la calçotada de 13:00 a 15:00), sujeto a un mínimo de ocupación y con vuelta al acabar la música. En Valls, un autobús lanzadera gratuito unía la estación de autobuses con el recinto.",
+        `**El primer manojo:** ese mismo sábado, en un campo de la IGP, el cantautor Lo Pau de Ponts arrancó simbólicamente el primer manojo de calçots de la temporada, y ese día se cocinaron más de 30.000 calçots entre la calçotada popular y los restaurantes de la ciudad y la comarca, según la [Cambra de Comerç de Valls](${URLS.festaSeasonOpen2026}) (en catalán).`,
       ),
       ...paras(
-        `Fuente: [Ayuntamiento de Valls, 15 de octubre de 2026](${URLS.vallsCalcofest}). El precio de las entradas de los conciertos sube a medida que se acerca la fecha; consúltalo en la web del festival. Para el resto de ferias gastronómicas del otoño, ${link("foodfairs", "es", "mira nuestro calendario")}.`,
+        `Fuentes: [Ayuntamiento de Valls, 15 de octubre de 2026](${URLS.vallsCalcofest}), y Cambra de Comerç de Valls, 23 de noviembre de 2026. La [web del Calçofest](${URLS.calcofest}) ya da la edición por cerrada («Gràcies per venir!», gracias por venir). Para el resto de ferias gastronómicas del otoño, ${link("foodfairs", "es", "mira nuestro calendario")}.`,
       ),
       ...h2(
         "¿Qué es un calçot y qué garantiza la IGP Calçot de Valls?",
@@ -748,7 +773,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "¿Qué es el Calçofest?",
-          answer: `Un festival de música y gastronomía en Valls que celebra su segunda edición el ${calcofest}, con actividades gratuitas por la mañana, una calçotada popular de 13:00 a 15:00 y conciertos por la tarde y la noche.`,
+          answer: `Un festival de música y gastronomía en Valls. La segunda edición fue el ${calcofest}, con actividades gratuitas por la mañana, una calçotada popular de 13:00 a 15:00, con los 1.500 tickets agotados, y conciertos por la tarde y la noche.`,
         },
       ]),
       ...paras(verifiedLine("es", CALCOTS_VERIFIED)),
@@ -764,7 +789,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       { label: "Gran Festa de la Calçotada 2027", value: `${festa}, in Valls (45th edition)` },
       { label: "Organised by", value: "The Valls Chamber of Commerce (Cambra de Comerç) and Valls City Council" },
       { label: "2027 programme and tickets", value: programmeFact("en", programme) },
-      { label: "Before that: Calçofest", value: `${calcofest}, in Valls (2nd edition)` },
+      { label: "Calçofest 2026 (already held)", value: `${calcofest}, in Valls (2nd edition)` },
       { label: "Without a car from Barcelona", value: "Rodalies R13 train or the Monbus Valls – Barcelona bus" },
     ]),
     callout(
@@ -801,15 +826,16 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
     ),
     ...h2(
       "Calçofest 2026: Saturday 21 November in Valls",
-      `Before the Gran Festa, Valls has another date: **Calçofest**, whose second edition is on **${calcofest}**. According to Valls City Council it has become one of the events that open the calçotada season, combining free activities in the morning, a popular calçotada and concerts in the afternoon and evening.`,
+      `Before the Gran Festa, Valls had another date: **Calçofest**, whose second edition was on **${calcofest}**. According to Valls City Council it has become one of the events that open the calçotada season, and it combined free activities in the morning, a popular calçotada and concerts in the afternoon and evening.`,
     ),
     list(
-      `**Popular calçotada:** 13:00 to 15:00 in the Cooperativa car park, with 1,500 tastings at €15 plus booking fees. Tickets are sold on the [Calçofest website](${URLS.calcofest}).`,
-      "**Concerts:** Figa Flawas, The Tyets, Els Pets and Els Amics de les Arts, among others.",
-      "**Bus from Barcelona:** the Calçofest organisers have arranged an official return bus from the Estació de França area, leaving at 14:30 and timed for the concerts (it does not reach the 13:00-15:00 calçotada), subject to a minimum number of passengers and returning after the music ends. In Valls, a free shuttle bus links the bus station with the festival site.",
+      `**Popular calçotada:** 13:00 to 15:00 in the Cooperativa car park, with 1,500 tastings at €15 plus booking fees; according to the [Valls Chamber of Commerce](${URLS.festaSeasonOpen2026}), all 1,500 tickets sold out.`,
+      "**Concerts:** the line-up was headed by Figa Flawas, with The Tyets, Els Pets and Els Amics de les Arts, among others.",
+      "**Bus from Barcelona:** the Calçofest organisers arranged an official return bus from the Estació de França area, leaving at 14:30 and timed for the concerts (it did not reach the 13:00-15:00 calçotada), subject to a minimum number of passengers and returning after the music ended. In Valls, a free shuttle bus linked the bus station with the festival site.",
+      `**The first bunch:** that Saturday, in an IGP field, the singer-songwriter Lo Pau de Ponts symbolically pulled up the season's first bunch of calçots, and more than 30,000 calçots were cooked that day between the popular calçotada and the restaurants of the town and the comarca, according to the [Valls Chamber of Commerce](${URLS.festaSeasonOpen2026}) (in Catalan).`,
     ),
     ...paras(
-      `Source: [Valls City Council, 15 October 2026](${URLS.vallsCalcofest}). Concert ticket prices rise as the date approaches; check them on the festival website. For the other autumn food fairs, ${link("foodfairs", "en", "see our calendar")}.`,
+      `Sources: [Valls City Council, 15 October 2026](${URLS.vallsCalcofest}), and the Valls Chamber of Commerce, 23 November 2026. The [Calçofest website](${URLS.calcofest}) now treats the edition as over ("Gràcies per venir!", thanks for coming). For the other autumn food fairs, ${link("foodfairs", "en", "see our calendar")}.`,
     ),
     ...h2(
       "What is a calçot, and what does the IGP Calçot de Valls guarantee?",
@@ -926,7 +952,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       },
       {
         question: "What is Calçofest?",
-        answer: `A music and food festival in Valls whose second edition is on ${calcofest}, with free activities in the morning, a popular calçotada from 13:00 to 15:00 and concerts in the afternoon and evening.`,
+        answer: `A music and food festival in Valls. Its second edition was on ${calcofest}, with free activities in the morning, a popular calçotada from 13:00 to 15:00, whose 1,500 tickets sold out, and concerts in the afternoon and evening.`,
       },
     ]),
     ...paras(verifiedLine("en", CALCOTS_VERIFIED)),
