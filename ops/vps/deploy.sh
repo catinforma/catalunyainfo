@@ -141,6 +141,22 @@ health_check() {
   return "$failed"
 }
 
+# Warm the election routes before Cloudflare is purged (23 Nov 2026,
+# docs/SEO_EXPERIMENTS.md "29N town pages: origin cost per page view"). The
+# first request to them after a restart loads ~5 MB of server chunks (the
+# results and polling-place snapshots) and runs cold code: 7-9 s for the first
+# town page on a copy of the live build, 0.5-3 s for the next few, ~0.2 s once
+# warm. Without this the purge sends the first visitors of every route onto
+# that cold start at once. Informational only: never fails the deploy.
+warm_routes() {
+  local path out
+  for path in /ca/eleccions/igualada/ /es/elecciones/igualada/ /en/elections/salou/ \
+    /ca/eleccions/comarca/anoia/ /es/elecciones/comarca/anoia/ /ca/eleccions/ /es/elecciones/ /en/elections/; do
+    out=$(curl -s -o /dev/null -w '%{http_code} %{time_total}s' --max-time 60 -H "Host: $CANONICAL_HOST" "$APP_URL$path" || true)
+    echo "  warm $path ${out:-000}"
+  done
+}
+
 # ---------------------------------------------------------------------------
 # Cloudflare purge. Cloudflare may cache HTML (README section 10, rule 2), and
 # a new release changes every page (build id, chunk names), so the whole zone
@@ -329,6 +345,8 @@ restart
 log "Health checks"
 if health_check; then
   log "Live: $NAME (previous: ${PREVIOUS:+$(basename "$PREVIOUS")}${PREVIOUS:-none}) in $(( $(date +%s) - START ))s"
+  log "Warming the election routes"
+  warm_routes
   purge_cdn
 else
   warn "health checks failed for $NAME"

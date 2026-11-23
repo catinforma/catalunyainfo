@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
+import { IntentLink } from "@/components/nav/IntentLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
@@ -123,12 +124,12 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
                   {model.others.links.map((item, index) => (
                     <span key={item.href}>
                       {index > 0 ? " · " : ""}
-                      <Link href={item.href}>{item.label}</Link>
+                      <IntentLink href={item.href}>{item.label}</IntentLink>
                     </span>
                   ))}
                 </p>
                 <p className="mt-3">
-                  <Link href={model.hub.href}>{model.hub.label}</Link>
+                  <IntentLink href={model.hub.href}>{model.hub.label}</IntentLink>
                 </p>
               </nav>
 
@@ -137,7 +138,7 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
                 <ul>
                   {model.guides.links.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href}>{item.label}</Link>
+                      <IntentLink href={item.href}>{item.label}</IntentLink>
                     </li>
                   ))}
                 </ul>

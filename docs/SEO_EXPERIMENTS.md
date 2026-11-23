@@ -12406,3 +12406,88 @@ Same go-live, also published: `strikes` (26N minimum-services order, e-Tauler 66
 cada 3 unitats o aules», 50 % special education, 33 % llars d'infants, USTEC/COS/La Intersindical/CGT), `calcots`,
 `puente-diciembre-espana`, `pont-desembre`, `ski`, `nuria`, `portaventura`, `batch02-b` (all 200, failedCalls 0);
 IndexNow 169 URLs. 3,075 tests pass.
+
+## 2026-11-23 — 29N town pages: origin cost per page view (election links prefetch on intent; deploy warms the election routes before the purge; no title, description, H1, lead or visible content touched; deploy only, no publish group)
+
+**Why.** Before 29N (goal 30k sessions that day) the election town pages (`/ca/eleccions/<town>/`, `/es/elecciones/…`,
+`/en/elections/…`, 947 + 947 + 30, `revalidate = 300`) were slow on a cold cache. Owner's live measurements, 23 Nov, right
+after the 19:19 deploy and its full Cloudflare purge: Súria 3.7 s (es) / 2.7 s (ca), Sabadell 1.8 s, Barcelona 1.4 s,
+Girona 1.2 s; Cloudflare HITs 0.5–0.7 s; during a ~2 req/s crawl several took 8–11 s and 290 URLs took > 3 s.
+
+**Where the time goes** (measured 23 Nov 2026 on the VPS; a copy of the live standalone build, release
+20261123T175956Z-e851218, run on port 3199 without the database, profiled with the V8 inspector; plus ≤ 1 req/s probes of
+production through Cloudflare and on 127.0.0.1:3000):
+- **Not the database, not fetches, not data loading.** The page reads the committed snapshot (no query, no fetch); the
+  header/footer counts are memoised in-process for 10 min. `generateMetadata` costs 1–2 ms; `resolveElectionPage` is a
+  `Set` check plus a `find` over 947 towns. The 1.8 MB results snapshot and the 1.6 MB polling-place JSON are parsed once per
+  process, not per render.
+- **Cold process after a restart: 7–9 s** for the first town page (the route loads ≥ 5.3 MB of server chunks, among them the
+  two snapshots, and runs cold code), 0.5–3 s for the next few, ~0.2 s once warm. A deploy restarts the process and then
+  purges Cloudflare, so the first visitors of every route land on that cold start at once — the owner's 3.7 s Súria.
+- **A warm cold-render costs ~0.2–0.25 s of CPU** on the one Node thread (40 towns sequential: mean 0.27 s, p50 0.21 s,
+  p90 0.50 s; production direct on 127.0.0.1:3000: 0.09–0.35 s). Split: React render + Flight serialisation ~35 %, the ISR
+  write ~20 % (Next's `IncrementalCache.set` runs `JSON.stringify` over the whole entry, buffers included, then writes
+  `.html`, `.rsc`, `.meta` and four `.segments` files: ~0.5–0.8 MB per town, 0.8 MB for Barcelona), GC ~8 %, the ETag hash
+  of the HTML ~5 %, the app's own code (model, page component) ~10 % (~20 ms). It scales with the page (HTML 180–320 KB,
+  RSC 100–160 KB), which is content: not changed.
+- **One thread saturates at ~4–5 renders/s.** 24 cold towns at concurrency 8 took 9.3 s wall (0.39 s each). A STALE hit is
+  not free either: Next resolves the stale entry and starts the regeneration in the same tick
+  (`next/dist/server/response-cache/index.js`, `handleGet`), so on one thread its latency is close to a render's (local:
+  STALE p50 0.22 s vs MISS 0.21 s). A cache HIT is ~25 ms of CPU.
+- **Viewport prefetches multiply the origin work per page view.** Cloudflare caches the HTML but never `?_rsc=`. In headless
+  Chromium on the build copy (390 px phone, scrolled to the end): a town page sent **12** RSC requests (route tree +
+  segment, ~10–20 ms each at the origin, a full render when the target is stale or never rendered: comarca 0.1–0.4 s), from
+  the election-night guide (3: linked from the next-step box and the related list), the comarca link (2), the hub link (2)
+  and the five other guide links (5); a comarca page sent **6 and
+  more** (its 42 other-comarca links drip through the prefetch scheduler). 18 Nov Caddy logs had RSC prefetches at 41 % of
+  origin requests; header, footer, breadcrumbs, hub lists and sibling lists were already fixed then, these were not.
+- Network: TCP retransmits 4.3 % of segments since boot (3.83 M / 88.2 M, 644 k RTO timeouts; 0.6 % over 30 s tonight).
+  Multi-second outliers through Cloudflare can be retransmission timeouts, not render time.
+
+**What changed.**
+1. **Election links prefetch on intent** (`IntentLink`, the 18 Nov pattern): town page `ElectionResultsPage.tsx` comarca,
+   hub and guide links; comarca page `ElectionsComarcaPage.tsx` other comarques, hub, guides; and the sitewide next-step
+   box `NextStep.tsx` (near the top of every page that has it). Same `<a href>` HTML (checked against the live build's HTML
+   for Súria); a hover, focus or touch still prefetches, so the click stays a client-side navigation. Town lists keep
+   `prefetch={false}`. Test: `tests/election-prefetch.test.ts`.
+2. **`ops/vps/deploy.sh` warms the election routes** after the health checks and before the Cloudflare purge (one town page
+   per language, two comarca pages, the three hubs; `--max-time 60`, never fails the deploy; ~5–10 s). Test:
+   `tests/cdn-purge.test.ts`. Takes effect for deploys only after `sudo bash /srv/catalunyainfo/current/ops/vps/provision.sh
+   --files-only` installs the new `/usr/local/bin/catalunyainfo-deploy`.
+
+**Expected gain.** Per scrolled town page view: 12 uncached origin requests → 0 (1–2 when the reader hovers or taps a link),
+i.e. ~0.15–0.25 s of origin CPU per view removed, plus the comarca/hub renders those prefetches triggered; per comarca page
+view: 6–40+ → 0. The town page itself, cached by Cloudflare, costs the origin one render per Cloudflare POP per 5 min, so on
+the night most of the per-view origin work was the prefetches. After a deploy: the first visitors no longer pay the 7–9 s
+cold start. Per-render cost is unchanged (~0.2–0.25 s CPU).
+
+**Not changed, and why.**
+- *Prerendering more towns at build time:* the build takes ~15 min (893 s; static generation 276 s), so entries prerendered
+  with `revalidate = 300` are already stale at go-live and a STALE hit costs about a render on one thread. Little gain for
+  +~1 min of build and ~0.3 GB per release.
+- *A longer revalidate before 20:00 and a short one after:* the town pages print no figures on the night (results reach them
+  only through `npm run elections:29n -- import` → `snapshot.ts` → deploy, after the 4–7 Dec general count;
+  `scripts/elections-29n.ts`, `tests/election-29n-import.test.ts`), so the 300 s exists for the clock-driven phase (28 Nov
+  00:00, 29 Nov 00:00, 29 Nov 20:00, 30 Nov 00:00, 8 Dec 00:00) and the day-dependent boxes. Next 16 without
+  `cacheComponents` needs `revalidate` as a literal, and no timer revalidates at the boundaries, so a timed switch is not
+  clean. Recommendation: keep 300 through 29 Nov; a deploy on Mon 30 Nov can raise it to 900 (the "after" phase changes only
+  at midnight); back to `false` after 8 Dec as planned.
+- *`generateEtags: false`:* ~5 % of a render, ~10 % of a HIT, but it changes 304 behaviour sitewide. Left as it is.
+
+**Recommendations (owner/ops).** Turn on Cloudflare Smart Tiered Cache (one origin fetch per page per 5 min instead of one
+per POP). Avoid a deploy between 19:00 and 24:00 on 29 Nov: it restarts the only Node process, discards the release's ISR
+cache and purges the whole zone at peak (if `ELECTION_NIGHT_RESULTS_URL` must go in that night, do it as early as possible).
+Capacity is one Node thread (~4–5 cold renders/s); a second process would need a shared cache handler (not for this week).
+
+**How to re-measure.**
+- Origin cache state and time through Cloudflare (a query string skips the HTML cache rule; Next ignores it):
+  `curl -s -o /dev/null -D - -w 'ttfb %{time_starttransfer}\n' 'https://www.catalunyainfo.com/es/elecciones/suria/?pv=1' | grep -iE 'x-nextjs-cache|ttfb'`
+  (MISS = a render, STALE = served + regenerated, HIT = cached). ≤ 1 req/s.
+- The origin alone, on the VPS: the same `curl` on `http://127.0.0.1:3000/es/elecciones/<town>/` for towns not yet
+  rendered since the last deploy.
+- Prefetches per page view: load a town page in Chromium DevTools (Network, filter `_rsc`, phone size), scroll to the end:
+  0 requests expected until a link is hovered or tapped (12 before this change).
+- Cold start: after a deploy, the `warm` lines in the deploy log print each route's status and time.
+
+**Outcome:** _pending — check on 30 Nov: origin load and slow requests on the night (Caddy access log: share of `_rsc`
+requests and of responses > 3 s, compared with 18 Nov's 41 %)._

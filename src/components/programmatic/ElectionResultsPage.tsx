@@ -8,6 +8,7 @@ import { PlacePhoto } from "@/components/PlacePhoto";
 import { TownHub } from "@/components/TownHub";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { IntentLink } from "@/components/nav/IntentLink";
 import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
 import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
@@ -209,11 +210,11 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                   ))}
                   {model.siblings.comarca ? (
                     <p className="mt-3">
-                      <Link href={model.siblings.comarca.href}>{model.siblings.comarca.label}</Link>
+                      <IntentLink href={model.siblings.comarca.href}>{model.siblings.comarca.label}</IntentLink>
                     </p>
                   ) : null}
                   <p className="mt-3">
-                    <Link href={model.siblings.hub.href}>{model.siblings.hub.label}</Link>
+                    <IntentLink href={model.siblings.hub.href}>{model.siblings.hub.label}</IntentLink>
                   </p>
                 </nav>
 
@@ -222,7 +223,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                   <ul>
                     {model.related.links.map((item) => (
                       <li key={item.href}>
-                        <Link href={item.href}>{item.label}</Link>
+                        <IntentLink href={item.href}>{item.label}</IntentLink>
                       </li>
                     ))}
                   </ul>

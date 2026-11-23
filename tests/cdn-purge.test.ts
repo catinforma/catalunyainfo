@@ -234,7 +234,10 @@ test("deploy.sh: purges everything after passing checks, token via stdin, silent
   // and the printf into curl's stdin. Nothing else can print it.
   assert.deepEqual(deploy.match(/\$\{?CLOUDFLARE_API_TOKEN[^A-Z_]/g), ["${CLOUDFLARE_API_TOKEN:", '$CLOUDFLARE_API_TOKEN"']);
   // Called only after a release passes its health checks (deploy, --rollback, auto-rollback).
-  assert.match(deploy, /log "Live: \$NAME[^\n]*\n {2}purge_cdn\n/);
+  // After a deploy, the election routes are warmed first (23 Nov 2026): the purge must not send
+  // visitors onto their cold start.
+  assert.match(deploy, /log "Live: \$NAME[^\n]*\n {2}log "Warming the election routes"\n {2}warm_routes\n {2}purge_cdn\n/);
+  assert.match(deploy, /warm_routes\(\) \{[^]*?--max-time 60[^]*?\|\| true\)/, "warming is bounded and never fails the deploy");
   assert.match(deploy, /log "Rolled back to \$\(basename "\$target"\)"; purge_cdn; exit 0;/);
   assert.equal(deploy.match(/^\s*purge_cdn$|; purge_cdn;/gm)?.length, 3);
   // load_env reads the env file through the existing sudo rule; no new rule.
