@@ -433,8 +433,16 @@ test("structured data: FAQPage and Dataset on the 2027 pages, from what the page
       assert.ok(based.includes(BOE_2027.url) && based.includes(SNAPSHOT.sources.regional["2027"]!.url), `${iso} ${locale}`);
     }
   }
+  // 23 Nov 2026: the earlier pages get FAQPage too, with one question (the H1)
+  // and the answer printed under it; still no Dataset.
   for (const iso of DATE_PAGES.filter((d) => !isTranche4(d))) {
-    assert.equal(dateFaq(iso, "ca"), null, iso);
+    for (const locale of DATE_LOCALES) {
+      const c = dateContent(iso, locale);
+      const faq = dateFaq(iso, locale) as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] };
+      assert.equal(faq.mainEntity.length, 1, `${iso} ${locale}`);
+      assert.equal(faq.mainEntity[0]!.name, dateQuestion(iso, locale));
+      assert.equal(faq.mainEntity[0]!.acceptedAnswer.text, [c.answer, ...c.answerNote].join(" "));
+    }
     assert.equal(dateDataset(iso, "ca"), null, iso);
   }
   const routes = readFileSync(join(ROOT, "src/components/programmatic/holidays/routes.tsx"), "utf8");

@@ -121,12 +121,28 @@ test("sources are https and untracked, and the reader sees the check date", () =
       assert.ok(!/[?&]utm_/.test(source.url), source.url);
       assert.ok(!/aerobusbcn/i.test(source.url), source.url);
     }
-    assert.equal(article.verifiedAt, "2026-10-26");
+  }
+  // La Marató keeps its 26 Oct reading; the bridge was re-read on 23 Nov 2026
+  // (docs/SEO_EXPERIMENTS.md): every edition prints that day, in the
+  // "last verified" line and in the "where these dates come from" box.
+  const checked: Record<string, RegExp> = {
+    [MARATO_GUIDE.key]: /26 (d'octubre|de octubre|October) (de )?2026/,
+    [DECEMBER_BRIDGE.key]: /23 (de novembre|de noviembre|November) (de )?2026/,
+  };
+  assert.equal(MARATO_GUIDE.verifiedAt, MARATO_VERIFIED);
+  assert.equal(MARATO_VERIFIED, "2026-10-26");
+  assert.equal(DECEMBER_BRIDGE.verifiedAt, BRIDGE_VERIFIED);
+  assert.equal(BRIDGE_VERIFIED, "2026-11-23");
+  for (const article of ARTICLES) {
     for (const locale of LOCALES) {
-      assert.match(text(article.editions[locale].blocks), /26 (d'octubre|de octubre|October) (de )?2026/, `${article.key}/${locale}`);
+      const body = text(article.editions[locale].blocks);
+      assert.match(body, checked[article.key]!, `${article.key}/${locale}`);
     }
   }
-  assert.equal(BRIDGE_VERIFIED, MARATO_VERIFIED);
+  // No edition of the bridge still says it was last read on 26 October.
+  for (const locale of LOCALES) {
+    assert.doesNotMatch(text(DECEMBER_BRIDGE.editions[locale].blocks), /(tornat a llegir|vuelto a leer|re-read it)[^.]*26 (d'octubre|de octubre|October)/, locale);
+  }
 });
 
 test("internal links stay in their language, end in a slash and point at a published path", () => {
@@ -327,7 +343,10 @@ test("local holidays on the 7th, school and shops are stated as the orders state
 test("ski openings are never promised", () => {
   for (const locale of LOCALES) {
     const body = text(DECEMBER_BRIDGE.editions[locale].blocks);
-    assert.match(body, /si la meteorologia i la neu ho permeten|siempre que las condiciones meteorológicas y de nieve lo permitan|weather and snow permitting/, locale);
+    // 23 Nov 2026: the resort's news of 11 Nov says "siempre que las condiciones lo permitan".
+    const proviso = { ca: /si les condicions ho permeten/, es: /«siempre que las condiciones lo permitan»/, en: /conditions permitting/ }[locale];
+    assert.match(body, proviso, locale);
+    assert.match(body, /11 (de novembre|de noviembre|November) (de )?2026/, `${locale}: the news item's date`);
     assert.doesNotMatch(body, /hi haurà neu|habrá nieve|there will be snow|garantit|garantizad|guaranteed/i, locale);
   }
 });

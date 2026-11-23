@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { daysBetween, holidayOn, isCovered, nextHolidayAfter, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { READ_AT } from "@/lib/content/mushrooms/conditions";
+import { holidayLiveHref } from "@/lib/content/home-holiday-link";
 import { TOP_TOOLS, type ToolKey } from "@/lib/content/home-tools";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
 import { getMessages } from "@/lib/i18n";
@@ -43,6 +44,23 @@ export function HomeTopTools({ locale }: { locale: Locale }) {
       <ul>
         {TOP_TOOLS[locale].map((key) => {
           const live = key === "holidays" ? liveLine("holiday", locale) : null;
+          // 23 Nov 2026: the next-holiday line links that day's own page; the
+          // title keeps the hub link and still covers the rest of the tile.
+          const liveHref = live ? holidayLiveHref(locale, todayInCatalonia()) : null;
+          if (live && liveHref) {
+            return (
+              <li key={key}>
+                <div className="ci-home-top-tile is-split">
+                  <Link href={MENU_PATHS[key][locale]} className="ci-home-top-title ci-home-top-cover">
+                    {MENU_LABELS[key][locale]}
+                  </Link>
+                  <Link href={liveHref} className="ci-home-top-live">
+                    {live}
+                  </Link>
+                </div>
+              </li>
+            );
+          }
           return (
             <li key={key}>
               <Link href={MENU_PATHS[key][locale]} className="ci-home-top-tile">

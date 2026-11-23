@@ -23,7 +23,7 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-23T16:37:46.068Z",
+   "date": "2026-11-23T16:38:39.000Z",
    "fingerprint": "v1:63ef76856dff04b870e19bb312032b62",
    "files": 16
   },
@@ -98,7 +98,7 @@
    "files": 29
   },
   "gordo": {
-   "date": "2026-11-23T16:32:48.597Z",
+   "date": "2026-11-23T16:38:39.000Z",
    "fingerprint": "v1:1d71ba33ad5d4669e1ff7de42e967e21",
    "files": 36
   },
@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-23T16:32:48.597Z",
-   "fingerprint": "v1:b647539f60a3f79615d7c6b2c9501c4c",
+   "date": "2026-11-23T16:45:29.809Z",
+   "fingerprint": "v1:c69485360a478997ae9c06e52a87fad2",
    "files": 49
   },
   "holidays-report": {

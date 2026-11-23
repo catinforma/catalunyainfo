@@ -11898,4 +11898,145 @@ days" sentence) and none of the three councils has 2027 days in the DOGC.
 the four families, URL Inspection of the Spain page. **10 Dec** (14 days): the same, plus `page botigues-obertes 14`,
 `page shops-open 14`, `page /es/festivos/dia/8-diciembre-2026/ 14`.
 
+## 2026-11-23 — December bridge and holiday date pages: the Spain page says "Purísima", the Catalan bridge re-read (its only date was 26 Oct), FAQPage on every date page, the homepage's next-holiday line links that day's page (deploy; groups `puente-diciembre-espana`, `pont-desembre`) (review 2026-12-04, 2026-12-09, 2026-12-21)
+
+**Brief.** Owner: average position from 7–8 to ~3, traffic from many pages. Area: the holiday family and the December
+bridge cluster, before the 4–8 Dec peak. **No title, description, H1 or lead touched.** Every page here is inside a
+window: Catalan bridge 11 Nov retitle (to 9 Dec) and 17 Nov lead (to 15 Dec); Spain bridge 12 Nov ES title (to 10 Dec);
+8 Dec date page title revert of 16 Nov (review 30 Nov); the 20 Nov cluster entry (body and anchors, review 4 and 8 Dec)
+and the 21 Nov December events entry (link lines). Body, structured data and internal links only. One factual update
+inside a window, logged here: the Catalan bridge's check date (26 Oct → 23 Nov) in its "D'on surten aquestes dates" box,
+which is not the lead.
+
+**Why these pages sit at 7–11 (diagnosis, 23 Nov).**
+1. **Wrong page for the national "Purísima" queries.** GSC 27 Oct–23 Nov: "puente de la purisima 2026" 1,051 impressions
+   at 6.3 with **0 clicks**, "puente purisima 2026" 638 at 6.2 (3), "cuando es el puente de la purisima" 285 at 2.9,
+   "puente constitucion 2026" 91, "puente inmaculada 2026" 85: all on the **Catalan** page, whose title and snippet say
+   "en Cataluña". The Spain-wide page, which answers the question for most of these searchers, **never contained the
+   word "Purísima"** (grep: 0 in `december-bridge-spain.ts`, 16 in `december-bridge.ts`). The 20 Nov entry split intents
+   by anchors; this is the missing word on the page that should own them.
+2. **Stale date on the cluster's largest page family.** Live HTML 23 Nov: `/ca|es/…/pont-desembre-catalunya/` show only
+   "Publicado el 26 de octubre · Verificado el 26 oct" and JSON-LD `dateModified` 2026-10-26, although the body gained
+   the traffic section, Spain hand-offs, Santa Llúcia dates and museums since. `editionUpdatedAt` (lib/seo/article-dates.ts)
+   moves dateModified only with a new verification day, and `BRIDGE_VERIFIED` had never moved. The Spain page shows
+   "Actualizado el 20 de noviembre"; the news results above us (democrata.es 14 Nov, cronista, idealista) are dated
+   November. "pont de la purissima 2026" has 1,372 impressions at 6.6 and 1 click on the CA page.
+3. **8 Dec date page: intent, not content.** "8 de diciembre es festivo" 268 at 8.1, "8 diciembre festivo" 198 at 9.1,
+   "el 8 de diciembre es festivo" 180 at 7.7, all 0 clicks: national questions on a page titled "… en Cataluña?". The
+   body already answers nationally (20 Nov note). The title is the owner's lever at the 30 Nov review (see "Left for the
+   owner"). What was missing in our hands: the date pages carried breadcrumbs only, no FAQPage.
+4. **Homepage linked no holiday page.** Live 23 Nov: `/es/`, `/ca/`, `/en/` contain no link to a bridge or date page.
+   The holidays tile prints "Próximo festivo: la Inmaculada, 8 de diciembre (dentro de 15 días)" but the whole tile goes
+   to the work calendar. The sitewide strip links the Spain page only from 30 Nov, the desktop lead card from 1 Dec.
+5. **Competitors (WebSearch, 23 Nov; US-located, so a rough read):** press pieces (democrata.es: H1 "en qué comunidades es
+   festivo el lunes 7", a 19-row Festivo/Laborable table, four H2s, no FAQ; cronista, idealista, publico, okdiario) and
+   calendar sites (diainternacionalde.com: one line "En toda España, Inmaculada Concepción (fiesta nacional)"). None
+   answers more than our Spain page (the regional bulletins per community, leave table, shops, traffic). What they have
+   that we lacked: November dates and, on the press side, the "Purísima/Inmaculada" naming in the copy.
+
+**Baseline** (`snapshot.py page <url> 14` / `28`; clicks / impressions / CTR / position; 10–23 Nov and 27 Oct–23 Nov, 23 Nov
+partial):
+
+| URL | 14 d | 28 d |
+| --- | --- | --- |
+| /es/guias/puente-diciembre-espana/ | 291 / 9,768 / 3.0 % / 8.7 | 509 / 17,320 / 2.9 % / 7.7 |
+| /ca/guies/pont-desembre-espanya/ · /en/guides/december-holidays-spain/ | 4 / 182 / 6.0 · 2 / 167 / 3.8 | 8 / 254 / 5.6 · 12 / 569 / 3.8 |
+| /es/guias/puente-diciembre-cataluna/ | 134 / 9,649 / 1.4 % / 6.4 | 371 / 21,667 / 1.7 % / 6.0 |
+| /ca/guies/pont-desembre-catalunya/ | 23 / 5,127 / 0.4 % / 6.8 | 44 / 6,100 / 0.7 % / 6.5 |
+| /en/guides/december-long-weekend-catalonia/ | 0 / 142 / 4.5 | 2 / 461 / 4.2 |
+| /es/festivos/dia/8-diciembre-2026/ | 8 / 1,710 / 0.5 % / 7.4 | 14 / 2,226 / 0.6 % / 6.9 |
+| /es/festivos/dia/7-diciembre-2026/ | 112 / 4,330 / 2.6 % / 5.0 | 188 / 6,554 / 2.9 % / 5.0 |
+| Date pages `/festivos/dia/` · `/festius/dia/` · `/holidays/day/` | 263 / 12,046 / 2.2 % / 5.7 · 22 / 1,652 / 6.0 · 4 / 526 / 6.9 | 937 / 30,202 / 3.1 % / 5.5 · 65 / 3,376 / 5.7 · 5 / 1,055 / 6.2 |
+
+Target queries, 14 d (impressions at position, clicks): Catalan ES page "puente de la purisima 2026" 766 at 6.5 (0),
+"puente purisima 2026" 538 at 6.5 (2), "festivos puente diciembre" 689 at 9.3 (2); Spain page "festivos puente
+diciembre" 523 at 10.7 (2); CA page "pont de la purissima 2026" 1,360 at 6.6 (1), "pont purissima 2026" 509 at 7.0 (0);
+8 Dec page "8 de diciembre es festivo" 268 at 8.1 (0).
+
+**What changed (ca/es/en everywhere).**
+1. **Spain bridge page** (`december-bridge-spain.ts`, group `puente-diciembre-espana`): the "cuántos días libres salen"
+   section opens with the bridge's names (`BRIDGE_NAMES`: "Es el puente de la Constitución y la Inmaculada, también
+   llamado puente de la Purísima." / ca "pont de la Puríssima" / en "also called the puente de la Purísima (or de la
+   Inmaculada)"), and the FAQ gains "¿Cuándo es el puente de la Purísima de 2026?" / "Quan és el pont de la Puríssima del
+   2026?" / "When is the Purísima long weekend in 2026?" (`purisimaFaq`), answered from the BOE rows: Saturday 5 to
+   Tuesday 8, 4 days, where Monday 7 is a holiday; elsewhere Tuesday 8 is the bridge's only holiday and Monday 7 must be
+   booked. No new fact. `SPAIN_BRIDGE_VERIFIED` unchanged (20 Nov).
+2. **Catalan bridge page** (`december-bridge.ts`, group `pont-desembre`): every variable fact re-read today (below);
+   `BRIDGE_VERIFIED` 26 Oct → **23 Nov**, so the "last verified" line, the "D'on surten" box ("L'hem tornat a llegir al DOGC
+   el 23 de novembre") and dateModified move with a real check. The only content change: Baqueira's source is now the
+   resort's news of 11 Nov 2026 (same 28 November opening, "siempre que las condiciones lo permitan") instead of the
+   28 July one.
+3. **Every date page** (`holidays/structured.ts` `dateFaqItems`, code route, deploy): the 2026 date pages and 1/6 Jan
+   2027 now carry FAQPage with their one visible question, the H1, and the answer plus notes printed right under it
+   (the 2027 pages already listed several). FAQ rich results are limited to authoritative government and health sites, so
+   this is markup for answer engines and for disambiguation, not a SERP feature. No Dataset added.
+4. **Homepage, all editions** (`HomeTools.tsx`, new `home-holiday-link.ts` `holidayLiveHref`, `globals.css`; deploy; kept out of `home-tools.ts`, which the reservoirs and today families import, so their sitemap dates do not move): the holidays
+   tile's live line ("Próximo festivo: la Inmaculada, 8 de diciembre…") now links that day's date page
+   (`/es/festivos/dia/8-diciembre-2026/` today; 25 Dec from 9 Dec; on a holiday, that day's page; nothing if the page is
+   noindex or the day has none). The tile title keeps its hub link and still covers the rest of the tile (stretched-link
+   `::after`), so the tile looks and clicks as before. No new homepage block: the owner's 12 Nov layout stays.
+
+**Facts read 23 Nov 2026** (curl, browser UA, untrusted-download dir; pdftotext; fact pack
+`research_notes/december-bridge-23nov.md`, gitignored):
+- Ordre EMT/66/2025 (DOGC 9406, PDF 2086441), art. 1: "8 de desembre, dimarts", "25 de desembre, divendres", "26 de
+  desembre, dissabte"; Aran "la festa del dia 26 de desembre (Sant Esteve) queda substituïda per la de 17 de juny".
+  Treball's 2026 calendar page lists the same days.
+- BOE-A-2025-21667 (txt.php): "7 Lunes siguiente al Día de la Constitución Española." with "**" in ten columns, "8
+  Inmaculada Concepción." "*" in nineteen, legend "Fiesta Nacional no sustituible (*)"; the only later reference is the
+  AGE non-working-days resolution, not a correction.
+- Ordre EMT/208/2025 (DOGC 9565, PDF 2125485): 46 lines with "7 de desembre" = 43 municipalities + the nuclei Escart and
+  Escaladei + Torà de Tost ("17 de desembre"). "Castelldefels, 14 de setembre i 7 de desembre." "Gallifa, 2 d'abril i
+  7 de desembre."
+- Ordre EMT/77/2025 art. 1 "6, 13, 20 i 27 de desembre." and art. 6 "el dia 11 de gener i el dia 8 de desembre per a l'any
+  2026"; Resolució EMT/4342/2025, Barcelona "6, 8, 13, 20 i 27 de desembre."; Ordre EDF/66/2026 "Nadal: del 22 de desembre
+  de 2026 al 7 de gener de 2027, ambdós inclosos", "quatre dies festius de lliure disposició".
+- SCT: "4 al 8 de desembre de 2026 Operació Especial LA CONSTITUCIÓ - IMMACULADA"; December restrictions, 04/12/2026,
+  AP-7 Sant Celoni–Vilafranca del Penedès, heavy vehicles and coaches ≥ 7,500 kg right lane, no overtaking, 80 km/h,
+  "De 17 a 22 h". DGT MOV 2025/21: same signed PDF (signed 29/12/2025); scanned, not re-read visually (its dates were read
+  on 10 Nov).
+- Baqueira Beret, news 11/11/2026: "La apertura está prevista para el sábado 28 de noviembre de 2026 y el cierre para el
+  domingo 4 de abril de 2027, siempre que las condiciones lo permitan." Espinelves: "45a Fira de l'Avet any 2026 – Del 28
+  de novembre al 8 de desembre de 2026." Vic agenda: "05/12/2026 a 00:00 fins a 08/12/2026 a 00:00". Santa Llúcia (Agenda
+  Cultural 2026110300020, "Darrera actualització: 17/11/2026"): "Inici: 27/11/2026 Fi: 23/12/2026". MNAC: free "cada
+  primer diumenge de mes … cal reservar", Sundays "de 10 a 15 h"; Barcelona council list: Picasso "Entrada gratuïta el
+  primer diumenge de mes (amb reserva prèvia)", MUHBA "excepte al Park Güell".
+
+**Prediction.** By 4 Dec (and read again on 9 Dec, after the bridge): (a) the Spain page appears for "puente de la
+purisima 2026" / "puente purisima 2026" (today: no impressions on it) and the pair's combined CTR on our two pages rises
+above 1 % (today 0.2 %); (b) the Catalan CA/ES pages show "Actualitzat / Actualizado el 23 de novembre" and their
+"pont/puente de la purissima 2026" CTR rises above 0.5 % at equal position; (c) the 8 Dec page's national queries get
+their first clicks at ≤ 7 (helped by the homepage link; the title is the bigger lever); (d) the date-page family's
+position does not worsen by more than 0.5 against its 14-day baseline.
+
+**Revert rule.** Remove the Purísima sentence and FAQ if the Spain page loses > 1.5 positions mix-free on its own 7
+December queries with no gain on the Purísima queries. Revert the homepage link if the homepage's position or the
+holidays tile's clicks (GA4 `/` → `/xx/festivos/dia/` or the work calendar) fall clearly below the 16–22 Nov week. The
+re-read date and the FAQPage markup stay (a fact and valid markup).
+
+**Confounders.** Demand climbing steeply to 4–8 Dec (compare position and CTR at equal query); the 20 Nov cluster entry
+(same pages, review 4 Dec); the 21 Nov link lines; the sitewide strip to the Spain page from 30 Nov and the desktop lead
+card from 1 Dec; the 25 Nov bridge review and the 30 Nov 8 Dec title review; the November core update.
+
+**Left for the owner.** (1) The 8 Dec date page's title/H1 ask "… en Cataluña?" while its demand asks nationally ("8 de
+diciembre es festivo", ~650 impressions in 28 days, 0 clicks). At the 30 Nov review, consider a title that answers both,
+e.g. "¿Es festivo el 8 de diciembre de 2026? Sí, en toda España" (57 chars), with Catalonia in the description. (2) The
+Catalan ES page's title "(Purísima) en Cataluña" pulls national Purísima searches it cannot convert; once the Spain page
+ranks for them (4 Dec), the 9 Dec review can decide whether the Catalan ES title drops "Purísima". Neither done here
+(windows).
+
+**Go-live.** Deploy first (date pages and homepage are code routes; publish reads the deployed modules). Then publish
+**`puente-diciembre-espana`** and **`pont-desembre`** (also republishes the work-calendar guide, unchanged here). IndexNow:
+`python scripts/indexnow-sitemap.py /es/guias/puente-diciembre- /ca/guies/pont-desembre- /en/guides/december-holidays-spain/
+/en/guides/december-long-weekend-catalonia/ /es/festivos/dia/ /ca/festius/dia/ /en/holidays/day/`.
+
+**Tests.** New `tests/december-bridge-23nov.test.ts` (Spain page: names sentence and Purísima FAQ in every edition, dates
+from the BOE rows, no duplicate question; Catalan page re-read on 23 Nov with the 11 Nov Baqueira source and no 28 July
+date; `holidayLiveHref` before, on and after 8 Dec and outside the calendars; the split tile has no nested link).
+Updated: `december-pages.test.ts` (the bridge's check date is 23 Nov, Marató's stays 26 Oct; the ski proviso in the 11 Nov
+wording), `holiday-dates-2027.test.ts` (one-question FAQPage on the earlier date pages, still no Dataset).
+
+**Review:** 4 Dec 2026 (11 days) and 9 Dec 2026 (after the bridge), then 21 Dec for the homepage link (25 Dec page).
+`snapshot.py page puente-diciembre 7`, `page /es/festivos/dia/8-diciembre-2026/ 7`, `page pont-desembre-catalunya 7`,
+plus a query × page split for the Purísima queries and "8 de diciembre es festivo".
+
 **Outcome:** _pending_

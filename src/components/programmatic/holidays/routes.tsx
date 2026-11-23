@@ -262,7 +262,7 @@ export function DateRoute({ locale, iso }: { locale: DateLocale; iso: DatePage }
       <main id="main">
         <DatePageView iso={iso} locale={locale} />
       </main>
-      {/* The 2027 pages add their questions (FAQPage) and their sources (Dataset); the others carry breadcrumbs only. */}
+      {/* FAQPage on every date page (the 2027 ones list several questions, the others their H1 since 23 Nov 2026); Dataset on the 2027 ones only. */}
       <JsonLd json={graph([breadcrumbSchema(dateCrumbs(iso, locale)), dateDataset(iso, locale), dateFaq(iso, locale)])} />
       <SiteFooter locale={locale} />
     </>
