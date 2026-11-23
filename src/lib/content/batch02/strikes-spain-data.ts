@@ -205,7 +205,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * strike). The one change of the day is Catalan (the 26N education order,
  * strikes.ts); the Spain hub prints it through the Catalan entry.
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-23";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-24";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.

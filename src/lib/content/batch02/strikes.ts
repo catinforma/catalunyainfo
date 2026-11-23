@@ -412,7 +412,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * Treball's list, e-Tauler, the DOGC (núm. 9800), the BOE (núm. 291) or the
  * Ministry's lists, nor on CCOO, UGT and CGT Catalunya's home pages.
  */
-export const STRIKES_AS_OF: string = "2026-11-23";
+export const STRIKES_AS_OF: string = "2026-11-24";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
