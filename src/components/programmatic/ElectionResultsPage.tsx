@@ -48,10 +48,11 @@ export function electionCrumbs(locale: Locale, m: Municipality): Crumb[] {
 }
 
 export function ElectionResultsPage({ locale, municipality }: { locale: Locale; municipality: Municipality }) {
-  const model = buildElectionPage(municipality, locale);
   // Server clock at render time, never the reader's: the cached HTML carries the phase (election-day.ts).
   const now = new Date();
-  const day = townElectionDay(municipality, locale, electionPhase(now), model.polling, undefined, now);
+  const phase = electionPhase(now);
+  const model = buildElectionPage(municipality, locale, undefined, phase);
+  const day = townElectionDay(municipality, locale, phase, model.polling, undefined, now);
   const crumbs = electionCrumbs(locale, municipality);
   const faqBlock = { type: "faq", items: model.faq } as Block;
 

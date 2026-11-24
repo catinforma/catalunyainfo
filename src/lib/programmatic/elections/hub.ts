@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
 
 import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "./english";
+import type { ElectionDayPhase } from "./election-day";
 import { INTERIOR_DOWNLOADS, longDate, LOREG_URL } from "./model";
 import { resultsNightLine } from "./results-night";
 import { caOfComarca, hubPath, latestDataDate, PAGES_PER_LOCALE } from "./pages";
@@ -41,7 +42,9 @@ export interface HubCopy {
   sources: { name: string; publisher: string; url: string }[];
 }
 
-export function hubCopy(locale: Locale): HubCopy {
+export function hubCopy(locale: Locale, phase: ElectionDayPhase = "before"): HubCopy {
+  // Once the vote is over (Mon 30 Nov on) the "if you have to vote" guides go; the results line goes past tense.
+  const voted = phase === "after" || phase === "over";
   const read = longDate(latestDataDate(), locale);
   const g = SNAPSHOT.general2026;
   const year = SNAPSHOT.sources.population.period.slice(0, 4);
@@ -63,9 +66,9 @@ export function hubCopy(locale: Locale): HubCopy {
         `Cada pàgina té els vots i els regidors de cada llista a les municipals del 2023, com es van elegir els regidors, i el vot del municipi a les generals i al Parlament al costat del de Catalunya. Cada comarca té també la seva pàgina, amb el resultat de les municipals de tots els seus municipis en una taula.`,
         `Per a totes les municipals des del 1979, fes servir el [cercador de resultats municipals](${b2href("municipalResults", "ca")}).`,
         // Until the 29N results are in: the two guides voters need first.
-        ...(g ? [] : [`Si has de votar el 29 de novembre: [com votar a Catalunya](${b2href("voting", "ca")}) i [el vot per correu, pas a pas](${b2href("postalVote", "ca")}).`]),
+        ...(g || voted ? [] : [`Si has de votar el 29 de novembre: [com votar a Catalunya](${b2href("voting", "ca")}) i [el vot per correu, pas a pas](${b2href("postalVote", "ca")}).`]),
         // Results night (13 Nov 2026): when the figures come out and who publishes them; the official link once announced.
-        ...(g ? [] : [resultsNightLine("ca")]),
+        ...(g ? [] : [resultsNightLine("ca", undefined, phase)]),
         `Les estimacions de vot i escons del CIS i del CEO per al 29N a Catalunya, amb la fitxa tècnica de cada estudi, són a [enquestes oficials de les eleccions generals](${pollsPath("ca")}).`,
       ],
       listTitle: "Municipis per comarques",
@@ -95,9 +98,9 @@ export function hubCopy(locale: Locale): HubCopy {
         `Cada página tiene los votos y los concejales de cada lista en las municipales de 2023, cómo se eligieron los concejales, y el voto del municipio en las generales y en el Parlament junto al de Cataluña. Cada comarca tiene también su página, con el resultado de las municipales de todos sus municipios en una tabla.`,
         `Para todas las municipales desde 1979, usa el [buscador de resultados municipales](${b2href("municipalResults", "es")}).`,
         // Until the 29N results are in: the two guides voters need first.
-        ...(g ? [] : [`Si tienes que votar el 29 de noviembre: [cómo votar en Cataluña](${b2href("voting", "es")}) y [el voto por correo, paso a paso](${b2href("postalVote", "es")}).`]),
+        ...(g || voted ? [] : [`Si tienes que votar el 29 de noviembre: [cómo votar en Cataluña](${b2href("voting", "es")}) y [el voto por correo, paso a paso](${b2href("postalVote", "es")}).`]),
         // Results night (13 Nov 2026): when the figures come out and who publishes them; the official link once announced.
-        ...(g ? [] : [resultsNightLine("es")]),
+        ...(g ? [] : [resultsNightLine("es", undefined, phase)]),
         `Las estimaciones de voto y escaños del CIS y del CEO para el 29N en Cataluña, con la ficha técnica de cada estudio, están en [encuestas oficiales de las elecciones generales](${pollsPath("es")}).`,
       ],
       listTitle: "Municipios por comarcas",
@@ -126,9 +129,9 @@ export function hubCopy(locale: Locale): HubCopy {
       `Each page has every list's votes, percentage and councillors in the 2023 local election, how the seats were allocated, and the town's vote in the general and Catalan elections beside Catalonia's. The towns are the ${EN_LARGEST} largest by population on 1 January ${year} (Idescat), the four provincial capitals among them, and the ${EN_RESORTS.length} with the most places in the Generalitat's register of tourist accommodation (hotels, campsites, rural tourism, tourist flats and homes).`,
       `The Catalan and Spanish editions cover all ${PAGES_PER_LOCALE.ca} municipalities in Catalonia: [in Catalan](${hubPath("ca")}), [in Spanish](${hubPath("es")}). For every local election since 1979, use the [local results lookup](${b2href("municipalResults", "en")}).`,
       // Until the 29N results are in: the two guides voters need first.
-      ...(g ? [] : [`Voting on 29 November? [How to vote in Catalonia](${b2href("voting", "en")}) and [the postal vote, step by step](${b2href("postalVote", "en")}).`]),
+      ...(g || voted ? [] : [`Voting on 29 November? [How to vote in Catalonia](${b2href("voting", "en")}) and [the postal vote, step by step](${b2href("postalVote", "en")}).`]),
       // Results night (13 Nov 2026): when the figures come out and who publishes them; the official link once announced.
-      ...(g ? [] : [resultsNightLine("en")]),
+      ...(g ? [] : [resultsNightLine("en", undefined, phase)]),
       `The CIS and CEO vote and seat estimates for Catalonia for 29 November, with each study's technical sheet, are on [official general election polls](${pollsPath("en")}).`,
     ],
     listTitle: "Towns by comarca",

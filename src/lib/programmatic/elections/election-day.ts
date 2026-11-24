@@ -2,7 +2,7 @@ import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 
 import { INE_MESA_URL } from "./polling";
-import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED, checkedDay, pendingSiteLine } from "./results-night";
+import { ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay, pendingSiteLine } from "./results-night";
 
 /**
  * The election-day layer of 29 November 2026 (18 Nov 2026, logged in
@@ -20,8 +20,12 @@ import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED, checkedDay, pendingSi
  *   eve      Sat 28 Nov               "tomorrow": hours, ID, where, reflection day
  *   polling  Sun 29 Nov 00:00-19:59   "today": hours, ID, where, help line, results from 20:00
  *   count    Sun 29 Nov 20:00-23:59   the official results site first
- *   after    Mon 30 Nov - Mon 7 Dec   provisional vs official, general count 4-7 Dec
- *   over     from Tue 8 Dec           no block
+ *   after    Mon 30 Nov - Mon 7 Dec   past tense: night figures provisional, general count 4-7 Dec, final result pending
+ *   over     from Tue 8 Dec           no block; the pages' results line goes past tense (results-night.ts)
+ * The "after" copy (24 Nov 2026, LOREG on the BOE consolidated text): count on the
+ * fifth day after the vote, art. 103.1; it ends by the eighth day, art. 107.2;
+ * proclamation and BOE publication within forty days, art. 108 (quotes in
+ * results-night.ts).
  *
  * Every fact, read on 18 Nov 2026 on the primary source:
  *  - 9:00 to 20:00, and whoever is in the polling place or at its entrance at
@@ -220,7 +224,7 @@ const COPY: Record<Locale, Copy> = {
       eve: "Demà es vota: diumenge 29 de novembre, de 9 a 20 h",
       polling: "Avui es vota: diumenge 29 de novembre, de 9 a 20 h",
       count: "Urnes tancades: l'escrutini provisional, aquesta nit",
-      after: "Eleccions del 29 de novembre: resultats provisionals i escrutini general",
+      after: "Eleccions del 29 de novembre: resultat oficial pendent de l'escrutini general",
     },
     canaryTitle: "Col·legis tancats, excepte a les Canàries (fins a les 21:00 hora peninsular): l'escrutini provisional, aquesta nit",
     ctaLabel: "Resultats al web oficial del Ministeri de l'Interior",
@@ -257,11 +261,13 @@ const COPY: Record<Locale, Copy> = {
       }
       return [
         url
-          ? `**Escrutini provisional:** el del Ministeri de l'Interior, al seu [web oficial de resultats](${url}).`
-          : `**Escrutini provisional:** el difon el Ministeri de l'Interior (LOREG, article 98).`,
-        "**Escrutini general:** el fan les juntes electorals provincials del 4 al 7 de desembre; el resultat oficial es publica al BOE.",
+          ? `**Escrutini provisional:** el de la nit electoral, que el Ministeri de l'Interior publica al seu [web oficial de resultats](${url}). No és el resultat oficial.`
+          : `**Escrutini provisional:** el de la nit electoral va ser el que el Govern va donar a partir de les còpies de les actes de les meses ([LOREG, article 98.2](${LOREG})). No és el resultat oficial.`,
+        `**Escrutini general:** el fan les juntes electorals provincials el cinquè dia després de la votació, el divendres 4 de desembre, i ha d'acabar com a molt tard el dilluns 7 ([LOREG, articles 103 i 107](${LOREG})). Quan acaba i es resolen les reclamacions, es proclamen els electes, i la Junta Electoral Central publica al BOE els resultats generals i per circumscripcions en un termini de quaranta dies ([article 108](${LOREG})).`,
         ...townLine,
-        ...(url ? [] : [pendingSiteLine("ca", "", checked)]),
+        url
+          ? "**Resultat oficial definitiu: pendent** de l'escrutini general."
+          : `**Resultat oficial definitiu: pendent** de l'escrutini general. Mentrestant, la informació oficial és al [web de les eleccions del Ministeri de l'Interior](${OFFICIAL_ELECTION_SITE}) i a [Infoelectoral](${INFOELECTORAL}), el seu portal de dades electorals.`,
         `**Membres de mesa:** si treballes per compte d'altri o ets funcionari, el dilluns 30 de novembre tens dret a cinc hores menys de feina, les cinc primeres de la jornada ([LOREG, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
@@ -271,7 +277,7 @@ const COPY: Record<Locale, Copy> = {
       eve: "Mañana se vota: domingo 29 de noviembre, de 9 a 20 h",
       polling: "Hoy se vota: domingo 29 de noviembre, de 9 a 20 h",
       count: "Urnas cerradas: el escrutinio provisional, esta noche",
-      after: "Elecciones del 29 de noviembre: resultados provisionales y escrutinio general",
+      after: "Elecciones del 29 de noviembre: resultado oficial pendiente del escrutinio general",
     },
     canaryTitle: "Colegios cerrados, salvo en Canarias (hasta las 21:00 hora peninsular): el escrutinio provisional, esta noche",
     ctaLabel: "Resultados en la web oficial del Ministerio del Interior",
@@ -308,11 +314,13 @@ const COPY: Record<Locale, Copy> = {
       }
       return [
         url
-          ? `**Escrutinio provisional:** el del Ministerio del Interior, en su [web oficial de resultados](${url}).`
-          : `**Escrutinio provisional:** lo difunde el Ministerio del Interior (LOREG, artículo 98).`,
-        "**Escrutinio general:** lo hacen las juntas electorales provinciales del 4 al 7 de diciembre; el resultado oficial se publica en el BOE.",
+          ? `**Escrutinio provisional:** el de la noche electoral, que el Ministerio del Interior publica en su [web oficial de resultados](${url}). No es el resultado oficial.`
+          : `**Escrutinio provisional:** el de la noche electoral fue el que el Gobierno dio a partir de las copias de las actas de las mesas ([LOREG, artículo 98.2](${LOREG})). No es el resultado oficial.`,
+        `**Escrutinio general:** lo hacen las juntas electorales provinciales el quinto día siguiente a la votación, el viernes 4 de diciembre, y debe concluir a más tardar el lunes 7 ([LOREG, artículos 103 y 107](${LOREG})). Al terminar y resolverse las reclamaciones, se proclaman los electos, y la Junta Electoral Central publica en el BOE los resultados generales y por circunscripciones en el plazo de cuarenta días ([artículo 108](${LOREG})).`,
         ...townLine,
-        ...(url ? [] : [pendingSiteLine("es", "", checked)]),
+        url
+          ? "**Resultado oficial definitivo: pendiente** del escrutinio general."
+          : `**Resultado oficial definitivo: pendiente** del escrutinio general. Mientras tanto, la información oficial está en la [web de las elecciones del Ministerio del Interior](${OFFICIAL_ELECTION_SITE}) y en [Infoelectoral](${INFOELECTORAL}), su portal de datos electorales.`,
         `**Miembros de mesa:** si trabajas por cuenta ajena o eres funcionario, el lunes 30 de noviembre tienes derecho a cinco horas menos de jornada, las cinco primeras ([LOREG, artículo 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
@@ -322,7 +330,7 @@ const COPY: Record<Locale, Copy> = {
       eve: "Polling day is tomorrow: Sunday 29 November, 9:00 to 20:00",
       polling: "Polling day is today: Sunday 29 November, 9:00 to 20:00",
       count: "Polls closed: the provisional count comes in tonight",
-      after: "29 November election: provisional results and the official count",
+      after: "29 November election: official result pending the general count",
     },
     canaryTitle: "Polls closed except in the Canary Islands (open until 21:00 peninsular time): the provisional count comes in tonight",
     ctaLabel: "Results on the Spanish Interior Ministry's official site",
@@ -359,11 +367,13 @@ const COPY: Record<Locale, Copy> = {
       }
       return [
         url
-          ? `**Provisional count:** the Interior Ministry's, on its [official results site](${url}).`
-          : `**Provisional count:** published by the Interior Ministry (electoral law, article 98).`,
-        "**Official count:** the provincial electoral boards hold the general count from 4 to 7 December; the official result is published in the BOE.",
+          ? `**Provisional count:** election night's, which the Interior Ministry publishes on its [official results site](${url}). It is not the official result.`
+          : `**Provisional count:** election night's was the one the Government gave from copies of the polling tables' count sheets ([electoral law, article 98.2](${LOREG})). It is not the official result.`,
+        `**General count:** the provincial electoral boards hold it on the fifth day after the vote, Friday 4 December, and it must finish no later than Monday 7 December ([electoral law, articles 103 and 107](${LOREG})). Once it ends and any claims are resolved, the elected members are proclaimed, and the Central Electoral Board publishes the general and by-constituency results in the BOE within forty days ([article 108](${LOREG})).`,
         ...townLine,
-        ...(url ? [] : [pendingSiteLine("en", "", checked)]),
+        url
+          ? "**Final official result: pending** the general count."
+          : `**Final official result: pending** the general count. Meanwhile the official information is on the [Interior Ministry's election site](${OFFICIAL_ELECTION_SITE}) and on [Infoelectoral](${INFOELECTORAL}), its election-data portal.`,
         `**Polling-station members:** employees and civil servants who sat at a table are entitled to five fewer working hours on Monday 30 November, the first five of their day ([electoral law, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },

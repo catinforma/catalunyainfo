@@ -11,7 +11,8 @@ import { homeLeadKey } from "../src/lib/content/home-lead.ts";
 import { buildElectionPage, townElectionDay } from "../src/lib/programmatic/elections/model.ts";
 import { electionPath } from "../src/lib/programmatic/elections/paths.ts";
 import { INE_MESA_URL } from "../src/lib/programmatic/elections/polling.ts";
-import { ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay } from "../src/lib/programmatic/elections/results-night.ts";
+import { hubCopy } from "../src/lib/programmatic/elections/hub.ts";
+import { ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay, resultsNightLine } from "../src/lib/programmatic/elections/results-night.ts";
 import { SNAPSHOT } from "../src/lib/programmatic/elections/snapshot.ts";
 import { madridDate } from "../src/lib/programmatic/elections/today.ts";
 
@@ -175,6 +176,9 @@ test("the layer stays neutral: no polls, forecasts, parties or percentages; link
   }
 });
 
+/** First day of the "over" phase (Madrid): the routes go back to static. */
+const ELECTION_LAYER_END = "2026-12-08";
+
 const ROUTES = [
   "src/app/(public)/[locale]/eleccions/page.tsx",
   "src/app/(public)/[locale]/elecciones/page.tsx",
@@ -186,14 +190,26 @@ const ROUTES = [
   "src/app/(public)/[locale]/elecciones/comarca/[comarca]/page.tsx",
 ];
 
-test("the hubs, comarca and town routes regenerate every minute through 7 Dec, then go back to static", () => {
+test("the hubs, comarca and town routes regenerate every minute through 7 Dec; from 8 Dec 00:00 Madrid they must be back to `false`", () => {
+  // `revalidate` must be a static literal (route segment config: "needs to be statically analyzable"), so it cannot follow the
+  // clock: this guard does. It passes until 7 Dec and FAILS on 8 Dec until `node scripts/election-layer-end.mjs` is run and merged.
   const today = madridDate(new Date());
   for (const route of ROUTES) {
     const source = readFileSync(new URL(`../${route}`, import.meta.url), "utf8");
     const value = /export const revalidate = (\w+);/.exec(source)?.[1];
-    if (today <= "2026-12-08") assert.equal(value, "60", `${route}: each phase must reach the cache within a minute (300 left the first visitor on the old phase for up to five)`);
-    else assert.equal(value, "false", `${route}: the election-day layer is over; set revalidate back to false`);
+    if (today < ELECTION_LAYER_END) assert.equal(value, "60", `${route}: each phase must reach the cache within a minute (300 left the first visitor on the old phase for up to five)`);
+    else assert.equal(value, "false", `${route}: the election-day layer is over (${ELECTION_LAYER_END}); run \`node scripts/election-layer-end.mjs\` to set revalidate back to false`);
   }
+});
+
+test("the 8 Dec reset: the guard's date is the 'over' phase's first day, and the reset script rewrites exactly the eight routes", () => {
+  const start = new Date(`${ELECTION_LAYER_END}T00:00:00+01:00`);
+  assert.equal(electionPhase(start), "over");
+  assert.equal(electionPhase(new Date(start.getTime() - 1)), "after");
+  const script = readFileSync(new URL("../scripts/election-layer-end.mjs", import.meta.url), "utf8");
+  for (const route of ROUTES) assert.ok(script.includes(`"${route}"`), `the reset script lists ${route}`);
+  assert.equal((script.match(/^ {2}"src\/app\//gm) ?? []).length, ROUTES.length, "and no other route");
+  assert.match(script, /export const revalidate = false;/);
 });
 
 test("the pages compute the phase on the server, and the callout has no client code", () => {
@@ -220,7 +236,9 @@ test("no announced site: the night says 'pending' and still links the official e
       assert.equal(off.cta, null, `${locale} ${phase}: no results button for a site that is not announced`);
       // Once the site is announced, the pending line and the stopgap links go.
       const on = text(electionDayBlock(locale, phase, { resultsUrl: FAKE_SITE }));
-      assert.doesNotMatch(on, PENDING_WORD[locale], `${locale} ${phase}: no 'pending' once announced`);
+      // From 30 Nov the "pending" is the final official result (the general count), not the site: it stays once the site is announced.
+      if (phase === "count") assert.doesNotMatch(on, PENDING_WORD[locale], `${locale} ${phase}: no 'pending' once announced`);
+      else assert.match(on, PENDING_WORD[locale], `${locale} ${phase}: the final result is still pending`);
       assert.ok(!on.includes(INFOELECTORAL), `${locale} ${phase}: no stopgap link once announced`);
     }
   }
@@ -282,8 +300,110 @@ test("no announced site: one pending line per language, no second 'not announced
   for (const locale of LOCALES) {
     for (const phase of ["count", "after"] as const) {
       const all = text(electionDayBlock(locale, phase, { resultsUrl: null }));
-      assert.equal((all.match(checkedWord[locale]) ?? []).length, 1, `${locale} ${phase}: the check date is said once`);
+      // The night's "checked on 24 Nov" belongs to the night; the day after it would be a stale claim.
+      assert.equal((all.match(checkedWord[locale]) ?? []).length, phase === "count" ? 1 : 0, `${locale} ${phase}: the check date is said once on the night and never after it`);
       assert.doesNotMatch(all, notAnnounced[locale], `${locale} ${phase}: the pending line says it, nothing repeats it`);
+    }
+  }
+});
+
+/* ---- after the night (24 Nov 2026): past tense, final result pending, then "over" ---- */
+
+const LOREG_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672";
+// Madrid instants at the edges the ticket names.
+const MON_30_0000 = at("2026-11-30T00:00:00+01:00");
+const WED_2 = at("2026-12-02T12:00:00+01:00");
+const MON_7_2359 = at("2026-12-07T23:59:00+01:00");
+const TUE_8_0000 = at("2026-12-08T00:00:00+01:00");
+// A promise or a night-time scene, false once the night is over.
+const NIGHT_PROMISE: Record<Locale, RegExp> = {
+  ca: /aquella mateixa nit|aquesta nit|avui es vota|demà es vota|publicarà|hi enllaçarem|pendent d'anunci/i,
+  es: /esa misma noche|esta noche|hoy se vota|mañana se vota|publicará|enlazaremos|pendiente de anuncio/i,
+  en: /the same night|tonight|polling day is (today|tomorrow)|we will link|pending announcement|comes in/i,
+};
+const COUNT_DATES: Record<Locale, RegExp> = { ca: /4 de desembre.*7/s, es: /4 de diciembre.*7/s, en: /4 December.*7 December/s };
+const PENDING_WORD_AFTER: RegExp = /pendent|pendiente|pending/;
+
+test("boundaries: Mon 30 Nov 00:00 starts 'after'; Wed 2 Dec and Mon 7 Dec 23:59 are still 'after'; Tue 8 Dec 00:00 is 'over' (Madrid)", () => {
+  assert.equal(electionPhase(new Date(MON_30_0000.getTime() - 1)), "count");
+  assert.equal(electionPhase(MON_30_0000), "after");
+  assert.equal(electionPhase(WED_2), "after");
+  assert.equal(electionPhase(MON_7_2359), "after");
+  assert.equal(electionPhase(TUE_8_0000), "over");
+  assert.equal(electionPhaseStart(WED_2)?.toISOString(), MON_30_0000.toISOString());
+  assert.equal(electionPhaseStart(TUE_8_0000)?.toISOString(), TUE_8_0000.toISOString());
+});
+
+test("after the night: past tense about the night, the count dated by the law, the final result pending, in ca/es/en", () => {
+  const town = salou();
+  for (const locale of LOCALES) {
+    for (const now of [MON_30_0000, WED_2, MON_7_2359]) {
+      const phase = electionPhase(now);
+      for (const block of [electionDayBlock(locale, phase, { resultsUrl: null, now }), townElectionDay(town, locale, phase, undefined, undefined, now)]) {
+        assert.ok(block, `${locale} ${now.toISOString()}`);
+        assert.equal(block.phase, "after");
+        const all = text(block);
+        assert.doesNotMatch(all, NIGHT_PROMISE[locale], `${locale} ${now.toISOString()}: no promise or night-time tense`);
+        assert.match(all, COUNT_DATES[locale], `${locale}: the count, 4 to 7 December`);
+        assert.match(all, PENDING_WORD_AFTER, `${locale}: the final result is pending`);
+        for (const article of ["103", "107", "108"]) assert.match(all, new RegExp(`\\b${article}\\b`), `${locale}: art. ${article}`);
+        assert.match(all, /BOE/);
+        assert.ok(all.includes(`](${LOREG_URL})`), `${locale}: links the LOREG on the BOE`);
+        assert.ok(all.includes(`](${OFFICIAL_ELECTION_SITE})`) && all.includes(`](${INFOELECTORAL})`), `${locale}: the official links while pending`);
+        assert.doesNotMatch(all.replace(/\]\([^)]*\)/g, "]"), /\d\s*%|\d{1,3}[.,]\d{3}\s+(vots|votos|votes)|enquest|sondeo|encuesta|\bpolls?\b/i, `${locale}: no figure, no poll`);
+      }
+    }
+  }
+});
+
+test("after the night the callout title names the pending official result", () => {
+  const title: Record<Locale, RegExp> = { ca: /resultat oficial pendent/, es: /resultado oficial pendiente/, en: /official result pending/ };
+  for (const locale of LOCALES) assert.match(electionDayBlock(locale, "after")!.title, title[locale]);
+});
+
+test("the results line by phase: after and over are past; over has no promise, no pending and no results-page link", () => {
+  for (const locale of LOCALES) {
+    const before = resultsNightLine(locale, null);
+    assert.match(before, /20:00/);
+    assert.equal(resultsNightLine(locale, null, "before"), before, "the default phase is the one the static guides use: unchanged");
+    for (const phase of ["after", "over"] as const) {
+      const line = resultsNightLine(locale, null, phase);
+      assert.doesNotMatch(line, NIGHT_PROMISE[locale], `${locale} ${phase}`);
+      assert.doesNotMatch(line, /comprov|comprob|checked on/, `${locale} ${phase}: no stale check date`);
+      for (const article of ["103", "107", "108"]) assert.match(line, new RegExp(`\\b${article}\\b`), `${locale} ${phase}: art. ${article}`);
+      assert.match(line, /BOE/);
+      assert.doesNotMatch(line, /\d\s*%/);
+    }
+    const after = resultsNightLine(locale, null, "after");
+    assert.match(after, PENDING_WORD_AFTER);
+    assert.match(after, COUNT_DATES[locale]);
+    assert.doesNotMatch(after, /\]\(/, `${locale}: the line carries no link; the callout above it does`);
+    const over = resultsNightLine(locale, null, "over");
+    assert.doesNotMatch(over, PENDING_WORD_AFTER, `${locale}: over is not pending`);
+    assert.match(over, { ca: /havia de començar el 4 de desembre i acabar/s, es: /debía empezar el 4 de diciembre y concluir/s, en: /was due to begin on 4 December and to finish/s }[locale], `${locale}: the count is stated as the law's schedule, not as a fact`);
+    assert.ok(over.includes(`](${OFFICIAL_ELECTION_SITE})`) && over.includes(`](${INFOELECTORAL})`), `${locale}: where the official information is`);
+    // A set switch is linked once on the days after the vote, and never on 8 Dec onwards.
+    assert.equal(resultsNightLine(locale, FAKE_SITE, "after").split(`](${FAKE_SITE})`).length - 1, 1, `${locale}: one link`);
+    assert.ok(!resultsNightLine(locale, FAKE_SITE, "over").includes(FAKE_SITE), `${locale}: no results-site link from 8 Dec`);
+  }
+});
+
+test("town pages and the hub print the line of their phase; the 'if you have to vote' guides leave once the vote is over", () => {
+  const m = salou();
+  for (const locale of LOCALES) {
+    const votingLead: Record<Locale, RegExp> = { ca: /Si has de votar/, es: /Si tienes que votar/, en: /Voting on 29 November\?|If you are voting/ };
+    if (SNAPSHOT.general2026) continue;
+    assert.match(buildElectionPage(m, locale).slot.md.join("\n"), votingLead[locale], `${locale}: before the vote the guides are there`);
+    assert.match(hubCopy(locale).intro.join("\n"), votingLead[locale], `${locale}: hub before the vote`);
+    for (const [phase, now] of [["after", WED_2], ["over", TUE_8_0000]] as const) {
+      assert.equal(electionPhase(now), phase);
+      const md = buildElectionPage(m, locale, undefined, phase).slot.md.join("\n");
+      const intro = hubCopy(locale, phase).intro.join("\n");
+      const line = resultsNightLine(locale, undefined, phase);
+      assert.ok(md.includes(line), `${locale} ${phase}: town slot`);
+      assert.ok(intro.includes(line), `${locale} ${phase}: hub`);
+      assert.doesNotMatch(md, votingLead[locale], `${locale} ${phase}: town slot`);
+      assert.doesNotMatch(intro, votingLead[locale], `${locale} ${phase}: hub`);
     }
   }
 });

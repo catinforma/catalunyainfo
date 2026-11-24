@@ -461,8 +461,8 @@ export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHO
 }
 
 
-export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT): ElectionPageModel {
-  const base = buildResults(m, locale, snapshot);
+export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT, phase: ElectionDayPhase = "before"): ElectionPageModel {
+  const base = buildResults(m, locale, snapshot, phase);
   const date = (iso: string) => longDate(iso, locale);
   const polling = buildPolling(m, locale, date);
   const mesa = buildMesaDuty(m, locale, date);
@@ -507,7 +507,9 @@ export function townElectionDay(
 
 const POLLING_FACT_LABEL: Record<Locale, string> = { ca: "Locals electorals del 29N", es: "Locales electorales del 29N", en: "29 Nov polling places" };
 
-function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot): Omit<ElectionPageModel, "polling" | "mesa"> {
+function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot, phase: ElectionDayPhase): Omit<ElectionPageModel, "polling" | "mesa"> {
+  // From Mon 30 Nov the vote is over: the "if you have to vote" guides leave the 29N slot (and the results line is in the past tense).
+  const voted = phase === "after" || phase === "over";
   const f = formats(locale);
   const place = placeName(m, locale);
   const Place = place.charAt(0).toLocaleUpperCase(locale) + place.slice(1);
@@ -623,8 +625,8 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
             ]
           : [
               `**Els resultats ${de} apareixeran aquí quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis** a la seva [àrea de descàrregues](${INTERIOR_DOWNLOADS.ca}).`,
-              `${resultsNightLine("ca")} Com funciona la nit electoral: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
-              `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}), [el vot per correu](${b2href("postalVote", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
+              `${resultsNightLine("ca", undefined, phase)} Com funciona la nit electoral: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
+              ...(voted ? [] : [`Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}), [el vot per correu](${b2href("postalVote", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`]),
             ],
         results:
           general && g
@@ -814,8 +816,8 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
             ]
           : [
               `**Los resultados de ${place} aparecerán aquí cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios** en su [área de descargas](${INTERIOR_DOWNLOADS.es}).`,
-              `${resultsNightLine("es")} Cómo funciona la noche electoral: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
-              `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}), [el voto por correo](${b2href("postalVote", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
+              `${resultsNightLine("es", undefined, phase)} Cómo funciona la noche electoral: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
+              ...(voted ? [] : [`Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}), [el voto por correo](${b2href("postalVote", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`]),
             ],
         results:
           general && g
@@ -1003,8 +1005,8 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
           ]
         : [
             `**Results for ${place} will appear here when the Spanish Ministry of the Interior publishes the official results file by municipality** in its [download area](${INTERIOR_DOWNLOADS.en}).`,
-            `${resultsNightLine("en")} How election night works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
-            `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}), [the postal vote](${b2href("postalVote", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
+            `${resultsNightLine("en", undefined, phase)} How election night works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
+            ...(voted ? [] : [`If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}), [the postal vote](${b2href("postalVote", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`]),
           ],
       results:
         general && g

@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 
+import type { ElectionDayPhase } from "./election-day";
+
 /**
  * Results night, 29 November 2026: the ONE switch for the official results
  * site, read by the town pages, the elections hubs, the election-night guide,
@@ -116,12 +118,41 @@ export function pendingSiteLine(locale: Locale, tail = "", checked: string = che
 }
 
 /**
- * One paragraph, true on any day from now to the BOE publication (static
- * pages are built once per deploy): when the night's figures come out, who
- * publishes them, that they are provisional, and when they become official.
- * Markdown; the link is there only once the switch above is set.
+ * The general count as the law dates it, for the lines printed after the
+ * night. LOREG, BOE consolidated text (BOE-A-1985-11672, read 24 Nov 2026):
+ *  - art. 103.1: "El escrutinio general se realiza el quinto día siguiente al de
+ *    la votación, por la Junta Electoral que corresponda" (the fifth day after
+ *    Sunday 29 Nov is Friday 4 Dec);
+ *  - art. 107.2: "El escrutinio deberá concluir no más tarde del octavo día
+ *    posterior al de las elecciones" (Monday 7 Dec);
+ *  - art. 108.4: once the claims period is over, or the Central Electoral Board
+ *    has ruled on them, the boards proclaim the elected members "dentro del día
+ *    siguiente";
+ *  - art. 108.6: the Central Electoral Board "en el periodo de cuarenta días,
+ *    procederá a la publicación en el «Boletín Oficial del Estado» los
+ *    resultados generales y por circunscripciones";
+ *  - art. 98.2: a copy of each table's count sheet goes to the person the
+ *    Administration designates, "a los solos efectos de facilitar la información
+ *    provisional sobre los resultados de la elección que ha de proporcionar el
+ *    Gobierno".
+ * The ticket that queued this said the count starts "from the third day"; the
+ * text says the fifth (the JEC calendar's 4-7 Dec is the same reading).
  */
-export function resultsNightLine(locale: Locale, url: string | null = ELECTION_NIGHT_RESULTS_URL): string {
+
+/**
+ * One paragraph per phase, Markdown. Up to and including the night it is true
+ * on any day before the vote: when the night's figures come out, who publishes
+ * them, that they are provisional, and when they become official; the link is
+ * there only once the switch above is set. From Mon 30 Nov ("after") it is in
+ * the past tense about the night and says the final result is pending; from
+ * Tue 8 Dec ("over") the count is past too, with no promise, no figure and no
+ * link that claims to show results. No claim depends on a data import: the
+ * pages that print it add their own "results will appear here" line only while
+ * the 29N file is not in.
+ */
+export function resultsNightLine(locale: Locale, url: string | null = ELECTION_NIGHT_RESULTS_URL, phase: ElectionDayPhase = "before"): string {
+  if (phase === "after") return afterLine(locale, url);
+  if (phase === "over") return overLine(locale);
   if (locale === "ca") {
     return url
       ? `**Resultats del 29N:** la votació acaba a les 20:00 (a les Canàries, a les 21:00 hora peninsular) i el Ministeri de l'Interior publica l'escrutini provisional aquella mateixa nit, a mesura que es compten les meses, al seu [web oficial de resultats](${url}). Són provisionals: els oficials surten de l'escrutini general de les juntes electorals provincials, del 4 al 7 de desembre, i es publiquen al BOE.`
@@ -135,6 +166,28 @@ export function resultsNightLine(locale: Locale, url: string | null = ELECTION_N
   return url
     ? `**Results of 29 November:** voting ends at 20:00 (21:00 peninsular time in the Canary Islands) and the Spanish Ministry of the Interior publishes the provisional count the same night, as tables are counted, on its [official results site](${url}). These figures are provisional: the official result comes from the provincial electoral boards' general count, 4 to 7 December, and is published in the BOE.`
     : `**Results of 29 November:** voting ends at 20:00 (21:00 peninsular time in the Canary Islands) and the Spanish Ministry of the Interior publishes the provisional count the same night, as tables are counted. It has not yet announced the website it will use (checked on ${checkedDay("en", RESULTS_SITE_CHECKED)}); we will link the official site once it does. The official result comes from the provincial electoral boards' general count, 4 to 7 December, and is published in the BOE.`;
+}
+
+/** 30 Nov to 7 Dec: the night's figures were provisional; the official result is the general count's and is pending. */
+function afterLine(locale: Locale, url: string | null): string {
+  if (locale === "ca") {
+    return `**Resultats del 29N:** els de la nit electoral eren provisionals: el Govern els dona a partir de les còpies de les actes de les meses, abans de l'escrutini general (LOREG, article 98.2)${url ? `; el Ministeri de l'Interior els publica al seu [web oficial de resultats](${url})` : ""}. El resultat oficial és el de l'escrutini general de les juntes electorals provincials, que es fa el cinquè dia després de la votació, el divendres 4 de desembre, i ha d'acabar com a molt tard el dilluns 7 (articles 103 i 107); després es proclamen els electes i la Junta Electoral Central publica al BOE els resultats, en un termini de quaranta dies (article 108). **Resultat oficial definitiu: pendent.**`;
+  }
+  if (locale === "es") {
+    return `**Resultados del 29N:** los de la noche electoral eran provisionales: el Gobierno los da a partir de las copias de las actas de las mesas, antes del escrutinio general (LOREG, artículo 98.2)${url ? `; el Ministerio del Interior los publica en su [web oficial de resultados](${url})` : ""}. El resultado oficial es el del escrutinio general de las juntas electorales provinciales, que se hace el quinto día siguiente a la votación, el viernes 4 de diciembre, y debe concluir a más tardar el lunes 7 (artículos 103 y 107); después se proclaman los electos y la Junta Electoral Central publica en el BOE los resultados, en el plazo de cuarenta días (artículo 108). **Resultado oficial definitivo: pendiente.**`;
+  }
+  return `**Results of 29 November:** the election-night figures were provisional: the Government gives them from copies of the polling tables' count sheets, before the general count (electoral law, article 98.2)${url ? `; the Interior Ministry publishes them on its [official results site](${url})` : ""}. The official result is the general count of the provincial electoral boards, held on the fifth day after the vote, Friday 4 December, and due to finish no later than Monday 7 December (articles 103 and 107); then the elected members are proclaimed and the Central Electoral Board publishes the results in the BOE within forty days (article 108). **Final official result: pending.**`;
+}
+
+/** From 8 Dec: all past; the stopgap official links say what they are (the election site, the data portal), not "results". */
+function overLine(locale: Locale): string {
+  if (locale === "ca") {
+    return `**Resultats del 29N:** la votació va ser el diumenge 29 de novembre de 2026. Els resultats de la nit electoral eren provisionals; l'oficial és el de l'escrutini general de les juntes electorals provincials, que havia de començar el 4 de desembre i acabar com a molt tard el 7 (LOREG, articles 103 i 107), i que la Junta Electoral Central publica al BOE en un termini de quaranta dies (article 108). La informació oficial és al [web de les eleccions del Ministeri de l'Interior](${OFFICIAL_ELECTION_SITE}) i a [Infoelectoral](${INFOELECTORAL}), el seu portal de dades electorals.`;
+  }
+  if (locale === "es") {
+    return `**Resultados del 29N:** la votación fue el domingo 29 de noviembre de 2026. Los resultados de la noche electoral eran provisionales; el oficial es el del escrutinio general de las juntas electorales provinciales, que debía empezar el 4 de diciembre y concluir a más tardar el 7 (LOREG, artículos 103 y 107), y que la Junta Electoral Central publica en el BOE en el plazo de cuarenta días (artículo 108). La información oficial está en la [web de las elecciones del Ministerio del Interior](${OFFICIAL_ELECTION_SITE}) y en [Infoelectoral](${INFOELECTORAL}), su portal de datos electorales.`;
+  }
+  return `**Results of 29 November:** voting took place on Sunday 29 November 2026. The election-night figures were provisional; the official result is the general count of the provincial electoral boards, which was due to begin on 4 December and to finish no later than 7 December (electoral law, articles 103 and 107), and which the Central Electoral Board publishes in the BOE within forty days (article 108). The official information is on the [Interior Ministry's election site](${OFFICIAL_ELECTION_SITE}) and on [Infoelectoral](${INFOELECTORAL}), its election-data portal.`;
 }
 
 /** Is `url` on one of the hosts an announcement may come from? */

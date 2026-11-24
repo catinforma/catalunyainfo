@@ -16,7 +16,8 @@ const LOCALE = "en";
 // rendered in, so it regenerates every minute (s-maxage=60 at Cloudflare) from 28 Nov to 7 Dec 2026
 // without a deploy or a purge on the night. 60, not 300: the first visit after a phase change is still served
 // the old page (x-nextjs-cache STALE) while the new one renders, so the window is one minute, not five.
-// Back to `false` in the first deploy after 8 Dec 2026 (tested).
+// Not time-based: revalidate must be a static literal. On 8 Dec 2026 run `node scripts/election-layer-end.mjs` (back to `false`);
+// tests/election-day.test.ts fails from 8 Dec until then. The pages stop printing the layer on their own (phase "over").
 export const revalidate = 60;
 export const dynamicParams = true;
 
