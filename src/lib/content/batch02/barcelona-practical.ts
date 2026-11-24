@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { link } from "@/lib/content/features/shared";
 import {
   CURRENT_FARES,
@@ -106,6 +107,38 @@ function daysBlocks(locale: "ca" | "es" | "en"): Block[] {
     table(t.caption, [...t.headers], rows, t.note),
     ...paras(t.text(euros(fareFor("t-casual"), locale))),
   ];
+}
+
+/**
+ * 24 Nov 2026 (position 8-20 push): searchers call the T-casual "la tarjeta de
+ * metro" ("tarjeta de metro barcelona precios 2026" 68 impressions at 9.2, "barcelona
+ * metro tickets price" 15 at 8.2, "barcelona metro prices 2026", "barcelona public
+ * transport prices" 8 at 14.5) and the page only said "T-casual" / "pass". One H2
+ * in their words, a direct answer from the same dated table the zone table uses
+ * (CURRENT_FARES), so the drift test and the 2027 switch cover it. Re-read today on
+ * https://www.tmb.cat/en/barcelona-fares-metro-bus/transport-ticket-fares, "Prices
+ * in force from 15 January 2026": "Bitllet senzill* | 2,90 €", "T-casual | 13,00 €",
+ * "T-dia | 12,00 € ", "T-usual | 22,80 €" (1 zone), 24 Nov 2026: unchanged.
+ */
+function cardPriceBlocks(locale: "ca" | "es" | "en"): Block[] {
+  const z = CURRENT_FARES.zones["1"];
+  const e = (v: number) => euros(v, locale);
+  if (locale === "ca") {
+    return h2(
+      "Quant costa la targeta de metro de Barcelona?",
+      `No hi ha una sola «targeta de metro»: amb els preus de TMB vigents des del ${dayMonthYear(CURRENT_FARES.validFrom, "ca")}, a una zona el bitllet senzill costa ${e(z.single)}, la **T-casual** (deu viatges, la que molta gent anomena targeta de metro) **${e(z.tCasual)}**, la T-dia (24 hores il·limitades) ${e(z.tDia)} i la T-usual (30 dies il·limitats) ${e(z.tUsual)}. Per a dues zones o més, la taula de sota.`,
+    );
+  }
+  if (locale === "es") {
+    return h2(
+      "¿Cuánto cuesta la tarjeta de metro de Barcelona?",
+      `No hay una única «tarjeta de metro»: con los precios de TMB vigentes desde el ${dayMonthYear(CURRENT_FARES.validFrom, "es")}, en una zona el billete sencillo cuesta ${e(z.single)}, la **T-casual** (diez viajes, la que mucha gente llama tarjeta de metro) **${e(z.tCasual)}**, la T-dia (24 horas ilimitadas) ${e(z.tDia)} y la T-usual (30 días ilimitados) ${e(z.tUsual)}. Para dos zonas o más, la tabla de más abajo.`,
+    );
+  }
+  return h2(
+    `How much is a Barcelona metro ticket or card in ${CURRENT_FARES.year}?`,
+    `There is no single "metro card": on TMB's fares in force since ${dayMonthYear(CURRENT_FARES.validFrom, "en")}, in one zone a single ticket costs ${e(z.single)}, the **T-casual** (ten journeys, the card most visitors mean) **${e(z.tCasual)}**, the T-dia (24 hours of unlimited travel) ${e(z.tDia)} and the T-usual (30 days of unlimited travel) ${e(z.tUsual)}. For two zones or more, see the table below.`,
+  );
 }
 
 const PROFILE_HEADERS: Record<string, string[]> = {
@@ -232,6 +265,7 @@ export const TRANSPORT: B2Article = {
           "Si faràs pocs trajectes, compara primer la T-casual. Si vols viatges il·limitats durant 24 hores, la T-dia és especialment interessant. Per a estades llargues, la T-usual pot tenir molt sentit. La Hola Barcelona prioritza la simplicitat i inclou el metro de l'aeroport.",
         ),
         { type: "transportPasses" } as Block,
+        ...cardPriceBlocks("ca"),
         ...h2(
           "Preu de la T-casual i de la resta de targetes per zones (2026)",
           "La T-casual val per a **deu viatges integrats** en tots els modes de transport. Costa **13 €** en una zona, **25,50 €** en dues i **34,70 €** en tres: 1,30 € per viatge en una zona, davant dels 2,90 € del bitllet senzill.",
@@ -336,6 +370,7 @@ export const TRANSPORT: B2Article = {
           "T-casual para pocos desplazamientos; T-dia para un día de uso intensivo; T-usual para estancias largas; Hola Barcelona para quien valore especialmente los viajes ilimitados y el metro del aeropuerto.",
         ),
         { type: "transportPasses" } as Block,
+        ...cardPriceBlocks("es"),
         ...h2(
           "Precio de la T-casual y del resto de tarjetas por zonas (2026)",
           "La T-casual sirve para **diez viajes integrados** en todos los modos de transporte. Cuesta **13 €** en una zona, **25,50 €** en dos y **34,70 €** en tres: 1,30 € por viaje en una zona, frente a los 2,90 € del billete sencillo.",
@@ -433,6 +468,7 @@ export const TRANSPORT: B2Article = {
           "Look at T-casual for light public-transport use, T-dia for one intensive day, T-usual for longer stays, and Hola Barcelona if unlimited travel and airport metro access matter most.",
         ),
         { type: "transportPasses" } as Block,
+        ...cardPriceBlocks("en"),
         ...h2(
           "T-casual price by zone, and the other passes (2026)",
           "The T-casual is valid for **ten integrated journeys** on every mode of transport. It costs **€13** in one zone, **€25.50** in two and **€34.70** in three: €1.30 a journey in one zone, against €2.90 for a single ticket.",

@@ -627,6 +627,14 @@ export function buildEasterBody(locale: Locale): Block[] {
         en: ` The towns that take the day off are listed on [is ${dm(E.whitMonday, "en")} ${EASTER_YEAR} a holiday?](${datePath("en", E.whitMonday)}).`,
       }[locale]
     : "";
+  // 24 Nov 2026: Easter Monday's own date page answers "pasqua 2027" / "pascua 2027" (it now says when Easter Sunday is, and lists the local days and shops): one link in the query's words.
+  const mondayPage = isDatePage(E.easterMonday)
+    ? {
+        ca: ` Pasqua 2027, dia a dia: [és festiu el ${dm(E.easterMonday, "ca")} de ${EASTER_YEAR}?](${datePath("ca", E.easterMonday)})`,
+        es: ` Pascua 2027, día a día: [¿es festivo el ${dm(E.easterMonday, "es")} de ${EASTER_YEAR}?](${datePath("es", E.easterMonday)})`,
+        en: ` Easter 2027 day by day: [is ${dm(E.easterMonday, "en")} ${EASTER_YEAR} a holiday?](${datePath("en", E.easterMonday)})`,
+      }[locale]
+    : "";
   // Both true in 2027; the sentences that rely on them are left out in a year they are not.
   const schoolOnMonday = E.schoolFrom <= E.easterMonday && E.schoolTo >= E.easterMonday;
   const matchesSchool = weekBeforeRun.from === E.schoolFrom && weekBeforeRun.to === E.schoolTo;
@@ -673,7 +681,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       ...h2(
         "El Dilluns de Pasqua del 2027",
-        `És el ${d(E.easterMonday, "ca")}, festiu a tot Catalunya excepte a l'Aran, on el canvia la Festa d'Aran (${d(E.aranDay, "ca")}). És el dia de la mona.${schoolOnMonday ? " Les escoles, també les de l'Aran, encara són de vacances aquell dia." : ""}`,
+        `És el ${d(E.easterMonday, "ca")}, festiu a tot Catalunya excepte a l'Aran, on el canvia la Festa d'Aran (${d(E.aranDay, "ca")}). És el dia de la mona.${schoolOnMonday ? " Les escoles, també les de l'Aran, encara són de vacances aquell dia." : ""}${mondayPage}`,
         `La Pasqua Granada, set setmanes després (${d(E.whitMonday, "ca")}), no és festiu a tot Catalunya: és festa local a Barcelona i als municipis que la trien. Tots els festius de la ciutat són a [festius de Barcelona](${municipalityPath("ca", "barcelona")}).${whitPage}`,
       ),
       ...h2(
@@ -787,7 +795,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       ...h2(
         "El Lunes de Pascua de 2027",
-        `Es el ${d(E.easterMonday, "es")}, festivo en toda Cataluña salvo en Arán, donde lo cambia la Fiesta de Arán (${d(E.aranDay, "es")}). Es el día de la mona.${schoolOnMonday ? " Los colegios, también los de Arán, siguen de vacaciones ese día." : ""}`,
+        `Es el ${d(E.easterMonday, "es")}, festivo en toda Cataluña salvo en Arán, donde lo cambia la Fiesta de Arán (${d(E.aranDay, "es")}). Es el día de la mona.${schoolOnMonday ? " Los colegios, también los de Arán, siguen de vacaciones ese día." : ""}${mondayPage}`,
         `La Pascua Granada, siete semanas después (${d(E.whitMonday, "es")}), no es festivo en toda Cataluña: es fiesta local en Barcelona y en los municipios que la eligen. Todos los festivos de la ciudad están en [festivos de Barcelona](${municipalityPath("es", "barcelona")}).${whitPage}`,
       ),
       ...h2(
@@ -900,7 +908,7 @@ export function buildEasterBody(locale: Locale): Block[] {
     ),
     ...h2(
       "Easter Monday 2027",
-      `It is ${d(E.easterMonday, "en")}, a public holiday across Catalonia except in Aran, which swaps it for the Festa d'Aran (${d(E.aranDay, "en")}). It is the day of the mona, the Easter cake.${schoolOnMonday ? " Schools, Aran's included, are still on holiday that day." : ""}`,
+      `It is ${d(E.easterMonday, "en")}, a public holiday across Catalonia except in Aran, which swaps it for the Festa d'Aran (${d(E.aranDay, "en")}). It is the day of the mona, the Easter cake.${schoolOnMonday ? " Schools, Aran's included, are still on holiday that day." : ""}${mondayPage}`,
       `Whit Monday (Pasqua Granada), seven weeks later on ${d(E.whitMonday, "en")}, is not a Catalonia-wide holiday: it is a local holiday in Barcelona and the towns that choose it.${hasEnglishPage("barcelona") ? ` Every Barcelona holiday is on [Barcelona public holidays](${municipalityPath("en", "barcelona")}).` : ""}${whitPage}`,
     ),
     ...h2(

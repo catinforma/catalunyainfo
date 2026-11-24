@@ -923,6 +923,33 @@ const GUIDE_ORDER: Record<DayKind2027, GuideKey[]> = {
   local: ["bridges2027", "localHolidays", "workCalendar", "shops", "school"],
 };
 
+/**
+ * 24 Nov 2026 (position 8-20 push): "pasqua 2027" (460 impressions in 28 days at
+ * 9.1, 0 clicks; "pascua 2027" and "easter 2027" the same) lands on the Easter
+ * Monday date page, which never said when Easter Sunday is. One section in the
+ * searchers' words, and the same text as an FAQ item. Source, read 24 Nov 2026:
+ * https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2027/
+ * "26 de març, divendres | 29 de març, dilluns" and "la festa del dia 29 de març
+ * (Pasqua Florida) queda substituïda per la de 17 de juny (Festa d'Aran)". The
+ * Sunday is the day before the Monday (no computus in the text), Palm Sunday the
+ * Sunday a week before: the same dates as the Easter 2027 guide.
+ */
+function easterSection(locale: DateLocale): DateSection {
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const sunday = addDays(EASTER_MONDAY, -1);
+  const palm = addDays(sunday, -7);
+  return {
+    title: L(`Quan és Pasqua el ${YEAR}?`, `¿Cuándo es Pascua en ${YEAR}?`, `When is Easter in ${YEAR}?`),
+    paragraphs: [
+      L(
+        `El Diumenge de Pasqua del ${YEAR} és el ${wdm(sunday, "ca")}, el dia abans del Dilluns de Pasqua (${wdm(EASTER_MONDAY, "ca")}, Ordre EMT/52/2026). La Setmana Santa va del Diumenge de Rams, el ${dayMonth(palm, "ca")}, al Diumenge de Pasqua, el ${dayMonth(sunday, "ca")}: a Catalunya són festius el Divendres Sant (${wdm(GOOD_FRIDAY, "ca")}) i el Dilluns de Pasqua, el dia de la mona.`,
+        `El Domingo de Pascua de ${YEAR} es el ${wdm(sunday, "es")}, el día antes del Lunes de Pascua (${wdm(EASTER_MONDAY, "es")}, Orden EMT/52/2026). La Semana Santa va del Domingo de Ramos, el ${dayMonth(palm, "es")}, al Domingo de Pascua, el ${dayMonth(sunday, "es")}: en Cataluña son festivos el Viernes Santo (${wdm(GOOD_FRIDAY, "es")}) y el Lunes de Pascua, el día de la mona.`,
+        `Easter Sunday ${YEAR} is ${wdm(sunday, "en")}, the day before Easter Monday (${wdm(EASTER_MONDAY, "en")}, Order EMT/52/2026). Holy Week runs from Palm Sunday, ${dayMonth(palm, "en")}, to Easter Sunday, ${dayMonth(sunday, "en")}: in Catalonia Good Friday (${wdm(GOOD_FRIDAY, "en")}) and Easter Monday, the day of the mona cake, are public holidays.`,
+      ),
+    ],
+  };
+}
+
 export function dateContent2027(iso: string, locale: DateLocale, next: NextYearLocal = NEXT_YEAR): DateContent {
   const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
   const local = nextYearPlacesOn(iso, next);
@@ -950,7 +977,9 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const shops = shopsParagraphs(iso, kind, locale);
   const school = schoolParagraph(iso, kind, local.places, locale);
   const transport = transportParagraph(iso, locale);
+  const easterBlock = iso === EASTER_MONDAY ? easterSection(locale) : null;
   const sections: DateSection[] = [
+    ...(easterBlock ? [easterBlock] : []),
     { title: shopsTitle, paragraphs: shops },
     { title: schoolTitle, paragraphs: [school] },
     ...(compensation ? [{ title: compensation.question, paragraphs: [compensation.answer] }] : []),
@@ -974,6 +1003,7 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const localAnswer = [localPart.text, localPart.places.length ? `${placeNames(localPart.places, locale)}.` : "", localPart.note ?? ""].filter(Boolean).join(" ");
   const faq = [
     { question: dateQuestion(iso, locale), answer: [answer, ...answerNote].join(" ") },
+    ...(easterBlock ? [{ question: easterBlock.title, answer: easterBlock.paragraphs.join(" ") }] : []),
     { question: localPart.title ?? "", answer: localAnswer },
     { question: shopsTitle, answer: shops.join(" ") },
     { question: schoolTitle, answer: school },

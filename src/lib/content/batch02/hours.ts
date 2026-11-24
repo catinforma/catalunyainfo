@@ -52,6 +52,20 @@ import {
  * 23 September, 31 December); the title, already answer-first since 30 Oct,
  * is kept. No new facts.
  *
+ * 24 Nov 2026 (position 8-20 push): two H2s in the searchers' words, "What time does
+ * the metro open?" (the page answered it only in the FAQ; ES 38 impressions at 11.9,
+ * EN 13 at 7.4) and "...close today?" (ES 25 + 8 at 8.8, EN 'today metro closing
+ * time' 47 at 7.4). Facts unchanged. Re-read today on TMB's hours page
+ * (https://www.tmb.cat/en/barcelona-transport/operating-hours-metro-bus, EN, CA and
+ * ES): "From Monday to Thursday and midweek public holidays: From 05:00 to
+ * midnight", "Fridays and the nights before public holidays: From 05:00 to 02:00",
+ * "Saturdays: Start: at 5.00 hours; continuous service throughout Saturday to
+ * Sunday night", "Sundays: Metro service ends at midnight", "The final time refers
+ * to when the last train leaves the terminal station at each end of every metro
+ * line", and the seven L9 Sud / L10 Sud stations "have the same opening times
+ * everyday: from 5.00 to 24.00 hours". Read 24 Nov 2026. VERIFIED stays 2026-10-30:
+ * the tram, NitBus and funicular were not re-read.
+ *
  * 5 Nov 2026: the "Christmas and New Year" line now ends with one sentence
  * linking the new Christmas transport page (christmasTransportMention);
  * title and descriptions untouched. Goes out with `transport-nadal-links`.
@@ -106,6 +120,10 @@ type T = {
   headers: string[];
   rows: string[][];
   tableNote: string;
+  openTitle: string;
+  open: string;
+  todayTitle: string;
+  today: string;
   fridayTitle: string;
   friday: string;
   sundayTitle: string;
@@ -145,6 +163,10 @@ const COPY: Record<Locale, T> = {
       ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) and ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (all week)", "Midnight, all week (23:00 on 24 December)"],
     ],
     tableNote: "From TMB's hours page, checked on 30 October 2026. The seven stations in the last row keep 5:00 to midnight all week: no 2:00 close on Fridays and no all-night Saturday.",
+    openTitle: "What time does the Barcelona metro open?",
+    open: "The Barcelona metro opens at **5:00** from Monday to Saturday. On **Sunday** it does not open at 5:00: it has been running non-stop since Saturday night, and it closes at midnight. The seven outer stations of L9 Sud and L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial and La Factoria) also open at 5:00, every day of the week.",
+    todayTitle: "What time does the metro close today?",
+    today: "Tonight's closing time is in the box at the top of the page. The rule behind it: **midnight** from Sunday to Thursday (and on midweek public holidays), **2:00** on Fridays and the night before a midweek public holiday, and **no closing** on Saturday night. Those times are when the last train leaves the terminal station at each end of the line.",
     fridayTitle: "What time does the metro close on Fridays?",
     friday: "At **2:00** in the early hours of Saturday. The same 2:00 closing applies on the night before a public holiday that falls Monday to Friday.",
     sundayTitle: "Metro hours on Sundays and public holidays",
@@ -210,6 +232,10 @@ const COPY: Record<Locale, T> = {
       ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) y ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (toda la semana)", "24:00, toda la semana (23:00 el 24 de diciembre)"],
     ],
     tableNote: "De la página de horarios de TMB, comprobada el 30 de octubre de 2026. Las siete estaciones de la última fila mantienen de 5:00 a 24:00 toda la semana: ni cierre a las 2:00 el viernes ni noche entera el sábado.",
+    openTitle: "¿A qué hora abre el metro de Barcelona?",
+    open: "El metro de Barcelona abre a las **5:00** de lunes a sábado. El **domingo** no abre a las 5:00: funciona sin parar desde la noche del sábado, y cierra a medianoche. Las siete estaciones de los extremos de la L9 Sud y la L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial y La Factoria) también abren a las 5:00, todos los días de la semana.",
+    todayTitle: "¿A qué hora cierra el metro hoy?",
+    today: "El cierre de esta noche está en el recuadro del principio de la página. La regla de la que sale: a **medianoche** de domingo a jueves (y en los festivos entre semana), a las **2:00** los viernes y la víspera de un festivo entre semana, y **sin cierre** la noche del sábado. Esas horas son las de salida del último tren desde la estación de cabecera de cada extremo de la línea.",
     fridayTitle: "¿A qué hora cierra el metro los viernes?",
     friday: "A las **2:00** de la madrugada del sábado. El mismo cierre a las 2:00 se aplica la víspera de un festivo que cae de lunes a viernes.",
     sundayTitle: "Horario del metro el domingo y los festivos",
@@ -275,6 +301,10 @@ const COPY: Record<Locale, T> = {
       ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) i ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (tota la setmana)", "24:00, tota la setmana (23:00 el 24 de desembre)"],
     ],
     tableNote: "De la pàgina d'horaris de TMB, comprovada el 30 d'octubre de 2026. Les set estacions de l'última fila mantenen de 5:00 a 24:00 tota la setmana: ni tancament a les 2:00 el divendres ni nit sencera el dissabte.",
+    openTitle: "A quina hora obre el metro de Barcelona?",
+    open: "El metro de Barcelona obre a les **5:00** de dilluns a dissabte. El **diumenge** no obre a les 5:00: funciona sense parar des de la nit del dissabte, i tanca a mitjanit. Les set estacions dels extrems de la L9 Sud i la L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial i La Factoria) també obren a les 5:00, tots els dies de la setmana.",
+    todayTitle: "A quina hora tanca el metro avui?",
+    today: "El tancament d'aquesta nit és al requadre del principi de la pàgina. La regla de què surt: a **mitjanit** de diumenge a dijous (i als festius entre setmana), a les **2:00** els divendres i la vigília d'un festiu entre setmana, i **sense tancament** la nit del dissabte. Aquestes hores són les de sortida de l'últim tren des de l'estació de capçalera de cada extrem de la línia.",
     fridayTitle: "A quina hora tanca el metro els divendres?",
     friday: "A les **2:00** de la matinada del dissabte. El mateix tancament a les 2:00 s'aplica la vigília d'un festiu que cau de dilluns a divendres.",
     sundayTitle: "Horari del metro el diumenge i els festius",
@@ -334,6 +364,8 @@ function body(locale: Locale) {
     ...h2(t.tableTitle),
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
+    ...h2(t.openTitle, t.open),
+    ...h2(t.todayTitle, t.today),
     ...h2(t.fridayTitle, t.friday),
     ...h2(t.sundayTitle, t.sunday),
     ...h2(t.specialTitle),

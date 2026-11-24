@@ -328,7 +328,9 @@ test("shops and schools: the retail law's closing days, the 2027 shop calendar a
   // Llei 18/2017, art. 36.2.d, by date: 26 December 2027 is a closing day though not a holiday.
   assert.deepEqual([...CLOSING_2027].sort(), ["2027-01-01", "2027-01-06", "2027-03-28", "2027-03-29", "2027-05-01", "2027-06-24", "2027-09-11", "2027-12-25", "2027-12-26"]);
   for (const iso of ["2027-03-29", "2027-05-01", "2027-06-24", "2027-09-11", "2027-12-25", "2027-12-26"]) {
-    assert.match(dateContent(iso, "ca").sections[0]!.paragraphs[0]!, /^Les botigues amb horari general han de tancar/, iso);
+    // 24 Nov 2026: Easter Monday's page opens with "Quan és Pasqua el 2027?", so the shops section is found by its title.
+    const shops = dateContent(iso, "ca").sections.find((s) => s.title.startsWith("Obren les botigues"));
+    assert.match(shops!.paragraphs[0]!, /^Les botigues amb horari general han de tancar/, iso);
   }
   assert.match(dateContent("2027-12-26", "es").sections[0]!.paragraphs[0]!, /el 26 de diciembre está en la lista aunque en 2027 no sea festivo/);
   // The eight general days of Ordre EMT/89/2026 that have a page.

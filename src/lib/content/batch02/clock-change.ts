@@ -39,6 +39,14 @@ import {
  * once it has passed, and both are rewritten together.
  */
 
+/*
+ * 24 Nov 2026 (position 8-20 push): "do the clocks change in spain" / "do the clocks go
+ * back in spain" (EN, ~100 impressions in 28 days at 9.8-11.8, 0 clicks) had no heading in
+ * its words. The H2 "Do the clocks change in Spain?" restates the rule already on the page
+ * (RD 236/2002 "con caracter indefinido", BOE-A-2002-4221, quoted 31 Oct 2026; the Canary
+ * Islands' same instant: arts. 2-3), with no date that can go stale: the next change is in
+ * the clockChange box. No new fact, so VERIFIED stays.
+ */
 const VERIFIED = "2026-10-31";
 
 /** US changes in 2027 under the federal rule (NIST): second Sunday of March, first Sunday of November. */
@@ -91,6 +99,8 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
 type T = {
   lead: string;
   note: string;
+  changeTitle: string;
+  change: string;
   ruleTitle: string;
   rule: string[];
   tableCaption: string;
@@ -127,6 +137,8 @@ const COPY: Record<Locale, T> = {
     lead: "**El pròxim canvi d'hora és el diumenge 28 de març del 2027**: a les 2 de la matinada seran les 3 i dormirem una hora menys. L'últim va ser el diumenge 25 d'octubre del 2026, i el següent serà el diumenge 31 d'octubre del 2027. La regla no canvia mai: l'hora s'avança l'**últim diumenge de març** i es retarda l'**últim diumenge d'octubre**, a Catalunya, a la resta d'Espanya i a tota la UE en el mateix instant. Aquí tens les dates oficials fins al 2031, què passa amb la diferència horària amb el Regne Unit i els Estats Units, i com està de debò la proposta d'acabar amb el canvi.",
     note: "La data del pròxim canvi es calcula amb la regla del Reial decret 236/2002; les dates de la taula són les publicades al BOE i al Diari Oficial de la UE.",
     ruleTitle: "Quan canvia l'hora",
+    changeTitle: "Canvia l'hora a Espanya?",
+    change: "Sí. Espanya canvia l'hora dues vegades l'any, segons el Reial decret 236/2002, que aplica la regla europea de l'horari d'estiu «con carácter indefinido»: **s'avança una hora l'últim diumenge de març** (de les 02:00 a les 03:00) i **es retarda una hora l'últim diumenge d'octubre** (de les 03:00 a les 02:00). Barcelona, la resta de la península i les Canàries canvien en el mateix instant; la data del pròxim canvi és al requadre del principi de la pàgina.",
     rule: [
       "La Directiva 2000/84/CE fixa que l'horari d'estiu comença l'**últim diumenge de març** i acaba l'**últim diumenge d'octubre**, en tots els estats membres alhora: a la 01:00 en temps universal. Espanya la va incorporar amb el **Reial decret 236/2002**, que la declara aplicable «con carácter indefinido».",
       "Cada cinc anys es publica el calendari amb les dates concretes. L'últim ordre espanyol, l'Orden PCM/186/2022, cobreix fins al 2026. Les dates del 2027 al 2031 ja les ha fixat la Comissió Europea al Diari Oficial de la UE; el BOE encara no n'ha publicat l'ordre corresponent, però com que la regla és permanent, les dates no canvien.",
@@ -176,6 +188,8 @@ const COPY: Record<Locale, T> = {
     lead: "**El próximo cambio de hora es el domingo 28 de marzo de 2027**: a las 2 de la madrugada serán las 3 y dormiremos una hora menos. El último fue el domingo 25 de octubre de 2026, y el siguiente será el domingo 31 de octubre de 2027. La regla no cambia nunca: la hora se adelanta el **último domingo de marzo** y se retrasa el **último domingo de octubre**, en toda España y en toda la UE en el mismo instante. Aquí tienes las fechas oficiales hasta 2031, qué pasa con la diferencia horaria con Reino Unido y Estados Unidos, y cómo está de verdad la propuesta de acabar con el cambio.",
     note: "La fecha del próximo cambio se calcula con la regla del Real Decreto 236/2002; las fechas de la tabla son las publicadas en el BOE y en el Diario Oficial de la UE.",
     ruleTitle: "Cuándo cambia la hora",
+    changeTitle: "¿Cambia la hora en España?",
+    change: "Sí. España cambia la hora dos veces al año, según el Real Decreto 236/2002, que aplica la regla europea del horario de verano «con carácter indefinido»: **se adelanta una hora el último domingo de marzo** (de las 02:00 a las 03:00) y **se retrasa una hora el último domingo de octubre** (de las 03:00 a las 02:00). Barcelona, el resto de la península y Canarias cambian en el mismo instante; la fecha del próximo cambio está en el recuadro del principio de la página.",
     rule: [
       "La Directiva 2000/84/CE fija que el horario de verano empieza el **último domingo de marzo** y termina el **último domingo de octubre**, en todos los Estados miembros a la vez: a la 01:00 en tiempo universal. España la incorporó con el **Real Decreto 236/2002**, que la declara aplicable «con carácter indefinido».",
       "Cada cinco años se publica el calendario con las fechas concretas. La última orden española, la Orden PCM/186/2022, cubre hasta 2026. Las fechas de 2027 a 2031 ya las ha fijado la Comisión Europea en el Diario Oficial de la UE; el BOE aún no ha publicado la orden correspondiente, pero como la regla es permanente, las fechas no cambian.",
@@ -225,6 +239,8 @@ const COPY: Record<Locale, T> = {
     lead: "**The clocks in Spain next change on Sunday 28 March 2027**, when they go forward an hour: at 02:00 it becomes 03:00. They last went back on Sunday 25 October 2026 and will go back again on Sunday 31 October 2027. The rule never changes: forward on the **last Sunday of March**, back on the **last Sunday of October**, in Barcelona, the rest of Spain and the whole EU at the same moment. Here are the official dates to 2031, what happens to the time difference with the UK and the US, and where the plan to scrap the change really stands.",
     note: "The next change is computed from the rule in Real Decreto 236/2002; the dates in the table are the ones published in the BOE and the EU Official Journal.",
     ruleTitle: "When the clocks change",
+    changeTitle: "Do the clocks change in Spain?",
+    change: "Yes. Spain changes the clocks twice a year under Real Decreto 236/2002, which applies the EU summer-time rule \"con carácter indefinido\", with no end date: the clocks **go forward an hour on the last Sunday of March** (02:00 becomes 03:00) and **back an hour on the last Sunday of October** (03:00 becomes 02:00). Barcelona, the rest of mainland Spain and the Canary Islands change at the same instant; the date of the next change is in the box at the top of the page.",
     rule: [
       "Directive 2000/84/EC sets summer time to start on the **last Sunday of March** and end on the **last Sunday of October**, in every member state at the same moment: 01:00 universal time. Spain adopted it through **Real Decreto 236/2002**, which applies it «con carácter indefinido», with no end date.",
       "The exact dates are published every five years. Spain's latest order, Orden PCM/186/2022, runs to 2026. The 2027-2031 dates have already been set by the European Commission in the EU Official Journal; Spain has not yet published its own order for those years, but because the rule is permanent the dates are the same.",
@@ -288,6 +304,7 @@ function body(locale: Locale): Block[] {
     lead(t.lead),
     { type: "clockChange" } as Block,
     callout("official", verifiedLine(locale, VERIFIED), t.note),
+    ...h2(t.changeTitle, t.change),
     ...h2(t.ruleTitle, ...t.rule),
     table(
       t.tableCaption,
