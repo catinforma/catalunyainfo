@@ -115,6 +115,15 @@ import { OPENING_2027, SHOPS } from "./shops";
  * wording untouched (window to 28 Nov); only the lead's check date moves.
  * Re-read checkpoints: reis-towns.ts REIS_REREAD_BY (1, 15, 22 Dec, 2 Jan).
  *
+ * 25 Nov 2026: every council and Barcelona's press room re-read (reis-towns.ts
+ * header lists what is new). No new time or route: Sabadell, Reus and
+ * Granollers unchanged. Barcelona: still nothing (press room tag "reis",
+ * searches "cavalcada reis" and "nadal", barcelona.cat/nadal still "Nadal
+ * 2025"); the sign-up form is now paused, so SIGNUPS_CLOSED reads "closed".
+ * Mataró (19 Nov) and Badalona (draw held) news2027 updated. Title,
+ * description, H1 and lead wording untouched (window to 28 Nov); only the
+ * check dates move.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights on a Barcelona shopping street), also the Christmas in Barcelona
  * hero, with its exact alt text and caption, because media rows are keyed by
@@ -122,7 +131,7 @@ import { OPENING_2027, SHOPS } from "./shops";
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const REIS_AS_OF = "2026-11-21";
+export const REIS_AS_OF = "2026-11-25";
 
 /* -------------------------------------------------------------------------- */
 /* The days, from the shared modules                                          */
@@ -222,7 +231,7 @@ export interface Town {
   watch: string;
   past: PastParade;
   /** Something official about 2027 already out (the date, a call for volunteers), never a time. */
-  news2027?: { published: string; url: string; text: Record<Locale, string> };
+  news2027?: { published: string; url: string; alsoUrl?: string; text: Record<Locale, string> };
   /** Our guide to getting there from Barcelona. */
   guide?: B2Key;
 }
@@ -331,6 +340,7 @@ export const BARCELONA_HOSTS = /(^|\.)(barcelona\.cat|dtibcn\.cat)$/;
 export const BARCELONA_NEWS_2027 = {
   opens: "2026-10-19",
   closes: "2026-11-23",
+  // 25 Nov 2026: the form answers "L'enquesta està en pausa i no s'hi pot accedir" (past the 23 Nov deadline).
   url: "https://inscripcions-ajuntament.barcelona.cat/index.php/469371?lang=ca",
   read: "2026-11-21",
 } as const;
@@ -634,13 +644,19 @@ export const TOWNS: readonly Town[] = [
     name: "Mataró",
     hosts: /(^|\.)(mataro\.cat|culturamataro\.cat)$/,
     watch: "https://www.mataro.cat/ca/actualitat/noticies",
+    // Council news "dijous 19 novembre 2026" (read 25 Nov 2026): "El Nadal culminarà el 5 de gener amb l'arribada de Ses
+    // Majestats els Reis d'Orient i la tradicional Cavalcada"; "el 5 de gener [el Port] es convertirà novament en
+    // l'escenari de l'arribada per mar de Ses Majestats"; "el Parc Central tornarà a acollir el Campament Reial de l'1
+    // al 4 de gener"; "Els Carters Reials també recorreran diferents barris de Mataró els dies 2, 3 i 4 de gener".
+    // No time and no route yet. Earlier: 30 Oct 2026, 20 places for the new Serenins float, until 22 Nov.
     news2027: {
-      published: "2026-10-30",
-      url: "https://www.mataro.cat/ca/actualitat/noticies/2026/l2019ajuntament-obre-la-cavalcada-de-reis-a-la-ciutadania-amb-una-carrossa-participativa",
+      published: "2026-11-19",
+      url: "https://www.mataro.cat/ca/actualitat/noticies/2026/mataro-encendra-el-nadal-el-27-de-novembre-amb-una-gran-festa-participativa-al-nou-parc-central",
+      alsoUrl: "https://www.mataro.cat/ca/actualitat/noticies/2026/l2019ajuntament-obre-la-cavalcada-de-reis-a-la-ciutadania-amb-una-carrossa-participativa",
       text: {
-        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: el 30 d'octubre de 2026 va obrir 20 places de figurant per a la nova carrossa dels Serenins, amb preinscripció fins al 22 de novembre.",
-        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: el 30 de octubre de 2026 abrió 20 plazas de figurante para la nueva carroza de los Serenins, con preinscripción hasta el 22 de noviembre.",
-        en: "The City Council has already confirmed the parade for 5 January 2027: on 30 October 2026 it opened 20 places for members of the public on the new Serenins float, with applications until 22 November.",
+        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027, amb l'arribada dels Reis per mar al port i una carrossa nova, la dels Serenins, oberta al públic (la preinscripció es va tancar el 22 de novembre). El Campament Reial és al Parc Central de l'1 al 4 de gener i els carters reials passen pels barris el 2, 3 i 4 de gener.",
+        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027, con la llegada de los Reyes por mar al puerto y una carroza nueva, la de los Serenins, abierta al público (la preinscripción se cerró el 22 de noviembre). El Campamento Real está en el Parc Central del 1 al 4 de enero y los carteros reales recorren los barrios el 2, 3 y 4 de enero.",
+        en: "The City Council has already confirmed the parade for 5 January 2027, with the Kings arriving by sea at the harbour and a new float, the Serenins, open to the public (applications closed on 22 November). The royal camp is in the Parc Central from 1 to 4 January and the royal letter-carriers tour the neighbourhoods on 2, 3 and 4 January.",
       },
     },
     past: {
@@ -667,6 +683,7 @@ export const TOWNS: readonly Town[] = [
       sources: [
         { name: "Tot a punt per viure un Nadal amb més llums que mai, i amb noves carrosses i nous personatges a la Cavalcada (20/11/2025)", url: "https://www.mataro.cat/ca/actualitat/noticies/2025/tot-a-punt-per-viure-un-nadal-amb-mes-llums-que-mai-i-amb-noves-carrosses-i-nous-personatges-a-la-cavalcada-1", publisher: "Ajuntament de Mataró" },
         { name: "Afectacions al trànsit per la Cavalcada de Reis 2026 el dia 5 de gener (22/12/2025)", url: "https://www.mataro.cat/ca/actualitat/avisos/afectacions-al-transit-per-la-cavalcada-de-reis-2026-el-dia-5-de-gener", publisher: "Ajuntament de Mataró" },
+        { name: "Mataró encendrà el Nadal el 27 de novembre amb una gran festa participativa al Nou Parc Central (19/11/2026)", url: "https://www.mataro.cat/ca/actualitat/noticies/2026/mataro-encendra-el-nadal-el-27-de-novembre-amb-una-gran-festa-participativa-al-nou-parc-central", publisher: "Ajuntament de Mataró" },
         { name: "L'Ajuntament obre la Cavalcada de Reis a la ciutadania amb una carrossa participativa (30/10/2026)", url: "https://www.mataro.cat/ca/actualitat/noticies/2026/l2019ajuntament-obre-la-cavalcada-de-reis-a-la-ciutadania-amb-una-carrossa-participativa", publisher: "Ajuntament de Mataró" },
       ],
     },
@@ -679,10 +696,11 @@ export const TOWNS: readonly Town[] = [
     news2027: {
       published: "2026-10-13",
       url: "https://www.badalona.cat/ca/actualitat/noticies/el-proxim-dilluns-19-doctubre-sobre-el-termini-de-presentacio-de-sol-licituds-per-als-infants-que-vulguin-participar-en-la-cavalcada-de-reis-anant-a-dalt-de-les-carrosses",
+      alsoUrl: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/festes/reis/sorteig-per-escollir-els-infants-que-aniran-a-dalt-de-les-carrosses-de-la-cavalcada-de-reis-2027",
       text: {
-        ca: "L'Ajuntament ja prepara la Cavalcada de Reis 2027: el sorteig dels infants que aniran a dalt de les carrosses és el 12 de novembre, i hi entren els que tinguin entre 9 i 14 anys el 5 de gener de 2027.",
-        es: "El Ayuntamiento ya prepara la Cabalgata de Reyes 2027: el sorteo de los niños que irán en las carrozas es el 12 de noviembre, y entran los que tengan entre 9 y 14 años el 5 de enero de 2027.",
-        en: "The City Council is already preparing the 2027 parade: the draw for the children who will ride on the floats is on 12 November, open to those aged 9 to 14 on 5 January 2027.",
+        ca: "L'Ajuntament ja prepara la Cavalcada de Reis 2027: el sorteig dels infants que aniran a dalt de les carrosses es va fer el 12 de novembre (hi entraven els de 9 a 14 anys el 5 de gener de 2027) i la seva web ja en publica l'acta amb les llistes finals.",
+        es: "El Ayuntamiento ya prepara la Cabalgata de Reyes 2027: el sorteo de los niños que irán en las carrozas se hizo el 12 de noviembre (entraban los de 9 a 14 años el 5 de enero de 2027) y su web ya publica el acta con las listas finales.",
+        en: "The City Council is already preparing the 2027 parade: the draw for the children who ride on the floats was held on 12 November (open to those aged 9 to 14 on 5 January 2027) and its website now publishes the minutes with the final lists.",
       },
     },
     past: {
@@ -710,6 +728,7 @@ export const TOWNS: readonly Town[] = [
       sources: [
         { name: "Reis 2025-2026", url: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/festes/reis/reis-2025-2026", publisher: "Ajuntament de Badalona" },
         { name: "Cavalcada de Reis (agenda, 5/1/2026)", url: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/agenda/cavalcada-de-reis-1", publisher: "Ajuntament de Badalona" },
+        { name: "Sorteig per escollir els infants per la Cavalcada de Reis 2027 (acta, 12/11/2026)", url: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/festes/reis/sorteig-per-escollir-els-infants-que-aniran-a-dalt-de-les-carrosses-de-la-cavalcada-de-reis-2027", publisher: "Ajuntament de Badalona" },
         { name: "Sol·licituds per als infants que vulguin participar en la Cavalcada de Reis 2027 (13/10/2026)", url: "https://www.badalona.cat/ca/actualitat/noticies/el-proxim-dilluns-19-doctubre-sobre-el-termini-de-presentacio-de-sol-licituds-per-als-infants-que-vulguin-participar-en-la-cavalcada-de-reis-anant-a-dalt-de-les-carrosses", publisher: "Ajuntament de Badalona" },
       ],
     },
@@ -808,6 +827,7 @@ export function reisSources(announced: Announced2027 = ANNOUNCED_2027, moreTowns
     { name: `Cavalcada de Reis 2026 (${town.name})`, url: town.y2026.url, publisher: councilName(town.name) },
     ...(town.y2026.alsoUrl ? [{ name: `Cavalcada de Reis 2026 (${town.name})`, url: town.y2026.alsoUrl, publisher: councilName(town.name) }] : []),
     ...(town.news2027 ? [{ name: `Cavalcada de Reis 2027 (${town.name})`, url: town.news2027.url, publisher: councilName(town.name) }] : []),
+    ...(town.news2027?.alsoUrl ? [{ name: `Cavalcada de Reis 2027 (${town.name})`, url: town.news2027.alsoUrl, publisher: councilName(town.name) }] : []),
   ]);
   const seen = new Set<string>();
   const out: B2Source[] = [];
@@ -1021,7 +1041,7 @@ export interface TownView {
   hosts: RegExp;
   watch: string;
   slot: Parade | null;
-  news2027?: { published: string; url: string; text: Record<Locale, string>; confirmsDate?: true };
+  news2027?: { published: string; url: string; alsoUrl?: string; text: Record<Locale, string>; confirmsDate?: true };
   /** True for the first eight towns, whose notes are a full account of 2026. */
   full: boolean;
   past: Parade;

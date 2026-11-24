@@ -45,8 +45,16 @@ import type { B2Key } from "./shared";
  * 21 Nov 2026: all re-read; Granollers (programme "2026 - 2027") has
  * published its 2027 parade, and so have Sabadell and Reus (reis.ts
  * ANNOUNCED_2027); the others still show 2026 or nothing.
+ * 25 Nov 2026: all re-read again (the council pages below, Barcelona's press
+ * room with its tags and searches). No new 2027 time or route. New on council
+ * pages: Rubí (Christmas programme, 18 Nov: the Kings arrive at the Escardívol
+ * on the afternoon of 5 January, royal camp 2-4 January), Mataró (19 Nov:
+ * arrival by sea, royal camp 1-4 January), Castelldefels (its page links a
+ * "programa de Reis 2027" PDF that answers a login page; royal camp tickets
+ * from 28 December), Badalona (the children's draw was held). Santa Coloma's
+ * site answers 403 to every request (REIS_TOWNS_LEFT_OUT).
  */
-export const REIS_TOWNS_AS_OF = "2026-11-21";
+export const REIS_TOWNS_AS_OF = "2026-11-25";
 
 /**
  * The re-read checkpoints: from each of these days on, REIS_TOWNS_AS_OF (and
@@ -98,7 +106,7 @@ export interface ReisTown {
   /** This year's, or `null` while the council has not published it. */
   y2027: Parade | null;
   /** Something official about 2027 already out (a call for participants, the date), never a time. */
-  news2027?: { published: string; url: string; text: Record<Locale, string>; confirmsDate?: true };
+  news2027?: { published: string; url: string; alsoUrl?: string; text: Record<Locale, string>; confirmsDate?: true };
   /** One or two sentences of what else the council said about 2026, in each language. */
   notes?: Record<Locale, string>;
   /** The start as one short phrase, when "time, start" would mislead. */
@@ -200,6 +208,20 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       read: READ,
     },
     y2027: null,
+    // Christmas programme news, "18 de novembre 2026" (read 25 Nov 2026): "I la tarda del 5 de gener, els Reis arribaran
+    // a l'Escardívol, des d'on iniciaran l'esperada cavalcada pels carrers de Rubí. Aquesta arribada també es renovarà amb
+    // un moment sorprenent en què, per primera vegada, hi intervindran drons." "Els dies 2, 3 i 4, el Mag Rubisenc obrirà
+    // el seu Campament Màgic a l'Arborètum del parc del Castell [...] començarà a les 17 h." No time and no route yet.
+    news2027: {
+      published: "2026-11-18",
+      confirmsDate: true,
+      url: "https://www.rubi.cat/ca/actualitat/noticies/rubi-es-prepara-per-fer-la-seva-magia-en-un-nadal-marcadament-familiar",
+      text: {
+        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: aquella tarda els Reis arribaran a l'Escardívol, per primera vegada amb drons, i el Campament Màgic del Mag Rubisenc serà a l'Arborètum del parc del Castell els dies 2, 3 i 4 de gener, des de les 17:00.",
+        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: esa tarde los Reyes llegarán al Escardívol, por primera vez con drones, y el Campamento Mágico del Mag Rubisenc estará en el Arborètum del parque del Castell los días 2, 3 y 4 de enero, desde las 17:00.",
+        en: "The council has already confirmed the parade for 5 January 2027: that afternoon the Kings arrive at the Escardívol, for the first time with drones, and the Mag Rubisenc's royal camp is in the Arborètum of the Parc del Castell on 2, 3 and 4 January, from 17:00.",
+      },
+    },
     startText: {
       ca: "Cap a les 18:30, carrer de Cadmo",
       es: "Hacia las 18:30, calle de Cadmo",
@@ -458,10 +480,15 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       published: "2026-10-26",
       confirmsDate: true,
       url: "https://www.castelldefels.org/ca/actualitat/elcastell/noticies/vols-participar-en-la-cavalcada-de-reis-2027-ja-pots-inscriuret",
+      // Re-read 25 Nov 2026 on the council's page "Reis i Carters Reials" (Catalan version): "<< DESCARREGA EL PROGRAMA DE
+      // REIS 2027 >>" (the PDF progreismags_web.pdf answers a login page: not readable), "Reserva d'entrades a partir de
+      // dilluns 28 de desembre a les 9 h", "<< RESERVA ENTRADES CAMPAMENT CARTERS REIALS 2027 >>", and the draw's result
+      // ("número de tall ... 122"). The Spanish version of that page still says 2026 (27 December): not used.
+      alsoUrl: "https://www.castelldefels.org/ca/serveis/cultura/festes/agenda-festes/reis-i-carters-reials",
       text: {
-        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: les inscripcions per participar-hi es van tancar el 9 de novembre i el sorteig és el 16.",
-        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: las inscripciones para participar se cerraron el 9 de noviembre y el sorteo es el 16.",
-        en: "The council has already confirmed the parade for 5 January 2027: applications to take part closed on 9 November and the draw is on the 16th.",
+        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: les inscripcions per participar-hi es van tancar el 9 de novembre i el sorteig ja s'ha fet. La seva pàgina de Reis enllaça el programa de Reis 2027 (un PDF que no s'obre sense accés) i diu que les entrades del campament dels carters reials es poden reservar a partir del dilluns 28 de desembre, a les 9:00.",
+        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: las inscripciones para participar se cerraron el 9 de noviembre y el sorteo ya se ha hecho. Su página de Reyes enlaza el programa de Reyes 2027 (un PDF que no se abre sin acceso) y dice que las entradas del campamento de los carteros reales se pueden reservar a partir del lunes 28 de diciembre, a las 9:00.",
+        en: "The council has already confirmed the parade for 5 January 2027: applications to take part closed on 9 November and the draw has been held. Its Reis page links the 2027 programme (a PDF that does not open without a login) and says tickets for the royal letter-carriers' camp can be booked from Monday 28 December at 9:00.",
       },
     },
     notes: {
@@ -566,13 +593,18 @@ export const REIS_TOWNS: readonly ReisTown[] = [
 ];
 
 /** Towns we tried and could not read on the council's own site: the page says why they are missing. */
-export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; reason: Record<Locale, string> }[] = [
+export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; read: string; status: string; reason: Record<Locale, string> }[] = [
   {
     // gramenet.cat (read through a translation proxy) keeps only a video on its 2025-26 parade page; the news
     // archive has no parade article for Dec 2025-Jan 2026. Only the date is on a council page (a 2025 contract
     // for "la cavalcada de reis del 5 de gener de 2026"). The 2025 edition's details are not printed as 2026's.
     name: "Santa Coloma de Gramenet",
     watch: "https://ajuntamentinforma.gramenet.cat/les-noticies/",
+    // Read 25 Nov 2026: www.gramenet.cat and ajuntamentinforma.gramenet.cat answer 403 (BunkerWeb) to a plain request:
+    // nothing about the 2027 parade could be read. Not published yet as far as we can read; re-checked from the
+    // REIS_REREAD_BY days.
+    read: "2026-11-25",
+    status: "could not be read (403): no 2027 parade details",
     reason: {
       ca: "Santa Coloma de Gramenet no hi és perquè la web de l'Ajuntament ja no conserva l'horari ni el recorregut del 2026.",
       es: "Santa Coloma de Gramenet no está porque la web del Ayuntamiento ya no conserva el horario ni el recorrido de 2026.",
@@ -584,6 +616,8 @@ export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; reason
     // with a bot challenge, and has no archived copy. Search snippets are not a source.
     name: "Viladecans",
     watch: "https://www.viladecans.cat/es/navidad-y-reyes",
+    read: "2026-11-25",
+    status: "bot challenge (403): could not be read",
     reason: {
       ca: "Viladecans tampoc, perquè la seva web no s'ha pogut consultar.",
       es: "Viladecans tampoco, porque su web no se ha podido consultar.",
@@ -595,6 +629,8 @@ export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; reason
     // but no year or weekday, and no dated council page of Dec 2025-Jan 2026 confirms it: it cannot be labelled 2026.
     name: "Vilanova i la Geltrú",
     watch: "https://www.vilanova.cat/cavalcada_de_reis",
+    read: "2026-11-25",
+    status: "undated page, no 2027 details: not published yet (read 25 Nov 2026)",
     reason: {
       ca: "I Vilanova i la Geltrú només publica una pàgina de la cavalcada sense data, de manera que no podem dir que sigui la del 2026.",
       es: "Y Vilanova i la Geltrú solo publica una página de la cabalgata sin fecha, así que no podemos decir que sea la de 2026.",
@@ -620,7 +656,7 @@ export function townRowProblems(town: ReisTown): string[] {
   }
   if (p.published !== undefined && (!iso.test(p.published) || p.published > p.date)) problems.push(`${town.name}: published ${p.published} is not a day before the parade`);
   if (!iso.test(p.read) || p.read > REIS_TOWNS_AS_OF) problems.push(`${town.name}: read ${p.read} is not a day on or before REIS_TOWNS_AS_OF`);
-  const urls = [p.url, ...(p.alsoUrl ? [p.alsoUrl] : []), town.watch, ...(town.news2027 ? [town.news2027.url] : [])];
+  const urls = [p.url, ...(p.alsoUrl ? [p.alsoUrl] : []), town.watch, ...(town.news2027 ? [town.news2027.url, ...(town.news2027.alsoUrl ? [town.news2027.alsoUrl] : [])] : [])];
   for (const href of urls) {
     try {
       const url = new URL(href);

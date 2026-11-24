@@ -190,6 +190,7 @@ test("sources are https, untracked, official and listed once; the reader sees th
       for (const locale of LOCALES) assert.ok(!json(locale).includes(`](${town.past.url})`), `${locale}: ${town.name}'s removed page is linked`);
     } else assert.ok(urls.has(town.past.url), `${town.name}: its 2026 page is a source`);
     if (town.news2027) assert.ok(urls.has(town.news2027.url), `${town.name}: its 2027 news is a source`);
+    if (town.news2027?.alsoUrl) assert.ok(urls.has(town.news2027.alsoUrl), `${town.name}: its second 2027 news page is a source`);
     const slot = ANNOUNCED_2027.towns[town.key];
     if (slot) assert.ok(urls.has(slot.url), `${town.name}: its 2027 page is a source`);
   }
@@ -197,6 +198,7 @@ test("sources are https, untracked, official and listed once; the reader sees th
     assert.ok(urls.has(town.y2026.url), `${town.name}: its 2026 page is a source`);
     if (town.y2026.alsoUrl) assert.ok(urls.has(town.y2026.alsoUrl), `${town.name}: its second 2026 page is a source`);
     if (town.news2027) assert.ok(urls.has(town.news2027.url), `${town.name}: its 2027 news is a source`);
+    if (town.news2027?.alsoUrl) assert.ok(urls.has(town.news2027.alsoUrl), `${town.name}: its second 2027 news page is a source`);
   }
   for (const url of [BARCELONA_2026.url, PAST.programme2025.url, TRANSPORT_2026.url, IGUALADA_DECLARATION.url]) assert.ok(urls.has(url), url);
   // A filled slot's page goes in first.
@@ -335,6 +337,7 @@ test("each town is the 5 January 2026 parade from its council's own site; Terras
     for (const s of p.sources) assert.ok(town.hosts.test(new URL(s.url).host) || /dogc\.gencat\.cat$/.test(new URL(s.url).host), `${town.name}: ${s.url}`);
     if (town.news2027) {
       assert.ok(town.hosts.test(new URL(town.news2027.url).host), town.name);
+      if (town.news2027.alsoUrl) assert.ok(town.hosts.test(new URL(town.news2027.alsoUrl).host), town.name);
       assert.ok(town.news2027.published <= REIS_AS_OF, town.name);
     }
     for (const locale of LOCALES) assert.ok(body(locale).includes(town.name), `${locale}: ${town.name}`);
@@ -683,4 +686,38 @@ test("21 Nov 2026: the FAQ answers when, when Barcelona publishes, how to take p
   }
   // The sign-up sentence turns to the past tense once the page's check date is after 23 November.
   assert.equal(SIGNUPS_CLOSED, REIS_AS_OF > "2026-11-23");
+});
+
+/* -------------------------------------------------------------------------- */
+/* 25 Nov 2026 re-read: left-out towns carry their read date; new council news */
+/* -------------------------------------------------------------------------- */
+
+test("towns left out carry the day they were last read and why; from a checkpoint on they must have been re-read", () => {
+  assert.ok(REIS_TOWNS_LEFT_OUT.length >= 1);
+  const today = new Date().toISOString().slice(0, 10);
+  const due = rereadDue(today);
+  for (const t of REIS_TOWNS_LEFT_OUT) {
+    assert.match(t.read, /^\d{4}-\d{2}-\d{2}$/, t.name);
+    assert.ok(t.read <= REIS_TOWNS_AS_OF, `${t.name}: read after REIS_TOWNS_AS_OF`);
+    assert.ok(t.status.length > 10, `${t.name}: status`);
+    assert.match(t.watch, /^https:\/\//, t.name);
+    if (due) assert.ok(t.read >= due, `${t.name}: on ${today} it was last read ${t.read}, before ${due}: re-read its council page and move read`);
+  }
+  // Santa Coloma de Gramenet (the only one of the 15 largest towns without a row) is left out with its read date.
+  assert.ok(REIS_TOWNS_LEFT_OUT.some((t) => t.name === "Santa Coloma de Gramenet" && t.read === REIS_TOWNS_AS_OF));
+});
+
+test("council news of 18-19 Nov 2026 (Rubí, Mataró) and the Castelldefels programme and camp tickets are on the page in ca, es and en", () => {
+  const rubi = REIS_TOWNS.find((t) => t.key === "rubi")!;
+  assert.equal(rubi.news2027?.published, "2026-11-18");
+  assert.equal(rubi.news2027?.confirmsDate, true);
+  assert.equal(rubi.y2027, null, "Rubí has published no time or route: only news");
+  const expected: Record<string, RegExp[]> = {
+    ca: [/Escardívol, per primera vegada amb drons/, /Arborètum del parc del Castell/, /dilluns 28 de desembre, a les 9:00/, /Campament Reial és al Parc Central de l'1 al 4 de gener/],
+    es: [/Escardívol, por primera vez con drones/, /Arborètum del parque del Castell/, /lunes 28 de diciembre, a las 9:00/, /Campamento Real está en el Parc Central del 1 al 4 de enero/],
+    en: [/Escardívol, for the first time with drones/, /Arborètum of the Parc del Castell/, /Monday 28 December at 9:00/, /royal camp is in the Parc Central from 1 to 4 January/],
+  };
+  for (const locale of LOCALES) for (const re of expected[locale]!) assert.match(body(locale), re, `${locale}: ${re}`);
+  // 28 December 2026 is a Monday, as the Catalan page says.
+  assert.equal(new Date("2026-12-28T12:00:00Z").getUTCDay(), 1);
 });
