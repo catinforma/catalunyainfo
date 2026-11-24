@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { absoluteUrl } from "@/lib/site";
 
 import { MONTHS, type DateLocale } from "@/lib/programmatic/holidays/format";
@@ -94,6 +95,16 @@ export function resolveSpainDay(route: DateLocale, locale: string, slug: string)
 /** Every day page is built at deploy; `locale` is always the route's own (see holidays/routing.ts on why). */
 export function spainDayStaticParams(route: DateLocale): { locale: DateLocale; fecha: string }[] {
   return DAY_PAGES.map((iso) => ({ locale: route, fecha: spainDaySlug(iso, route) }));
+}
+
+/**
+ * The day pages of one language that Google keeps (not in the low-demand list,
+ * lib/seo/low-demand.ts): what the "Dia a dia / Día a día / Day by day" row of
+ * the hubs links. In ca and en that is one page each (29 March; 8 September);
+ * a date page leaves the list 14 days after its date (`today`: Madrid ISO date).
+ */
+export function indexableDayPages(locale: DateLocale, today?: string): string[] {
+  return DAY_PAGES.filter((iso) => !isLowDemandPath(spainDayPath(iso, locale), today));
 }
 
 /** Every day page in the three languages: the sitemap, IndexNow and the publish group `calendario-2027-espana`. */

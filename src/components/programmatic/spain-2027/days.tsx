@@ -58,7 +58,7 @@ import { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, isCity, isWeeke
 import { editionBridgesPath, editionCommunityPath } from "@/lib/programmatic/spain-2027/editions";
 import { SPAIN_MAIN } from "@/lib/programmatic/spain-2027/main-urls";
 import { isLowDemandPath } from "@/lib/seo/low-demand";
-import { communityPath, spainBridgesPath, spainDayPath, spainDayTranslations, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { communityPath, indexableDayPages, spainBridgesPath, spainDayPath, spainDayTranslations, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON } from "@/lib/programmatic/spain-2027/sources";
 import { breadcrumbSchema, datasetSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -273,6 +273,34 @@ function RegionLinks({ regions, locale }: { regions: readonly Region[]; locale: 
 /** A date in a table or list, linked to its day page (same language) when it has one. */
 export function DayDateLink({ iso, children, locale = "es" }: { iso: string; children: ReactNode; locale?: DateLocale }) {
   return hasDayPage(iso) ? <Link href={spainDayPath(iso, locale)}>{children}</Link> : <>{children}</>;
+}
+
+/**
+ * The "Dia a dia / Día a día / Day by day" row of the Catalan and English
+ * hubs and the Catalonia pages (25 Nov 2026 internal-link audit): the day
+ * pages of the page's language that Google keeps. Pages in the low-demand
+ * list (lib/seo/low-demand.ts) are never linked; in ca and en that leaves
+ * /ca/festius/2027/dia/29-marc/ and /en/holidays/2027/day/8-september/. The
+ * Spanish hub lists every day in `SpainDayIndex` instead. Links read as the
+ * query ("És festiu el 29 de març?"). Nothing renders when no day page is
+ * indexable.
+ */
+export function DayByDayRow({ locale }: { locale: DateLocale }) {
+  const days = indexableDayPages(locale);
+  if (days.length === 0) return null;
+  const label = locale === "ca" ? "Dia a dia" : locale === "es" ? "Día a día" : "Day by day";
+  const w = dayWords(locale);
+  return (
+    <p>
+      <strong>{label}:</strong>{" "}
+      {days.map((iso, i) => (
+        <span key={iso}>
+          {i > 0 ? " · " : ""}
+          <Link href={spainDayPath(iso, locale)}>{w.question(iso)}</Link>
+        </span>
+      ))}
+    </p>
+  );
 }
 
 /* ------------------------------------------------------------- Day page --- */

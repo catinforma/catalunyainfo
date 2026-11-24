@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
-import { link } from "@/lib/content/features/shared";
+import { ARTICLE_TITLES, href, link } from "@/lib/content/features/shared";
+import { trainGuideNextSentence } from "@/lib/content/sitges-links";
 
 import {
   b2link,
@@ -220,7 +221,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "Are the Sitges museums free?", answer: "On the first Wednesday of every month, and always for under-17s. Otherwise the Cau Ferrat and Maricel ticket costs €12." },
     ],
     note: "Rodalies can change services for works or incidents: check the Rodalies app on the day.",
-    more: `More train trips from Barcelona: ${link("trains", "en", "12 day trips from Barcelona by train")}.`,
+    more: `More train trips from Barcelona: ${link("trains", "en", "12 day trips from Barcelona by train")}.${trainGuideNextSentence("en", ARTICLE_TITLES.sitges.en, href("sitges", "en"))}`,
   },
   es: {
     lead: "El tren de Barcelona a Sitges es la **R2 Sud de Rodalies**. Sale de Sants, Passeig de Gràcia y Estació de França unas **cuatro veces por hora**, tarda **de 31 a 37 minutos desde Sants** y el billete cuesta **5,50 € el sencillo** (11 € ida y vuelta). El **último tren de vuelta** sale de Sitges a las **22:22**, todos los días de la semana.",
@@ -298,7 +299,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "¿Los museos de Sitges son gratis?", answer: "El primer miércoles de cada mes, y siempre para menores de 17. Si no, la entrada al Cau Ferrat y Maricel cuesta 12 €." },
     ],
     note: "Rodalies puede cambiar el servicio por obras o incidencias: mira la app de Rodalies el mismo día.",
-    more: `Más escapadas en tren desde Barcelona: ${link("trains", "es", "12 escapadas por Cataluña que puedes hacer en tren")}.`,
+    more: `Más escapadas en tren desde Barcelona: ${link("trains", "es", "12 escapadas por Cataluña que puedes hacer en tren")}.${trainGuideNextSentence("es", ARTICLE_TITLES.sitges.es, href("sitges", "es"))}`,
   },
   ca: {
     lead: "El tren de Barcelona a Sitges és l'**R2 Sud de Rodalies**. Surt de Sants, Passeig de Gràcia i l'Estació de França unes **quatre vegades per hora**, triga **de 31 a 37 minuts des de Sants** i el bitllet costa **5,50 € el senzill** (11 € anada i tornada). L'**últim tren de tornada** surt de Sitges a les **22:22**, tots els dies de la setmana.",
@@ -376,7 +377,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "Els museus de Sitges són gratis?", answer: "El primer dimecres de cada mes, i sempre per als menors de 17. Si no, l'entrada al Cau Ferrat i Maricel costa 12 €." },
     ],
     note: "Rodalies pot canviar el servei per obres o incidències: mira l'app de Rodalies el mateix dia.",
-    more: `Més escapades en tren des de Barcelona: ${link("trains", "ca", "12 escapades per Catalunya que pots fer en tren")}.`,
+    more: `Més escapades en tren des de Barcelona: ${link("trains", "ca", "12 escapades per Catalunya que pots fer en tren")}.${trainGuideNextSentence("ca", ARTICLE_TITLES.sitges.ca, href("sitges", "ca"))}`,
   },
 };
 

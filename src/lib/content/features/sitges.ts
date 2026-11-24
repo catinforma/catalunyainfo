@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import { b2link } from "@/lib/content/batch02/shared";
+import { festivalNextParagraph } from "@/lib/content/sitges-links";
 import {
   ARTICLE_PATHS,
   h2,
@@ -140,6 +141,7 @@ function ca(): Block[] {
     ...paras(
       `Web oficial del Festival: [sitgesfilmfestival.com](${FESTIVAL}). Dates i bases de l'edició 2026: [rules & regulations](${RULES}).`,
     ),
+    ...paras(festivalNextParagraph("ca")),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "ca"),
   ];
 }
@@ -223,6 +225,7 @@ function es(): Block[] {
     ...paras(
       `Web oficial: [sitgesfilmfestival.com](${FESTIVAL}). Fechas y bases de la edición 2026: [rules & regulations](${RULES}).`,
     ),
+    ...paras(festivalNextParagraph("es")),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "es"),
   ];
 }
@@ -302,6 +305,7 @@ function en(): Block[] {
     ...paras(
       `Official site: [sitgesfilmfestival.com](${FESTIVAL}). 2026 dates and regulations: [rules & regulations](${RULES}).`,
     ),
+    ...paras(festivalNextParagraph("en")),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "en"),
   ];
 }

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { sitgesHolidaysHref, sitgesR2Href } from "../src/lib/content/sitges-links.ts";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
@@ -52,6 +53,8 @@ const PUBLISHED_HREFS = new Set([
   ),
   // Live pages with their own routes that the guides link (warnings in force).
   ...LOCALES.map((locale) => warningsPath(locale)),
+  // Code routes the Sitges festival guide links (25 Nov 2026): the Sitges holidays page and the R2 Sud line page.
+  ...LOCALES.flatMap((locale) => [sitgesHolidaysHref(locale), sitgesR2Href(locale)]),
 ]);
 
 test("there are ten features, thirty editions, thirty distinct paths", () => {

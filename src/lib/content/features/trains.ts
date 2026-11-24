@@ -87,7 +87,7 @@ function ca(): Block[] {
     ...h2(
       "1. Sitges",
       "És una de les escapades més directes que es poden fer des de Barcelona. L'estació és dins del poble, i a peu es passa dels carrers blancs del centre al passeig marítim, l'església de Sant Bartomeu i Santa Tecla i les platges.",
-      "Sitges funciona pràcticament tot l'any: mar a l'estiu, museus i patrimoni quan refresca, i una agenda cultural especialment intensa a la tardor. Si hi vas durant el Festival de Cinema, compta que la vila canvia de ritme del tot.",
+      `Sitges funciona pràcticament tot l'any: mar a l'estiu, museus i patrimoni quan refresca, i una agenda cultural especialment intensa a la tardor. Si hi vas durant el Festival de Cinema, compta que la vila canvia de ritme del tot: ${link("sitges", "ca", "guia del Festival de Sitges")}.`,
       "Línia habitual: R2 Sud.",
     ),
     ...h2(
@@ -205,7 +205,7 @@ function es(): Block[] {
     ...h2(
       "1. Sitges",
       "Una de las escapadas más directas desde Barcelona. La estación está en el propio pueblo, y a pie se pasa de las calles blancas del centro al paseo marítimo, la iglesia de Sant Bartomeu i Santa Tecla y las playas.",
-      "Sitges funciona casi todo el año: mar en verano, museos y patrimonio cuando refresca, y una agenda cultural especialmente intensa en otoño.",
+      `Sitges funciona casi todo el año: mar en verano, museos y patrimonio cuando refresca, y una agenda cultural especialmente intensa en otoño. Si vas durante el Festival de Cine, la villa cambia de ritmo: ${link("sitges", "es", "guía del Festival de Sitges")}.`,
       "Línea habitual: R2 Sud.",
     ),
     ...h2(
@@ -321,7 +321,7 @@ function en(): Block[] {
     ...h2(
       "1. Sitges",
       "The most straightforward escape on this list. The station is in the town itself, and on foot you go from whitewashed streets to the seafront promenade, the church of Sant Bartomeu i Santa Tecla and the beaches.",
-      "Sitges works nearly all year: the sea in summer, museums and heritage when it cools down, and a notably busy cultural calendar in autumn.",
+      `Sitges works nearly all year: the sea in summer, museums and heritage when it cools down, and a notably busy cultural calendar in autumn. During the film festival the town changes pace: ${link("sitges", "en", "Sitges Film Festival guide")}.`,
       "Usual line: R2 Sud.",
     ),
     ...h2(

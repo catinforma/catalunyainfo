@@ -81,6 +81,7 @@ import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } f
 import { SOURCE_PROSE, placeName } from "@/lib/programmatic/spain-2027/sources-intl";
 
 import { DecemberBridgeLine } from "./DecemberBridgeLine";
+import { DayByDayRow } from "./days";
 
 /**
  * The Catalan and English editions of the Spain-wide 2027 pages (pages.tsx
@@ -466,6 +467,7 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
               )}
             </p>
           ) : null}
+          {c.region === "CT" ? <DayByDayRow locale={locale} /> : null}
 
           <h2 id="ponts">{tr(locale, `Ponts i caps de setmana llargs del ${YEAR} ${c.in}`, `Long weekends and bridges ${c.in} in ${YEAR}`)}</h2>
           <p>
@@ -767,6 +769,8 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               </tfoot>
             </table>
           </div>
+          {/* "Dia a dia" row (25 Nov 2026 link audit): after the month table so the answer stays up; indexable day pages only. */}
+          <DayByDayRow locale={locale} />
 
           <h2 id="comunitats">{tr(locale, `Festius ${YEAR} per comunitat autònoma`, `${YEAR} holidays by autonomous community`)}</h2>
           <div className="ci-table-scroll mt-4">
