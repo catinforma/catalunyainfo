@@ -90,7 +90,7 @@ const VERIFIED_2026: Record<string, string | null> = {
   "55è Pessebre Vivent d'Osona": "20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027, de 18 a 20 h (el 20 de desembre i el 6 i el 10 de gener, fins a les 19.30 h); entrades només a taquilla (adults, 10 €; de 6 a 13 anys, 3 €)",
   // The 18 h / 19.15 h sessions read on 25 Oct are no longer on the page.
   "Pessebre Vivent del Bages a les Torres de Fals": "19, 20, 26 i 27 de desembre de 2026 i 1, 2, 3 i 6 de gener de 2027; entrada general, 15 € (majors de 65 anys, 12 €; de 6 a 12 anys, 6 €)",
-  "Pessebre Vivent dels Oficis Perduts (40è aniversari)": "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 13 de novembre, venda encara no oberta: «properament»)",
+  "Pessebre Vivent dels Oficis Perduts (40è aniversari)": "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 24 de novembre, venda encara no oberta: «properament»)",
   "49è Pessebre Vivent parlat de les Gunyoles": "20, 25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 18, 18.45 i 19.30 h",
   "Pessebre Vivent de l'Espluga de Francolí": "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h, sense taquilla",
   "33è Pessebre Vivent de la Torre del Suro": "21 de desembre de 2026 a les 18 h; entrada lliure, sense inscripció",

@@ -70,6 +70,10 @@ import {
  * Barcelona in December, Christmas in Barcelona, the traditions and the
  * Three Kings parade.
  *
+ * 24 Nov 2026: the two `recheck` entries re-read (pessebre.org still "VENDA
+ * D'ENTRADES PROPERAMENT"; Rupit's page still last season's, "Darrera
+ * actualització: 27.12.2025"); nothing else re-read.
+ *
  * 13 Nov 2026 (December freshness pass; fact pack
  * research_notes/pessebres-vivents-2026-13nov.md): every organiser page in
  * KNOWN re-read with a browser user agent and grepped; each entry now carries
@@ -191,14 +195,14 @@ export const KNOWN: Known[] = [
     name: "Pessebre Vivent dels Oficis Perduts (40è aniversari)",
     place: "Sant Guim de la Plana (Segarra)",
     dates: {
-      ca: "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 13 de novembre, venda encara no oberta: «properament»)",
-      es: "19, 20, 26 y 27 de diciembre de 2026 y 2, 3, 9 y 10 de enero de 2027, a las 18.30 h; entradas solo por internet (el 13 de noviembre, venta aún no abierta: «properament», próximamente)",
-      en: "19, 20, 26 and 27 December 2026 and 2, 3, 9 and 10 January 2027, at 18:30; tickets online only (on 13 November not on sale yet: \"properament\", coming soon)",
+      ca: "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 24 de novembre, venda encara no oberta: «properament»)",
+      es: "19, 20, 26 y 27 de diciembre de 2026 y 2, 3, 9 y 10 de enero de 2027, a las 18.30 h; entradas solo por internet (el 24 de noviembre, venta aún no abierta: «properament», próximamente)",
+      en: "19, 20, 26 and 27 December 2026 and 2, 3, 9 and 10 January 2027, at 18:30; tickets online only (on 24 November not on sale yet: \"properament\", coming soon)",
     },
     url: "https://pessebre.org/",
     label: "pessebre.org",
     publisher: "Associació Cultural La Marinada",
-    readOn: "2026-11-13",
+    readOn: "2026-11-24",
     quote: "Desembre 2026: 19, 20, 26 i 27 · Gener 2027: 2, 3, 9 i 10 … Hora: 18.30h … VENDA D'ENTRADES PROPERAMENT",
     recheck: true,
   },
@@ -325,7 +329,7 @@ export const KNOWN: Known[] = [
     url: "https://www.rupitpruit.cat/pessebre-vivent",
     label: "rupitpruit.cat",
     publisher: "Ajuntament de Rupit i Pruit",
-    readOn: "2026-11-13",
+    readOn: "2026-11-24",
     quote: "NOVES DATES: 3 i 4 DE GENER DE 2026 … Darrera actualització: 27.12.2025",
     recheck: true,
   },

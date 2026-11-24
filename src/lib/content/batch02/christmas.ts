@@ -116,7 +116,22 @@ import {
 // Granollers (2025-26), Tarragona (no 2026 dates), Reus (homepage, no 2026
 // market), Figueres' call, Vic's medieval market and the nine confirmed
 // councils (each quote still on its page). Titles untouched (3 Nov window).
+// 24 Nov 2026 (fairs re-read): Manresa and Granollers published their 2026
+// editions. Manresa, the council's agenda L'Apuntador (Manresa Turisme):
+// "SANTA LLÚCIA 2026 … Horaris de la fira. Dissabte 12 de desembre de 10h a
+// 20h a la Plaça Major. Diumenge 13 de desembre 10h a 20h a la Plaça Major i a
+// la Baixada de la Seu." Granollers, granollers.cat/nadal/fires-de-nadal:
+// "Fira de pessebres i ornamentació a la plaça de la Porxada Del 26 de
+// novembre al 24 de desembre", "Fira d'Artesania a la plaça Barangé De l'11
+// de desembre al 5 de gener … (tancat els dies 25 i 26 desembre i l'1 de
+// gener)", "Roca Umbert Market L'11 de desembre, de 17.30 a 20.30 h, i el 12 i
+// 13 de desembre, de 10 a 20.30 h" (the plants stall is left out: the page
+// gives two different squares for it). Both rows and the "Manresa i
+// Granollers" section now give those dates, as the fairs family's pages do
+// (organisers.ts). The other rows were not re-read for this guide: VERIFIED
+// stays, and the table note dates these two rows on their own.
 const VERIFIED = "2026-11-13";
+const MANRESA_GRANOLLERS_READ = "2026-11-24";
 
 /** Fairs open on at least one day between `from` and `to`. */
 const openBetween = (from: string, to: string) => FAIRS.filter((f) => f.start <= to && f.end >= from).length;
@@ -278,8 +293,8 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Mercat de Nadal", "Girona", "Plaça de la Independència", `**${cap(gironaRange("ca"))}**, segons l'agenda de l'Ajuntament (tancat el 25 i el 26 de desembre i l'1 de gener)`],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de novembre al 24 de desembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaça de la Catedral i voltants", "Pendent"],
-    ["Fira de Santa Llúcia", "Manresa", "Plaça Major i Baixada de la Seu", "12 i 13 de desembre de 2026, segons el calendari de fires de la Generalitat (l'Ajuntament encara mostra el 2025)"],
-    ["Fires de Nadal", "Granollers", "Porxada, Corona i Barangé (2025)", "Pendent. El 2025: des del 21 de novembre"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaça Major i Baixada de la Seu", "**12 i 13 de desembre de 2026, de 10 a 20 h**, segons l'agenda de l'Ajuntament (dissabte, només a la plaça Major)"],
+    ["Fires de Nadal", "Granollers", "Plaça de la Porxada i plaça Barangé", "**Pessebres i ornamentació: del 26 de novembre al 24 de desembre de 2026. Artesania: de l'11 de desembre de 2026 al 5 de gener de 2027**"],
   ],
   es: [
     ["Fira de Santa Llúcia", "Barcelona", "Pla de la Seu y avenida de la Catedral", `**${slWhen("es")}**, según la Agenda Cultural de la Generalitat`],
@@ -288,8 +303,8 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Mercat de Nadal", "Girona", "Plaza de la Independència", `**${cap(gironaRange("es"))}**, según la agenda del Ayuntamiento (cerrado el 25 y el 26 de diciembre y el 1 de enero)`],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de noviembre al 24 de diciembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaza de la Catedral y alrededores", "Pendiente"],
-    ["Fira de Santa Llúcia", "Manresa", "Plaza Major y Baixada de la Seu", "12 y 13 de diciembre de 2026, según el calendario de ferias de la Generalitat (el Ayuntamiento aún muestra 2025)"],
-    ["Ferias de Navidad", "Granollers", "Porxada, Corona y Barangé (2025)", "Pendiente. En 2025: desde el 21 de noviembre"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaza Major y Baixada de la Seu", "**12 y 13 de diciembre de 2026, de 10 a 20 h**, según la agenda del Ayuntamiento (el sábado, solo en la plaza Major)"],
+    ["Ferias de Navidad", "Granollers", "Plaza de la Porxada y plaza Barangé", "**Belenes y ornamentación: del 26 de noviembre al 24 de diciembre de 2026. Artesanía: del 11 de diciembre de 2026 al 5 de enero de 2027**"],
   ],
   en: [
     ["Fira de Santa Llúcia", "Barcelona", "Pla de la Seu and Avinguda de la Catedral", `**${slWhen("en")}**, according to the Catalan government's cultural agenda`],
@@ -298,8 +313,8 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Christmas market", "Girona", "Plaça de la Independència", `**${gironaRange("en")}**, according to the City Council's events listing (closed on 25 and 26 December and 1 January)`],
     ["Christmas market", "Figueres", "La Rambla", "27 November to 24 December 2026"],
     ["Christmas market", "Lleida", "Plaça de la Catedral and around", "Not yet published"],
-    ["Fira de Santa Llúcia", "Manresa", "Plaça Major and Baixada de la Seu", "12 and 13 December 2026, according to the Catalan government's fairs calendar (the council's page still shows 2025)"],
-    ["Christmas fairs", "Granollers", "Porxada, Corona and Barangé squares (2025)", "Not yet published. In 2025: from 21 November"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaça Major and Baixada de la Seu", "**12 and 13 December 2026, 10:00 to 20:00**, according to the council's events listing (Saturday on Plaça Major only)"],
+    ["Christmas fairs", "Granollers", "Plaça de la Porxada and Plaça Barangé", "**Nativity figures and decorations: 26 November to 24 December 2026. Crafts: 11 December 2026 to 5 January 2027**"],
   ],
 };
 
@@ -316,9 +331,9 @@ function marketTable(locale: Locale) {
     en: "The main Christmas markets in Catalonia and their dates",
   };
   const note: Record<Locale, string> = {
-    ca: `«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el ${dateYear(VERIFIED, "ca")}; Santa Llúcia, a l'Agenda Cultural de la Generalitat (el web de la fira encara mostra el 2025); la Sagrada Família, a la Guia BCN de l'Ajuntament de Barcelona; Girona, a l'agenda de l'Ajuntament, i Manresa, al calendari oficial de fires de la Generalitat.`,
-    es: `«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el ${dateYear(VERIFIED, "es")}; Santa Llúcia, en la Agenda Cultural de la Generalitat (la web de la feria aún muestra 2025); la Sagrada Família, en la Guia BCN del Ayuntamiento de Barcelona; Girona, en la agenda del Ayuntamiento, y Manresa, en el calendario oficial de ferias de la Generalitat.`,
-    en: `"Not yet published" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. "Where" only when an official page says so. Checked on ${dateYear(VERIFIED, "en")}; Santa Llúcia in the Catalan government's cultural agenda (the fair's own website still shows 2025), the Sagrada Família in Barcelona City Council's Guia BCN, Girona in the City Council's events listing, and Manresa in the Catalan government's official fairs calendar.`,
+    ca: `«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el ${dateYear(VERIFIED, "ca")}; Santa Llúcia, a l'Agenda Cultural de la Generalitat (el web de la fira encara mostra el 2025); la Sagrada Família, a la Guia BCN de l'Ajuntament de Barcelona; Girona, a l'agenda de l'Ajuntament. Manresa i Granollers, a les pàgines dels seus ajuntaments, llegides el ${dateYear(MANRESA_GRANOLLERS_READ, "ca")}.`,
+    es: `«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el ${dateYear(VERIFIED, "es")}; Santa Llúcia, en la Agenda Cultural de la Generalitat (la web de la feria aún muestra 2025); la Sagrada Família, en la Guia BCN del Ayuntamiento de Barcelona; Girona, en la agenda del Ayuntamiento. Manresa y Granollers, en las páginas de sus ayuntamientos, leídas el ${dateYear(MANRESA_GRANOLLERS_READ, "es")}.`,
+    en: `"Not yet published" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. "Where" only when an official page says so. Checked on ${dateYear(VERIFIED, "en")}; Santa Llúcia in the Catalan government's cultural agenda (the fair's own website still shows 2025), the Sagrada Família in Barcelona City Council's Guia BCN, and Girona in the City Council's events listing. Manresa and Granollers on their councils' own pages, read on ${dateYear(MANRESA_GRANOLLERS_READ, "en")}.`,
   };
   return table(caption[locale], HEADERS[locale], MARKETS[locale], note[locale]);
 }
@@ -419,8 +434,8 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Manresa i Granollers",
-        `**Manresa** fa la Fira de Santa Llúcia, on l'Ajuntament diu que es troben «els elements imprescindibles per preparar Nadal». Segons el calendari de fires de la Generalitat, el 2026 es fa el 12 i el 13 de desembre a la plaça Major i la Baixada de la Seu; la pàgina de l'Ajuntament encara és la del 2025, quan es va fer el dissabte 13 de desembre a la Baixada de la Seu i el diumenge 14 a la plaça Major. Més detalls a [fires de Nadal de Manresa](${fairsTownPath("ca", "manresa")}).`,
-        "**Granollers** en fa diverses: el 2025 hi va haver la parada de plantes i arbres de Nadal des del 21 de novembre, la fira de pessebres i ornamentació a la plaça de la Porxada, la fira d'artesania a la plaça Barangé i dos mercats de cap de setmana.",
+        `**Manresa** fa la Fira de Santa Llúcia, on l'Ajuntament diu que es troben «els elements imprescindibles per preparar Nadal». El 2026 es fa el dissabte 12 de desembre a la plaça Major i el diumenge 13 a la plaça Major i la Baixada de la Seu, tots dos dies de 10 a 20 h, segons l'agenda de l'Ajuntament. Més detalls a [fires de Nadal de Manresa](${fairsTownPath("ca", "manresa")}).`,
+        `**Granollers** en fa diverses. El 2026, segons l'Ajuntament: la fira de pessebres i ornamentació a la plaça de la Porxada, del 26 de novembre al 24 de desembre; la fira d'artesania a la plaça Barangé, de l'11 de desembre al 5 de gener (tancada el 25 i el 26 de desembre i l'1 de gener), i el Roca Umbert Market, de l'11 al 13 de desembre. Horaris a [fires de Nadal de Granollers](${fairsTownPath("ca", "granollers")}).`,
       ),
       ...h2(
         "I la resta de ciutats?",
@@ -503,8 +518,8 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Manresa y Granollers",
-        `**Manresa** celebra la Fira de Santa Llúcia, donde el Ayuntamiento dice que se encuentra lo imprescindible para preparar la Navidad. Según el calendario de ferias de la Generalitat, en 2026 se celebra el 12 y el 13 de diciembre en la plaza Major y la Baixada de la Seu; la página del Ayuntamiento aún es la de 2025, cuando se hizo el sábado 13 de diciembre en la Baixada de la Seu y el domingo 14 en la plaza Major. Más detalles en [ferias de Navidad de Manresa](${fairsTownPath("es", "manresa")}).`,
-        "**Granollers** organiza varias: en 2025 hubo el puesto de plantas y árboles de Navidad desde el 21 de noviembre, la feria de belenes y ornamentación en la plaza de la Porxada, la feria de artesanía en la plaza Barangé y dos mercados de fin de semana.",
+        `**Manresa** celebra la Fira de Santa Llúcia, donde el Ayuntamiento dice que se encuentra lo imprescindible para preparar la Navidad. En 2026 se celebra el sábado 12 de diciembre en la plaza Major y el domingo 13 en la plaza Major y la Baixada de la Seu, los dos días de 10 a 20 h, según la agenda del Ayuntamiento. Más detalles en [ferias de Navidad de Manresa](${fairsTownPath("es", "manresa")}).`,
+        `**Granollers** organiza varias. En 2026, según el Ayuntamiento: la feria de belenes y ornamentación en la plaza de la Porxada, del 26 de noviembre al 24 de diciembre; la feria de artesanía en la plaza Barangé, del 11 de diciembre al 5 de enero (cerrada el 25 y el 26 de diciembre y el 1 de enero), y el Roca Umbert Market, del 11 al 13 de diciembre. Horarios en [ferias de Navidad de Granollers](${fairsTownPath("es", "granollers")}).`,
       ),
       ...h2(
         "¿Y el resto de ciudades?",
@@ -586,8 +601,8 @@ function body(locale: Locale) {
     ),
     ...h2(
       "Manresa and Granollers",
-      "**Manresa** holds a Fira de Santa Llúcia, which the council describes as the place to find what you need to prepare for Christmas. According to the Catalan government's fairs calendar, the 2026 fair is on 12 and 13 December on Plaça Major and the Baixada de la Seu; the council's own page still shows 2025, when it was held on Saturday 13 December on the Baixada de la Seu and on Sunday 14 December on Plaça Major.",
-      "**Granollers** runs several: in 2025 there was a Christmas tree and plant stall from 21 November, a nativity and decorations fair on Plaça de la Porxada, a craft fair on Plaça Barangé and two weekend markets.",
+      "**Manresa** holds a Fira de Santa Llúcia, which the council describes as the place to find what you need to prepare for Christmas. In 2026 it is on Saturday 12 December on Plaça Major and on Sunday 13 December on Plaça Major and the Baixada de la Seu, from 10:00 to 20:00 on both days, according to the council's events listing.",
+      "**Granollers** runs several. In 2026, according to the council: a nativity and decorations fair on Plaça de la Porxada from 26 November to 24 December; a craft fair on Plaça Barangé from 11 December to 5 January (closed on 25 and 26 December and 1 January); and the Roca Umbert Market from 11 to 13 December.",
     ),
     ...h2(
       "What about other towns?",

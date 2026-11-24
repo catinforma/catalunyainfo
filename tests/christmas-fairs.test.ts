@@ -53,7 +53,7 @@ import { PRERENDER, hubAllowed, resolveTown, townStaticParams } from "../src/lib
 import { WEB_REPLACEMENTS, agendaFairs, fairFromRow, organiserWeb } from "../src/lib/programmatic/christmas-fairs/rows.ts";
 import { christmasFairsPaths, christmasFairsSitemapEntries } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
 import { christmasFairEvents } from "../src/lib/programmatic/christmas-fairs/structured.ts";
-import { fill, seasonStatus, todayInMadrid, type DatedFair } from "../src/lib/programmatic/christmas-fairs/today.ts";
+import { fill, isOpenOn, seasonStatus, todayInMadrid, type DatedFair } from "../src/lib/programmatic/christmas-fairs/today.ts";
 import type { ChristmasSnapshot } from "../src/lib/programmatic/christmas-fairs/types.ts";
 import { buildLookup, municipalityNames } from "../src/lib/programmatic/weekend/compact.ts";
 import { SNAPSHOT as WEEKEND, municipality } from "../src/lib/programmatic/weekend/data.ts";
@@ -369,9 +369,10 @@ test("13 Nov 2026: confirmations, corrections and unconfirmed fairs", () => {
     for (const locale of FAIRS_LOCALES) assert.ok(u.shows[locale].length > 20, `${u.fairId} ${locale}`);
     assert.ok(byId.get(u.fairId)?.unconfirmed, u.fairId);
   }
-  const manresa = townBySlug("manresa")!;
-  assert.match(confirmationNote(manresa.fairs, "ca")!, /encara no ha confirmat l'edició del 2026/);
-  assert.match(confirmationNote(manresa.fairs, "es")!, /aún no ha confirmado la edición de 2026/);
+  // Sant Celoni stands for the unconfirmed ones since Manresa published (24 Nov 2026, test below).
+  const santCeloni = townBySlug("sant-celoni")!;
+  assert.match(confirmationNote(santCeloni.fairs, "ca")!, /encara no ha confirmat l'edició del 2026/);
+  assert.match(confirmationNote(santCeloni.fairs, "es")!, /aún no ha confirmado la edición de 2026/);
   assert.match(confirmationNote(townBySlug("espinelves")!.fairs, "en")!, /2026 dates confirmed/);
   // Girona: the council's agenda, with its closing days.
   const girona = townBySlug("girona")!;
@@ -384,6 +385,49 @@ test("13 Nov 2026: confirmations, corrections and unconfirmed fairs", () => {
  * re-read at least every 10 days until each fair opens (move a fair to
  * ORGANISER_FAIRS when its page publishes 2026, bump `readOn` otherwise).
  */
+/**
+ * 24 Nov 2026 re-read: Manresa, Martorell, Solsona and Vallirana published
+ * their 2026 edition (Vallirana with a Friday evening the calendar does not
+ * have), Granollers its fairs page, Vic the days it opens and Olot its hours.
+ */
+test("24 Nov 2026: newly confirmed fairs, Vic's open days, Granollers' own page", () => {
+  const byId = new Map(FAIRS.map((f) => [f.id, f]));
+  for (const id of ["vm32:24032442", "vm32:24033249", "vm32:24032429", "vm32:24032398"]) {
+    const f = byId.get(id)!;
+    assert.equal(f.unconfirmed, null, id);
+    assert.equal(f.checked?.readOn, "2026-11-24", id);
+    assert.ok(f.hours, id);
+    assert.ok(!UNCONFIRMED_FAIRS.some((u) => u.fairId === id), id);
+  }
+  assert.match(confirmationNote(townBySlug("manresa")!.fairs, "ca")!, /confirmades/);
+  const manresa = byId.get("vm32:24032442")!;
+  assert.equal(`${manresa.start}..${manresa.end}`, "2026-12-12..2026-12-13");
+  assert.deepEqual(manresa.details?.times, { opens: "10:00", closes: "20:00" });
+  // Vallirana: the council opens on Friday 27; the calendar said 28-29.
+  const vallirana = byId.get("vm32:24032398")!;
+  assert.equal(`${vallirana.start}..${vallirana.end}`, "2026-11-27..2026-11-29");
+  assert.deepEqual(vallirana.datasetDates, { start: "2026-11-28", end: "2026-11-29" });
+  // Vic: fifteen open days between 5 Dec and 4 Jan, as the organiser lists them.
+  const vic = FAIRS.find((f) => f.id === "org:vic-artesania-de-nadal")!;
+  const dated: DatedFair = { id: vic.id, s: vic.start, e: vic.end, n: vic.name, t: "Vic", x: vic.closed };
+  const open: string[] = [];
+  for (let t = Date.parse(`${vic.start}T12:00:00Z`); t <= Date.parse(`${vic.end}T12:00:00Z`); t += 86_400_000) {
+    const day = new Date(t).toISOString().slice(0, 10);
+    if (isOpenOn(dated, day)) open.push(day.slice(5));
+  }
+  assert.deepEqual(open, ["12-05", "12-06", "12-07", "12-08", "12-12", "12-13", "12-19", "12-20", "12-21", "12-22", "12-23", "12-24", "01-02", "01-03", "01-04"]);
+  assert.match(vic.hours!.ca, /només els dies 5, 6, 7, 8, 12, 13, 19, 20, 21, 22, 23 i 24 de desembre i 2, 3 i 4 de gener/);
+  // Olot: hours per day and the place the fair's page gives.
+  const olot = byId.get("vm32:24032768")!;
+  assert.match(olot.hours!.es, /sábado 5 y domingo 6, de 10 a 20 h; lunes 7, de 10 a 19 h/);
+  assert.equal(olot.place, "Del carrer de Sant Esteve a la plaça del Carme");
+  // Granollers: no longer pending; three dated fairs give it a page.
+  assert.ok(!PENDING_MARKETS.some((p) => p.ine === "08096"));
+  const granollers = townBySlug("granollers")!;
+  assert.equal(granollers.fairs.length, 3);
+  assert.deepEqual(granollers.fairs.find((f) => f.id === "org:granollers-fira-d-artesania")?.closed, ["2026-12-25", "2026-12-26", "2027-01-01"]);
+});
+
 test("date guard: unconfirmed fairs re-read within 10 days while still to come", () => {
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
   const tenDaysAgo = new Date(Date.parse(`${today}T12:00:00Z`) - 10 * 86_400_000).toISOString().slice(0, 10);
@@ -444,7 +488,8 @@ test("Canyelles (20 Nov 2026): hours, programme, shuttle buses and parking from 
   const town = townBySlug("canyelles")!;
   const fair = town.fairs.find((f) => f.id === "vm32:24033377")!;
   assert.equal(fair.hours?.ca, "dissabte i diumenge, de 9 a 21 h");
-  assert.equal(fair.details?.readOn, "2026-11-20");
+  assert.equal(fair.details?.readOn, "2026-11-24");
+  assert.match(fair.details!.after!.ca, /28 i diumenge 29 de novembre.*1 euro/);
   assert.ok(fair.details!.links.every((l) => /^https:\/\/www\.(canyelles\.cat|santalluciacanyelles\.cat)\//.test(l.url)));
   const text = (locale: "ca" | "es" | "en") => [...fair.details!.programme, ...(fair.details!.access ?? [])].map((l) => l[locale]).join(" ");
   assert.match(text("ca"), /350 parades/);
@@ -799,8 +844,9 @@ test("structured data: one Event per dated fair, on its town page only", () => {
   const events = christmasFairEvents(vic.fairs, townPath("en", vic.slug), "en") as Record<string, unknown>[];
   assert.equal(events.length, 1);
   assert.equal(events[0]!["@type"], "Event");
-  assert.equal(events[0]!.startDate, "2026-12-05");
-  assert.equal(events[0]!.endDate, "2027-01-04");
+  // With the organiser's hours read (24 Nov 2026): 10 to 21 h on its open days.
+  assert.equal(events[0]!.startDate, "2026-12-05T10:00:00+01:00");
+  assert.equal(events[0]!.endDate, "2027-01-04T21:00:00+01:00");
   assert.equal((events[0]!.location as { address: { addressLocality: string } }).address.addressLocality, "Vic");
   assert.ok(String(events[0]!["@id"]).startsWith(`${absoluteUrl("/en/christmas-markets/vic/")}#event-org-vic-`), String(events[0]!["@id"]));
   // A council homepage standing in for a dead organiser website is not the event's URL.

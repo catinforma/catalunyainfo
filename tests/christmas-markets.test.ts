@@ -135,22 +135,25 @@ test("the EN guide answers 'barcelona christmas market' first and every edition 
 });
 
 /**
- * Manresa, 30 Oct 2026: the council's page still shows 2025; the Generalitat
- * fairs calendar gives 12-13 Dec 2026. The guide gives those dates attributed
- * to the calendar, the same dates as the Christmas fairs family's Manresa page.
+ * Manresa, 30 Oct 2026: the council's page still showed 2025; the Generalitat
+ * fairs calendar gave 12-13 Dec 2026. On 24 Nov 2026 the council's agenda
+ * (L'Apuntador) carries "SANTA LLÚCIA 2026" with the same days and the hours:
+ * the guide now credits the council, as the fairs family's Manresa page does.
+ * Granollers published its 2026 fairs page the same day.
  */
-test("Manresa: 12-13 Dec 2026, attributed to the Generalitat fairs calendar, as the fairs family shows it", () => {
+test("Manresa: 12-13 Dec 2026 from the council's agenda, as the fairs family shows it; Granollers dated", () => {
   const fair = FAIRS.find((f) => f.id === "vm32:24032442");
   assert.ok(fair, "Manresa's Santa Llúcia is in the fairs family");
   assert.equal(fair.start, "2026-12-12");
   assert.equal(fair.end, "2026-12-13");
-  assert.equal(fair.checked, null, "no organiser page gives other dates");
+  assert.equal(fair.checked?.readOn, "2026-11-24", "the council's agenda, read 24 Nov 2026");
+  assert.ok(!fair.datasetDates, "the same dates as the calendar gave");
   assert.ok(townBySlug("manresa"), "Manresa has a fairs page");
 
   const expected = {
-    ca: [/12 i 13 de desembre de 2026, segons el calendari de fires de la Generalitat/, /Segons el calendari de fires de la Generalitat, el 2026 es fa el 12 i el 13 de desembre/],
-    es: [/12 y 13 de diciembre de 2026, según el calendario de ferias de la Generalitat/, /Según el calendario de ferias de la Generalitat, en 2026 se celebra el 12 y el 13 de diciembre/],
-    en: [/12 and 13 December 2026, according to the Catalan government's fairs calendar/, /According to the Catalan government's fairs calendar, the 2026 fair is on 12 and 13 December/],
+    ca: [/12 i 13 de desembre de 2026, de 10 a 20 h, segons l'agenda de l'Ajuntament/, /El 2026 es fa el dissabte 12 de desembre a la plaça Major i el diumenge 13 a la plaça Major i la Baixada de la Seu/],
+    es: [/12 y 13 de diciembre de 2026, de 10 a 20 h, según la agenda del Ayuntamiento/, /En 2026 se celebra el sábado 12 de diciembre en la plaza Major y el domingo 13 en la plaza Major y la Baixada de la Seu/],
+    en: [/12 and 13 December 2026, 10:00 to 20:00, according to the council's events listing/, /In 2026 it is on Saturday 12 December on Plaça Major and on Sunday 13 December on Plaça Major and the Baixada de la Seu/],
   } as const;
   for (const locale of LOCALES) {
     const text = bodyToPlainText(CHRISTMAS.editions[locale].blocks);
@@ -160,9 +163,21 @@ test("Manresa: 12-13 Dec 2026, attributed to the Generalitat fairs calendar, as 
     assert.ok(manresa, `${locale}: Manresa row`);
     assert.doesNotMatch(manresa[3]!, /Pendent|Pendiente|Not yet published/, `${locale}: Manresa no longer pending`);
     assert.doesNotMatch(manresa[2]!, /2025/, `${locale}: the place is the 2026 one`);
+    assert.doesNotMatch(text, /calendari de fires de la Generalitat, el 2026|calendario de ferias de la Generalitat, en 2026|fairs calendar, the 2026 fair/, `${locale}: Manresa no longer credited to the calendar`);
+    const granollers = rows.find((r) => r[1] === "Granollers");
+    assert.ok(granollers, `${locale}: Granollers row`);
+    assert.doesNotMatch(granollers.join(" "), /Pendent|Pendiente|Not yet published|2025/, `${locale}: Granollers dated`);
+    assert.match(granollers[3]!, /24 (de )?(desembre|diciembre|December) (de )?2026.*5 (de )?(gener|enero|January) (de )?2027/, `${locale}: Granollers' two fairs`);
   }
   assert.match(JSON.stringify(CHRISTMAS.editions.ca.blocks), /\/ca\/fires-de-nadal\/manresa\//);
   assert.match(JSON.stringify(CHRISTMAS.editions.es.blocks), /\/es\/mercados-navidad\/manresa\//);
+  // The guide's Granollers dates are the fairs family's own.
+  const byId = new Map(FAIRS.map((f) => [f.id, f]));
+  assert.equal(`${byId.get("org:granollers-fira-de-pessebres")?.start}..${byId.get("org:granollers-fira-de-pessebres")?.end}`, "2026-11-26..2026-12-24");
+  assert.equal(`${byId.get("org:granollers-fira-d-artesania")?.start}..${byId.get("org:granollers-fira-d-artesania")?.end}`, "2026-12-11..2027-01-05");
+  assert.ok(townBySlug("granollers"), "Granollers has a fairs page");
+  assert.match(JSON.stringify(CHRISTMAS.editions.ca.blocks), /\/ca\/fires-de-nadal\/granollers\//);
+  assert.match(JSON.stringify(CHRISTMAS.editions.es.blocks), /\/es\/mercados-navidad\/granollers\//);
   assert.ok(CHRISTMAS.sources.some((s) => s.url === "https://analisi.transparenciacatalunya.cat/d/vm32-przc"));
 });
 

@@ -12557,3 +12557,21 @@ those date reasons; all eight strike test files pass now.
 **Wording kept out of the "called off" check.** The day-by-day intro says «Si cambia algo, lo actualizamos aquí», not
 "se convoca o se desconvoca": the hub test allows "desconvoca" only in a sentence that names who called a strike off.
 
+
+## 2026-11-24 — Christmas fairs re-read on the organisers' pages: four fairs confirmed, Granollers gets a town page, hours for Vic, Olot and Manresa (deploy with the strikes re-read; groups `christmas`, `pessebres`; the fairs pages are programmatic)
+
+**What changed (facts, each quoted in `organisers.ts` with its URL; the head checked every quote against the live page on 24 Nov with `curl`):**
+
+- **Confirmed by the organiser** (they were "not yet confirmed" until now): Manresa, Fira de Santa Llúcia, 12–13 Dec, 10–20 h (council agenda L'Apuntador); Martorell, Fira de Nadal, 19–20 Dec, 10–20 h (council); Solsona, Fira del Tió, Sat 5 Dec from 10 h (Solsona Turisme, 19 Nov); Vallirana, XV Fira de Nadal, **27**–29 Nov (council news of 20 Nov and its leaflet: the Friday evening is not in the Generalitat calendar, which said 28–29).
+- **Granollers**: the council published its 2026 fairs page. Three dated fairs (nativity figures 26 Nov–24 Dec; crafts 11 Dec–5 Jan, closed 25–26 Dec and 1 Jan; Roca Umbert Market 11–13 Dec) and so a new town page (`/ca/fires-de-nadal/granollers/`, `/es/mercados-navidad/granollers/`, `/en/…`). The plants stall is left out: the page gives two different squares for it.
+- **Vic**: the fair's page lists the 15 days it opens between 5 Dec and 4 Jan (10–21 h); the page now says which days are closed. **Olot**: hours per day (Sat–Sun 10–20 h, Mon 10–19 h), where each market is, programme. **Manresa**: programme by day and the 1-euro giant tió. **Canyelles**: the "Petita Llúcia" exhibitions of 28–29 Nov (council news of 23 Nov). Girona and Espinelves gain programme facts.
+- The Christmas markets guide (ca/es/en) gives the Manresa and Granollers dates from the councils instead of "pending"/the Generalitat calendar. Living nativities: the two `recheck` entries re-read (Oficis Perduts tickets still "properament"; Rupit still last season's page).
+- Polls: the CEO pending slot re-read (unchanged) and its next re-read moved to 30 Nov, after the legal blackout. No visible change (the page shows no figures during the blackout).
+
+**Hypothesis:** town fair queries sit at positions 6–10 with almost no clicks ("fira santa llucia canyelles 2026" 423 impressions at 10.4, "fira de espinelves 2026" 84 at 10.4, "fira nadal vic 2026" 148 at 6.0, "fira de nadal cardedeu 2026" 111 at 8.9). A page that gives the opening days, the hours per day and the programme from the organiser should rank above pages that only repeat the calendar dates.
+
+**Baseline (GSC, 11–23 Nov):** `fires-de-nadal` pages 181 clicks, 7,155 impressions, position 6.3–7.1 per day; `mercados-navidad` pages 263 clicks, 12,905 impressions, position 7.0–8.2.
+
+**Review:** 2026-12-04 (positions for the Canyelles, Vic, Olot, Manresa, Granollers queries; clicks per family). Not a title/description experiment: titles and descriptions are unchanged, except where a confirmed date replaces "pending" text in the body.
+
+**Tests:** `christmas-fairs` (42), `christmas-markets` (9), `living-nativities-guide` (13), `polls-blackout` (18).
