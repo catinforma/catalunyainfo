@@ -323,7 +323,7 @@ const COPY: Record<Locale, Copy> = {
         extraId: "hay-clase",
         extra: (checked) => [
           ...paras(
-            `**Sí, los centros abren:** es una huelga del personal, no un cierre, y el jueves 26 es día lectivo. Según ${link(U.cgtEns26Notice, "el preaviso de la CGT")}, que CGT Ensenyament publicó el 18 de noviembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), están llamados el personal docente y no docente de los centros públicos, las escuelas infantiles (escoles bressol), los EAP y los CREDA, y el personal de comedor, acogida, ocio, extraescolares y transporte escolar de los centros públicos, privados y concertados.`,
+            `**Sí, los centros abren:** es una huelga del personal, no un cierre, y el jueves 26 es día lectivo. Según ${link(U.cgtEns26Notice, "el preaviso de la CGT")}, que CGT Ensenyament publicó el 18 de noviembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), están llamados el personal docente y no docente de los centros públicos, las escuelas infantiles (escoles bressol), los EAP y los CREETDIC, y el personal de comedor, acogida, ocio, extraescolares y transporte escolar de los centros públicos, privados y concertados.`,
             `**Servicios mínimos:** los fijó el Departament d'Empresa i Treball por una orden del 23 de noviembre, en ${link(U.treballMs, "su lista")}: en cada centro, una persona del equipo directivo y, además, un docente por cada 3 aulas en infantil, primaria y secundaria; el 50% de la plantilla en educación especial y el 33% en las escuelas infantiles (llars d'infants); y el 50% del personal de comedor, cocina, acogida y extraescolares. La dirección de cada centro designa quién los cubre: pregunta en el tuyo qué garantiza ese día.`,
           ),
           table(
@@ -331,7 +331,7 @@ const COPY: Record<Locale, Copy> = {
             ["Servicio", "El jueves 26", "Servicios mínimos"],
             [
               ["Escuelas e institutos públicos", "Abren; el profesorado y el personal no docente están convocados", "Una persona del equipo directivo y un docente por cada 3 aulas; educación especial, 50% de la plantilla"],
-              ["Escoles bressol, EAP y CREDA", "Convocados", "Escuelas infantiles (llars d'infants): 33% de la plantilla"],
+              ["Escoles bressol, EAP y CREETDIC", "Convocados", "Escuelas infantiles (llars d'infants): 33% de la plantilla"],
               ["Comedor, acogida, extraescolares y transporte escolar", "Convocados también en la concertada y la privada: pregunta al centro o a la empresa", "50% del personal de comedor, cocina, acogida y extraescolares"],
               ["Sanidad pública", "Huelgas de médicos (Sindicato Médicos Unidos y Metges de Catalunya)", "Publicados: urgencias y unidades especiales con normalidad"],
               ["Rodalies, metro, autobuses y FGC", "Sin huelga convocada ese día en las fuentes revisadas", "—"],
@@ -463,7 +463,7 @@ const COPY: Record<Locale, Copy> = {
         extraId: "hi-ha-classe",
         extra: (checked) => [
           ...paras(
-            `**Sí, els centres obren:** és una vaga del personal, no un tancament, i el dijous 26 és dia lectiu. Segons ${link(U.cgtEns26Notice, "el preavís de la CGT")}, que CGT Ensenyament va publicar el 18 de novembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), hi estan cridats el personal docent i no docent dels centres públics, les escoles bressol, els EAP i els CREDA, i el personal de menjador, acollida, lleure, extraescolars i transport escolar dels centres públics, privats i concertats.`,
+            `**Sí, els centres obren:** és una vaga del personal, no un tancament, i el dijous 26 és dia lectiu. Segons ${link(U.cgtEns26Notice, "el preavís de la CGT")}, que CGT Ensenyament va publicar el 18 de novembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), hi estan cridats el personal docent i no docent dels centres públics, les escoles bressol, els EAP i els CREETDIC, i el personal de menjador, acollida, lleure, extraescolars i transport escolar dels centres públics, privats i concertats.`,
             `**Serveis mínims:** els va fixar el Departament d'Empresa i Treball per una ordre del 23 de novembre, a ${link(U.treballMs, "la seva llista")}: a cada centre, una persona de l'equip directiu i, a més, un docent per cada 3 aules a infantil, primària i secundària; el 50% de la plantilla a l'educació especial i el 33% a les llars d'infants; i el 50% del personal de menjador, cuina, acollida i extraescolars. La direcció de cada centre designa qui els cobreix: pregunta al teu què garanteix aquell dia.`,
           ),
           table(
@@ -471,7 +471,7 @@ const COPY: Record<Locale, Copy> = {
             ["Servei", "El dijous 26", "Serveis mínims"],
             [
               ["Escoles i instituts públics", "Obren; el professorat i el personal no docent hi estan convocats", "Una persona de l'equip directiu i un docent per cada 3 aules; educació especial, 50% de la plantilla"],
-              ["Escoles bressol, EAP i CREDA", "Convocats", "Llars d'infants: 33% de la plantilla"],
+              ["Escoles bressol, EAP i CREETDIC", "Convocats", "Llars d'infants: 33% de la plantilla"],
               ["Menjador, acollida, extraescolars i transport escolar", "Convocats també a la concertada i la privada: pregunta al centre o a l'empresa", "50% del personal de menjador, cuina, acollida i extraescolars"],
               ["Sanitat pública", "Vagues de metges (Sindicato Médicos Unidos i Metges de Catalunya)", "Publicats: urgències i unitats especials amb normalitat"],
               ["Rodalies, metro, autobusos i FGC", "Sense vaga convocada aquell dia a les fonts revisades", "—"],
@@ -602,7 +602,7 @@ const COPY: Record<Locale, Copy> = {
         extraId: "is-there-school",
         extra: (checked) => [
           ...paras(
-            `**Yes, schools open:** it is a strike by staff, not a closure, and Thursday 26 is a school day. According to ${link(U.cgtEns26Notice, "CGT's strike notice")}, which CGT Ensenyament published on 18 November (${link(U.cgtEns26Call, "\"us convoquem a la vaga\"")}, we call you out on strike), teaching and non-teaching staff at state schools, nursery schools (escoles bressol), the EAP and CREDA support teams, and lunchtime, before- and after-school, leisure and school-transport staff at state, private and concertada (state-funded private) schools are called out.`,
+            `**Yes, schools open:** it is a strike by staff, not a closure, and Thursday 26 is a school day. According to ${link(U.cgtEns26Notice, "CGT's strike notice")}, which CGT Ensenyament published on 18 November (${link(U.cgtEns26Call, "\"us convoquem a la vaga\"")}, we call you out on strike), teaching and non-teaching staff at state schools, nursery schools (escoles bressol), the EAP and CREETDIC support teams, and lunchtime, before- and after-school, leisure and school-transport staff at state, private and concertada (state-funded private) schools are called out.`,
             `**Minimum services:** the Department of Business and Labour set them by an order of 23 November, on ${link(U.treballMs, "its list")}: at each school, one member of the head team plus one teacher per 3 classes in infant, primary and secondary schools; 50% of staff at special-needs schools and 33% at nursery schools (llars d'infants); and 50% of lunchtime, kitchen, before-school care and after-school activity staff. Each school's management names who covers them: ask yours what it can provide that day.`,
           ),
           table(
@@ -610,7 +610,7 @@ const COPY: Record<Locale, Copy> = {
             ["Service", "On Thursday 26", "Minimum services"],
             [
               ["State schools", "Open; teachers and non-teaching staff are called out", "One member of the head team and one teacher per 3 classes; special-needs schools, 50% of staff"],
-              ["Nursery schools (escoles bressol), EAP and CREDA", "Called out", "Nursery schools (llars d'infants): 33% of staff"],
+              ["Nursery schools (escoles bressol), EAP and CREETDIC", "Called out", "Nursery schools (llars d'infants): 33% of staff"],
               ["Lunchtime, before- and after-school care, school transport", "Called out at concertada and private schools too: ask your school or the provider", "50% of lunchtime, kitchen, before-school care and after-school activity staff"],
               ["Public healthcare", "Doctors' strikes (Sindicato Médicos Unidos and Metges de Catalunya)", "Published: A&E and special units run normally"],
               ["Rodalies, metro, buses and FGC", "No strike called that day in the sources checked", "—"],
