@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { communityBySlug, type CommunityNames } from "@/lib/programmatic/spain-2027/communities";
-import { BRIDGES, HUB, bridgesDescription, communityDescription, communityFaq, communityH1, communityTitle, hubDescription } from "@/lib/programmatic/spain-2027/copy";
+import { BRIDGES, HUB, bridgesDescription, communityDescription, communityFaq, communityH1, communityTitle, hubDescription, hubFaq } from "@/lib/programmatic/spain-2027/copy";
 import type { City } from "@/lib/programmatic/spain-2027/cities";
 import { cityDescription, cityFaq, cityTitle } from "@/lib/programmatic/spain-2027/city-copy";
 import { editionsOf } from "@/lib/programmatic/spain-2027/editions";
@@ -61,7 +61,7 @@ export function SpainHubRoute() {
       <main id="main">
         <SpainHubPage />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs()), dataset(spainHubPath(), HUB.h1, hubDescription(), "España")])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs()), dataset(spainHubPath(), HUB.h1, hubDescription(), "España"), faqSchema([{ type: "faq", items: hubFaq() }])])} />
       <SiteFooter locale="es" />
     </>
   );

@@ -157,6 +157,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     national: [
       "Nou dels dotze festius són comuns a tota Espanya el 2027: l'1 i el 6 de gener, Divendres Sant (26 de març), l'1 de maig, el 12 d'octubre, l'1 de novembre i el 6, el 8 i el 25 de desembre. Els altres tres són propis de Catalunya: el Dilluns de Pasqua Florida (29 de març), Sant Joan (24 de juny) i la Diada (11 de setembre).",
       "El **Dijous Sant** (25 de març de 2027) és festiu a la majoria de comunitats, però **no a Catalunya**. El 15 d'agost i el 26 de desembre, que el 2026 són festius aquí, el 2027 cauen en diumenge i no formen part del calendari català.",
+      "Els festius del 2027 de cadascuna de les altres comunitats, amb els seus ponts, són al [calendari laboral 2027 a Espanya per comunitat autònoma](/ca/festius/2027/); la comparació dia per dia, a [festius 2027: Catalunya i la resta d'Espanya](/ca/festius/2027/catalunya/).",
       "Font: Resolució de 8 d'octubre de 2026 de la Direcció General de Treball, que publica la relació de festes laborals del 2027 (BOE del 13 d'octubre de 2026).",
     ],
 
@@ -297,7 +298,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     national: [
       "Nueve de los doce festivos son comunes a toda España en 2027: 1 y 6 de enero, Viernes Santo (26 de marzo), 1 de mayo, 12 de octubre, 1 de noviembre y 6, 8 y 25 de diciembre. Los otros tres son propios de Cataluña: el Lunes de Pascua (29 de marzo), San Juan (24 de junio) y la Diada (11 de septiembre).",
       "El **Jueves Santo** (25 de marzo de 2027) es festivo en la mayoría de comunidades, pero **no en Cataluña**. El 15 de agosto y el 26 de diciembre, que en 2026 son festivos aquí, en 2027 caen en domingo y no forman parte del calendario catalán.",
-      "Los festivos de 2027 de cada una de las demás comunidades, con sus puentes, están en el [calendario laboral 2027 en España por comunidad autónoma](/es/festivos/2027/).",
+      "Los festivos de 2027 de cada una de las demás comunidades, con sus puentes, están en el [calendario laboral 2027 en España por comunidad autónoma](/es/festivos/2027/); la comparación día por día, en [festivos 2027: Cataluña y el resto de España](/es/festivos/2027/cataluna/).",
       "Fuente: Resolución de 8 de octubre de 2026 de la Dirección General de Trabajo, por la que se publica relación de fiestas laborales para el año 2027 (BOE del 13 de octubre de 2026).",
     ],
 
@@ -438,6 +439,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     national: [
       "Nine of the twelve are common to the whole of Spain in 2027: 1 and 6 January, Good Friday (26 March), 1 May, 12 October, 1 November, and 6, 8 and 25 December. The other three are Catalonia's own: Easter Monday (29 March), Sant Joan (24 June) and the Diada, Catalonia's national day (11 September).",
       "**Maundy Thursday** (25 March 2027) is a holiday in most of Spain, but **not in Catalonia**. 15 August and 26 December, holidays here in 2026, fall on a Sunday in 2027 and are not part of the Catalan calendar.",
+      "The 2027 holidays of each of the other regions, with their long weekends, are in the [Spain public holidays 2027 calendar, region by region](/en/holidays/2027/); the day-by-day comparison is in [public holidays 2027: Catalonia vs the rest of Spain](/en/holidays/2027/catalonia/).",
       "Source: Resolution of 8 October 2026 of the Directorate-General for Labour publishing the 2027 list of public holidays (BOE, 13 October 2026).",
     ],
 

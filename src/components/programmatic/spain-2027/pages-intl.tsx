@@ -19,10 +19,13 @@ import {
   COMMON_DATES,
   YEAR,
   commonRows,
+  commonWorkingDays,
   communityDays,
   communityRuns,
   communityRunsWithLocal,
+  communityWorkingDays,
   dayCount,
+  monthRows,
   ownDays,
   runSummary,
   spainRuns,
@@ -36,6 +39,7 @@ import {
   BRIDGES_INTL,
   HUB_INTL,
   KIND_LABEL_INTL,
+  boeLineIntl,
   communityFaqIntl,
   communityH1Intl,
   communityLeadIntl,
@@ -45,13 +49,16 @@ import {
   decreeLineIntl,
   everywhereFreeIntl,
   holidayLabel,
+  hubFaqIntl,
   hubLeadIntl,
   localStatusLineIntl,
+  monthNameIntl,
   notKeptLineIntl,
   rangeCellIntl,
   rangeWordsIntl,
   regionsWordsIntl,
   runLineIntl,
+  shortWeekdayDateIntl,
   tr,
   weekdayDateIntl,
   weekendLineIntl,
@@ -68,6 +75,7 @@ import {
   type Edition,
   type EditionNames,
 } from "@/lib/programmatic/spain-2027/editions";
+import { mainElsewhere, regionsWithMainElsewhere } from "@/lib/programmatic/spain-2027/main-urls";
 import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 import { SOURCE_PROSE, placeName } from "@/lib/programmatic/spain-2027/sources-intl";
 
@@ -282,6 +290,7 @@ function HubCityList({ locale }: { locale: Edition }) {
   );
 }
 
+/** As the Spanish edition's list: Catalonia's page is listed as the comparison, and its main page (main-urls.ts) gets the head anchor. */
 function CommunityLinks({ exclude, locale }: { exclude?: string; locale: Edition }) {
   return (
     <section className="mt-12" aria-labelledby="ci-es27-others">
@@ -291,7 +300,9 @@ function CommunityLinks({ exclude, locale }: { exclude?: string; locale: Edition
           .filter((c) => c.slug !== exclude)
           .map((c) => (
             <li key={c.slug}>
-              <Link href={editionCommunityPath(locale, c.region)}>{tr(locale, `Festius ${YEAR} ${c.in}`, `${c.short} holidays ${YEAR}`)}</Link>{" "}
+              <Link href={editionCommunityPath(locale, c.region)}>
+                {tr(locale, `Festius ${YEAR} ${c.in}`, `${c.short} holidays ${YEAR}`)}
+              </Link>{" "}
               <small className="text-[var(--color-muted)]">({dayCount(c.region)})</small>
             </li>
           ))}
@@ -300,6 +311,15 @@ function CommunityLinks({ exclude, locale }: { exclude?: string; locale: Edition
         <Link href={editionHubPath(locale)}>{tr(locale, `${HUB_INTL.ca.breadcrumb}: festius comuns i per comunitat`, `${HUB_INTL.en.breadcrumb}: shared and regional days`)}</Link>
         {" · "}
         <Link href={editionBridgesPath(locale)}>{tr(locale, `Ponts ${YEAR} a Espanya`, `Long weekends in Spain ${YEAR}`)}</Link>
+        {regionsWithMainElsewhere().map((r) => {
+          const main = mainElsewhere(r, locale)!;
+          return (
+            <span key={r}>
+              {" · "}
+              <Link href={main.href}>{main.anchor.charAt(0).toUpperCase() + main.anchor.slice(1)}</Link>
+            </span>
+          );
+        })}
       </p>
     </section>
   );
@@ -622,6 +642,12 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
   const wd = (iso: string) => weekdayDateIntl(iso, locale);
   const statusWord = (st: string) =>
     st === "published" ? tr(locale, "Publicats", "Published") : st === "partial" ? tr(locale, "En part", "Partly") : tr(locale, "Pendents", "Pending");
+  const months = monthRows();
+  const faq = hubFaqIntl(locale);
+  const none = tr(locale, "Cap", "None");
+  const everywhere = tr(locale, "A tot Espanya", "All of Spain");
+  const onlySome = tr(locale, "Només en algunes", "Only in some");
+  const workingDays = tr(locale, "Dies feiners", "Working days");
   return (
     <article>
       <Header crumbs={hubCrumbsIntl(locale)} h1={HUB_INTL[locale].h1} locale={locale} />
@@ -637,8 +663,83 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               </li>
             ))}
           </ul>
+          {/* The official text and its PDF, under the answer (24 Nov 2026). */}
+          <p>
+            {tr(locale, "Font: ", "Source: ")}
+            <a href={BOE_REF.url} rel="noopener nofollow" target="_blank">
+              {boeLineIntl(locale)}
+            </a>
+            .{" "}
+            <a href={BOE_REF.pdf} rel="noopener nofollow" target="_blank">
+              {tr(locale, `Calendari laboral ${YEAR} oficial en PDF (BOE)`, `Official ${YEAR} work calendar as a PDF (BOE)`)}
+            </a>
+            . {tr(locale, "En aquesta pàgina: ", "On this page: ")}
+            <a href="#mesos">{tr(locale, "mes a mes", "month by month")}</a>, <a href="#comunitats">{tr(locale, "per comunitat", "by region")}</a>,{" "}
+            <a href="#ponts">{tr(locale, "ponts", "long weekends")}</a>, <a href="#ciutats">{tr(locale, "festius locals per ciutat", "local holidays by city")}</a>
+            {tr(locale, " i ", " and ")}
+            <a href="#preguntes">{tr(locale, "preguntes freqüents", "frequently asked questions")}</a>.
+          </p>
 
           <p className="ci-lead">{hubLeadIntl(locale)}</p>
+
+          <h2 id="mesos">{tr(locale, `Calendari laboral ${YEAR} mes a mes: festius i dies feiners`, `${YEAR} work calendar month by month: holidays and working days`)}</h2>
+          <div className="ci-table-scroll mt-4">
+            <table className="ci-local-table ci-stack-table">
+              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+                {tr(
+                  locale,
+                  `Dies feiners: de dilluns a divendres sense els ${COMMON_DATES.length} festius comuns. Cada comunitat hi resta a més els seus festius propis i cada municipi fins a 2 de locals. Càlcul de CatalunyaInfo a partir de la taula del BOE.`,
+                  `Working days: Monday to Friday without the ${COMMON_DATES.length} nationwide holidays. Each region also takes off its own holidays and each municipality up to 2 local ones. CatalunyaInfo's calculation from the BOE table.`,
+                )}
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">{tr(locale, "Mes", "Month")}</th>
+                  <th scope="col">{tr(locale, "Festiu a tot Espanya", "Holiday in all of Spain")}</th>
+                  <th scope="col">{tr(locale, "Festiu només en algunes comunitats", "Holiday only in some regions")}</th>
+                  <th scope="col">{workingDays}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {months.map((m) => (
+                  <tr key={m.month}>
+                    <th scope="row" className="font-normal">
+                      {monthNameIntl(m.month, locale)}
+                    </th>
+                    <td data-label={everywhere}>
+                      {m.common.length === 0
+                        ? none
+                        : m.common.map((r, i) => (
+                            <span key={r.date}>
+                              {i > 0 ? "; " : ""}
+                              <time dateTime={r.date}>{shortWeekdayDateIntl(r.date, locale)}</time> ({holidayLabel(r.name, locale)})
+                            </span>
+                          ))}
+                    </td>
+                    <td data-label={onlySome}>
+                      {m.variable.length === 0
+                        ? none
+                        : m.variable.map((v, i) => (
+                            <span key={v.date}>
+                              {i > 0 ? "; " : ""}
+                              <time dateTime={v.date}>{shortWeekdayDateIntl(v.date, locale)}</time> ({regionsWordsIntl(v.regions, locale)})
+                            </span>
+                          ))}
+                    </td>
+                    <td data-label={workingDays}>{m.workingDays}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row">{YEAR}</th>
+                  <td data-label={everywhere}>{tr(locale, `${COMMON_DATES.length} festius`, `${COMMON_DATES.length} holidays`)}</td>
+                  <td data-label={onlySome}>{tr(locale, `${variable.length} dates`, `${variable.length} dates`)}</td>
+                  <td data-label={workingDays}>{commonWorkingDays()}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
           <h2 id="comunitats">{tr(locale, `Festius ${YEAR} per comunitat autònoma`, `${YEAR} holidays by autonomous community`)}</h2>
           <div className="ci-table-scroll mt-4">
@@ -646,8 +747,8 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
                 {tr(
                   locale,
-                  `Dies que cada comunitat i ciutat afegeix als ${COMMON_DATES.length} comuns, segons el BOE.`,
-                  `The days each community and city adds to the ${COMMON_DATES.length} shared ones, according to the BOE.`,
+                  `Dies que cada comunitat i ciutat afegeix als ${COMMON_DATES.length} comuns, segons el BOE. Dies feiners: de dilluns a divendres sense els festius de la comunitat, abans de restar-hi els locals i els insulars (càlcul de CatalunyaInfo).`,
+                  `The days each community and city adds to the ${COMMON_DATES.length} shared ones, according to the BOE. Working days: Monday to Friday without the region's holidays, before taking off local and island ones (CatalunyaInfo's calculation).`,
                 )}
               </caption>
               <thead>
@@ -655,6 +756,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
                   <th scope="col">{tr(locale, "Comunitat", "Community")}</th>
                   <th scope="col">{tr(locale, "Festius", "Holidays")}</th>
                   <th scope="col">{tr(locale, "A més dels comuns", "On top of the shared ones")}</th>
+                  <th scope="col">{workingDays}</th>
                   <th scope="col">{tr(locale, `Festius locals ${YEAR}`, `Local holidays ${YEAR}`)}</th>
                 </tr>
               </thead>
@@ -676,6 +778,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
                           .map((d) => `${d.replaces ? tr(locale, "trasllat de l'Assumpció", "Assumption, moved") : holidayLabel(d.name, locale)} (${compactDatesIntl([d.date], locale)})`)
                           .join("; ")}
                       </td>
+                      <td data-label={workingDays}>{communityWorkingDays(c.region)}</td>
                       <td data-label={tr(locale, `Locals ${YEAR}`, `Local ${YEAR}`)}>{statusWord(s.local.status)}</td>
                     </tr>
                   );
@@ -683,6 +786,20 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               </tbody>
             </table>
           </div>
+          {/* The communities whose full calendar is another page (main-urls.ts): the link with the head anchor. */}
+          {regionsWithMainElsewhere().map((r) => {
+            const main = mainElsewhere(r, locale)!;
+            return (
+              <p key={r}>
+                {tr(
+                  locale,
+                  `${editionNames(r, locale).Full}: els festius locals de cada municipi, els ponts i els dies feiners de cada mes són al `,
+                  `${editionNames(r, locale).Full}: each town's local holidays, the long weekends and the working days in each month are in `,
+                )}
+                <Link href={main.href}>{main.anchor}</Link>.
+              </p>
+            );
+          })}
 
           <h2 id="variables">{tr(locale, "Festius que canvien segons la comunitat", "Holidays that vary by region")}</h2>
           <ul>
@@ -729,10 +846,25 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
           </ul>
 
           <HubCityList locale={locale} />
+          <p>
+            {tr(
+              locale,
+              `Per portar-lo al mòbil: la pàgina de cada ciutat ofereix els seus festius del ${YEAR} com a calendari .ics, per a Google Calendar, Apple o Outlook.`,
+              `To carry it on your phone: each city's page offers its ${YEAR} holidays as an .ics calendar, for Google Calendar, Apple or Outlook.`,
+            )}
+          </p>
           <LeaveHubLink locale={locale} />
           <WorkingDaysHubLink locale={locale} />
           <CalculatorsHubLink locale={locale} />
           <WidgetHubLink locale={locale} />
+
+          <h2 id="preguntes">{tr(locale, "Preguntes freqüents", "Frequently asked questions")}</h2>
+          {faq.map((item) => (
+            <section key={item.question}>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </section>
+          ))}
         </div>
 
         <CommunityLinks locale={locale} />

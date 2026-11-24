@@ -12594,3 +12594,24 @@ those date reasons; all eight strike test files pass now.
 **Tests:** new `spain-cities-2027-10k` (8); `spain-cities-2027-more`, `spain-2027-laboral-20nov` adjusted to count the new rows.
 
 **Site search:** one of the new towns is Montserrat (Valencia). Searching "Montserrat" on the site still opens the mountain's day-trip page first; the town's page comes after it (`search-shortcuts.ts`, pinned in `search-shortcuts` test).
+
+## 2026-11-24 — "Calendario laboral 2027": the three Spain hubs answer more (official PDF, month by month, working days, questions) and every page links the main one (third deploy of the day; programmatic, no publish group; no title, description, H1 or lead touched)
+
+**Why:** the three hubs of the Spain 2027 family are the pages meant for "calendario laboral 2027" and "festivos 2027", and they rank far below the family's town pages. They printed the list of common days and a table by community, and nothing for the searches around the head term: the official PDF, the calendar month by month, the number of working days, and the usual questions (Jueves Santo, San José, the holiday that falls on a Sunday).
+
+**What changed (additive only):**
+- Hubs (`/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`): a source line under the list with the BOE resolution, its PDF and an in-page index; a month-by-month table (holiday in all of Spain, holiday only in some communities, working days of the month); a "working days" column in the table by community; an .ics sentence; seven questions with `FAQPage` markup, each answer built from the BOE table (`hubFaq`, `hubFaqIntl`).
+- Working days are this site's count (Monday to Friday minus the BOE's days; local days not taken out), and the pages say so: 261 weekdays in 2027, 254 without the common holidays, 251–252 by community.
+- Links to the main page of each search (`main-urls.ts`): day pages (`/…/2027/<day>/`) link the Spain hub of their language in the breadcrumb and footer, and in ca and en their territory names link the community page where that page is in the index (Catalonia and one more per language; the 17 noindex ones stay plain text, as before); the family's community list and the hubs link the Catalonia guide with the anchor "calendario laboral 2027 de Cataluña" / "calendari laboral 2027 de Catalunya" / "Catalonia public holidays 2027"; the Catalonia guide links the Spain hub in the three languages.
+
+**Checked on 24 Nov:** BOE-A-2026-21254 downloaded again: the table has no 15 August row, "16 Lunes siguiente a asunción de la Virgen" in six columns and "11 Sustitución 15 de agosto" in one, as the FAQ says; the PDF URL answers 200 (application/pdf). Estatuto de los Trabajadores art. 37.2 (BOE-A-2015-11430): "no podrán exceder de catorce al año, de las cuales dos serán locales". Working days recounted in the test with `Date`, independently of the site's helpers.
+
+**Not done, on purpose:** the worker's branch also retitled the Catalonia community page (`/es/festivos/2027/cataluna/` and its ca/en editions) as "Cataluña frente al resto de España" with a new description, first paragraph and H2, to hand "calendario laboral 2027 cataluña" to the guide. Taken out: that page went live on 7 Nov (28-day window to 5 Dec) and the evidence is thin (GSC 20 Oct–23 Nov: "calendario laboral 2027 cataluña" 1 impression on each of four pages; "calendario laboral 2027 catalunya" 40 impressions at position 10 and "calendari laboral 2027 catalunya" 29 at 11.3, both on the es guide). **Candidate for after 5 Dec**, with the data of both pages; `calendar-2027-main-urls` test pins the current titles until then.
+
+**Baseline (GSC, 11–23 Nov, page):** es hub 1 click, 144 impressions, position 26.9; ca hub 1, 66, 15.7; en hub 1, 218, 20.9. Catalonia community page: es 5 clicks, 213 impressions, 13.5; ca 2, 138, 8.3; en 2, 186, 10.1. Queries (11–24 Nov): "calendario laboral 2027" 62 impressions at 37.8; "festivos 2027" 47 at 19.4.
+
+**Hypothesis:** the hubs move from position 16–27 towards page one for "calendario laboral 2027 [pdf / oficial / días laborables]" as December demand arrives; FAQ answers pick up long-tail questions. No effect expected on the town pages.
+
+**Review:** 2026-12-08, with the 227-town wave (hub impressions and position per language; queries containing "pdf", "laborables", "jueves santo", "san josé"; whether the guide keeps "calendario laboral 2027 catalunya").
+
+**Tests:** new `calendar-2027-main-urls` (6); `spain-days-2027-intl` links test rewritten for the new rule.

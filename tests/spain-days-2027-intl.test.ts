@@ -255,9 +255,11 @@ test("every weekday printed next to a day of the month is that date's (2027), in
 /* Links                                                                      */
 /* -------------------------------------------------------------------------- */
 
-test("same-language links: territories link only in Spanish, every other href is built for the page's locale", () => {
-  // The community pages are Spanish only: Catalan and English name the territory without a link.
-  assert.match(COMPONENT, /return locale === "es" \? <Link href=\{communityPath\(names\(r\)\)\}>\{label\}<\/Link> : <>\{label\}<\/>;/);
+test("same-language links: territories link their community page where it is in the index, every other href is built for the page's locale", () => {
+  // 24 Nov 2026: Spanish links every community page; Catalan and English link the ones in the index
+  // (lib/seo/low-demand.ts) and name the others without a link.
+  assert.match(COMPONENT, /if \(locale === "es"\) return <Link href=\{communityPath\(names\(r\)\)\}>\{label\}<\/Link>;/);
+  assert.match(COMPONENT, /return isLowDemandPath\(href\) \? <>\{label\}<\/> : <Link href=\{href\}>\{label\}<\/Link>;/);
   assert.equal((COMPONENT.match(/communityPath\(/g) ?? []).length, 1, "communityPath is used in Place only");
   // No hard-coded locale prefix, and no day link without the locale.
   assert.doesNotMatch(COMPONENT, /href=\{?["'`]\/(ca|es|en)\//);
@@ -265,9 +267,9 @@ test("same-language links: territories link only in Spanish, every other href is
   assert.doesNotMatch(COMPONENT, /spainDayPath\((prev|next|d|t\.date)\)/);
   assert.match(COMPONENT, /<Link href=\{datePath\(locale, iso\)\}>\{dateQuestion\(iso, locale\)\}<\/Link>/);
   assert.match(COMPONENT, /const december = b2href\("decemberBridgeSpain", locale\)/);
-  assert.match(COMPONENT, /const lastLink = locale === "es" \? spainHubPath\(\) : hubPath\(locale\)/);
-  // Spanish-only targets (the bridges page) are behind the Spanish check.
-  assert.match(COMPONENT, /\{locale === "es" \? \(\s*<>\s*\{" · "\}\s*<Link href=\{spainBridgesPath\(\)\}>/);
+  // The year's hub in the page's language (main-urls.ts), and the bridges page of that language.
+  assert.match(COMPONENT, /const lastLink = SPAIN_MAIN\[locale\]/);
+  assert.match(COMPONENT, /<Link href=\{locale === "es" \? spainBridgesPath\(\) : editionBridgesPath\(locale\)\}>/);
   // The targets exist in each language.
   for (const locale of INTL) {
     assert.ok(B2_PATHS.decemberBridgeSpain[locale], locale);

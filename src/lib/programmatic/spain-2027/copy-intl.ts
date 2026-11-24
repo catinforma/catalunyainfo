@@ -1,6 +1,6 @@
 import type { Plan } from "@/lib/content/holidays/bridges";
 import { REGIONS, type BoeCode, type Region } from "@/lib/programmatic/holidays/boe-2027";
-import { dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
+import { MONTHS, dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
 import { caA, joinList } from "@/lib/programmatic/holidays/names";
 
 import {
@@ -14,11 +14,13 @@ import {
   ownDays,
   runSummary,
   spainRuns,
+  variableDates,
   weekendDays,
   type CommunityDay,
 } from "./calendar";
+import { localStatusCounts, substitutionDates, workingDayFigures } from "./copy";
 import { editionCommunities, editionNames, type Edition, type EditionNames } from "./editions";
-import { SOURCES, SOURCES_READ_ON, type LocalStatus } from "./sources";
+import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type LocalStatus } from "./sources";
 import { SOURCE_PROSE } from "./sources-intl";
 
 /**
@@ -452,6 +454,143 @@ export function hubLeadIntl(locale: Edition): string {
       `${COMMON_DATES.length} days are holidays everywhere; the rest are set by each autonomous community and by the cities of Ceuta and Melilla. ` +
       `${twelve} of the 19 territories have 12 holidays${list}. Each municipality adds up to 2 local holidays.`,
   );
+}
+
+/** The BOE resolution with its id and date; the title stays in Spanish, as published. */
+export function boeLineIntl(locale: Edition): string {
+  return tr(locale, `${BOE_REF.title} (${BOE_REF.id}, BOE del ${dayMonthYear(BOE_REF.date, "ca")})`, `${BOE_REF.title} (${BOE_REF.id}, BOE of ${dayMonthYear(BOE_REF.date, "en")})`);
+}
+
+/** "Gener" … "Desembre"; "January" … "December". */
+export function monthNameIntl(month: number, locale: Edition): string {
+  return cap(MONTHS[locale][month - 1]!);
+}
+
+/** The hub's questions, as the Spanish edition (`hubFaq`, copy.ts): the same answers from the same data. */
+export function hubFaqIntl(locale: Edition): FaqIntl[] {
+  const all = editionCommunities(locale);
+  const others = all.filter((c) => dayCount(c.region) !== 12);
+  const twelve = all.length - others.length;
+  const otherWords = others.map((c) => {
+    const island = SOURCE_PROSE[c.region][locale].subRegional;
+    return `${c.short}, ${dayCount(c.region)}${island ? tr(locale, ` més 1 ${island.unit}`, ` plus 1 ${island.unit}`) : ""}`;
+  });
+  const otherList = others.length ? ` (${joinList(otherWords, locale)})` : "";
+  const on = (iso: string) => variableDates().find((v) => v.date === iso)?.regions ?? [];
+  const holyThursday = on(`${YEAR}-03-25`);
+  const notHolyThursday = REGIONS.filter((r) => !holyThursday.includes(r));
+  const notWords = joinList(
+    notHolyThursday.map((r) => editionNames(r, locale).in),
+    locale,
+  );
+  const stJoseph = on(`${YEAR}-03-19`);
+  const stJosephList = joinList(
+    stJoseph.map((r) => short(r, locale)),
+    locale,
+  );
+  const w = workingDayFigures();
+  const range = w.min === w.max ? String(w.min) : tr(locale, `entre ${w.min} i ${w.max}`, `between ${w.min} and ${w.max}`);
+  const st = localStatusCounts();
+  const subs = joinList(
+    substitutionDates().map((v) => {
+      const where = joinList(
+        v.regions.map((r) => short(r, locale)),
+        locale,
+      );
+      return tr(locale, `al ${weekdayDateIntl(v.date, locale)} a ${where}`, `to ${cap(weekdayDateIntl(v.date, locale))} in ${where}`);
+    }),
+    locale,
+  );
+  const dates = compactDatesIntl(COMMON_DATES, locale);
+  const thursday = weekdayDateIntl(`${YEAR}-03-25`, locale);
+  const friday19 = weekdayDateIntl(`${YEAR}-03-19`, locale);
+  const goodFriday = dayMonth(`${YEAR}-03-26`, locale);
+  if (locale === "ca") {
+    return [
+      {
+        question: `Quants festius hi ha el ${YEAR} a Espanya?`,
+        answer:
+          `${COMMON_DATES.length} són festius a tot Espanya: ${dates}. Amb els que fixa cada comunitat, ${twelve} dels ${all.length} territoris en tenen 12${otherList}, ` +
+          `i cada municipi hi afegeix fins a 2 festes locals: 14 com a màxim, el límit de l'article 37.2 de l'Estatut dels Treballadors.`,
+      },
+      {
+        question: `On és el calendari laboral ${YEAR} oficial, en PDF?`,
+        answer:
+          `Al Butlletí Oficial de l'Estat (BOE): ${BOE_REF.title} (${BOE_REF.ref}). El BOE la publica també en PDF, amb la taula de les 17 comunitats, Ceuta i Melilla. ` +
+          `Les festes locals no hi són: les publica cada comunitat al seu butlletí.`,
+      },
+      {
+        question: `És festiu el Dijous Sant del ${YEAR} a tot Espanya?`,
+        answer:
+          `No. El ${thursday} del ${YEAR} és festiu a ${territoryCountIntl(holyThursday, locale)}${notHolyThursday.length ? ` i feiner ${notWords}` : ""}. ` +
+          `El Divendres Sant, ${goodFriday}, és festiu a tot arreu.`,
+      },
+      {
+        question: `És festiu Sant Josep, el 19 de març del ${YEAR}?`,
+        answer: `Només a ${territoryCountIntl(stJoseph, locale)}: ${stJosephList}. A la resta d'Espanya el ${friday19} és feiner.`,
+      },
+      {
+        question: `Què passa amb el 15 d'agost del ${YEAR}, que cau en diumenge?`,
+        answer:
+          `El 15 d'agost del ${YEAR} (l'Assumpció) és diumenge i la taula del BOE no el recull com a festiu. El festiu es trasllada ${subs}. ` +
+          `A la resta d'Espanya el dilluns 16 d'agost és feiner.`,
+      },
+      {
+        question: `Quants dies feiners té el ${YEAR}?`,
+        answer:
+          `El ${YEAR} té ${w.weekdays} dies de dilluns a divendres. Sense els festius comuns a tot Espanya que cauen entre setmana en queden ${w.common}; amb els de cada comunitat, ` +
+          `${range}, i fins a 2 menys per les festes locals. Càlcul de CatalunyaInfo a partir dels festius del BOE, per a una setmana de dilluns a divendres.`,
+      },
+      {
+        question: `Quan es publiquen els festius locals del ${YEAR}?`,
+        answer:
+          `Cada comunitat els publica al seu butlletí oficial o, en algunes, al butlletí de cada província. A ${dayMonthYear(latestReading(), "ca")}: ` +
+          `publicats a ${st.published} dels ${REGIONS.length} territoris${st.partial ? `, en part a ${st.partial}` : ""} i pendents a ${st.pending}. La taula per comunitats d'aquesta pàgina diu quins.`,
+      },
+    ];
+  }
+  return [
+    {
+      question: `How many public holidays does Spain have in ${YEAR}?`,
+      answer:
+        `${COMMON_DATES.length} are holidays in the whole of Spain: ${dates}. With the days each region sets, ${twelve} of the ${all.length} territories have 12${otherList}, ` +
+        `and every municipality adds up to 2 local holidays: 14 at most, the ceiling in article 37.2 of the Workers' Statute.`,
+    },
+    {
+      question: `Where is the official ${YEAR} work calendar for Spain, as a PDF?`,
+      answer:
+        `In the BOE, Spain's official gazette: ${BOE_REF.title} (${BOE_REF.ref}). The BOE also publishes it as a PDF, with the table for the 17 communities, Ceuta and Melilla. ` +
+        `Local holidays are not in that table: each community publishes them in its own bulletin.`,
+    },
+    {
+      question: `Is Maundy Thursday ${YEAR} a holiday everywhere in Spain?`,
+      answer:
+        `No. ${cap(thursday)} ${YEAR} is a holiday in ${territoryCountIntl(holyThursday, locale)}${notHolyThursday.length ? ` and a working day ${notWords}` : ""}. ` +
+        `Good Friday, ${goodFriday}, is a holiday everywhere.`,
+    },
+    {
+      question: `Is St Joseph's Day, 19 March ${YEAR}, a holiday in Spain?`,
+      answer: `Only in ${territoryCountIntl(stJoseph, locale)}: ${stJosephList}. In the rest of Spain, ${cap(friday19)} is a working day.`,
+    },
+    {
+      question: `What happens to 15 August ${YEAR}, which falls on a Sunday?`,
+      answer:
+        `15 August ${YEAR} (the Assumption) is a Sunday and the BOE table does not list it as a holiday. The holiday moves ${subs}. ` +
+        `In the rest of Spain, Monday 16 August is a working day.`,
+    },
+    {
+      question: `How many working days are there in Spain in ${YEAR}?`,
+      answer:
+        `${YEAR} has ${w.weekdays} Monday-to-Friday days. Without the nationwide holidays that fall on a weekday, ${w.common} are left; with each region's own, ` +
+        `${range}, and up to 2 fewer for local holidays. CatalunyaInfo's calculation from the BOE holidays, for a Monday-to-Friday week.`,
+    },
+    {
+      question: `When are the ${YEAR} local holidays published?`,
+      answer:
+        `Each community publishes them in its official bulletin or, in some, in each province's bulletin. As of ${dayMonthYear(latestReading(), "en")}: ` +
+        `published in ${st.published} of the ${REGIONS.length} territories${st.partial ? `, partly in ${st.partial}` : ""} and pending in ${st.pending}. The table by community on this page says which.`,
+    },
+  ];
 }
 
 /* -------------------------------------------------------------- Bridges --- */

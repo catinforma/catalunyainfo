@@ -20,10 +20,13 @@ import {
   COMMON_DATES,
   YEAR,
   commonRows,
+  commonWorkingDays,
   communityDays,
   communityRuns,
   communityRunsWithLocal,
+  communityWorkingDays,
   dayCount,
+  monthRows,
   ownDays,
   runSummary,
   spainRuns,
@@ -35,6 +38,7 @@ import {
   BRIDGES,
   HUB,
   KIND_LABEL,
+  boeLine,
   communityFaq,
   communityH1,
   communityLead,
@@ -42,16 +46,20 @@ import {
   dayName,
   decreeLine,
   everywhereFree,
+  hubFaq,
   hubLead,
   localStatusLine,
+  monthName,
   notKeptLine,
   rangeWords,
   regionsWords,
   runLine,
+  shortWeekdayDate,
   weekdayDate,
   weekendLine,
   whereElse,
 } from "@/lib/programmatic/spain-2027/copy";
+import { mainElsewhere, regionsWithMainElsewhere } from "@/lib/programmatic/spain-2027/main-urls";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 
@@ -239,6 +247,11 @@ function HubCityList() {
   );
 }
 
+/**
+ * The family's list of communities. A community whose full calendar is
+ * another page (`main-urls.ts`: Catalonia's guide, 24 Nov 2026) gets a link
+ * to it with the head anchor under the list.
+ */
 function CommunityLinks({ exclude }: { exclude?: string }) {
   return (
     <section className="mt-12" aria-labelledby="ci-es27-others">
@@ -255,6 +268,15 @@ function CommunityLinks({ exclude }: { exclude?: string }) {
         <Link href={spainHubPath()}>{HUB.breadcrumb}: festivos comunes y por comunidad</Link>
         {" · "}
         <Link href={spainBridgesPath()}>Puentes {YEAR} en España</Link>
+        {regionsWithMainElsewhere().map((r) => {
+          const main = mainElsewhere(r, "es")!;
+          return (
+            <span key={r}>
+              {" · "}
+              <Link href={main.href}>{main.anchor.charAt(0).toUpperCase() + main.anchor.slice(1)}</Link>
+            </span>
+          );
+        })}
       </p>
     </section>
   );
@@ -525,6 +547,8 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
 export function SpainHubPage() {
   const variable = variableDates();
   const free = everywhereFree();
+  const months = monthRows();
+  const faq = hubFaq();
   return (
     <article>
       <Header crumbs={hubCrumbs()} h1={HUB.h1} />
@@ -540,20 +564,97 @@ export function SpainHubPage() {
               </li>
             ))}
           </ul>
+          {/* The official text and its PDF, under the answer (24 Nov 2026: "calendario laboral 2027 pdf", "boe festivos 2027"). */}
+          <p>
+            Fuente:{" "}
+            <a href={BOE_REF.url} rel="noopener nofollow" target="_blank">
+              {boeLine()}
+            </a>
+            .{" "}
+            <a href={BOE_REF.pdf} rel="noopener nofollow" target="_blank">
+              Calendario laboral {YEAR} oficial en PDF (BOE)
+            </a>
+            . En esta página: <a href="#meses">mes a mes</a>, <a href="#comunidades">por comunidad</a>, <a href="#puentes">puentes</a>,{" "}
+            <a href="#ciudades">festivos locales por ciudad</a> y <a href="#preguntas">preguntas frecuentes</a>.
+          </p>
 
           <p className="ci-lead">{hubLead()}</p>
+
+          <h2 id="meses">Calendario laboral {YEAR} mes a mes: festivos y días laborables</h2>
+          <div className="ci-table-scroll mt-4">
+            <table className="ci-local-table ci-stack-table">
+              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+                Días laborables: de lunes a viernes sin los {COMMON_DATES.length} festivos comunes. Cada comunidad resta además sus festivos propios y
+                cada municipio hasta 2 locales. Cálculo de CatalunyaInfo sobre la tabla del BOE.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Mes</th>
+                  <th scope="col">Festivo en toda España</th>
+                  <th scope="col">Festivo solo en algunas comunidades</th>
+                  <th scope="col">Días laborables</th>
+                </tr>
+              </thead>
+              <tbody>
+                {months.map((m) => (
+                  <tr key={m.month}>
+                    <th scope="row" className="font-normal">
+                      {monthName(m.month)}
+                    </th>
+                    <td data-label="En toda España">
+                      {m.common.length === 0
+                        ? "Ninguno"
+                        : m.common.map((r, i) => (
+                            <span key={r.date}>
+                              {i > 0 ? "; " : ""}
+                              <DayDateLink iso={r.date}>
+                                <time dateTime={r.date}>{shortWeekdayDate(r.date)}</time>
+                              </DayDateLink>{" "}
+                              ({r.name})
+                            </span>
+                          ))}
+                    </td>
+                    <td data-label="Solo en algunas">
+                      {m.variable.length === 0
+                        ? "Ninguno"
+                        : m.variable.map((v, i) => (
+                            <span key={v.date}>
+                              {i > 0 ? "; " : ""}
+                              <DayDateLink iso={v.date}>
+                                <time dateTime={v.date}>{shortWeekdayDate(v.date)}</time>
+                              </DayDateLink>{" "}
+                              ({regionsWords(v.regions)})
+                            </span>
+                          ))}
+                    </td>
+                    <td data-label="Días laborables">{m.workingDays}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row">{YEAR}</th>
+                  <td data-label="En toda España">{COMMON_DATES.length} festivos</td>
+                  <td data-label="Solo en algunas">{variable.length} fechas</td>
+                  <td data-label="Días laborables">{commonWorkingDays()}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
           <h2 id="comunidades">Festivos {YEAR} por comunidad autónoma</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
-                Días que cada comunidad y ciudad añade a los {COMMON_DATES.length} comunes, según el BOE.
+                Días que cada comunidad y ciudad añade a los {COMMON_DATES.length} comunes, según el BOE. Días laborables: de lunes a viernes sin
+                los festivos de la comunidad, antes de restar los locales y los insulares (cálculo de CatalunyaInfo).
               </caption>
               <thead>
                 <tr>
                   <th scope="col">Comunidad</th>
                   <th scope="col">Festivos</th>
                   <th scope="col">Además de los comunes</th>
+                  <th scope="col">Días laborables</th>
                   <th scope="col">Festivos locales {YEAR}</th>
                 </tr>
               </thead>
@@ -570,6 +671,7 @@ export function SpainHubPage() {
                         {s.subRegional ? ` + 1 ${s.subRegional.unit}` : ""}
                       </td>
                       <td data-label="Propios">{ownDays(c.region).map((d) => `${d.replaces ? "traslado de la Asunción" : d.name} (${compactDates([d.date])})`).join("; ")}</td>
+                      <td data-label="Días laborables">{communityWorkingDays(c.region)}</td>
                       <td data-label={`Locales ${YEAR}`}>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "En parte" : "Pendientes"}</td>
                     </tr>
                   );
@@ -577,6 +679,16 @@ export function SpainHubPage() {
               </tbody>
             </table>
           </div>
+          {/* The communities whose full calendar is another page (main-urls.ts): the link with the head anchor. */}
+          {regionsWithMainElsewhere().map((r) => {
+            const main = mainElsewhere(r, "es")!;
+            return (
+              <p key={r}>
+                {names(r).Full}: los festivos locales de cada municipio, los puentes y los días laborables de cada mes están en el{" "}
+                <Link href={main.href}>{main.anchor}</Link>.
+              </p>
+            );
+          })}
 
           <h2 id="variables">Festivos que cambian según la comunidad</h2>
           <ul>
@@ -618,10 +730,22 @@ export function SpainHubPage() {
           </ul>
 
           <HubCityList />
+          <p>
+            Para llevarlo en el móvil: la página de cada ciudad ofrece sus festivos de {YEAR} como calendario .ics, para Google Calendar, Apple u
+            Outlook.
+          </p>
           <LeaveHubLink locale="es" />
           <WorkingDaysHubLink locale="es" />
           <CalculatorsHubLink locale="es" />
           <WidgetHubLink locale="es" />
+
+          <h2 id="preguntas">Preguntas frecuentes</h2>
+          {faq.map((item) => (
+            <section key={item.question}>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </section>
+          ))}
         </div>
 
         <CommunityLinks />

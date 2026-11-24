@@ -201,6 +201,58 @@ export function variableDates(): { date: string; rows: BoeRow[]; regions: Region
     .map((date) => ({ date, rows: BOE_2027_ROWS.filter((r) => r.date === date), regions: regionsOn(date) }));
 }
 
+/* ------------------------------------------------- Month by month, working days --- */
+
+/**
+ * Monday-to-Friday days of `YEAR` that are not in `holidays`, per month
+ * (index 0 = January). A count of this site, not a figure of the BOE: no
+ * official text gives one, and the two local days of each municipality are
+ * not in it (the pages say both).
+ */
+export function workingDaysByMonth(holidays: readonly string[]): number[] {
+  const off = new Set(holidays);
+  const months = Array.from({ length: 12 }, () => 0);
+  for (let iso = `${YEAR}-01-01`; iso.startsWith(String(YEAR)); iso = addDays(iso, 1)) {
+    const wd = weekday(iso);
+    if (wd === 0 || wd === 6 || off.has(iso)) continue;
+    months[Number(iso.slice(5, 7)) - 1]!++;
+  }
+  return months;
+}
+
+/** The year's Monday-to-Friday days once only the days common to all Spain are taken out. */
+export function commonWorkingDays(): number {
+  return workingDaysByMonth(COMMON_DATES).reduce((a, b) => a + b, 0);
+}
+
+/** The same for one community or city: its BOE column taken out, its local days not. */
+export function communityWorkingDays(region: Region): number {
+  return workingDaysByMonth(datesOf(region)).reduce((a, b) => a + b, 0);
+}
+
+export interface MonthRow {
+  /** 1 = January. */
+  month: number;
+  /** The month's days that are a holiday in all nineteen columns. */
+  common: BoeRow[];
+  /** The month's days that are a holiday somewhere only. */
+  variable: { date: string; rows: BoeRow[]; regions: Region[] }[];
+  /** Monday to Friday minus the common days (`workingDaysByMonth(COMMON_DATES)`). */
+  workingDays: number;
+}
+
+/** The BOE table laid out by month: what the hubs' month-by-month table prints. */
+export function monthRows(): MonthRow[] {
+  const working = workingDaysByMonth(COMMON_DATES);
+  const inMonth = (iso: string, m: number) => Number(iso.slice(5, 7)) === m;
+  return Array.from({ length: 12 }, (_, i) => ({
+    month: i + 1,
+    common: commonRows().filter((r) => inMonth(r.date, i + 1)),
+    variable: variableDates().filter((v) => inMonth(v.date, i + 1)),
+    workingDays: working[i]!,
+  }));
+}
+
 /**
  * Easter Sunday by the anonymous Gregorian algorithm (Meeus/Jones/Butcher),
  * independent of every table: the test holds the BOE's Holy Thursday, Good

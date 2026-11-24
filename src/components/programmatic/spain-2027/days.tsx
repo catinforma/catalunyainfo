@@ -52,7 +52,11 @@ import {
   workingInIntl,
   type IntlLocale,
 } from "@/lib/programmatic/spain-2027/day-copy-intl";
+import { BRIDGES_INTL, HUB_INTL } from "@/lib/programmatic/spain-2027/copy-intl";
 import { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, isCity, isWeekend, neighbours, spainDay, type SpainDay } from "@/lib/programmatic/spain-2027/days";
+import { editionBridgesPath, editionCommunityPath } from "@/lib/programmatic/spain-2027/editions";
+import { SPAIN_MAIN } from "@/lib/programmatic/spain-2027/main-urls";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { communityPath, spainBridgesPath, spainDayPath, spainDayTranslations, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON } from "@/lib/programmatic/spain-2027/sources";
 import { breadcrumbSchema, datasetSchema, faqSchema, graph } from "@/lib/seo/jsonld";
@@ -144,7 +148,7 @@ export function dayWords(locale: DateLocale): DayWords {
 /** The interface words around the copy, per language. */
 const UI = {
   ca: {
-    parent: "Festius",
+    parent: HUB_INTL.ca.breadcrumb,
     on: "Festiu",
     off: "Laborable",
     cityLocal: "festa local de la ciutat",
@@ -158,7 +162,9 @@ const UI = {
     decemberBack: "Pont de desembre del 2026 a Espanya",
     nav: "Festius anterior i següent",
     others: (year: string) => `Altres festius del ${year} a Espanya, dia a dia`,
-    hub: "Festius a Catalunya, municipi per municipi",
+    hub: `${HUB_INTL.ca.breadcrumb}: festius per comunitat`,
+    towns: "Festius a Catalunya, municipi per municipi",
+    bridges: `${BRIDGES_INTL.ca.breadcrumb} a Espanya`,
     sources: "Fonts oficials",
     read: (date: string) => `Llegides el ${date} als butlletins oficials.`,
     spain: "Espanya",
@@ -179,12 +185,14 @@ const UI = {
     nav: "Festivos anterior y siguiente",
     others: (year: string) => `Otros festivos de ${year}, día a día`,
     hub: `${HUB.breadcrumb}: festivos por comunidad`,
+    towns: "Festivos en Cataluña, municipio a municipio",
+    bridges: `${BRIDGES.breadcrumb} en España`,
     sources: "Fuentes oficiales",
     read: (date: string) => `Leídas el ${date} en los boletines oficiales.`,
     spain: "España",
   },
   en: {
-    parent: "Public holidays",
+    parent: HUB_INTL.en.breadcrumb,
     on: "Holiday",
     off: "Working day",
     cityLocal: "the city's local holiday",
@@ -198,7 +206,9 @@ const UI = {
     decemberBack: "December 2026 holidays in Spain",
     nav: "Previous and next holidays",
     others: (year: string) => `Other ${year} holidays in Spain, day by day`,
-    hub: "Public holidays in Catalonia, town by town",
+    hub: `${HUB_INTL.en.breadcrumb}, region by region`,
+    towns: "Public holidays in Catalonia, town by town",
+    bridges: `${BRIDGES_INTL.en.breadcrumb} in Spain`,
     sources: "Official sources",
     read: (date: string) => `Read on ${date} in the official bulletins.`,
     spain: "Spain",
@@ -208,7 +218,7 @@ const UI = {
 export function dayCrumbs(iso: string, locale: DateLocale = "es"): Crumb[] {
   return [
     { label: getMessages(locale).common.home, href: `/${locale}/` },
-    { label: UI[locale].parent, href: locale === "es" ? spainHubPath() : hubPath(locale) },
+    { label: UI[locale].parent, href: SPAIN_MAIN[locale] },
     { label: dayWords(locale).h1(iso), href: spainDayPath(iso, locale) },
   ];
 }
@@ -232,10 +242,16 @@ function daySources(day: SpainDay): Source[] {
   return out.filter((s, i) => out.findIndex((x) => x.url === s.url) === i);
 }
 
-/** A territory: linked to its 2027 page in Spanish, its name alone in Catalan and English (that page is Spanish only). */
+/**
+ * A territory, linked to its 2027 page in the page's language. In Catalan and
+ * English most community pages are out of the index (lib/seo/low-demand.ts):
+ * those are named without a link.
+ */
 function Place({ r, locale }: { r: Region; locale: DateLocale }) {
   const label = dayWords(locale).place(r);
-  return locale === "es" ? <Link href={communityPath(names(r))}>{label}</Link> : <>{label}</>;
+  if (locale === "es") return <Link href={communityPath(names(r))}>{label}</Link>;
+  const href = editionCommunityPath(locale, r);
+  return isLowDemandPath(href) ? <>{label}</> : <Link href={href}>{label}</Link>;
 }
 
 /** Inline list of territories: "Galicia, Madrid y Murcia". */
@@ -357,7 +373,8 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
   const sources = daySources(day);
   const shape = dayShape(day);
   const december = b2href("decemberBridgeSpain", locale);
-  const lastLink = locale === "es" ? spainHubPath() : hubPath(locale);
+  // The year's main page in this language (main-urls.ts): every day page links it, in the breadcrumb and below.
+  const lastLink = SPAIN_MAIN[locale];
 
   return (
     <article>
@@ -423,12 +440,14 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
           </p>
           <p className="mt-4 text-sm">
             <Link href={lastLink}>{ui.hub}</Link>
-            {locale === "es" ? (
+            {" · "}
+            <Link href={locale === "es" ? spainBridgesPath() : editionBridgesPath(locale)}>{ui.bridges}</Link>
+            {locale === "es" ? null : (
               <>
                 {" · "}
-                <Link href={spainBridgesPath()}>{BRIDGES.breadcrumb} en España</Link>
+                <Link href={hubPath(locale)}>{ui.towns}</Link>
               </>
-            ) : null}
+            )}
           </p>
         </section>
 

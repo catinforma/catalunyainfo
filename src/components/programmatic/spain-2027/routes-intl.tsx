@@ -9,6 +9,7 @@ import { cityDescriptionIntl, cityFaqIntl, cityTitleIntl } from "@/lib/programma
 import {
   BRIDGES_INTL,
   HUB_INTL,
+  hubFaqIntl,
   bridgesDescriptionIntl,
   communityDescriptionIntl,
   communityFaqIntl,
@@ -83,7 +84,11 @@ export function SpainHubRouteIntl({ locale }: { locale: Edition }) {
     <Shell
       locale={locale}
       translations={hubEditions()}
-      json={graph([breadcrumbSchema(hubCrumbsIntl(locale)), dataset(locale, editionHubPath(locale), HUB_INTL[locale].h1, hubDescriptionIntl(locale), spain)])}
+      json={graph([
+        breadcrumbSchema(hubCrumbsIntl(locale)),
+        dataset(locale, editionHubPath(locale), HUB_INTL[locale].h1, hubDescriptionIntl(locale), spain),
+        faqSchema([{ type: "faq", items: hubFaqIntl(locale) }]),
+      ])}
     >
       <SpainHubPageIntl locale={locale} />
     </Shell>

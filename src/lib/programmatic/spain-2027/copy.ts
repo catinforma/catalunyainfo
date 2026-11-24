@@ -1,24 +1,29 @@
 import type { Plan } from "@/lib/content/holidays/bridges";
 import { BOE_2027, REGIONS, type BoeCode, type Region } from "@/lib/programmatic/holidays/boe-2027";
-import { dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
+import { MONTHS, dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
 
 import {
   COMMON_DATES,
+  SUBSTITUTIONS,
   YEAR,
+  commonWorkingDays,
   communityDays,
   communityRuns,
+  communityWorkingDays,
   dayCount,
   isSubstitutionName,
   nationalNotKept,
   ownDays,
   runSummary,
   spainRuns,
+  variableDates,
   weekendDays,
+  workingDaysByMonth,
   type CommunityDay,
 } from "./calendar";
 import { COMMUNITIES, names, type CommunityNames } from "./communities";
-import { SOURCES, SOURCES_READ_ON, type LocalStatus } from "./sources";
+import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type LocalStatus } from "./sources";
 
 /**
  * Spanish words for the Spain-wide 2027 pages. Every number and date comes
@@ -266,6 +271,104 @@ export function hubLead(): string {
     `${twelve} de los 19 territorios tienen 12 festivos${others.length ? `; ${joinList(otherWords, "es")}` : ""}. ` +
     `A ellos se suman hasta 2 festivos locales por municipio.`
   );
+}
+
+/** "Resolución de 8 de octubre de 2026, de la Dirección General de Trabajo, … (BOE-A-2026-21254, BOE de 13 de octubre de 2026)". */
+export function boeLine(): string {
+  return `${BOE_REF.title} (${BOE_REF.id}, BOE de ${dayMonthYear(BOE_REF.date, "es")})`;
+}
+
+/** "Enero" … "Diciembre". */
+export function monthName(month: number): string {
+  return capitalise(MONTHS.es[month - 1]!);
+}
+
+/** The year's Monday-to-Friday days, and what is left once the holidays are out: every figure counted, none typed. */
+export function workingDayFigures() {
+  const weekdays = workingDaysByMonth([]).reduce((a, b) => a + b, 0);
+  const perRegion = REGIONS.map((r) => communityWorkingDays(r));
+  return { weekdays, common: commonWorkingDays(), min: Math.min(...perRegion), max: Math.max(...perRegion) };
+}
+
+/** How many of the nineteen local lists are out, in part, or pending. */
+export function localStatusCounts() {
+  const of = (status: LocalStatus["status"]) => REGIONS.filter((r) => SOURCES[r].local.status === status).length;
+  return { published: of("published"), partial: of("partial"), pending: of("pending") };
+}
+
+/** The dates that stand in for another day (the BOE's substitution rows), with where. */
+export function substitutionDates(): { date: string; regions: Region[] }[] {
+  return variableDates()
+    .map((v) => ({ date: v.date, rows: v.rows.filter((r) => SUBSTITUTIONS[r.name]) }))
+    .filter((v) => v.rows.length > 0)
+    .map((v) => ({ date: v.date, regions: REGIONS.filter((r) => v.rows.some((row) => row.marks[r])) }));
+}
+
+/**
+ * The hub's questions (24 Nov 2026): the ones Search Console shows for the
+ * family ("cuantos festivos hay en el calendario laboral", "calendario
+ * laboral 2027 pdf", "calendario laboral oficial", "boe festivos 2027",
+ * "dias laborables 2027") and the ones the pages that rank above answer
+ * (Jueves Santo, San José, the Sunday holiday). Every answer is built from
+ * the BOE table and `sources.ts`; the one figure from another text is the
+ * ceiling of fourteen, Estatuto de los Trabajadores, art. 37.2 (BOE-A-2015-11430,
+ * read on boe.es on 24 Nov 2026: «Las fiestas laborales, que tendrán carácter
+ * retribuido y no recuperable, no podrán exceder de catorce al año, de las
+ * cuales dos serán locales.»).
+ */
+export function hubFaq(): Faq[] {
+  const others = COMMUNITIES.filter((c) => dayCount(c.region) !== 12);
+  const twelve = COMMUNITIES.length - others.length;
+  const otherWords = others.map((c) => `${c.short}, ${dayCount(c.region)}${SOURCES[c.region].subRegional ? ` más 1 ${SOURCES[c.region].subRegional!.unit}` : ""}`);
+  const on = (iso: string) => variableDates().find((v) => v.date === iso)?.regions ?? [];
+  const holyThursday = on(`${YEAR}-03-25`);
+  const notHolyThursday = REGIONS.filter((r) => !holyThursday.includes(r));
+  const stJoseph = on(`${YEAR}-03-19`);
+  const w = workingDayFigures();
+  const st = localStatusCounts();
+  const subWords = substitutionDates().map((v) => `al ${weekdayDate(v.date)} en ${joinList(v.regions.map((r) => names(r).short), "es")}`);
+  return [
+    {
+      question: `¿Cuántos festivos hay en ${YEAR} en España?`,
+      answer:
+        `${COMMON_DATES.length} son festivo en toda España: ${compactDates(COMMON_DATES)}. Con los que fija cada comunidad, ${twelve} de los ${COMMUNITIES.length} territorios tienen 12` +
+        `${others.length ? ` (${joinList(otherWords, "es")})` : ""}, y cada municipio añade hasta 2 fiestas locales: 14 como máximo, el tope del artículo 37.2 del Estatuto de los Trabajadores.`,
+    },
+    {
+      question: `¿Dónde está el calendario laboral ${YEAR} oficial, en PDF?`,
+      answer:
+        `En el Boletín Oficial del Estado: ${BOE_REF.title} (${BOE_REF.ref}). El BOE la publica también en PDF, con la tabla de las 17 comunidades, Ceuta y Melilla. ` +
+        `Las fiestas locales no están en esa tabla: las publica cada comunidad en su boletín.`,
+    },
+    {
+      question: `¿Es festivo el Jueves Santo de ${YEAR} en toda España?`,
+      answer:
+        `No. El ${weekdayDate(`${YEAR}-03-25`)} de ${YEAR} es festivo en ${territoryCount(holyThursday)}` +
+        `${notHolyThursday.length ? ` y laborable ${joinList(notHolyThursday.map((r) => names(r).en), "es")}` : ""}. El Viernes Santo, ${dayMonth(`${YEAR}-03-26`, "es")}, es festivo en todas partes.`,
+    },
+    {
+      question: `¿Es festivo San José, el 19 de marzo de ${YEAR}?`,
+      answer: `Solo en ${territoryCount(stJoseph)}: ${joinList(stJoseph.map((r) => names(r).short), "es")}. En el resto de España el ${weekdayDate(`${YEAR}-03-19`)} es laborable.`,
+    },
+    {
+      question: `¿Qué pasa con el 15 de agosto de ${YEAR}, que cae en domingo?`,
+      answer:
+        `El 15 de agosto de ${YEAR} (Asunción de la Virgen) es domingo y la tabla del BOE no lo recoge como festivo. El festivo se traslada ${joinList(subWords, "es")}. ` +
+        `En el resto de España el lunes 16 de agosto es laborable.`,
+    },
+    {
+      question: `¿Cuántos días laborables tiene ${YEAR}?`,
+      answer:
+        `${YEAR} tiene ${w.weekdays} días de lunes a viernes. Sin los festivos comunes a toda España que caen entre semana quedan ${w.common}; con los de cada comunidad, ` +
+        `${w.min === w.max ? w.min : `entre ${w.min} y ${w.max}`}, y hasta 2 menos por las fiestas locales. Cálculo de CatalunyaInfo sobre los festivos del BOE, para una semana de lunes a viernes.`,
+    },
+    {
+      question: `¿Cuándo se publican los festivos locales de ${YEAR}?`,
+      answer:
+        `Cada comunidad los publica en su boletín oficial o, en algunas, en el boletín de cada provincia. A ${dayMonthYear(latestReading(), "es")}: ` +
+        `publicados en ${st.published} de los ${REGIONS.length} territorios${st.partial ? `, en parte en ${st.partial}` : ""} y pendientes en ${st.pending}. La tabla por comunidades de esta página dice cuáles.`,
+    },
+  ];
 }
 
 /* -------------------------------------------------------------- Bridges --- */
