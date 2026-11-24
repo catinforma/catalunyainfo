@@ -135,7 +135,9 @@ test("titles fit in 60 characters with the searched words first; descriptions fi
     const strike = entry(strikeId);
     for (const locale of LOCALES) {
       const { seoTitle, seoDescription, excerpt, title } = article.editions[locale];
-      assert.equal(seoTitle, seo[key][locale], `${key}/${locale}`);
+      // 24 Nov 2026: the called-off titles are pinned while the call-off is shown (to 23 Nov); after that day the Renfe guide is about its last strike again.
+      if (key !== "strikeRenfe" || calledOffOn(key)) assert.equal(seoTitle, seo[key][locale], `${key}/${locale}`);
+      else assert.equal(seoTitle, strikeGuideMeta(key, locale).seoTitle, `${key}/${locale}`);
       assert.ok(seoTitle.length <= 60, `${key}/${locale} title ${seoTitle.length}`);
       assert.ok(seoDescription.length > 60 && seoDescription.length <= 155, `${key}/${locale} description ${seoDescription.length}: ${seoDescription}`);
       assert.ok(excerpt.length > 30 && excerpt.length <= 200, `${key}/${locale} excerpt ${excerpt.length}`);
@@ -146,7 +148,8 @@ test("titles fit in 60 characters with the searched words first; descriptions fi
       assert.match(seoDescription, /^(\p{Lu}\p{Ll}+ )?\d{1,2}\b/u, `${key}/${locale}: ${seoDescription}`);
       const off = calledOffOn(key);
       if (off && !isUpcoming(strike, STRIKES_AS_OF)) assert.equal(seoDescription, off.guideMeta?.[locale].description, `${key}/${locale}`);
-      else assert.ok(seoDescription.includes(strike.minimumServices.msShort[locale]), `${key}/${locale}: ${seoDescription}`);
+      else if (isUpcoming(strike, STRIKES_AS_OF)) assert.ok(seoDescription.includes(strike.minimumServices.msShort[locale]), `${key}/${locale}: ${seoDescription}`);
+      else assert.match(seoDescription, /es va|se fijaron|se anunció|were set|was announced/, `${key}/${locale}: ${seoDescription}`);
     }
   }
 });
@@ -182,7 +185,8 @@ test("titles and descriptions stay in sync with the entry's dates and status in 
       const description = strikeGuideDescription(key, locale, STRIKES_AS_OF, out);
       assert.ok(description.length <= 155, `${key}/${locale}: ${description.length}`);
       // 20 Nov 2026: not while a called-off strike's description stands in for the past entry's.
-      if (!(calledOffOn(key) && !isUpcoming(entry(strikeId), STRIKES_AS_OF))) assert.ok(description.includes(PUBLISHED_MS.msShort[locale]), `${key}/${locale}: ${description}`);
+      // 24 Nov 2026: nor once the entry is over (the description is then in the past tense, checked below).
+      if (isUpcoming(entry(strikeId), STRIKES_AS_OF)) assert.ok(description.includes(PUBLISHED_MS.msShort[locale]), `${key}/${locale}: ${description}`);
       // The longest real msShort so far (Renfe, 29 Oct) still fits, falling back to a shorter line.
       const long = withEntry(strikeId, (s) => ({ ...s, minimumServices: { ...PUBLISHED_MS, msShort: entry("vaga-renfe-2026-10-29").minimumServices.msShort } }));
       assert.ok(strikeGuideDescription(key, locale, STRIKES_AS_OF, long).length <= 155, `${key}/${locale}: long msShort`);
@@ -501,7 +505,11 @@ test("the read-next box only repeats links from the related rail, and the hub co
     for (const locale of LOCALES) {
       const before = article.editions[locale].blocks;
       const after = withReadNext([...before], locale);
-      assert.equal(after.length - before.length, 1, `${key}/${locale}: long enough for a box`);
+      // 24 Nov 2026: a guide whose strike is over drops "what to do" and "other strikes those days", and with two sections it gets no box.
+      const sections = before.filter((b) => b.type === "heading" && (b as { level?: number }).level === 2).length - 1;
+      assert.equal(after.length - before.length, sections >= 3 ? 1 : 0, `${key}/${locale}: a box from three sections`);
+      if (isUpcoming(entry(guideStrikeId(key)), STRIKES_AS_OF)) assert.ok(sections >= 3, `${key}/${locale}: long enough for a box while the strike is to come`);
+      if (sections < 3) continue;
       const related = before[before.length - 1] as { items?: string[] };
       assert.ok(related.items?.[0]?.includes(`(/${locale}/${B2_PATHS.strikes[locale]}/)`), `${key}/${locale}`);
       const box = after.find((b) => b.type === "callout" && (b as { tone?: string }).tone === "tip") as { text: string };

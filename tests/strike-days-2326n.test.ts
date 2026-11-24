@@ -22,7 +22,7 @@ import {
 } from "../src/lib/content/batch02/strike-days-2326n.ts";
 import { dayDate } from "../src/lib/content/batch02/festive.ts";
 import { buildStrikeGuideBody, guideStrikeId } from "../src/lib/content/batch02/strike-guides.ts";
-import { STRIKES, STRIKES_CALLED_OFF, STRIKES_GUIDE, STRIKE_DAY_PAGES, buildStrikesBody } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES, STRIKES_AS_OF, STRIKES_CALLED_OFF, STRIKES_GUIDE, STRIKE_DAY_PAGES, buildStrikesBody } from "../src/lib/content/batch02/strikes.ts";
 import { STRIKES_SPAIN_GUIDE, buildStrikesSpainBody } from "../src/lib/content/batch02/strikes-spain.ts";
 import { SPAIN_NOT_HAPPENING, SPAIN_STRIKES } from "../src/lib/content/batch02/strikes-spain-data.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -219,7 +219,9 @@ test("links: external ones are named https non-press sources; internal ones are 
         assert.ok(registered.has(href), `${key}/${locale}: ${href}`);
       }
       const other = key === "strike23n" ? "strike26n" : "strike23n";
-      assert.ok(body.includes(`](/${locale}/${B2_PATHS[other][locale]}/)`), `${key}/${locale}: links the other day`);
+      // 24 Nov 2026: while the other day is to come (the 26th's page drops the 23rd once it has passed).
+      assert.equal(body.includes(`](/${locale}/${B2_PATHS[other][locale]}/)`), STRIKE_DAY_2326[other] >= STRIKES_AS_OF, `${key}/${locale}: links the other day`);
+      for (const asOf of ["2026-11-20", "2026-11-23"]) assert.ok(json(buildStrikeDay2326Body(key, locale, asOf)).includes(`](/${locale}/${B2_PATHS[other][locale]}/)`), `${key}/${locale}/${asOf}: links the other day`);
       // The Renfe guide from the 23rd, the education guide from the 26th.
       const own = key === "strike23n" ? "strikeRenfe" : "strikeEducation";
       assert.ok(body.includes(`](/${locale}/${B2_PATHS[own][locale]}/)`), `${key}/${locale}: links ${own}`);
@@ -233,8 +235,12 @@ test("links in: both hubs, the Renfe and education guides and the 19N/20N pages,
   for (const locale of LOCALES) {
     for (const key of KEYS) {
       const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
-      assert.ok(json(STRIKES_SPAIN_GUIDE.editions[locale].blocks).includes(target), `${locale}: Spain hub → ${key}`);
-      assert.ok(json(STRIKES_GUIDE.editions[locale].blocks).includes(target), `${locale}: Catalan hub → ${key}`);
+      // 24 Nov 2026: on the day itself and before, whatever today's as-of is.
+      const toCome = STRIKE_DAY_2326[key] >= STRIKES_AS_OF;
+      assert.equal(json(STRIKES_SPAIN_GUIDE.editions[locale].blocks).includes(target), toCome, `${locale}: Spain hub → ${key}`);
+      assert.equal(json(STRIKES_GUIDE.editions[locale].blocks).includes(target), toCome, `${locale}: Catalan hub → ${key}`);
+      assert.ok(json(buildStrikesSpainBody(locale, STRIKE_DAY_2326[key])).includes(target), `${locale}: Spain hub → ${key} on the day`);
+      assert.ok(json(buildStrikesBody(locale, STRIKE_DAY_2326[key])).includes(target), `${locale}: Catalan hub → ${key} on the day`);
       const after = iso(dayOf(key) + 1);
       assert.ok(!json(buildStrikesSpainBody(locale, after)).includes(target), `${locale}: Spain hub still links ${key} after the day`);
       assert.ok(!json(buildStrikesBody(locale, after)).includes(target), `${locale}: Catalan hub still links ${key} after the day`);

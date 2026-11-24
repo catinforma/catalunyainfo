@@ -6,7 +6,7 @@ import { dateYear, dayDate, range, span } from "./festive";
 import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
-import { STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, strikeDayPagesLine, strikeDays as catalanDays, type Strike } from "./strikes";
+import { STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, spanStart, strikeDayNote, strikeDayPagesLine, strikeDays as catalanDays, strikesOnDay, type Strike } from "./strikes";
 import {
   SPAIN_FRAMEWORK_SOURCES,
   SPAIN_NOT_HAPPENING,
@@ -369,6 +369,27 @@ interface Wording {
    */
   qDay: (day: string) => string;
   aDay: (items: string, checked: string) => string;
+  /** 24 Nov 2026: the same answer on a day with strikes but no general strike and no state-wide rail strike: it says that first. */
+  aDayOther: (items: string, checked: string) => string;
+  /**
+   * 24 Nov 2026: the plain answer for the as-of day and the three after it
+   * (`spainDayAnswers`), for "el 25 de noviembre hay huelga" (306 impressions
+   * at 9.4), "huelga 24 noviembre 2026" (8.7) and "huelga miercoles 25
+   * noviembre". Each day is named by its date, never "today" or "tomorrow".
+   */
+  daysHeading: (from: string, to: string) => string;
+  daysId: string;
+  daysIntro: (checked: string, open: boolean) => string;
+  /** No general strike and no state-wide rail strike that day. Lower case, no full stop. */
+  dayNoRail: string;
+  /** Nothing with a date in this calendar that day, in Spain or in Catalonia only. Lower case, no full stop. */
+  dayNothing: string;
+  /** The strikes on a day without a general or rail strike. */
+  dayYes: (items: string) => string;
+  /** The strikes on a day with a general or rail strike. Lower case. */
+  dayStrike: (items: string) => string;
+  /** The Catalan hub's Catalonia-only strikes on that day. */
+  dayCatalan: (items: string) => string;
   msWord: string;
   noneOnDays: string;
   openToo: (titles: string) => string;
@@ -443,6 +464,16 @@ const T: Record<Locale, Wording> = {
     qToday: "Quines vagues hi ha avui a Espanya?",
     qDay: (day) => `Hi ha vaga el ${day}?`,
     aDay: (items, checked) => `Sí, al calendari de vagues d'àmbit estatal (fonts revisades: ${checked}): ${items}`,
+    aDayOther: (items, checked) => `No hi ha cap vaga general ni de trens d'àmbit estatal aquell dia. Sí que hi ha altres vagues al calendari (fonts revisades: ${checked}): ${items}`,
+    daysHeading: (from, to) => `Dia a dia: hi ha vaga del ${from} al ${to}?`,
+    daysId: "dia-a-dia",
+    daysIntro: (checked, open) =>
+      `Dia per dia, el que consta a les fonts oficials i als avisos dels convocants. Fonts revisades: ${checked}.${open ? " A part, continuen obertes les vagues indefinides d'aeroports que detallem més avall." : ""}`,
+    dayNoRail: "no hi ha cap vaga general ni de trens (Renfe) d'àmbit estatal convocada",
+    dayNothing: "no hi ha cap vaga amb data en aquest calendari, ni general ni de trens",
+    dayYes: (items) => `Sí que hi ha: ${items}.`,
+    dayStrike: (items) => `hi ha vaga: ${items}.`,
+    dayCatalan: (items) => `Només a Catalunya: ${items}.`,
     msWord: "Serveis mínims",
     aToday: (when, days, open, checked) => `Depèn del dia. La setmana ${when}: ${days}.${open} Fonts revisades: ${checked}.`,
     noneOnDays: "cap amb data en aquest calendari",
@@ -513,6 +544,16 @@ const T: Record<Locale, Wording> = {
     qToday: "¿Qué huelgas hay hoy en España?",
     qDay: (day) => `¿Hay huelga el ${day}?`,
     aDay: (items, checked) => `Sí, en el calendario de huelgas de ámbito estatal (fuentes revisadas: ${checked}): ${items}`,
+    aDayOther: (items, checked) => `No hay ninguna huelga general ni de trenes de ámbito estatal ese día. Sí hay otras huelgas en el calendario (fuentes revisadas: ${checked}): ${items}`,
+    daysHeading: (from, to) => `Día a día: ¿hay huelga del ${from} al ${to}?`,
+    daysId: "dia-a-dia",
+    daysIntro: (checked, open) =>
+      `Día por día, lo que consta en las fuentes oficiales y en los avisos de los convocantes. Fuentes revisadas: ${checked}.${open ? " Aparte, siguen abiertas las huelgas indefinidas de aeropuertos que detallamos más abajo." : ""}`,
+    dayNoRail: "no hay ninguna huelga general ni de trenes (Renfe) de ámbito estatal convocada",
+    dayNothing: "no hay ninguna huelga con fecha en este calendario, ni general ni de trenes",
+    dayYes: (items) => `Sí hay: ${items}.`,
+    dayStrike: (items) => `hay huelga: ${items}.`,
+    dayCatalan: (items) => `Solo en Cataluña: ${items}.`,
     msWord: "Servicios mínimos",
     aToday: (when, days, open, checked) => `Depende del día. En la semana ${when}: ${days}.${open} Fuentes revisadas: ${checked}.`,
     noneOnDays: "ninguna con fecha en este calendario",
@@ -583,6 +624,16 @@ const T: Record<Locale, Wording> = {
     qToday: "What strikes are there in Spain today?",
     qDay: (day) => `Is there a strike on ${day}?`,
     aDay: (items, checked) => `Yes, in the calendar of Spain-wide strikes (sources checked: ${checked}): ${items}`,
+    aDayOther: (items, checked) => `No general strike and no Spain-wide rail strike is called that day. Other strikes in the calendar (sources checked: ${checked}): ${items}`,
+    daysHeading: (from, to) => `Day by day: is there a strike from ${from} to ${to}?`,
+    daysId: "day-by-day",
+    daysIntro: (checked, open) =>
+      `One day at a time, what the official sources and the organisers' notices show. Sources checked: ${checked}.${open ? " The open-ended airport strikes detailed further down also continue." : ""}`,
+    dayNoRail: "no general strike and no Spain-wide rail (Renfe) strike is called",
+    dayNothing: "no strike with a date in this calendar, general, rail or other",
+    dayYes: (items) => `Strikes that day: ${items}.`,
+    dayStrike: (items) => `there is a strike: ${items}.`,
+    dayCatalan: (items) => `In Catalonia only: ${items}.`,
     msWord: "Minimum services",
     aToday: (when, days, open, checked) => `It depends on the day. In the week of ${when}: ${days}.${open} Sources checked: ${checked}.`,
     noneOnDays: "none with a date in this calendar",
@@ -652,7 +703,54 @@ export function weekRows(locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF, str
     const name = cap(dayDate(day, locale, false));
     const onDay = strikesOn(day, strikes);
     if (onDay.length === 0) return [[name, t.noStrikeRow, "—", "—"]];
-    return onDay.map((strike) => [name, cap(strike.title[locale]), STATUS_LABEL[strike.status][locale], strike.minimumServices.short[locale]]);
+    return onDay.map((strike) => [name, cap(spainDayTitle(strike, day, locale)), STATUS_LABEL[strike.status][locale], strike.minimumServices.short[locale]]);
+  });
+}
+
+/** The strike's name on one day: its note for that day (`dayNotes`), else its title. */
+export function spainDayTitle(strike: SpainStrike, day: string, locale: Locale): string {
+  return strike.dayNotes?.[day]?.[locale] ?? strike.title[locale];
+}
+
+/** A general strike or a rail strike: what "is there a strike?" most often means. */
+export function isGeneralOrRail(strike: SpainStrike): boolean {
+  return strike.sector === "general" || strike.sector === "rail";
+}
+
+export interface SpainDayAnswer {
+  /** ISO day. */
+  day: string;
+  /** The day by its date ("Miércoles 25 de noviembre de 2026"): never "today" or "tomorrow". */
+  label: string;
+  /** The plain answer: first whether a general or a state-wide rail strike is called, then the strikes that are on, then Catalonia's own. */
+  text: string;
+  /** A general strike or a rail strike of this calendar is on that day. */
+  generalOrRail: boolean;
+  strikes: SpainStrike[];
+  /** The Catalan hub's Catalonia-only strikes on that day. */
+  catalan: Strike[];
+}
+
+/**
+ * 24 Nov 2026: "is there a strike on the 24th, the 25th, the 26th, the 27th?",
+ * one answer per day from the as-of day, worked out from the same entries as
+ * the week's table (`strikesOn`) and from the Catalan hub's Catalonia-only
+ * strikes. Plain text: no links, no bold.
+ */
+export function spainDayAnswers(locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF, input: StrikesSpainInput = {}, days = 4): SpainDayAnswer[] {
+  const t = T[locale];
+  const strikes = input.strikes ?? SPAIN_STRIKES;
+  const catalanOnly = catalanOnlyStrikes(asOf, strikes, input.catalan ?? STRIKES);
+  return Array.from({ length: days }, (_, index) => {
+    const day = addDays(asOf, index);
+    const on = strikesOn(day, strikes);
+    const catalan = strikesOnDay(day, catalanOnly);
+    const generalOrRail = on.some(isGeneralOrRail);
+    // A strike that is only "called" (no official record yet) says so.
+    const items = on.map((strike) => `${spainDayTitle(strike, day, locale)}${strike.status === "called" ? ` (${lower(STATUS_LABEL.called[locale])})` : ""}`).join("; ");
+    const head = on.length === 0 ? `${catalan.length === 0 ? t.dayNothing : t.dayNoRail}.` : generalOrRail ? t.dayStrike(items) : `${t.dayNoRail}. ${t.dayYes(items)}`;
+    const tail = catalan.length > 0 ? ` ${t.dayCatalan(catalan.map((strike) => strikeDayNote(strike, day, locale) ?? strike.title[locale]).join("; "))}` : "";
+    return { day, label: cap(dayDate(day, locale)), text: strip(`${head}${tail}`), generalOrRail, strikes: on, catalan };
   });
 }
 
@@ -713,6 +811,16 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const dayPages = strikeDayPagesLine(locale, asOf).trim();
   if (dayPages) blocks.push(...paras(dayPages));
   blocks.push(callout("official", STATUS_KEY[locale].title, STATUS_KEY[locale].text));
+
+  /* 24 Nov 2026: the as-of day and the next three in plain words, above the week's table. */
+  const dayAnswers = spainDayAnswers(locale, asOf, input);
+  const firstAnswer = dayAnswers[0];
+  const lastAnswer = dayAnswers[dayAnswers.length - 1];
+  if (firstAnswer && lastAnswer) {
+    blocks.push(heading(2, t.daysHeading(spanStart(firstAnswer.day, lastAnswer.day, locale), dayDate(lastAnswer.day, locale, false)), t.daysId));
+    blocks.push(...paras(t.daysIntro(checked, open.length > 0)));
+    blocks.push(list(...dayAnswers.map((answer) => `**${answer.label}:** ${answer.text}`)));
+  }
 
   /* This week, day by day. */
   blocks.push(heading(2, t.weekHeading(when), t.weekId));
@@ -797,7 +905,8 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const rail = listed.filter((strike) => strike.sector === "rail" || strike.sector === "general");
   const doctors = notHappening.find((item) => item.id === DOCTORS_ENTRY);
   const catalanHealth = catalan.filter((strike) => strike.scope === "health");
-  const health = listed.filter((strike) => strike.sector === "health");
+  // 24 Nov 2026: doctors' strikes only (`doctors`); a strike of all the staff of one health service (Osakidetza) is not "a doctors' strike across Spain".
+  const health = listed.filter((strike) => strike.sector === "health" && strike.doctors);
   const items: { question: string; answer: string }[] = [
     {
       question: t.qToday,
@@ -805,20 +914,24 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
     },
     ...week.days
       .filter((day) => day >= asOf && strikesOn(day, strikes).length > 0)
-      .map((day) => ({
-        question: t.qDay(dayDate(day, locale, false)),
-        answer: t.aDay(
-          strikesOn(day, strikes)
-            .map(
-              (strike) =>
-                `${cap(strike.title[locale])} (${lower(STATUS_LABEL[strike.status][locale])}). ${strike.scope[locale]}${
-                  strike.minimumServices.status === "none" ? "" : ` ${t.msWord}: ${lower(strike.minimumServices.short[locale])}.`
-                }`,
-            )
-            .join(" "),
-          checked,
-        ),
-      })),
+      .map((day) => {
+        const onDay = strikesOn(day, strikes);
+        const dayItems = onDay
+          .map(
+            (strike) =>
+              `${cap(spainDayTitle(strike, day, locale))} (${lower(STATUS_LABEL[strike.status][locale])}). ${strike.scope[locale]}${
+                strike.minimumServices.status === "none" ? "" : ` ${t.msWord}: ${lower(strike.minimumServices.short[locale])}.`
+              }`,
+          )
+          .join(" ");
+        // 24 Nov 2026: without a general or rail strike that day the answer says so first ("el 25 de noviembre hay huelga"), and Catalonia's own strikes close it.
+        const catalanDay = strikesOnDay(day, catalan);
+        const catalanTail = catalanDay.length > 0 ? ` ${t.dayCatalan(catalanDay.map((strike) => strikeDayNote(strike, day, locale) ?? strike.title[locale]).join("; "))}` : "";
+        return {
+          question: t.qDay(dayDate(day, locale, false)),
+          answer: `${onDay.some(isGeneralOrRail) ? t.aDay(dayItems, checked) : t.aDayOther(dayItems, checked)}${catalanTail}`,
+        };
+      }),
     {
       question: t.qRail,
       answer:

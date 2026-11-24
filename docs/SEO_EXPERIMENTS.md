@@ -12491,3 +12491,69 @@ Capacity is one Node thread (~4–5 cold renders/s); a second process would need
 
 **Outcome:** _pending — check on 30 Nov: origin load and slow requests on the night (Caddy access log: share of `_rsc`
 requests and of responses > 3 s, compared with 18 Nov's 41 %)._
+
+## 2026-11-24 — Strikes re-read (Tuesday): the 26N school order has its number (Ordre EMT/237/2026, DOGC 9801); the students' strike of the 26th added; a day-by-day answer for the next four days on both hubs; Osakidetza's December strike listed (body only, es + ca + en; no title, description, H1 or lead touched; deploy; groups `strikes`, `huelgas-espana`, `huelga-23-26n`)
+
+**Why (factual + one small experiment).** The 00:05 timer moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 2026-11-24 with
+VERIFIED pinned to the 23rd. The sources were re-read today and both VERIFIED constants are now 2026-11-24. The re-read
+was started by a worker that the owner stopped; the head finished it by hand and checked the new facts again one by one
+(below). Titles, seoTitles, descriptions, H1s, lead templates and URLs are not touched, so the 19 Nov measurement window of the
+26N pages stands.
+
+**What changed in the facts (each read on its own source on 24 Nov 2026, curl; downloads kept outside the repo, `python3 -I`).**
+- **26N school order, now numbered.** DOGC document API (`documentId=1059945`): «ORDRE EMT/237/2026, de 23 de novembre, per la
+  qual es garanteix el servei essencial que presta el personal funcionari i laboral docent i el personal laboral no docent, en
+  els centres educatius públics, i el personal de lleure educatiu […]», DOGC núm. 9801 of 24.11.2026, CVE-DOGC-A-26327079-2026,
+  same figures as the e-Tauler text read on the 23rd («un docent per cada 3 unitats o aules», special education 50 %, llars
+  d'infants 33 %). The pages now cite it by its Portal Jurídic ELI (`STRIKE_URLS.ordreEdu26`); Treball's list is kept as a
+  source (its newest entry is still that order, 23/11/2026).
+- **Students' strike on the same day (new on the page).** Sindicat d'Estudiants, 19 Nov 2026: «26N Vaga d'estudiants i de
+  treballadores de l'ensenyament», «Manifestació unitària a Barcelona: 12.30h Plaça Tetuan | Cita del bloc del Sindicat
+  d'Estudiants a les 11.45h a la cantonada de Tetuan amb Passeig Sant Joan». Its notice for school heads (PDF, «Barcelona, 19 de
+  novembre de 2026»): the strike «durarà la jornada lectiva d'aquell dia, tant al matí com a la tarda». LODE art. 8 (BOE
+  consolidated text): «las decisiones colectivas que adopte el alumnado, a partir del tercer curso de educación secundaria
+  obligatoria, con respecto a la asistencia a clase no tendrán la consideración de faltas de conducta ni serán objeto de
+  sanción, cuando estas hayan sido resultado del ejercicio del derecho de reunión y sean comunicadas previamente a la dirección
+  del centro», «en los términos que establezcan las Administraciones educativas». The page says this and no more.
+- **Doctors (Catalonia).** Metges de Catalunya's news: newest items 23 and 24 Nov, neither about an agreement; the "still on"
+  line is dated 24 Nov.
+- **Osakidetza, 9, 10, 11 and 14 Dec (new entry on the Spain hub, so the calendar has no gap after 27 Nov).** Basque
+  Government's order of 26 Oct 2026 (PDF on its list of minimum-services orders): «Las organizaciones sindicales SATSE, ELA,
+  LAB, CCOO y UGT han convocado huelga para todo el personal (laboral, estatutario y funcionario)»; «De las 22.00 horas del 8 de
+  diciembre de 2026, a las 22.00 horas del 9 de diciembre» (Dirección General and Álava), 9–10 (Bizkaia), 10–11 (Gipuzkoa), «De
+  las 22.00 horas del 13 de diciembre a las 22.00 horas del 14 de diciembre de 2026, para todo el personal de Osakidetza»;
+  «46.545 personas trabajadoras»; hospitals «con el personal habitual de un festivo», primary care «los servicios
+  correspondientes a un sábado», «El 100% de los servicios de emergencia y PAC», call centres «el 50%». The callers keep it on a
+  condition: LAB (13 Nov) and ELA (17 Nov), «si en la siguiente Mesa Sectorial del 2 de diciembre no se producen avances,
+  mantendremos / mantendrán las jornadas de huelga convocadas para el 9 de diciembre en Araba, el 10 en Bizkaia, el 11 en
+  Gipuzkoa y el 14 en el conjunto de Osakidetza». The entry says so and carries `rereadBy: 2026-12-03`: a test fails from that
+  day until it is re-read.
+- **Correos.** Orden INT/1239/2026 unchanged; the day-by-day lines say that on the 26th and the 27th the strike is in the
+  Community of Madrid only (the Andalusian provinces end on the 25th, as the order says).
+- **Unchanged, as left by the worker's re-read (not re-checked one by one by the head):** SMU, the rail unions, the Ministry's
+  rail and air lists, Rodalies, TMB, FGC, e-Tauler, BOE núm. 292, CSIF and CCOO Madrid, the Basque list. No new strike for
+  Catalonia to 31 Dec on those sources.
+
+**The experiment: a day-by-day answer near the top of both hubs.** New H2 «Día a día: ¿hay huelga del martes 24 al viernes 27
+de noviembre?» (`#dia-a-dia`; `#day-by-day` on the English Spain hub) with one line per day for the next four days, built from
+the entries (`strikeDayAnswers`, `spainDayAnswers`): «Hoy, martes 24 de noviembre de 2026: no hay ninguna huelga general ni de
+transporte convocada en Cataluña (…). Sí hay: …». Hypothesis: queries with a day in them that the hubs rank for on page one
+or two without a matching line ("el 25 de noviembre hay huelga" position 9.4, "huelga 24 noviembre 2026", "mañana hay huelga",
+"vaga 27 novembre") gain position and CTR because the page now states each day in the searched words.
+- Baseline (GSC, 7 days to 22 Nov): `/es/guias/huelga-26-noviembre/` 2,694 clicks at position 4.2; "el 25 de noviembre hay
+  huelga" position 9.4; "vaga 26 novembre" 1,870 impressions at position 7.9. Site, 23 Nov: 2,793 clicks, 57,745 impressions,
+  position 6.6.
+- Review **2026-12-01**: clicks, impressions and position of both hubs for queries that carry a day (24–30 Nov), against the
+  week before. The strike news of the 26th will move the totals by itself, so compare day-queries, not page totals.
+
+**Tests.** `tests/strikes-hub.test.ts` (new: the order's ELI, the students' sources, the day answers; publishers list
+updated; the SEMAF call-off is a source on 20–23 Nov and not after), `tests/strikes-spain.test.ts` (new: `rereadBy` guard, day
+notes, Osakidetza, day answers), and three date-pinned expectations made date-aware so they stop failing every time the
+timer moves the as-of day: `tests/strike-guides.test.ts` (the Renfe guide's called-off titles are pinned while the call-off is
+shown, to 23 Nov; a guide whose strike is over has two sections and no read-next box) and `tests/strike-days-2326n.test.ts`
+(the 26N page and the hubs link the 23N page while that day is to come). Eight strike tests failed on main this morning for
+those date reasons; all eight strike test files pass now.
+
+**Wording kept out of the "called off" check.** The day-by-day intro says «Si cambia algo, lo actualizamos aquí», not
+"se convoca o se desconvoca": the hub test allows "desconvoca" only in a sentence that names who called a strike off.
+

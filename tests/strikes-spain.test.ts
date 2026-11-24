@@ -19,6 +19,7 @@ import {
   STRIKES_SPAIN_MAX_AGE_DAYS,
   buildStrikesSpainBody,
   catalanOnlyStrikes,
+  spainDayAnswers,
   daysBetween,
   expiredOpenStrikes,
   isHubStale,
@@ -588,4 +589,44 @@ test("the publish route: huelgas-espana (three languages), huelgas-espana-links,
   const strikes = route.slice(route.indexOf('if (wants("strikes"))'), route.indexOf('if (wants("strike-renfe"))'));
   assert.match(strikes, /publishB2Article\(STRIKES_SPAIN_GUIDE\)/);
   assert.match(route, /wants\("strike-11n"\)\) published\.push\([^;]*publishB2Article\(STRIKES_SPAIN_GUIDE\)\)/);
+});
+
+test("24 Nov 2026: a strike kept on a condition is re-read by its day (read the callers' pages, then confirm, change or remove the entry and publish ?only=huelgas-espana)", () => {
+  const today = madridDate(new Date());
+  const due = SPAIN_STRIKES.filter((s) => s.rereadBy && s.rereadBy <= today);
+  assert.deepEqual(
+    due.map((s) => s.id),
+    [],
+    `On ${today} these strikes had to be re-read: ${due.map((s) => `${s.id} (${s.rereadBy})`).join(", ")}. Read each caller's page in src/lib/content/batch02/strikes-spain-data.ts, then move or delete rereadBy.`,
+  );
+  for (const s of SPAIN_STRIKES) {
+    if (s.rereadBy) assert.ok(s.rereadBy <= s.dates[0]!, `${s.id}: re-read before its first day`);
+    // A day note belongs to one of the entry's own days and has no links.
+    for (const [day, note] of Object.entries(s.dayNotes ?? {})) {
+      assert.ok(s.dates.includes(day) || (s.dates[0]! <= day && day <= s.dates[s.dates.length - 1]!), `${s.id}: ${day} is not a strike day`);
+      for (const locale of LOCALES) assert.ok(note[locale].length > 10 && !/\]\(/.test(note[locale]), `${s.id}/${day}/${locale}`);
+    }
+  }
+});
+
+test("24 Nov 2026: Osakidetza's December strike (Basque Government's order of 26 Oct) and the day-by-day answers", () => {
+  const osakidetza = SPAIN_STRIKES.find((s) => s.id === "huelga-osakidetza-2026-12-09")!;
+  // The order: 22:00 on 8 Dec to 22:00 on 9 Dec (Álava), 9-10 (Bizkaia), 10-11 (Gipuzkoa), 13-14 Dec (all Osakidetza).
+  assert.deepEqual(osakidetza.dates, ["2026-12-09", "2026-12-10", "2026-12-11", "2026-12-14"]);
+  // LAB (13 Nov) and ELA (17 Nov) keep it "si en la siguiente Mesa Sectorial del 2 de diciembre no se producen avances".
+  assert.equal(osakidetza.rereadBy, "2026-12-03");
+  assert.equal(osakidetza.minimumServices.status, "published");
+  assert.equal(osakidetza.sources[0]!.url, "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.10.26-Orden-SSMM-Osakidetza.pdf");
+  for (const locale of LOCALES) {
+    assert.match(osakidetza.scope[locale], /46[.,]545/, locale);
+    assert.match(osakidetza.calledBy[locale], /2 (de |d')?(desembre|diciembre|December)/, `${locale}: the condition`);
+    // Four days from the as-of day; Correos is Madrid only on the 26th and the 27th (Orden INT/1239/2026: the Andalusian provinces to the 25th).
+    const answers = spainDayAnswers(locale, "2026-11-24");
+    assert.deepEqual(answers.map((a) => a.day), ["2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"]);
+    assert.match(answers[0]!.text, /Correos|Correus/, locale);
+    assert.doesNotMatch(answers[0]!.text, /només a la Comunitat de Madrid|solo en la Comunidad de Madrid|Community of Madrid only/, locale);
+    for (const answer of answers.slice(2)) assert.match(answer.text, /només a la Comunitat de Madrid|solo en la Comunidad de Madrid|Community of Madrid only/, `${locale}/${answer.day}`);
+    const blocks = buildStrikesSpainBody(locale, "2026-11-24") as { type: string; id?: string }[];
+    assert.ok(blocks.some((b) => b.type === "heading" && b.id === (locale === "en" ? "day-by-day" : "dia-a-dia")), `${locale}: the day-by-day section`);
+  }
 });

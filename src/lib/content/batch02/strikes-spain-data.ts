@@ -204,6 +204,21 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * still 17 Nov. CSIF Madrid's calendar unchanged; CESM (newest 23 Nov, not a
  * strike). The one change of the day is Catalan (the 26N education order,
  * strikes.ts); the Spain hub prints it through the Catalan entry.
+ *
+ * 24 Nov 2026 (morning, Tuesday): every source re-read (the log is in
+ * docs/SEO_EXPERIMENTS.md, "2026-11-24 — Strikes re-read (Tuesday)"). No
+ * change to any dated entry. Correos: Orden INT/1239/2026 unchanged; BOE of 24
+ * Nov (núm. 292): no strike order. SMU, the rail unions, the Ministry's rail
+ * and air lists (air resolutions to 30 Nov), CSIF Madrid (stoppages on 24, 26
+ * and 30 Nov and 1, 10, 11, 16 and 18 Dec) and CCOO Madrid: unchanged. Basque
+ * list: newest still 17 Nov. Added, so that the calendar has no gap after 27
+ * Nov: the Osakidetza strike of 9, 10, 11 and 14 Dec (the Basque Government's
+ * order of 26 Oct, left out on 21 Nov as outside the window), with the
+ * unions' condition (LAB on 13 Nov and ELA on 17 Nov keep it "si en la
+ * siguiente Mesa Sectorial del 2 de diciembre no se producen avances"):
+ * `rereadBy` 3 Dec, a test fails that day. New in the model: `dayNotes`
+ * (Correos is Madrid only on the 26th and the 27th), `doctors` and
+ * `rereadBy`; new on the page: the day-by-day answers (`spainDayAnswers`).
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-24";
 
@@ -212,7 +227,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-24";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-23";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-24";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";
@@ -271,6 +286,22 @@ export const SPAIN_URLS = {
   euskadiCareBizkaia: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.11.-17-Orden-SSMM-Centros-de-la-tercera-edad-Bizkaia_sectorial.pdf",
   // Order of 17 Nov 2026: private care homes in Gipuzkoa (ELA), 20 Nov, 22 and 23 Dec, full working day.
   euskadiCareGipuzkoa: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.11.17-SSMM_Residencias-de-la-tercera-edad-Gipuzkoa.pdf",
+  /**
+   * Order of 26 Oct 2026: all Osakidetza staff (read 24 Nov 2026). "Las organizaciones sindicales SATSE, ELA, LAB, CCOO y UGT han convocado huelga para
+   * todo el personal (laboral, estatutario y funcionario) que presta servicios en los centros de trabajo de OSAKIDETZA - Servicio Vasco de Salud";
+   * "De las 22.00 horas del 8 de diciembre de 2026, a las 22.00 horas del 9 de diciembre de 2026" (Álava), 9-10 Dec (Bizkaia), 10-11 Dec (Gipuzkoa),
+   * "De las 22.00 horas del 13 de diciembre a las 22.00 horas del 14 de diciembre de 2026, para todo el personal de Osakidetza"; "son 46.545 personas
+   * trabajadoras"; "a) En los centros hospitalarios, con el personal habitual de un festivo"; "b) En la atención primaria […] los servicios
+   * correspondientes a un sábado"; "c) El 100% de los servicios de emergencia y PAC"; "d) En los servicios Call Center de las OSIs […] el 50%".
+   */
+  euskadiOsakidetza: "https://www.euskadi.eus/contenidos/informacion/ordenes_servicios_minimos/es_servmin/2026.10.26-Orden-SSMM-Osakidetza.pdf",
+  /**
+   * LAB, 13 Nov 2026 (read 24 Nov 2026): "si en la siguiente Mesa Sectorial del 2 de diciembre no se producen avances, mantendremos las jornadas de
+   * huelga convocadas para el 9 de diciembre en Araba, el 10 en Bizkaia, el 11 en Gipuzkoa y el 14 en el conjunto de Osakidetza".
+   */
+  labOsakidetza: "https://www.lab.eus/es/la-fuerza-de-la-movilizacion-obliga-a-osakidetza-a-mover-ficha-pero-las-propuestas-siguen-siendo-insuficientes/",
+  /** ELA, 17 Nov 2026 (read 24 Nov 2026): the same sentence, "mantendrán las jornadas de huelga convocadas para el 9 de diciembre en Araba, el 10 en Bizkaia, el 11 en Gipuzkoa y el 14 en el conjunto de Osakidetza". */
+  elaOsakidetza: "https://www.ela.eus/es/gizalan/sanidad/nueva-jornada-de-movilizaciones-ante-la-falta-de-avances-en-la-negociacion",
   // Correos in Madrid (23-27 Nov) and Cádiz, Córdoba, Huelva, Málaga, Sevilla (23-25 Nov): Orden INT/1239/2026 of 17 Nov, BOE núm. 288 of 19 Nov 2026.
   correos2327: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259",
   /** JEC agreement of 19 Nov 2026 (read 22 Nov 2026): "esta Junta acuerda ampliar el plazo de depósito del voto por correo hasta el 26 de noviembre de 2026 […] y como máximo hasta las 14:00 horas". */
@@ -612,6 +643,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     id: "huelga-medicos-smu-2026-11-16",
     dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
     sector: "health",
+    doctors: true,
     status: "official",
     catalanEntry: "vaga-metges-smu-2026-11-16",
     // The marches of the 19th are on that day's page.
@@ -872,6 +904,19 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: "Correos (Spanish post) strike in Madrid and five Andalusian provinces (Sindicato Libre de Correos)",
     },
     label: { ca: "Correus (Madrid i Andalusia)", es: "Correos (Madrid y Andalucía)", en: "Correos (Madrid, Andalusia)" },
+    // 24 Nov 2026: in the five Andalusian provinces the strike ends on Wednesday 25 (the order: "del 23 al 25"); the 26th and the 27th are Madrid's only.
+    dayNotes: {
+      "2026-11-26": {
+        ca: "vaga a Correus, aquest dia només a la Comunitat de Madrid (Sindicato Libre de Correos)",
+        es: "huelga en Correos, ese día solo en la Comunidad de Madrid (Sindicato Libre de Correos)",
+        en: "Correos (Spanish post) strike, that day in the Community of Madrid only (Sindicato Libre de Correos)",
+      },
+      "2026-11-27": {
+        ca: "vaga a Correus, aquest dia només a la Comunitat de Madrid (Sindicato Libre de Correos)",
+        es: "huelga en Correos, ese día solo en la Comunidad de Madrid (Sindicato Libre de Correos)",
+        en: "Correos (Spanish post) strike, that day in the Community of Madrid only (Sindicato Libre de Correos)",
+      },
+    },
     scope: {
       ca: "Tot el personal de tots els centres de Correus de la Comunitat de Madrid (del 23 al 27 de novembre) i de les províncies de Cadis, Còrdova, Huelva, Màlaga i Sevilla (del 23 al 25 de novembre).",
       es: "Todo el personal de todos los centros de Correos de la Comunidad de Madrid (del 23 al 27 de noviembre) y de las provincias de Cádiz, Córdoba, Huelva, Málaga y Sevilla (del 23 al 25 de noviembre).",
@@ -908,6 +953,82 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sources: [
       { name: "Orden INT/1239/2026, de 17 de noviembre: servicios esenciales en Correos durante las huelgas del 23 al 27 de noviembre en Madrid y del 23 al 25 en Cádiz, Córdoba, Huelva, Málaga y Sevilla (BOE núm. 288, 19 de noviembre de 2026)", url: U.correos2327, publisher: "Boletín Oficial del Estado (Ministerio del Interior)" },
       { name: "Acuerdo 418/2026, de 19 de noviembre: plazo de depósito del voto por correo ampliado hasta el 26 de noviembre de 2026, como máximo hasta las 14:00 horas", url: U.jec418, publisher: "Junta Electoral Central" },
+    ],
+  },
+  {
+    // 24 Nov 2026 (read that day): the Basque Government's order of 26 Oct, on its list of minimum-services orders. The order also covers 30 Oct
+    // (past, never listed here). The callers keep the December days on a condition (LAB 13 Nov, ELA 17 Nov): talks on 2 Dec. Re-read on 3 Dec.
+    id: "huelga-osakidetza-2026-12-09",
+    dates: ["2026-12-09", "2026-12-10", "2026-12-11", "2026-12-14"],
+    sector: "health",
+    status: "official",
+    rereadBy: "2026-12-03",
+    title: {
+      ca: "vaga a Osakidetza, la sanitat pública basca (SATSE, ELA, LAB, CCOO, UGT)",
+      es: "huelga en Osakidetza, la sanidad pública vasca (SATSE, ELA, LAB, CCOO, UGT)",
+      en: "strike at Osakidetza, the Basque public health service (SATSE, ELA, LAB, CCOO, UGT)",
+    },
+    label: { ca: "Osakidetza (sanitat basca)", es: "Osakidetza (sanidad vasca)", en: "Osakidetza (Basque health service)" },
+    dayNotes: {
+      "2026-12-09": {
+        ca: "vaga a Osakidetza, aquest dia a Àlaba (SATSE, ELA, LAB, CCOO, UGT)",
+        es: "huelga en Osakidetza, ese día en Álava (SATSE, ELA, LAB, CCOO, UGT)",
+        en: "strike at Osakidetza, that day in Álava (SATSE, ELA, LAB, CCOO, UGT)",
+      },
+      "2026-12-10": {
+        ca: "vaga a Osakidetza, aquest dia a Biscaia (SATSE, ELA, LAB, CCOO, UGT)",
+        es: "huelga en Osakidetza, ese día en Bizkaia (SATSE, ELA, LAB, CCOO, UGT)",
+        en: "strike at Osakidetza, that day in Bizkaia (SATSE, ELA, LAB, CCOO, UGT)",
+      },
+      "2026-12-11": {
+        ca: "vaga a Osakidetza, aquest dia a Guipúscoa (SATSE, ELA, LAB, CCOO, UGT)",
+        es: "huelga en Osakidetza, ese día en Gipuzkoa (SATSE, ELA, LAB, CCOO, UGT)",
+        en: "strike at Osakidetza, that day in Gipuzkoa (SATSE, ELA, LAB, CCOO, UGT)",
+      },
+      "2026-12-14": {
+        ca: "vaga a Osakidetza, aquest dia a tot el País Basc (SATSE, ELA, LAB, CCOO, UGT)",
+        es: "huelga en Osakidetza, ese día en todo el País Vasco (SATSE, ELA, LAB, CCOO, UGT)",
+        en: "strike at Osakidetza, that day across the Basque Country (SATSE, ELA, LAB, CCOO, UGT)",
+      },
+    },
+    scope: {
+      ca: "Tot el personal d'Osakidetza, el servei basc de salut (laboral, estatutari i funcionari; 46.545 persones, segons l'ordre del Govern Basc), un territori cada dia: el dimecres 9 de desembre a Àlaba (i a la direcció general), el dijous 10 a Biscaia, el divendres 11 a Guipúscoa i el dilluns 14 a tot Osakidetza.",
+      es: "Todo el personal de Osakidetza, el servicio vasco de salud (laboral, estatutario y funcionario; 46.545 personas, según la orden del Gobierno Vasco), un territorio cada día: el miércoles 9 de diciembre en Álava (y en la dirección general), el jueves 10 en Bizkaia, el viernes 11 en Gipuzkoa y el lunes 14 en todo Osakidetza.",
+      en: "All staff of Osakidetza, the Basque public health service (46,545 people, according to the Basque Government's order), one province a day: Wednesday 9 December in Álava (and at head office), Thursday 10 in Bizkaia, Friday 11 in Gipuzkoa and Monday 14 across Osakidetza.",
+    },
+    hours: {
+      ca: "Cada jornada comença a les 22.00 h del dia anterior i acaba a les 22.00 h del dia de vaga, segons l'ordre del Govern Basc: per exemple, la del dilluns 14 va de les 22.00 h del diumenge 13 a les 22.00 h del dilluns 14 de desembre.",
+      es: "Cada jornada empieza a las 22.00 h del día anterior y acaba a las 22.00 h del día de huelga, según la orden del Gobierno Vasco: por ejemplo, la del lunes 14 va de las 22.00 h del domingo 13 a las 22.00 h del lunes 14 de diciembre.",
+      en: "Each strike day runs from 22:00 the evening before to 22:00 on the day itself, according to the Basque Government's order: the one on Monday 14, for example, runs from 22:00 on Sunday 13 to 22:00 on Monday 14 December.",
+    },
+    calledBy: {
+      ca: `Els sindicats SATSE, ELA, LAB, CCOO i UGT, segons ${link(U.euskadiOsakidetza, "l'ordre de serveis mínims del Govern Basc del 26 d'octubre")}. Hi posen una condició: ${link(U.labOsakidetza, "LAB (13 de novembre)")} i ${link(U.elaOsakidetza, "ELA (17 de novembre)")} diuen que mantindran les jornades del 9, el 10, l'11 i el 14 de desembre si a la mesa sectorial del 2 de desembre no hi ha avenços.`,
+      es: `Los sindicatos SATSE, ELA, LAB, CCOO y UGT, según ${link(U.euskadiOsakidetza, "la orden de servicios mínimos del Gobierno Vasco del 26 de octubre")}. Ponen una condición: ${link(U.labOsakidetza, "LAB (13 de noviembre)")} y ${link(U.elaOsakidetza, "ELA (17 de noviembre)")} dicen que mantendrán las jornadas del 9, el 10, el 11 y el 14 de diciembre si en la mesa sectorial del 2 de diciembre no hay avances.`,
+      en: `The SATSE, ELA, LAB, CCOO and UGT unions, according to ${link(U.euskadiOsakidetza, "the Basque Government's minimum-services order of 26 October")}. There is a condition: ${link(U.labOsakidetza, "LAB (13 November)")} and ${link(U.elaOsakidetza, "ELA (17 November)")} say they will keep the strike days of 9, 10, 11 and 14 December if the talks of 2 December (the health service's bargaining table) bring no progress.`,
+    },
+    basis: {
+      ca: `${link(U.euskadiOsakidetza, "L'ordre del Govern Basc del 26 d'octubre")}, a ${link(U.euskadiList, "la seva llista d'ordres de serveis mínims")}. El {checked} ni LAB ni ELA no l'havien desconvocada als seus webs; els tornarem a llegir després de la mesa del 2 de desembre.`,
+      es: `${link(U.euskadiOsakidetza, "La orden del Gobierno Vasco del 26 de octubre")}, en ${link(U.euskadiList, "su lista de órdenes de servicios mínimos")}. El {checked} ni LAB ni ELA la habían desconvocado en sus webs; volveremos a leerlos después de la mesa del 2 de diciembre.`,
+      en: `${link(U.euskadiOsakidetza, "The Basque Government's order of 26 October")}, on ${link(U.euskadiList, "its list of minimum-services orders")}. On {checked} neither LAB nor ELA had called it off on their websites; we will read them again after the talks of 2 December.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Hospitals com un festiu; atenció primària com un dissabte; emergències i PAC al 100%",
+        es: "Hospitales como un festivo; atención primaria como un sábado; emergencias y PAC al 100%",
+        en: "Hospitals as on a holiday; primary care as on a Saturday; emergencies and PAC at 100%",
+      },
+      text: {
+        ca: `${link(U.euskadiOsakidetza, "L'ordre del Govern Basc del 26 d'octubre")} manté als hospitals **el personal habitual d'un festiu** (urgències, cuina i atenció a les persones ingressades, i es poden donar altes) i el **100%** de la diàlisi, dels tractaments oncològics programats i dels processos que no poden esperar (hospital de dia oncohematològic, hemodinàmica, unitats d'ictus, cures intensives, neonatologia i parts). A l'atenció primària, **els serveis d'un dissabte**; els serveis d'emergències i els PAC (punts d'atenció continuada), al **100%**, i els centres d'atenció telefònica, al **50%**.`,
+        es: `${link(U.euskadiOsakidetza, "La orden del Gobierno Vasco del 26 de octubre")} mantiene en los hospitales **el personal habitual de un festivo** (urgencias, cocina y atención a las personas ingresadas, y se pueden dar altas) y el **100%** de la diálisis, de los tratamientos oncológicos programados y de los procesos que no pueden esperar (hospital de día oncohematológico, hemodinámica, unidades de ictus, cuidados intensivos, neonatología y partos). En la atención primaria, **los servicios de un sábado**; los servicios de emergencia y los PAC (puntos de atención continuada), al **100%**, y los centros de atención telefónica, al **50%**.`,
+        en: `${link(U.euskadiOsakidetza, "The Basque Government's order of 26 October")} keeps hospitals on **their usual public-holiday staffing** (A&E, kitchens and care for inpatients; patients can still be discharged) and **100%** of dialysis, scheduled cancer treatment and care that cannot wait (the cancer and haematology day hospital, cardiac catheterisation, stroke units, intensive care, neonatal care and births). Primary care runs **a Saturday service**; the emergency services and the PAC out-of-hours clinics run at **100%**, and the health service's call centres at **50%**.`,
+      },
+    },
+    sources: [
+      { name: "Orden de 26 de octubre de 2026: servicios esenciales del personal de Osakidetza-Servicio Vasco de Salud durante la huelga convocada para diferentes días de octubre y diciembre de 2026 (PDF)", url: U.euskadiOsakidetza, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
+      { name: "Órdenes de servicios mínimos", url: U.euskadiList, publisher: "Gobierno Vasco" },
+      { name: "La fuerza de la movilización obliga a Osakidetza a mover ficha, pero las propuestas siguen siendo insuficientes (13/11/2026)", url: U.labOsakidetza, publisher: "LAB" },
+      { name: "Nueva jornada de movilizaciones ante la falta de avances en la negociación (17/11/2026)", url: U.elaOsakidetza, publisher: "ELA" },
     ],
   },
 ];

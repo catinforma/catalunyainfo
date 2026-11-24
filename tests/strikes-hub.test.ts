@@ -26,8 +26,11 @@ import {
   madridDate,
   pastStrikes,
   staleStrikes,
+  strikeDayAnswers,
   strikeDays,
   strikesDescription,
+  strikesOnDay,
+  strikesSources,
   unrecheckedOpenStrikes,
   upcomingStrikes,
   whatRunsRows,
@@ -622,7 +625,14 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   // 19 Nov 2026: plus CGT Ensenyament's 26N call of 18 Nov and the strike notice it links (hours and who is called out).
   // 21 Nov 2026: plus USTEC·STEs' notice of 20 Nov on the mediation of the 19th (no proposal, no agreement; the strike stays on).
   // 23 Nov 2026: plus the minimum-services order (cited on Treball's list, as e-Tauler withdraws its notices) and USTEC·STEs' 23 Nov notice (the march on the 26th).
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "Departament d'Empresa i Treball", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs"]);
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), [
+    // 24 Nov 2026: the numbered order (Ordre EMT/237/2026, DOGC 9801), the students' strike of the same day (Sindicat d'Estudiants: its call and its notice) and the LODE's art. 8.
+    "BOE",
+    "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament", "CGT Ensenyament",
+    "Departament d'Empresa i Treball", "Departament d'Empresa i Treball",
+    "Sindicat d'Estudiants", "Sindicat d'Estudiants",
+    "USTEC·STEs", "USTEC·STEs", "USTEC·STEs", "USTEC·STEs",
+  ]);
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.treballMs && /23 de novembre de 2026/.test(s.name)));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustec26All));
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
@@ -888,7 +898,9 @@ test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for
     assert.ok(!text(buildStrikesBody(locale, "2026-11-24").slice(0, 1)).includes(off.title[locale]), `${locale}: gone after the 23rd`);
     assert.ok(!text(buildStrikesBody(locale, "2026-11-19").slice(0, 1)).includes(off.title[locale]), `${locale}: not before the call-off`);
   }
-  assert.ok(STRIKES_GUIDE.sources.some((s) => s.url === STRIKE_URLS.semaf38));
+  // The notice is a source while the call-off is printed (20-23 Nov), and not after the day.
+  assert.ok(strikesSources(STRIKES, "2026-11-20").some((s) => s.url === STRIKE_URLS.semaf38));
+  assert.ok(!strikesSources(STRIKES, "2026-11-24").some((s) => s.url === STRIKE_URLS.semaf38));
   // The 21N march (USTEC·STEs, 17 Nov): 12:00, plaça d'Urquinaona.
   const schools = byId("vaga-educacio-2026-11-26");
   for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /Urquinaona/, locale);
@@ -904,5 +916,45 @@ test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for
     assert.ok(rail.facts[locale].join(" ").includes("«SCF ha acordado la desconvocatoria para el día 19»") || rail.facts[locale].join(" ").includes('"SCF ha acordado la desconvocatoria para el día 19"'), locale);
     assert.ok(rail.facts[locale].join(" ").includes(`](${STRIKE_URLS.scf38})`), locale);
     assert.match(rail.minimumServices.msShort[locale], /^Rodalies (el 17|on the 17th): 66%.*(desconvocada|called off)$/, locale);
+  }
+});
+
+test("24 Nov 2026: the numbered school order, the students' strike of the 26th and the day-by-day answers", () => {
+  // Ordre EMT/237/2026, de 23 de novembre (DOGC núm. 9801, 24.11.2026, CVE-DOGC-A-26327079-2026): read through the DOGC document API on 24 Nov.
+  assert.equal(STRIKE_URLS.ordreEdu26, "https://portaljuridic.gencat.cat/eli/es-ct/o/2026/11/23/emt237/dof/cat/html");
+  const schools = STRIKES.find((s) => s.id === "vaga-educacio-2026-11-26")!;
+  for (const url of [STRIKE_URLS.ordreEdu26, STRIKE_URLS.students26, STRIKE_URLS.students26Notice, STRIKE_URLS.lode]) {
+    assert.ok(schools.sources.some((s) => s.url === url), url);
+  }
+  for (const locale of LOCALES) {
+    const body = JSON.stringify(buildStrikesBody(locale, "2026-11-24"));
+    assert.ok(body.includes("EMT/237/2026"), `${locale}: the order's number`);
+    // The students' notice in its own words, and the block's meeting point on the union's page.
+    assert.ok(body.includes("durarà la jornada lectiva d'aquell dia, tant al matí com a la tarda"), `${locale}: the notice's words`);
+    assert.match(body, /11[.:]45/, `${locale}: the students' block`);
+    assert.ok(body.includes(`](${STRIKE_URLS.lode})`), `${locale}: LODE art. 8`);
+
+    // Four days from the as-of day, each with the strikes of that day and nothing else.
+    const answers = strikeDayAnswers(locale, "2026-11-24");
+    assert.deepEqual(answers.map((a) => a.day), ["2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"]);
+    for (const answer of answers) {
+      assert.deepEqual(answer.strikes.map((s) => s.id), strikesOnDay(answer.day).map((s) => s.id));
+      assert.ok(answer.strikes.every((s) => isOnDay(s, answer.day)), `${locale}/${answer.day}`);
+      // No transport strike is listed on any of the four days: the answer says so before naming the others.
+      assert.equal(answer.transport, false, `${locale}/${answer.day}`);
+      assert.match(answer.text, /^(no hi ha cap vaga general ni de transport|no hay ninguna huelga general ni de transporte|no general strike and no transport strike)/i, `${locale}/${answer.day}: ${answer.text}`);
+    }
+    assert.ok(answers[2]!.strikes.some((s) => s.id === "vaga-educacio-2026-11-26"), `${locale}: the 26th lists the school strike`);
+    assert.ok(!answers[0]!.strikes.some((s) => s.id === "vaga-educacio-2026-11-26"), `${locale}: not on the 24th`);
+    // On the page: an H2 with a stable anchor, right after the lead blocks, and one list item per day.
+    const blocks = buildStrikesBody(locale, "2026-11-24") as { type: string; id?: string; items?: string[] }[];
+    const at = blocks.findIndex((b) => b.type === "heading" && b.id === "dia-a-dia");
+    assert.ok(at > 0 && at < 8, `${locale}: the day-by-day section sits near the top (${at})`);
+    assert.equal(blocks[at + 2]!.items?.length, 4, locale);
+    // A day with a transport strike says so first (a made-up entry on the 25th).
+    const rail: Strike = { ...STRIKES.find((s) => s.affects.includes("rodalies"))!, id: "test-rail", dates: ["2026-11-25"], openEnded: false } as Strike;
+    const withRail = strikeDayAnswers(locale, "2026-11-24", [...STRIKES.filter((s) => !s.affects.includes("rodalies")), rail]);
+    assert.equal(withRail[1]!.transport, true, locale);
+    assert.doesNotMatch(withRail[1]!.text, /^(no hi ha|no hay|no general strike)/i, locale);
   }
 });

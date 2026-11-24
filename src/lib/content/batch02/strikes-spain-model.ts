@@ -67,6 +67,27 @@ export interface SpainStrike {
   sources: B2Source[];
   /** The id of the same strike in the Catalan hub (`strikes.ts`), when it is there too: a test keeps the dates in step. */
   catalanEntry?: string;
+  /**
+   * 24 Nov 2026. What the strike is on one day (ISO), in place of `title`,
+   * when the title would say too much or too little for that day: a strike
+   * that ends earlier in some provinces, or moves from one province to the
+   * next. Same form as `title` (lower case, tense-neutral, no links). Printed
+   * in the day-by-day table and answers.
+   */
+  dayNotes?: Record<string, L>;
+  /**
+   * 24 Nov 2026. A health strike of doctors only: the FAQ "is there a
+   * doctors' strike across Spain?" lists these, and not a strike of all the
+   * staff of one health service.
+   */
+  doctors?: boolean;
+  /**
+   * 24 Nov 2026. A strike its callers keep on a condition (talks on a known
+   * day): the day by which the entry must be re-read (ISO). A test fails from
+   * that day until the entry is confirmed, changed or removed and the date
+   * moved or deleted.
+   */
+  rereadBy?: string;
 }
 
 /**
