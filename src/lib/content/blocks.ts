@@ -457,6 +457,15 @@ export const shopsTodayBlock = z.object({
 });
 
 /**
+ * "Do I pay for the blue or green zone in Barcelona today?" (24 Nov 2026),
+ * worked out from AREA's published hours in `batch02/parking-today.ts`.
+ * Configuration-free and day-dependent, like `shopsToday`.
+ */
+export const parkingTodayBlock = z.object({
+  type: z.literal("parkingToday"),
+});
+
+/**
  * Today's reservoir levels, read from the water agency's open data.
  * Configuration-free: the reading date comes from the data, so the block
  * cannot be left showing a day that has passed.
@@ -568,6 +577,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   localHolidaysBlock,
   shopsChristmasBlock,
   shopsTodayBlock,
+  parkingTodayBlock,
   reservoirLevelsBlock,
   schoolCalendarBlock,
   electionHistoryBlock,

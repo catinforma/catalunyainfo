@@ -781,7 +781,7 @@ test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-b
     assert.match(text, /9 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: zone 36 start`);
     assert.ok(JSON.stringify(blocks).includes(map[locale]), `${locale}: AREA map link`);
     const days = blocks.filter((b) => b.type === "table")[1];
-    assert.equal(days?.rows?.length, 3, `${locale}: weekdays, Saturday, Sunday`);
+    assert.equal(days?.rows?.length, 5, `${locale}: weekdays, Saturday, Sunday, weekday holiday (24 Nov 2026), August (24 Nov 2026)`);
     const edition = PARKING.editions[locale];
     assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
     assert.ok(edition.seoDescription.length <= 155, `${locale}: description budget`);

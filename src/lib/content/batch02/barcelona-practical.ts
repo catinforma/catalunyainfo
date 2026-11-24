@@ -1190,7 +1190,7 @@ const PARKING_VERIFIED = "2026-11-20";
  * are the ones an actual driver needs, because almost nobody is driving a
  * zero-emission car or an unlabelled one: most hire cars are C.
  */
-const BLUE_ROWS = [
+export const BLUE_ROWS = [
   ["Zero", "1,25 €", "1,15 €"],
   ["ECO", "2,50 €", "2,25 €"],
   ["C", "3,25 €", "3,00 €"],
@@ -1198,7 +1198,7 @@ const BLUE_ROWS = [
   ["Sense distintiu", "3,75 €", "3,50 €"],
 ];
 
-const GREEN_ROWS = [
+export const GREEN_ROWS = [
   ["Zero", "1,50 €", "1,40 €"],
   ["ECO", "3,00 €", "2,75 €"],
   ["C", "3,75 €", "3,50 €"],
@@ -1359,10 +1359,12 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     daysHeaders: ["Dia", "Zona blava", "Zona verda (no residents)", "Places exclusives per a residents"],
     daysRows: [
       ["Dilluns a divendres", "9.00–20.00 h", "8.00–20.00 h o 8.00–22.00 h, segons la zona", "Reservades 8.00–20.00 h"],
-      ["Dissabte", "Només al centre de la ciutat", "Només a les zones que funcionen de dilluns a dissabte", "Reservades 8.00–20.00 h"],
-      ["Diumenge", "Només a la zona de platja", "No es paga", "Reservades 8.00–20.00 h"],
+      ["Dissabte", "Al centre de la ciutat i al tram de l'avinguda Litoral (zona de platja)", "Només a les zones que funcionen de dilluns a dissabte", "Reservades 8.00–20.00 h"],
+      ["Diumenge", "Només al tram de l'avinguda Litoral (zona de platja), des de l'1 d'octubre del 2026", "No es paga", "Reservades 8.00–20.00 h"],
+      ["Festiu entre setmana", "Només al tram de l'avinguda Litoral es paga (des de l'1 d'octubre del 2026). Als altres trams, AREA no publica cap regla general: mana el senyal", "AREA no publica cap regla general: mana el senyal", "Reservades, com qualsevol altre dia"],
+      ["Agost", "Les pàgines d'AREA no hi preveuen cap excepció per als no residents: horari del senyal", "Les pàgines d'AREA no hi preveuen cap excepció per als no residents: horari del senyal", "Reservades, com qualsevol altre dia"],
     ],
-    daysNote: "Fora d'aquestes hores s'aparca gratis, llevat que el senyal digui una altra cosa. A la zona de platja, la blava també es paga els festius; des de l'1 d'octubre només hi manté l'horari de set dies el tram de l'avinguda Litoral entre Joan Miró i Jonquera. A la Barceloneta i el Born, les places exclusives per a residents ho són les 24 hores. Font: AREA (B:SM), comprovat el 20 de novembre de 2026.",
+    daysNote: "Fora d'aquestes hores s'aparca gratis, llevat que el senyal digui una altra cosa. A la zona de platja, des de l'1 d'octubre del 2026 només l'avinguda Litoral (Joan Miró–Jonquera) es paga de dilluns a diumenge, festius inclosos; Icària i Salvador Espriu, de dilluns a divendres. Barceloneta i el Born: places de residents 24 h. Font: AREA (B:SM), comprovat el 24 de novembre de 2026.",
     trinitatTitle: "Zona verda de Trinitat Vella (zona 36), activa des del 9 de novembre",
     trinitat: "Des del **9 de novembre de 2026** funciona la zona verda 36, a Trinitat Vella (Sant Andreu): **632 places** noves de zona verda als carrers entre el passeig de Santa Coloma, l'avinguda Meridiana i l'intercanviador de la Trinitat, més 136 places compartides amb la zona 20, totes amb marques vials verdes. També hi ha 231 places AREA Motos i 29 de càrrega i descàrrega (AREA DUM). Els no residents hi poden aparcar **2 hores com a màxim**, dins de l'horari que indica el senyal, amb la tarifa de zona verda que els toqui pel distintiu ambiental; els veïns empadronats a la zona amb el cotxe donat d'alta a Barcelona paguen la tarifa de resident. AREA en publica el [plànol de la zona 36](https://areaverda.cat/sites/default/files/2026-09/Zona%2036_2026_web.pdf).",
     stepsTitle: "Com aparcar en zona blava o verda, pas a pas",
@@ -1378,7 +1380,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     hours: [
       "La **zona blava** es regula normalment de dilluns a divendres de 9.00 a 20.00 h sense pausa al migdia; al centre, també els dissabtes, i a les zones de platja, també diumenges i festius.",
       "La **zona verda** per a no residents funciona de dilluns a divendres o de dilluns a dissabte, de 8.00 a 20.00 h o fins a les 22.00 h segons la zona. Fora de l'horari regulat l'estacionament és lliure, però mana el senyal vertical.",
-      "La regulació de platja és de temporada: a Sant Martí va anar de l'1 d'abril al 30 de setembre del 2026, i des de l'1 d'octubre només el tram de l'avinguda Litoral entre Joan Miró i Jonquera manté l'horari de set dies.",
+      "La regulació de platja és de temporada: a Sant Martí el règim especial va acabar l'1 d'octubre del 2026 i només el tram de l'avinguda Litoral entre Joan Miró i Jonquera manté l'horari de set dies.",
       "**Cap de setmana:** el dissabte només es paga la zona blava del centre i les zones verdes que funcionen de dilluns a dissabte; el diumenge, fora de la platja, ni la blava ni la verda es paguen. Les **places exclusives per a residents**, en canvi, estan reservades de 8.00 a 20.00 h tots els dies, festius inclosos (a la Barceloneta i el Born, les 24 hores).",
     ],
     blueTitle: "Preu de la zona blava a Barcelona",
@@ -1426,7 +1428,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "On és la zona verda nova de Trinitat Vella?", answer: "És la zona 36: els carrers entre el passeig de Santa Coloma, l'avinguda Meridiana i l'intercanviador de la Trinitat. Funciona des del 9 de novembre de 2026 i els no residents hi poden aparcar 2 hores com a màxim." },
       { question: "Fins a quina hora es paga la zona blava a Barcelona?", answer: "Fins a les 20.00 h: la blava es paga de dilluns a divendres de 9.00 a 20.00 h (al centre, també el dissabte). La verda per a no residents, fins a les 20.00 o les 22.00 h segons la zona. Després s'aparca gratis, llevat que el senyal digui una altra cosa." },
       { question: "Es paga la zona verda el dissabte a Barcelona?", answer: "Només a les zones verdes que funcionen de dilluns a dissabte; a les que funcionen de dilluns a divendres, el dissabte és lliure. El senyal vertical del tram diu quins dies es paga." },
-      { question: "Es paga la zona blava i verda els festius?", answer: "A la zona de platja, la blava sí que es paga els festius. Per a la resta de la ciutat, AREA no publica cap regla general per als festius entre setmana: mira el senyal del tram. Les places exclusives per a residents estan reservades també els festius." },
+      { question: "Es paga la zona blava i verda els festius?", answer: "Al tram de l'avinguda Litoral (zona de platja), la blava sí que es paga els festius. Per a la resta de la ciutat, AREA no publica cap regla general per als festius entre setmana: mira el senyal del tram. Les places exclusives per a residents estan reservades també els festius." },
       { question: "Per què la zona blava costa 2 € més alguns dies?", answer: "Perquè hi ha un episodi de contaminació declarat: l'ordenança fiscal hi suma 2 € l'hora de dilluns a divendres, des de les 7.00 h de l'endemà de la declaració fins que s'acaba. Els zero emissions no paguen el suplement." },
     ],
   },
@@ -1452,10 +1454,12 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     daysHeaders: ["Día", "Zona azul", "Zona verde (no residentes)", "Plazas exclusivas para residentes"],
     daysRows: [
       ["Lunes a viernes", "9:00–20:00", "8:00–20:00 u 8:00–22:00, según la zona", "Reservadas 8:00–20:00"],
-      ["Sábado", "Solo en el centro de la ciudad", "Solo en las zonas que funcionan de lunes a sábado", "Reservadas 8:00–20:00"],
-      ["Domingo", "Solo en la zona de playa", "No se paga", "Reservadas 8:00–20:00"],
+      ["Sábado", "En el centro de la ciudad y en el tramo de la avenida Litoral (zona de playa)", "Solo en las zonas que funcionan de lunes a sábado", "Reservadas 8:00–20:00"],
+      ["Domingo", "Solo en el tramo de la avenida Litoral (zona de playa), desde el 1 de octubre de 2026", "No se paga", "Reservadas 8:00–20:00"],
+      ["Festivo entre semana", "Solo en el tramo de la avenida Litoral se paga (desde el 1 de octubre de 2026). En los demás tramos, AREA no publica ninguna regla general: manda la señal", "AREA no publica ninguna regla general: manda la señal", "Reservadas, como cualquier otro día"],
+      ["Agosto", "Las páginas de AREA no prevén ninguna excepción para los no residentes: horario de la señal", "Las páginas de AREA no prevén ninguna excepción para los no residentes: horario de la señal", "Reservadas, como cualquier otro día"],
     ],
-    daysNote: "Fuera de estas horas se aparca gratis, salvo que la señal diga otra cosa. En la zona de playa, la azul también se paga los festivos; desde el 1 de octubre solo mantiene el horario de siete días el tramo de la avenida Litoral entre Joan Miró y Jonquera. En la Barceloneta y El Born, las plazas exclusivas para residentes lo son las 24 horas. Fuente: AREA (B:SM), comprobado el 20 de noviembre de 2026.",
+    daysNote: "Fuera de estas horas se aparca gratis, salvo que la señal diga otra cosa. En la zona de playa, desde el 1 de octubre de 2026 solo la avenida Litoral (Joan Miró–Jonquera) se paga de lunes a domingo, festivos incluidos; Icària y Salvador Espriu, de lunes a viernes. Barceloneta y El Born: plazas de residentes 24 h. Fuente: AREA (B:SM), comprobado el 24 de noviembre de 2026.",
     trinitatTitle: "Zona verde de Trinitat Vella (zona 36), en marcha desde el 9 de noviembre",
     trinitat: "Desde el **9 de noviembre de 2026** funciona la zona verde 36, en Trinitat Vella (Sant Andreu): **632 plazas** nuevas de zona verde en las calles entre el paseo de Santa Coloma, la avenida Meridiana y el intercambiador de la Trinitat, más 136 plazas compartidas con la zona 20, todas con marcas viales verdes. También hay 231 plazas AREA Motos y 29 de carga y descarga (AREA DUM). Los no residentes pueden aparcar **2 horas como máximo**, dentro del horario que indica la señal, con la tarifa de zona verde que les toque por el distintivo ambiental; los vecinos empadronados en la zona con el coche dado de alta en Barcelona pagan la tarifa de residente. AREA publica el [plano de la zona 36](https://areaverda.cat/sites/default/files/2026-09/Zona%2036_2026_web.pdf).",
     stepsTitle: "Cómo aparcar en zona azul o verde, paso a paso",
@@ -1471,7 +1475,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     hours: [
       "La **zona azul** se regula normalmente de lunes a viernes de 9:00 a 20:00 sin pausa al mediodía; en el centro, también los sábados, y en las zonas de playa, también domingos y festivos.",
       "La **zona verde** para no residentes funciona de lunes a viernes o de lunes a sábado, de 8:00 a 20:00 o hasta las 22:00 según la zona. Fuera del horario regulado se aparca gratis, pero manda la señal vertical.",
-      "La regulación de playa es de temporada: en Sant Martí fue del 1 de abril al 30 de septiembre de 2026, y desde el 1 de octubre solo el tramo de la avenida Litoral entre Joan Miró y Jonquera mantiene el horario de siete días.",
+      "La regulación de playa es de temporada: en Sant Martí el régimen especial terminó el 1 de octubre de 2026 y solo el tramo de la avenida Litoral entre Joan Miró y Jonquera mantiene el horario de siete días.",
       "**Fin de semana:** el sábado solo se paga la zona azul del centro y las zonas verdes que funcionan de lunes a sábado; el domingo, fuera de la playa, ni la azul ni la verde se pagan. Las **plazas exclusivas para residentes**, en cambio, están reservadas de 8:00 a 20:00 todos los días, festivos incluidos (en la Barceloneta y El Born, las 24 horas).",
     ],
     blueTitle: "Precio de la zona azul en Barcelona",
@@ -1519,7 +1523,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "¿Dónde está la nueva zona verde de Trinitat Vella?", answer: "Es la zona 36: las calles entre el paseo de Santa Coloma, la avenida Meridiana y el intercambiador de la Trinitat. Funciona desde el 9 de noviembre de 2026 y los no residentes pueden aparcar 2 horas como máximo." },
       { question: "¿Hasta qué hora se paga la zona azul en Barcelona?", answer: "Hasta las 20:00: la azul se paga de lunes a viernes de 9:00 a 20:00 (en el centro, también el sábado). La verde para no residentes, hasta las 20:00 o las 22:00 según la zona. Después se aparca gratis, salvo que la señal diga otra cosa." },
       { question: "¿Se paga la zona verde los sábados en Barcelona?", answer: "Solo en las zonas verdes que funcionan de lunes a sábado; en las que funcionan de lunes a viernes, el sábado es gratis. La señal vertical del tramo dice qué días se paga." },
-      { question: "¿Se paga la zona azul y verde en festivos?", answer: "En la zona de playa, la azul sí se paga los festivos. Para el resto de la ciudad, AREA no publica una regla general para los festivos entre semana: mira la señal del tramo. Las plazas exclusivas para residentes están reservadas también los festivos." },
+      { question: "¿Se paga la zona azul y verde en festivos?", answer: "En el tramo de la avenida Litoral (zona de playa), la azul sí se paga los festivos. Para el resto de la ciudad, AREA no publica una regla general para los festivos entre semana: mira la señal del tramo. Las plazas exclusivas para residentes están reservadas también los festivos." },
       { question: "¿Por qué la zona azul cuesta 2 € más algunos días?", answer: "Porque hay un episodio de contaminación declarado: la ordenanza fiscal suma 2 € la hora de lunes a viernes, desde las 7:00 del día siguiente a la declaración hasta que termina. Los cero emisiones no pagan el suplemento." },
     ],
   },
@@ -1545,10 +1549,12 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     daysHeaders: ["Day", "Blue zone", "Green zone (non-residents)", "Resident-only spaces"],
     daysRows: [
       ["Monday to Friday", "9:00–20:00", "8:00–20:00 or 8:00–22:00, depending on the area", "Reserved 8:00–20:00"],
-      ["Saturday", "Only in the city centre", "Only in areas that run Monday to Saturday", "Reserved 8:00–20:00"],
-      ["Sunday", "Only in the beach zone", "Not charged", "Reserved 8:00–20:00"],
+      ["Saturday", "In the city centre and on the Avinguda Litoral stretch (beach zone)", "Only in areas that run Monday to Saturday", "Reserved 8:00–20:00"],
+      ["Sunday", "Only on the Avinguda Litoral stretch (beach zone), since 1 October 2026", "Not charged", "Reserved 8:00–20:00"],
+      ["Weekday public holiday", "Charged only on the Avinguda Litoral stretch (since 1 October 2026). Elsewhere AREA publishes no general rule: the sign decides", "AREA publishes no general rule: the sign decides", "Reserved, like any other day"],
+      ["August", "AREA's pages give non-residents no August exception: the sign's hours apply", "AREA's pages give non-residents no August exception: the sign's hours apply", "Reserved, like any other day"],
     ],
-    daysNote: "Outside these hours parking is free unless the sign says otherwise. In the beach zone, blue spaces are also charged on public holidays; since 1 October only the Avinguda Litoral stretch between Joan Miró and Jonquera keeps the seven-day schedule. In Barceloneta and El Born, resident-only spaces are reserved 24 hours. Source: AREA (B:SM), checked on 20 November 2026.",
+    daysNote: "Outside these hours parking is free unless the sign says otherwise. In the beach zone, since 1 October 2026 only Avinguda Litoral (Joan Miró–Jonquera) is charged Monday to Sunday, public holidays included; Icària and Salvador Espriu are Monday to Friday. Barceloneta and El Born: resident-only spaces 24 h. Source: AREA (B:SM), checked on 24 November 2026.",
     trinitatTitle: "Trinitat Vella green zone (Zone 36), live since 9 November",
     trinitat: "Since **9 November 2026** green Zone 36 has been running in Trinitat Vella (Sant Andreu): **632 new green spaces** on the streets between Passeig de Santa Coloma, Avinguda Meridiana and the Trinitat interchange, plus 136 spaces shared with Zone 20, all with green road markings. There are also 231 AREA Motos spaces and 29 loading spaces (AREA DUM). Non-residents can park for **2 hours at most**, within the hours on the sign, at the green rate for their car's environmental label; residents registered in the zone with a Barcelona-registered car pay the resident rate. AREA publishes a [Zone 36 map](https://areaverda.cat/sites/default/files/2026-09/Zona%2036_2026_web.pdf).",
     stepsTitle: "How to park in a blue or green space, step by step",
@@ -1564,7 +1570,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     hours: [
       "**Blue** spaces are normally regulated Monday to Friday, 9:00 to 20:00 with no midday break; in the city centre also on Saturdays, and in beach zones also on Sundays and public holidays.",
       "**Green** spaces for non-residents run Monday to Friday or Monday to Saturday, from 8:00 to 20:00 or to 22:00 depending on the area. Outside the regulated hours parking is free, but the sign on the street is what counts.",
-      "Beach regulation is seasonal: in Sant Martí it ran from 1 April to 30 September 2026, and since 1 October only the Avinguda Litoral stretch between Joan Miró and Jonquera keeps the seven-day schedule.",
+      "Beach regulation is seasonal: in Sant Martí the special regime ended on 1 October 2026 and only the Avinguda Litoral stretch between Joan Miró and Jonquera keeps the seven-day schedule.",
       "**Weekends:** on Saturdays you pay only in blue spaces in the centre and in green areas that run Monday to Saturday; on Sundays, away from the beach, neither blue nor green spaces are charged. **Resident-only spaces**, though, are reserved 8:00 to 20:00 every day including public holidays (24 hours in Barceloneta and El Born).",
     ],
     blueTitle: "Blue zone prices in Barcelona",
@@ -1612,7 +1618,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "Where is the new green zone in Trinitat Vella?", answer: "It is Zone 36: the streets between Passeig de Santa Coloma, Avinguda Meridiana and the Trinitat interchange. It has run since 9 November 2026 and non-residents can park for 2 hours at most." },
       { question: "Until what time do you pay for blue zone parking in Barcelona?", answer: "Until 20:00: blue spaces are charged Monday to Friday, 9:00 to 20:00 (in the centre, also on Saturdays). Green spaces for non-residents until 20:00 or 22:00, depending on the area. After that parking is free unless the sign says otherwise." },
       { question: "Do you pay for green zone parking on Saturdays in Barcelona?", answer: "Only in green areas that run Monday to Saturday; in those that run Monday to Friday, Saturday is free. The vertical sign for the stretch says which days you pay." },
-      { question: "Do you pay for blue and green zones on public holidays?", answer: "In the beach zone, blue spaces are charged on public holidays. For the rest of the city AREA publishes no general rule for weekday holidays: check the sign for that stretch. Resident-only spaces stay reserved on holidays too." },
+      { question: "Do you pay for blue and green zones on public holidays?", answer: "On the Avinguda Litoral stretch (beach zone), blue spaces are charged on public holidays. For the rest of the city AREA publishes no general rule for weekday holidays: check the sign for that stretch. Resident-only spaces stay reserved on holidays too." },
       { question: "Why does blue zone parking cost €2 more on some days?", answer: "Because a pollution episode has been declared: the fiscal ordinance adds €2 an hour Monday to Friday, from 7:00 on the day after the declaration until it ends. Zero-emission vehicles do not pay the supplement." },
     ],
   },
@@ -1623,6 +1629,19 @@ const ZONA_AZUL_HUB_LABEL = {
   ca: "Zona blava per ciutat: horaris i preus",
   es: "Zona azul por ciudad: horarios y precios",
   en: "Blue zone parking in Spain by city: hours and prices",
+};
+
+/** H2 above the `parkingToday` block, in the searchers' words (24 Nov 2026). */
+const TODAY_TITLE = {
+  ca: "Es paga avui la zona blava i la zona verda a Barcelona?",
+  es: "¿Se paga hoy la zona azul y la zona verde en Barcelona?",
+  en: "Do you have to pay for blue and green zone parking in Barcelona today?",
+};
+
+const TODAY_HUB_LEAD = {
+  ca: "Aparques en una altra ciutat?",
+  es: "¿Aparcas en otra ciudad?",
+  en: "Parking in another city?",
 };
 
 function parkingBody(locale: "ca" | "es" | "en"): Block[] {
@@ -1638,6 +1657,10 @@ function parkingBody(locale: "ca" | "es" | "en"): Block[] {
   const passes = { ca: "quina targeta de transport et convé", es: "qué tarjeta de transporte te conviene", en: "which pass to buy" }[locale];
   return [
     lead(t.lead),
+    // 24 Nov 2026: the date-driven answer on the first screen of the body (see batch02/parking-today.ts).
+    ...h2(TODAY_TITLE[locale]),
+    { type: "parkingToday" } as Block,
+    ...paras(`${TODAY_HUB_LEAD[locale]} [${ZONA_AZUL_HUB_LABEL[locale]}](${zaHubPath(locale)}).`),
     ...h2(t.summaryTitle),
     table(t.summaryCaption, t.summaryHeaders, t.summaryRows, t.tableNote),
     ...h2(t.daysTitle),
