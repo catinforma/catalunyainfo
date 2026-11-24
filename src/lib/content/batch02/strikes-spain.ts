@@ -273,6 +273,7 @@ export function strikesSpainDescription(locale: Locale, asOf: string = STRIKES_S
   const thisWeek = listedSpainStrikes(asOf, strikes).filter((strike) => strike.dates.some((iso) => week.days.includes(iso)));
   const names = andList(thisWeek.map((strike) => strike.label[locale]), locale);
   const dated = andList(thisWeek.map((strike) => `${strike.label[locale]} (${dayNumbersInWeek(strike, week.days, locale)})`), locale);
+  // 25 Nov 2026: the last candidate before the generic line is the names alone (no suffix), so a week with four strikes still names them.
   const candidates: Record<Locale, string[]> = {
     ca: [
       ...(thisWeek.length > 0
@@ -280,6 +281,7 @@ export function strikesSpainDescription(locale: Locale, asOf: string = STRIKES_S
             `Vagues a Espanya ${when}: ${dated}. Qui convoca i serveis mínims oficials.`,
             `Vagues a Espanya ${when}: ${dated}. Serveis mínims oficials.`,
             `Vagues a Espanya ${when}: ${names}. Dates i serveis mínims oficials.`,
+            `Vagues a Espanya ${when}: ${names}.`,
           ]
         : []),
       `Vagues a Espanya ${when}: dates, qui convoca cadascuna i serveis mínims, amb la font oficial.`,
@@ -290,6 +292,7 @@ export function strikesSpainDescription(locale: Locale, asOf: string = STRIKES_S
             `Huelgas en España ${when}: ${dated}. Quién convoca y servicios mínimos oficiales.`,
             `Huelgas en España ${when}: ${dated}. Servicios mínimos oficiales.`,
             `Huelgas en España ${when}: ${names}. Fechas y servicios mínimos oficiales.`,
+            `Huelgas en España ${when}: ${names}.`,
           ]
         : []),
       `Huelgas en España ${when}: fechas, quién convoca cada una y servicios mínimos, con la fuente oficial.`,
@@ -300,6 +303,7 @@ export function strikesSpainDescription(locale: Locale, asOf: string = STRIKES_S
             `Strikes in Spain, ${when}: ${dated}. Who calls each one and official minimum services.`,
             `Strikes in Spain, ${when}: ${dated}. Official minimum services.`,
             `Strikes in Spain, ${when}: ${names}. Dates and official minimum services.`,
+            `Strikes in Spain, ${when}: ${names}.`,
           ]
         : []),
       `Strikes in Spain, ${when}: dates, who calls each one and minimum services, with the official source.`,

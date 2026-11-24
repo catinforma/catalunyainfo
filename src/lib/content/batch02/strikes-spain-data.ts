@@ -240,6 +240,19 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * 10, 11, 16 and 18 Dec); CESM (still postponed). UGT FICA's home page did not
  * carry the perfumery call (its newest items: water cycle in the Balearics,
  * 16 Nov; meat industry).
+ *
+ * 25 Nov 2026 (00:35-00:55 CET), follow-ups of the same night. (1) Perfumery:
+ * UGT FICA nº 3861 (18 Nov) and CCOO de Industria's state-level news (19 Nov)
+ * give the same three days; both say state-wide ("del Estado"), the SIMA
+ * mediation of 17 Nov ended without agreement and the employers' association
+ * is STANPA (nothing on the strike on its site). Still "called": no official
+ * document (not a public service). (2) NEW: Madrid public schools, CSIF's
+ * partial stoppages on 26 and 30 Nov and 1, 10, 11, 16 and 18 Dec (9:00-11:00
+ * and 17:00-19:00): "official", because the Community of Madrid's Orden
+ * 4252/2026 (BOCM núm. 241, 9 Oct) quotes CSIF's call and sets minimum services,
+ * modified by Orden 4977/2026 (BOCM núm. 278, 19 Nov); BOCM of 20-24 Nov: no
+ * further order. The indefinite strike of CCOO, UGT, CGT and others, covered by
+ * the same orders, is not listed (its current notices were not read).
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
 
@@ -336,6 +349,40 @@ export const SPAIN_URLS = {
    * Catalunya de Barcelona».
    */
   perfumery: "https://www.ccoo.cat/noticies/el-sector-de-la-perfumeria-i-la-cosmetica-fara-vaga-el-27-de-novembre-per-reclamar-un-conveni-que-avanci-en-salaris-jornada-i-conciliacio/",
+  /**
+   * CCOO de Industria (state level), news of 19 Nov 2026 (read 25 Nov 2026, ~00:50 CET; HTTP 200): «las personas que trabajan en el sector de la
+   * perfumería y la cosmética del Estado secundarán la primera de las tres jornadas de huelga que CCOO de Industria y UGT FICA han convocado»;
+   * «Si la patronal no incorpora al convenio las justas reivindicaciones de las plantillas, el sector volverá a parar el 23 de diciembre y el 4 de
+   * enero»; «La convocatoria también se extiende a las plantillas de las fábricas que elaboran geles, champús y otros productos para supermercados
+   * como Mercadona»; the employers' association it names is STANPA.
+   */
+  perfumeryIndustria:
+    "https://industria.ccoo.es/noticia:772972--El_27N_sera_un_viernes_negro_en_la_perfumeria_y_la_cosmetica_Los_y_las_trabajadoras_iran_a_la_huelga_para_exigir_avances_en_salarios_jornada_y_conciliacion",
+  /**
+   * UGT FICA (state level), nº 3861 of 18 Nov 2026 (read 25 Nov 2026, ~00:40 CET; HTTP 200): «UGT FICA denuncia el bloqueo de la negociación del
+   * Convenio Estatal de Perfumería y Afines y mantiene la convocatoria de huelga»; «tras finalizar sin acuerdo el acto de mediación celebrado ayer
+   * en el Servicio Interconfederal de Mediación y Arbitraje (SIMA)» (17 Nov); «la patronal Stanpa»; «ambos sindicatos confirman el mantenimiento de la
+   * huelga convocada para el próximo 27 de noviembre, coincidiendo con la campaña del Black Friday, así como de las jornadas de paro previstas para el
+   * 23 de diciembre de 2026 y el 4 de enero de 2027».
+   */
+  perfumeryFica: `${FICA}/3861?catid=8`,
+  /**
+   * Madrid public schools, 25 Nov 2026 (read ~00:55 CET, all HTTP 200). BOCM núm. 241 of 9 Oct 2026, Orden 4252/2026 of 7 Oct (minimum services «durante las
+   * huelgas convocadas a partir del día 14 de octubre de 2026, en todos los centros docentes y educativos públicos no universitarios de la Comunidad de
+   * Madrid»); it quotes CSIF Madrid's call of 24 Sep: «los días 20, 22, 26 y 30 de octubre de 2026, 3, 5, 11, 13, 16, 20, 24, 26 y 30 de noviembre de
+   * 2026 y 1, 10, 11, 16 y 18 de diciembre de 2026, en las franjas desde las 9:00 a las 11:00 horas de la mañana y desde las 17:00 a las 19:00 horas de la
+   * tarde, extendiéndose la misma al personal funcionario docente de las etapas educativas públicas no universitarias de la Comunidad de Madrid».
+   */
+  madridOrder4252: "https://www.bocm.es/bocm-20261009-25",
+  /**
+   * BOCM núm. 278 of 19 Nov 2026, Orden 4977/2026 of 17 Nov (modifies 4252/2026; effects «desde el día siguiente al de su publicación»; «no se ha alcanzado
+   * un acuerdo sobre los servicios mínimos»; applies «a las convocatorias de huelga […] que permanezcan vigentes cuando esta orden surta efectos»).
+   */
+  madridOrder4977: "https://www.bocm.es/bocm-20261119-16",
+  /** CSIF Educación Madrid, 23 Sep 2026: «los días 20, 22, 26 y 30 de octubre de 2026, 3, 5, 11, 13, 16, 20, 24, 26 y 30 de noviembre de 2026 y 1, 10, 11, 16 y 18 de diciembre de 2026, en las franjas desde las 9:00 a las 11:00 horas de la mañana y desde las 17:00 a las 19:00 horas de la tarde». */
+  csifMadrid: "https://www.csif.es/es/articulo/comunidaddemadrid/educacion/97107",
+  /** CSIF Educación Madrid, 21 Nov 2026: «Ayer, día 20 de noviembre de 2026, CSIF presentó un Recurso Contencioso Administrativo ante el TSJ de Madrid impugnando la La Orden 4977/2026». */
+  csifMadridAppeal: "https://www.csif.es/es/articulo/comunidaddemadrid/educacion/100572",
   // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
   scf37: "https://www.scf.es/com37/",
   // SCF nº 38, 17 Nov 2026 (22:25, read 18 Nov): "SCF ha acordado la desconvocatoria para el día 19".
@@ -986,8 +1033,11 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     ],
   },
   {
-    // 25 Nov 2026 (read that day, ~00:25 CET): CCOO de Catalunya's news of 24 Nov (perfumery). The organisers' notice only: no registered call or
-    // order seen, and none is due (a private sector). UGT FICA's home page did not carry it yet.
+    // 25 Nov 2026 (read that day, ~00:25 CET): CCOO de Catalunya's news of 24 Nov (perfumery). Second and third source read the same night (~00:40):
+    // UGT FICA nº 3861 (18 Nov: the SIMA mediation of 17 Nov ended without agreement, strike kept on 27 Nov, 23 Dec and 4 Jan) and CCOO de Industria's
+    // state-level news (19 Nov: "del Estado"; shops of the big brands such as El Corte Inglés, and factories). Still the organisers' notices only: no
+    // registered call or order seen, and none is due (a private sector). The employers' association, STANPA, has nothing on the strike on its site
+    // (its own search for "huelga" is empty, 25 Nov).
     id: "huelga-perfumeria-2026-11-27",
     dates: ["2026-11-27", "2026-12-23", "2027-01-04"],
     sector: "industry",
@@ -999,9 +1049,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     label: { ca: "perfumeria i cosmètica", es: "perfumería y cosmética", en: "perfumery and cosmetics" },
     scope: {
-      ca: "Les persones que treballen al sector de la perfumeria i la cosmètica, a tot Espanya: unes 7.000 a Catalunya, segons CCOO de Catalunya. No afecta el transport, la sanitat ni les escoles.",
-      es: "Las personas que trabajan en el sector de la perfumería y la cosmética, en toda España: unas 7.000 en Cataluña, según CCOO de Catalunya. No afecta al transporte, la sanidad ni los colegios.",
-      en: "People who work in the perfumery and cosmetics sector, all over Spain: about 7,000 in Catalonia, according to CCOO de Catalunya. It does not touch transport, health care or schools.",
+      ca: "Les persones que treballen al sector de la perfumeria i la cosmètica (conveni estatal de perfumeria i afins), a tot Espanya: segons CCOO d'Indústria, qui ven les marques a botigues com El Corte Inglés i les plantilles de les fàbriques de gels i xampús; unes 7.000 a Catalunya, segons CCOO de Catalunya. No afecta el transport, la sanitat ni les escoles.",
+      es: "Las personas que trabajan en el sector de la perfumería y la cosmética (convenio estatal de perfumería y afines), en toda España: según CCOO de Industria, quienes venden las marcas en tiendas como El Corte Inglés y las plantillas de las fábricas de geles y champús; unas 7.000 en Cataluña, según CCOO de Catalunya. No afecta al transporte, la sanidad ni los colegios.",
+      en: "People who work in the perfumery and cosmetics sector (the state-wide perfumery and related products collective agreement), all over Spain: according to CCOO Industria, those who sell the brands in shops such as El Corte Inglés and the workforces of the factories that make gels and shampoos; about 7,000 in Catalonia, according to CCOO de Catalunya. It does not touch transport, health care or schools.",
     },
     hours: {
       ca: "Tres jornades de vaga: el divendres 27 de novembre (Black Friday), el 23 de desembre i el 4 de gener. L'avís no en diu l'horari. El 27, CCOO convoca una concentració a partir de les 9.00 h davant d'El Corte Inglés de la plaça Catalunya de Barcelona.",
@@ -1009,14 +1059,14 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: "Three strike days: Friday 27 November (Black Friday), 23 December and 4 January. The notice gives no hours. On the 27th CCOO has called a rally from 09:00 outside El Corte Inglés in Plaça Catalunya, Barcelona.",
     },
     calledBy: {
-      ca: `CCOO d'Indústria i UGT FICA, segons ${link(U.perfumery, "la notícia de CCOO de Catalunya del 24 de novembre")}.`,
-      es: `CCOO de Industria y UGT FICA, según ${link(U.perfumery, "la noticia de CCOO de Catalunya del 24 de noviembre")}.`,
-      en: `The unions CCOO Industria and UGT FICA, according to ${link(U.perfumery, "CCOO de Catalunya's news of 24 November")}.`,
+      ca: `CCOO d'Indústria i UGT FICA, segons ${link(U.perfumeryFica, "la nota de UGT FICA del 18 de novembre")}, ${link(U.perfumeryIndustria, "la de CCOO d'Indústria del 19")} i ${link(U.perfumery, "la notícia de CCOO de Catalunya del 24 de novembre")}. La patronal que negocia el conveni és STANPA.`,
+      es: `CCOO de Industria y UGT FICA, según ${link(U.perfumeryFica, "la nota de UGT FICA del 18 de noviembre")}, ${link(U.perfumeryIndustria, "la de CCOO de Industria del 19")} y ${link(U.perfumery, "la noticia de CCOO de Catalunya del 24 de noviembre")}. La patronal que negocia el convenio es STANPA.`,
+      en: `The unions CCOO Industria and UGT FICA, according to ${link(U.perfumeryFica, "UGT FICA's note of 18 November")}, ${link(U.perfumeryIndustria, "CCOO Industria's of 19 November")} and ${link(U.perfumery, "CCOO de Catalunya's news of 24 November")}. The employers' association at the bargaining table is STANPA.`,
     },
     basis: {
-      ca: `Consta a l'avís d'un dels sindicats, ${link(U.perfumery, "CCOO de Catalunya, el 24 de novembre")}: «tres jornades de vaga» el 27 de novembre, el 23 de desembre i el 4 de gener. No hi ha cap ordre ni resolució oficial, perquè no és un servei públic essencial.`,
-      es: `Consta en el aviso de uno de los sindicatos, ${link(U.perfumery, "CCOO de Catalunya, el 24 de noviembre")}: «tres jornadas de huelga» el 27 de noviembre, el 23 de diciembre y el 4 de enero. No hay ninguna orden ni resolución oficial, porque no es un servicio público esencial.`,
-      en: `It rests on one of the unions' own notices, ${link(U.perfumery, "CCOO de Catalunya, 24 November")}: "tres jornadas de huelga" (three strike days) on 27 November, 23 December and 4 January. There is no official order or resolution, because it is not an essential public service.`,
+      ca: `Consta als avisos dels dos sindicats convocants, amb les mateixes tres dates (27 de novembre, 23 de desembre i 4 de gener): ${link(U.perfumeryFica, "UGT FICA, el 18 de novembre")} (després de la mediació sense acord al SIMA del dia 17: «ambos sindicatos confirman el mantenimiento de la huelga»), ${link(U.perfumeryIndustria, "CCOO d'Indústria, el 19")} i ${link(U.perfumery, "CCOO de Catalunya, el 24")} («tres jornades de vaga»). No hi ha cap ordre ni resolució oficial, perquè no és un servei públic essencial, i el {checked} la patronal STANPA no havia publicat res sobre la vaga al seu web.`,
+      es: `Consta en los avisos de los dos sindicatos convocantes, con las mismas tres fechas (27 de noviembre, 23 de diciembre y 4 de enero): ${link(U.perfumeryFica, "UGT FICA, el 18 de noviembre")} (tras la mediación sin acuerdo en el SIMA del día 17: «ambos sindicatos confirman el mantenimiento de la huelga»), ${link(U.perfumeryIndustria, "CCOO de Industria, el 19")} y ${link(U.perfumery, "CCOO de Catalunya, el 24")} («tres jornadas de huelga»). No hay ninguna orden ni resolución oficial, porque no es un servicio público esencial, y el {checked} la patronal STANPA no había publicado nada sobre la huelga en su web.`,
+      en: `It rests on the notices of both unions that call it, with the same three dates (27 November, 23 December and 4 January): ${link(U.perfumeryFica, "UGT FICA, 18 November")} (after the SIMA mediation of the 17th ended without agreement: "ambos sindicatos confirman el mantenimiento de la huelga"), ${link(U.perfumeryIndustria, "CCOO Industria, 19 November")} and ${link(U.perfumery, "CCOO de Catalunya, 24 November")} ("tres jornadas de huelga", three strike days). There is no official order or resolution, because it is not an essential public service, and on {checked} the employers' association STANPA had published nothing about the strike on its website.`,
     },
     minimumServices: {
       status: "none",
@@ -1029,6 +1079,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     sources: [
       { name: "El sector de la perfumeria i la cosmètica farà vaga el 27 de novembre per reclamar un conveni que avanci en salaris, jornada i conciliació (24 de novembre de 2026)", url: U.perfumery, publisher: "CCOO de Catalunya" },
+      { name: "El 27N será un viernes negro en la perfumería y la cosmética: los y las trabajadoras irán a la huelga para exigir avances en salarios, jornada y conciliación (19 de noviembre de 2026)", url: U.perfumeryIndustria, publisher: "CCOO de Industria" },
+      { name: "UGT FICA denuncia el bloqueo de la negociación del Convenio Estatal de Perfumería y Afines y mantiene la convocatoria de huelga (18 de noviembre de 2026)", url: U.perfumeryFica, publisher: "UGT FICA" },
     ],
   },
   {
@@ -1105,6 +1157,62 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "Órdenes de servicios mínimos", url: U.euskadiList, publisher: "Gobierno Vasco" },
       { name: "La fuerza de la movilización obliga a Osakidetza a mover ficha, pero las propuestas siguen siendo insuficientes (13/11/2026)", url: U.labOsakidetza, publisher: "LAB" },
       { name: "Nueva jornada de movilizaciones ante la falta de avances en la negociación (17/11/2026)", url: U.elaOsakidetza, publisher: "ELA" },
+    ],
+  },
+  {
+    // 25 Nov 2026 (read that day, ~00:55 CET): CSIF Educación Madrid's calendar of partial stoppages (its notice of 23 Sep) and the Comunidad de Madrid's two
+    // orders in the BOCM (Orden 4252/2026, 9 Oct; Orden 4977/2026, 19 Nov), which quote CSIF's call and its days. Only CSIF's dated days from 26 Nov are listed
+    // here (the 20, 22, 26 and 30 Oct and the November days to the 24th are past). The same orders also cover the indefinite strike that CCOO, UGT, CGT and other
+    // organisations called from 14 Oct; their current notices were not read, so it is not listed. BOCM 20-24 Nov: no further order. CSIF's appeal to the TSJ of
+    // Madrid (20 Nov, by its own post): no ruling on its site on 25 Nov.
+    id: "huelga-madrid-colegios-csif-2026-11-26",
+    dates: ["2026-11-26", "2026-11-30", "2026-12-01", "2026-12-10", "2026-12-11", "2026-12-16", "2026-12-18"],
+    sector: "education",
+    status: "official",
+    title: {
+      ca: "paros parcials del professorat dels centres públics de la Comunitat de Madrid (CSIF)",
+      es: "paros parciales del profesorado de los centros públicos de la Comunidad de Madrid (CSIF)",
+      en: "partial stoppages by teachers in the Community of Madrid's public schools (CSIF)",
+    },
+    label: { ca: "escola pública de Madrid (CSIF)", es: "colegios públicos de Madrid (CSIF)", en: "Madrid public schools (CSIF)" },
+    scope: {
+      ca: "El personal docent funcionari de tots els centres docents i educatius públics no universitaris de la Comunitat de Madrid. Només a la Comunitat de Madrid: no afecta les escoles de Catalunya ni d'altres regions.",
+      es: "El personal docente funcionario de todos los centros docentes y educativos públicos no universitarios de la Comunidad de Madrid. Solo en la Comunidad de Madrid: no afecta a los colegios de Cataluña ni de otras regiones.",
+      en: "Civil-service teaching staff at all public, non-university schools and teaching centres in the Community of Madrid. Madrid only: schools in Catalonia and other regions are not affected.",
+    },
+    hours: {
+      ca: `Dos paros de dues hores cada dia de vaga, de 9.00 a 11.00 h i de 17.00 a 19.00 h: el dijous 26 i el dilluns 30 de novembre, i el dimarts 1, el dijous 10, el divendres 11, el dimecres 16 i el divendres 18 de desembre (${link(U.csifMadrid, "calendari de CSIF")}).`,
+      es: `Dos paros de dos horas cada día de huelga, de 9.00 a 11.00 h y de 17.00 a 19.00 h: el jueves 26 y el lunes 30 de noviembre, y el martes 1, el jueves 10, el viernes 11, el miércoles 16 y el viernes 18 de diciembre (${link(U.csifMadrid, "calendario de CSIF")}).`,
+      en: `Two two-hour stoppages on each strike day, 09:00 to 11:00 and 17:00 to 19:00: Thursday 26 and Monday 30 November, and Tuesday 1, Thursday 10, Friday 11, Wednesday 16 and Friday 18 December (${link(U.csifMadrid, "CSIF's calendar")}).`,
+    },
+    calledBy: {
+      ca: `El sindicat CSIF Educación Madrid, a ${link(U.csifMadrid, "la seva convocatòria del 23 de setembre")}.`,
+      es: `El sindicato CSIF Educación Madrid, en ${link(U.csifMadrid, "su convocatoria del 23 de septiembre")}.`,
+      en: `The union CSIF Educación Madrid, in ${link(U.csifMadrid, "its call of 23 September")}.`,
+    },
+    basis: {
+      ca: `${link(U.madridOrder4252, "L'Ordre 4252/2026, de 7 d'octubre")} (BOCM del 9 d'octubre) fixa serveis mínims per a «las huelgas convocadas a partir del día 14 de octubre de 2026» als centres públics no universitaris de la Comunitat de Madrid i hi recull la convocatòria de CSIF amb els mateixos dies i franges: «1, 10, 11, 16 y 18 de diciembre de 2026, en las franjas desde las 9:00 a las 11:00 horas […] y desde las 17:00 a las 19:00 horas». La mateixa ordre cobreix la vaga indefinida que CCOO, UGT, CGT i altres organitzacions van convocar des del 14 d'octubre; aquesta fitxa només en llista els dies de CSIF.`,
+      es: `${link(U.madridOrder4252, "La Orden 4252/2026, de 7 de octubre")} (BOCM del 9 de octubre) fija servicios mínimos para «las huelgas convocadas a partir del día 14 de octubre de 2026» en los centros públicos no universitarios de la Comunidad de Madrid y recoge la convocatoria de CSIF con los mismos días y franjas: «1, 10, 11, 16 y 18 de diciembre de 2026, en las franjas desde las 9:00 a las 11:00 horas […] y desde las 17:00 a las 19:00 horas». La misma orden cubre la huelga indefinida que CCOO, UGT, CGT y otras organizaciones convocaron desde el 14 de octubre; esta ficha solo lista los días de CSIF.`,
+      en: `${link(U.madridOrder4252, "Order 4252/2026 of 7 October")} (BOCM, 9 October) sets minimum services for "las huelgas convocadas a partir del día 14 de octubre de 2026" (the strikes called from 14 October 2026) in the Community of Madrid's public non-university schools, and it quotes CSIF's call with the same days and hours: "1, 10, 11, 16 y 18 de diciembre de 2026, en las franjas desde las 9:00 a las 11:00 horas […] y desde las 17:00 a las 19:00 horas". The same order covers the indefinite strike that CCOO, UGT, CGT and other organisations called from 14 October; this entry lists only CSIF's days.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Ordre de Madrid: direcció i un docent per cada 50, 70 o 90 alumnes",
+        es: "Orden de Madrid: dirección y un docente por cada 50, 70 o 90 alumnos",
+        en: "Madrid order: school heads and one teacher per 50, 70 or 90 pupils",
+      },
+      text: {
+        ca: `${link(U.madridOrder4252, "L'Ordre 4252/2026")} fixa els serveis mínims i ${link(U.madridOrder4977, "l'Ordre 4977/2026, de 17 de novembre")} (BOCM del 19; efectes des del dia següent) la modifica; no hi va haver acord amb els comitès de vaga. Ara, a cada centre: el director i el cap d'estudis; **un mestre per cada 50 alumnes** o fracció als centres amb segon cicle d'Infantil i Primària, **un professor per cada 90** alumnes d'ESO i FP Bàsica i **un per cada 70** de Batxillerat i cicles de grau mitjà i superior; un professor més per cada tres unitats a 6è de Primària, 4t d'ESO i els cursos finals de FP. A 2n de Batxillerat, a més, el professorat de les matèries de la PAU durant el **50%** de les hores setmanals de cada grup fins al 31 de gener de 2027 (75% fins al 30 d'abril i 90% després). El {checked}, ${link(U.csifMadridAppeal, "segons CSIF")}, l'ordre del 17 de novembre està impugnada davant el TSJ de Madrid (recurs del 20 de novembre) i al seu web no hi consta cap resolució.`,
+        es: `${link(U.madridOrder4252, "La Orden 4252/2026")} fija los servicios mínimos y ${link(U.madridOrder4977, "la Orden 4977/2026, de 17 de noviembre")} (BOCM del 19; efectos desde el día siguiente) la modifica; no hubo acuerdo con los comités de huelga. Ahora, en cada centro: el director y el jefe de estudios; **un maestro por cada 50 alumnos** o fracción en los centros con segundo ciclo de Infantil y Primaria, **un profesor por cada 90** alumnos de ESO y FP Básica y **uno por cada 70** de Bachillerato y ciclos de grado medio y superior; un profesor más por cada tres unidades en 6.º de Primaria, 4.º de ESO y los cursos finales de FP. En 2.º de Bachillerato, además, el profesorado de las materias de la PAU durante el **50%** de las horas semanales de cada grupo hasta el 31 de enero de 2027 (75% hasta el 30 de abril y 90% después). El {checked}, ${link(U.csifMadridAppeal, "según CSIF")}, la orden del 17 de noviembre está recurrida ante el TSJ de Madrid (recurso del 20 de noviembre) y en su web no consta ninguna resolución.`,
+        en: `${link(U.madridOrder4252, "Order 4252/2026")} sets the minimum services and ${link(U.madridOrder4977, "Order 4977/2026 of 17 November")} (BOCM, 19 November; in force from the next day) amends it; there was no agreement with the strike committees. Now, in each school: the head and the head of studies; **one teacher per 50 pupils** or part of 50 in schools with the second cycle of nursery (Infantil) and primary, **one teacher per 90** pupils of ESO and basic vocational training, and **one per 70** in Bachillerato and intermediate and higher vocational cycles; one more teacher per three classes in the last year of primary, 4th year of ESO and the final years of vocational training. In the second year of Bachillerato, teachers of the university-entrance (PAU) subjects also count during **50%** of each group's weekly hours until 31 January 2027 (75% until 30 April and 90% after). On {checked}, ${link(U.csifMadridAppeal, "according to CSIF")}, the order of 17 November is under appeal to the Madrid High Court (TSJ; filed on 20 November) and its website shows no ruling.`,
+      },
+    },
+    sources: [
+      { name: "ORDEN 4252/2026, de 7 de octubre: servicios mínimos esenciales en los centros docentes y educativos públicos no universitarios de la Comunidad de Madrid, con ocasión de las huelgas convocadas a partir del día 14 de octubre de 2026 (BOCM núm. 241, 9 de octubre de 2026)", url: U.madridOrder4252, publisher: "Comunidad de Madrid, Boletín Oficial (BOCM)" },
+      { name: "ORDEN 4977/2026, de 17 de noviembre, por la que se modifica la Orden 4252/2026 (BOCM núm. 278, 19 de noviembre de 2026)", url: U.madridOrder4977, publisher: "Comunidad de Madrid, Boletín Oficial (BOCM)" },
+      { name: "CSIF Educación Madrid convoca huelga indefinida a partir del 14 de octubre (23 de septiembre de 2026)", url: U.csifMadrid, publisher: "CSIF Educación Madrid" },
+      { name: "CSIF lleva a los tribunales los servicios mínimos abusivos impuestos por la Consejería de Educación (21 de noviembre de 2026)", url: U.csifMadridAppeal, publisher: "CSIF Educación Madrid" },
     ],
   },
 ];

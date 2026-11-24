@@ -138,7 +138,11 @@ test("the first line answers the question, in the tense of the as-of date", () =
 test("the day's strikes come from the entries and every one is named and has its section", () => {
   // 20 Nov 2026: SEMAF's strike of the 23rd is called off: not in the entries, in SPAIN_NOT_HAPPENING and STRIKES_CALLED_OFF.
   assert.deepEqual(spainStrikesOn2326("strike23n").map((s) => s.id).sort(), [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu].sort());
-  assert.deepEqual(spainStrikesOn2326("strike26n").map((s) => s.id).sort(), [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu].sort());
+  // 25 Nov 2026: and CSIF's partial stoppages in the Community of Madrid's public schools (26th is one of its days; BOCM Orden 4252/2026).
+  assert.deepEqual(
+    spainStrikesOn2326("strike26n").map((s) => s.id).sort(),
+    [STRIKE_DAY_2326_IDS.correos, STRIKE_DAY_2326_IDS.smu, "huelga-madrid-colegios-csif-2026-11-26"].sort(),
+  );
   assert.ok(!SPAIN_STRIKES.some((s) => s.id === "huelga-renfe-2026-11-23"));
   assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"));
   assert.ok(SPAIN_NOT_HAPPENING.some((s) => s.id === STRIKE_DAY_2326_IDS.renfeCalledOff));

@@ -93,7 +93,8 @@ const PRESS_HOSTS =
 /** Hosts whose pages are an official record: the state gazette and the Ministry of Transport. */
 // 17 Nov 2026: and the Generalitat (treball.gencat.cat lists its minimum-services orders; the regional doctors' strike has no BOE or Ministry record).
 // 19 Nov 2026: and the Basque Government (euskadi.eus lists its orders; the Bizkaia and Gipuzkoa care-home strikes have no other record).
-const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es|gencat\.cat|euskadi\.eus)$/;
+// 25 Nov 2026: and the Comunidad de Madrid (its BOCM prints the minimum-services orders of the public schools).
+const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es|gencat\.cat|euskadi\.eus|bocm\.es)$/;
 
 const texts = (value: L | undefined) => (value ? LOCALES.map((locale) => value[locale]) : []);
 const strikeTexts = (strike: SpainStrike) => [strike.scope, strike.hours, strike.calledBy, strike.basis, strike.minimumServices.text].flatMap(texts);
@@ -653,4 +654,55 @@ test("25 Nov 2026: the perfumery and cosmetics strike (CCOO de Catalunya's news 
     assert.equal(answers[2]!.day, "2026-11-27");
     assert.match(answers[2]!.text, /perfumeria i la cosm|perfumería y la cosm|perfumery and cosmetics/, `${locale}/${answers[2]!.day}`);
   }
+});
+
+test("25 Nov 2026: the perfumery strike has a second and a third source (UGT FICA nº 3861, CCOO de Industria), stays 'called', and its scope is state-wide", () => {
+  const perfumery = SPAIN_STRIKES.find((s) => s.id === "huelga-perfumeria-2026-11-27")!;
+  // Both calling unions' own notices, with the same three days; no official order exists (not a public service), so never "official".
+  assert.equal(perfumery.status, "called");
+  const urls = perfumery.sources.map((src) => src.url);
+  assert.ok(urls.includes("https://ugt-fica.org/component/content/article/3861?catid=8"), "UGT FICA nº 3861 (18 Nov)");
+  assert.ok(urls.some((url) => /^https:\/\/industria\.ccoo\.es\/noticia:772972--/.test(url)), "CCOO de Industria (19 Nov)");
+  for (const locale of LOCALES) {
+    const linked = externalHrefs(perfumery.calledBy[locale] + perfumery.basis[locale]);
+    for (const url of urls) assert.ok(linked.includes(url), `${locale}: ${url} is cited in the text`);
+    assert.match(perfumery.calledBy[locale], /STANPA/, `${locale}: the employers' association`);
+    assert.match(perfumery.basis[locale], /SIMA/, `${locale}: the failed mediation of 17 Nov`);
+    assert.match(perfumery.scope[locale], /(Espanya|España|Spain)/, `${locale}: state-wide`);
+  }
+});
+
+test("25 Nov 2026: Madrid public schools, CSIF's partial stoppages (BOCM Orden 4252/2026 and 4977/2026) are listed as official, Madrid only, from the 26th", () => {
+  const madrid = SPAIN_STRIKES.find((s) => s.id === "huelga-madrid-colegios-csif-2026-11-26")!;
+  // CSIF's calendar quoted in the BOCM: ... 24, 26 y 30 de noviembre y 1, 10, 11, 16 y 18 de diciembre; the 24th is past, so the list starts on the 26th.
+  assert.deepEqual(madrid.dates, ["2026-11-26", "2026-11-30", "2026-12-01", "2026-12-10", "2026-12-11", "2026-12-16", "2026-12-18"]);
+  assert.equal(madrid.status, "official");
+  assert.equal(madrid.sector, "education");
+  assert.equal(madrid.minimumServices.status, "published");
+  assert.deepEqual(
+    madrid.sources.map((src) => src.url),
+    [
+      "https://www.bocm.es/bocm-20261009-25",
+      "https://www.bocm.es/bocm-20261119-16",
+      "https://www.csif.es/es/articulo/comunidaddemadrid/educacion/97107",
+      "https://www.csif.es/es/articulo/comunidaddemadrid/educacion/100572",
+    ],
+  );
+  for (const locale of LOCALES) {
+    assert.match(madrid.scope[locale], /Madrid/, locale);
+    assert.match(madrid.hours![locale], /(9\.00|09:00).{1,8}(11\.00|11:00)/, `${locale}: morning stoppage`);
+    assert.match(madrid.hours![locale], /(17\.00|17:00).{1,8}(19\.00|19:00)/, `${locale}: afternoon stoppage`);
+    // The orders are the official record and are linked in the status and the minimum-services lines.
+    const linked = externalHrefs(madrid.basis[locale] + madrid.minimumServices.text[locale]);
+    assert.ok(linked.includes("https://www.bocm.es/bocm-20261009-25") && linked.includes("https://www.bocm.es/bocm-20261119-16"), locale);
+    // The pending appeal is attributed to CSIF and dated by the as-of day, not stated as a fact of ours.
+    assert.match(madrid.minimumServices.text[locale], /CSIF/, locale);
+    assert.match(madrid.minimumServices.text[locale], /\{checked\}/, locale);
+    // The 26th is in the week of the as-of day: the day-by-day answer names the schools.
+    const answer = spainDayAnswers(locale, "2026-11-25").find((a) => a.day === "2026-11-26");
+    assert.ok(answer, `${locale}: a day-by-day answer for the 26th`);
+    assert.match(answer.text, /Madrid/, locale);
+  }
+  // Not a Catalan strike: it is not on the Catalan hub.
+  assert.equal(madrid.catalanEntry, undefined);
 });
