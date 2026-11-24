@@ -12,14 +12,16 @@ import type { Locale } from "@/lib/i18n/config";
  * interactive, and places our three manual units by rule (lib/ads/config.ts).
  *
  * Rules, so that ads never stand between a reader and the answer:
- * - nothing above the content: the middle unit goes before the middle H2 of
- *   the article, only on long pages (4+ sections, 4,000+ characters) and
- *   only if that point is below the first screen;
+ * - nothing above the answer: the first in-article unit goes after the
+ *   first section (before the second H2) once that point is past the top
+ *   half of the screen; a second one further down on longer pages (5+
+ *   sections, 3,000+ characters); each at least a screen from the next
+ *   (owner, 24 Nov 2026: visible, but not annoying);
  * - the end unit closes the article, before its "sources" heading when the
  *   sources sit inside it, and only on pages with something to read;
  * - the sidebar unit (desktops) only where the sticky sidebar still fits on
  *   screen with it;
- * - at most three per page; every unit reserves its height before it loads
+ * - at most four per page (two in-article, the end unit, the desktop sidebar); every unit reserves its height before it loads
  *   (no jump) and hides itself if Google has nothing to fill it with
  *   (data-ad-status="unfilled", support.google.com/adsense/answer/10762946).
  *
@@ -89,15 +91,25 @@ function placeUnits(client: string, locale: Locale): HTMLElement[] {
     placed.push(box);
   }
 
-  // Middle of a long article, never on the first screen, never next to the end unit.
+  // In-article units (owner, 24 Nov 2026: "els anuncis surten molt amagats").
+  // First: right after the first section, so the answer is always read
+  // first, and only once that point is past the top half of the screen.
+  // Second: on longer pages, further down. Every unit at least one screen
+  // from the next, and from the end unit.
   const body = sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s;
-  if (body.length >= 4 && chars >= 4000) {
-    const at = body[Math.floor(body.length / 2)]!;
+  const half = viewport * 0.5;
+  const tops: number[] = [];
+  const far = (top: number) => tops.every((t) => Math.abs(t - top) > viewport) && endTop - top > viewport;
+  const candidates: HTMLElement[] = [];
+  if (body.length >= 2 && chars >= 2000) candidates.push(body[1]!);
+  if (body.length >= 5 && chars >= 3000) candidates.push(body[Math.floor(body.length * 0.65)]!);
+  for (const at of candidates) {
     const top = topOf(at);
-    if (top > viewport && endTop - top > viewport) {
+    if (top > half && far(top)) {
       const box = unit("middle", client, AD_SLOTS.middle, label);
       prose.insertBefore(box, at);
       placed.push(box);
+      tops.push(top);
     }
   }
 

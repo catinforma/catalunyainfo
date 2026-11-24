@@ -59,9 +59,11 @@ test("the CSP opens to HTTPS only while ads are live, and keeps the rest closed"
 
 test("the runtime follows the placement rules", () => {
   const src = readFileSync(new URL("../src/components/AdsRuntime.tsx", import.meta.url), "utf8");
-  // Middle unit: long pages only, below the first screen, away from the end unit.
-  assert.match(src, /body\.length >= 4 && chars >= 4000/);
-  assert.match(src, /top > viewport && endTop - top > viewport/);
+  // In-article units: after the first section (never above the answer), past half a screen, a screen apart.
+  assert.match(src, /if \(body\.length >= 2 && chars >= 2000\) candidates\.push\(body\[1\]!\)/);
+  assert.match(src, /if \(body\.length >= 5 && chars >= 3000\)/);
+  assert.match(src, /if \(top > half && far\(top\)\)/);
+  assert.match(src, /Math\.abs\(t - top\) > viewport\) && endTop - top > viewport/);
   // REE guard and pause.
   assert.match(src, /pauseAdRequests = paused \? 1 : 0/);
   assert.match(src, /if \(window\.__ciAdsActive\) window\.location\.reload\(\)/);

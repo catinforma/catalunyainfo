@@ -12832,3 +12832,8 @@ Check against `tests/holiday-first-screen.test.ts` and the 19 Nov rule that phot
 **Review 2026-12-20** (`snapshot.py page la-marato 14` and 28): position and CTR per query vs the baseline; share of new long-tail queries; whether "marató tv3 2026 recaptat / marcador" queries rise after 13 Dec and the page is in the past tense by then (guard 14 Dec).
 
 **Outcome:** _pending_
+
+## 2026-11-24 (night) — Ads more visible, still never above the answer (owner: "els anuncis surten molt amagats… no han de molestar però també vull generar ingressos")
+
+**Change.** `components/AdsRuntime.tsx`: the first in-article unit now goes right after the first section (before the second H2) on pages with 2+ sections and 2,000+ characters, once that point is past half a screen; a second in-article unit on pages with 5+ sections and 3,000+ characters (at 65 % of the sections); every unit at least one screen from the next and from the end unit. Before: one middle unit only on pages with 4+ sections and 4,000+ characters, below the first screen. End unit and desktop sidebar unchanged. Max four per page.
+**Watch (8 Dec, with the ads review):** GSC clicks and position on the top 20 pages (no drop), CWV/CLS in field data, AdSense viewability and RPM per unit, unfilled share.
