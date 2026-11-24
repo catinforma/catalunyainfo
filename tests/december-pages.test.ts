@@ -19,7 +19,7 @@ import {
   runWords,
 } from "../src/lib/content/batch02/december-bridge.ts";
 import { dayDate } from "../src/lib/content/batch02/festive.ts";
-import { MARATO, MARATO_GUIDE, MARATO_VERIFIED, PROGRAMME, PROGRAMME_CHECKED } from "../src/lib/content/batch02/marato.ts";
+import { FIGURES_CHECKED, MARATO, MARATO_GUIDE, MARATO_REREAD_BY, MARATO_VERIFIED, PROGRAMME, PROGRAMME_CHECKED } from "../src/lib/content/batch02/marato.ts";
 import { B2_PATHS, withReadNext, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { SHOPS } from "../src/lib/content/batch02/shops.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
@@ -418,6 +418,51 @@ test("no other edition's figures are printed as 2026's", () => {
     assert.ok(body.includes(locale === "ca" ? "9.30" : "9:30"), `${locale}: the start time`);
   }
   assert.equal(PROGRAMME_CHECKED, "2026-11-13");
+});
+
+test("La Marató: the day's essentials come first (24 Nov 2026): hours and phone in the key facts, donating before the cause, then events near you and last year's total", () => {
+  // 3Cat, 20 May 2026: "ha tancat la 34a edició amb un marcador excepcional de 14.425.548"; 9,7 million on the night, ~4,7 million more until 31 March.
+  const total: Record<Locale, string> = { ca: "14.425.548", es: "14.425.548", en: "14,425,548" };
+  const finalDate: Record<Locale, RegExp> = { ca: /20 de maig de 2026/, es: /20 de mayo de 2026/, en: /20 May 2026/ };
+  const closed: Record<Locale, RegExp> = { ca: /31 de març/, es: /31 de marzo/, en: /31 March/ };
+  const headings: Record<Locale, { donate: RegExp; events: RegExp; total: RegExp; cause: RegExp }> = {
+    ca: { donate: /Com fer un donatiu/, events: /Activitats de La Marató a prop teu/, total: /Quant va recaptar/, cause: /A què es dedica/ },
+    es: { donate: /Cómo hacer un donativo/, events: /Actividades de La Marató cerca de ti/, total: /Cuánto recaudó/, cause: /A qué se dedica/ },
+    en: { donate: /How to donate/, events: /events near you/, total: /How much did La Marató raise last year/, cause: /What is La Marató 2026 for/ },
+  };
+  for (const locale of LOCALES) {
+    const blocks = MARATO_GUIDE.editions[locale].blocks;
+    const body = text(blocks);
+    assert.ok(body.includes(total[locale]), `${locale}: last year's final total`);
+    assert.match(body, finalDate[locale], locale);
+    assert.match(body, closed[locale], locale);
+    assert.ok(JSON.stringify(blocks).includes(`](${MARATO.activities})`), `${locale}: the official events map is linked`);
+    assert.ok(MARATO_GUIDE.sources.some((source) => source.url.includes("14425548-euros")), "the final-total news is a source");
+    // The first key facts are date, TV3 hours, Catalunya Ràdio and the phone line, before the cause.
+    const facts = blocks.find((b) => b.type === "keyFacts") as { items: { label: string; value: string }[] };
+    const values = facts.items.map((item) => item.value).join(" | ");
+    assert.ok(values.indexOf(PROGRAMME.phone) < values.indexOf(MARATO.bizum) + 400, `${locale}: phone and Bizum are in the key facts`);
+    assert.ok(facts.items.slice(0, 5).some((item) => item.value.includes(PROGRAMME.phone)), `${locale}: the phone line is in the first five key facts`);
+    assert.ok(facts.items.slice(0, 5).some((item) => item.value.includes(PROGRAMME.tv[0].from) || item.value.includes(hmLike(PROGRAMME.tv[0].from))), `${locale}: the TV3 hours are in the first five key facts`);
+    // Order of the H2s.
+    const h2s = blocks.filter((b) => b.type === "heading" && (b as { level: number }).level === 2).map((b) => (b as { text: string }).text);
+    const at = (re: RegExp) => h2s.findIndex((h) => re.test(h));
+    const o = headings[locale];
+    assert.ok(at(o.donate) >= 0 && at(o.events) > at(o.donate) && at(o.total) > at(o.events) && at(o.cause) > at(o.total), `${locale}: ${JSON.stringify(h2s)}`);
+    // FAQ answers match the visible text.
+    const items = (blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    assert.ok(items.some((item) => item.answer.includes(total[locale])), `${locale}: FAQ gives last year's total`);
+  }
+  assert.equal(FIGURES_CHECKED, "2026-11-24");
+});
+
+function hmLike(time: string): string {
+  return time.replace(".", ":");
+}
+
+test("date guard: La Marató's page is re-read and put in the past tense by MARATO_REREAD_BY (the day after the programme)", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  assert.ok(today < MARATO_REREAD_BY, `From ${MARATO_REREAD_BY}: La Marató 2026 has happened. Re-read https://www.3cat.cat/tv3/marato/ for the provisional total, put the page in the past tense and move MARATO_REREAD_BY (marato.ts).`);
 });
 
 test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and the FAQ asks for the Purísima bridge; La Marató's description gives the date", () => {

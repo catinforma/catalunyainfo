@@ -12812,3 +12812,23 @@ Check against `tests/holiday-first-screen.test.ts` and the 19 Nov rule that phot
 **Tests.** `tests/school-answers-24nov.test.ts` (new: order of the blocks, the dates with weekdays, the links, the counts and the FAQ against the boxes, the guard) and the school, Spain-school, Easter 2027, December, holiday-engine, strike-guide, home-tools and free-days tests; `npx tsc --noEmit -p .` clean; `npm run -s seo:body-dates` leaves `body-dates.json` unchanged (the school guide is a database page, not a code-rendered family).
 
 **Go-live.** Deploy first (publish reads the deployed modules). Then publish **`school-calendar`** not before 26 Nov (after the 25 Nov reads). IndexNow: `/ca/guies/calendari-escolar-catalunya/ /es/guias/calendario-escolar-cataluna/ /en/guides/catalonia-school-calendar/`.
+
+## 2026-11-24 — La Marató 2026 guide: donating, events near you and last year's total move up (body only; ca/es/en; group `marato`)
+
+**Why.** `/ca/guies/la-marato-tv3-3cat/`: 28 d (28 Oct–24 Nov) about 6,236 impressions, CTR 0.6 %, position 6.6. "marató tv3 2026 data" 659 / 1 click / 6.7, "marato tv3 2026" 496 / 1 / 8.7, "marató tv3 2026" 463 / 0 / 8.6, "la marato 2026" 392 / 0 / 8.7, "quan es la marato de tv3 2026" 64 / 0 / 4.7. Daily impressions 113–282 in the last 14 days, climbing into 13 Dec. Title window: retitled 11 Nov, reverted by the rule on 18 Nov to the queued "horari, presentadors i com donar" (reads 25 Nov and 2 Dec still open). **Title, description, H1 and lead not touched.**
+
+**What changed (body, ca/es/en identical in facts).**
+- Key facts reordered: date, TV3 hours, Catalunya Ràdio, phone 900 21 50 50, Bizum 33333, then cause, where to watch, presenters; two new rows (events near you; last year's total) before edition, volunteers and album.
+- Section order: when → how to donate (was fifth) → **new "Activitats de La Marató a prop teu"** (the official comarca map, plus the rule that associations pay their takings into a separate account) → **new "Quant va recaptar La Marató l'any passat i quan se sap el marcador final?"** → cause → how to watch → programme → volunteering (heading now only volunteering; the events paragraph moved up) → album, schools, what is La Marató.
+- Three new FAQs (2025 total; when the final total is known; where to find events), each matching visible text.
+- Facts, read with curl 24 Nov 2026 (quotes in the code comment of `marato.ts`): 3Cat news 20 May 2026, "ha tancat la 34a edició amb un marcador excepcional de 14.425.548", provisional 9,7 million on the night, "prop de 4,7 milions d'euros ... fins al 31 de març"; 3Cat news 13 Dec 2025, "vuitena i última actualització ... a les dues de la matinada", "la xifra més alta a aquesta hora de les últimes cinc edicions", closes "31 de març". Events map: `/tv3/marato/activitats-populars/2026/3630/` (comarca pages list 2026 activities; Catalan only). Re-read the same day and unchanged: programme news of 10 Nov (9.30–14.30 Collserola, 16.00–1.00 Terrassa, radio 8.00, phone 900 21 50 50), donation page (internet, Bizum 33333, transfer; certificate before 31 Dec), volunteering ("Tancat el període de preinscripcions").
+- Not printed because not official: a 2026 closing date of the donation period (none published), any record claim (3Cat says "excepcional", not "rècord"), TV3 audience figures.
+- New source entries and `FIGURES_CHECKED`; date guard `MARATO_REREAD_BY = 2026-12-14` in `tests/december-pages.test.ts` (fails from 14 Dec until the page is put in the past tense with the provisional total).
+
+**Baseline (GSC 28 Oct–24 Nov):** CA 6,236 impressions, CTR 0.6 %, position 6.6 (CA daily CTR 0–1.5 %). ES and EN: see `snapshot.py page la-marato 28`.
+
+**Prediction.** More long-tail queries that the page answers lower down today ("telèfon marató 2026", "quant va recaptar la marató 2025", "activitats marató prop meu") appear by 6 Dec; head queries ("marató tv3 2026") stay at 8–9 until the title window closes, so judge CTR on the day after the programme, not before.
+
+**Review 2026-12-20** (`snapshot.py page la-marato 14` and 28): position and CTR per query vs the baseline; share of new long-tail queries; whether "marató tv3 2026 recaptat / marcador" queries rise after 13 Dec and the page is in the past tense by then (guard 14 Dec).
+
+**Outcome:** _pending_

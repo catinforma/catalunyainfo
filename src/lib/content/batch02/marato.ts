@@ -185,6 +185,30 @@ export const PROGRAMME = {
 const hm = (time: string) => time.replace(".", ":");
 
 /**
+ * Last edition's total and the activities finder, read with curl on 24 Nov 2026
+ * (quotes below):
+ *  - 3Cat, 20 May 2026 (https://www.3cat.cat/tv3/marato/14425548-euros-recaptacio-final-de-la-marato-del-2025-pel-cancer/noticia/3410623/):
+ *    "La Marató del 2025, dedicada al càncer, ha tancat la 34a edició amb un marcador excepcional de 14.425.548 [euros]. El 14 de desembre del 2025 ...
+ *    va acabar amb un marcador provisional de 9,7 milions, que s'ha vist incrementat amb els prop de 4,7 milions d'euros que la ciutadania va aportar
+ *    fins al 31 de març, quan va acabar el període de donatius."
+ *  - 3Cat, 13 Dec 2025 21.54 (https://www.3cat.cat/tv3/marato/la-marato-2025-recapta-mes-de-9-7-milions-deuros-per-a-la-recerca-sobre-el-cancer/noticia/3384911/):
+ *    "9.741.627 euros és la xifra de la vuitena i última actualització del marcador de La Marató 2025 a les dues de la matinada, després de més de 17 hores
+ *    de programa. És la xifra més alta a aquesta hora de les últimes cinc edicions i es pot incrementar fins al 31 de març del 2026, quan es tancarà
+ *    definitivament el marcador."
+ *  - Activities page (MARATO.activities): "Mapa de comarques de Catalunya. Clica una comarca per veure les activitats populars de la Marató."; the
+ *    per-comarca pages (e.g. .../activitats-populars/2026/baix-llobregat/3630/) list 2026 activities. The page answers in Catalan on /es/ and /en/ too.
+ *  - Donation page: the account for "Entitats que hagin inscrit una activitat popular" is a different one from the donations account (not printed).
+ * No closing date of the 2026 donation period is published (donation page: certificate form "abans del 31 de desembre" only), so none is printed.
+ */
+export const FIGURES_CHECKED = "2026-11-24";
+const FIGURES_CHECKED_TEXT = { ca: "24 de novembre de 2026", es: "24 de noviembre de 2026", en: "24 November 2026" } as const;
+/** Re-read by this day: after the programme the page must give the provisional total and the past tense (tests/december-pages.test.ts). */
+export const MARATO_REREAD_BY = "2026-12-14";
+const TOTAL_LAST = { ca: "14.425.548", es: "14.425.548", en: "14,425,548" } as const;
+const LAST_FINAL = "https://www.3cat.cat/tv3/marato/14425548-euros-recaptacio-final-de-la-marato-del-2025-pel-cancer/noticia/3410623/";
+const LAST_NIGHT = "https://www.3cat.cat/tv3/marato/la-marato-2025-recapta-mes-de-9-7-milions-deuros-per-a-la-recerca-sobre-el-cancer/noticia/3384911/";
+
+/**
  * The disc's twelve pieces, as 3Cat's disc page lists them (13 Nov 2026):
  * [title, original title or null, performers]. "&" joins performers and
  * becomes i / y / and.
@@ -256,6 +280,8 @@ const SOURCES: B2Source[] = [
   { name: "La 35a edició de La Marató donarà veu a les persones que conviuen amb malalties neurodegeneratives i neuromusculars (10/11/2026)", url: PROGRAMME.news, publisher: "3Cat" },
   { name: "La Marató 2026: públic", url: PROGRAMME.audience, publisher: "Fundació La Marató de 3Cat" },
   { name: "El disc de La Marató 2026", url: PROGRAMME.disc, publisher: "Fundació La Marató de 3Cat" },
+  { name: "14.425.548 euros, recaptació final de La Marató del 2025 pel càncer", url: LAST_FINAL, publisher: "3Cat" },
+  { name: "La Marató 2025 recapta més de 9,7 milions d'euros per a la recerca sobre el càncer", url: LAST_NIGHT, publisher: "3Cat" },
   { name: "Ley 49/2002, de régimen fiscal de las entidades sin fines lucrativos y de los incentivos fiscales al mecenazgo (artículo 19)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2002-25039", publisher: "BOE" },
 ];
 
@@ -305,15 +331,17 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       keyFacts("La Marató 2026, d'un cop d'ull", [
         { label: "Data", value: dayDate(MARATO.date, "ca").replace(/^d/, "D") },
-        { label: "Edició", value: `${MARATO.edition}a` },
-        { label: "Causa", value: "Malalties neurodegeneratives i neuromusculars" },
-        { label: "On es veu", value: "TV3 i Catalunya Ràdio, i en directe a 3cat.cat" },
-        { label: "Presentadors", value: "Raquel Sans i Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
-        { label: "Donatius", value: `Per internet, per Bizum (codi ${MARATO.bizum}) o per transferència, des de la pàgina oficial` },
-        { label: "Voluntaris", value: "Preinscripció tancada el 10 de novembre; el sorteig ja s'ha fet i s'assignen les places. Llista d'espera fins al 8 de desembre" },
         { label: "Horari a TV3", value: `De ${PROGRAMME.tv[0].from} a ${PROGRAMME.tv[0].to} des de la Torre de Collserola, i de ${PROGRAMME.tv[1].from} a ${PROGRAMME.tv[1].to} de la matinada des del Parc Audiovisual de Catalunya (Terrassa)` },
         { label: "Catalunya Ràdio", value: `«El suplement» especial des de la Universitat de Lleida, a partir de les ${PROGRAMME.radioFrom}` },
         { label: "Telèfon de donatius", value: `${PROGRAMME.phone}, actiu el diumenge 13 de desembre` },
+        { label: "Donatius", value: `Per internet, per Bizum (codi ${MARATO.bizum}) o per transferència, des de la pàgina oficial` },
+        { label: "Causa", value: "Malalties neurodegeneratives i neuromusculars" },
+        { label: "On es veu", value: "TV3 i Catalunya Ràdio, i en directe a 3cat.cat" },
+        { label: "Presentadors", value: "Raquel Sans i Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
+        { label: "Activitats a prop teu", value: "Mapa per comarques a la pàgina oficial d'activitats populars (en català)" },
+        { label: "Marcador del 2025 (càncer)", value: `${TOTAL_LAST.ca} euros, xifra final que 3Cat va publicar el 20 de maig de 2026; la de la nit va ser de 9,7 milions` },
+        { label: "Edició", value: `${MARATO.edition}a` },
+        { label: "Voluntaris", value: "Preinscripció tancada el 10 de novembre; el sorteig ja s'ha fet i s'assignen les places. Llista d'espera fins al 8 de desembre" },
         { label: "Disc de La Marató", value: `A la venda el ${dayDate(PROGRAMME.discDate, "ca", false)} amb els diaris, en CD per ${PROGRAMME.discPrice} €` },
       ]),
       callout(
@@ -326,6 +354,29 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `El **${day}**. Segons ${link(PROGRAMME.news, "3Cat")}, el programa de televisió començarà a les **${PROGRAMME.tv[0].from}** des de la Torre de Collserola, on s'allargarà fins a les ${PROGRAMME.tv[0].to}, i es reprendrà a les **${PROGRAMME.tv[1].from}** des del Parc Audiovisual de Catalunya, a Terrassa, fins a la ${PROGRAMME.tv[1].to} de la matinada. A Catalunya Ràdio, Roger Escapa presentarà una edició especial d'«El suplement» des de la Universitat de Lleida a partir de les ${PROGRAMME.radioFrom} (consultat el ${PROGRAMME_CHECKED_TEXT.ca}).`,
         "La Torre de Collserola es va inaugurar el 1992, el mateix any que La Marató, i segons 3Cat simbolitza la connexió: com les neurones transmeten informació, la torre fa arribar els senyals de ràdio i televisió al territori.",
         `És el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}. Aquell dia les botigues de Barcelona poden obrir, perquè el 13 de desembre és un dels diumenges d'obertura del calendari comercial del 2026: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
+      ),
+      ...h2(
+        "Com fer un donatiu a La Marató 2026",
+        `Només pels canals que publica la Fundació a la seva ${link(MARATO.donate.ca, "pàgina de donatius")}. El ${PROGRAMME_CHECKED_TEXT.ca} n'hi havia tres:`,
+      ),
+      list(
+        "**Per internet**, amb el formulari de la mateixa pàgina.",
+        `**Per Bizum**, a l'apartat «Donacions» de l'aplicació, amb el codi de La Marató: **${MARATO.bizum}**. Cal escriure el codi postal al camp «concepte».`,
+        "**Per transferència bancària** al compte de la Fundació. Copia el número de la pàgina oficial, no d'un missatge ni d'una xarxa social.",
+      ),
+      ...paras(
+        `**Per telèfon, el diumenge 13 de desembre:** al **${PROGRAMME.phone}**, segons ${link(PROGRAMME.news, "3Cat")}. Les trucades les atenen persones voluntàries des de les seus telefòniques de la Fira de Barcelona, el Palau de Congressos de Girona, el Port de Tarragona i la Universitat de Lleida.`,
+        "**Desgravació.** La Fundació La Marató de 3Cat és una entitat acollida a la Llei 49/2002. L'article 19 d'aquesta llei permet als contribuents de l'IRPF deduir el 80% dels primers 250 € donats i el 40% de la resta (el 45% si els dos exercicis anteriors es va donar a la Fundació un import igual o superior), amb el límit del 10% de la base liquidable. Per rebre el certificat, la Fundació demana omplir el formulari de la pàgina de donatius abans del 31 de desembre.",
+      ),
+      ...h2(
+        "Activitats de La Marató a prop teu",
+        `La Fundació té un **mapa de Catalunya per comarques** amb les activitats populars inscrites per a La Marató 2026 (concerts, caminades, competicions esportives, dinars...): obre la ${link(MARATO.activities, "pàgina d'activitats populars")}, clica la teva comarca i en veuràs la llista. La pàgina és en català (consultada el ${FIGURES_CHECKED_TEXT.ca}).`,
+        "Segons la Fundació, cada any s'organitzen més de 3.500 activitats. Les entitats que en vulguin fer una la poden inscriure des de la mateixa pàgina, i n'han d'ingressar la recaptació al compte que la pàgina de donatius reserva a les activitats populars, que no és el dels donatius particulars.",
+      ),
+      ...h2(
+        "Quant va recaptar La Marató l'any passat i quan se sap el marcador final?",
+        `**La Marató del 2025, dedicada al càncer, va tancar amb ${TOTAL_LAST.ca} euros.** És la xifra final que ${link(LAST_FINAL, "3Cat")} va publicar el 20 de maig de 2026, i que qualifica de «marcador excepcional»: el marcador provisional del final del programa era de 9,7 milions d'euros, i hi van sumar prop de 4,7 milions les aportacions de la ciutadania fins al 31 de març, quan va acabar el període de donatius (consultat el ${FIGURES_CHECKED_TEXT.ca}).`,
+        `**Què passarà el 13 de desembre:** durant el programa el marcador s'actualitza i la xifra de la nit és provisional. L'edició del càncer en va fer la vuitena i última actualització a les dues de la matinada, amb 9,7 milions d'euros, la xifra més alta a aquella hora de les últimes cinc edicions, i 3Cat va avisar que podia créixer fins al 31 de març (${link(LAST_NIGHT, "3Cat, 13 de desembre del 2025")}). Per al 2026 no hem trobat publicada la data en què es tanca el període de donatius, així que el marcador definitiu encara no té data: la xifra final de l'edició passada es va fer pública el 20 de maig.`,
       ),
       ...h2(
         "A què es dedica La Marató 2026?",
@@ -345,22 +396,8 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `**Anar-hi com a públic:** la tarda del 13 de desembre, La Marató convidava el públic al Parc Audiovisual de Catalunya, però les places ja són completes, segons la ${link(PROGRAMME.audience, "pàgina de públic")} (consultada el ${PROGRAMME_CHECKED_TEXT.ca}).`,
       ),
       ...h2(
-        "Com fer un donatiu a La Marató 2026",
-        `Només pels canals que publica la Fundació a la seva ${link(MARATO.donate.ca, "pàgina de donatius")}. El ${PROGRAMME_CHECKED_TEXT.ca} n'hi havia tres:`,
-      ),
-      list(
-        "**Per internet**, amb el formulari de la mateixa pàgina.",
-        `**Per Bizum**, a l'apartat «Donacions» de l'aplicació, amb el codi de La Marató: **${MARATO.bizum}**. Cal escriure el codi postal al camp «concepte».`,
-        "**Per transferència bancària** al compte de la Fundació. Copia el número de la pàgina oficial, no d'un missatge ni d'una xarxa social.",
-      ),
-      ...paras(
-        `**Per telèfon, el diumenge 13 de desembre:** al **${PROGRAMME.phone}**, segons ${link(PROGRAMME.news, "3Cat")}. Les trucades les atenen persones voluntàries des de les seus telefòniques de la Fira de Barcelona, el Palau de Congressos de Girona, el Port de Tarragona i la Universitat de Lleida.`,
-        "**Desgravació.** La Fundació La Marató de 3Cat és una entitat acollida a la Llei 49/2002. L'article 19 d'aquesta llei permet als contribuents de l'IRPF deduir el 80% dels primers 250 € donats i el 40% de la resta (el 45% si els dos exercicis anteriors es va donar a la Fundació un import igual o superior), amb el límit del 10% de la base liquidable. Per rebre el certificat, la Fundació demana omplir el formulari de la pàgina de donatius abans del 31 de desembre.",
-      ),
-      ...h2(
-        "Com participar-hi: voluntariat i activitats populars",
+        "Voluntariat a La Marató 2026",
         `**Voluntariat.** La preinscripció per atendre trucades a les seus telefòniques del 13 de desembre es va tancar el 10 de novembre de 2026, i el sorteig ja s'ha fet: les places s'assignen a partir del número ${VOLUNTEER_CUTOFF.barcelona} a Barcelona, el ${VOLUNTEER_CUTOFF.girona} a Girona, el ${VOLUNTEER_CUTOFF.lleida} a Lleida i el ${VOLUNTEER_CUTOFF.tarragona} a Tarragona, per ordre i segons les preferències de cada persona preinscrita. Qui rep una plaça ho sap per correu electrònic, l'ha d'acceptar en 72 hores i ha de fer una formació en línia; qui no en té queda en una llista d'espera, activa fins al 8 de desembre. Només si queden places vacants s'obrirà, a mitjans de novembre, una inscripció directa: primer per a la llista d'espera i, si encara en sobren, per a tothom. Tot el procés és a ${link(MARATO.volunteer, "marato.voluntariat.org")} (consultat ${VOLUNTEER_CHECKED_TEXT.ca}). El voluntariat el coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
-        `**Activitats populars.** Segons la Fundació, cada any s'organitzen més de 3.500 activitats per recaptar diners: concerts, competicions esportives, caminades, dinars... Les entitats que en vulguin fer una la poden inscriure des de la ${link(MARATO.activities, "pàgina d'activitats populars")}, que també té un mapa per comarques amb les ja inscrites.`,
         // 4 Nov 2026: one sentence on the Gran Recapte (13-14 Nov), read from gran-recapte.ts.
         granRecapteMention("ca", "marato"),
       ),
@@ -396,6 +433,9 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "Quan surt el disc de La Marató 2026?", answer: `El ${dayDate(PROGRAMME.discDate, "ca", false)}, només aquell dia amb els diaris, en CD per ${PROGRAMME.discPrice} €. També es ven a la botiga de 3Cat (CD i USB) i és a Apple Music.` },
         { question: "Com puc ser voluntari de La Marató 2026?", answer: "La preinscripció es va tancar el 10 de novembre de 2026 i el sorteig de places ja s'ha fet. Només si queden places vacants s'obrirà, a mitjans de novembre, una inscripció directa a marato.voluntariat.org, primer per a la llista d'espera i després per a tothom. També pots col·laborar amb un donatiu o amb una activitat popular." },
         { question: "Els donatius a La Marató desgraven?", answer: "Sí, per als contribuents de l'IRPF: la Llei 49/2002 permet deduir el 80% dels primers 250 € i el 40% de la resta (el 45% per a qui hi va donar el mateix o més els dos anys anteriors). El certificat s'ha de demanar a la Fundació abans del 31 de desembre." },
+        { question: "Quant va recaptar La Marató del 2025, la del càncer?", answer: `${TOTAL_LAST.ca} euros, segons la xifra final que 3Cat va publicar el 20 de maig de 2026: 9,7 milions la nit del programa i prop de 4,7 milions més de donatius fins al 31 de març.` },
+        { question: "Quan se sap el marcador final de La Marató 2026?", answer: "El 13 de desembre hi ha un marcador provisional durant el programa. El definitiu depèn de quan acabi el període de donatius: l'edició anterior el va tancar el 31 de març i 3Cat en va publicar la xifra final el 20 de maig. Per al 2026 no hem trobat publicada la data de tancament." },
+        { question: "On trobo activitats de La Marató a prop meu?", answer: "A la pàgina d'activitats populars de 3Cat, que té un mapa per comarques amb les activitats inscrites per a La Marató 2026 (en català)." },
       ]),
       ...paras(verifiedLine("ca", MARATO_VERIFIED)),
       ...b2Related([...RELATED], "ca"),
@@ -409,15 +449,17 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       keyFacts("La Marató 2026, de un vistazo", [
         { label: "Fecha", value: dayDate(MARATO.date, "es").replace(/^d/, "D") },
-        { label: "Edición", value: `${MARATO.edition}ª` },
-        { label: "Causa", value: "Enfermedades neurodegenerativas y neuromusculares" },
-        { label: "Dónde verla", value: "TV3 y Catalunya Ràdio, y en directo en 3cat.cat" },
-        { label: "Presentadores", value: "Raquel Sans y Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
-        { label: "Donativos", value: `Por internet, por Bizum (código ${MARATO.bizum}) o por transferencia, desde la página oficial` },
-        { label: "Voluntarios", value: "Preinscripción cerrada el 10 de noviembre; el sorteo ya se ha hecho y se asignan las plazas. Lista de espera hasta el 8 de diciembre" },
         { label: "Horario en TV3", value: `De ${hm(PROGRAMME.tv[0].from)} a ${hm(PROGRAMME.tv[0].to)} desde la Torre de Collserola, y de ${hm(PROGRAMME.tv[1].from)} a ${hm(PROGRAMME.tv[1].to)} de la madrugada desde el Parc Audiovisual de Catalunya (Terrassa)` },
         { label: "Catalunya Ràdio", value: `«El suplement» especial desde la Universitat de Lleida, a partir de las ${hm(PROGRAMME.radioFrom)}` },
         { label: "Teléfono de donativos", value: `${PROGRAMME.phone}, activo el domingo 13 de diciembre` },
+        { label: "Donativos", value: `Por internet, por Bizum (código ${MARATO.bizum}) o por transferencia, desde la página oficial` },
+        { label: "Causa", value: "Enfermedades neurodegenerativas y neuromusculares" },
+        { label: "Dónde verla", value: "TV3 y Catalunya Ràdio, y en directo en 3cat.cat" },
+        { label: "Presentadores", value: "Raquel Sans y Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
+        { label: "Actividades cerca de ti", value: "Mapa por comarcas en la página oficial de actividades populares (en catalán)" },
+        { label: "Marcador de 2025 (cáncer)", value: `${TOTAL_LAST.es} euros, cifra final que 3Cat publicó el 20 de mayo de 2026; la de la noche fue de 9,7 millones` },
+        { label: "Edición", value: `${MARATO.edition}ª` },
+        { label: "Voluntarios", value: "Preinscripción cerrada el 10 de noviembre; el sorteo ya se ha hecho y se asignan las plazas. Lista de espera hasta el 8 de diciembre" },
         { label: "Disco de La Marató", value: `A la venta el ${dayDate(PROGRAMME.discDate, "es", false)} con los periódicos, en CD por ${PROGRAMME.discPrice} €` },
       ]),
       callout(
@@ -430,6 +472,29 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `El **${day}**. Según ${link(PROGRAMME.news, "3Cat")}, el programa de televisión empezará a las **${hm(PROGRAMME.tv[0].from)}** desde la Torre de Collserola, donde seguirá hasta las ${hm(PROGRAMME.tv[0].to)}, y se reanudará a las **${hm(PROGRAMME.tv[1].from)}** desde el Parc Audiovisual de Catalunya, en Terrassa, hasta la ${hm(PROGRAMME.tv[1].to)} de la madrugada. En Catalunya Ràdio, Roger Escapa presentará una edición especial de «El suplement» desde la Universitat de Lleida a partir de las ${hm(PROGRAMME.radioFrom)} (consultado el ${PROGRAMME_CHECKED_TEXT.es}).`,
         "La Torre de Collserola se inauguró en 1992, el mismo año que La Marató, y según 3Cat simboliza la conexión: como las neuronas transmiten información, la torre hace llegar las señales de radio y televisión al territorio.",
         `Es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}. Ese día las tiendas de Barcelona pueden abrir, porque el 13 de diciembre es uno de los domingos de apertura del calendario comercial de 2026: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
+      ),
+      ...h2(
+        "Cómo hacer un donativo a La Marató 2026",
+        `Solo por los canales que publica la Fundació en su ${link(MARATO.donate.es, "página de donativos")}. El ${PROGRAMME_CHECKED_TEXT.es} había tres:`,
+      ),
+      list(
+        "**Por internet**, con el formulario de la misma página.",
+        `**Por Bizum**, en el apartado de donaciones de la aplicación, con el código de La Marató: **${MARATO.bizum}**. Hay que escribir el código postal en el campo del concepto.`,
+        "**Por transferencia bancaria** a la cuenta de la Fundació. Copia el número de la página oficial, no de un mensaje ni de una red social.",
+      ),
+      ...paras(
+        `**Por teléfono, el domingo 13 de diciembre:** en el **${PROGRAMME.phone}**, según ${link(PROGRAMME.news, "3Cat")}. Las llamadas las atienden personas voluntarias desde los centros telefónicos de la Fira de Barcelona, el Palau de Congressos de Girona, el Port de Tarragona y la Universitat de Lleida.`,
+        "**Desgravación.** La Fundació La Marató de 3Cat es una entidad acogida a la Ley 49/2002. El artículo 19 de esa ley permite a los contribuyentes del IRPF deducir el 80% de los primeros 250 € donados y el 40% del resto (el 45% si en los dos ejercicios anteriores se donó a la Fundació un importe igual o superior), con el límite del 10% de la base liquidable. Para recibir el certificado, la Fundació pide rellenar el formulario de la página de donativos antes del 31 de diciembre.",
+      ),
+      ...h2(
+        "Actividades de La Marató cerca de ti",
+        `La Fundació tiene un **mapa de Cataluña por comarcas** con las actividades populares inscritas para La Marató 2026 (conciertos, caminatas, competiciones deportivas, comidas...): abre la ${link(MARATO.activities, "página de actividades populares")}, haz clic en tu comarca y verás la lista. La página está en catalán (consultada el ${FIGURES_CHECKED_TEXT.es}).`,
+        "Según la Fundació, cada año se organizan más de 3.500 actividades. Las entidades que quieran hacer una pueden inscribirla desde la misma página, e ingresar la recaudación en la cuenta que la página de donativos reserva a las actividades populares, que no es la de los donativos particulares.",
+      ),
+      ...h2(
+        "¿Cuánto recaudó La Marató el año pasado y cuándo se sabe el marcador final?",
+        `**La Marató de 2025, dedicada al cáncer, cerró con ${TOTAL_LAST.es} euros.** Es la cifra final que ${link(LAST_FINAL, "3Cat")} publicó el 20 de mayo de 2026 y que califica de «marcador excepcional»: el marcador provisional al final del programa fue de 9,7 millones de euros, y se le sumaron cerca de 4,7 millones con las aportaciones de la ciudadanía hasta el 31 de marzo, cuando acabó el periodo de donativos (consultado el ${FIGURES_CHECKED_TEXT.es}).`,
+        `**Qué pasará el 13 de diciembre:** durante el programa el marcador se va actualizando y la cifra de la noche es provisional. La edición del cáncer hizo su octava y última actualización a las dos de la madrugada, con 9,7 millones de euros, la cifra más alta a esa hora de las últimas cinco ediciones, y 3Cat avisó de que podía crecer hasta el 31 de marzo (${link(LAST_NIGHT, "3Cat, 13 de diciembre de 2025")}). Para 2026 no hemos encontrado publicada la fecha en que se cierra el periodo de donativos, así que el marcador definitivo aún no tiene fecha: la cifra final de la edición pasada se hizo pública el 20 de mayo.`,
       ),
       ...h2(
         "¿A qué se dedica La Marató 2026?",
@@ -449,22 +514,8 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `**Ir como público:** la tarde del 13 de diciembre, La Marató invitaba al público al Parc Audiovisual de Catalunya, pero las plazas ya están completas, según la ${link(PROGRAMME.audience, "página de público")} (consultada el ${PROGRAMME_CHECKED_TEXT.es}).`,
       ),
       ...h2(
-        "Cómo hacer un donativo a La Marató 2026",
-        `Solo por los canales que publica la Fundació en su ${link(MARATO.donate.es, "página de donativos")}. El ${PROGRAMME_CHECKED_TEXT.es} había tres:`,
-      ),
-      list(
-        "**Por internet**, con el formulario de la misma página.",
-        `**Por Bizum**, en el apartado de donaciones de la aplicación, con el código de La Marató: **${MARATO.bizum}**. Hay que escribir el código postal en el campo del concepto.`,
-        "**Por transferencia bancaria** a la cuenta de la Fundació. Copia el número de la página oficial, no de un mensaje ni de una red social.",
-      ),
-      ...paras(
-        `**Por teléfono, el domingo 13 de diciembre:** en el **${PROGRAMME.phone}**, según ${link(PROGRAMME.news, "3Cat")}. Las llamadas las atienden personas voluntarias desde los centros telefónicos de la Fira de Barcelona, el Palau de Congressos de Girona, el Port de Tarragona y la Universitat de Lleida.`,
-        "**Desgravación.** La Fundació La Marató de 3Cat es una entidad acogida a la Ley 49/2002. El artículo 19 de esa ley permite a los contribuyentes del IRPF deducir el 80% de los primeros 250 € donados y el 40% del resto (el 45% si en los dos ejercicios anteriores se donó a la Fundació un importe igual o superior), con el límite del 10% de la base liquidable. Para recibir el certificado, la Fundació pide rellenar el formulario de la página de donativos antes del 31 de diciembre.",
-      ),
-      ...h2(
-        "Cómo participar: voluntariado y actividades populares",
+        "Voluntariado en La Marató 2026",
         `**Voluntariado.** La preinscripción para atender llamadas en los centros telefónicos del 13 de diciembre se cerró el 10 de noviembre de 2026, y el sorteo ya se ha hecho: las plazas se asignan a partir del número ${VOLUNTEER_CUTOFF.barcelona} en Barcelona, el ${VOLUNTEER_CUTOFF.girona} en Girona, el ${VOLUNTEER_CUTOFF.lleida} en Lleida y el ${VOLUNTEER_CUTOFF.tarragona} en Tarragona, por orden y según las preferencias de cada persona preinscrita. Quien recibe una plaza lo sabe por correo electrónico, debe aceptarla en 72 horas y hacer una formación en línea; quien no la tiene queda en una lista de espera, activa hasta el 8 de diciembre. Solo si quedan plazas vacantes se abrirá, a mediados de noviembre, una inscripción directa: primero para la lista de espera y, si aún sobran, para todo el mundo. Todo el proceso está en ${link(MARATO.volunteer, "marato.voluntariat.org")} (consultado ${VOLUNTEER_CHECKED_TEXT.es}). Lo coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
-        `**Actividades populares.** Según la Fundació, cada año se organizan más de 3.500 actividades para recaudar dinero: conciertos, competiciones deportivas, caminatas, comidas... Las entidades que quieran hacer una pueden inscribirla desde la ${link(MARATO.activities, "página de actividades populares")}, que también tiene un mapa por comarcas con las ya inscritas.`,
         granRecapteMention("es", "marato"),
       ),
       ...h2(
@@ -499,6 +550,9 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "¿Cuándo sale el disco de La Marató 2026?", answer: `El ${dayDate(PROGRAMME.discDate, "es", false)}, solo ese día con los periódicos, en CD por ${PROGRAMME.discPrice} €. También se vende en la tienda de 3Cat (CD y USB) y está en Apple Music.` },
         { question: "¿Cómo puedo ser voluntario de La Marató 2026?", answer: "La preinscripción se cerró el 10 de noviembre de 2026 y el sorteo de plazas ya se ha hecho. Solo si quedan plazas vacantes se abrirá, a mediados de noviembre, una inscripción directa en marato.voluntariat.org, primero para la lista de espera y después para todo el mundo. También puedes colaborar con un donativo o con una actividad popular." },
         { question: "¿Los donativos a La Marató desgravan?", answer: "Sí, para los contribuyentes del IRPF: la Ley 49/2002 permite deducir el 80% de los primeros 250 € y el 40% del resto (el 45% para quien donó lo mismo o más los dos años anteriores). El certificado se pide a la Fundació antes del 31 de diciembre." },
+        { question: "¿Cuánto recaudó La Marató de 2025, la del cáncer?", answer: `${TOTAL_LAST.es} euros, según la cifra final que 3Cat publicó el 20 de mayo de 2026: 9,7 millones la noche del programa y cerca de 4,7 millones más en donativos hasta el 31 de marzo.` },
+        { question: "¿Cuándo se sabe el marcador final de La Marató 2026?", answer: "El 13 de diciembre hay un marcador provisional durante el programa. El definitivo depende de cuándo acabe el periodo de donativos: la edición anterior lo cerró el 31 de marzo y 3Cat publicó la cifra final el 20 de mayo. Para 2026 no hemos encontrado publicada la fecha de cierre." },
+        { question: "¿Dónde encuentro actividades de La Marató cerca de mí?", answer: "En la página de actividades populares de 3Cat, que tiene un mapa por comarcas con las actividades inscritas para La Marató 2026 (en catalán)." },
       ]),
       ...paras(verifiedLine("es", MARATO_VERIFIED)),
       ...b2Related([...RELATED], "es"),
@@ -511,15 +565,17 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     keyFacts("La Marató 2026 at a glance", [
       { label: "Date", value: dayDate(MARATO.date, "en") },
-      { label: "Edition", value: `${MARATO.edition}th` },
-      { label: "Cause", value: "Neurodegenerative and neuromuscular diseases" },
-      { label: "Where to watch", value: "TV3 and Catalunya Ràdio, and live online at 3cat.cat" },
-      { label: "Presenters", value: "Raquel Sans and Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
-      { label: "Donations", value: `Online, by Bizum (code ${MARATO.bizum}) or by bank transfer, from the official page` },
-      { label: "Volunteers", value: "Pre-registration closed on 10 November; the draw has been held and places are being assigned. Waiting list until 8 December" },
       { label: "TV3 times", value: `${hm(PROGRAMME.tv[0].from)} to ${hm(PROGRAMME.tv[0].to)} from the Torre de Collserola, then ${hm(PROGRAMME.tv[1].from)} to ${hm(PROGRAMME.tv[1].to)} am from the Parc Audiovisual de Catalunya (Terrassa)` },
       { label: "Catalunya Ràdio", value: `A special "El suplement" from the University of Lleida, from ${hm(PROGRAMME.radioFrom)}` },
       { label: "Donation phone line", value: `${PROGRAMME.phone}, open on Sunday 13 December` },
+      { label: "Donations", value: `Online, by Bizum (code ${MARATO.bizum}) or by bank transfer, from the official page` },
+      { label: "Cause", value: "Neurodegenerative and neuromuscular diseases" },
+      { label: "Where to watch", value: "TV3 and Catalunya Ràdio, and live online at 3cat.cat" },
+      { label: "Presenters", value: "Raquel Sans and Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
+      { label: "Events near you", value: "Map by comarca on the official popular activities page (in Catalan)" },
+      { label: "2025 total (cancer)", value: `${TOTAL_LAST.en} euros, the final figure 3Cat published on 20 May 2026; the figure on the night was 9.7 million` },
+      { label: "Edition", value: `${MARATO.edition}th` },
+      { label: "Volunteers", value: "Pre-registration closed on 10 November; the draw has been held and places are being assigned. Waiting list until 8 December" },
       { label: "La Marató album", value: `On sale on ${dayDate(PROGRAMME.discDate, "en", false)} with newspapers, CD at €${PROGRAMME.discPrice}` },
     ]),
     callout(
@@ -532,6 +588,29 @@ export function buildMaratoBody(locale: Locale): Block[] {
       `On **${day}**. According to ${link(PROGRAMME.news, "3Cat")}, the TV programme starts at **${hm(PROGRAMME.tv[0].from)}** from the Torre de Collserola, where it runs until ${hm(PROGRAMME.tv[0].to)}, and resumes at **${hm(PROGRAMME.tv[1].from)}** from the Parc Audiovisual de Catalunya in Terrassa, until ${hm(PROGRAMME.tv[1].to)} am. On Catalunya Ràdio, Roger Escapa presents a special edition of "El suplement" from the University of Lleida from ${hm(PROGRAMME.radioFrom)} (checked on ${PROGRAMME_CHECKED_TEXT.en}).`,
       "The Torre de Collserola, Barcelona's telecommunications tower, opened in 1992, the same year as La Marató; for 3Cat it stands for connection: just as neurons pass on information, the tower carries radio and TV signals across the country.",
       `It is the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}. Shops in Barcelona may open that day, because 13 December is one of the Sunday opening days in the 2026 shopping calendar: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
+    ),
+    ...h2(
+      "How to donate to La Marató 2026",
+      `Only through the channels the Fundació lists on its ${link(MARATO.donate.en, "donation page")}. On ${PROGRAMME_CHECKED_TEXT.en} there were three:`,
+    ),
+    list(
+      "**Online**, with the form on that page.",
+      `**By Bizum** (the Spanish mobile payment service), in the app's donations section, with La Marató's code: **${MARATO.bizum}**. Put your postcode in the payment concept field.`,
+      "**By bank transfer** to the Fundació's account. Copy the account number from the official page, never from a message or a social media post.",
+    ),
+    ...paras(
+      `**By phone, on Sunday 13 December:** on **${PROGRAMME.phone}**, according to ${link(PROGRAMME.news, "3Cat")}. Volunteers take the calls at phone centres at Fira de Barcelona, the Palau de Congressos de Girona, the Port of Tarragona and the University of Lleida.`,
+      "**Tax relief.** The Fundació La Marató de 3Cat is covered by Spain's Law 49/2002. Article 19 of that law lets people who pay Spanish income tax (IRPF) deduct 80% of the first €250 donated and 40% of the rest (45% if you gave the Fundació the same amount or more in each of the two previous years), up to 10% of the taxable base. To get the certificate, the Fundació asks donors to fill in the form on the donation page before 31 December.",
+    ),
+    ...h2(
+      "La Marató events near you",
+      `The Fundació has a **map of Catalonia by comarca** with the local events registered for La Marató 2026 (concerts, walks, sports competitions, lunches and more): open the ${link(MARATO.activities, "popular activities page")}, click your comarca and the list appears. The page is in Catalan (checked ${FIGURES_CHECKED_TEXT.en}).`,
+      "According to the Fundació, more than 3,500 events are organised every year. Groups that want to run one can register it on the same page, and pay the takings into the account the donation page sets aside for popular activities, which is not the account for individual donations.",
+    ),
+    ...h2(
+      "How much did La Marató raise last year, and when is the final total known?",
+      `**La Marató 2025, dedicated to cancer, closed at ${TOTAL_LAST.en} euros.** That is the final figure ${link(LAST_FINAL, "3Cat")} published on 20 May 2026, calling it an "exceptional scoreboard" ("marcador excepcional"): the provisional total at the end of the programme was 9.7 million euros, and nearly 4.7 million more came in from the public until 31 March, when the donation period ended (checked ${FIGURES_CHECKED_TEXT.en}).`,
+      `**What to expect on 13 December:** the scoreboard is updated during the programme and the figure on the night is provisional. The cancer edition made its eighth and last update at two in the morning, at 9.7 million euros, the highest figure at that hour in the last five editions, and 3Cat warned that it could keep growing until 31 March (${link(LAST_NIGHT, "3Cat, 13 December 2025")}). For 2026 we have not found a published closing date for the donation period, so the definitive total has no date yet: last edition's final figure was made public on 20 May.`,
     ),
     ...h2(
       "What is La Marató 2026 for?",
@@ -551,22 +630,8 @@ export function buildMaratoBody(locale: Locale): Block[] {
       `**Going as audience:** La Marató invited the public to the Parc Audiovisual de Catalunya on the afternoon of 13 December, but the places are now full, according to its ${link(PROGRAMME.audience, "audience page")} (checked on ${PROGRAMME_CHECKED_TEXT.en}).`,
     ),
     ...h2(
-      "How to donate to La Marató 2026",
-      `Only through the channels the Fundació lists on its ${link(MARATO.donate.en, "donation page")}. On ${PROGRAMME_CHECKED_TEXT.en} there were three:`,
-    ),
-    list(
-      "**Online**, with the form on that page.",
-      `**By Bizum** (the Spanish mobile payment service), in the app's donations section, with La Marató's code: **${MARATO.bizum}**. Put your postcode in the payment concept field.`,
-      "**By bank transfer** to the Fundació's account. Copy the account number from the official page, never from a message or a social media post.",
-    ),
-    ...paras(
-      `**By phone, on Sunday 13 December:** on **${PROGRAMME.phone}**, according to ${link(PROGRAMME.news, "3Cat")}. Volunteers take the calls at phone centres at Fira de Barcelona, the Palau de Congressos de Girona, the Port of Tarragona and the University of Lleida.`,
-      "**Tax relief.** The Fundació La Marató de 3Cat is covered by Spain's Law 49/2002. Article 19 of that law lets people who pay Spanish income tax (IRPF) deduct 80% of the first €250 donated and 40% of the rest (45% if you gave the Fundació the same amount or more in each of the two previous years), up to 10% of the taxable base. To get the certificate, the Fundació asks donors to fill in the form on the donation page before 31 December.",
-    ),
-    ...h2(
-      "How to take part: volunteering and local events",
+      "Volunteering at La Marató 2026",
       `**Volunteering.** Pre-registration to answer calls at the phone centres on 13 December closed on 10 November 2026, and the draw has been held: places are assigned from number ${VOLUNTEER_CUTOFF.barcelona} in Barcelona, ${VOLUNTEER_CUTOFF.girona} in Girona, ${VOLUNTEER_CUTOFF.lleida} in Lleida and ${VOLUNTEER_CUTOFF.tarragona} in Tarragona, in order and by each person's preferences. Anyone given a place is told by email, must accept it within 72 hours and then takes an online training course; everyone else goes on a waiting list that runs until 8 December. Only if places are left over will direct registration open in mid-November, first for the waiting list and then, if places remain, for everyone. The whole process is on ${link(MARATO.volunteer, "marato.voluntariat.org")} (checked ${VOLUNTEER_CHECKED_TEXT.en}). Volunteering is coordinated by the Generalitat's Directorate-General for Community Action and Social Innovation (Department of Social Rights and Inclusion).`,
-      `**Local events.** According to the Fundació, more than 3,500 fundraising events are organised every year: concerts, sports competitions, walks, lunches and more. Groups that want to run one can register it on the ${link(MARATO.activities, "popular activities page")}, which also has a map of those already registered, by comarca.`,
       granRecapteMention("en", "marato"),
     ),
     ...h2(
@@ -601,6 +666,9 @@ export function buildMaratoBody(locale: Locale): Block[] {
       { question: "When does La Marató's 2026 album come out?", answer: `On ${dayDate(PROGRAMME.discDate, "en", false)}, on that day only with newspapers, as a €${PROGRAMME.discPrice} CD. It is also sold in 3Cat's shop (CD and USB) and is on Apple Music.` },
       { question: "How can I volunteer for La Marató 2026?", answer: "Pre-registration closed on 10 November 2026 and the draw for places has been held. Only if places are left over will direct registration open in mid-November at marato.voluntariat.org, first for the waiting list and then for everyone. You can also help with a donation or a local fundraising event." },
       { question: "Are donations to La Marató tax-deductible?", answer: "Yes, for Spanish income tax (IRPF) payers: Law 49/2002 allows a deduction of 80% of the first €250 and 40% of the rest (45% for repeat donors who gave the same or more in the two previous years). Request the certificate from the Fundació before 31 December." },
+      { question: "How much did La Marató 2025, the cancer edition, raise?", answer: `${TOTAL_LAST.en} euros, according to the final figure 3Cat published on 20 May 2026: 9.7 million on the night of the programme and nearly 4.7 million more in donations until 31 March.` },
+      { question: "When is the final total of La Marató 2026 known?", answer: "On 13 December there is a provisional total during the programme. The definitive one depends on when the donation period ends: the previous edition closed it on 31 March and 3Cat published the final figure on 20 May. For 2026 we have not found a published closing date." },
+      { question: "Where can I find La Marató events near me?", answer: "On 3Cat's popular activities page, which has a map by comarca of the events registered for La Marató 2026 (in Catalan)." },
     ]),
     ...paras(verifiedLine("en", MARATO_VERIFIED)),
     ...b2Related([...RELATED], "en"),
