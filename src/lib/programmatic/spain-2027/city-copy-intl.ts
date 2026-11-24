@@ -97,6 +97,14 @@ const AREA_NAME: Record<string, Record<Edition, string>> = {
   "Parroquia de Sant Mateu": { ca: "Parròquia de Sant Mateu", en: "Parish of Sant Mateu" },
   "Parroquia de Sant Rafel": { ca: "Parròquia de Sant Rafel", en: "Parish of Sant Rafel" },
   "Parroquia de Santa Agnès": { ca: "Parròquia de Santa Agnès", en: "Parish of Santa Agnès" },
+  // The 10,000+ wave (cities-10k.ts): Valdés and San Martín del Rey Aurelio (BOPA).
+  "Todo el concejo salvo Trevías": { ca: "Tot el municipi excepte Trevías", en: "The whole municipality except Trevías" },
+  "Parroquia rural de Trevías": { ca: "Parròquia rural de Trevías", en: "Rural parish of Trevías" },
+  "Parroquias de San Martín, Santa Bárbara y Blimea": { ca: "Parròquies de San Martín, Santa Bárbara i Blimea", en: "Parishes of San Martín, Santa Bárbara and Blimea" },
+  "Parroquias de San Andrés (L'Entregu/El Entrego) y Cocañín (La Güeria)": {
+    ca: "Parròquies de San Andrés (L'Entregu/El Entrego) i Cocañín (La Güeria)",
+    en: "Parishes of San Andrés (L'Entregu/El Entrego) and Cocañín (La Güeria)",
+  },
 };
 
 /** A zone or area of a municipality in the page's language. */

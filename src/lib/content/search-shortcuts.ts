@@ -268,6 +268,8 @@ interface Place {
   name: string;
   /** Larger first when several match. */
   weight: number;
+  /** A town outside Catalonia (the Spain 2027 family): a curated topic with the same name answers first. */
+  outside?: boolean;
   links: Partial<PerLocale<Shortcut>>;
 }
 
@@ -303,6 +305,7 @@ function places(): Place[] {
     out.push({
       name: c.name,
       weight: c.population,
+      outside: true,
       links: {
         es: { href: es, label: `Festivos de ${c.name} 2027` },
         ...(ed ? { ca: { href: ed.ca, label: `Festius de ${c.name} 2027` }, en: { href: ed.en, label: `${c.name} public holidays 2027` } } : {}),
@@ -353,7 +356,9 @@ export function searchShortcuts(locale: Locale, rawQuery: string, limit = 6): Sh
     placeLinks.forEach(push);
   } else if (besides === "") {
     // The place alone: its holiday page, then the topic pages named after it (the day trip), then its other pages.
-    push(placeLinks[0]);
+    // A town outside Catalonia that shares its name with a topic of this site ("Montserrat": the mountain, not the
+    // town of that name in Valencia, 24 Nov 2026) goes after the topic.
+    if (!(matched[0]!.outside && TOPICS.some((t) => t.keys.includes(query)))) push(placeLinks[0]);
     topicLinks.forEach(push);
     placeLinks.forEach(push);
   } else {

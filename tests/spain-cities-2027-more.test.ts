@@ -15,6 +15,7 @@ process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 type Region = import("../src/lib/programmatic/holidays/boe-2027.ts").Region;
 const { CITY_ROWS, CORE_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-data.ts");
 const { COUNCIL_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-council.ts");
+const { TEN_K_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-10k.ts");
 const { GSC_SMALL_TOWNS, LIST_READ_ON, MORE_CITY_ROWS, MORE_MIN_POPULATION, MORE_READ_ON, WAITING_RECHECK_BY, WAITING_TOWNS } = await import(
   "../src/lib/programmatic/spain-2027/cities-more.ts"
 );
@@ -51,7 +52,7 @@ test("waiting towns: re-read the pending communities by WAITING_RECHECK_BY (DOGV
 test("selection: 20,000+ inhabitants (INE 1 Jan 2025) below the core's 50,000, or a smaller town with Search Console queries", () => {
   assert.equal(MORE_MIN_POPULATION, 20_000);
   assert.ok(MORE_CITY_ROWS.length >= 100, `${MORE_CITY_ROWS.length} rows`);
-  assert.equal(CITY_ROWS.length, CORE_CITY_ROWS.length + MORE_CITY_ROWS.length + COUNCIL_CITY_ROWS.length);
+  assert.equal(CITY_ROWS.length, CORE_CITY_ROWS.length + MORE_CITY_ROWS.length + COUNCIL_CITY_ROWS.length + TEN_K_CITY_ROWS.length);
   const codes = [...CITY_ROWS, ...WAITING_TOWNS].map((r) => r.ine);
   assert.equal(new Set(codes).size, codes.length, "no municipality twice");
   for (const r of [...MORE_CITY_ROWS, ...WAITING_TOWNS]) {

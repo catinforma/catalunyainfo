@@ -22,6 +22,9 @@ test("town holiday queries open the town's page, including towns without 2026 da
   assert.equal(first("es", "festivos girona 2027"), "/es/festivos/girona/");
   // "montserrat" alone is the mountain, not Monistrol.
   assert.equal(first("ca", "Montserrat"), "/ca/escapades/montserrat-per-lliure-des-barcelona/");
+  // Nor the town of that name in Valencia (Spain 2027 family, 24 Nov 2026): its page is listed after the mountain's.
+  assert.equal(first("es", "Montserrat"), "/es/escapadas/montserrat-por-libre-desde-barcelona/");
+  assert.ok(searchShortcuts("es", "Montserrat").some((s) => s.href === "/es/festivos/2027/comunidad-valenciana/montserrat/"));
   // A short name only matches when it is all the query says.
   assert.ok(!searchShortcuts("ca", "festes de les Santes").some((s) => s.href === "/ca/festius/les/"));
   assert.equal(first("ca", "festius les"), "/ca/festius/les/");

@@ -5,6 +5,7 @@ import { test } from "node:test";
 
 import { CITIES, bulletinLocal2027, cityBySlug, cityReadOn, local2027 } from "../src/lib/programmatic/spain-2027/cities.ts";
 import { CANTABRIA_READ_ON } from "../src/lib/programmatic/spain-2027/cities-data.ts";
+import { TEN_K_CITY_ROWS, TEN_K_READ_ON } from "../src/lib/programmatic/spain-2027/cities-10k.ts";
 import { COUNCIL_READ_ON } from "../src/lib/programmatic/spain-2027/cities-council.ts";
 import { LIST_READ_ON, WAITING_RECHECK_BY, WAITING_TOWNS } from "../src/lib/programmatic/spain-2027/cities-more.ts";
 import { cityAnswer, cityFaq, cityLayerLines } from "../src/lib/programmatic/spain-2027/city-copy.ts";
@@ -20,6 +21,9 @@ import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
  * <ciudad> en 2027?" in the FAQ and name the city in the local section.
  */
 
+/** The 10,000+ wave (24 Nov 2026, cities-10k.ts) reads the same bulletins on its own day. */
+const TEN_K = new Set(TEN_K_CITY_ROWS.map((r) => r.ine));
+
 test("Cantabria: BOC núm. 224, de 20.11.2026, read the day it came out", () => {
   const local = SOURCES.CB.local;
   assert.equal(local.status, "published");
@@ -31,7 +35,7 @@ test("Cantabria: BOC núm. 224, de 20.11.2026, read the day it came out", () => 
   assert.equal(CANTABRIA_READ_ON, local.y2027?.date);
   assert.equal(LIST_READ_ON.CB, local.y2027?.date);
   assert.ok(!WAITING_TOWNS.some((t) => t.region === "CB"), "every Cantabrian town of 20,000+ has its page");
-  const cb = CITIES.filter((c) => c.region === "CB");
+  const cb = CITIES.filter((c) => c.region === "CB" && !TEN_K.has(c.ine));
   assert.deepEqual(cb.map((c) => c.slug).sort(), ["camargo", "castro-urdiales", "pielagos", "santander", "torrelavega"]);
   for (const c of cb) {
     assert.equal(c.status2027, "published", c.slug);
@@ -93,7 +97,7 @@ test("Comunitat Valenciana: the three provincial BOPs, every city of the family 
     assert.equal(c.status2027, "published", c.slug);
     const part = local.parts!.find((p) => p.place === c.province)!;
     assert.equal(local2027(c)!.source.ref, part.text.ref, `${c.slug}: not its province's BOP`);
-    assert.equal(cityReadOn(c), "2026-11-20", c.slug);
+    assert.equal(cityReadOn(c), TEN_K.has(c.ine) ? TEN_K_READ_ON : "2026-11-20", c.slug);
   }
   const days = (slug: string) => local2027(cityBySlug("VC", slug)!)!.days.map((d) => d.date);
   assert.deepEqual(days("benidorm"), ["2027-11-15", "2027-11-16"]);

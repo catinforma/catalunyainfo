@@ -12575,3 +12575,22 @@ those date reasons; all eight strike test files pass now.
 **Review:** 2026-12-04 (positions for the Canyelles, Vic, Olot, Manresa, Granollers queries; clicks per family). Not a title/description experiment: titles and descriptions are unchanged, except where a confirmed date replaces "pending" text in the body.
 
 **Tests:** `christmas-fairs` (42), `christmas-markets` (9), `living-nativities-guide` (13), `polls-blackout` (18).
+
+
+## 2026-11-24 — Spain 2027 holidays: 227 towns of 10,000 to 19,999 inhabitants get their page (second deploy of the day; programmatic, no publish group)
+
+**What changed:** `cities-10k.ts` adds 227 towns outside Catalonia with 10,000–19,999 inhabitants (INE, 1 Jan 2025) to the Spain 2027 family (`/es/festivos/2027/<comunidad>/<ciudad>/`, with ca and en editions, the leave planner and the .ics feed), each with its two 2027 local days from its community's or province's official list: Andalucía 67, Comunitat Valenciana 37, Galicia 33, País Vasco 24, Asturias 11, Illes Balears 12, Canarias 12, Murcia 12, Extremadura 6, Cantabria 5, Castilla y León 5, La Rioja 3. The family goes from 354 to 581 Spanish pages. The ca and en editions of these towns stay under the low-demand rule (`low-demand.ts`), like the earlier waves.
+
+**No page:** 53 towns of Aragón, Castilla-La Mancha, Madrid and Navarra wait (`TEN_K_WAITING`): their 2027 local list was not out on 24 Nov (last issue read of each bulletin in `TEN_K_PENDING_READ`); they are re-read with the 20,000+ wave (`WAITING_RECHECK_BY`). Five are left out with the reason (`TEN_K_LEFT_OUT`): Llanes (the BOPA gives one zone a single day), Benissa (the BOP prints "lunes" for two days that are Tuesdays in 2027), Villaquilambre and Astorga (not in the León annex), Benavente (not in the Zamora list).
+
+**How it was checked (24 Nov, two readings):** the worker transcribed each row with the bulletin's line as a comment above it. The head then downloaded the same 24 documents again (BOJA, BOPA, BOIB, BOC Canarias, three Valencian BOPs, BOC Cantabria, nine Castilla y León BOPs, DOE, DOG in Spanish and Galician, BORM, BOTHA, BOB, BOG, BOR; all byte-identical to the worker's copies) and compared every row: the dates of the 67 Andalusian rows against the BOJA table under their province; the dates and names of the other 160 against the bulletin text next to the town's name; the seven that a script could not match by eye (Asturias's layout, Cantabria's "ASTILLERO, EL" order, wrapped lines; La Bañeza on the page image, because León's annex has no text layer). Every population (285 towns) matches the INE table of its province, and no town of 10,000–19,999 in the 46 provinces is missing from the rows, the waiting list or the left-out list. Tomiño: the DOG's Spanish edition prints "Tomillo"; the Galician edition prints "Tomiño" with the same two days. Formentera's 25 July 2027 is a Sunday in the BOIB and is shown as printed.
+
+**Hypothesis:** a new town page of this family enters at position 4–8 within days and its impressions grow with population^0.85; demand for "festivos / calendario laboral <town> 2027" peaks in December–January. 227 smaller towns should add roughly a third to the family's impressions. Expect few clicks until positions improve (the family's CTR is under 1 % at position 9).
+
+**Baseline (GSC, 11–23 Nov, pages under `/es/festivos/2027/`):** 214 clicks, 25,551 impressions, position 8.0–9.8 on weekdays; 354 pages.
+
+**Review:** 2026-12-08 (how many of the 227 are indexed and have impressions; family impressions per day; the queries of the ten largest new towns). Titles, descriptions and H1s of existing pages are unchanged.
+
+**Tests:** new `spain-cities-2027-10k` (8); `spain-cities-2027-more`, `spain-2027-laboral-20nov` adjusted to count the new rows.
+
+**Site search:** one of the new towns is Montserrat (Valencia). Searching "Montserrat" on the site still opens the mountain's day-trip page first; the town's page comes after it (`search-shortcuts.ts`, pinned in `search-shortcuts` test).

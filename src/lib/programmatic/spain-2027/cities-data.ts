@@ -1,5 +1,6 @@
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 
+import { TEN_K_CITY_ROWS } from "./cities-10k";
 import { COUNCIL_CITY_ROWS, COUNCIL_READ_ON } from "./cities-council";
 import { MORE_CITY_ROWS } from "./cities-more";
 import { SOURCES, type OfficialText } from "./sources";
@@ -533,10 +534,10 @@ export const CORE_CITY_ROWS: readonly CityRow[] = [
 
 /**
  * Every city with a page: the core rows, the 20,000+ wave (`cities-more.ts`),
- * then the 20,000+ towns whose council act is out before their community's
- * list (`cities-council.ts`).
+ * the 20,000+ towns whose council act is out before their community's
+ * list (`cities-council.ts`), then the 10,000+ wave (`cities-10k.ts`).
  */
-export const CITY_ROWS: readonly CityRow[] = [...CORE_CITY_ROWS, ...MORE_CITY_ROWS, ...COUNCIL_CITY_ROWS];
+export const CITY_ROWS: readonly CityRow[] = [...CORE_CITY_ROWS, ...MORE_CITY_ROWS, ...COUNCIL_CITY_ROWS, ...TEN_K_CITY_ROWS];
 
 /**
  * Ceuta and Melilla: in scope, one municipality each. Their two local days
