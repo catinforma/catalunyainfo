@@ -1307,6 +1307,11 @@
     border-left-color: var(--color-ink);
     background: var(--color-surface-sunk);
   }
+  /* Shop answer under the H1 of a town holiday page (shops-line.ts): 2-3 lines on a 360px phone. */
+  .ci-prose .ci-town-shops {
+    padding: 0.55rem 0.8rem;
+    line-height: 1.45;
+  }
 
   /* --- Next useful step (components/NextStep.tsx) -----------------------
      A tip callout holding 1-3 links. Two classes everywhere, so it wins over

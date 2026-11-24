@@ -23,8 +23,8 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-23T16:38:39.000Z",
-   "fingerprint": "v1:63ef76856dff04b870e19bb312032b62",
+   "date": "2026-11-24T21:08:17.305Z",
+   "fingerprint": "v1:2b2634f226ced9daa72e7ad98495e0f3",
    "files": 16
   },
   "block:touristTax": {
@@ -108,9 +108,9 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-24T20:23:04.000Z",
-   "fingerprint": "v1:d7b3842918e254d7956ad8ac71dda799",
-   "files": 49
+   "date": "2026-11-24T21:08:17.305Z",
+   "fingerprint": "v1:92588a69463794abedba6c5c94522dbc",
+   "files": 51
   },
   "holidays-report": {
    "date": "2026-11-18T15:12:20.000Z",

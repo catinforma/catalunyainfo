@@ -44,6 +44,7 @@ import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { ChristmasShops } from "./ChristmasShops";
+import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
 import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
 
@@ -140,15 +141,20 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               the past days collapsed, then the lead; ca keeps the table first (12 Nov 2026). */}
           {firstScreenOrder(locale).map((part) =>
             part === "answer" ? (
-              answer ? (
-                <p key={part} className="ci-lead ci-town-answer">
-                  <strong>{answer.question}</strong> {answer.before}
-                  <strong>{answer.strong}</strong>
-                  {answer.after}
-                </p>
-              ) : null
+              <Fragment key={part}>
+                {answer ? (
+                  <p className="ci-lead ci-town-answer">
+                    <strong>{answer.question}</strong> {answer.before}
+                    <strong>{answer.strong}</strong>
+                    {answer.after}
+                  </p>
+                ) : null}
+                <TownShopsLine m={m} locale={locale} />
+              </Fragment>
             ) : part === "table" ? (
               <Fragment key={part}>
+                {/* ca: the shop answer for the next Sunday or holiday above the table (shops-line.ts); es has it under its answer. */}
+                {todayFirst ? null : <TownShopsLine m={m} locale={locale} tight />}
                 <h2 id="festius-2026" className={todayFirst ? undefined : "mt-0"}>
                   {t.tableTitle}
                 </h2>

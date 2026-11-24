@@ -161,7 +161,7 @@ test("town section: one row per Sunday and holiday to Reis, each with a source a
     for (const d of days) assert.ok(CHRISTMAS_SOURCES[d.source], `${m.name} ${d.iso}`);
     for (const iso of ["2026-12-25", "2026-12-26", "2027-01-01", "2027-01-06"]) assert.equal(days.find((d) => d.iso === iso)?.answer, "lawClosed", `${m.name} ${iso}`);
     assert.equal(days.find((d) => d.iso === "2027-01-03")?.answer, "pending2027", m.name);
-    assert.ok(days.every((d) => d.iso >= "2026-12-01" && d.iso <= CHRISTMAS_SHOPS_LAST_DAY), m.name);
+    assert.ok(days.every((d) => d.iso >= "2026-11-29" && d.iso <= CHRISTMAS_SHOPS_LAST_DAY), m.name);
   }
   assert.equal(answer("barcelona", "2026-12-08")?.answer, "open");
   assert.equal(answer("badalona", "2026-12-08")?.answer, "swapped");

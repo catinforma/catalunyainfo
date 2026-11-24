@@ -26,13 +26,15 @@ import { datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { EnglishChristmasShops } from "./ChristmasShops";
+import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
 import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
 
 /**
  * `/en/holidays/<slug>/`: one town of the English selection. Server-rendered
  * from the snapshot; the only part that knows today's date is the status box,
- * which fills in after mount in the browser.
+ * which fills in after mount in the browser. The shop line under the H1
+ * (shops-line.ts) is date-free: dated days, past ones dropped at render.
  */
 
 const STATUS_LABELS: StatusLabels = {
@@ -96,6 +98,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* The shop answer for the next Sunday or holiday (lib/programmatic/holidays/shops-line.ts, 24 Nov 2026). */}
+          <TownShopsLine m={m} locale="en" tight />
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
           <h2 id="holidays-2026" className="mt-0">{t.tableTitle}</h2>
           <HolidayTable rows={yearRows(m, YEAR, "en")} locale="en" caption={t.tableCaption} />

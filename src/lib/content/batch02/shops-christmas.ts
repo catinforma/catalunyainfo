@@ -157,14 +157,16 @@ export interface ChristmasDay {
 }
 
 /**
- * Every Sunday and holiday from 6 December to 6 January for one municipality,
- * plus its December local holidays and any extra opening day it chose.
+ * Every Sunday and holiday from 29 November (the first Sunday of the guide's
+ * window; added on 24 Nov 2026 so the line under the H1 of the town page and
+ * this table agree) to 6 January for one municipality, plus its December
+ * local holidays and any extra opening day it chose.
  * `shopsOwnList` says whether the council is listed by name in the
  * resolution (otherwise the default applies).
  */
 export function christmasDays(m: { shops: readonly string[]; local: readonly string[]; shopsOwnList: boolean }): ChristmasDay[] {
   const december = (d: string) => d >= "2026-12-01" && d <= "2026-12-31";
-  const base = ["2026-12-06", "2026-12-08", "2026-12-13", "2026-12-20", "2026-12-27", ...LAW_CLOSING, GENERAL_2027_IN_WINDOW];
+  const base = [WINDOW_2026.from, "2026-12-06", "2026-12-08", "2026-12-13", "2026-12-20", "2026-12-27", ...LAW_CLOSING, GENERAL_2027_IN_WINDOW];
   const dates = [...new Set([...base, ...m.shops.filter(december), ...m.local.filter(december)])].sort();
   const listed: ChristmasSourceKey = m.shopsOwnList ? "resolution2026" : "order2026";
   return dates.map((iso) => {
