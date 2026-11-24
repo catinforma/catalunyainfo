@@ -120,6 +120,12 @@ export default function proxy(request: NextRequest) {
   if (pollsTarget) {
     const url = request.nextUrl.clone();
     url.pathname = pollsTarget;
+    // Behind Caddy, nextUrl carries the visitor's https (X-Forwarded-Proto)
+    // with the server's own host (localhost:3000). A rewrite to that URL is
+    // treated as an external proxy over TLS to a plain-HTTP port and fails
+    // with EPROTO (500 on every polls page from 24 Nov 00:00 until the fix of
+    // 25 Nov). Same-origin http keeps it an internal rewrite.
+    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") url.protocol = "http:";
     const response = NextResponse.rewrite(url);
     for (const { key, value } of POLLS_CACHE_HEADERS) response.headers.set(key, value);
     return decorate(response, pathname, request);

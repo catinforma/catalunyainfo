@@ -426,3 +426,9 @@ test("linked from the election hub and the candidates guide, in the body only", 
     }
   }
 });
+
+test("proxy: the blackout rewrite stays same-origin http behind Caddy (25 Nov 2026 fix of the EPROTO 500)", async () => {
+  const { readFileSync } = await import("node:fs");
+  const src = readFileSync(new URL("../src/proxy.ts", import.meta.url), "utf8");
+  assert.match(src, /if \(url\.hostname === "localhost" \|\| url\.hostname === "127\.0\.0\.1"\) url\.protocol = "http:";\n    const response = NextResponse\.rewrite\(url\);/);
+});
