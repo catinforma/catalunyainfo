@@ -18,6 +18,7 @@ import {
   weekdayIndex,
 } from "@/lib/content/holidays/calendar";
 import { BARCELONA_LOCAL } from "@/lib/content/holidays/payload";
+import { FREE_DAYS_TOWNS } from "@/lib/content/batch02/school-free-days-towns";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { townPageCount } from "@/lib/programmatic/holidays/towns";
 
@@ -37,6 +38,61 @@ import { bridgeDays, generalSchoolDays, weekdayDay } from "./snippet";
  */
 
 export const ENTRY_KEY = "guide-school-calendar-catalonia";
+
+/**
+ * The answer boxes under the lead (Christmas, Easter, free-choice days, number
+ * of school days), read on the official sources on 24 Nov 2026 (curl + grep of
+ * the quoted words; skill verify-official-source):
+ *
+ * Ordre EDF/66/2026, DOGC 9653, 27.4.2026
+ * (https://portaldogc.gencat.cat/utilsEADOP/PDF/9653/2147443.pdf, PDF text):
+ *  - art. 3.4 a (2nd cycle of infant and primary; arts. 4.4 ESO and 6.5
+ *    batxillerat say the same): «Nadal: del 22 de desembre de 2026 al 7 de gener
+ *    de 2027, ambdós inclosos.» / «Setmana Santa: del 20 de març al 29 de març de
+ *    2027, ambdós inclosos.»
+ *  - art. 3.4 c: «Els centres poden establir quatre dies festius de lliure
+ *    disposició, que s'han de distribuir entre els tres trimestres; no poden
+ *    coincidir amb els dies d'inici i final de curs ni amb els períodes de
+ *    vacances de Nadal ni de Setmana Santa; s'han de preveure en la programació
+ *    general del centre, i s'han de comunicar als serveis territorials.»
+ *  - art. 3.4 e: «Els consells escolars municipals, un cop determinats els
+ *    calendaris de festivitats locals, nacionals i estatals, han de fixar els
+ *    dies que convindria que adoptessin tots els centres del mateix municipi.»
+ *  - art. 1: «Totes les referències que en aquesta Ordre es fan als serveis
+ *    territorials i a les seves direccions, a la ciutat de Barcelona, s'han
+ *    d'entendre referides al Consorci d'Educació de Barcelona».
+ *  - preamble: the Law sets «entre cent setanta-cinc i cent setanta-vuit dies
+ *    lectius per curs». The order states no number of school days or weeks
+ *    for a year: the general-calendar days and the weeks are counted here
+ *    from its dates and the holiday orders, and the page says so.
+ *
+ * Generalitat's page "Consulta el calendari escolar de Catalunya"
+ * (https://web.gencat.cat/ca/ciutadania/educacio-formacio/calendari-escolar-catalunya,
+ * the same page in /es/ and /en/; read 24 Nov 2026, Last-Modified 24 Nov 2026
+ * 18:43 GMT): «A més, cada centre pot establir fins a 4 dies de lliure
+ * disposició, repartits durant el curs. Pots consultar les dates concretes de
+ * cada any al DOGC: Calendari escolar al DOGC · Calendari laboral al DOGC · Al
+ * calendari del teu centre educatiu».
+ *
+ * The free-choice days themselves are never typed here: each school's are its
+ * own, and the towns whose councils have published theirs are on the free-days
+ * page.
+ */
+export const SCHOOL_ANSWERS_READ = "2026-11-24";
+
+/**
+ * A test fails from this day: the Christmas break is over, so the box must move
+ * on to 2027-2028 (publish `school-calendar` again), and the order's Easter and
+ * free-choice-day texts and the Generalitat's page are to be read again before
+ * the Easter peak.
+ */
+export const SCHOOL_ANSWERS_REREAD_BY = "2027-01-08";
+
+const GENCAT_SCHOOL_PAGE: Record<Locale, string> = {
+  ca: "https://web.gencat.cat/ca/ciutadania/educacio-formacio/calendari-escolar-catalunya",
+  es: "https://web.gencat.cat/es/ciutadania/educacio-formacio/calendari-escolar-catalunya",
+  en: "https://web.gencat.cat/en/ciutadania/educacio-formacio/calendari-escolar-catalunya",
+};
 
 const PUBLISHED = new Date("2026-10-07T22:45:00+02:00");
 const HERO_KEY = "calendari-escolar-escola-vic-pati";
@@ -201,8 +257,19 @@ export function buildBody(locale: Locale, secondMediaId?: string): Block[] {
   const blocks: Block[] = [
     { type: "paragraph", lead: true, text: `${answerLead(year, locale)} ${copy.lead}` },
   ];
+  // The reader's questions in the order they are searched (Search Console, 28
+  // days to 24 Nov 2026): Christmas, Easter, "is there school today or
+  // tomorrow" (the day-dependent block, computed when the page renders), the
+  // free-choice days, how many school days. Each break is the next one that is
+  // not over yet.
+  const today = todayInCatalonia();
+  const christmasYear = SCHOOL_YEARS.find((y) => today <= y.christmas[1]) ?? year;
+  const easterYear = SCHOOL_YEARS.find((y) => today <= y.easter[1]) ?? year;
+  blocks.push(christmasCallout(christmasYear, locale));
+  blocks.push(easterCallout(easterYear, locale));
   blocks.push({ type: "schoolCalendar" });
-  blocks.push(christmasCallout(year, locale));
+  blocks.push(freeDaysCallout(year, locale));
+  blocks.push(schoolDaysCallout(year, locale));
   blocks.push(...daysOff(year, locale));
   blocks.push(...barcelona(year, locale));
 
@@ -318,21 +385,115 @@ const DAYS_OFF_TITLE: Record<Locale, string> = {
 function christmasCallout(year: SchoolYear, locale: Locale): Block {
   const [from, to] = year.christmas;
   const years = `${from.slice(0, 4)}-${to.slice(0, 4)}`;
-  const back = day(addDays(to, 1), locale);
+  const last = day(lastClassBefore(from), locale);
+  const back = day(firstClassAfter(to), locale);
+  const read = dayMonthYear(SCHOOL_ANSWERS_READ, locale);
   return {
     type: "callout",
     tone: "info",
     // es (5 Nov 2026): in the searchers' words, "vacaciones de Navidad 2026
     // colegios Cataluña"; ca and en keep theirs (the ca title is under test).
     title: L(locale, `Vacances de Nadal ${years}`, `Vacaciones de Navidad ${years} en los colegios de Cataluña`, `Christmas school holidays ${years}`),
+    // 24 Nov 2026: first day without school and day back, with weekdays, and
+    // the order's name and read date (queries "quan comencen les vacances de
+    // nadal", "vacances de nadal 2026": 0 clicks at position 4.6-8.8).
     // 13 Nov 2026: the Spain-wide question ("cuándo empiezan las vacaciones de
     // Navidad 2026") lands on community pages; this one hands it to the table.
     text: `${L(
       locale,
-      `Del **${day(from, locale)}** al **${day(to, locale)}**, tots dos inclosos. Es torna a classe el **${back}**.`,
-      `Del **${day(from, locale)}** al **${day(to, locale)}**, ambos incluidos. Se vuelve a clase el **${back}**.`,
-      `From **${day(from, locale)}** to **${day(to, locale)}**, both included. Classes restart on **${back}**.`,
+      `Les vacances de Nadal comencen el **${day(from, locale)}** (l'últim dia de classe és el ${last}) i duren fins al **${day(to, locale)}**, tots dos inclosos. Es torna a classe el **${back}**. Font: [Ordre EDF/66/2026](${SCHOOL_SOURCE.url}), DOGC del 27 d'abril de 2026; llegida el ${read}.`,
+      `Las vacaciones de Navidad empiezan el **${day(from, locale)}** (el último día de clase es el ${last}) y duran hasta el **${day(to, locale)}**, ambos incluidos. Se vuelve a clase el **${back}**. Fuente: [Ordre EDF/66/2026](${SCHOOL_SOURCE.url}), DOGC del 27 de abril de 2026; leída el ${read}.`,
+      `The Christmas holidays start on **${day(from, locale)}** (the last day of class is ${last}) and last until **${day(to, locale)}**, both included. Classes restart on **${back}**. Source: [Order EDF/66/2026](${SCHOOL_SOURCE.url}), DOGC of 27 April 2026; read on ${read}.`,
     )}${year.label === SPAIN_SCHOOL_YEAR ? ` ${spainChristmasLine(locale)}` : ""}`,
+  };
+}
+
+/** The first Monday-to-Friday after `iso` that is not a Catalonia-wide holiday. */
+function firstClassAfter(iso: string): string {
+  let d = addDays(iso, 1);
+  for (let i = 0; i < 14; i++, d = addDays(d, 1)) {
+    if (weekdayIndex(d) !== 0 && weekdayIndex(d) !== 6 && !holidayOn(d)) return d;
+  }
+  return addDays(iso, 1);
+}
+
+/** The last Monday-to-Friday before `iso` that is not a Catalonia-wide holiday. */
+function lastClassBefore(iso: string): string {
+  let d = addDays(iso, -1);
+  for (let i = 0; i < 14; i++, d = addDays(d, -1)) {
+    if (weekdayIndex(d) !== 0 && weekdayIndex(d) !== 6 && !holidayOn(d)) return d;
+  }
+  return addDays(iso, -1);
+}
+
+/**
+ * "Vacances de Setmana Santa 2027": the second question, answered under the
+ * Christmas box (search: "setmana santa 2027 calendari escolar", position 7.8).
+ * No link to the Easter 2027 page here: the days-off section carries the only
+ * one (tests/easter-2027.test.ts counts it).
+ */
+function easterCallout(year: SchoolYear, locale: Locale): Block {
+  const [from, to] = year.easter;
+  const y = from.slice(0, 4);
+  const last = day(lastClassBefore(from), locale);
+  const back = day(firstClassAfter(to), locale);
+  const holiday = holidayOn(to);
+  const note = holiday ? ` (${holiday.name[locale]})` : "";
+  return {
+    type: "callout",
+    tone: "info",
+    title: L(locale, `Vacances de Setmana Santa ${y}`, `Vacaciones de Semana Santa ${y} en los colegios de Cataluña`, `Easter school holidays ${y}`),
+    text: L(
+      locale,
+      `Del **${day(from, locale)}** al **${day(to, locale)}**${note}, tots dos inclosos. L'últim dia de classe és el ${last} i es torna a classe el **${back}**.`,
+      `Del **${day(from, locale)}** al **${day(to, locale)}**${note}, ambos incluidos. El último día de clase es el ${last} y se vuelve a clase el **${back}**.`,
+      `From **${day(from, locale)}** to **${day(to, locale)}**${note}, both included. The last day of class is ${last} and classes restart on **${back}**.`,
+    ),
+  };
+}
+
+/**
+ * "Dies de lliure disposició": what they are, who sets them, how many, and
+ * where a family finds its school's days (search: "dies de lliure disposició",
+ * "dies de lliure disposició 2026-2027"). Quotes in the comment at the top.
+ */
+function freeDaysCallout(year: SchoolYear, locale: Locale): Block {
+  const hub = b2href("schoolFreeDays", locale);
+  const towns = FREE_DAYS_TOWNS.length;
+  const gencat = GENCAT_SCHOOL_PAGE[locale];
+  return {
+    type: "callout",
+    tone: "official",
+    title: L(locale, "Dies de lliure disposició: què són i on mirar els de la teva escola", "Días de libre disposición: qué son y dónde mirar los de tu colegio", "Free-choice days: what they are and where to find your school's"),
+    text: L(
+      locale,
+      `Són dies sense classe que **cada escola** pot fixar dins del curs: **quatre**, repartits entre els tres trimestres, i mai el primer ni l'últim dia de curs ni durant les vacances de Nadal o Setmana Santa. Les dates concretes **no són les mateixes a tot Catalunya**: les tria cada centre, que les comunica als serveis territorials d'Educació (a Barcelona ciutat, al Consorci d'Educació), i el consell escolar municipal de cada municipi fixa els que convindria que fessin totes les escoles del poble o de la ciutat. Per saber els de la teva escola, mira el calendari del centre o la web de l'ajuntament; la [pàgina del calendari escolar de la Generalitat](${gencat}) hi remet. Els dies que han publicat ${towns} municipis, un per un i amb la font de cada consell, són a [dies de lliure disposició per municipi](${hub}). Font: Ordre EDF/66/2026, article 3.4 (infantil i primària), 4.4 (ESO) i 6.5 (batxillerat).`,
+      `Son días sin clase que **cada colegio** puede fijar dentro del curso: **cuatro**, repartidos entre los tres trimestres, y nunca el primer ni el último día de curso ni durante las vacaciones de Navidad o Semana Santa. Las fechas concretas **no son las mismas en toda Cataluña**: las elige cada centro, que las comunica a los servicios territoriales de Educación (en la ciudad de Barcelona, al Consorci d'Educació), y el consejo escolar municipal de cada municipio fija los que convendría que hicieran todos los colegios del pueblo o de la ciudad. Para saber los de tu colegio, mira el calendario del centro o la web del ayuntamiento; la [página del calendario escolar de la Generalitat](${gencat}) remite a ellos. Los días que han publicado ${towns} municipios, uno a uno y con la fuente de cada consejo, están en [días de libre disposición por municipio](${hub}). Fuente: Ordre EDF/66/2026, artículo 3.4 (infantil y primaria), 4.4 (ESO) y 6.5 (bachillerato).`,
+      `These are days off that **each school** can set within the year: **four**, spread across the three terms, and never the first or last day of the year or inside the Christmas or Easter holidays. The exact dates are **not the same across Catalonia**: each school chooses its own and reports them to the education department's regional offices (in Barcelona city, the Consorci d'Educació), and each town's municipal school council sets the days it would like every school in the town to share. To find your school's, look at the school's calendar or the town hall's website; the [Generalitat's school calendar page](${gencat}) points to them. The days ${towns} towns have published, one by one with each council's source, are on [free-choice days by town](${hub}). Source: Order EDF/66/2026, articles 3.4 (infant and primary), 4.4 (ESO) and 6.5 (batxillerat).`,
+    ),
+  };
+}
+
+/**
+ * "Quants dies lectius i setmanes té el curs?": the order states the law's
+ * range only; the rest is counted from its dates (the same count as the FAQ).
+ */
+function schoolDaysCallout(year: SchoolYear, locale: Locale): Block {
+  const schoolDays = generalSchoolDays(year);
+  const weeks = Math.round((daysBetween(year.start, year.end) + 1) / 7);
+  const first = day(year.start, locale);
+  const lastDay = day(year.end, locale);
+  const own = schoolDays ? schoolDays - 6 : null;
+  return {
+    type: "callout",
+    tone: "info",
+    title: L(locale, `Quants dies i setmanes té el curs ${year.label}?`, `¿Cuántos días y semanas tiene el curso ${year.label}?`, `How many days and weeks is the ${year.label} school year?`),
+    text: L(
+      locale,
+      `L'ordre recorda que la Llei d'educació demana **entre 175 i 178 dies lectius** per curs. El curs va del ${first} al ${lastDay}: **${weeks} setmanes** de calendari.${schoolDays ? ` Comptant des de les dates de l'ordre, el calendari general té **${schoolDays} dies de classe**; una escola que faci en dia lectiu els seus dos festius locals i els quatre dies de lliure disposició en té ${own}.` : ""} L'ordre no fixa el nombre de dies ni de setmanes d'un curs concret: aquests comptes són nostres.`,
+      `La orden recuerda que la Ley de educación exige **entre 175 y 178 días lectivos** por curso. El curso va del ${first} al ${lastDay}: **${weeks} semanas** de calendario.${schoolDays ? ` Contando desde las fechas de la orden, el calendario general tiene **${schoolDays} días de clase**; un colegio que haga en día lectivo sus dos festivos locales y los cuatro días de libre disposición tiene ${own}.` : ""} La orden no fija el número de días ni de semanas de un curso concreto: esas cuentas son nuestras.`,
+      `The order recalls that the education law requires **between 175 and 178 school days** a year. The year runs from ${first} to ${lastDay}: **${weeks} calendar weeks**.${schoolDays ? ` Counting from the order's dates, the general calendar has **${schoolDays} school days**; a school whose two local holidays and four free-choice days all fall on school days has ${own}.` : ""} The order does not fix the number of days or weeks of a given year: these counts are ours.`,
+    ),
   };
 }
 
@@ -639,7 +800,9 @@ function bridgeGuide(dayIso: string, locale: Locale): string {
 /** The questions the school calendar is searched with, in the searchers' words. */
 function faq(year: SchoolYear, locale: Locale): Block {
   const next = SCHOOL_YEARS[SCHOOL_YEARS.indexOf(year) + 1] ?? null;
-  const [c0, c1] = year.christmas;
+  // The Christmas questions are about the next Christmas not yet over (the same pick as the box under the lead).
+  const xmasYear = SCHOOL_YEARS.find((y) => todayInCatalonia() <= y.christmas[1]) ?? year;
+  const [c0, c1] = xmasYear.christmas;
   const [e0, e1] = year.easter;
   const cy = c0.slice(0, 4);
   const ey = e0.slice(0, 4);
@@ -651,13 +814,14 @@ function faq(year: SchoolYear, locale: Locale): Block {
   const cembList = cembDays.length <= 1 ? cembDays.join("") : `${cembDays.slice(0, -1).join(", ")}${L(locale, " i ", " y ", " and ")}${cembDays.at(-1)}`;
   const schoolDays = generalSchoolDays(year);
   const weeks = Math.round((daysBetween(year.start, year.end) + 1) / 7);
-  const lastBeforeXmas = lastDayBeforeChristmas(year);
+  const lastBeforeXmas = lastDayBeforeChristmas(xmasYear);
 
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
       { question: `Quan comencen les vacances de Nadal ${cy} a les escoles?`, answer: `El ${d(c0)}. Duren fins al ${d(c1)}, inclòs, i es torna a classe el ${d(addDays(c1, 1))}.` },
       ...(bridge ? [{ question: `Hi ha escola el ${weekdayDay(bridge.day, locale)}?`, answer: `Al calendari general, sí: és dia lectiu, i només el ${weekdayDay(bridge.holiday, locale)} és festiu a tot Catalunya. Però cada escola el pot fer festiu amb un dels seus quatre dies de lliure disposició${cemb.some((c) => c.date === bridge.day) ? ", i a Barcelona el Consell d'Educació Municipal el proposa a tots els centres" : ""}. Pregunta-ho a la teva escola.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `Quins són els dies de lliure disposició del curs ${year.label}?`, answer: `Els tria cada escola: quatre per curs, repartits entre els tres trimestres i mai el primer o l'últim dia ni durant les vacances. El consell escolar municipal en proposa uns de comuns${cemb.length ? `; a Barcelona, el CEMB proposa ${cembList}` : ""}.` },
+      { question: "On puc consultar els dies de lliure disposició de la meva escola?", answer: `Al calendari del teu centre o a la web de l'ajuntament: no són els mateixos a tot Catalunya, perquè els tria cada escola. La [pàgina del calendari escolar de la Generalitat](${GENCAT_SCHOOL_PAGE.ca}) remet al calendari de cada centre, i els dies dels ${FREE_DAYS_TOWNS.length} municipis que els han publicat són a [dies de lliure disposició per municipi](${b2href("schoolFreeDays", "ca")}).` },
       { question: `Quan és la Setmana Santa ${ey} a les escoles de Catalunya?`, answer: `Del ${d(e0)} al ${d(e1)}, tots dos inclosos; les classes tornen el ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `Quan és la Setmana Santa ${next.easter[0].slice(0, 4)} a les escoles?`, answer: `Del ${d(next.easter[0])} al ${d(next.easter[1])}, tots dos inclosos (curs ${next.label}).` }] : []),
       { question: `Quan acaba el curs ${year.label}?`, answer: `El ${d(year.end)} a infantil, primària i ESO. Primer de batxillerat acaba el ${d(year.endBatxillerat1)}.` },
@@ -671,6 +835,7 @@ function faq(year: SchoolYear, locale: Locale): Block {
       { question: `¿Cuándo empiezan las vacaciones de Navidad ${cy} en los colegios?`, answer: `El ${d(c0)}. Duran hasta el ${d(c1)}, incluido, y se vuelve a clase el ${d(addDays(c1, 1))}.` },
       ...(bridge ? [{ question: `¿Hay cole el ${weekdayDay(bridge.day, locale)}?`, answer: `En el calendario general, sí: es día lectivo, y solo el ${weekdayDay(bridge.holiday, locale)} es festivo en toda Cataluña. Pero cada colegio puede hacerlo festivo con uno de sus cuatro días de libre disposición${cemb.some((c) => c.date === bridge.day) ? ", y en Barcelona el Consell d'Educació Municipal lo propone a todos los centros" : ""}. Pregúntalo en tu colegio.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `¿Cuáles son los días de libre disposición del curso ${year.label}?`, answer: `Los elige cada colegio: cuatro por curso, repartidos entre los tres trimestres y nunca el primer o el último día ni durante las vacaciones. El consejo escolar municipal propone unos comunes${cemb.length ? `; en Barcelona, el CEMB propone ${cembList}` : ""}.` },
+      { question: "¿Dónde puedo consultar los días de libre disposición de mi colegio?", answer: `En el calendario de tu centro o en la web del ayuntamiento: no son los mismos en toda Cataluña, porque los elige cada colegio. La [página del calendario escolar de la Generalitat](${GENCAT_SCHOOL_PAGE.es}) remite al calendario de cada centro, y los días de los ${FREE_DAYS_TOWNS.length} municipios que los han publicado están en [días de libre disposición por municipio](${b2href("schoolFreeDays", "es")}).` },
       { question: `¿Cuándo es Semana Santa ${ey} en los colegios de Cataluña?`, answer: `Del ${d(e0)} al ${d(e1)}, ambos incluidos; las clases vuelven el ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `¿Cuándo es Semana Santa ${next.easter[0].slice(0, 4)} en los colegios?`, answer: `Del ${d(next.easter[0])} al ${d(next.easter[1])}, ambos incluidos (curso ${next.label}).` }] : []),
       { question: `¿Cuándo termina el curso ${year.label}?`, answer: `El ${d(year.end)} en infantil, primaria y ESO. Primero de bachillerato termina el ${d(year.endBatxillerat1)}.` },
@@ -684,6 +849,7 @@ function faq(year: SchoolYear, locale: Locale): Block {
       { question: `When do the ${cy} Christmas school holidays start?`, answer: `On ${d(c0)}. They last until ${d(c1)}, included, and classes restart on ${d(addDays(c1, 1))}.` },
       ...(bridge ? [{ question: `Is there school on ${weekdayDay(bridge.day, locale)}?`, answer: `In the general calendar, yes: it is a school day, and only ${weekdayDay(bridge.holiday, locale)} is a holiday across Catalonia. But each school can take it as one of its four free-choice days${cemb.some((c) => c.date === bridge.day) ? ", and Barcelona's municipal education council recommends it to every school" : ""}. Ask your school.${bridgeGuide(bridge.day, locale)}` }] : []),
       { question: `What are the free-choice days in ${year.label}?`, answer: `Each school chooses its own: four a year, spread across the three terms, never the first or last day or inside the holidays. The municipal school council suggests shared ones${cemb.length ? `; in Barcelona the CEMB recommends ${cembList}` : ""}.` },
+      { question: "Where can I find my school's free-choice days?", answer: `On your school's calendar or the town hall's website: they are not the same across Catalonia, because each school chooses its own. The [Generalitat's school calendar page](${GENCAT_SCHOOL_PAGE.en}) points to each school's calendar, and the days of the ${FREE_DAYS_TOWNS.length} towns that have published them are on [free-choice days by town](${b2href("schoolFreeDays", "en")}).` },
       { question: `When are the ${ey} Easter school holidays in Catalonia?`, answer: `From ${d(e0)} to ${d(e1)}, both included; classes restart on ${d(addDays(e1, 1))}.` },
       ...(next ? [{ question: `When are the ${next.easter[0].slice(0, 4)} Easter school holidays?`, answer: `From ${d(next.easter[0])} to ${d(next.easter[1])}, both included (${next.label} school year).` }] : []),
       { question: `When does the ${year.label} school year end?`, answer: `On ${d(year.end)} for infant, primary and ESO. First-year batxillerat ends on ${d(year.endBatxillerat1)}.` },
