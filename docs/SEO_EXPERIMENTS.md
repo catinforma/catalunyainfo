@@ -13155,3 +13155,80 @@ Queries behind the three acted on (90 d): "dia de cobro del paro" 16 at 65.1, "c
 - Order on both pages: the how-it-is-calculated section (`#como-se-calcula`) first, then my `#ejemplos` and the FAQ near the end; ids do not clash; the ad boxes stay where main put them (SelfEmployedPage merged cleanly; the pensions and paro pages carry none in main).
 - **Paro calculator:** the monthly-amount-by-base table and the "si cobro 1.200" FAQ question are dropped from my part, because the how-to section already has them (bases 700 / 1.200 / 1.800 / 3.000, the 1.200 answer with the Social Security share, SEPE quotes). What stays is what it lacks: the total of the whole benefit by days contributed (360 to 2.160 days, on 1.200 and 1.800 €), and four questions (6 months worked, daily amount, 3 years worked, when it is paid). Its intro points up to the how-to section. Same function and the same 2026 limits, so no figure differs.
 - **Pensions:** the examples table (700 to 3.000 €, includes the how-to's 1.500 € example) now sits after the how-to section; the rounding wording of my intro and the how-to's step 2 say the same (RDL 3/2026, one decimal).
+
+## 2026-11-25 — Strikes re-read (Wednesday): one new strike (perfumery and cosmetics sector, 27 Nov / 23 Dec / 4 Jan); nothing else changed; 26N education order unchallenged in court so far (body only, es + ca + en; no title, H1 or lead touched; one data-driven meta description moves, see below; groups `strikes`, `huelgas-espana`, `huelga-23-26n`)
+
+**Why (factual only).** The 00:05 timer moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 2026-11-25 with VERIFIED pinned to the 24th.
+Every source the strike data cites for strikes from 25 Nov to 6 Dec was re-read between 00:20 and 00:50 CET on 25 Nov 2026 (curl, browser
+User-Agent; downloads kept outside the repo, `python3 -I`), and both VERIFIED constants are now 2026-11-25. Titles, seoTitles, H1s and
+lead templates of the pages are untouched.
+
+**Read and unchanged (quote and what was seen).**
+- Treball «Informació de vagues amb serveis mínims (e-Tauler)»: newest entry still the 26N school order («Servei essencial que presta el
+  personal funcionari i laboral docent i no docent, en els centres educatius públics, i el personal de lleure educatiu a les escoles
+  dins de Catalunya», 23/11/2026); nothing newer. e-Tauler API (`/api/edictes?ens=1&size=100`, newest 100 edicts, 23-24 Nov): no strike edict.
+- DOGC núm. 9802 (25 Nov 2026, summary API `summaryDOGC?numDOGC=9802`; `summaryLastPublishedDOGC` returns 9802): 123 documents, none about
+  a strike or an essential service; núm. 9801 only Ordre EMT/237/2026. BOE: 24 Nov (núm. 292) has no strike order; the 25 Nov issue was
+  not out at 00:30.
+- **USTEC·STEs and the minimum services of 26N.** USTEC's «Tot el que cal saber de la vaga del 26N» (23 Nov): «USTEC·STEs (IAC) impugnarem
+  aquests serveis mínims abusius» (and «Educació es presenta a la mediació sense proposta […]», 20 Nov: «uns serveis mínims que
+  USTEC·STEs(IAC) impugnarem si Treball en dicta uns de diferents dels de la vaga de l'11N»). **No court decision, no new order and no
+  amended order exists** (Treball's list, e-Tauler, DOGC 9801-9802). CGT Ensenyament's page: «decreten uns serveis mínims abusius».
+  Not printed on the pages: a union's stated intention is not a fact about the strike; **re-read on 26 Nov** (the strike day) for any
+  court order or amendment. The students' strike (Sindicat d'Estudiants, 19 Nov) and the 26N facts are as on the 24th.
+- Metges de Catalunya's news list: newest item 24 Nov (a study on gender discrimination), 23 Nov (an allowance), nothing about an agreement or
+  an end: the "still on" line now says 25 Nov (`strikes.ts`, ca/es/en). SMU: notice «hasta las 08:00 horas del sábado 28 de noviembre de
+  2026», huelgamedica.es and medicosunidos.es carry nothing new.
+- Rail: Ministry rail list (newest the 12 Nov resolution for 17 Nov) and air list (newest LogiRAIL, 17 Nov; SAERCO, Groundforce and Outsmart in
+  force to 30 Nov); SEMAF newest nº 2026-39 (20 Nov), SCF newest SCFCOM 40 (21 Nov), SFF-CGT, ALFERRO, CCOO rail, CSIF: no new
+  call. Rodalies' alterations, TMB (works only: «Fins al 3 de desembre inclòs, sense servei entre La Pau i Gorg»), FGC, AENA, Renfe's press
+  room: no strike notice.
+- Correos: BOE-A-2026-24259, Orden INT/1239/2026: «huelgas de jornada completa convocadas para los días 23 a 27 de noviembre de 2026 en
+  Madrid y de 23 a 25 de noviembre de 2026 en Cádiz, Córdoba, Huelva, Málaga y Sevilla» unchanged; Correos' press room: no call-off.
+- Basque Government's list of orders: newest still the two care-home orders of 17 Nov (Bizkaia 17 Dec and 21 Jan 2027, Gipuzkoa 22 and 23
+  Dec) and the Osakidetza order of 26 Oct. LAB (13 Nov) and ELA (17 Nov) still say they keep 9, 10, 11 and 14 Dec «si en la siguiente Mesa
+  Sectorial del 2 de diciembre no se producen avances»; `rereadBy` stays 2026-12-03.
+- CSIF Educación Madrid: «los días 20, 22, 26 y 30 de octubre de 2026, 3, 5, 11, 13, 16, 20, 24, 26 y 30 de noviembre de 2026 y 1, 10, 11, 16
+  y 18 de diciembre de 2026» (Madrid schools, regional, not listed); CESM: indefinite strike still postponed.
+- CCOO, UGT and CGT Catalunya home pages, CCOO and UGT national home pages: nothing else new.
+
+**What changed (new fact, one source).**
+- **Perfumery and cosmetics sector strike, 27 Nov, 23 Dec and 4 Jan (Spain hub only).** CCOO de Catalunya, news of 24 Nov 2026 (read 25 Nov,
+  HTTP 200): «CCOO d'Indústria i UGT-FICA han convocat tres jornades de vaga al sector de la perfumeria i la cosmètica […] Els dies 27 de
+  novembre, 23 de desembre i 4 de gener les persones que treballen al sector faran vaga»; «Aquest divendres 27 de novembre, coincidint amb el
+  Black Friday, arrenca la primera de les tres jornades de vaga convocades al sector de la perfumeria i la cosmètica al conjunt de l'Estat. En
+  el cas de Catalunya, al voltant de 7.000 treballadors i treballadores estan cridats a participar en la vaga»; «CCOO convoca una concentració
+  a partir de les 9 hores, davant d'El Corte Inglés de la plaça Catalunya de Barcelona». The page lists it as **called** (the organisers'
+  notice only; never "confirmed"), sector industry, minimum services "none" (a private sector: transport, health and schools are not
+  affected, the wording of the meat-industry entry), the 7,000 attributed to CCOO de Catalunya, no hours (the notice gives none). Not
+  found elsewhere: UGT FICA's home page did not carry it (its newest items: water cycle in the Balearics, 16 Nov; meat industry), the
+  national CCOO pages neither. **Missed on the 24th**: CCOO de Catalunya's home page had it that day; the 24 Nov re-read said "nothing
+  new on CCOO Catalunya's home page".
+- It is not on the Catalan hub (`strikes.ts`): nothing in it touches a service a traveller, patient or family would notice; the Catalan
+  hub's lines are unchanged except the doctors' "still on" date.
+
+**The one meta that moves, and why it is allowed.** The Spain hub's description (`strikesSpainDescription`) is built from the strikes of
+the week of the as-of day; with the 27th in the week it now names the new one: es «Huelgas en España del 23 al 29 de noviembre: médicos
+(SMU), Correos (Madrid y Andalucía) y perfumería y cosmética. Fechas y servicios mínimos oficiales.» (152 characters; before: «… médicos
+(SMU) (23-27) y Correos (Madrid y Andalucía) (23-27). Quién convoca y servicios mínimos oficiales.»). Same for ca (144) and en (145). The H1,
+the seoTitle and the lead are not touched. This is a factual update of a data-driven line, not a wording test; if the head wants the
+description kept as it was, the entry's first date can only be moved by dropping the entry itself; flagged in the report.
+
+**Also changed.** The two day-by-day answers and the table of the Spain hub now show the 27th with the new strike. Tests that pinned "24
+Nov" as the day the Renfe guide stamps its FAQ and standing lead now read `STRIKES_VERIFIED`
+(`tests/rail-strike-next.test.ts`, `tests/strike-guides.test.ts`), so they stop failing on every re-read. The Renfe guide's FAQ answer
+(«A 25 de novembre […]») and the 26N/hub "checked on" lines move to 25 Nov.
+
+**Tests.** All strike files pass: `strike-11n-cities` 28, `strike-11n` 27, `strike-days-1920n` 8, `strike-days-2326n` 8, `strike-guides` 25,
+`strike-rail-17n` 9, `strikes-hub` 34, `strikes-spain` 27 (one new: the perfumery entry), `rail-strike-next` 14. The three that failed at
+midnight (`strike-days-1920n:262`, `strikes-spain:164` "as-of discipline", and "known answers" in `strikes-hub`) pass.
+
+**Review / follow-ups.** Re-read every day (VERIFIED must stay within 4 days). 26 Nov (strike day): USTEC's challenge (court order or
+amended order), the demonstration times, Treball's list. 27 Nov: perfumery (any call-off or agreement, UGT FICA's own notice, a second
+source for the date). 3 Dec: Osakidetza (`rereadBy`; Mesa Sectorial of 2 Dec). 28 Nov: SMU's notice ends 08:00; Metges de Catalunya's
+indefinite strike. 30 Nov: SAERCO, Groundforce and Outsmart resolutions expire (`msValidUntil`); check the Ministry's air list on 1 Dec.
+
+**Go-live.** Deploy, then publish `strikes`, `huelgas-espana`, `huelga-23-26n`; IndexNow `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`,
+`/en/guides/strikes-spain`, `/es/guias/huelga-hoy-cataluna`, `/ca/guies/vaga-avui-catalunya`, `/en/guides/strike-barcelona-catalonia-today`,
+`/es/guias/huelga-26-noviembre`, `/ca/guies/vaga-26-novembre`, `/en/guides/spain-strike-26-november`, `/es/guias/huelga-renfe-rodalies-noviembre`,
+`/ca/guies/vaga-renfe-rodalies-novembre`, `/en/guides/renfe-rodalies-strike-november`.

@@ -630,3 +630,27 @@ test("24 Nov 2026: Osakidetza's December strike (Basque Government's order of 26
     assert.ok(blocks.some((b) => b.type === "heading" && b.id === (locale === "en" ? "day-by-day" : "dia-a-dia")), `${locale}: the day-by-day section`);
   }
 });
+
+test("25 Nov 2026: the perfumery and cosmetics strike (CCOO de Catalunya's news of 24 Nov) is listed as called, with no public service and no invented figure", () => {
+  const perfumery = SPAIN_STRIKES.find((s) => s.id === "huelga-perfumeria-2026-11-27")!;
+  assert.deepEqual(perfumery.dates, ["2026-11-27", "2026-12-23", "2027-01-04"]);
+  // Only the organisers' notice: never "confirmed", and nothing official is due.
+  assert.equal(perfumery.status, "called");
+  assert.equal(perfumery.minimumServices.status, "none");
+  assert.equal(perfumery.sector, "industry");
+  assert.equal(
+    perfumery.sources[0]!.url,
+    "https://www.ccoo.cat/noticies/el-sector-de-la-perfumeria-i-la-cosmetica-fara-vaga-el-27-de-novembre-per-reclamar-un-conveni-que-avanci-en-salaris-jornada-i-conciliacio/",
+  );
+  for (const locale of LOCALES) {
+    assert.match(perfumery.scope[locale], /7[.,]000/, `${locale}: the figure is CCOO's, for Catalonia`);
+    assert.match(perfumery.scope[locale], /CCOO/, `${locale}: attributed`);
+    assert.match(perfumery.hours![locale], /Black Friday/, locale);
+    assert.match(perfumery.hours![locale], /9\.00|09:00/, `${locale}: the rally at 9:00`);
+    // The week of the as-of day holds the 27th: the description names it, and so does the day-by-day answer for that day.
+    assert.match(strikesSpainDescription(locale, "2026-11-25"), /perfumeria i cosm|perfumería y cosm|perfumery and cosmetics/, locale);
+    const answers = spainDayAnswers(locale, "2026-11-25");
+    assert.equal(answers[2]!.day, "2026-11-27");
+    assert.match(answers[2]!.text, /perfumeria i la cosm|perfumería y la cosm|perfumery and cosmetics/, `${locale}/${answers[2]!.day}`);
+  }
+});

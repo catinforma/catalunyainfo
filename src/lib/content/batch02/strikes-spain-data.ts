@@ -219,6 +219,27 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * `rereadBy` 3 Dec, a test fails that day. New in the model: `dayNotes`
  * (Correos is Madrid only on the 26th and the 27th), `doctors` and
  * `rereadBy`; new on the page: the day-by-day answers (`spainDayAnswers`).
+ *
+ * 25 Nov 2026 (00:20-00:50 CET, Wednesday): every source re-read (log in
+ * docs/SEO_EXPERIMENTS.md, "2026-11-25 — Strikes re-read (Wednesday)").
+ * NEW: the perfumery and cosmetics sector strike (CCOO Industria and UGT FICA)
+ * on 27 Nov (Black Friday), 23 Dec and 4 Jan, from CCOO de Catalunya's news of
+ * 24 Nov (about 7,000 workers in Catalonia; rally at 9:00 at El Corte Inglés,
+ * Plaça Catalunya, on the 27th). "called": the organisers' notice only, no
+ * public service. Unchanged: Correos (Orden INT/1239/2026, BOE-A-2026-24259:
+ * "días 23 a 27 de noviembre de 2026 en Madrid y de 23 a 25 [...] en Cádiz,
+ * Córdoba, Huelva, Málaga y Sevilla"); BOE of 24 Nov (núm. 292) has no strike
+ * order (25 Nov not out at 00:30); SMU (notice "hasta las 08:00 horas del
+ * sábado 28 de noviembre de 2026", nothing new on its site); the Ministry's
+ * rail list (newest the 12 Nov resolution for 17 Nov) and air list (newest
+ * LogiRAIL 17 Nov; SAERCO, Groundforce, Outsmart to 30 Nov); the Basque list
+ * (newest the two care-home orders of 17 Nov; Osakidetza order of 26 Oct;
+ * LAB and ELA still say they keep 9, 10, 11 and 14 Dec if the 2 Dec talks do
+ * not advance); SEMAF (newest nº 2026-39, 20 Nov), SCF (SCFCOM 40, 21 Nov),
+ * SFF-CGT, ALFERRO, CCOO rail: no new call; CSIF Madrid (24, 26 and 30 Nov, 1,
+ * 10, 11, 16 and 18 Dec); CESM (still postponed). UGT FICA's home page did not
+ * carry the perfumery call (its newest items: water cycle in the Balearics,
+ * 16 Nov; meat industry).
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
 
@@ -227,7 +248,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-24";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-25";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";
@@ -306,6 +327,15 @@ export const SPAIN_URLS = {
   correos2327: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-24259",
   /** JEC agreement of 19 Nov 2026 (read 22 Nov 2026): "esta Junta acuerda ampliar el plazo de depósito del voto por correo hasta el 26 de noviembre de 2026 […] y como máximo hasta las 14:00 horas". */
   jec418: "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=156427&idsesion=1122&template=Doctrina/JEC_Detalle",
+  /**
+   * CCOO de Catalunya, 24 Nov 2026 (read 25 Nov 2026, ~00:25 CET; HTTP 200): «CCOO d'Indústria i UGT-FICA han convocat tres jornades de vaga al
+   * sector de la perfumeria i la cosmètica […] Els dies 27 de novembre, 23 de desembre i 4 de gener les persones que treballen al sector faran
+   * vaga»; «Aquest divendres 27 de novembre, coincidint amb el Black Friday, arrenca la primera de les tres jornades de vaga convocades al
+   * sector de la perfumeria i la cosmètica al conjunt de l'Estat. En el cas de Catalunya, al voltant de 7.000 treballadors i treballadores
+   * estan cridats a participar en la vaga»; «CCOO convoca una concentració a partir de les 9 hores, davant d'El Corte Inglés de la plaça
+   * Catalunya de Barcelona».
+   */
+  perfumery: "https://www.ccoo.cat/noticies/el-sector-de-la-perfumeria-i-la-cosmetica-fara-vaga-el-27-de-novembre-per-reclamar-un-conveni-que-avanci-en-salaris-jornada-i-conciliacio/",
   // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
   scf37: "https://www.scf.es/com37/",
   // SCF nº 38, 17 Nov 2026 (22:25, read 18 Nov): "SCF ha acordado la desconvocatoria para el día 19".
@@ -953,6 +983,52 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sources: [
       { name: "Orden INT/1239/2026, de 17 de noviembre: servicios esenciales en Correos durante las huelgas del 23 al 27 de noviembre en Madrid y del 23 al 25 en Cádiz, Córdoba, Huelva, Málaga y Sevilla (BOE núm. 288, 19 de noviembre de 2026)", url: U.correos2327, publisher: "Boletín Oficial del Estado (Ministerio del Interior)" },
       { name: "Acuerdo 418/2026, de 19 de noviembre: plazo de depósito del voto por correo ampliado hasta el 26 de noviembre de 2026, como máximo hasta las 14:00 horas", url: U.jec418, publisher: "Junta Electoral Central" },
+    ],
+  },
+  {
+    // 25 Nov 2026 (read that day, ~00:25 CET): CCOO de Catalunya's news of 24 Nov (perfumery). The organisers' notice only: no registered call or
+    // order seen, and none is due (a private sector). UGT FICA's home page did not carry it yet.
+    id: "huelga-perfumeria-2026-11-27",
+    dates: ["2026-11-27", "2026-12-23", "2027-01-04"],
+    sector: "industry",
+    status: "called",
+    title: {
+      ca: "vaga al sector de la perfumeria i la cosmètica (CCOO Indústria, UGT FICA)",
+      es: "huelga en el sector de la perfumería y la cosmética (CCOO Industria, UGT FICA)",
+      en: "perfumery and cosmetics sector strike (CCOO Industria, UGT FICA)",
+    },
+    label: { ca: "perfumeria i cosmètica", es: "perfumería y cosmética", en: "perfumery and cosmetics" },
+    scope: {
+      ca: "Les persones que treballen al sector de la perfumeria i la cosmètica, a tot Espanya: unes 7.000 a Catalunya, segons CCOO de Catalunya. No afecta el transport, la sanitat ni les escoles.",
+      es: "Las personas que trabajan en el sector de la perfumería y la cosmética, en toda España: unas 7.000 en Cataluña, según CCOO de Catalunya. No afecta al transporte, la sanidad ni los colegios.",
+      en: "People who work in the perfumery and cosmetics sector, all over Spain: about 7,000 in Catalonia, according to CCOO de Catalunya. It does not touch transport, health care or schools.",
+    },
+    hours: {
+      ca: "Tres jornades de vaga: el divendres 27 de novembre (Black Friday), el 23 de desembre i el 4 de gener. L'avís no en diu l'horari. El 27, CCOO convoca una concentració a partir de les 9.00 h davant d'El Corte Inglés de la plaça Catalunya de Barcelona.",
+      es: "Tres jornadas de huelga: el viernes 27 de noviembre (Black Friday), el 23 de diciembre y el 4 de enero. El aviso no dice el horario. El 27, CCOO convoca una concentración a partir de las 9.00 h ante El Corte Inglés de la plaza de Cataluña de Barcelona.",
+      en: "Three strike days: Friday 27 November (Black Friday), 23 December and 4 January. The notice gives no hours. On the 27th CCOO has called a rally from 09:00 outside El Corte Inglés in Plaça Catalunya, Barcelona.",
+    },
+    calledBy: {
+      ca: `CCOO d'Indústria i UGT FICA, segons ${link(U.perfumery, "la notícia de CCOO de Catalunya del 24 de novembre")}.`,
+      es: `CCOO de Industria y UGT FICA, según ${link(U.perfumery, "la noticia de CCOO de Catalunya del 24 de noviembre")}.`,
+      en: `The unions CCOO Industria and UGT FICA, according to ${link(U.perfumery, "CCOO de Catalunya's news of 24 November")}.`,
+    },
+    basis: {
+      ca: `Consta a l'avís d'un dels sindicats, ${link(U.perfumery, "CCOO de Catalunya, el 24 de novembre")}: «tres jornades de vaga» el 27 de novembre, el 23 de desembre i el 4 de gener. No hi ha cap ordre ni resolució oficial, perquè no és un servei públic essencial.`,
+      es: `Consta en el aviso de uno de los sindicatos, ${link(U.perfumery, "CCOO de Catalunya, el 24 de noviembre")}: «tres jornadas de huelga» el 27 de noviembre, el 23 de diciembre y el 4 de enero. No hay ninguna orden ni resolución oficial, porque no es un servicio público esencial.`,
+      en: `It rests on one of the unions' own notices, ${link(U.perfumery, "CCOO de Catalunya, 24 November")}: "tres jornadas de huelga" (three strike days) on 27 November, 23 December and 4 January. There is no official order or resolution, because it is not an essential public service.`,
+    },
+    minimumServices: {
+      status: "none",
+      short: { ca: "No afecta serveis públics", es: "No afecta a servicios públicos", en: "No public service affected" },
+      text: {
+        ca: "És una vaga en un sector privat (perfumeria i cosmètica): no afecta el transport, la sanitat ni les escoles.",
+        es: "Es una huelga en un sector privado (perfumería y cosmética): no afecta al transporte, la sanidad ni los colegios.",
+        en: "It is a strike in a private sector (perfumery and cosmetics): transport, health care and schools are not affected.",
+      },
+    },
+    sources: [
+      { name: "El sector de la perfumeria i la cosmètica farà vaga el 27 de novembre per reclamar un conveni que avanci en salaris, jornada i conciliació (24 de novembre de 2026)", url: U.perfumery, publisher: "CCOO de Catalunya" },
     ],
   },
   {

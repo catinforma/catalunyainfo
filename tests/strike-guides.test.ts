@@ -616,7 +616,7 @@ test("on a strike day the lead says so; after it, the page speaks of the past an
       const after = buildStrikeGuideBody(key, locale, "2026-12-31", over);
       assert.ok(bodySchema.safeParse(after).success, `${key}/${locale}`);
       // 24 Nov 2026: the Renfe guide after its last strike is the standing page (its lead is dated to the last re-read, from 18 Dec).
-      if (key === "strikeRenfe") assert.match(text(after.slice(0, 1)), /^(A|As of) 24 (de )?(novembre|noviembre|November) (de )?2026/, `${key}/${locale}`);
+      if (key === "strikeRenfe") assert.match(text(after.slice(0, 1)), new RegExp(`^(A|As of) ${Number(STRIKES_VERIFIED.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`), `${key}/${locale}`);
       else assert.match(text(after.slice(0, 1)), /ja ha passat|ya ha pasado|is over/, `${key}/${locale}`);
       assert.ok(!after.some((b) => b.type === "heading" && (b as { id?: string }).id === "que-fer"), `${key}/${locale}: advice after the strike`);
     }

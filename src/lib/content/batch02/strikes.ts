@@ -440,6 +440,20 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * CGT Catalunya's home pages. New on the page: the day-by-day answer for the
  * next four days (`strikeDayAnswers`), for "el 25 de noviembre hay huelga",
  * "huelga 24 noviembre 2026", "mañana hay huelga", "vaga 27 novembre".
+ *
+ * 25 Nov 2026 (00:20-00:50 CET, Wednesday): re-read (docs/SEO_EXPERIMENTS.md,
+ * "2026-11-25 — Strikes re-read (Wednesday)"). Nothing changes in this file's
+ * entries. Treball's list: newest entry still the 26N school order (23/11/2026);
+ * DOGC núm. 9802 (25 Nov) has no strike or essential-service order; e-Tauler
+ * (newest 100 edicts, 23-24 Nov): none. USTEC·STEs (23 Nov): "USTEC·STEs
+ * (IAC) impugnarem aquests serveis mínims abusius"; no court decision, no new
+ * order, nothing on the ICS or the Departament's side: not printed (a union's
+ * intention, not a fact about the strike). Metges de Catalunya: newest item
+ * 24 Nov (a study), no agreement. SMU: newest page unchanged, notice 16-28 Nov.
+ * Rail (SEMAF newest nº 2026-39, SCF SCFCOM 40, Ministry rail and air lists,
+ * Rodalies, TMB, FGC): no new call. One new strike outside this hub's scope: see
+ * the Spain hub (perfumery and cosmetics, 27 Nov, 23 Dec, 4 Jan, CCOO de
+ * Catalunya's news of 24 Nov, about 7,000 workers in Catalonia, no public service).
  */
 export const STRIKES_AS_OF: string = "2026-11-25";
 
@@ -450,7 +464,7 @@ export const STRIKES_AS_OF: string = "2026-11-25";
  * a re-read must not make the page claim one. Typed as string so a test that
  * compares the two never narrows it to `never`.
  */
-export const STRIKES_VERIFIED: string = "2026-11-24";
+export const STRIKES_VERIFIED: string = "2026-11-25";
 
 /** The date a "checked on" line may claim for a page built as of `asOf`: the last re-read, never later than the as-of day. */
 export function checkedOn(asOf: string, verified: string = STRIKES_VERIFIED): string {
@@ -761,21 +775,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 24 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 25 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 24 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 25 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 24 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 25 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],

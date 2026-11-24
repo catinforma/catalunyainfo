@@ -27,6 +27,9 @@ import { blockSchema, bodyToPlainText, type Block } from "../src/lib/content/blo
 import { DAY_DEPENDENT_BLOCKS } from "../src/lib/content/day-dependent.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 
+/** 25 Nov 2026: the stamp moves with each re-read (STRIKES_VERIFIED), so the tests read it instead of pinning a day. */
+const STAMPED_RE = new RegExp(`^(A|As of) ${Number(STRIKES_VERIFIED.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`);
+
 /**
  * 24 Nov 2026 (docs/SEO_EXPERIMENTS.md, "Renfe guide as the standing 'is there
  * a Renfe strike now?' page"): "huelga renfe", "vaga renfe", "huelga trenes"
@@ -185,10 +188,10 @@ test("guide: while no rail strike is to come, the lead of the last strike stays,
     assert.ok(JSON.stringify(blocks).includes(`](/${locale}/${B2_PATHS.railStrike17n[locale]}/)`), locale);
     assert.ok(railCalledOff(locale).length >= 3);
     for (const title of railCalledOff(locale)) assert.ok(text(blocks).includes(title), `${locale}: ${title}`);
-    // The FAQ opens with the date-stamped answer ("A 24 de novembre"), never "hoy".
+    // The FAQ opens with the date-stamped answer ("A 25 de novembre": the last re-read, STRIKES_VERIFIED), never "hoy".
     const faq = blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
-    assert.match(faq.items[0]!.answer, /^(A|As of) 24 (de )?(novembre|noviembre|November) (de )?2026/, locale);
-    assert.equal(faq.items[0]!.answer, railStandingAnswer("2026-11-24", locale));
+    assert.match(faq.items[0]!.answer, STAMPED_RE, locale);
+    assert.equal(faq.items[0]!.answer, railStandingAnswer(STRIKES_VERIFIED, locale));
     assert.doesNotMatch(faq.items[0]!.answer, /\b(avui|hoy|today)\b/i, locale);
   }
 });
@@ -210,12 +213,12 @@ test("guide: title, description and lead keep following the last strike until 22
     assert.match(meta.seoTitle + meta.title, /Renfe/);
     const description = strikeGuideDescription("strikeRenfe", locale, "2026-12-22", STRIKES);
     assert.ok(description.length > 60 && description.length <= 155, `${locale}: ${description}`);
-    assert.match(description, /^(A|As of) 24 (de )?(novembre|noviembre|November) (de )?2026/, locale);
+    assert.match(description, STAMPED_RE, locale);
     // Lead: the last strike's until 22 Dec, the dated answer from then.
     const leadBefore = text(buildStrikeGuideBody("strikeRenfe", locale, "2026-12-21").slice(0, 1));
     const leadAfter = text(buildStrikeGuideBody("strikeRenfe", locale, "2026-12-22").slice(0, 1));
     assert.match(leadBefore, /17 (de )?(novembre|noviembre|November)/);
-    assert.match(leadAfter, /^(A|As of) 24 (de )?(novembre|noviembre|November) (de )?2026/, locale);
+    assert.match(leadAfter, STAMPED_RE, locale);
     assert.ok(leadAfter.length > 120, locale);
   }
 });
