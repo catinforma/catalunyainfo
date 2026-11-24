@@ -6,7 +6,7 @@ import { dateYear, dayDate, range, span } from "./festive";
 import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
-import { STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, spanStart, strikeDayNote, strikeDayPagesLine, strikeDays as catalanDays, strikesOnDay, type Strike } from "./strikes";
+import { RENFE_STANDING_ANCHOR, STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, spanStart, strikeDayNote, strikeDayPagesLine, strikeDays as catalanDays, strikesOnDay, type Strike } from "./strikes";
 import {
   SPAIN_FRAMEWORK_SOURCES,
   SPAIN_NOT_HAPPENING,
@@ -810,6 +810,9 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   // here; the day pages answer them). Was under the week table.
   const dayPages = strikeDayPagesLine(locale, asOf).trim();
   if (dayPages) blocks.push(...paras(dayPages));
+  // 24 Nov 2026: the rail strikes of this calendar have a standing page ("huelga renfe" 1,803 impressions at 3.7, 9 clicks, on a dated page).
+  const railPrefix = { ca: "Trens (Renfe, Adif i Rodalies)", es: "Trenes (Renfe, Adif y Rodalies)", en: "Trains (Renfe, Adif and Rodalies)" }[locale];
+  blocks.push(...paras(`**${railPrefix}:** ${b2link("strikeRenfe", locale, RENFE_STANDING_ANCHOR[locale])}.`));
   blocks.push(callout("official", STATUS_KEY[locale].title, STATUS_KEY[locale].text));
 
   /* 24 Nov 2026: the as-of day and the next three in plain words, above the week's table. */

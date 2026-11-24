@@ -16,7 +16,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
-import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, type Strike } from "./strikes";
+import { RENFE_STANDING_ANCHOR, STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, type Strike } from "./strikes";
 import { SPAIN_NOT_HAPPENING, STRIKES_SPAIN_VERIFIED, SPAIN_STRIKES } from "./strikes-spain-data";
 import { fillChecked, spainCheckedOn } from "./strikes-spain";
 import type { SpainStrike } from "./strikes-spain-model";
@@ -455,6 +455,10 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
       { label: t.labels.rodalies, value: `${rodaliesShort.charAt(0).toUpperCase()}${rodaliesShort.slice(1)}` },
       { label: t.labels.notIn, value: t.notIn },
     ]),
+    // 24 Nov 2026: once the strike is over, "huelga renfe" readers (1,803 impressions at 3.7 here, 9 clicks) get the page that is always current.
+    ...(phase === "after"
+      ? paras(`${{ ca: "**Hi ha vaga de Renfe ara?**", es: "**¿Hay huelga de Renfe ahora?**", en: "**Is there a Renfe strike now?**" }[locale]} ${b2link("strikeRenfe", locale, RENFE_STANDING_ANCHOR[locale])}.`)
+      : []),
     heading(2, t.whoHeading, t.whoId),
     ...paras(spain.calledBy[locale]),
     heading(2, t.msHeading, t.msId),

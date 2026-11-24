@@ -13000,3 +13000,63 @@ Check against `tests/holiday-first-screen.test.ts` and the 19 Nov rule that phot
 
 **Change.** `components/AdSlot.tsx`: a server-rendered slot (box and height in the HTML, so no layout shift) at the start of the body of every database article (`EntryArticle`: guides, strikes, news) and two on the three home pages (under the top block; after the headlines). `AdsRuntime` fills them; the in-article units after the first section, further down, and the end and sidebar units stay, spaced at least a screen apart. No ads still on REE pages and legal pages. Accessibility page wording updated (ca/es/en; group `pages`). Owner accepted the ranking risk explicitly.
 **Watch (8 Dec ads review):** CLS in field data on the top 20 pages; GSC clicks/position (Google's page-layout signal penalises ad-heavy tops — compare ES/CA cohorts); RPM and viewability per slot.
+## 2026-11-24 (night) — Renfe guide becomes the standing "is there a Renfe / Rodalies strike now?" page: a day-dependent next-strike block, past strikes in a short history, hub and 17N links with the "huelga Renfe" anchor; standing title queued for 22 Dec (body only; ca/es/en; deploy, then groups `strikes`, `huelgas-espana`, `huelga-trenes-17n`) (review 2026-12-02 and 2026-12-22)
+
+**Decision (a), not (b).** Evidence, GSC 28 Oct-24 Nov (`sc-domain`, query x page): the generic queries land on `/es/guias/huelga-trenes-17-noviembre/`, a page dated to one strike
+that is over: "huelga renfe" 1,803 impr / 9 clicks / pos 3.7 (2,516 impr at 5.5 by page view), "huelga de trenes" 284 / 1 / 2.8, "huelga trenes" 247 / 0 / 2.3,
+"renfe huelga ultima hora" 197 / 0 / 2.1, "hoy hay huelga de renfe" 125 / 0 / 9.1, "cuando hay huelga de trenes" 96 / 2 / 5.3. The guide
+`/es/guias/huelga-renfe-rodalies-noviembre/` (+ ca `/ca/guies/vaga-renfe-rodalies-novembre/`, en `/en/guides/renfe-rodalies-strike-november/`) owns
+"vaga renfe" 43 impr / 13 clicks / 2.8, "vaga trenes" 56 / 13 / 6.2, "vaga de trenes" 95 / 10 / 7.1, "huelga renfe noviembre 2026" 696 / 3 / 10.0 and, in the last
+week, nothing (ES page 20-23 Nov: 120, 71, 309, 106 impressions a day at 7.8-9.6). Its path already carries no day ("noviembre" is the only date word) and its title already
+follows the next rail strike through `guideEntry`; the page can carry the intent, so a new URL (b) would only split the 13,387-impression history of the ES page. The
+slug "noviembre" becomes misleading in January: fallback plan, not executed: new standing paths `/es/guias/huelga-renfe-rodalies/`, `/ca/guies/vaga-renfe-rodalies/`,
+`/en/guides/renfe-rodalies-strike/` in `B2_PATHS.strikeRenfe`, a 301 from each old path in `redirects` (ca→ca, es→es, en→en), canonical = new path, sitemap and `hreflang`
+follow the registry, IndexNow both. Trigger: re-open it at the 22 Dec review if the guide still ranks below 5 for "huelga renfe" and a January query shows "noviembre"
+hurting CTR.
+
+**What changed (no title, description, H1 or lead touched; they follow the last strike as before until 22 Dec).**
+- New day-dependent block `railStrikeNext` (`batch02/rail-strike-next.ts`, `components/blocks/RailStrikeNext.tsx`, in `blocks.ts` and `DAY_DEPENDENT_BLOCKS`): the nightly cron
+  rebuilds the pages carrying it and the answer is computed for the day it is rendered. Only rail strikes in the verified strike data: the Catalan entries of `strikes.ts`
+  (scope rail or touching Rodalies / long distance) plus Spain-only rail entries of `strikes-spain-data.ts` (SEMAF, CCOO/UGT rail, SCF, ALFERRO, Ouigo), once each. Today it
+  says "no rail strike with a date" with the date the sources were re-read (the earlier of `STRIKES_VERIFIED` and `STRIKES_SPAIN_VERIFIED`, 24 Nov), the last strike (17 Nov),
+  who sets the minimum services (Generalitat order in the DOGC for Rodalies/regional; Ministry resolution for high-speed/long distance, the words the guide already used) and
+  the official places to look: Rodalies' alterations, Rodalies today (our live page), renfe.com, the Ministry's rail list, Treball's e-Tauler list. With a strike under way or
+  next it prints its days, title, minimum-services line and its own first two official sources. Never invents a date. Only strikes with a registered call or an official order are printed (`status: "official"`; a strike only an organiser's notice calls is never the next strike), and the detail always carries the strike's scope (where it applies and who is called out) so a strike outside Catalonia does not read as a Rodalies strike. When the re-read is more than 4 days old
+  (`RAIL_NEXT_MAX_AGE_DAYS`) the block stops saying "today" and reports what the last re-read found, with its date; `tests/rail-strike-next.test.ts` fails at the same point (re-read
+  SEMAF, SCF, CCOO/UGT rail, ALFERRO, the Ministry's list, Treball's list, Rodalies; move both VERIFIED constants; publish `strikes`).
+- Renfe guide body (only while no rail strike is to come in either data file and no call-off is shown; a rail strike only the Spain calendar has keeps the old past page, so its lead never says "over" above a "next strike" block; with a strike called the guide is that strike's page as before): lead (unchanged), H2 "¿Hay huelga de Renfe o
+  Rodalies ahora? La próxima huelga de trenes" + the block, the minimum-services section (who sets them, Rodalies and long distance table, with standing wording: "in a rail strike", not "this strike"; sources note and tips likewise) and the Rodalies lines, **history** H2
+  "Huelgas anteriores de Renfe y Rodalies" (five strikes from the data, newest first, each with its minimum-services line: 17 Nov, the 11 Nov general strike, 10 Nov, Ouigo 30 Oct and 2 Nov, 29 Oct; the 11 Nov one is kept on purpose because the data lists it as affecting Rodalies, and the 17 Nov one links its page) and one line of
+  the strikes that were called and then called off or moved (titles from the Spain calendar's list, linked), a "what to do if there is a Renfe strike" list (the existing tips) and a new FAQ:
+  "¿Hay huelga de Renfe o Rodalies hoy?" (answer date-stamped "A 24 de noviembre de 2026 ...", never "hoy"), last strike, who fixes minimum services, metro, long-distance tickets.
+  The old 17 Nov key facts / "what it touches" table / FAQ (which answered "Qué días hay huelga de Renfe" with 17 Nov) leave the standing page; the same facts live on the 17N page.
+- Links with the "huelga Renfe" anchor (ES "Huelga Renfe y Rodalies: ¿hay huelga ahora? La próxima huelga de trenes", ca "Vaga Renfe i Rodalies: ...", en "Renfe and Rodalies strike: is there one now? ..."): the Catalan hub's travel list
+  ("¿Hay huelga de Renfe ahora?"), the Spain hub (new line "Trenes (Renfe, Adif y Rodalies)" under the day pages) and, once the strike is over, the 17N page right under its key facts (that page ranks for the generic queries).
+- **Queued, same code, applies by itself from `STRIKES_AS_OF` >= 2026-12-22 (the live title/lead reverted from the 20 Nov call-off wording to the 17 Nov wording on 24 Nov, so the 28-day window ends 22 Dec; corrected from 18 Dec on review)**, only while no rail strike is to come:
+  ca seoTitle "Vaga Renfe i Rodalies avui: hi ha vaga? Propera data" / title "Vaga de Renfe i Rodalies avui: hi ha vaga ara? Propera vaga de trens i serveis mínims";
+  es "Huelga Renfe y Rodalies hoy: ¿hay huelga? Próxima fecha" / "Huelga de Renfe y Rodalies hoy: ¿hay huelga ahora? Próxima huelga de trenes y servicios mínimos";
+  en "Renfe and Rodalies strike today: is there one? Next date" / "Renfe and Rodalies strike today: is there one now? Next train strike and minimum services";
+  description and lead = "A 24 de noviembre de 2026: ninguna huelga de Renfe ni de Rodalies con fecha. La última, martes 17 de noviembre de 2026." (stamped with the last re-read) + a
+  tail; ≤ 60 / 120 / 155 characters pinned. To move or cancel, change `RENFE_STANDING_META_FROM` in `strike-guides.ts`. Owner option (not taken): break the window now; the title is the
+  main lever and the 17N page still outranks the guide for the head queries.
+
+**Not touched:** the 17N page's title/lead/description (title since 13 Nov, lead 18 Nov), the hubs' titles, `B2_TITLES.strikeRenfe` (anchor of the related boxes), `low-demand.ts`.
+
+**Baseline** (GSC 28 Oct-24 Nov, query x page): see the Decision; ES guide per-day impressions 16 Nov 3,100 / 17 Nov 4,448 / 18 Nov 1,042 / 19 Nov 326 / 20 Nov 120 / 23 Nov 106 (clicks 202 / 393 / 47 / 17 / 1 / 2); 17N page "huelga renfe" 1,803 impr / 9 clicks / 3.7.
+
+**Prediction.** By 2 Dec (`snapshot.py page huelga-renfe-rodalies 7`, `page huelga-trenes-17 7`) the guide gets impressions for "huelga renfe", "huelga de trenes", "huelga trenes" (none today) and
+the 17N page loses its share of them; clicks on the guide for the generic queries above 0.5 % CTR. After 22 Dec the standing title should lift CTR on those queries to the curve (about 8-10 % at
+positions 2-4). Wrong if by 22 Dec the generic queries still land on the 17N page at CTR < 1 % (then retitle the 17N page when its window ends, "Huelga de trenes en España" without the date, and consider the new-path plan above).
+
+**Review 2026-12-02 and 2026-12-22 (the title switch is on the 22nd, read it on the 23rd):** per-query rows for "huelga renfe", "huelga de trenes", "huelga trenes", "renfe huelga ultima hora", "vaga renfe", "hoy hay huelga de renfe", "proximas vagas catalunya 2026" on the guide (ES, CA, EN) and
+the 17N page; check on 22-23 Dec that the guide's published title is the standing one; any rail strike called by then flips the guide to that strike's page by itself.
+
+**Tests.** `tests/rail-strike-next.test.ts` (new, 14: official-only and scope, the five-strike history, Spain-only strike, standing wording, and): data once each and rail only, state (none / on / next / gap day / last), copy never invents and always dates the re-read, stale re-read, the 4-day re-read
+guard, block registration (schema, `DAY_DEPENDENT_BLOCKS`, renderer, server component, no clock in the module), guide structure, the 22 Dec switch both sides, a called strike restores the strike page, anchors on both hubs and
+the 17N page. `tests/strike-guides.test.ts`: the strike-structure tests read the Renfe guide on 12 Nov (its 17 Nov strike still to come); hub link counted twice (card + travel list). `strikes-hub`, `strikes-spain`, `strike-rail-17n`, `strike-days-1920n`, `strike-days-2326n`, `strike-11n*`, `next-step`, `useful-now`, `today-page`, `news-alerts`, `answer-first`, `rodalies`, `sitemap-lastmod`, `utility-blocks`, `parking-today`, `shops-today` green; `npx tsc --noEmit -p .` clean; `seo:body-dates` run.
+
+**Go-live.** Deploy, then publish `strikes` (hub, Renfe guide, Spain hub, 17N and day pages), `huelgas-espana`, `huelga-trenes-17n`; IndexNow `/es/guias/huelga-renfe-rodalies-noviembre`, `/ca/guies/vaga-renfe-rodalies-novembre`, `/en/guides/renfe-rodalies-strike-november`,
+`/es/guias/huelga-trenes-17-noviembre`, `/ca/guies/vaga-trens-17-novembre`, `/en/guides/spain-rail-strike-17-november`, `/es/guias/huelga-hoy-cataluna`, `/ca/guies/vaga-avui-catalunya`, `/en/guides/strike-barcelona-catalonia-today`, `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
+Daily: the usual strikes re-read keeps both VERIFIED constants fresh; the block itself needs no republish (nightly cron).
+
+**Outcome:** _pending_

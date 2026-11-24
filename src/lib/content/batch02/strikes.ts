@@ -1560,6 +1560,18 @@ export function strikeDayPagesLine(locale: Locale, asOf: string): string {
   return ` **${DAY_PAGES_LEAD[locale]}** ${pages.map((page) => b2link(page.key, locale, B2_TITLES[page.key][locale])).join(" · ")}`;
 }
 
+/**
+ * 24 Nov 2026: the anchor the strike hubs, the Spain hub and the 17 Nov rail
+ * page use for the Renfe guide, which is the standing "is there a Renfe or
+ * Rodalies strike now?" page while no rail strike is to come (rail-strike-
+ * next.ts). "huelga Renfe" / "vaga Renfe" first: the queries it answers.
+ */
+export const RENFE_STANDING_ANCHOR: Record<Locale, string> = {
+  ca: "Vaga Renfe i Rodalies: hi ha vaga ara? La propera vaga de trens",
+  es: "Huelga Renfe y Rodalies: ¿hay huelga ahora? La próxima huelga de trenes",
+  en: "Renfe and Rodalies strike: is there one now? The next train strike",
+};
+
 export const SPAIN_HUB_LINE: Record<Locale, string> = {
   ca: `Les vagues de tot Espanya, amb la data, qui les convoca i els serveis mínims, són al ${b2link("strikesSpain", "ca", "calendari de vagues a Espanya")}.`,
   es: `Las huelgas de toda España, con su fecha, quién las convoca y sus servicios mínimos, están en el ${b2link("strikesSpain", "es", "calendario de huelgas en España")}.`,
@@ -1800,6 +1812,7 @@ const COPY: Record<Locale, Copy> = {
       "**No totes les vagues ho aturen tot.** Una vaga de maquinistes de Renfe no afecta el metro ni FGC; una vaga general pot afectar-ho tot alhora.",
       "**Si et cancel·len el tren o el vol**, el canvi o la devolució depèn de l'operador: segueix el que publiqui al seu web o t'enviï per correu.",
       `**Per anar a l'aeroport**, mira l'estat del vol a la teva companyia o a Infovuelos d'Aena, i les alternatives per arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
+      `**Hi ha vaga de Renfe ara?** ${b2link("strikeRenfe", "ca", RENFE_STANDING_ANCHOR.ca)}.`,
       `**Si vas amb Rodalies**, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya.`,
       `**Els dies normals**, ${b2link("hours", "ca", "l'horari del metro i del NitBus")} i ${b2link("transport", "ca", "quina targeta de transport et convé")}.`,
     ],
@@ -1897,6 +1910,7 @@ const COPY: Record<Locale, Copy> = {
       "**No todas las huelgas lo paran todo.** Una huelga de maquinistas de Renfe no afecta al metro ni a FGC; una huelga general puede afectar a todo a la vez.",
       "**Si te cancelan el tren o el vuelo**, el cambio o la devolución depende del operador: sigue lo que publique en su web o te envíe por correo.",
       `**Para ir al aeropuerto**, mira el estado del vuelo en tu compañía o en Infovuelos de Aena, y las alternativas para llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
+      `**¿Hay huelga de Renfe ahora?** ${b2link("strikeRenfe", "es", RENFE_STANDING_ANCHOR.es)}.`,
       `**Si vas en Rodalies**, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya.`,
       `**Los días normales**, ${b2link("hours", "es", "el horario del metro y del NitBus")} y ${b2link("transport", "es", "qué tarjeta de transporte te conviene")}.`,
     ],
@@ -1994,6 +2008,7 @@ const COPY: Record<Locale, Copy> = {
       "**Not every strike stops everything.** A Renfe drivers' strike does not touch the metro or FGC; a general strike can affect all of them at once.",
       "**If your train or flight is cancelled**, changes and refunds depend on the operator: follow what it publishes on its website or emails you.",
       `**Going to the airport?** Check your flight with your airline or on Aena's Infovuelos, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
+      `**Is there a Renfe strike now?** ${b2link("strikeRenfe", "en", RENFE_STANDING_ANCHOR.en)}.`,
       `**Travelling on Rodalies?** Check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya.`,
       `**On normal days**, see ${b2link("hours", "en", "Barcelona metro and night bus hours")} and ${b2link("transport", "en", "which transport pass to buy")}.`,
     ],

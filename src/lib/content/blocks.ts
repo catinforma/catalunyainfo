@@ -466,6 +466,16 @@ export const parkingTodayBlock = z.object({
 });
 
 /**
+ * "Is there a Renfe or Rodalies strike now? The next train strike" (24 Nov
+ * 2026), worked out from the rail strikes in `batch02/strikes.ts` and
+ * `strikes-spain-data.ts` by `batch02/rail-strike-next.ts`. Configuration-free
+ * and day-dependent, like `parkingToday`.
+ */
+export const railStrikeNextBlock = z.object({
+  type: z.literal("railStrikeNext"),
+});
+
+/**
  * Today's reservoir levels, read from the water agency's open data.
  * Configuration-free: the reading date comes from the data, so the block
  * cannot be left showing a day that has passed.
@@ -597,6 +607,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   shopsChristmasBlock,
   shopsTodayBlock,
   parkingTodayBlock,
+  railStrikeNextBlock,
   reservoirLevelsBlock,
   schoolCalendarBlock,
   electionHistoryBlock,

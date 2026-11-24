@@ -51,6 +51,16 @@ const GUIDES: { key: StrikeGuideKey; article: typeof STRIKE_RENFE_GUIDE; strikeI
   { key: "strikeEducation", article: STRIKE_EDUCATION_GUIDE, strikeId: guideStrikeId("strikeEducation") },
 ];
 
+/**
+ * 24 Nov 2026: while no rail strike is to come the Renfe guide is the standing "is there a train strike?" page
+ * (tests/rail-strike-next.test.ts). The tests of the guide's strike structure (key facts, minimum-services text,
+ * what it touches) read it on 12 Nov, when the 17 Nov strike was still to come; the education guide on the default day.
+ */
+const LIVE_RENFE_DAY = "2026-11-12";
+const liveDay = (key: StrikeGuideKey) => (key === "strikeRenfe" ? LIVE_RENFE_DAY : STRIKES_AS_OF);
+const liveBlocks = (key: StrikeGuideKey, article: typeof STRIKE_RENFE_GUIDE, locale: Locale): Block[] =>
+  key === "strikeRenfe" ? buildStrikeGuideBody(key, locale, LIVE_RENFE_DAY) : article.editions[locale].blocks;
+
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
 const entry = (id: string): Strike => {
   const strike = STRIKES.find((s) => s.id === id);
@@ -193,7 +203,9 @@ test("titles and descriptions stay in sync with the entry's dates and status in 
       // After the strike: past wording.
       const past = strikeGuideDescription(key, locale, "2026-12-31", withEntry(strikeId, (s) => ({ ...s, minimumServices: { ...PUBLISHED_MS, status: "none" } })));
       assert.ok(past.length > 30 && past.length <= 155, `${key}/${locale}: ${past}`);
-      assert.match(past, /es va|se fijaron|se anunció|were set|was announced/, `${key}/${locale}: ${past}`);
+      // 24 Nov 2026: from 18 Dec the Renfe guide's description is the standing page's, stamped with the last re-read.
+      if (key === "strikeRenfe") assert.match(past, /^(A|As of) \d{1,2} (de )?(novembre|noviembre|November) (de )?2026/, `${key}/${locale}: ${past}`);
+      else assert.match(past, /es va|se fijaron|se anunció|were set|was announced/, `${key}/${locale}: ${past}`);
     }
   }
 });
@@ -283,7 +295,8 @@ test("the Renfe guide follows the next rail strike: its days, titles and the hub
     const guideLink = `](/${locale}/${B2_PATHS.strikeRenfe[locale]}/)`;
     for (const asOf of ["2026-11-05", "2026-11-12", "2026-11-20"]) {
       const hub = buildStrikesBody(locale, asOf);
-      assert.equal(JSON.stringify(hub).split(guideLink).length - 1, 1, `hub/${locale} ${asOf}`);
+      // The entry's card, and the travel list's "is there a Renfe strike now?" pointer (24 Nov 2026).
+      assert.equal(JSON.stringify(hub).split(guideLink).length - 1, 2, `hub/${locale} ${asOf}`);
       const at = hub.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === cover(asOf));
       assert.ok(JSON.stringify(hub[at + 1]).includes(guideLink), `hub/${locale} ${asOf}: the link is on ${cover(asOf)}'s card`);
     }
@@ -294,7 +307,7 @@ test("every fact on the page is the entry's: facts, minimum services and advice 
   for (const { key, article, strikeId } of GUIDES) {
     const strike = entry(strikeId);
     for (const locale of LOCALES) {
-      const body = JSON.stringify(article.editions[locale].blocks);
+      const body = JSON.stringify(liveBlocks(key, article, locale));
       for (const fact of strike.facts[locale]) {
         const { value } = splitFact(fact);
         assert.ok(body.includes(JSON.stringify(value).slice(1, -1)), `${key}/${locale}: fact missing: ${fact.slice(0, 60)}`);
@@ -318,14 +331,14 @@ test("editing the entry changes the guide without touching the template", () => 
   for (const { key, strikeId } of GUIDES) {
     const out = withEntry(strikeId, (s) => ({ ...s, minimumServices: PUBLISHED_MS }));
     for (const locale of LOCALES) {
-      const blocks = buildStrikeGuideBody(key, locale, STRIKES_AS_OF, out);
+      const blocks = buildStrikeGuideBody(key, locale, liveDay(key), out);
       assert.ok(bodySchema.safeParse(blocks).success, `${key}/${locale}`);
       const leadText = text(blocks.slice(0, 1));
       assert.ok(leadText.includes(PUBLISHED_MS.msShort[locale]), `${key}/${locale}: ${leadText}`);
       assert.doesNotMatch(leadText, /no publicats|no publicados|not published/, `${key}/${locale}`);
       assert.match(text(blocks), /99%/, `${key}/${locale}`);
       // The order joins the sources.
-      assert.ok(strikeGuideSources(key, [blocks], out).some((s) => s.url === "https://example.org/ordre-prova"), `${key}/${locale}`);
+      assert.ok(strikeGuideSources(key, [blocks], out, liveDay(key)).some((s) => s.url === "https://example.org/ordre-prova"), `${key}/${locale}`);
     }
   }
 });
@@ -350,7 +363,7 @@ test("answer first: the lead gives the days, the strike, what it touches and whe
   for (const { key, article, strikeId } of GUIDES) {
     const strike = entry(strikeId);
     for (const locale of LOCALES) {
-      const blocks = article.editions[locale].blocks;
+      const blocks = liveBlocks(key, article, locale);
       assert.equal(blocks[0]?.type, "paragraph");
       assert.equal((blocks[0] as { lead?: boolean }).lead, true);
       const leadText = text(blocks.slice(0, 1));
@@ -381,7 +394,7 @@ test("minimum services: the section has the entry's text and says who sets them 
   for (const { key, article, strikeId } of GUIDES) {
     const strike = entry(strikeId);
     for (const locale of LOCALES) {
-      const blocks = article.editions[locale].blocks;
+      const blocks = liveBlocks(key, article, locale);
       const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === "serveis-minims");
       assert.ok(at > 3, `${key}/${locale}: no minimum-services section`);
       assert.equal((blocks[at + 1] as { text?: string }).text, strike.minimumServices.text[locale]);
@@ -402,7 +415,7 @@ test("what it touches: one row per service, from `affects`; Rodalies lines link 
   for (const { key, article, strikeId } of GUIDES) {
     const strike = entry(strikeId);
     for (const locale of LOCALES) {
-      const blocks = article.editions[locale].blocks;
+      const blocks = liveBlocks(key, article, locale);
       const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === "que-afecta");
       const tableBlock = blocks[at + 1] as { type: string; rows: string[][] };
       assert.equal(tableBlock.type, "table");
@@ -410,7 +423,7 @@ test("what it touches: one row per service, from `affects`; Rodalies lines link 
       assert.equal(tableBlock.rows.filter((r) => /^(Sí|Yes)$/.test(r[1] ?? "")).length, strike.affects.length, `${key}/${locale}`);
     }
   }
-  const renfe = (locale: Locale) => JSON.stringify(STRIKE_RENFE_GUIDE.editions[locale].blocks);
+  const renfe = (locale: Locale) => JSON.stringify(liveBlocks("strikeRenfe", STRIKE_RENFE_GUIDE, locale));
   for (const locale of ["ca", "es"] as const) {
     for (const id of LINE_IDS) assert.ok(renfe(locale).includes(`](${linePath(locale, id)})`), `${locale}: no link to ${id}`);
   }
@@ -527,7 +540,8 @@ test("the hub's card for each strike links its guide once per language; the hub'
     for (const locale of LOCALES) {
       const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
       const blocks = STRIKES_GUIDE.editions[locale].blocks;
-      assert.equal(JSON.stringify(blocks).split(target).length - 1, 1, `hub/${key}/${locale}`);
+      // 24 Nov 2026: the Renfe guide is also linked from the hub's travel list ("Hay huelga de Renfe ahora?"), once.
+      assert.equal(JSON.stringify(blocks).split(target).length - 1, key === "strikeRenfe" ? 2 : 1, `hub/${key}/${locale}`);
       // Inside that strike's own section, as the last item of its facts.
       const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === strikeId);
       const list = blocks[at + 1] as { type: string; items: string[] };
@@ -601,7 +615,9 @@ test("on a strike day the lead says so; after it, the page speaks of the past an
       const over = withEntry(strikeId, (s) => ({ ...s, minimumServices: { ...PUBLISHED_MS, status: "none" } }));
       const after = buildStrikeGuideBody(key, locale, "2026-12-31", over);
       assert.ok(bodySchema.safeParse(after).success, `${key}/${locale}`);
-      assert.match(text(after.slice(0, 1)), /ja ha passat|ya ha pasado|is over/, `${key}/${locale}`);
+      // 24 Nov 2026: the Renfe guide after its last strike is the standing page (its lead is dated to the last re-read, from 18 Dec).
+      if (key === "strikeRenfe") assert.match(text(after.slice(0, 1)), /^(A|As of) 24 (de )?(novembre|noviembre|November) (de )?2026/, `${key}/${locale}`);
+      else assert.match(text(after.slice(0, 1)), /ja ha passat|ya ha pasado|is over/, `${key}/${locale}`);
       assert.ok(!after.some((b) => b.type === "heading" && (b as { id?: string }).id === "que-fer"), `${key}/${locale}: advice after the strike`);
     }
   }

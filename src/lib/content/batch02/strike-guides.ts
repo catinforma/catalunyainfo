@@ -8,6 +8,7 @@ import { hubPath as rodaliesHub, linePath } from "@/lib/programmatic/rodalies/pa
 import { LINE_IDS, type LineId } from "@/lib/programmatic/rodalies/types";
 
 import { dateYear, dayDate } from "./festive";
+import { RAIL_NEXT_HEADING, RAIL_NEXT_HEADING_ID, railCalledOff, railHistory, railStandingAnswer, railStandingBrief, railState, railStrikes, type RailStrike } from "./rail-strike-next";
 import {
   B2_PATHS,
   B2_TITLES,
@@ -894,6 +895,224 @@ const EDUCATION: GuideSpec = {
 
 export const STRIKE_GUIDE_SPECS: GuideSpec[] = [RENFE, EDUCATION];
 
+/* -------------------------------------------------------------------------- */
+/* The Renfe guide as the standing "is there a train strike?" page             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * 24 Nov 2026. "huelga renfe", "vaga renfe", "huelga trenes" and "renfe huelga
+ * última hora" (about 2,600 impressions at positions 1-4 and 10 clicks in 28
+ * days) are asked every week and landed on pages dated to one strike. While no
+ * rail strike is still to come the Renfe guide is that page: the body answers
+ * "is there one now, and when is the next" (the day-dependent `railStrikeNext`
+ * block, rail-strike-next.ts) and keeps the strikes that are over in a short
+ * history. When one is called, the entry in strikes.ts makes `guideEntry`
+ * cover it again and the guide is that strike's page as before.
+ *
+ * Title, description and lead are inside their 28-day window (the 20 Nov
+ * call-off titles gave way to the 17 Nov ones on 24 Nov, the live change that
+ * counts: free 22 Dec): until `RENFE_STANDING_META_FROM` they keep following the last
+ * strike. From that day, with no rail strike still to come and no call-off to
+ * show, they take the wording below (ca/es/en); a test pins both sides. To
+ * move it, change the constant.
+ */
+export const RENFE_STANDING_META_FROM = "2026-12-22";
+
+interface StandingCopy {
+  seoTitles: string[];
+  title: string;
+  excerpt: string;
+  descTail: string;
+  leadTail: (hub: string) => string;
+  /** The sources note under the answer (the strike guides' own says "when minimum services come out", which is about one strike). */
+  data: (hub: string) => string;
+  whereCaption: string;
+  historyHeading: string;
+  historyIntro: string;
+  calledOffLead: string;
+  todoHeading: string;
+  /** Tips for any rail strike: the strike-free ones of the guide's "what to do". */
+  tips: (outside: string, hours: string, airport: string) => string[];
+  faq: {
+    todayQ: string;
+    lastQ: string;
+    msQ: string;
+    msA: string;
+    metroQ: string;
+    metroA: string;
+    ticketQ: string;
+    ticketA: string;
+  };
+}
+
+const STANDING: Record<Locale, StandingCopy> = {
+  ca: {
+    seoTitles: ["Vaga Renfe i Rodalies avui: hi ha vaga? Propera data", "Vaga Renfe i Rodalies: hi ha vaga ara?"],
+    title: "Vaga de Renfe i Rodalies avui: hi ha vaga ara? Propera vaga de trens i serveis mínims",
+    excerpt: "Hi ha vaga de Renfe, Adif o Rodalies ara i quina és la propera amb data, llegit a les fonts oficials, amb els serveis mínims i les vagues anteriors.",
+    descTail: "Serveis mínims i vagues anteriors.",
+    leadTail: (hub) => `Aquí tens la propera vaga de trens quan n'hi ha una, qui fixa els serveis mínims i on es publiquen, i les vagues que ja han passat. Les vagues d'altres sectors, a ${hub}.`,
+    data: (hub) =>
+      `Aquesta pàgina es fa amb la mateixa llista de vagues que ${hub}: només el que publiquen els sindicats convocants, els operadors, el DOGC, el BOE i el Ministeri de Transports, i no el que avança la premsa. Si es convoca o es desconvoca una vaga ferroviària, ho veuràs a la resposta de dalt.`,
+    whereCaption: "Serveis mínims en una vaga ferroviària: qui els fixa i on es consulten",
+    tips: (outside, hours, airport) => [
+      "**No tots els trens de la teva hora hi seran:** els serveis mínims no els reparteixen igual a totes les hores (per a la vaga del 29 d'octubre, més en hora punta que la resta del dia). Mira el teu tren el vespre abans i el mateix matí.",
+      `**Alternatives que no formen part d'una vaga de Renfe:** ${outside}. L'horari d'un dia normal, a ${hours}.`,
+      `**Tens bitllet de llarga distància?** El canvi o la devolució depèn de Renfe: segueix el que publiqui a ${link(U.renfe, "renfe.com")} o t'enviï per correu.`,
+      `**Si vas a l'aeroport o en tornes**, les alternatives al tren són a ${airport}.`,
+    ],
+    historyHeading: "Vagues anteriors de Renfe i Rodalies",
+    historyIntro: "Les vagues ferroviàries que ja han passat, de la més recent a la més antiga, amb els serveis mínims que es van fixar. Les fonts oficials de cadascuna són a la guia de vagues.",
+    calledOffLead: "**Convocades i després desconvocades o traslladades:**",
+    todoHeading: "Què cal fer si hi ha vaga de Renfe",
+    faq: {
+      todayQ: "Hi ha vaga de Renfe o Rodalies avui?",
+      lastQ: "Quina va ser l'última vaga de Renfe i Rodalies?",
+      msQ: "Qui fixa els serveis mínims de Rodalies i dels trens de llarga distància?",
+      msA: "Rodalies i els regionals: la Generalitat, per ordre al DOGC. L'alta velocitat i la llarga distància: el Ministeri de Transports, per resolució.",
+      metroQ: "Funciona el metro els dies de vaga de Renfe?",
+      metroA: "Una vaga de maquinistes de Renfe no afecta el metro ni FGC; una vaga general pot afectar-ho tot alhora. L'horari d'un dia normal és a la guia de l'horari del metro.",
+      ticketQ: "Què faig si tinc un bitllet de llarga distància de Renfe?",
+      ticketA: "El canvi o la devolució depèn de Renfe: segueix el que publiqui a renfe.com o t'enviï per correu. Els serveis mínims de l'alta velocitat i la llarga distància els fixa el Ministeri de Transports.",
+    },
+  },
+  es: {
+    seoTitles: ["Huelga Renfe y Rodalies hoy: ¿hay huelga? Próxima fecha", "Huelga Renfe y Rodalies: ¿hay huelga ahora?"],
+    title: "Huelga de Renfe y Rodalies hoy: ¿hay huelga ahora? Próxima huelga de trenes y servicios mínimos",
+    excerpt: "Si hay huelga de Renfe, Adif o Rodalies ahora y cuál es la próxima con fecha, según las fuentes oficiales, con los servicios mínimos y las huelgas anteriores.",
+    descTail: "Servicios mínimos y huelgas anteriores.",
+    leadTail: (hub) => `Aquí tienes la próxima huelga de trenes cuando la hay, quién fija los servicios mínimos y dónde se publican, y las huelgas que ya han pasado. Las huelgas de otros sectores, en ${hub}.`,
+    data: (hub) =>
+      `Esta página se hace con la misma lista de huelgas que ${hub}: solo lo que publican los sindicatos convocantes, los operadores, el DOGC, el BOE y el Ministerio de Transportes, no lo que adelanta la prensa. Si se convoca o se desconvoca una huelga ferroviaria, lo verás en la respuesta de arriba.`,
+    whereCaption: "Servicios mínimos en una huelga ferroviaria: quién los fija y dónde se consultan",
+    tips: (outside, hours, airport) => [
+      "**No estarán todos los trenes de tu hora:** los servicios mínimos no los reparten igual a todas las horas (para la huelga del 29 de octubre, más en hora punta que el resto del día). Mira tu tren la noche antes y la misma mañana.",
+      `**Alternativas que no forman parte de una huelga de Renfe:** ${outside}. El horario de un día normal, en ${hours}.`,
+      `**¿Tienes billete de larga distancia?** El cambio o la devolución depende de Renfe: sigue lo que publique en ${link(U.renfe, "renfe.com")} o te envíe por correo.`,
+      `**Si vas al aeropuerto o vuelves de él**, las alternativas al tren están en ${airport}.`,
+    ],
+    historyHeading: "Huelgas anteriores de Renfe y Rodalies",
+    historyIntro: "Las huelgas ferroviarias que ya han pasado, de la más reciente a la más antigua, con los servicios mínimos que se fijaron. Las fuentes oficiales de cada una están en la guía de huelgas.",
+    calledOffLead: "**Convocadas y después desconvocadas o trasladadas:**",
+    todoHeading: "Qué hacer si hay huelga de Renfe",
+    faq: {
+      todayQ: "¿Hay huelga de Renfe o Rodalies hoy?",
+      lastQ: "¿Cuál fue la última huelga de Renfe y Rodalies?",
+      msQ: "¿Quién fija los servicios mínimos de Rodalies y de los trenes de larga distancia?",
+      msA: "Rodalies y los regionales: la Generalitat, por orden en el DOGC. La alta velocidad y la larga distancia: el Ministerio de Transportes, por resolución.",
+      metroQ: "¿Funciona el metro los días de huelga de Renfe?",
+      metroA: "Una huelga de maquinistas de Renfe no afecta al metro ni a FGC; una huelga general puede afectar a todo a la vez. El horario de un día normal está en la guía del horario del metro.",
+      ticketQ: "¿Qué hago si tengo un billete de larga distancia de Renfe?",
+      ticketA: "El cambio o la devolución depende de Renfe: sigue lo que publique en renfe.com o te envíe por correo. Los servicios mínimos de la alta velocidad y la larga distancia los fija el Ministerio de Transportes.",
+    },
+  },
+  en: {
+    seoTitles: ["Renfe and Rodalies strike today: is there one? Next date", "Renfe and Rodalies strike: is there one now?"],
+    title: "Renfe and Rodalies strike today: is there one now? Next train strike and minimum services",
+    excerpt: "Whether there is a Renfe, Adif or Rodalies strike now and which is the next with a date, from the official sources, with minimum services and earlier strikes.",
+    descTail: "Minimum services and earlier strikes.",
+    leadTail: (hub) => `Here is the next train strike when there is one, who sets the minimum services and where they are published, and the strikes that are over. Strikes in other sectors are in ${hub}.`,
+    data: (hub) =>
+      `This page is built from the same list of strikes as ${hub}: only what the unions calling a strike, the operators, the DOGC and BOE gazettes and the Ministry of Transport publish, never what the press reports ahead of them. If a rail strike is called or called off, you will see it in the answer above.`,
+    whereCaption: "Minimum services in a rail strike: who sets them and where to check",
+    tips: (outside, hours, airport) => [
+      "**Not every train at your usual time will run:** minimum services do not spread trains evenly over the day (for the 29 October strike, more at peak times than the rest of the day). Check your train the evening before and that morning.",
+      `**Alternatives that are not part of a Renfe strike:** ${outside}. Normal-day hours are in ${hours}.`,
+      `**Holding a long-distance ticket?** Changes and refunds depend on Renfe: follow what it publishes on ${link(U.renfe, "renfe.com")} or emails you.`,
+      `**Going to or from the airport?** The alternatives to the train are in ${airport}.`,
+    ],
+    historyHeading: "Earlier Renfe and Rodalies strikes",
+    historyIntro: "The rail strikes that are over, most recent first, with the minimum services that were set. Each one's official sources are in the strikes guide.",
+    calledOffLead: "**Called, then called off or moved:**",
+    todoHeading: "What to do if there is a Renfe strike",
+    faq: {
+      todayQ: "Is there a Renfe or Rodalies strike today?",
+      lastQ: "What was the last Renfe and Rodalies strike?",
+      msQ: "Who sets the minimum services for Rodalies and long-distance trains?",
+      msA: "Rodalies and regional trains: the Generalitat, in an order in the DOGC. High-speed and long-distance trains: the Ministry of Transport, in a resolution.",
+      metroQ: "Does the Barcelona metro run during a Renfe strike?",
+      metroA: "A Renfe drivers' strike does not affect the metro or FGC; a general strike can affect everything at once. Normal-day hours are in our metro hours guide.",
+      ticketQ: "What if I have a Renfe long-distance ticket?",
+      ticketA: "Changes and refunds depend on Renfe: follow what it publishes on renfe.com or emails you. Spain's Ministry of Transport sets the minimum services for high-speed and long-distance trains.",
+    },
+  },
+};
+
+/** The Renfe guide is the standing page: no rail strike still to come, and no call-off to show. */
+function isStanding(spec: GuideSpec, strike: Strike, asOf: string, rail: RailStrike[] = railStrikes()): boolean {
+  if (spec.key !== "strikeRenfe" || isUpcoming(strike, asOf) || calledOffFor(spec, asOf)) return false;
+  // A rail strike only the Spain calendar has (not an entry of strikes.ts) is still "a strike to come": the guide is not the standing page then,
+  // or its lead would say "this strike is over" above a block that says "next strike".
+  const state = railState(asOf, rail, asOf);
+  return state.now.length === 0 && state.next.length === 0;
+}
+
+/** The standing wording of titles, description and lead applies from RENFE_STANDING_META_FROM. */
+function standingMeta(spec: GuideSpec, strike: Strike, asOf: string, rail: RailStrike[] = railStrikes()): boolean {
+  return asOf >= RENFE_STANDING_META_FROM && isStanding(spec, strike, asOf, rail);
+}
+
+/** The body after the lead while the Renfe guide is the standing page. */
+function standingBlocks(spec: GuideSpec, c: Ctx, hub: string, rail: RailStrike[]): Block[] {
+  const locale = c.locale;
+  const t = COMMON[locale];
+  const sc = STANDING[locale];
+  const s = copyFor(spec, c.strike, locale);
+  const blocks: Block[] = [];
+  // The answer for today, computed on the day it is rendered.
+  blocks.push(heading(2, RAIL_NEXT_HEADING[locale], RAIL_NEXT_HEADING_ID));
+  blocks.push({ type: "railStrikeNext" } as Block);
+  blocks.push(languageLinks());
+  blocks.push(callout("official", verifiedLine(locale, STRIKES_VERIFIED), sc.data(hub)));
+
+  // Minimum services: who sets them and where they are published (Rodalies and long distance).
+  blocks.push(heading(2, t.msHeading, "serveis-minims"));
+  blocks.push(...paras(sc.faq.msA));
+  blocks.push(...h3(t.whereHeading));
+  blocks.push(
+    table(
+      sc.whereCaption,
+      [...t.whereHeaders],
+      (["rodalies", "longDistance"] as ServiceKey[]).map((k) => [t.services[k].name, t.services[k].who, t.services[k].where]),
+    ),
+  );
+  blocks.push(...s.section(c));
+
+  // History: the strikes that are over, short.
+  const history = railHistory(c.asOf, rail);
+  blocks.push(heading(2, sc.historyHeading, "vagues-anteriors"));
+  blocks.push(...paras(sc.historyIntro));
+  blocks.push(
+    list(
+      ...history.map((strike) => {
+        const page = strike.page ? ` ${b2link(strike.page, locale, B2_TITLES[strike.page][locale])}.` : "";
+        return `**${cap(strike.days[locale])}:** ${strip(strike.title[locale])}. ${strip(strike.ms[locale])}.${page}`;
+      }),
+    ),
+  );
+  const calledOff = railCalledOff(locale);
+  if (calledOff.length > 0) blocks.push(...paras(`${sc.calledOffLead} ${calledOff.join("; ")}. ${b2link("strikesSpain", locale, B2_TITLES.strikesSpain[locale])}.`));
+
+  // What to do if a strike is called.
+  blocks.push(heading(2, sc.todoHeading, "si-hi-ha-vaga"));
+  const outside = (["metroBus", "fgcTram"] as ServiceKey[]).map((k) => t.services[k].inline).join("; ");
+  blocks.push(list(...sc.tips(outside, b2link("hours", locale, B2_TITLES.hours[locale]), b2link("airport", locale, B2_TITLES.airport[locale]))));
+
+  const last = history[0];
+  blocks.push(
+    faq([
+      { question: sc.faq.todayQ, answer: railStandingAnswer(c.asOf, locale, rail) },
+      ...(last ? [{ question: sc.faq.lastQ, answer: `${cap(last.days[locale])}: ${strip(last.title[locale])}. ${strip(last.ms[locale])}.` }] : []),
+      { question: sc.faq.msQ, answer: sc.faq.msA },
+      { question: sc.faq.metroQ, answer: sc.faq.metroA },
+      { question: sc.faq.ticketQ, answer: sc.faq.ticketA },
+    ]),
+  );
+  blocks.push(...paras(verifiedLine(locale, STRIKES_VERIFIED)));
+  blocks.push(...b2Related(spec.related, locale));
+  return blocks;
+}
+
 /**
  * 20 Nov 2026: a strike this guide followed that was called off before its
  * day (STRIKES_CALLED_OFF in strikes.ts, guide = this guide), while that day
@@ -974,6 +1193,7 @@ export function buildStrikeGuideBody(
   locale: Locale,
   asOf: string = STRIKES_AS_OF,
   strikes: Strike[] = STRIKES,
+  rail: RailStrike[] = railStrikes(),
 ): Block[] {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
@@ -991,6 +1211,13 @@ export function buildStrikeGuideBody(
   const eve = !isOnDay(strike, asOf) && strike.dates.includes(tomorrow);
   // 20 Nov 2026: a strike this guide followed that was called off before its day opens the answer (its section below has the organiser's words).
   const off = calledOffFor(spec, asOf);
+  const standing = isStanding(spec, strike, asOf, rail);
+  // 22 Dec 2026 on: the standing page's own lead (RENFE_STANDING_META_FROM); until then the lead of the last strike stays.
+  if (standing && standingMeta(spec, strike, asOf, rail)) {
+    blocks.push(lead(`**${railStandingBrief(asOf, locale, rail)}** ${STANDING[locale].leadTail(hub)}`));
+    blocks.push(...standingBlocks(spec, c, hub, rail));
+    return blocks;
+  }
   blocks.push(
     lead(
       [
@@ -1006,6 +1233,12 @@ export function buildStrikeGuideBody(
         .join(" "),
     ),
   );
+
+  // 24 Nov 2026: with no rail strike still to come, the Renfe guide is the standing "is there a train strike?" page (the lead above is the last strike's until 22 Dec).
+  if (standing) {
+    blocks.push(...standingBlocks(spec, c, hub, rail));
+    return blocks;
+  }
 
   // 2. Key facts: who, days and hours, what it touches, minimum services, then the entry's other facts.
   const parsed = strike.facts[locale].map(splitFact);
@@ -1098,12 +1331,17 @@ export function strikeGuideMeta(
   locale: Locale,
   strikes: Strike[] = STRIKES,
   asOf: string = STRIKES_AS_OF,
+  rail: RailStrike[] = railStrikes(),
 ): { title: string; seoTitle: string; excerpt: string } {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const strike = strikeFor(spec, strikes, asOf);
   const off = calledOffMeta(spec, strike, asOf, locale);
   if (off) return { title: off.title, seoTitle: off.seoTitle, excerpt: off.excerpt };
+  if (standingMeta(spec, strike, asOf, rail)) {
+    const sc = STANDING[locale];
+    return { title: sc.title, seoTitle: firstFit(sc.seoTitles, SEO_TITLE_LIMIT), excerpt: sc.excerpt };
+  }
   const parts = titleParts(strike, locale);
   const copy = copyFor(spec, strike, locale);
   return { title: copy.title(parts), seoTitle: firstFit(copy.seoTitles(parts), SEO_TITLE_LIMIT), excerpt: copy.excerpt(parts) };
@@ -1113,12 +1351,16 @@ export function strikeGuideMeta(
  * Answer first: the days, what the strike is and where its minimum services
  * stand, as many of those words as fit in 155 characters.
  */
-export function strikeGuideDescription(key: StrikeGuideKey, locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): string {
+export function strikeGuideDescription(key: StrikeGuideKey, locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES, rail: RailStrike[] = railStrikes()): string {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const strike = strikeFor(spec, strikes, asOf);
   const off = calledOffMeta(spec, strike, asOf, locale);
   if (off) return off.description;
+  if (standingMeta(spec, strike, asOf, rail)) {
+    const brief = railStandingBrief(asOf, locale, rail);
+    return firstFit([`${brief} ${STANDING[locale].descTail}`, brief], DESCRIPTION_LIMIT);
+  }
   const copy = copyFor(spec, strike, locale);
   const parts = titleParts(strike, locale);
   const withYear = locale === "en" ? `${parts.days} ${parts.year}` : `${parts.days} de ${parts.year}`;

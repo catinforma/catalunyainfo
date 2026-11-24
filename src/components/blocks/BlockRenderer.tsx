@@ -13,6 +13,7 @@ import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ShopsChristmas } from "@/components/blocks/ShopsChristmas";
 import { ParkingToday } from "@/components/blocks/ParkingToday";
+import { RailStrikeNext } from "@/components/blocks/RailStrikeNext";
 import { ShopsToday } from "@/components/blocks/ShopsToday";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
@@ -451,6 +452,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
           ))}
         </>
       );
+
+    case "railStrikeNext":
+      // Server-rendered for the same reason; the nightly cron keeps the date.
+      return <RailStrikeNext locale={context.locale} />;
 
     case "reservoirLevels":
       // Async server component: the ACA's daily reading, cached three hours.
