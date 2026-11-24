@@ -12,13 +12,27 @@
  *       Reads the open-data metadata only and says whether rows for next year
  *       have appeared. Exits 0 either way; prints what changed.
  *
- *   npm run holidays:snapshot -- prepare2027 --order <file.txt|file.pdf|documentId> [--amend <…>] [--write]
- *       The 48-hour swap. Parses the 2027 local-holiday order (same format as
- *       Ordre EMT/208/2025: "Municipi, dd de mes i dd de mes."), finds each of
- *       the snapshot's municipalities and nuclei by the name and comarca they
- *       had in the 2026 order, and prints the result. With --write it stores
- *       the dates as `local2027` in src/lib/programmatic/holidays/local-2027.json
- *       - the pages then show them instead of "not published yet". Anything it
+ *   npm run holidays:snapshot -- find [--year 2027] [--since YYYY-MM-DD] [--from-issue N]
+ *       Is next year's local-holiday order in the DOGC? Reads the DOGC's own
+ *       summaries (the API behind dogc.gencat.cat) from the newest issue back
+ *       to --since (default 45 days) and Treball's "Normativa relacionada" page.
+ *       Prints the title, DOGC number, document page and PDF, or "NOT
+ *       PUBLISHED". Exit code 0 found, 3 not found. Never guesses an ID.
+ *
+ *   npm run holidays:snapshot -- ingest [--write] [same options as find]
+ *       find + download + parse + check, in one command. Dry run by default
+ *       (counts, warnings, COUNCIL DIFFERS, PROBLEM lines); --write stores
+ *       local-2027.json only when there is no PROBLEM. Runbook:
+ *       docs/SEO_EXPERIMENTS.md, entry "2026-11-24 - DOGC 2027 local order".
+ *
+ *   npm run holidays:snapshot -- prepare2027 --order <file.txt|file.pdf|documentId> [--amend <…>] [--year 2027] [--write --name … --ref … --url …] [--verbose]
+ *       The same, from a file or an ID you give it (what `ingest` calls).
+ *       Parses the local-holiday order (same format as Ordre EMT/208/2025:
+ *       "Municipi, dd de mes i dd de mes."), finds each of the snapshot's
+ *       municipalities and nuclei - and the councils the 2026 order left out -
+ *       by the name and comarca they had, checks the result and, with --write,
+ *       stores it in src/lib/programmatic/holidays/local-2027.json. The pages
+ *       then show the order's days instead of "not published yet". Anything it
  *       cannot match is listed and the file is NOT written until it is fixed.
  *
  *   npm run holidays:snapshot -- urls
@@ -44,7 +58,16 @@ import {
 } from "../src/lib/programmatic/holidays/dogc.ts";
 import { applyAmendments, locate, nucleiAfter, sameComarca } from "../src/lib/programmatic/holidays/match.ts";
 import { slugify } from "../src/lib/programmatic/holidays/slug.ts";
-import type { DatePlace, HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality } from "../src/lib/programmatic/holidays/types.ts";
+import {
+  DOGC_PAGE,
+  DOGC_PDF,
+  dogcRef,
+  findLocalOrders,
+  parseSummary,
+  sourceRefOf,
+  type LocalOrderHit,
+} from "../src/lib/programmatic/holidays/ingest.ts";
+import type { DatePlace, HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality, SourceRef } from "../src/lib/programmatic/holidays/types.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SNAPSHOT = join(ROOT, "src/lib/programmatic/holidays/snapshot.json");
@@ -81,8 +104,8 @@ const SOCRATA = "https://analisi.transparenciacatalunya.cat";
 const DATASET = "b4eh-r8up";
 const IDESCAT_POPULATION = "https://www.idescat.cat/pub/?id=pmh&n=446&geo=mun&lang=ca";
 const IDESCAT_COMARQUES = "https://www.idescat.cat/codis/?id=50&n=9";
-const dogcPdf = (id: string) => `https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=${id}&type=01&language=ca_ES`;
-const dogcPage = (id: string) => `https://dogc.gencat.cat/ca/document-del-dogc/?documentId=${id}`;
+const dogcPdf = DOGC_PDF;
+const dogcPage = (id: string) => `${DOGC_PAGE}${id}`;
 
 /**
  * Names the order prints differently from Idescat. Found by the build's own
@@ -523,41 +546,178 @@ async function check(): Promise<void> {
 }
 
 /* -------------------------------------------------------------------------- */
-/* prepare2027                                                                */
+/* find / ingest / prepare2027                                                */
 /* -------------------------------------------------------------------------- */
+
+const DOGC_API = "https://portaldogc.gencat.cat/eadop-rest/api/dogc";
+const NORMATIVA = "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/normativa/";
+const sleep = (ms: number) => new Promise((done) => setTimeout(done, ms));
+
+async function dogcPost(endpoint: string): Promise<unknown> {
+  const response = await fetch(`${DOGC_API}/${endpoint}`, {
+    method: "POST",
+    headers: { "user-agent": "CatalunyaInfo holidays snapshot (+https://www.catalunyainfo.com)" },
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!response.ok) throw new Error(`DOGC ${endpoint}: HTTP ${response.status}`);
+  return response.json();
+}
+
+function daysBefore(iso: string, days: number): string {
+  return new Date(Date.parse(`${iso}T12:00:00Z`) - days * 86_400_000).toISOString().slice(0, 10);
+}
+
+/**
+ * Reads the DOGC summaries from the newest issue (or `--from-issue N`) back to
+ * `--since` (default 45 days ago) and returns the local-holiday documents of
+ * `--year` (default: next year). The ID of the document is never guessed: it
+ * comes from the summary's own link.
+ */
+async function scan(): Promise<{ year: number; hits: LocalOrderHit[]; first: number; last: number; firstDate: string; lastDate: string }> {
+  const year = Number(arg("year") ?? YEAR + 1);
+  const since = arg("since") ?? daysBefore(todayInMadrid(), 45);
+  const newest = arg("from-issue") ? Number(arg("from-issue")) : parseSummary(await dogcPost("summaryLastPublishedDOGC?language=ca"))[0]!.numDOGC;
+  const hits: LocalOrderHit[] = [];
+  let first = newest;
+  let last = newest;
+  let firstDate = "";
+  let lastDate = "";
+  for (let num = newest; num > newest - 150; num--) {
+    let issues;
+    try {
+      issues = parseSummary(await dogcPost(`summaryDOGC?anexos=1&language=ca&numDOGC=${num}`));
+    } catch (error) {
+      console.log(`issue ${num}: ${error instanceof Error ? error.message : error} (skipped)`);
+      continue;
+    }
+    const date = issues.find((i) => i.date)?.date ?? "";
+    if (!firstDate) firstDate = date;
+    last = num;
+    lastDate = date || lastDate;
+    for (const issue of issues) hits.push(...findLocalOrders(issue, year));
+    if (date && date < since) break;
+    await sleep(300);
+  }
+  return { year, hits, first, last, firstDate, lastDate };
+}
+
+function printHits(found: Awaited<ReturnType<typeof scan>>): void {
+  console.log(`read ${new Date().toISOString()} (UTC): DOGC núm. ${found.last} (${found.lastDate}) to ${found.first} (${found.firstDate})`);
+  if (found.hits.length === 0) {
+    console.log(`NOT PUBLISHED: no document "calendari de festes locals a Catalunya per a l'any ${found.year}" in those issues.`);
+    return;
+  }
+  for (const hit of [...found.hits].sort((a, b) => a.numDOGC - b.numDOGC)) {
+    console.log(`FOUND ${hit.kind.toUpperCase()}: ${hit.title}`);
+    console.log(`  ${dogcRef(hit)} | ${DOGC_PAGE}${hit.documentId} | ${DOGC_PDF(hit.documentId)}`);
+  }
+}
+
+/** The Department's own page of related rules (a second, independent place the order is listed). */
+async function normativaMentions(year: number): Promise<boolean> {
+  const html = await fetchText(NORMATIVA);
+  const text = html.replace(/<[^>]+>/g, " ").replace(/&#39;|&rsquo;|’/g, "'").replace(/\s+/g, " ");
+  return new RegExp(`calendari de festes locals a Catalunya per a l'any ${year}`, "i").test(text);
+}
+
+/** `find`: is next year's order in the DOGC yet? Exit 0 if so, 3 if not. */
+async function find(): Promise<void> {
+  const found = await scan();
+  printHits(found);
+  const listed = await normativaMentions(found.year).catch(() => null);
+  console.log(`Treball, "Normativa relacionada" (${NORMATIVA}): ${listed === null ? "not readable" : listed ? `lists a ${found.year} local order` : `no ${found.year} local order listed`}`);
+  if (!found.hits.some((h) => h.kind === "order")) process.exitCode = 3;
+}
+
+interface BuildOptions {
+  orderSource: string;
+  amendSources: string[];
+  source: SourceRef;
+  year: number;
+  write: boolean;
+}
+
+async function runBuild(options: BuildOptions): Promise<void> {
+  const snapshot = JSON.parse(readFileSync(SNAPSHOT, "utf8")) as HolidaySnapshot;
+  const { buildNextYear } = await import("../src/lib/programmatic/holidays/ingest.ts");
+  const { regionalDays } = await import("../src/lib/programmatic/holidays/data.ts");
+  const result = buildNextYear({
+    orderText: await readDogc(options.orderSource),
+    amendmentTexts: await Promise.all(options.amendSources.map(readDogc)),
+    snapshot,
+    year: options.year,
+    source: options.source,
+    readOn: todayInMadrid(),
+    regionalDates: (aran) => regionalDays(options.year, aran).map((d) => d.date),
+  });
+
+  if (process.argv.includes("--verbose")) {
+    for (const m of snapshot.municipalities) {
+      const found = result.next.municipalities[m.slug];
+      console.log(`${m.name}: ${found ? found.local.join(", ") || "(nuclei only)" : "NOT FOUND"}`);
+    }
+  }
+  const s = result.stats;
+  console.log(`${options.source.name}`);
+  console.log(`${options.source.ref} | ${options.source.url}`);
+  console.log(
+    `order entries ${s.orderEntries}, amendments applied ${s.amendmentsApplied}; towns on the list ${s.listedTowns}: ${s.townsWithOwnDays} with two days of their own, ${s.townsNucleiOnly} by nuclei only (${s.nuclei} nuclei); Aran towns ${s.aranTowns}; ` +
+      `left-out councils now with days ${s.unlistedNowListed.length}${s.unlistedNowListed.length ? ` (${s.unlistedNowListed.join(", ")})` : ""}, still left out ${s.unlistedStill.length}; local days on a Sunday ${s.sundayDays}`,
+  );
+  // The pages showed these councils' own days before the order (council-2027.ts); the order now
+  // wins. Where the two differ, check the town before the deploy: the page's days will change.
+  const { councilDisagreements } = await import("../src/lib/programmatic/holidays/council-2027.ts");
+  for (const d of councilDisagreements(result.next.municipalities)) {
+    console.log(`COUNCIL DIFFERS: ${d.slug}: council ${d.council.join(", ")}; order ${d.dogc.join(", ") || "(none)"}`);
+  }
+  for (const warning of result.warnings) console.log(`WARNING: ${warning}`);
+  for (const error of result.errors) console.log(`PROBLEM: ${error}`);
+
+  if (!options.write) {
+    console.log(result.errors.length ? `DRY RUN: ${result.errors.length} problem(s); --write would refuse.` : "DRY RUN: clean. Add --write to store local-2027.json.");
+    if (result.errors.length) process.exitCode = 1;
+    return;
+  }
+  if (result.errors.length) throw new Error("not written: fix the problems above first");
+  if (options.year !== YEAR + 1) throw new Error(`the order is for ${options.year}, expected ${YEAR + 1}`);
+  writeFileSync(LOCAL_2027, `${JSON.stringify(result.next, null, 1)}\n`);
+  console.log(`written ${LOCAL_2027} (year ${options.year}): review the diff, run the holiday tests, deploy, then follow the runbook (docs/SEO_EXPERIMENTS.md, entry "2026-11-24 - DOGC 2027 local order")`);
+}
+
+/** `ingest`: find the order in the DOGC, download it, check it, and (with --write) store it. */
+async function ingest(): Promise<void> {
+  const found = await scan();
+  printHits(found);
+  const order = found.hits.filter((h) => h.kind === "order").sort((a, b) => b.numDOGC - a.numDOGC)[0];
+  if (!order) {
+    process.exitCode = 3;
+    return;
+  }
+  const corrections = found.hits.filter((h) => h.kind === "correction");
+  if (corrections.length > 0) console.log("A correction of errors is published: read it and apply it by hand (the parser does not read corrections) before --write.");
+  const amendments = found.hits.filter((h) => h.kind === "amendment").sort((a, b) => a.numDOGC - b.numDOGC);
+  await runBuild({
+    orderSource: order.documentId,
+    amendSources: amendments.map((a) => a.documentId),
+    source: sourceRefOf(order),
+    year: found.year,
+    write: process.argv.includes("--write"),
+  });
+}
 
 async function prepare(): Promise<void> {
   const source = arg("order");
   if (!source) throw new Error("--order <file.txt|file.pdf|documentId> is required");
-  const snapshot = JSON.parse(readFileSync(SNAPSHOT, "utf8")) as HolidaySnapshot;
-  const order = parseLocalOrder(await readDogc(source));
-  const amendments = (await Promise.all(args("amend").map(readDogc))).flatMap((text) => parseAmendments(text, order.year));
-  const amended = applyAmendments(order.comarques, amendments);
-
-  const { extractLocalDays } = await import("../src/lib/programmatic/holidays/prepare.ts");
-  const result = extractLocalDays(amended.comarques, snapshot.municipalities);
-  for (const problem of [...amended.unmatched.map((u) => `amendment not matched: ${u.comarca} / ${u.name}`), ...result.problems]) console.log(`PROBLEM: ${problem}`);
-  for (const m of snapshot.municipalities) {
-    const found = result.municipalities[m.slug];
-    console.log(`${m.name}: ${found ? found.local.join(", ") || "(nuclei only)" : "NOT FOUND"}`);
-  }
-  // The pages showed these councils' own days before the order (council-2027.ts); the order now
-  // wins. Where the two differ, check the town before the deploy: the page's days will change.
-  const { councilDisagreements } = await import("../src/lib/programmatic/holidays/council-2027.ts");
-  for (const d of councilDisagreements(result.municipalities)) {
-    console.log(`COUNCIL DIFFERS: ${d.slug}: council ${d.council.join(", ")}; order ${d.dogc.join(", ") || "(none)"}`);
-  }
-  if (process.argv.includes("--write")) {
-    if (result.problems.length || amended.unmatched.length) throw new Error("not written: fix the problems above first");
-    const ref = arg("ref") ?? "";
-    const name = arg("name") ?? "";
-    const url = arg("url") ?? (/^\d+$/.test(source) ? dogcPage(source) : "");
-    if (!ref || !name || !url) throw new Error("--name, --ref and --url (or a documentId as --order) are required with --write");
-    if (order.year !== YEAR + 1) throw new Error(`the order is for ${order.year}, expected ${YEAR + 1}`);
-    const out: NextYearLocal = { order: { name, ref, url }, readOn: todayInMadrid(), municipalities: result.municipalities };
-    writeFileSync(LOCAL_2027, `${JSON.stringify(out, null, 1)}\n`);
-    console.log(`written ${LOCAL_2027} (year ${order.year}): review the diff, run npm test, deploy`);
-  }
+  const write = process.argv.includes("--write");
+  const url = arg("url") ?? (/^\d+$/.test(source) ? `${DOGC_PAGE}${source}` : "");
+  if (write && (!arg("ref") || !arg("name") || !url)) throw new Error("--name, --ref and --url (or a documentId as --order) are required with --write");
+  await runBuild({
+    orderSource: source,
+    amendSources: args("amend"),
+    source: { name: arg("name") ?? "(dry run)", ref: arg("ref") ?? "", url },
+    year: Number(arg("year") ?? YEAR + 1),
+    write,
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -568,9 +728,9 @@ async function urls(): Promise<void> {
 }
 
 const command = process.argv[2];
-const run = { build, check, prepare2027: prepare, urls }[command ?? ""];
+const run = { build, check, find, ingest, prepare2027: prepare, urls }[command ?? ""];
 if (!run) {
-  console.error("usage: holidays-snapshot.ts build | check | prepare2027 --order <…> [--amend <…>] [--write] | urls");
+  console.error("usage: holidays-snapshot.ts build | check | find | ingest [--write] | prepare2027 --order <…> [--amend <…>] [--write] | urls");
   process.exit(2);
 }
 run().catch((error: unknown) => {

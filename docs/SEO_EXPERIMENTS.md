@@ -12664,3 +12664,71 @@ those date reasons; all eight strike test files pass now.
 - **One pending line.** With no announced site the count and after blocks carry one line per language ("Web oficial de resultats: pendent d'anunci (comprovat el 24 de novembre de 2026)" + the election site and Infoelectoral), not "had not announced" plus "pending", mixed tenses. `RESULTS_SITE_CHECKED` = `2026-11-24` for the reads that can be evidenced: `29neleccionesgenerales.es` home and sitemap HTTP 200 at 19:58 and 20:09 UTC, La Moncloa's Interior press list 200; Interior and Infoelectoral 403 (not read). A later read of the election site by the reviewer got 403: it answers scripts intermittently. The earlier comment claiming content "read 24 Nov" is reworded to what was read. The election-night guide's check dates follow the constant (now 24 Nov).
 - **Live prototype** (wired to nothing) holds figures until 21:00 Madrid (`BLACKOUT_END`), tested at 20:59:59 and 21:00.
 - **Review 2026-12-01** as above; re-read the official sites from a browser on 26 Nov.
+## 2026-11-24 — DOGC 2027 local order: not out yet; ingest is now one command (`holidays:snapshot -- ingest`), tested on the 2026 order's real text; work-calendar "read on" date moved (deploy; group `holidays`)
+
+**Is it out? No.** Read 24 Nov 2026, 20:07-20:15 UTC (curl, fresh scratch dirs):
+- DOGC API behind dogc.gencat.cat (`POST https://portaldogc.gencat.cat/eadop-rest/api/dogc/summaryLastPublishedDOGC?language=ca`
+  and `summaryDOGC?anexos=1&language=ca&numDOGC=N`): last issue **núm. 9801, Tuesday 24 Nov 2026**; issues 9770-9801 (9 Oct-24 Nov,
+  annexes included) hold no title with "calendari de festes locals ... per a l'any 2027". The Department's only entries in 9801 are
+  Ordre EMT/237/2026 (education minimum services), Resolució EMT/4313/2026 and EMT/4224/2026.
+- Treball, "Normativa relacionada" (`https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/normativa/`): "Any 2027"
+  lists only "Ordre EMT/52/2026, de 25 de març, per la qual s'estableix el calendari oficial de festes laborals a Catalunya per a
+  l'any 2027 (DOGC núm. 9637 de data 1 d'abril de 2026)"; the newest local order listed is "Ordre EMT/208/2025, d'11 de desembre ... per a
+  l'any 2026". `.../calendari-festes-2027/`: "S'ha aprovat el calendari de festes laborals per a 2027, a les quals els ajuntaments poden
+  afegir-hi dues festes locals" (the twelve days; no local list).
+- Open data b4eh-r8up: no `any_calendari` 2027 (2026: 2,794 rows), rows last updated 2 Mar 2026.
+- **Timing.** It is an *Ordre*, not a "Resolució", and it is signed from late November to late December (dates from Treball's normativa list):
+  EMO/353/2015 24 Nov (for 2016), TSF/260/2017 12 Dec (2018), TSF/229/2019 17 Dec (DOGC 8028, 20 Dec 2019; for 2020), TSF/204/2020 30 Nov (2021),
+  EMT/226/2021 3 Dec (DOGC 9 Dec 2021; 2022), EMT/290/2023 22 Dec (2024), EMT/262/2024 28 Dec (2025), EMT/208/2025 11 Dec (DOGC 9565, 17 Dec 2025; 2026).
+  Last year's was in the DOGC 17 Dec, three weeks after the 27 Nov *shop* resolution (a different document, already out for 2026, not yet for 2027).
+  So "late November" is the early edge: expect 3-28 December and check every working day from 1 Dec.
+
+**Built (no page text changed except one date).**
+- `src/lib/programmatic/holidays/ingest.ts` (pure): finds the order, its amendments and corrections in a DOGC summary (documents under
+  sections, headers and sub-headers; annexes "9791A" share the issue number); builds `local-2027.json` from the order text with the 2026
+  extractor **plus the 30 councils the 2026 order left out** (before, `prepare2027` never read them, so their pages would not have got days);
+  checks: right year, every one of the 917 towns present with two days (or nuclei), valid dates in the year, no repeated day, Aran towns present,
+  local day on a Catalonia-wide holiday (Aran has its own list: 29 Mar 2027 is not a holiday there, 17 Jun is), order entries no town claims.
+  Errors block `--write`; warnings are printed.
+- `scripts/holidays-snapshot.ts`: new `find` (exit 3 while it is not published; also reads Treball's normativa page) and `ingest [--write]`
+  (find + download by the ID the summary gives + parse + checks; `--year`, `--since`, `--from-issue` for rehearsal); `prepare2027` keeps its flags
+  and gains `--year`, `--verbose`, the same checks and a dry-run summary. Rehearsed against the real DOGC today:
+  `ingest --year 2026 --from-issue 9590 --since 2025-12-15` found Ordre EMT/208/2025 (9565) and EMT/3/2026 (9586), downloaded both and printed
+  "917 towns: 886 with two days of their own, 31 by nuclei only (409 nuclei); Aran 8; 30 still left out; DRY RUN: clean". Nothing written.
+- `tests/holiday-ingest.test.ts` (14): real DOGC summary excerpts (9565 with the 2026 order, 9801 without any) and the 2026 order/amendment
+  text with the year label moved to 2027 (proves format, matching, checks, and that the 2027 date pages switch to status "dogc"; invents no 2027
+  date). CLI tests run `prepare2027` offline and prove `--write` refuses a wrong-year order.
+- `LOCAL_ORDER_CHECKED` 13 Nov -> 24 Nov (the work-calendar guide says "a 24 de novembre de 2026, les dades obertes ... no en tenen cap"); its
+  date guard in `tests/holiday-serp-push-13nov.test.ts` now expires 15 Dec.
+
+**Runbook for the day it appears** (`npm run holidays:snapshot -- ...`, from the repo root, `pdftotext` installed):
+1. `find` (daily from 1 Dec, twice a day 10-24 Dec). Exit 3 = not out. When found it prints title, "DOGC núm. N, de d.m.yyyy", document page and PDF.
+2. `ingest` (dry run). Needs: no `PROBLEM` line. Read every `WARNING` and every `COUNCIL DIFFERS` (a council's own act differs from the order: the
+   page's days change; the order wins). A town printed as "proposta no formulada" that was listed in 2026 is a PROBLEM on purpose: it needs a
+   decision (page without local days) before writing. If a "Correcció d'errades" or amendment is listed, `ingest` applies amendments; corrections are read by hand.
+3. `ingest --write` writes `src/lib/programmatic/holidays/local-2027.json` (order name, "DOGC núm.", URL, read date, every town and nucleus).
+4. Tests: `tests/holiday-engine`, `holiday-council-2027`, `holiday-dates-2027`, `holiday-first-screen`, `holiday-serp-push-13nov`, `holidays`,
+   `local-holidays`, `holiday-ingest`, `easter-2027` (its line 321 fails on purpose: re-read the local section), `bridges-2027`, `carnival`,
+   `ics-feeds`, `leave-2027`, `today-page`, `working-days`, `spain-holidays-2027`; `npx tsc --noEmit -p .`; `npm run -s seo:body-dates`.
+5. Deploy (town pages are static: `/ca/festius/<town>/`, `/es/festivos/<town>/`, `/en/holidays/<town>/` ship with it, plus the left-out councils that now
+   have days), then publish groups `holidays`, `holiday-today`, `local-holidays`, `ponts-2027`, `setmana-santa-2027`, `festius-locals-dades`,
+   `calendari-2027-widget`, `lliure-disposicio`, `school-calendar`, and IndexNow `/ca/festius/`, `/es/festivos/`, `/en/holidays/` (`holidays:snapshot -- urls`).
+   Metadata held until 1 Dec (`COUNCIL_2027_METADATA_HELD`) and the frozen title/H1/lead window to 16 Dec: after the order the "pendent del DOGC" wording disappears from the body by itself; titles stay until the window closes.
+6. Log here: date, order and DOGC number, counts, COUNCIL DIFFERS list, groups published; measure "festius <town> 2027" queries 14 days later.
+
+**Live read, 24 Nov 2026 20:15 UTC** (`/ca/festius/girona/`, `/es/festivos/girona/`, `/ca/festius/sabadell/`, `/ca/festius/tona/`, `/es/festivos/tona/`, all 200):
+Girona title "Avui o demà és festiu a Girona? Festius 2026 i 2027" and description with the 2027 days (council-approved, "pendents del DOGC"); Sabadell and
+Tona (metadata held) say 2026 only in title, description and H1. Every page does carry the 2027 answer in the body, "I el 2027?" with the days, the source
+act, "encara no ha sortit... la del 2026 va sortir al DOGC el 17 de desembre de 2025", and a 2027 table with each local day marked "Aprovat per l'Ajuntament,
+pendent del DOGC". **But it is buried:** on Tona it is body line 31-34, after the whole 2026 table (14 rows), the "Pròxim festiu" paragraph, the next-step link and the
+"És festiu avui?" widget; the one-line summary ("Festius locals del 2027: 17 de maig i 30 de novembre, aprovats per l'Ajuntament (ple del 25 de juny de 2026), pendents de l'ordre del
+DOGC. Calendari del 2027", `t.nextLead` in `MunicipalityPage.tsx` ~line 195) sits just under the widget.
+**Proposal, not applied (title/H1/lead frozen to 16 Dec):** move that existing `t.nextLead` callout (it already links `#festius-2027`) to directly under the H1,
+above the "Tots els festius del 2026" table, only on the towns where the council days are known; no new text, no change to title, description, H1 or the lead paragraph.
+Check against `tests/holiday-first-screen.test.ts` and the 19 Nov rule that photo and widget keep their place. Apply on 16 Dec or after the order.
+
+**Baseline (GSC 18-24 Nov, 7 d):** `/es/festivos/` family 909 pages, 352 clicks, 21,843 impressions, CTR 1.61 %; `/ca/festius/` 832 pages, 217 clicks, 9,721, 2.23 %;
+`/en/holidays/` 172 pages, 23 clicks, 1,692, 1.36 %. Work-calendar guide `/ca/guies/calendari-laboral-catalunya/` ~25 impressions/day, position 8-14.
+**Review:** 2026-12-15 (the date guard expires; `find`), and the day the order appears.
+
+**Outcome:** _pending_

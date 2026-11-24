@@ -1,0 +1,31 @@
+{
+ "sumaris": [
+  {
+   "title": "DOGC 9565",
+   "numDOGC": "9565",
+   "numSuplement": "9565SN",
+   "dateStringDOGC": "Dimecres, 17 de desembre de 2025",
+   "dateDOGC": "17/12/2025",
+   "previousNumDOGC": "9564",
+   "laterNumDOGC": "9566",
+   "linkDownloadDOGCPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?dogcId=9565&language=ca_ES",
+   "linkDownloadSummaryPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?dogcId=9565&sumari=true&language=ca_ES",
+   "section": [
+    {
+     "title": "Altres disposicions",
+     "header": [
+      {
+       "title": "Departament d'Empresa i Treball",
+       "document": [
+        {
+         "title": "Ordre EMT/208/2025, d'11 de desembre, per la qual s'estableix el calendari de festes locals a Catalunya per a l'any 2026",
+         "linkDownloadDocumentPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1032232&type=01&language=ca_ES"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

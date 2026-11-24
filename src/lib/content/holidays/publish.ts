@@ -219,11 +219,14 @@ function easterSection(copy: HolidayCopy, locale: Locale): Block[] {
 
 /**
  * The day the Generalitat's open data (dataset b4eh-r8up, `any_calendari`)
- * was last read for a 2027 local-holiday order: none on 13 Nov 2026 (2026 is
- * the newest year). The section prints it; tests/holidays.test.ts fails 21
- * days later so it is read again (the 2026 order came out on 17 Dec 2025).
+ * was last read for a 2027 local-holiday order: none on 24 Nov 2026 (2026 is
+ * the newest year; rows last updated 2 Mar 2026). The DOGC summaries 9770-9801
+ * (9 Oct-24 Nov) and Treball's "Normativa relacionada" list no 2027 local
+ * order either. The section prints the date; tests/holiday-serp-push-13nov.test.ts
+ * fails 21 days later so it is read again (the 2026 order came out on 17 Dec
+ * 2025; run `npm run holidays:snapshot -- find`).
  */
-export const LOCAL_ORDER_CHECKED = "2026-11-13";
+export const LOCAL_ORDER_CHECKED = "2026-11-24";
 /** How many of the largest towns the local-days table lists. */
 export const LOCAL_TABLE_TOWNS = 15;
 

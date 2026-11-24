@@ -1,0 +1,75 @@
+{
+ "sumaris": [
+  {
+   "title": "DOGC 9801",
+   "numDOGC": "9801",
+   "numSuplement": "9801SN",
+   "dateStringDOGC": "Dimarts, 24 de novembre de 2026",
+   "dateDOGC": "24/11/2026",
+   "previousNumDOGC": "9800",
+   "laterNumDOGC": null,
+   "linkDownloadDOGCPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?dogcId=9801&language=ca_ES",
+   "linkDownloadSummaryPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?dogcId=9801&sumari=true&language=ca_ES",
+   "section": [
+    {
+     "title": "Altres disposicions",
+     "header": [
+      {
+       "title": "Departament d'Empresa i Treball",
+       "document": [
+        {
+         "title": "Ordre EMT/237/2026, de 23 de novembre, per la qual es garanteix el servei essencial que presta el personal funcionari i laboral docent i el personal laboral no docent, en els centres educatius públics, i el personal de lleure educatiu que presta serveis a les escoles dins l'àmbit territorial de Catalunya",
+         "linkDownloadDocumentPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1059945&type=01&language=ca_ES"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Càrrecs i personal",
+     "header": [
+      {
+       "title": "Departament d'Empresa i Treball",
+       "subheader": [
+        {
+         "title": "Agència Catalana del Consum",
+         "document": [
+          {
+           "title": "Resolució EMT/4313/2026, de 16 de novembre, per la qual es resol la convocatòria per a la provisió, pel sistema de lliure designació, d'un lloc singular de l'Agència Catalana del Consum (convocatòria de provisió núm. IU/54/26)",
+           "linkDownloadDocumentPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1059954&type=01&language=ca_ES"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Anuncis",
+     "header": [
+      {
+       "title": "Departament d'Empresa i Treball",
+       "document": [
+        {
+         "title": "Resolució EMT/4224/2026, de 9 de novembre, per la qual es fa pública la llista de cooperatives inscrites al Registre General de Cooperatives de la Generalitat de Catalunya durant el mes d'octubre de 2026",
+         "linkDownloadDocumentPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1059947&type=01&language=ca_ES"
+        }
+       ],
+       "subheader": [
+        {
+         "title": "Agència per a la Competitivitat de l'Empresa",
+         "document": [
+          {
+           "title": "Resolució EMT/4238/2026, de 16 de novembre, per la qual es modifiquen diverses convocatòries per a l'acreditació de clústers per al període 2024-2026 en el marc del Programa Catalunya Clústers, per prorrogar la vigència de les acreditacions",
+           "linkDownloadDocumentPDF": "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1059931&type=01&language=ca_ES"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
