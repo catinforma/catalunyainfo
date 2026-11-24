@@ -1012,8 +1012,14 @@
     border-top: 1px solid var(--color-rule);
     min-height: 280px;
   }
-  .ci-ad-end {
+  .ci-ad-end,
+  .ci-ad-home-end {
     min-height: 320px;
+  }
+  .ci-ad-top,
+  .ci-ad-home-top {
+    min-height: 250px;
+    margin: 0 0 2rem;
   }
   .ci-ad-side {
     margin: 1.5rem 0 0;

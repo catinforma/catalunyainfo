@@ -29,8 +29,9 @@ test("no ad on the pages that show Red Eléctrica PVPC data", () => {
   for (const p of AD_FREE_PATHS) assert.ok(!allowsAdUnits(p), p);
 });
 
-test("units: none on the home pages or the legal pages, allowed on content pages", () => {
-  for (const p of ["/ca/", "/es/", "/en/", "/ca/legal/privacitat/", "/es/legal/cookies/"]) assert.ok(!allowsAdUnits(p), p);
+test("units: none on the legal pages; allowed on content pages and, since 24 Nov (owner), the home pages", () => {
+  for (const p of ["/ca/legal/privacitat/", "/es/legal/cookies/"]) assert.ok(!allowsAdUnits(p), p);
+  for (const p of ["/ca/", "/es/", "/en/"]) assert.ok(allowsAdUnits(p), p);
   for (const p of ["/es/guias/huelgas-espana/", "/es/festivos/2027/", "/ca/calculadores/sou-net/"]) assert.ok(allowsAdUnits(p), p);
 });
 
@@ -79,4 +80,14 @@ test("measurement waits for Google's consent tool when ads are live", () => {
   assert.match(gate, /signals\?\.analytics_storage !== "granted"\) return null/);
   const client = readFileSync(new URL("../src/lib/ads/client.ts", import.meta.url), "utf8");
   assert.match(client, /s === CONSENT_MODE_GRANTED \? "granted" : "denied"/);
+});
+
+test("server-rendered slots: top of every article and two on the home page, boxes in the HTML (no layout shift)", () => {
+  const read = (f: string) => readFileSync(new URL(f, import.meta.url), "utf8");
+  assert.match(read("../src/components/pages/EntryArticle.tsx"), /<AdSlot kind="top" locale=\{locale\} path=\{entry\.href\} \/>/);
+  const home = read("../src/app/(public)/[locale]/page.tsx");
+  assert.match(home, /<AdSlot kind="home-top"/);
+  assert.match(home, /<AdSlot kind="home-end"/);
+  assert.match(read("../src/components/AdsRuntime.tsx"), /querySelectorAll<HTMLElement>\("\[data-ci-ad\]"\)/);
+  assert.match(read("../src/app/globals.css"), /\.ci-ad-top,\s*\.ci-ad-home-top \{\s*min-height: 250px/);
 });

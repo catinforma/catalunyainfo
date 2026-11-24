@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AdSlot } from "@/components/AdSlot";
 import { BlockRenderer, type BlockContext } from "@/components/blocks/BlockRenderer";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
@@ -233,6 +234,10 @@ export function EntryArticle({
             ) : null}
 
             {layout?.summary ? null : phoneToc}
+
+            {/* Ad at the start of the article (owner, 24 Nov 2026), its box
+                in the server HTML so it moves nothing (components/AdSlot). */}
+            <AdSlot kind="top" locale={locale} path={entry.href} />
 
             <BlockRenderer body={body} context={context} insert={bodyInsert} />
 

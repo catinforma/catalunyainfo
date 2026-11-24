@@ -34,7 +34,7 @@ const LABEL: Record<Locale, string> = { ca: "Publicitat", es: "Publicidad", en: 
 
 const SOURCES = /^(fonts|fuentes|sources|official sources|fonts oficials|fuentes oficiales)\b/i;
 
-function unit(kind: "middle" | "end" | "side", client: string, slot: string, label: string, height?: number): HTMLElement {
+function unit(kind: "top" | "middle" | "end" | "side", client: string, slot: string, label: string, height?: number): HTMLElement {
   const box = document.createElement("aside");
   box.className = `ci-ad ci-ad-${kind}`;
   box.setAttribute("aria-label", label);
@@ -45,7 +45,7 @@ function unit(kind: "middle" | "end" | "side", client: string, slot: string, lab
   ins.className = "adsbygoogle";
   ins.dataset.adClient = client;
   ins.dataset.adSlot = slot;
-  if (kind === "middle") {
+  if (kind === "middle" || kind === "top") {
     ins.style.cssText = "display:block;text-align:center";
     ins.dataset.adLayout = "in-article";
     ins.dataset.adFormat = "fluid";
@@ -65,14 +65,50 @@ function topOf(el: Element): number {
 }
 
 /** Places the units for the current page; returns them so they can be removed. */
-function placeUnits(client: string, locale: Locale): HTMLElement[] {
+/**
+ * Fills the server-rendered slots (components/AdSlot.tsx): top of the article
+ * and the home page. Their boxes are already in the HTML with their height, so
+ * filling them moves nothing. Returns the inserted <ins> elements.
+ */
+function fillSlots(main: HTMLElement, client: string): HTMLElement[] {
+  const filled: HTMLElement[] = [];
+  for (const box of Array.from(main.querySelectorAll<HTMLElement>("[data-ci-ad]"))) {
+    if (box.querySelector("ins.adsbygoogle")) continue;
+    const kind = box.dataset.ciAd;
+    const ins = document.createElement("ins");
+    ins.className = "adsbygoogle";
+    ins.dataset.adClient = client;
+    if (kind === "home-end") {
+      ins.dataset.adSlot = AD_SLOTS.end;
+      ins.style.cssText = "display:block";
+      ins.dataset.adFormat = "autorelaxed";
+    } else {
+      ins.dataset.adSlot = AD_SLOTS.middle;
+      ins.style.cssText = "display:block;text-align:center";
+      ins.dataset.adLayout = "in-article";
+      ins.dataset.adFormat = "fluid";
+    }
+    box.append(ins);
+    filled.push(ins);
+  }
+  return filled;
+}
+
+function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[] {
   const main = document.getElementById("main") ?? document.querySelector("main");
   if (!main) return [];
+  const slots = fillSlots(main, client);
+  const pushAll = (els: HTMLElement[]) => {
+    const q = adsQueue();
+    for (let i = 0; i < els.length; i++) q.push({});
+    return els;
+  };
+  if (home) return pushAll(slots);
 
   const proses = Array.from(main.querySelectorAll<HTMLElement>(".ci-prose"));
   const directH2 = (el: HTMLElement) => Array.from(el.children).filter((c): c is HTMLElement => c.tagName === "H2");
   const prose = proses.sort((a, b) => directH2(b).length - directH2(a).length || (b.textContent?.length ?? 0) - (a.textContent?.length ?? 0))[0];
-  if (!prose) return [];
+  if (!prose) return pushAll(slots);
 
   const label = LABEL[locale];
   const viewport = window.innerHeight;
@@ -91,6 +127,10 @@ function placeUnits(client: string, locale: Locale): HTMLElement[] {
     placed.push(box);
   }
 
+  // Top of the article: the server-rendered slot, if the template has one.
+  const topTops: number[] = slots.map((ins) => topOf(ins.parentElement ?? ins));
+  placed.push(...slots);
+
   // In-article units (owner, 24 Nov 2026: "els anuncis surten molt amagats").
   // First: right after the first section, so the answer is always read
   // first, and only once that point is past the top half of the screen.
@@ -98,7 +138,7 @@ function placeUnits(client: string, locale: Locale): HTMLElement[] {
   // from the next, and from the end unit.
   const body = sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s;
   const half = viewport * 0.5;
-  const tops: number[] = [];
+  const tops: number[] = [...topTops];
   const far = (top: number) => tops.every((t) => Math.abs(t - top) > viewport) && endTop - top > viewport;
   const candidates: HTMLElement[] = [];
   if (body.length >= 2 && chars >= 2000) candidates.push(body[1]!);
@@ -125,9 +165,7 @@ function placeUnits(client: string, locale: Locale): HTMLElement[] {
     }
   }
 
-  const q = adsQueue();
-  for (let i = 0; i < placed.length; i++) q.push({});
-  return placed;
+  return pushAll(placed);
 }
 
 export function AdsRuntime({ client, locale }: { client: string; locale: Locale }) {
@@ -159,10 +197,11 @@ export function AdsRuntime({ client, locale }: { client: string; locale: Locale 
       window.__ciAdsActive = true;
     }
     if (!allowsAdUnits(pathname)) return;
+    const home = /^\/(ca|es|en)\/?$/.test(pathname);
 
     let placed: HTMLElement[] = [];
     const timer = window.setTimeout(() => {
-      placed = placeUnits(client, locale);
+      placed = placeUnits(client, locale, home);
     }, 400);
     return () => {
       window.clearTimeout(timer);

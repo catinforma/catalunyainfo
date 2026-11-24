@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
+import { AdSlot } from "@/components/AdSlot";
 import { HomeTopTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -130,6 +131,9 @@ export default async function HomePage({
           </div>
         </section>
 
+        {/* Ad under the top block (owner, 24 Nov 2026), box in the HTML. */}
+        <AdSlot kind="home-top" locale={locale} path={`/${locale}/`} className="ci-shell" />
+
         {/* 12 Nov 2026, owner: no "Útil ara mateix" card grid between the
             hero and the articles; the four top tiles and the menu carry the
             utilities. */}
@@ -178,6 +182,7 @@ export default async function HomePage({
             </ul>
           </section>
         ) : null}
+        <AdSlot kind="home-end" locale={locale} path={`/${locale}/`} className="ci-shell" />
       </main>
 
       <SiteFooter locale={locale} />

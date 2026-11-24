@@ -963,7 +963,7 @@ function accessibilityBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Publicitat",
-        "Els anuncis (Google AdSense) van identificats com a publicitat i ocupen un espai reservat d'entrada, perquè el text no salti mentre llegeixes; mai abans de la resposta. No fem servir anuncis a pantalla completa ni finestres emergents; al mòbil hi pot haver una franja petita a la part de baix, que es pot tancar.",
+        "Els anuncis (Google AdSense) van identificats com a publicitat i ocupen un espai reservat d'entrada, perquè el text no salti mentre llegeixes: un a l'inici de l'article i d'altres entre seccions i al final. No fem servir anuncis a pantalla completa ni finestres emergents; al mòbil hi pot haver una franja petita a la part de baix, que es pot tancar.",
         "El contingut de cada anunci el serveix Google i el fa l'anunciant, de manera que la seva accessibilitat, com la dels mapes de tercers, no la controlem nosaltres. Si un anunci et bloqueja la lectura, digues-nos-ho.",
       ),
       ...section(
@@ -997,7 +997,7 @@ function accessibilityBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Publicidad",
-        "Los anuncios (Google AdSense) van identificados como publicidad y ocupan un espacio reservado de entrada, para que el texto no salte mientras lees; nunca antes de la respuesta. No usamos anuncios a pantalla completa ni ventanas emergentes; en el móvil puede haber una franja pequeña en la parte de abajo, que se puede cerrar.",
+        "Los anuncios (Google AdSense) van identificados como publicidad y ocupan un espacio reservado de entrada, para que el texto no salte mientras lees: uno al inicio del artículo y otros entre secciones y al final. No usamos anuncios a pantalla completa ni ventanas emergentes; en el móvil puede haber una franja pequeña en la parte de abajo, que se puede cerrar.",
         "El contenido de cada anuncio lo sirve Google y lo hace el anunciante, así que su accesibilidad, como la de los mapas de terceros, no la controlamos nosotros. Si un anuncio te impide leer, dínoslo.",
       ),
       ...section(
@@ -1031,7 +1031,7 @@ function accessibilityBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "And once there are ads",
-        "Ads (Google AdSense) are labelled as advertising and sit in space reserved in advance, so the text does not jump while you read; never before the answer. We use no full-screen ads or pop-ups; on phones there may be a small strip at the bottom, which you can close.",
+        "Ads (Google AdSense) are labelled as advertising and sit in space reserved in advance, so the text does not jump while you read: one at the start of the article and others between sections and at the end. We use no full-screen ads or pop-ups; on phones there may be a small strip at the bottom, which you can close.",
         "Each ad is served by Google and made by the advertiser, so its accessibility, like that of third-party maps, is not under our control. If an ad stops you reading, tell us.",
       ),
       ...section(

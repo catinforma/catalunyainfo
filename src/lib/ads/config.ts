@@ -57,14 +57,12 @@ export function isAdFreePath(path: string): boolean {
 }
 
 /**
- * True when manual units may be placed on this page. Ad-free pages, the three
- * home pages (tool tiles and headlines, nothing to read through) and the legal
- * pages get none.
+ * True when manual units may be placed on this page. Ad-free pages and the
+ * legal pages get none. Home pages get two (owner, 24 Nov 2026).
  */
 export function allowsAdUnits(path: string): boolean {
   const p = normalise(path);
   if (isAdFreePath(p)) return false;
-  if (/^\/(ca|es|en)\/$/.test(p)) return false;
   if (/^\/(ca|es|en)\/legal\//.test(p)) return false;
   return true;
 }
