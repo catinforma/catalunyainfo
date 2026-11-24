@@ -1,3 +1,5 @@
+import { ADS_LIVE } from "./ads/live";
+
 /**
  * Security headers, shared by `next.config.ts` (static, applied to every
  * response without running code) and `src/proxy.ts` (for the few responses the
@@ -17,19 +19,30 @@
  * docs/SECURITY.md for the full reasoning and the review trigger.
  */
 
-export function contentSecurityPolicy(isDev: boolean): string {
+/*
+ * With AdSense live (lib/ads/live.ts) script, style, font, connect and frame
+ * sources open to any HTTPS origin. Google's ad and consent scripts load from
+ * many hosts (country google.* domains, googlesyndication, doubleclick,
+ * adtrafficquality, gstatic, fonts) and ad creatives run in frames that
+ * inherit this policy, so an allow-list breaks ads without warning. What
+ * stays closed: plain-HTTP and data: scripts, plugins (object-src), <base>,
+ * form targets and framing of this site by others. The XSS defence on the
+ * rendering path is unchanged (tests/security.test.ts); docs/SECURITY.md.
+ */
+export function contentSecurityPolicy(isDev: boolean, ads: boolean = ADS_LIVE): string {
+  const open = ads ? " https:" : "";
   return [
     `default-src 'self'`,
     `base-uri 'self'`,
     `object-src 'none'`,
     `frame-ancestors 'none'`,
     `form-action 'self'`,
-    `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
-    `style-src 'self' 'unsafe-inline'`,
+    `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${open}${isDev ? " 'unsafe-eval'" : ""}`,
+    `style-src 'self' 'unsafe-inline'${open}`,
     `img-src 'self' data: blob: https:`,
-    `font-src 'self' data:`,
-    `connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://*.vercel-insights.com`,
-    `frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com https://www.openstreetmap.org https://open.spotify.com`,
+    `font-src 'self' data:${open}`,
+    `connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://*.vercel-insights.com${open}`,
+    `frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com https://www.openstreetmap.org https://open.spotify.com${open}`,
     `media-src 'self'`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,

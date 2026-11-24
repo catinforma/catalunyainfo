@@ -2,6 +2,8 @@ import "server-only";
 
 import { and, eq, sql } from "drizzle-orm";
 
+import { ADS_LIVE } from "@/lib/ads/live";
+
 import { getDb, schema } from "@/lib/db/client";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
@@ -317,13 +319,14 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
     blocking: true,
   });
 
-  /* ---- Ads must still be off ------------------------------------------- */
+  /* ---- Ads (live since 24 Nov 2026, lib/ads/config.ts) ------------------ */
   checks.push({
     id: "no-ads",
-    label: "No ad code loaded",
+    label: "Ad code",
     status: "pass",
-    detail:
-      "This build contains no AdSense script and no ad network code. Ad slots are layout placeholders only.",
+    detail: ADS_LIVE
+      ? "AdSense is live: Google's certified consent tool, three manual units placed by rule, none on the REE PVPC pages (lib/ads/config.ts)."
+      : "This build contains no AdSense script and no ad network code.",
     blocking: false,
   });
 

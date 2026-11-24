@@ -47,25 +47,23 @@ test("no eval or Function constructor in application code", () => {
   assert.deepEqual(offenders.map((f) => f.replace(SRC, "")), []);
 });
 
-test("no AdSense or ad network script is present anywhere", () => {
-  const adSignals = [
-    "pagead2.googlesyndication.com",
-    "adsbygoogle",
-    "data-ad-client",
-    "ca-pub-",
-  ];
+test("ad code lives only in the AdSense runtime, and no publisher id is hard-coded", () => {
+  // Since 24 Nov 2026 AdSense is live (lib/ads/config.ts). The script URL and
+  // the unit markup may appear only in the two files that own them; the
+  // publisher id comes from ADSENSE_PUBLISHER_ID, never from source.
+  const ALLOWED = new Set(["lib/ads/config.ts", "components/AdsRuntime.tsx", "lib/ads/client.ts"]);
+  const adSignals = ["pagead2.googlesyndication.com", "adsbygoogle", "data-ad-client"];
 
   const offenders = files.filter((file) => {
+    const rel = file.replace(SRC, "").replace(/^\//, "");
+    if (ALLOWED.has(rel)) return false;
     const source = readFileSync(file, "utf8");
-    // A comment naming the old publisher id is fine; a script tag is not.
-    return adSignals.some((signal) => source.includes(`"${signal}`) || source.includes(`'${signal}`));
+    return adSignals.some((signal) => source.includes(`"${signal}`) || source.includes(`'${signal}`) || source.includes(`"https://${signal}`));
   });
+  assert.deepEqual(offenders.map((f) => f.replace(SRC, "")), [], "ad code outside the AdSense runtime");
 
-  assert.deepEqual(
-    offenders.map((f) => f.replace(SRC, "")),
-    [],
-    "this build must ship with no ad code at all",
-  );
+  const hardCoded = files.filter((file) => /ca-pub-\d|pub-\d{10,}/.test(readFileSync(file, "utf8")));
+  assert.deepEqual(hardCoded.map((f) => f.replace(SRC, "")), [], "a publisher id is hard-coded");
 });
 
 test("the production origin is the canonical host, never a vercel.app alias", async () => {

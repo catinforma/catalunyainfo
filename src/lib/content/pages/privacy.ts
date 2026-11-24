@@ -43,7 +43,7 @@ function processorTable(locale: Locale): Block {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Advertising (planned, not live)                                            */
+/* Advertising (live since 24 Nov 2026)                                       */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -85,10 +85,9 @@ function processorTable(locale: Locale): Block {
  *   "You must clearly identify each party that may collect, receive, or use
  *   end users' personal data as a consequence of your use of a Google product."
  *
- * True today: no ad code exists (tests/security.test.ts), the consent gate
- * keeps `ad_storage`, `ad_user_data` and `ad_personalization` denied whatever
- * the reader chooses, and no advertising cookie is set. When ads go live this
- * section, the cookie policy, PROCESSORS and the legal notice change with them.
+ * Live since 24 Nov 2026 (lib/ads/config.ts): Google's certified consent tool
+ * asks; GA4 and personalised ads wait for it. This section, the cookie
+ * policy, PROCESSORS and the legal notice were rewritten that day.
  */
 export const AD_LINKS = {
   adsSettings: "https://www.google.com/settings/ads",
@@ -126,30 +125,27 @@ function advertisingSection(locale: Locale): Block[] {
   const copy: Record<Locale, Block[]> = {
     ca: section(
       "Publicitat (Google AdSense)",
-      "**Avui:** el web no mostra cap anunci i no carrega cap codi publicitari. No s'instal·la cap galeta de publicitat i no s'envia res a cap xarxa d'anuncis, triïs el que triïs al bàner de galetes.",
-      `**El que està previst:** tenim previst finançar el web amb anuncis servits per Google a través del programa AdSense. Abans que es mostri el primer anunci actualitzarem aquesta política, la [política de galetes](${cookies}) i l'[avís legal](${notice}).`,
-      "**Com funcionen les galetes publicitàries quan hi hagi anuncis:** proveïdors tercers, inclòs Google, fan servir galetes per mostrar anuncis basats en les visites anteriors d'un usuari a aquest web o a altres webs. L'ús de galetes publicitàries permet a Google i als seus socis mostrar-te anuncis basats en les teves visites a aquest web i/o a altres webs d'internet. Com a conseqüència de la publicitat, Google i altres proveïdors poden instal·lar i llegir galetes al teu navegador, o fer servir balises web i l'adreça IP per recollir informació.",
+      `**Des del 24 de novembre del 2026** el web mostra anuncis servits per Google a través del programa AdSense. Els anuncis els tria Google, van identificats com a publicitat i no n'hi ha a les pàgines del preu de la llum. També en parlen la [política de galetes](${cookies}) i l'[avís legal](${notice}).`,
+      "**Com funcionen les galetes publicitàries:** proveïdors tercers, inclòs Google, fan servir galetes per mostrar anuncis basats en les visites anteriors d'un usuari a aquest web o a altres webs. L'ús de galetes publicitàries permet a Google i als seus socis mostrar-te anuncis basats en les teves visites a aquest web i/o a altres webs d'internet. Com a conseqüència de la publicitat, Google i altres proveïdors poden instal·lar i llegir galetes al teu navegador, o fer servir balises web i l'adreça IP per recollir informació.",
       `**Com desactivar la publicitat personalitzada:** pots desactivar la publicitat personalitzada de Google a la [configuració d'anuncis de Google](${L.adsSettings}). Pots desactivar l'ús de galetes per a publicitat personalitzada d'alguns altres proveïdors a [www.aboutads.info/choices](${L.aboutAds}) o, a Europa, a [Your Online Choices](${L.yourOnlineChoices.ca}). Si desactives la personalització, encara pots veure anuncis, triats per factors com la teva ubicació general derivada de l'adreça IP, el tipus de navegador o el que cerques. Si a més de Google hi serveixen anuncis altres proveïdors o xarxes, els anomenarem en aquesta pàgina amb l'enllaç a la seva pàgina per desactivar-los.`,
       `**Com fa servir Google les dades:** Google ho explica a [Com utilitza Google la informació dels llocs web o de les aplicacions que utilitzen els nostres serveis](${L.partnerSites.ca}) i a la seva pàgina sobre [publicitat](${L.googleAds.ca}).`,
-      "**Consentiment a l'EEE, el Regne Unit i Suïssa:** hi mostrarem anuncis només amb una plataforma de gestió del consentiment certificada per Google i integrada amb el Marc de Transparència i Consentiment de l'IAB (TCF). Et preguntarà abans d'instal·lar cap galeta publicitària o de fer servir dades personals per personalitzar anuncis, identificarà cada proveïdor i et deixarà refusar o retirar el consentiment en qualsevol moment. La base jurídica serà el teu consentiment. Fins que els anuncis no estiguin actius, no s'instal·la cap galeta de publicitat.",
+      "**Consentiment a l'EEE, el Regne Unit i Suïssa:** el consentiment el demana la plataforma de gestió del consentiment de Google (Privadesa i missatges), certificada i integrada amb el Marc de Transparència i Consentiment de l'IAB (TCF). Et pregunta abans d'instal·lar galetes publicitàries o de fer servir dades personals per personalitzar anuncis, identifica cada proveïdor (a «Gestiona les opcions») i et deixa refusar-ho amb un sol clic o retirar-ho quan vulguis des de l'enllaç de configuració de galetes del peu de pàgina. La base jurídica és el teu consentiment. Si no hi consents, Google pot mostrar anuncis no personalitzats o limitats.",
     ),
     es: section(
       "Publicidad (Google AdSense)",
-      "**Hoy:** el sitio no muestra ningún anuncio y no carga ningún código publicitario. No se instala ninguna cookie de publicidad y no se envía nada a ninguna red de anuncios, elijas lo que elijas en el banner de cookies.",
-      `**Lo que está previsto:** tenemos previsto financiar el sitio con anuncios servidos por Google a través del programa AdSense. Antes de que se muestre el primer anuncio actualizaremos esta política, la [política de cookies](${cookies}) y el [aviso legal](${notice}).`,
-      "**Cómo funcionan las cookies publicitarias cuando haya anuncios:** proveedores externos, incluido Google, utilizan cookies para mostrar anuncios basados en las visitas anteriores de un usuario a este sitio web o a otros sitios web. El uso de cookies publicitarias permite a Google y a sus socios mostrarte anuncios basados en tus visitas a este sitio y/o a otros sitios de internet. Como consecuencia de la publicidad, Google y otros proveedores pueden instalar y leer cookies en tu navegador, o usar balizas web y la dirección IP para recoger información.",
+      `**Desde el 24 de noviembre de 2026** el sitio muestra anuncios servidos por Google a través del programa AdSense. Los anuncios los elige Google, van identificados como publicidad y no los hay en las páginas del precio de la luz. También hablan de ello la [política de cookies](${cookies}) y el [aviso legal](${notice}).`,
+      "**Cómo funcionan las cookies publicitarias:** proveedores externos, incluido Google, utilizan cookies para mostrar anuncios basados en las visitas anteriores de un usuario a este sitio web o a otros sitios web. El uso de cookies publicitarias permite a Google y a sus socios mostrarte anuncios basados en tus visitas a este sitio y/o a otros sitios de internet. Como consecuencia de la publicidad, Google y otros proveedores pueden instalar y leer cookies en tu navegador, o usar balizas web y la dirección IP para recoger información.",
       `**Cómo desactivar la publicidad personalizada:** puedes desactivar la publicidad personalizada de Google en la [configuración de anuncios de Google](${L.adsSettings}). Puedes desactivar el uso de cookies para publicidad personalizada de algunos otros proveedores en [www.aboutads.info/choices](${L.aboutAds}) o, en Europa, en [Your Online Choices](${L.yourOnlineChoices.es}). Si desactivas la personalización, aún puedes ver anuncios, elegidos por factores como tu ubicación general derivada de la dirección IP, el tipo de navegador o lo que buscas. Si además de Google sirven anuncios otros proveedores o redes, los nombraremos en esta página con el enlace a su página para desactivarlos.`,
       `**Cómo usa Google los datos:** Google lo explica en [Cómo utiliza Google la información de sitios web o aplicaciones que utilizan nuestros servicios](${L.partnerSites.es}) y en su página sobre [publicidad](${L.googleAds.es}).`,
-      "**Consentimiento en el EEE, el Reino Unido y Suiza:** solo mostraremos anuncios con una plataforma de gestión del consentimiento certificada por Google e integrada con el Marco de Transparencia y Consentimiento de IAB (TCF). Te preguntará antes de instalar ninguna cookie publicitaria o de usar datos personales para personalizar anuncios, identificará a cada proveedor y te dejará rechazar o retirar el consentimiento en cualquier momento. La base jurídica será tu consentimiento. Hasta que los anuncios no estén activos, no se instala ninguna cookie de publicidad.",
+      "**Consentimiento en el EEE, el Reino Unido y Suiza:** el consentimiento lo pide la plataforma de gestión del consentimiento de Google (Privacidad y mensajes), certificada e integrada con el Marco de Transparencia y Consentimiento de IAB (TCF). Te pregunta antes de instalar cookies publicitarias o de usar datos personales para personalizar anuncios, identifica a cada proveedor (en «Gestionar opciones») y te deja rechazarlo con un solo clic o retirarlo cuando quieras desde el enlace de configuración de cookies del pie de página. La base jurídica es tu consentimiento. Si no consientes, Google puede mostrar anuncios no personalizados o limitados.",
     ),
     en: section(
       "Advertising (Google AdSense)",
-      "**Today:** the site shows no ads and loads no advertising code. No advertising cookie is set and nothing is sent to any ad network, whatever you choose in the cookie banner.",
-      `**What is planned:** we plan to fund the site with ads served by Google through its AdSense programme. Before the first ad is shown we will update this policy, the [cookie policy](${cookies}) and the [legal notice](${notice}).`,
-      "**How advertising cookies work once ads are shown:** third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet. As a result of ad serving, Google and other vendors may place and read cookies on your browser, or use web beacons and your IP address to collect information.",
+      `**Since 24 November 2026** the site has shown ads served by Google through its AdSense programme. Google chooses the ads; they are labelled as advertising, and there are none on the electricity-price pages. The [cookie policy](${cookies}) and the [legal notice](${notice}) cover them too.`,
+      "**How advertising cookies work:** third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet. As a result of ad serving, Google and other vendors may place and read cookies on your browser, or use web beacons and your IP address to collect information.",
       `**Opting out of personalised advertising:** you can opt out of personalised advertising from Google in [Google's Ads Settings](${L.adsSettings}). You can opt out of some other vendors' use of cookies for personalised advertising at [www.aboutads.info/choices](${L.aboutAds}) or, in Europe, at [Your Online Choices](${L.yourOnlineChoices.en}). With personalisation off you may still see ads, chosen by factors such as your general location derived from your IP address, your browser type and your searches. If vendors or ad networks other than Google serve ads here, we will name them on this page with a link to their opt-out page.`,
       `**How Google uses data:** Google explains it in [How Google uses information from sites or apps that use our services](${L.partnerSites.en}) and on its [advertising](${L.googleAds.en}) page.`,
-      "**Consent in the EEA, the UK and Switzerland:** ads will be shown there only through a consent management platform certified by Google and integrated with the IAB Transparency and Consent Framework (TCF). It will ask before any advertising cookie is set or any personal data is used to personalise ads, name each vendor, and let you refuse or withdraw consent at any time. The legal basis will be your consent. Until ads are active, no advertising cookie is set.",
+      "**Consent in the EEA, the UK and Switzerland:** consent is asked by Google's consent management platform (Privacy & messaging), certified and integrated with the IAB Transparency and Consent Framework (TCF). It asks before advertising cookies are set or personal data is used to personalise ads, names each vendor (under \"Manage options\"), and lets you refuse in one click or withdraw at any time from the cookie settings link in the footer. The legal basis is your consent. If you do not consent, Google may show non-personalised or limited ads.",
     ),
   };
 
@@ -176,7 +172,7 @@ function privacyBlocks(locale: Locale): Block[] {
           { label: "Mesura d'audiència", value: "Només si l'acceptes; dades agregades" },
           { label: "Formulari de contacte", value: "Nom, correu i el que escrius" },
           { label: "Venda de dades", value: "Mai" },
-          { label: "Publicitat", value: "Encara cap anunci; prevista amb Google AdSense, personalitzada només si hi consents" },
+          { label: "Publicitat", value: "Google AdSense; personalitzada només si hi consents" },
         ],
       } as Block,
       ...section(
@@ -186,7 +182,7 @@ function privacyBlocks(locale: Locale): Block[] {
       ...section(
         "Quines dades tractem i per què",
         "**Navegació pel web.** Pots llegir-ho tot sense donar cap dada ni acceptar res. El servidor registra de manera tècnica i temporal les peticions per poder servir les pàgines i protegir-les d'abusos; aquest registre el gestiona el proveïdor d'allotjament i nosaltres no el fem servir per identificar ningú.",
-        "**Mesura d'audiència.** Si acceptes la mesura, Google Analytics 4 ens dona dades agregades sobre quines pàgines es llegeixen. Base jurídica: el teu consentiment, que pots retirar quan vulguis. Si no l'acceptes, no es carrega res de Google: ni una petició.",
+        "**Mesura d'audiència.** Si acceptes la mesura, Google Analytics 4 ens dona dades agregades sobre quines pàgines es llegeixen. Base jurídica: el teu consentiment, que pots retirar quan vulguis. Si no l'acceptes, Google Analytics no es carrega. Ho preguntem amb la mateixa finestra de consentiment de Google que la publicitat.",
         "**Formulari de contacte.** Tractem el nom, l'adreça de correu, el motiu i el missatge que ens escrius, amb la finalitat única de respondre't. Base jurídica: el teu consentiment i l'interès legítim a atendre una consulta. Sense aquestes dades no et podem contestar.",
         "**Valoració «t'ha estat útil?».** Només desem la pàgina, l'idioma i un sí o un no. No hi ha cap identificador, ni sessió, ni adreça IP: no és possible relacionar una resposta amb una persona.",
         "**No tractem** dades de categories especials, ni dades de menors de manera intencionada, ni fem decisions automatitzades amb efectes jurídics sobre tu.",
@@ -242,7 +238,7 @@ function privacyBlocks(locale: Locale): Block[] {
           { label: "Medición de audiencia", value: "Solo si la aceptas; datos agregados" },
           { label: "Formulario de contacto", value: "Nombre, correo y lo que escribes" },
           { label: "Venta de datos", value: "Nunca" },
-          { label: "Publicidad", value: "Aún ningún anuncio; prevista con Google AdSense, personalizada solo si consientes" },
+          { label: "Publicidad", value: "Google AdSense; personalizada solo si consientes" },
         ],
       } as Block,
       ...section(
@@ -252,7 +248,7 @@ function privacyBlocks(locale: Locale): Block[] {
       ...section(
         "Qué datos tratamos y para qué",
         "**Navegación por el sitio.** Puedes leerlo todo sin dar ningún dato ni aceptar nada. El servidor registra de forma técnica y temporal las peticiones para poder servir las páginas y protegerlas de abusos; ese registro lo gestiona el proveedor de alojamiento y no lo usamos para identificar a nadie.",
-        "**Medición de audiencia.** Si aceptas la medición, Google Analytics 4 nos da datos agregados sobre qué páginas se leen. Base jurídica: tu consentimiento, que puedes retirar cuando quieras. Si no lo aceptas, no se carga nada de Google: ni una sola petición.",
+        "**Medición de audiencia.** Si aceptas la medición, Google Analytics 4 nos da datos agregados sobre qué páginas se leen. Base jurídica: tu consentimiento, que puedes retirar cuando quieras. Si no lo aceptas, Google Analytics no se carga. Lo preguntamos con la misma ventana de consentimiento de Google que la publicidad.",
         "**Formulario de contacto.** Tratamos el nombre, la dirección de correo, el motivo y el mensaje que nos escribes, con la única finalidad de responderte. Base jurídica: tu consentimiento y el interés legítimo en atender una consulta. Sin esos datos no podemos contestarte.",
         "**Valoración «¿te ha sido útil?».** Solo guardamos la página, el idioma y un sí o un no. No hay identificador, ni sesión, ni dirección IP: no es posible relacionar una respuesta con una persona.",
         "**No tratamos** datos de categorías especiales, ni datos de menores de forma intencionada, ni tomamos decisiones automatizadas con efectos jurídicos sobre ti.",
@@ -308,7 +304,7 @@ function privacyBlocks(locale: Locale): Block[] {
           { label: "Audience measurement", value: "Only if you accept it; aggregate data" },
           { label: "Contact form", value: "Name, email and what you write" },
           { label: "Selling data", value: "Never" },
-          { label: "Advertising", value: "No ads yet; planned with Google AdSense, personalised only if you consent" },
+          { label: "Advertising", value: "Google AdSense; personalised only if you consent" },
         ],
       } as Block,
       ...section(
@@ -318,7 +314,7 @@ function privacyBlocks(locale: Locale): Block[] {
       ...section(
         "What we process, and why",
         "**Browsing the site.** You can read everything without giving any data or accepting anything. The server keeps technical, short-lived request logs so pages can be served and protected from abuse; those logs are held by the hosting provider and we do not use them to identify anyone.",
-        "**Audience measurement.** If you accept measurement, Google Analytics 4 gives us aggregate data on which pages are read. Legal basis: your consent, which you can withdraw at any time. If you decline, nothing from Google is loaded — not a single request.",
+        "**Audience measurement.** If you accept measurement, Google Analytics 4 gives us aggregate data on which pages are read. Legal basis: your consent, which you can withdraw at any time. If you decline, Google Analytics is not loaded. It is asked for in the same Google consent window as advertising.",
         "**Contact form.** We process the name, email address, subject and message you send us, for the sole purpose of replying. Legal basis: your consent and our legitimate interest in answering an enquiry. Without those details we cannot reply.",
         "**The \"was this useful?\" rating.** We store only the page, the language and a yes or no. There is no identifier, no session and no IP address, so an answer cannot be linked to a person.",
         "**We do not process** special-category data, we do not knowingly process children's data, and we make no automated decisions with legal effects on you.",
@@ -424,9 +420,10 @@ function cookieTable(locale: Locale): Block {
 }
 
 /**
- * Advertising cookies: none today, and what changes when ads are switched on.
- * Kept out of COOKIES on purpose: that list is what the site sets now, and a
- * test holds it to the code. Sources and check date: AD_LINKS above.
+ * Advertising cookies, since ads went live on 24 Nov 2026 (lib/ads/config.ts).
+ * Kept out of COOKIES on purpose: Google sets them, from its domains or this
+ * site's, and lists them per vendor in its consent tool. Sources and check
+ * date: AD_LINKS above.
  */
 function advertisingCookies(locale: Locale): Block[] {
   const privacy = legalPath("privacy", locale);
@@ -436,34 +433,37 @@ function advertisingCookies(locale: Locale): Block[] {
     ca: {
       type: "table",
       caption: "Galetes de publicitat",
-      headers: ["Què", "Avui", "Quan s'activin els anuncis"],
+      headers: ["Què", "Detall"],
       rows: [
-        ["Galetes", "Cap", "Galetes de Google (AdSense) i, si n'hi ha, d'altres proveïdors d'anuncis, des dels seus dominis o des del d'aquest web"],
-        ["Finalitat", "—", "Mostrar anuncis, limitar quantes vegades en veus un, detectar frau i, si hi consents, personalitzar-los segons les teves visites a aquest web i a altres"],
-        ["Consentiment", "—", "A l'EEE, el Regne Unit i Suïssa, amb una plataforma de gestió del consentiment certificada per Google (IAB TCF), abans d'instal·lar-ne cap"],
-        ["Noms i durades", "—", `Els publica Google a la seva [pàgina sobre galetes](${L.googleCookies.ca}); la plataforma de consentiment els llistarà per proveïdor`],
+        ["Qui les instal·la", "Google (AdSense) i, si hi consents, els proveïdors d'anuncis que llista la finestra de consentiment, des dels seus dominis o des del d'aquest web"],
+        ["Finalitat", "Mostrar anuncis, limitar quantes vegades en veus un, detectar frau, mesurar-los i, si hi consents, personalitzar-los segons les teves visites a aquest web i a altres"],
+        ["Consentiment", "A l'EEE, el Regne Unit i Suïssa, amb la plataforma de consentiment de Google, certificada (IAB TCF), abans d'instal·lar galetes publicitàries; també recorda la teva decisió amb galetes pròpies"],
+        ["Noms i durades", `Els publica Google a la seva [pàgina sobre galetes](${L.googleCookies.ca}) i la finestra de consentiment els detalla per proveïdor`],
+        ["Pàgines sense anuncis", "Les del preu de la llum (dades de Red Eléctrica)"],
       ],
     } as Block,
     es: {
       type: "table",
       caption: "Cookies de publicidad",
-      headers: ["Qué", "Hoy", "Cuando se activen los anuncios"],
+      headers: ["Qué", "Detalle"],
       rows: [
-        ["Cookies", "Ninguna", "Cookies de Google (AdSense) y, si los hay, de otros proveedores de anuncios, desde sus dominios o desde el de este sitio"],
-        ["Finalidad", "—", "Mostrar anuncios, limitar cuántas veces ves uno, detectar fraude y, si consientes, personalizarlos según tus visitas a este sitio y a otros"],
-        ["Consentimiento", "—", "En el EEE, el Reino Unido y Suiza, con una plataforma de gestión del consentimiento certificada por Google (IAB TCF), antes de instalar ninguna"],
-        ["Nombres y duraciones", "—", `Los publica Google en su [página sobre cookies](${L.googleCookies.es}); la plataforma de consentimiento los listará por proveedor`],
+        ["Quién las instala", "Google (AdSense) y, si consientes, los proveedores de anuncios que lista la ventana de consentimiento, desde sus dominios o desde el de este sitio"],
+        ["Finalidad", "Mostrar anuncios, limitar cuántas veces ves uno, detectar fraude, medirlos y, si consientes, personalizarlos según tus visitas a este sitio y a otros"],
+        ["Consentimiento", "En el EEE, el Reino Unido y Suiza, con la plataforma de consentimiento de Google, certificada (IAB TCF), antes de instalar cookies publicitarias; también recuerda tu decisión con cookies propias"],
+        ["Nombres y duraciones", `Los publica Google en su [página sobre cookies](${L.googleCookies.es}) y la ventana de consentimiento los detalla por proveedor`],
+        ["Páginas sin anuncios", "Las del precio de la luz (datos de Red Eléctrica)"],
       ],
     } as Block,
     en: {
       type: "table",
       caption: "Advertising cookies",
-      headers: ["What", "Today", "When ads are switched on"],
+      headers: ["What", "Detail"],
       rows: [
-        ["Cookies", "None", "Cookies from Google (AdSense) and, if any, other ad vendors, set from their domains or from this site's"],
-        ["Purpose", "—", "Serving ads, capping how often you see one, detecting fraud and, if you consent, personalising them based on your visits to this site and others"],
-        ["Consent", "—", "In the EEA, the UK and Switzerland, through a consent management platform certified by Google (IAB TCF), before any is set"],
-        ["Names and durations", "—", `Published by Google on its [cookies page](${L.googleCookies.en}); the consent platform will list them per vendor`],
+        ["Who sets them", "Google (AdSense) and, if you consent, the ad vendors listed in the consent window, from their domains or from this site's"],
+        ["Purpose", "Serving ads, capping how often you see one, detecting fraud, measuring them and, if you consent, personalising them based on your visits to this site and others"],
+        ["Consent", "In the EEA, the UK and Switzerland, through Google's certified consent platform (IAB TCF), before advertising cookies are set; it also remembers your decision with its own cookies"],
+        ["Names and durations", `Published by Google on its [cookies page](${L.googleCookies.en}); the consent window details them per vendor`],
+        ["Pages without ads", "The electricity-price pages (Red Eléctrica data)"],
       ],
     } as Block,
   };
@@ -471,15 +471,15 @@ function advertisingCookies(locale: Locale): Block[] {
   const text: Record<Locale, Block[]> = {
     ca: section(
       "Galetes de publicitat",
-      "Avui, cap. Tenim previst mostrar anuncis servits per Google (AdSense); fins que no estiguin actius, no s'instal·la cap galeta de publicitat. Quan s'activin, proveïdors tercers, inclòs Google, faran servir galetes per mostrar anuncis basats en les teves visites anteriors a aquest web o a altres webs.",
+      "Des del 24 de novembre del 2026 el web mostra anuncis servits per Google (AdSense). Proveïdors tercers, inclòs Google, fan servir galetes per mostrar anuncis basats en les teves visites anteriors a aquest web o a altres webs.",
     ),
     es: section(
       "Cookies de publicidad",
-      "Hoy, ninguna. Tenemos previsto mostrar anuncios servidos por Google (AdSense); hasta que no estén activos, no se instala ninguna cookie de publicidad. Cuando se activen, proveedores externos, incluido Google, usarán cookies para mostrar anuncios basados en tus visitas anteriores a este sitio o a otros sitios web.",
+      "Desde el 24 de noviembre de 2026 el sitio muestra anuncios servidos por Google (AdSense). Proveedores externos, incluido Google, usan cookies para mostrar anuncios basados en tus visitas anteriores a este sitio o a otros sitios web.",
     ),
     en: section(
       "Advertising cookies",
-      "None today. We plan to show ads served by Google (AdSense); until they are active, no advertising cookie is set. Once they are, third-party vendors, including Google, will use cookies to serve ads based on your prior visits to this site or other websites.",
+      "Since 24 November 2026 the site has shown ads served by Google (AdSense). Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this site or other websites.",
     ),
   };
 
@@ -500,7 +500,7 @@ function cookieBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "Aquest web funciona sense galetes de tercers si no les acceptes. En la primera visita no es carrega res de Google ni de cap altre tercer: ni un sol script, ni una sola petició.",
+        text: "Aquest web es finança amb anuncis de Google (AdSense). En la primera visita, la finestra de consentiment de Google et pregunta si acceptes les galetes de publicitat i de mesura; pots refusar-ho amb un sol clic i el web funciona igual.",
       } as Block,
       ...section(
         "Què és una galeta",
@@ -512,17 +512,16 @@ function cookieBlocks(locale: Locale): Block[] {
         type: "callout",
         tone: "info",
         title: "Per defecte, denegat",
-        text: "Les galetes de mesura només s'instal·len si les acceptes explícitament. Avui no s'instal·la cap galeta de publicitat, perquè el web encara no mostra anuncis.",
+        text: "Les galetes de mesura i les de publicitat personalitzada només s'instal·len si les acceptes explícitament a la finestra de consentiment de Google.",
       } as Block,
       ...advertisingCookies(locale),
       ...section(
         "Com canviar la teva decisió",
-        "Pots canviar-la en qualsevol moment des del botó de configuració de galetes del peu de pàgina. També pots esborrar les galetes des de la configuració del teu navegador; llavors se't tornarà a preguntar.",
-        "Si esborres la galeta `ci_consent`, la decisió desapareix i el web torna a l'estat inicial: tot denegat.",
+        "Pots canviar-la en qualsevol moment des de l'enllaç de configuració de galetes del peu de pàgina, que torna a obrir la finestra de consentiment de Google. També pots esborrar les galetes des de la configuració del teu navegador; llavors se't tornarà a preguntar.",
       ),
       ...section(
         "Google Consent Mode",
-        "Fem servir el mode de consentiment de Google en versió 2. Avui els senyals de publicitat (`ad_storage`, `ad_user_data`, `ad_personalization`) queden denegats triïs el que triïs, no només fins que decideixes: el web encara no mostra anuncis. Quan n'hi hagi, només s'activaran si ho acceptes a la plataforma de consentiment certificada.",
+        "Fem servir el mode de consentiment de Google en versió 2. Els senyals (`ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`) surten denegats per defecte i només passen a concedits si ho acceptes a la finestra de consentiment de Google.",
       ),
       ...section(
         "Més informació",
@@ -533,7 +532,7 @@ function cookieBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "Este sitio funciona sin cookies de terceros si no las aceptas. En la primera visita no se carga nada de Google ni de ningún otro tercero: ni un solo script, ni una sola petición.",
+        text: "Este sitio se financia con anuncios de Google (AdSense). En la primera visita, la ventana de consentimiento de Google te pregunta si aceptas las cookies de publicidad y de medición; puedes rechazarlo con un solo clic y el sitio funciona igual.",
       } as Block,
       ...section(
         "Qué es una cookie",
@@ -545,17 +544,16 @@ function cookieBlocks(locale: Locale): Block[] {
         type: "callout",
         tone: "info",
         title: "Por defecto, denegado",
-        text: "Las cookies de medición solo se instalan si las aceptas explícitamente. Hoy no se instala ninguna cookie de publicidad, porque el sitio todavía no muestra anuncios.",
+        text: "Las cookies de medición y las de publicidad personalizada solo se instalan si las aceptas explícitamente en la ventana de consentimiento de Google.",
       } as Block,
       ...advertisingCookies(locale),
       ...section(
         "Cómo cambiar tu decisión",
-        "Puedes cambiarla en cualquier momento desde el botón de configuración de cookies del pie de página. También puedes borrar las cookies desde la configuración de tu navegador; entonces se te volverá a preguntar.",
-        "Si borras la cookie `ci_consent`, la decisión desaparece y el sitio vuelve al estado inicial: todo denegado.",
+        "Puedes cambiarla en cualquier momento desde el enlace de configuración de cookies del pie de página, que vuelve a abrir la ventana de consentimiento de Google. También puedes borrar las cookies desde la configuración de tu navegador; entonces se te volverá a preguntar.",
       ),
       ...section(
         "Google Consent Mode",
-        "Usamos el modo de consentimiento de Google en versión 2. Hoy las señales publicitarias (`ad_storage`, `ad_user_data`, `ad_personalization`) quedan denegadas elijas lo que elijas, no solo hasta que decides: el sitio todavía no muestra anuncios. Cuando los haya, solo se activarán si lo aceptas en la plataforma de consentimiento certificada.",
+        "Usamos el modo de consentimiento de Google en versión 2. Las señales (`ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`) salen denegadas por defecto y solo pasan a concedidas si lo aceptas en la ventana de consentimiento de Google.",
       ),
       ...section(
         "Más información",
@@ -566,7 +564,7 @@ function cookieBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "This site works without third-party cookies unless you accept them. On a first visit nothing from Google or any other third party is loaded — not one script, not one request.",
+        text: "This site is funded by Google ads (AdSense). On a first visit, Google's consent window asks whether you accept advertising and measurement cookies; you can refuse in one click and the site works the same.",
       } as Block,
       ...section(
         "What a cookie is",
@@ -578,17 +576,16 @@ function cookieBlocks(locale: Locale): Block[] {
         type: "callout",
         tone: "info",
         title: "Denied by default",
-        text: "Measurement cookies are set only if you explicitly accept them. No advertising cookie is set today, because the site does not show ads yet.",
+        text: "Measurement cookies and personalised-advertising cookies are set only if you explicitly accept them in Google's consent window.",
       } as Block,
       ...advertisingCookies(locale),
       ...section(
         "Changing your decision",
-        "You can change it at any time from the cookie settings button in the footer. You can also delete cookies in your browser settings, after which you will be asked again.",
-        "If you delete the `ci_consent` cookie, the decision is gone and the site returns to its initial state: everything denied.",
+        "You can change it at any time from the cookie settings link in the footer, which reopens Google's consent window. You can also delete cookies in your browser settings, after which you will be asked again.",
       ),
       ...section(
         "Google Consent Mode",
-        "We use Google Consent Mode v2. Today the advertising signals (`ad_storage`, `ad_user_data`, `ad_personalization`) stay denied whatever you choose, not merely until you choose: the site does not show ads yet. Once it does, they will be granted only if you accept them in the certified consent platform.",
+        "We use Google Consent Mode v2. The signals (`ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`) start denied and are granted only if you accept in Google's consent window.",
       ),
       ...section(
         "More information",

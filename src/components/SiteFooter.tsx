@@ -7,7 +7,8 @@ import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
 import { LIVE_FOOTER_TITLE, liveFooterLinks, seasonalFooterLinks } from "@/lib/nav/footer";
-import { SITE } from "@/lib/site";
+import { SITE, adsensePublisherId } from "@/lib/site";
+import { adClient } from "@/lib/ads/config";
 import { Wordmark } from "@/components/Wordmark";
 import { FollowChannelLink } from "@/components/share/FollowChannel";
 
@@ -129,7 +130,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
               </li>
             ))}
             <li>
-              <ConsentSettingsButton label={getMessages(locale).consent.title} />
+              <ConsentSettingsButton label={getMessages(locale).consent.title} cmp={adClient(adsensePublisherId()) !== null} />
             </li>
           </ul>
         </nav>

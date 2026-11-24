@@ -1002,6 +1002,35 @@
     text-underline-offset: 0.2em;
   }
 
+  /* --- Ad units (components/AdsRuntime.tsx) ------------------------------ */
+  /* Each unit reserves its height before Google fills it, so text below does
+     not jump; a unit Google leaves unfilled disappears. */
+  .ci-ad {
+    clear: both;
+    margin: 2.5rem 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-rule);
+    min-height: 280px;
+  }
+  .ci-ad-end {
+    min-height: 320px;
+  }
+  .ci-ad-side {
+    margin: 1.5rem 0 0;
+    min-height: 0;
+  }
+  .ci-ad-label {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .ci-ad:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+    display: none;
+  }
+
   /* --- Calculator and calendar blocks ------------------------------------ */
   .ci-calc,
   .ci-calendar {

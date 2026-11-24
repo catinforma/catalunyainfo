@@ -57,9 +57,9 @@ export const PROCESSORS = [
   {
     name: "Google Ireland Ltd.",
     role: {
-      ca: "Mesura d'audiència (Google Analytics 4), només amb consentiment",
-      es: "Medición de audiencia (Google Analytics 4), solo con consentimiento",
-      en: "Audience measurement (Google Analytics 4), only with consent",
+      ca: "Publicitat (AdSense) i finestra de consentiment; mesura d'audiència (Google Analytics 4), només amb consentiment",
+      es: "Publicidad (AdSense) y ventana de consentimiento; medición de audiencia (Google Analytics 4), solo con consentimiento",
+      en: "Advertising (AdSense) and the consent window; audience measurement (Google Analytics 4), only with consent",
     },
     url: "https://policies.google.com/privacy",
     region: { ca: "UE i EUA", es: "UE y EE. UU.", en: "EU and USA" },
@@ -71,9 +71,9 @@ export const COOKIES = [
   {
     name: "ci_consent",
     purpose: {
-      ca: "Recorda la teva decisió sobre les galetes de mesura.",
-      es: "Recuerda tu decisión sobre las cookies de medición.",
-      en: "Remembers your decision about measurement cookies.",
+      ca: "Recorda la teva decisió al bàner propi de galetes. Només s'usa quan el web no mostra anuncis; amb anuncis, la decisió la desa la finestra de consentiment de Google.",
+      es: "Recuerda tu decisión en el banner propio de cookies. Solo se usa cuando el sitio no muestra anuncios; con anuncios, la decisión la guarda la ventana de consentimiento de Google.",
+      en: "Remembers your decision in our own cookie banner. Used only when the site shows no ads; with ads, Google's consent window stores the decision.",
     },
     duration: { ca: "180 dies", es: "180 días", en: "180 days" },
     kind: { ca: "Pròpia, necessària", es: "Propia, necesaria", en: "First-party, necessary" },

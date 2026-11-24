@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import "../../globals.css";
 
+import { AdsRuntime } from "@/components/AdsRuntime";
 import { AnalyticsClicks } from "@/components/AnalyticsClicks";
 import { ConsentGate } from "@/components/ConsentGate";
 import { JsonLd } from "@/components/JsonLd";
@@ -14,6 +15,7 @@ import { HTML_LANG, LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
 import { graph, organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
 import { WHATSAPP_CHANNEL_URL } from "@/lib/share/channel";
 import { SITE, adsensePublisherId } from "@/lib/site";
+import { adClient } from "@/lib/ads/config";
 
 /**
  * This is a root layout: it owns `<html>` and `<body>`.
@@ -90,6 +92,9 @@ export default async function LocaleLayout({
   const typed = locale as Locale;
   const t = getMessages(typed);
 
+  // AdSense (lib/ads/config.ts): Google's consent tool and our ad units.
+  const ads = adClient(adsensePublisherId());
+
   const siteGraph = graph([
     organizationSchema(typed),
     websiteSchema(typed),
@@ -108,7 +113,8 @@ export default async function LocaleLayout({
         <ScrollReset />
         <AnalyticsClicks locale={typed} channelUrl={WHATSAPP_CHANNEL_URL} />
         <JsonLd json={siteGraph} />
-        <ConsentGate locale={typed} t={{ consent: getMessages(typed).consent, legalLabel: getMessages(typed).nav.legal }} />
+        <ConsentGate locale={typed} cmp={ads !== null} t={{ consent: getMessages(typed).consent, legalLabel: getMessages(typed).nav.legal }} />
+        {ads ? <AdsRuntime client={ads} locale={typed} /> : null}
       </body>
     </html>
   );

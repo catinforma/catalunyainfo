@@ -12615,3 +12615,17 @@ those date reasons; all eight strike test files pass now.
 **Review:** 2026-12-08, with the 227-town wave (hub impressions and position per language; queries containing "pdf", "laborables", "jueves santo", "san josé"; whether the guide keeps "calendario laboral 2027 catalunya").
 
 **Tests:** new `calendar-2027-main-urls` (6); `spain-days-2027-intl` links test rewritten for the new rule.
+
+## 2026-11-24 — AdSense live: Google's consent tool replaces our banner, three manual units placed by rule, no ads on the REE pages (fourth deploy of the day; group `pages` for the legal and trust pages)
+
+**Why.** AdSense accepted the site today; the owner filled in the tax form and asked for ads to go live ("fes tot i publica"), with few and non-intrusive units ("no vull anuncis de merda… que molestin molt"). Manual units were chosen over in-page auto ads for control, no layout jumps (reserved height) and because auto ads do not re-place reliably on client-side navigation.
+
+**What changed.** `lib/ads/{live,config,client}.ts`, `components/AdsRuntime.tsx`; `ConsentGate` and `ConsentSettingsButton` follow Google's consent tool; CSP opens to `https:` for script/style/font/connect/frame (`docs/SECURITY.md`); privacy, cookies, legal notice, editorial policy, about, sponsorship and accessibility copy rewritten in ca/es/en; `docs/ADSENSE_READINESS.md` "Live since 24 Nov 2026". AdSense settings (owner): European regulations message with "Do not consent", consent mode for ads and analytics, auto ads overlays only (bottom anchor), nine REE pages excluded, auto optimisation off.
+
+**Not done, on purpose.** No ad on the nine PVPC/today pages (REE). No unit on home or legal pages, none above the answer. Desktop sidebar unit waits for its slot id. LSSI-CE art. 10 identity on the legal notice waits for the owner.
+
+**Expected side effects (measure, do not guess).** (a) GA4 now counts only visitors who accept in Google's window, and none outside the EEA/UK/CH (status "not applicable" is treated as denied): GA4 sessions drop and are **not comparable** with the series before 25 Nov; use GSC clicks for traffic. (b) Page weight and INP/LCP: the ad script loads after hydration; check CrUX/PageSpeed on 3 pages after 7 days.
+
+**Baseline (GSC, 18–23 Nov):** clicks 1,740 / 1,383 / 681 / 601 / 1,535 / 3,109 per day; average position 6.7–8.0; GA4 sessions 402–2,577 per day.
+
+**Review 2026-12-08:** GSC clicks and position against the baseline (traffic must not drop because of the ads); CWV on `/es/guias/huelgas-espana/`, `/es/festivos/2027/`, one town page; AdSense RPM, viewability and the share of unfilled units; GA4 consent rate (sessions / GSC clicks).

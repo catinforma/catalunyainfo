@@ -93,6 +93,19 @@ frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com
 media-src 'self'; manifest-src 'self'; worker-src 'self' blob:; upgrade-insecure-requests
 ```
 
+### With AdSense live (since 24 Nov 2026)
+
+`src/lib/ads/live.ts` (`ADS_LIVE = true`) adds ` https:` to `script-src`,
+`style-src`, `font-src`, `connect-src` and `frame-src`. Google's ad and consent
+scripts load from many hosts (country `google.*` domains, googlesyndication,
+doubleclick, adtrafficquality, gstatic, Google Fonts), and ad creatives run in
+`about:blank` frames that inherit this policy, so an allow-list fails silently
+and costs revenue. Still closed: plain HTTP and `data:` scripts, `object-src`,
+`base-uri`, `form-action` and `frame-ancestors`. This is the "third-party script
+is embedded" case named below: the compensating control (no stored content
+rendered as HTML) is unchanged, and `tests/ads-live.test.ts` pins both states.
+Set `ADS_LIVE = false` and the policy above returns.
+
 ### `script-src 'unsafe-inline'` — the trade-off, stated plainly
 
 This is the weakest part of the policy and it is deliberate.

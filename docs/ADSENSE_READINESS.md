@@ -3,7 +3,7 @@
 ## Verdict
 
 ```
-NOT READY
+LIVE (24 Nov 2026) — see "Live since 24 Nov 2026"
 ```
 
 Because there is no editorial content yet. That is the expected state at the end
@@ -117,7 +117,41 @@ a stranger would, on a phone, and answer honestly:
 
 Applying and being rejected a second time is materially worse than applying late.
 
-## When ads are eventually enabled
+## Live since 24 Nov 2026
+
+AdSense accepted the site on 24 Nov 2026; the owner completed the US tax form
+(W-8BEN, treaty article 7, 0 %) and asked for ads to go live the same day.
+
+- **Consent:** Google's own consent tool (AdSense → Privacy & messaging →
+  European regulations message: "Do not consent" on, close button off,
+  default language Catalan, logo uploaded; consent mode for advertising and
+  analytics enabled at account level). It replaces the first-party banner;
+  GA4 loads only when it reports `analytics_storage` granted
+  (`components/ConsentGate.tsx`, `lib/ads/client.ts`).
+- **Units:** `ci-mig` (in-article, 9170740903), `ci-final` (Multiplex,
+  3510773003), `ci-lateral` (display, desktop sidebar; pending). Placed by
+  `components/AdsRuntime.tsx`: nothing above the answer, middle only on long
+  pages and below the first screen, end before in-article sources, sidebar only
+  when it fits; reserved height; unfilled units hide (`data-ad-status`).
+- **Auto ads:** owner setting, overlays only (bottom anchor on phones);
+  vignettes, side rails, intent formats, in-page auto ads and auto
+  optimisation off; the nine pages below excluded.
+- **No ads:** `/es/precio-luz/`, `/ca/preu-llum/`, `/en/electricity-price-spain/`
+  (+ tomorrow) and `/es/hoy/`, `/ca/avui/`, `/en/today/`: they show REE PVPC
+  data (non-commercial terms). The script loads paused there so the consent
+  tool still works. Home and legal pages get no manual units.
+- **CSP:** opened to `https:` for scripts, styles, fonts, connections and
+  frames (`docs/SECURITY.md`).
+- **Legal copy:** privacy, cookies, legal notice, editorial policy, about and
+  accessibility pages rewritten for live ads in ca/es/en (publish group of the
+  legal pages).
+- **Open (owner):** LSSI-CE art. 10 identity (legal name, NIF, address) on the
+  legal notice: `OPERATOR` in `src/lib/content/pages/operator.ts` is still
+  empty. Publishing it is the owner's decision.
+
+Switch off: `ADS_LIVE = false` in `src/lib/ads/live.ts`, then deploy.
+
+## When ads are eventually enabled (written before launch; kept for history)
 
 The technical groundwork exists, deliberately inert:
 

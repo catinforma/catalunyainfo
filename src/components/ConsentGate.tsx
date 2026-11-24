@@ -3,6 +3,8 @@
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
+import { readConsentMode, watchConsentMode } from "@/lib/ads/client";
+
 import { CONSENT_VERSION, type ConsentState } from "@/lib/analytics/consent";
 import {
   readConsentCookie,
@@ -41,8 +43,62 @@ export interface ConsentCopy {
   legalLabel: string;
 }
 
-export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
+/**
+ * `cmp`: AdSense is live (lib/ads/config.ts), so Google's certified consent
+ * tool asks instead of our banner, and measurement waits for its answer:
+ * GA4 loads only when that tool reports `analytics_storage` granted (owner
+ * setting "consent mode for analytics purposes" in AdSense, Privacy &
+ * messaging). Any other status (unknown, denied, not applicable, not
+ * configured) keeps it off.
+ */
+export function ConsentGate({ locale, t, cmp = false }: { locale: Locale; t: ConsentCopy; cmp?: boolean }) {
   const measurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
+  if (cmp) return measurementId ? <CmpMeasurement measurementId={measurementId} /> : null;
+  return <FirstPartyConsent locale={locale} t={t} measurementId={measurementId} />;
+}
+
+function CmpMeasurement({ measurementId }: { measurementId: string }) {
+  const [signals, setSignals] = useState<Record<string, "granted" | "denied"> | null>(null);
+
+  useEffect(() => {
+    watchConsentMode(() => {
+      const next = readConsentMode();
+      if (!next) return;
+      setSignals((prev) => (prev && JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    });
+  }, []);
+
+  // Withdrawn after GA4 loaded: tell it at once (the tag cannot be unloaded).
+  useEffect(() => {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (signals && w.gtag) w.gtag("consent", "update", signals);
+  }, [signals]);
+
+  if (signals?.analytics_storage !== "granted") return null;
+
+  return (
+    <>
+      <Script
+        id="ci-ga4-lib"
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+      />
+      <Script id="ci-ga4-init" strategy="afterInteractive">
+        {[
+          "window.dataLayer=window.dataLayer||[];",
+          "function gtag(){dataLayer.push(arguments);}",
+          "window.gtag=gtag;",
+          "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted'});",
+          `gtag('consent','update',${JSON.stringify(signals)});`,
+          "gtag('js',new Date());",
+          `gtag('config','${measurementId}',{anonymize_ip:true,send_page_view:true});`,
+        ].join("")}
+      </Script>
+    </>
+  );
+}
+
+function FirstPartyConsent({ locale, t, measurementId }: { locale: Locale; t: ConsentCopy; measurementId: string | undefined }) {
 
   const snapshot = useSyncExternalStore(
     subscribeConsent,

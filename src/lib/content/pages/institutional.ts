@@ -98,8 +98,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "Com ens financem",
         paragraphs: [
-          "Ara mateix el web no mostra cap anunci i no té enllaços d'afiliació ni continguts patrocinats.",
-          `Tenim previst finançar-lo amb anuncis servits per Google (AdSense). Aniran identificats com a publicitat i separats del text, els tria Google i no canviaran què publiquem ni què recomanem. Com funcionaran les galetes i el consentiment s'explica a la [política de privadesa](${privacy}).`,
+          "El web no té enllaços d'afiliació ni continguts patrocinats.",
+          `Des del 24 de novembre del 2026 es finança amb anuncis servits per Google (AdSense). Van identificats com a publicitat i separats del text, els tria Google i no canvien què publiquem ni què recomanem. Com funcionen les galetes i el consentiment s'explica a la [política de privadesa](${privacy}).`,
         ],
       },
       help: {
@@ -147,8 +147,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "Cómo nos financiamos",
         paragraphs: [
-          "Ahora mismo el sitio no muestra ningún anuncio y no tiene enlaces de afiliación ni contenidos patrocinados.",
-          `Tenemos previsto financiarlo con anuncios servidos por Google (AdSense). Irán identificados como publicidad y separados del texto, los elige Google y no cambiarán lo que publicamos ni lo que recomendamos. Cómo funcionarán las cookies y el consentimiento se explica en la [política de privacidad](${privacy}).`,
+          "El sitio no tiene enlaces de afiliación ni contenidos patrocinados.",
+          `Desde el 24 de noviembre de 2026 se financia con anuncios servidos por Google (AdSense). Van identificados como publicidad y separados del texto, los elige Google y no cambian lo que publicamos ni lo que recomendamos. Cómo funcionan las cookies y el consentimiento se explica en la [política de privacidad](${privacy}).`,
         ],
       },
       help: {
@@ -196,8 +196,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "How we are funded",
         paragraphs: [
-          "The site currently shows no ads and carries no affiliate links and no sponsored content.",
-          `We plan to fund it with ads served by Google (AdSense). They will be labelled as advertising and kept apart from the text; Google chooses them, and they will not change what we publish or recommend. How the cookies and consent will work is explained in the [privacy policy](${privacy}).`,
+          "The site carries no affiliate links and no sponsored content.",
+          `Since 24 November 2026 it has been funded by ads served by Google (AdSense). They are labelled as advertising and kept apart from the text; Google chooses them, and they do not change what we publish or recommend. How the cookies and consent work is explained in the [privacy policy](${privacy}).`,
         ],
       },
       help: {
@@ -296,7 +296,7 @@ function contactBlocks(locale: Locale): Block[] {
         "Què no cal que ens enviïs",
         "No ens enviïs dades personals de tercers, ni documentació sensible, ni contrasenyes. Per respondre't només necessitem el teu nom i el teu correu.",
         "Tampoc acceptem propostes de publicació de contingut patrocinat, intercanvis d'enllaços ni articles escrits per tercers amb enllaços inserits: no en publiquem.",
-        "Tampoc venem espais publicitaris directament: la publicitat prevista al web la servirà Google (AdSense), i els anuncis no els triem nosaltres.",
+        "Tampoc venem espais publicitaris directament: la publicitat del web la serveix Google (AdSense), i els anuncis no els triem nosaltres.",
       ),
       ...section(
         "Per a què no som el canal",
@@ -335,7 +335,7 @@ function contactBlocks(locale: Locale): Block[] {
         "Qué no hace falta que nos envíes",
         "No nos envíes datos personales de terceros, ni documentación sensible, ni contraseñas. Para responderte solo necesitamos tu nombre y tu correo.",
         "Tampoco aceptamos propuestas de contenido patrocinado, intercambios de enlaces ni artículos escritos por terceros con enlaces insertados: no los publicamos.",
-        "Tampoco vendemos espacios publicitarios directamente: la publicidad prevista en el sitio la servirá Google (AdSense), y los anuncios no los elegimos nosotros.",
+        "Tampoco vendemos espacios publicitarios directamente: la publicidad del sitio la sirve Google (AdSense), y los anuncios no los elegimos nosotros.",
       ),
       ...section(
         "Para qué no somos el canal",
@@ -374,7 +374,7 @@ function contactBlocks(locale: Locale): Block[] {
         "What not to send",
         "Please do not send other people's personal data, sensitive documents, or passwords. To reply we only need your name and your email address.",
         "We also do not accept sponsored content, link exchanges, or third-party articles with links embedded: we do not publish them.",
-        "Nor do we sell ad space directly: the advertising planned for the site will be served by Google (AdSense), and we do not choose the ads.",
+        "Nor do we sell ad space directly: the site's advertising is served by Google (AdSense), and we do not choose the ads.",
       ),
       ...section(
         "What we cannot handle",

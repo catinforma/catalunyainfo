@@ -2,6 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 
+import { showConsentAgain } from "@/lib/ads/client";
+
 import {
   readConsentCookie,
   readServerSnapshot,
@@ -21,7 +23,19 @@ import {
 // Strings arrive as props from the server component that renders this one.
 // Importing getMessages here shipped all three languages' dictionaries
 // (~17 KB) to every page, because this component is on every page.
-export function ConsentSettingsButton({ label }: { label: string }) {
+export function ConsentSettingsButton({ label, cmp = false }: { label: string; cmp?: boolean }) {
+  // AdSense live: Google's consent tool owns the decision; this reopens it.
+  if (cmp) {
+    return (
+      <button type="button" className="ci-consent-reopen" onClick={() => showConsentAgain()}>
+        {label}
+      </button>
+    );
+  }
+  return <FirstPartyButton label={label} />;
+}
+
+function FirstPartyButton({ label }: { label: string }) {
 
   const snapshot = useSyncExternalStore(subscribeConsent, readConsentCookie, readServerSnapshot);
   const state = snapshotToState(snapshot);

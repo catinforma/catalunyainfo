@@ -108,7 +108,7 @@ function hubBlocks(locale: Locale): Block[] {
         ["Qui edita el web", `${OPERATOR.brand}, fundat per ${OWNER.name} (vegeu [qui som](${sectionPath("about", "ca")}))`],
         ["Llegir el web", "Sense registre i sense donar cap dada"],
         ["Galetes per defecte", "Només les necessàries; la mesura d'audiència, només si l'acceptes"],
-        ["Publicitat", "Encara cap anunci; prevista amb Google AdSense i, a Europa, amb consentiment previ"],
+        ["Publicitat", "Anuncis de Google AdSense des del 24 de novembre del 2026; a Europa, personalitzats només amb el teu consentiment"],
         ["Contingut patrocinat i afiliació", "No n'hi ha"],
         ["Fonts", "Oficials i primàries, citades a cada pàgina amb la data de verificació"],
         ["Errors", "Es corregeixen a la mateixa pàgina; objectiu de resposta: 72 hores"],
@@ -121,7 +121,7 @@ function hubBlocks(locale: Locale): Block[] {
         ["Quién edita el sitio", `${OPERATOR.brand}, fundado por ${OWNER.name} (ver [quiénes somos](${sectionPath("about", "es")}))`],
         ["Leer el sitio", "Sin registro y sin dar ningún dato"],
         ["Cookies por defecto", "Solo las necesarias; la medición de audiencia, solo si la aceptas"],
-        ["Publicidad", "Aún ningún anuncio; prevista con Google AdSense y, en Europa, con consentimiento previo"],
+        ["Publicidad", "Anuncios de Google AdSense desde el 24 de noviembre de 2026; en Europa, personalizados solo con tu consentimiento"],
         ["Contenido patrocinado y afiliación", "No hay"],
         ["Fuentes", "Oficiales y primarias, citadas en cada página con la fecha de verificación"],
         ["Errores", "Se corrigen en la misma página; objetivo de respuesta: 72 horas"],
@@ -134,7 +134,7 @@ function hubBlocks(locale: Locale): Block[] {
         ["Who publishes the site", `${OPERATOR.brand}, founded by ${OWNER.name} (see the [about page](${sectionPath("about", "en")}))`],
         ["Reading the site", "No sign-up and no data required"],
         ["Default cookies", "Only the necessary ones; audience measurement only if you accept it"],
-        ["Advertising", "No ads yet; planned with Google AdSense and, in Europe, only after consent"],
+        ["Advertising", "Google AdSense ads since 24 November 2026; in Europe, personalised only with your consent"],
         ["Sponsored content and affiliate links", "None"],
         ["Sources", "Official and primary, cited on every page with the date they were checked"],
         ["Errors", "Corrected on the page itself; target response time: 72 hours"],
@@ -243,9 +243,9 @@ function legalNoticeBlocks(locale: Locale): Block[] {
   const corrections = legalPath("corrections", locale);
 
   const pendingIdentity: Record<Locale, string> = {
-    ca: "CatalunyaInfo es finançarà amb publicitat (Google AdSense), sense enllaços d'afiliació ni venda de cap producte o servei. Avui encara no s'hi mostra cap anunci: abans que n'hi hagi, aquesta pàgina incorporarà les dades identificatives completes que exigeix l'article 10 de la Llei 34/2002.",
-    es: "CatalunyaInfo se financiará con publicidad (Google AdSense), sin enlaces de afiliación ni venta de ningún producto o servicio. Hoy todavía no se muestra ningún anuncio: antes de que lo haya, esta página incorporará los datos identificativos completos que exige el artículo 10 de la Ley 34/2002.",
-    en: "CatalunyaInfo will be funded by advertising (Google AdSense), with no affiliate links and nothing for sale. No ads are shown yet: before any are, this page will carry the full publisher details required by article 10 of Spain's Law 34/2002.",
+    ca: "CatalunyaInfo es finança amb publicitat (Google AdSense), sense enllaços d'afiliació ni venda de cap producte o servei.",
+    es: "CatalunyaInfo se financia con publicidad (Google AdSense), sin enlaces de afiliación ni venta de ningún producto o servicio.",
+    en: "CatalunyaInfo is funded by advertising (Google AdSense), with no affiliate links and nothing for sale.",
   };
 
   const copy: Record<Locale, Block[]> = {
@@ -289,7 +289,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Dades personals i galetes",
-        `El tractament de dades s'explica a la [política de privadesa](${privacy}) i les galetes a la [política de galetes](${legalPath("cookies", locale)}). La publicitat prevista (Google AdSense), les galetes que farà servir i com s'hi demanarà el consentiment s'expliquen en totes dues.`,
+        `El tractament de dades s'explica a la [política de privadesa](${privacy}) i les galetes a la [política de galetes](${legalPath("cookies", locale)}). La publicitat (Google AdSense), les galetes que fa servir i com es demana el consentiment s'expliquen en totes dues.`,
       ),
       ...section(
         "Legislació i jurisdicció",
@@ -340,7 +340,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Datos personales y cookies",
-        `El tratamiento de datos se explica en la [política de privacidad](${privacy}) y las cookies en la [política de cookies](${legalPath("cookies", locale)}). La publicidad prevista (Google AdSense), las cookies que usará y cómo se pedirá el consentimiento se explican en ambas.`,
+        `El tratamiento de datos se explica en la [política de privacidad](${privacy}) y las cookies en la [política de cookies](${legalPath("cookies", locale)}). La publicidad (Google AdSense), las cookies que usa y cómo se pide el consentimiento se explican en ambas.`,
       ),
       ...section(
         "Legislación y jurisdicción",
@@ -391,7 +391,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Personal data and cookies",
-        `Data processing is described in the [privacy policy](${privacy}) and cookies in the [cookie policy](${legalPath("cookies", locale)}). Both explain the planned advertising (Google AdSense), the cookies it will use and how consent will be asked for.`,
+        `Data processing is described in the [privacy policy](${privacy}) and cookies in the [cookie policy](${legalPath("cookies", locale)}). Both explain the advertising (Google AdSense), the cookies it uses and how consent is asked for.`,
       ),
       ...section(
         "Governing law",
@@ -492,8 +492,8 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independència i diners",
-        "Ara mateix el web no mostra cap anunci i no té enllaços d'afiliació ni continguts patrocinats. Ningú no ens paga per aparèixer-hi ni per aparèixer-hi millor.",
-        `Tenim previst finançar-lo amb anuncis servits per Google (AdSense). Els anuncis els tria Google, no nosaltres; aniran identificats com a publicitat i separats del text, i no decidiran què publiquem ni què recomanem. Com funcionaran les galetes i el consentiment s'explica a la [política de privadesa](${legalPath("privacy", locale)}).`,
+        "El web no té enllaços d'afiliació ni continguts patrocinats. Ningú no ens paga per aparèixer-hi ni per aparèixer-hi millor.",
+        `Des del 24 de novembre del 2026 es finança amb anuncis servits per Google (AdSense). Els anuncis els tria Google, no nosaltres; van identificats com a publicitat i separats del text, i no decideixen què publiquem ni què recomanem. Com funcionen les galetes i el consentiment s'explica a la [política de privadesa](${legalPath("privacy", locale)}).`,
         "No publiquem contingut patrocinat. Si algun dia hi hagués cap altra forma de contingut pagat, es marcaria de manera clara i visible abans del contingut afectat, mai amagada al final.",
       ),
       ...section(
@@ -545,8 +545,8 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independencia y dinero",
-        "Ahora mismo el sitio no muestra ningún anuncio y no tiene enlaces de afiliación ni contenidos patrocinados. Nadie nos paga por aparecer ni por aparecer mejor.",
-        `Tenemos previsto financiarlo con anuncios servidos por Google (AdSense). Los anuncios los elige Google, no nosotros; irán identificados como publicidad y separados del texto, y no decidirán qué publicamos ni qué recomendamos. Cómo funcionarán las cookies y el consentimiento se explica en la [política de privacidad](${legalPath("privacy", locale)}).`,
+        "El sitio no tiene enlaces de afiliación ni contenidos patrocinados. Nadie nos paga por aparecer ni por aparecer mejor.",
+        `Desde el 24 de noviembre de 2026 se financia con anuncios servidos por Google (AdSense). Los anuncios los elige Google, no nosotros; van identificados como publicidad y separados del texto, y no deciden qué publicamos ni qué recomendamos. Cómo funcionan las cookies y el consentimiento se explica en la [política de privacidad](${legalPath("privacy", locale)}).`,
         "No publicamos contenido patrocinado. Si algún día hubiera otra forma de contenido pagado, se marcaría de forma clara y visible antes del contenido afectado, nunca escondida al final.",
       ),
       ...section(
@@ -595,8 +595,8 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independence and money",
-        "The site currently shows no ads and carries no affiliate links and no sponsored content. Nobody pays to appear here, or to appear more favourably.",
-        `We plan to fund it with ads served by Google (AdSense). Google chooses the ads, not us; they will be labelled as advertising and kept apart from the text, and they will not decide what we publish or recommend. How the cookies and consent will work is explained in the [privacy policy](${legalPath("privacy", locale)}).`,
+        "The site carries no affiliate links and no sponsored content. Nobody pays to appear here, or to appear more favourably.",
+        `Since 24 November 2026 it has been funded by ads served by Google (AdSense). Google chooses the ads, not us; they are labelled as advertising and kept apart from the text, and they do not decide what we publish or recommend. How the cookies and consent work is explained in the [privacy policy](${legalPath("privacy", locale)}).`,
         "We do not publish sponsored content. If any other form of paid content ever appeared, it would be marked clearly and visibly before the content concerned, never buried at the end.",
       ),
       ...section(
@@ -962,8 +962,8 @@ function accessibilityBlocks(locale: Locale): Block[] {
         "Encara no publiquem versions en lectura fàcil.",
       ),
       ...section(
-        "I quan hi hagi publicitat",
-        "Avui el web no mostra cap anunci. Quan se n'hi mostrin (Google AdSense), cada anunci anirà identificat com a publicitat i ocuparà un espai reservat d'entrada, perquè el text no salti mentre llegeixes. No farem servir anuncis que tapin el contingut ni finestres emergents a pantalla completa.",
+        "Publicitat",
+        "Els anuncis (Google AdSense) van identificats com a publicitat i ocupen un espai reservat d'entrada, perquè el text no salti mentre llegeixes; mai abans de la resposta. No fem servir anuncis a pantalla completa ni finestres emergents; al mòbil hi pot haver una franja petita a la part de baix, que es pot tancar.",
         "El contingut de cada anunci el serveix Google i el fa l'anunciant, de manera que la seva accessibilitat, com la dels mapes de tercers, no la controlem nosaltres. Si un anunci et bloqueja la lectura, digues-nos-ho.",
       ),
       ...section(
@@ -996,8 +996,8 @@ function accessibilityBlocks(locale: Locale): Block[] {
         "Todavía no publicamos versiones en lectura fácil.",
       ),
       ...section(
-        "Y cuando haya publicidad",
-        "Hoy el sitio no muestra ningún anuncio. Cuando se muestren (Google AdSense), cada anuncio irá identificado como publicidad y ocupará un espacio reservado de entrada, para que el texto no salte mientras lees. No usaremos anuncios que tapen el contenido ni ventanas emergentes a pantalla completa.",
+        "Publicidad",
+        "Los anuncios (Google AdSense) van identificados como publicidad y ocupan un espacio reservado de entrada, para que el texto no salte mientras lees; nunca antes de la respuesta. No usamos anuncios a pantalla completa ni ventanas emergentes; en el móvil puede haber una franja pequeña en la parte de abajo, que se puede cerrar.",
         "El contenido de cada anuncio lo sirve Google y lo hace el anunciante, así que su accesibilidad, como la de los mapas de terceros, no la controlamos nosotros. Si un anuncio te impide leer, dínoslo.",
       ),
       ...section(
@@ -1031,7 +1031,7 @@ function accessibilityBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "And once there are ads",
-        "The site shows no ads today. When it does (Google AdSense), every ad will be labelled as advertising and sit in space reserved in advance, so the text does not jump while you read. We will not use ads that cover the content or full-screen pop-ups.",
+        "Ads (Google AdSense) are labelled as advertising and sit in space reserved in advance, so the text does not jump while you read; never before the answer. We use no full-screen ads or pop-ups; on phones there may be a small strip at the bottom, which you can close.",
         "Each ad is served by Google and made by the advertiser, so its accessibility, like that of third-party maps, is not under our control. If an ad stops you reading, tell us.",
       ),
       ...section(
