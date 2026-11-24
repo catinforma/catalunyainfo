@@ -54,6 +54,15 @@ export const PAY_DATES_AS_OF = "2026-11-09";
  *    el primer día hábil del mes en que se realice el pago y, como máximo, el cuarto
  *    día natural de dicho mes.»
  * The re-read date moves with the quote; a test fails 60 days after it.
+ *
+ * 25 Nov 2026, "each unemployment payment corresponds to the previous month" (reviewer: no source). Found with curl
+ * on the BOE consolidated text (ELI https://www.boe.es/eli/es/rd/1985/04/02/625/con, BOE-A-1985-8124, last update
+ * published 22/05/2024, read 25 Nov 2026): RD 625/1985 art. 26.1 «El abono de la prestación o subsidio por desempleo se
+ * realizará por mensualidades de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo. En todo
+ * caso, el derecho al percibo de cada mensualidad caducará al año de su respectivo vencimiento.» The SEPE FAQ does not
+ * say it; the text has no «mensualidades vencidas» wording but says the same thing. The page says exactly that and does
+ * not say pensions work the same way: no source read for pensions (RD 696/2018 and the LGSS have no such sentence for
+ * ordinary pensions; LGSS «por meses vencidos» concerns only the delayed-retirement amount).
  */
 export const SEPE_READ_ON = "2026-11-25";
 /** The SEPE sentence, verbatim (printed in the three editions: the official text is Spanish). */
@@ -70,6 +79,7 @@ const MONTHS: Record<Locale, string[]> = {
 const U = {
   sepe: "https://www.sepe.es/HomeSepe/preguntas-frecuentes/detalle-pregunta.html?detail=%2Fpreguntas%2Fprestaciones-por-desempleo%2Fpago-y-cuant-a%2Fcuando-se-abona-la-nomina-de-prestaciones-del-sepe",
   rd696: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2018-9030",
+  rd625: "https://www.boe.es/eli/es/rd/1985/04/02/625/con",
   ecb: "https://www.ecb.europa.eu/ecb/contacts/working-hours/html/index.en.html",
   lgss: "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11724",
   imv: "https://www.boe.es/buscar/act.php?id=BOE-A-2021-21007",
@@ -171,10 +181,10 @@ const COPY: Record<Locale, PayCopy> = {
       `**El paro (SEPE) se cobra el día 10 de cada mes**, o el siguiente día hábil si cae en festivo: en diciembre de 2026, el **${dec}**. **Las pensiones de la Seguridad Social y el Ingreso Mínimo Vital** se pagan, como tarde, el **primer día hábil del mes** (y nunca después del día 4); muchos bancos las adelantan unos días. Aquí tienes el calendario hasta diciembre de 2027.`,
     sepe: {
       heading: "Paro y subsidio: el día 10",
-      text: `El SEPE paga la prestación y el subsidio por desempleo «el día 10 de cada mes» y, «si coincide que es festivo, el primer día hábil siguiente» (${link(U.sepe, "SEPE")}). Cada pago corresponde al mes anterior. ¿Cuánto te toca y durante cuánto tiempo? ${link(CALC.es, "Calcula tu paro")}. ¿Se te acaba el paro o no llegas a 360 días cotizados? ${link(SUBSIDY.es, "Comprueba si te corresponde el subsidio")}.`,
+      text: `El SEPE paga la prestación y el subsidio por desempleo «el día 10 de cada mes» y, «si coincide que es festivo, el primer día hábil siguiente» (${link(U.sepe, "SEPE")}). El ${link(U.rd625, "Real Decreto 625/1985")}, art. 26.1, dice que se abona «por mensualidades de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo»: cada pago es de la mensualidad del mes anterior. ¿Cuánto te toca y durante cuánto tiempo? ${link(CALC.es, "Calcula tu paro")}. ¿Se te acaba el paro o no llegas a 360 días cotizados? ${link(SUBSIDY.es, "Comprueba si te corresponde el subsidio")}.`,
       caption: "Pago del paro y del subsidio (SEPE), diciembre 2026 – diciembre 2027",
       headers: ["Mes del pago", "Día", "Prestación que se cobra"],
-      note: "Solo se ha movido el día cuando el 10 cae en sábado o domingo; el SEPE no dice qué festivos autonómicos cuentan.",
+      note: "Solo se ha movido el día cuando el 10 cae en sábado o domingo; el SEPE no dice qué festivos autonómicos cuentan. La columna sigue el art. 26.1 del RD 625/1985: mensualidades de treinta días, pagadas en el mes siguiente.",
     },
     pensions: {
       heading: "Pensiones e Ingreso Mínimo Vital: el primer día hábil",
@@ -214,10 +224,10 @@ const COPY: Record<Locale, PayCopy> = {
       `**L'atur (SEPE) es cobra el dia 10 de cada mes**, o el primer dia hàbil següent si cau en festiu: el desembre de 2026, el **${dec}**. **Les pensions de la Seguretat Social i l'Ingrés Mínim Vital** s'han de pagar, com a molt tard, el **primer dia hàbil del mes** (i mai després del dia 4); molts bancs les avancen uns dies. Aquí tens el calendari fins al desembre de 2027.`,
     sepe: {
       heading: "Atur i subsidi: el dia 10",
-      text: `El SEPE paga la prestació i el subsidi per desocupació el dia 10 de cada mes i, si coincideix amb un festiu, el primer dia hàbil següent (${link(U.sepe, "SEPE")}). Cada pagament correspon al mes anterior. Quant et toca i durant quant de temps? ${link(CALC.ca, "Calcula el teu atur")}. Se t'acaba l'atur o no arribes a 360 dies cotitzats? ${link(SUBSIDY.ca, "Comprova si et correspon el subsidi")}.`,
+      text: `El SEPE paga la prestació i el subsidi per desocupació el dia 10 de cada mes i, si coincideix amb un festiu, el primer dia hàbil següent (${link(U.sepe, "SEPE")}). El ${link(U.rd625, "Reial decret 625/1985")}, art. 26.1, diu que s'abona «per mensualitats de trenta dies, dins del mes immediat següent a aquell al qual correspongui la meritació»: cada pagament és de la mensualitat del mes anterior. Quant et toca i durant quant de temps? ${link(CALC.ca, "Calcula el teu atur")}. Se t'acaba l'atur o no arribes a 360 dies cotitzats? ${link(SUBSIDY.ca, "Comprova si et correspon el subsidi")}.`,
       caption: "Pagament de l'atur i del subsidi (SEPE), desembre 2026 – desembre 2027",
       headers: ["Mes del pagament", "Dia", "Prestació que es cobra"],
-      note: "El dia només s'ha mogut quan el 10 cau en dissabte o diumenge; el SEPE no diu quins festius autonòmics compten.",
+      note: "El dia només s'ha mogut quan el 10 cau en dissabte o diumenge; el SEPE no diu quins festius autonòmics compten. La columna segueix l'art. 26.1 del RD 625/1985: mensualitats de trenta dies, pagades el mes següent.",
     },
     pensions: {
       heading: "Pensions i Ingrés Mínim Vital: el primer dia hàbil",
@@ -257,10 +267,10 @@ const COPY: Record<Locale, PayCopy> = {
       `**Unemployment benefit in Spain (the "paro", paid by SEPE) arrives on the 10th of each month**, or on the next business day if the 10th is a holiday: in December 2026, on **${dec}**. **Social Security pensions and the Minimum Living Income (IMV)** must be paid by the **first business day of the month** at the latest (and never after the 4th); many banks pay a few days early. Here is the calendar up to December 2027.`,
     sepe: {
       heading: "Unemployment benefit and subsidy: the 10th",
-      text: `SEPE, Spain's public employment service, pays unemployment benefit (prestación por desempleo) and the unemployment subsidy (subsidio) on the 10th of each month and, if that day is a holiday, on the next business day (${link(U.sepe, "SEPE")}). Each payment covers the previous month. How much you get, and for how long: ${link(CALC.en, "unemployment benefit calculator")}. Benefit running out, or fewer than 360 days of contributions? ${link(SUBSIDY.en, "unemployment subsidy checker")}.`,
+      text: `SEPE, Spain's public employment service, pays unemployment benefit (prestación por desempleo) and the unemployment subsidy (subsidio) on the 10th of each month and, if that day is a holiday, on the next business day (${link(U.sepe, "SEPE")}). ${link(U.rd625, "Royal Decree 625/1985")}, art. 26.1, says the benefit is paid in monthly instalments of thirty days, within the month immediately following the one in which the instalment accrued (devengo): each payment is for the previous month. How much you get, and for how long: ${link(CALC.en, "unemployment benefit calculator")}. Benefit running out, or fewer than 360 days of contributions? ${link(SUBSIDY.en, "unemployment subsidy checker")}.`,
       caption: "SEPE unemployment benefit and subsidy payment dates, December 2026 – December 2027",
       headers: ["Payment month", "Day", "Month it covers"],
-      note: "The day has been moved only when the 10th falls on a Saturday or Sunday; SEPE does not say which regional holidays count.",
+      note: "The day has been moved only when the 10th falls on a Saturday or Sunday; SEPE does not say which regional holidays count. The last column follows art. 26.1 of RD 625/1985: instalments of thirty days, paid in the following month.",
     },
     pensions: {
       heading: "Pensions and the Minimum Living Income: the first business day",
@@ -412,6 +422,7 @@ export function buildPayBody(locale: Locale = "es"): Block[] {
 
 const SOURCES: B2Source[] = [
   { name: "¿Cuándo se abona la nómina de prestaciones del SEPE?", url: U.sepe, publisher: "SEPE" },
+  { name: "Real Decreto 625/1985, desarrolla la Ley 31/1984 de Protección por Desempleo, art. 26 (texto consolidado)", url: U.rd625, publisher: "BOE" },
   { name: "Real Decreto 696/2018, Reglamento General de la Gestión Financiera de la Seguridad Social (BOE 30/06/2018)", url: U.rd696, publisher: "BOE" },
   { name: "TARGET closing days", url: U.ecb, publisher: "Banco Central Europeo" },
   { name: "Texto refundido de la Ley General de la Seguridad Social (RDL 8/2015)", url: U.lgss, publisher: "BOE" },

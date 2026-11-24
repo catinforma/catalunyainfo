@@ -162,3 +162,14 @@ test("review fix: the weekend rule is presented as ours, SEPE's sentence only co
     assert.match(items[4]!.answer, /no hem trobat|no hemos encontrado|found no official text/);
   }
 });
+
+test("review fix 25 Nov 2026: 'each payment is for the previous month' is sourced on RD 625/1985 art. 26.1 in the three editions, and pensions are not said to work the same", () => {
+  for (const locale of LOCALES) {
+    const text = JSON.stringify(PAY_DATES.editions[locale].blocks);
+    assert.match(text, /eli\/es\/rd\/1985\/04\/02\/625\/con/, `${locale}: link to the BOE text`);
+    assert.match(text, /625\/1985/, `${locale}: the norm is named`);
+    assert.match(text, /26\.1/, `${locale}: the article is named`);
+    assert.doesNotMatch(text, /pensi[oó]n(s|es)? [^.]{0,80}(mes anterior|previous month|mes d'abans)/i, `${locale}: no unsourced pension claim`);
+  }
+  assert.ok(PAY_DATES.sources.some((s) => /625\/1985/.test(s.name) && /boe\.es\/eli\/es\/rd\/1985\/04\/02\/625\/con/.test(s.url)));
+});

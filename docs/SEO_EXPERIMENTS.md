@@ -13304,3 +13304,19 @@ review changes which pages are indexable: the neighbour blocks follow it automat
 `/en/christmas-markets/`, `/ca/festius/2027/`, `/es/festivos/2027/`, `/en/holidays/2027/`.
 
 **Outcome:** _pending_
+
+## 2026-11-25 — Pay-dates guide: factual correction, "each unemployment payment is for the previous month" now sourced (ci-fonts + ci-edicio)
+
+**URLs.** `/es/guias/cuando-se-cobra-paro-pension/`, `/ca/guies/quan-es-cobra-atur-pensio/`, `/en/guides/unemployment-benefit-pension-payment-dates-spain/` (group `pagos`).
+Title, meta description, H1 and lead untouched (factual correction, allowed inside the 28-day window).
+
+**Why.** A reviewer found no official source for the clause in the table column "Prestación que se cobra" and the SEPE paragraph (9 Nov). The SEPE FAQ does not say it. Found with curl on 25 Nov 2026:
+BOE consolidated text of Real Decreto 625/1985 (ELI https://www.boe.es/eli/es/rd/1985/04/02/625/con, BOE-A-1985-8124, last update published 22/05/2024), art. 26.1:
+«El abono de la prestación o subsidio por desempleo se realizará por mensualidades de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo. En todo caso, el derecho al percibo de cada mensualidad caducará al año de su respectivo vencimiento.»
+(The 24 Nov note "no 'mensualidades vencidas' wording" was right about the words, but the article says the same thing in other words.)
+
+**Changed (ca/es/en).** The unsourced sentence is replaced by one citing RD 625/1985 art. 26.1 with the quote (es) or a close paraphrase (ca, en); the table note says the column follows art. 26.1 (thirty-day instalments, paid the following month); RD 625/1985 added to the sources. Pensions: no claim that they work the same; no source read for it (RD 696/2018 and the LGSS have no such sentence for ordinary pensions; LGSS «por meses vencidos» is only the delayed-retirement amount), so none is printed.
+Test: `tests/pay-dates.test.ts` (+1). Not changed here: the unemployment calculator FAQ still omits the clause (its test forbids it); it could now cite art. 26.1.
+
+**Baseline.** Unchanged from the 25 Nov entry of this guide (es 576 impressions / 10 clicks / pos 14.0; en 376 / 6 / 4.0; ca 59; 28 days to 24 Nov). A correction, not a ranking experiment; no prediction.
+**Review** with the 2026-12-09 review of that entry. Re-read BOE art. 26.1 on or before 2027-01-25 (60 days).
