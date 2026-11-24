@@ -191,7 +191,7 @@ const hm = (time: string) => time.replace(".", ":");
  *    "La Marató del 2025, dedicada al càncer, ha tancat la 34a edició amb un marcador excepcional de 14.425.548 [euros]. El 14 de desembre del 2025 ...
  *    va acabar amb un marcador provisional de 9,7 milions, que s'ha vist incrementat amb els prop de 4,7 milions d'euros que la ciutadania va aportar
  *    fins al 31 de març, quan va acabar el període de donatius."
- *  - 3Cat, 13 Dec 2025 21.54 (https://www.3cat.cat/tv3/marato/la-marato-2025-recapta-mes-de-9-7-milions-deuros-per-a-la-recerca-sobre-el-cancer/noticia/3384911/):
+ *  - 3Cat, article timestamped "13 des. 2025, 21.54" but describing the night of Sunday 14 Dec 2025 (https://www.3cat.cat/tv3/marato/la-marato-2025-recapta-mes-de-9-7-milions-deuros-per-a-la-recerca-sobre-el-cancer/noticia/3384911/):
  *    "9.741.627 euros és la xifra de la vuitena i última actualització del marcador de La Marató 2025 a les dues de la matinada, després de més de 17 hores
  *    de programa. És la xifra més alta a aquesta hora de les últimes cinc edicions i es pot incrementar fins al 31 de març del 2026, quan es tancarà
  *    definitivament el marcador."
@@ -376,7 +376,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ...h2(
         "Quant va recaptar La Marató l'any passat i quan se sap el marcador final?",
         `**La Marató del 2025, dedicada al càncer, va tancar amb ${TOTAL_LAST.ca} euros.** És la xifra final que ${link(LAST_FINAL, "3Cat")} va publicar el 20 de maig de 2026, i que qualifica de «marcador excepcional»: el marcador provisional del final del programa era de 9,7 milions d'euros, i hi van sumar prop de 4,7 milions les aportacions de la ciutadania fins al 31 de març, quan va acabar el període de donatius (consultat el ${FIGURES_CHECKED_TEXT.ca}).`,
-        `**Què passarà el 13 de desembre:** durant el programa el marcador s'actualitza i la xifra de la nit és provisional. L'edició del càncer en va fer la vuitena i última actualització a les dues de la matinada, amb 9,7 milions d'euros, la xifra més alta a aquella hora de les últimes cinc edicions, i 3Cat va avisar que podia créixer fins al 31 de març (${link(LAST_NIGHT, "3Cat, 13 de desembre del 2025")}). Per al 2026 no hem trobat publicada la data en què es tanca el període de donatius, així que el marcador definitiu encara no té data: la xifra final de l'edició passada es va fer pública el 20 de maig.`,
+        `**Què passarà el 13 de desembre:** durant el programa el marcador s'actualitza i la xifra de la nit és provisional. L'edició del càncer en va fer la vuitena i última actualització a les dues de la matinada, amb 9,7 milions d'euros, la xifra més alta a aquella hora de les últimes cinc edicions, i 3Cat va avisar que podia créixer fins al 31 de març (${link(LAST_NIGHT, "3Cat, desembre del 2025")}). Per al 2026 no hem trobat publicada la data en què es tanca el període de donatius, així que el marcador definitiu encara no té data: la xifra final de l'edició passada es va fer pública el 20 de maig.`,
       ),
       ...h2(
         "A què es dedica La Marató 2026?",
@@ -494,7 +494,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ...h2(
         "¿Cuánto recaudó La Marató el año pasado y cuándo se sabe el marcador final?",
         `**La Marató de 2025, dedicada al cáncer, cerró con ${TOTAL_LAST.es} euros.** Es la cifra final que ${link(LAST_FINAL, "3Cat")} publicó el 20 de mayo de 2026 y que califica de «marcador excepcional»: el marcador provisional al final del programa fue de 9,7 millones de euros, y se le sumaron cerca de 4,7 millones con las aportaciones de la ciudadanía hasta el 31 de marzo, cuando acabó el periodo de donativos (consultado el ${FIGURES_CHECKED_TEXT.es}).`,
-        `**Qué pasará el 13 de diciembre:** durante el programa el marcador se va actualizando y la cifra de la noche es provisional. La edición del cáncer hizo su octava y última actualización a las dos de la madrugada, con 9,7 millones de euros, la cifra más alta a esa hora de las últimas cinco ediciones, y 3Cat avisó de que podía crecer hasta el 31 de marzo (${link(LAST_NIGHT, "3Cat, 13 de diciembre de 2025")}). Para 2026 no hemos encontrado publicada la fecha en que se cierra el periodo de donativos, así que el marcador definitivo aún no tiene fecha: la cifra final de la edición pasada se hizo pública el 20 de mayo.`,
+        `**Qué pasará el 13 de diciembre:** durante el programa el marcador se va actualizando y la cifra de la noche es provisional. La edición del cáncer hizo su octava y última actualización a las dos de la madrugada, con 9,7 millones de euros, la cifra más alta a esa hora de las últimas cinco ediciones, y 3Cat avisó de que podía crecer hasta el 31 de marzo (${link(LAST_NIGHT, "3Cat, diciembre de 2025")}). Para 2026 no hemos encontrado publicada la fecha en que se cierra el periodo de donativos, así que el marcador definitivo aún no tiene fecha: la cifra final de la edición pasada se hizo pública el 20 de mayo.`,
       ),
       ...h2(
         "¿A qué se dedica La Marató 2026?",
@@ -610,7 +610,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ...h2(
       "How much did La Marató raise last year, and when is the final total known?",
       `**La Marató 2025, dedicated to cancer, closed at ${TOTAL_LAST.en} euros.** That is the final figure ${link(LAST_FINAL, "3Cat")} published on 20 May 2026, calling it an "exceptional scoreboard" ("marcador excepcional"): the provisional total at the end of the programme was 9.7 million euros, and nearly 4.7 million more came in from the public until 31 March, when the donation period ended (checked ${FIGURES_CHECKED_TEXT.en}).`,
-      `**What to expect on 13 December:** the scoreboard is updated during the programme and the figure on the night is provisional. The cancer edition made its eighth and last update at two in the morning, at 9.7 million euros, the highest figure at that hour in the last five editions, and 3Cat warned that it could keep growing until 31 March (${link(LAST_NIGHT, "3Cat, 13 December 2025")}). For 2026 we have not found a published closing date for the donation period, so the definitive total has no date yet: last edition's final figure was made public on 20 May.`,
+      `**What to expect on 13 December:** the scoreboard is updated during the programme and the figure on the night is provisional. The cancer edition made its eighth and last update at two in the morning, at 9.7 million euros, the highest figure at that hour in the last five editions, and 3Cat warned that it could keep growing until 31 March (${link(LAST_NIGHT, "3Cat, December 2025")}). For 2026 we have not found a published closing date for the donation period, so the definitive total has no date yet: last edition's final figure was made public on 20 May.`,
     ),
     ...h2(
       "What is La Marató 2026 for?",
