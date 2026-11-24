@@ -62,3 +62,7 @@ test("the page prints every FAQ question, and the layout emits FAQPage from the 
     assert.doesNotMatch(readFileSync(new URL(`../src/components/programmatic/employment/${other}.tsx`, import.meta.url), "utf8"), /faq=\{/);
   }
 });
+
+test("review fix: no unsourced claim that each payment covers the previous month", () => {
+  for (const locale of CALC_LOCALES) assert.doesNotMatch(exampleCopy(locale).faq[3]!.a, /mes anterior|previous month|mes d'abans/);
+});

@@ -312,7 +312,7 @@ const NOV25: Record<Locale, NovCopy> = {
     moved: {
       heading: "¿Qué día cobro el paro si el 10 cae en sábado, domingo o festivo?",
       text: (list, n) =>
-        `Si el 10 es festivo, el ${link(U.sepe, "SEPE")} paga «el primer día hábil siguiente». En la tabla movemos el pago solo cuando el 10 cae en sábado o domingo, y hasta diciembre de 2027 pasa ${n} veces: ${list}. El SEPE no dice qué festivos autonómicos o locales cuentan: si el tuyo cae en 10, mira la fecha en tu Área Personal.`,
+        `Si el 10 es festivo, el ${link(U.sepe, "SEPE")} paga «el primer día hábil siguiente». El SEPE lo establece para los festivos; la tabla aplica la misma regla cuando el 10 cae en sábado o domingo, y hasta diciembre de 2027 pasa ${n} veces: ${list}. El SEPE no dice qué festivos autonómicos o locales cuentan: si el tuyo cae en 10, mira la fecha en tu Área Personal.`,
       where:
         "¿Dónde ves tu pago? El SEPE indica que puedes consultar la nómina de prestaciones en tu Área Personal, con DNI o certificado electrónico, Cl@ve permanente o un PIN telefónico que te envía al móvil. La tabla de arriba es la regla general; tu nómina es la de tu caso.",
     },
@@ -321,8 +321,8 @@ const NOV25: Record<Locale, NovCopy> = {
       text: `La tabla vale para los pagos mensuales que siguen al primero. El ${link(U.rd696, "Real Decreto 696/2018")}, art. 24.2, empieza así: «una vez efectuado su primer pago, los importes de los sucesivos pagos mensuales de las pensiones […] deberán figurar en la cuenta […] el primer día hábil del mes en que se realice el pago y, como máximo, el cuarto día natural de dicho mes». Para el primer cobro esa norma no fija un día: su art. 24.1 remite a las reglas especiales que dicte el Ministerio de Trabajo.`,
     },
     faq: (jan) => [
-      { question: "¿Qué día se cobra el paro en enero de 2027?", answer: `El ${jan}: el 10 de enero cae en domingo y el SEPE paga el primer día hábil siguiente.` },
-      { question: "¿Qué pasa si el día 10 del paro cae en fin de semana o festivo?", answer: "El SEPE paga el primer día hábil siguiente. En la tabla solo movemos el día cuando el 10 cae en sábado o domingo; el SEPE no dice qué festivos autonómicos o locales cuentan." },
+      { question: "¿Qué día se cobra el paro en enero de 2027?", answer: `El ${jan}: el 10 de enero cae en domingo y aplicamos la regla del SEPE para los festivos, el primer día hábil siguiente.` },
+      { question: "¿Qué pasa si el día 10 del paro cae en fin de semana o festivo?", answer: "El SEPE lo dice para los festivos: paga el primer día hábil siguiente. Para los sábados y domingos la tabla aplica la misma regla, porque no hemos encontrado un texto oficial que los mencione; el SEPE tampoco dice qué festivos autonómicos o locales cuentan." },
       { question: "¿Dónde puedo ver cuándo me pagan el paro?", answer: "En tu Área Personal del SEPE, con DNI o certificado electrónico, Cl@ve permanente o un PIN telefónico: ahí consultas tu nómina de prestaciones." },
       { question: "¿Cuándo se cobra la primera pensión?", answer: "La norma fija el primer día hábil del mes (como máximo el día 4) para los pagos mensuales posteriores al primero. Para el primer cobro no fija un día: remite a las reglas especiales del Ministerio de Trabajo (RD 696/2018, art. 24)." },
     ],
@@ -333,7 +333,7 @@ const NOV25: Record<Locale, NovCopy> = {
     moved: {
       heading: "Quin dia cobro l'atur si el 10 cau en dissabte, diumenge o festiu?",
       text: (list, n) =>
-        `Si el 10 és festiu, el ${link(U.sepe, "SEPE")} paga el primer dia hàbil següent. A la taula movem el pagament només quan el 10 cau en dissabte o diumenge, i fins al desembre de 2027 passa ${n} vegades: ${list}. El SEPE no diu quins festius autonòmics o locals compten: si el teu cau en 10, mira la data a la teva Àrea Personal.`,
+        `Si el 10 és festiu, el ${link(U.sepe, "SEPE")} paga el primer dia hàbil següent. El SEPE ho estableix per als festius; la taula aplica la mateixa regla quan el 10 cau en dissabte o diumenge, i fins al desembre de 2027 passa ${n} vegades: ${list}. El SEPE no diu quins festius autonòmics o locals compten: si el teu cau en 10, mira la data a la teva Àrea Personal.`,
       where:
         "On veus el teu pagament? El SEPE indica que pots consultar la nòmina de prestacions a la teva Àrea Personal, amb DNI o certificat electrònic, Cl@ve permanent o un PIN telefònic que t'envia al mòbil. La taula de dalt és la regla general; la teva nòmina és la del teu cas.",
     },
@@ -342,8 +342,8 @@ const NOV25: Record<Locale, NovCopy> = {
       text: `La taula val per als pagaments mensuals que segueixen el primer. El ${link(U.rd696, "Reial decret 696/2018")}, art. 24.2, comença així: una vegada fet el primer pagament, els imports dels pagaments mensuals successius de les pensions han de figurar al compte el primer dia hàbil del mes en què es faci el pagament i, com a màxim, el quart dia natural d'aquell mes. Per al primer cobrament aquesta norma no fixa cap dia: l'art. 24.1 remet a les regles especials que dicti el Ministeri de Treball.`,
     },
     faq: (jan) => [
-      { question: "Quin dia es cobra l'atur el gener de 2027?", answer: `El ${jan}: el 10 de gener cau en diumenge i el SEPE paga el primer dia hàbil següent.` },
-      { question: "Què passa si el dia 10 de l'atur cau en cap de setmana o festiu?", answer: "El SEPE paga el primer dia hàbil següent. A la taula només movem el dia quan el 10 cau en dissabte o diumenge; el SEPE no diu quins festius autonòmics o locals compten." },
+      { question: "Quin dia es cobra l'atur el gener de 2027?", answer: `El ${jan}: el 10 de gener cau en diumenge i apliquem la regla del SEPE per als festius, el primer dia hàbil següent.` },
+      { question: "Què passa si el dia 10 de l'atur cau en cap de setmana o festiu?", answer: "El SEPE ho diu per als festius: paga el primer dia hàbil següent. Per als dissabtes i diumenges la taula aplica la mateixa regla, perquè no hem trobat cap text oficial que els esmenti; el SEPE tampoc no diu quins festius autonòmics o locals compten." },
       { question: "On puc veure quan em paguen l'atur?", answer: "A la teva Àrea Personal del SEPE, amb DNI o certificat electrònic, Cl@ve permanent o un PIN telefònic: allà consultes la teva nòmina de prestacions." },
       { question: "Quan es cobra la primera pensió?", answer: "La norma fixa el primer dia hàbil del mes (com a màxim el dia 4) per als pagaments mensuals posteriors al primer. Per al primer cobrament no fixa cap dia: remet a les regles especials del Ministeri de Treball (RD 696/2018, art. 24)." },
     ],
@@ -354,7 +354,7 @@ const NOV25: Record<Locale, NovCopy> = {
     moved: {
       heading: "What day is unemployment benefit paid if the 10th is a Saturday, Sunday or holiday?",
       text: (list, n) =>
-        `If the 10th is a holiday, ${link(U.sepe, "SEPE")} pays on the next business day. The table moves the payment only when the 10th falls on a Saturday or Sunday, which happens ${n} times up to December 2027: ${list}. SEPE does not say which regional or local holidays count: if yours falls on the 10th, check the date in your personal area.`,
+        `If the 10th is a holiday, ${link(U.sepe, "SEPE")} pays on the next business day. SEPE states that for holidays; the table applies the same rule when the 10th falls on a Saturday or Sunday, which happens ${n} times up to December 2027: ${list}. SEPE does not say which regional or local holidays count: if yours falls on the 10th, check the date in your personal area.`,
       where:
         "Where do you see your payment? SEPE says you can check your benefit payroll (nómina de prestaciones) in your Área Personal, with your DNI or electronic certificate, Cl@ve permanente or a phone PIN it sends to your mobile. The table above is the general rule; your payroll is your own case.",
     },
@@ -363,8 +363,8 @@ const NOV25: Record<Locale, NovCopy> = {
       text: `The table applies to the monthly payments after the first. ${link(U.rd696, "Royal Decree 696/2018")}, art. 24.2, begins: once the first payment has been made, the successive monthly payments of pensions must be in the account on the first business day of the month in which they are paid and, at the latest, on the fourth calendar day of that month. For the first payment that rule sets no day: art. 24.1 refers to the special rules the Ministry of Labour issues.`,
     },
     faq: (jan) => [
-      { question: "What day is unemployment benefit paid in Spain in January 2027?", answer: `On ${jan}: the 10th of January is a Sunday, so SEPE pays on the next business day.` },
-      { question: "What happens if the 10th falls on a weekend or a holiday?", answer: "SEPE pays on the next business day. The table moves the day only when the 10th is a Saturday or Sunday; SEPE does not say which regional or local holidays count." },
+      { question: "What day is unemployment benefit paid in Spain in January 2027?", answer: `On ${jan}: the 10th of January is a Sunday, so we apply SEPE's holiday rule, the next business day.` },
+      { question: "What happens if the 10th falls on a weekend or a holiday?", answer: "SEPE states it for holidays: it pays on the next business day. For Saturdays and Sundays the table applies the same rule, because we found no official text that mentions them; SEPE does not say which regional or local holidays count either." },
       { question: "Where can I see when my unemployment benefit is paid?", answer: "In your SEPE Área Personal, with your DNI or electronic certificate, Cl@ve permanente or a phone PIN: your benefit payroll is there." },
       { question: "When is the first Spanish pension paid?", answer: "The rule sets the first business day of the month (the 4th at the latest) for the monthly payments after the first. For the first payment it sets no day: it refers to the Ministry of Labour's special rules (RD 696/2018, art. 24)." },
     ],

@@ -1,6 +1,6 @@
 import { bareDay, euros, pct, percentText, type PensionLocale } from "./copy";
 import { perMonth, revaluePension, type RateStatus } from "./engine";
-import { GENDER_GAP_2026, INE_FINAL_DAY, INE_FLASH_DAY, MINIMUMS_2026, PNC_2026_ANNUAL, REVALUATION_2026 } from "./rules";
+import { GENDER_GAP_2026, INE_FINAL_DAY, INE_FLASH_DAY, MINIMUMS_2026, PNC_2026_ANNUAL, QUOTE, REVALUATION_2026 } from "./rules";
 
 /**
  * "Cuánto sube tu pensión": the worked-example table and the questions under
@@ -105,18 +105,24 @@ export function exampleCopy(locale: PensionLocale, status: RateStatus | null): E
       })[status.kind]
     : "";
   const pncFaq = L(locale, {
-    es: `La ley fija la regla, no la cifra: las no contributivas se actualizan en la Ley de Presupuestos «al menos, en el mismo porcentaje» que las contributivas (LGSS, art. 62), y para las contributivas mínimas la disposición adicional 53ª dice que el 1 de enero de 2027 la cuantía de referencia se incrementa, si hace falta, hasta el umbral de pobreza de un hogar de dos adultos. Las cuantías de 2027 no son oficiales hasta que las publique el BOE. Las de 2026 son: pensión mínima de jubilación con 65 años y sin cónyuge a cargo, ${eur(RET65_SINGLE)} al año (${eur(RET65_SINGLE_MONTHLY_2026)} al mes en 14 pagas), y pensión no contributiva, ${eur(PNC_2026_ANNUAL)} al año (${eur(PNC_MONTHLY_2026)} al mes).`,
-    ca: `La llei fixa la regla, no la xifra: les no contributives s'actualitzen a la Llei de pressupostos «almenys, en el mateix percentatge» que les contributives (LGSS, art. 62), i per a les contributives mínimes la disposició addicional 53a diu que l'1 de gener del 2027 la quantia de referència s'incrementa, si cal, fins al llindar de pobresa d'una llar de dos adults. Les quanties del 2027 no són oficials fins que les publiqui el BOE. Les del 2026 són: pensió mínima de jubilació amb 65 anys i sense cònjuge a càrrec, ${eur(RET65_SINGLE)} l'any (${eur(RET65_SINGLE_MONTHLY_2026)} al mes en 14 pagues), i pensió no contributiva, ${eur(PNC_2026_ANNUAL)} l'any (${eur(PNC_MONTHLY_2026)} al mes).`,
-    en: `The law fixes the rule, not the figure: non-contributory pensions are updated in the Budget Act "at least by the same percentage" as contributory ones (LGSS art. 62), and for the minimum contributory pensions additional provision 53 says that on 1 January 2027 the reference amount rises, if needed, to the poverty threshold of a two-adult household. The 2027 amounts are not official until the BOE publishes them. The 2026 ones are: minimum retirement pension at 65 with no dependent spouse, ${eur(RET65_SINGLE)} a year (${eur(RET65_SINGLE_MONTHLY_2026)} a month in 14 payments), and non-contributory pension, ${eur(PNC_2026_ANNUAL)} a year (${eur(PNC_MONTHLY_2026)} a month).`,
+    es: `La ley fija la regla, no la cifra: las no contributivas se actualizan en la Ley de Presupuestos «al menos, en el mismo porcentaje» que las contributivas (LGSS, art. 62), y para las contributivas mínimas la disposición adicional 53ª dice que el 1 de enero de 2027 la cuantía de referencia se incrementa, si hace falta, hasta el umbral de pobreza de un hogar de dos adultos. Las cuantías de 2027 no son oficiales hasta que las publique el BOE. Las de 2026 son: pensión mínima de jubilación con 65 años, «sin cónyuge: unidad económica unipersonal» (RD 241/2026, anexo I), ${eur(RET65_SINGLE)} al año (${eur(RET65_SINGLE_MONTHLY_2026)} al mes en 14 pagas), y pensión no contributiva, ${eur(PNC_2026_ANNUAL)} al año (${eur(PNC_MONTHLY_2026)} al mes).`,
+    ca: `La llei fixa la regla, no la xifra: les no contributives s'actualitzen a la Llei de pressupostos «almenys, en el mateix percentatge» que les contributives (LGSS, art. 62), i per a les contributives mínimes la disposició addicional 53a diu que l'1 de gener del 2027 la quantia de referència s'incrementa, si cal, fins al llindar de pobresa d'una llar de dos adults. Les quanties del 2027 no són oficials fins que les publiqui el BOE. Les del 2026 són: pensió mínima de jubilació amb 65 anys, «sense cònjuge: unitat econòmica unipersonal» (RD 241/2026, annex I), ${eur(RET65_SINGLE)} l'any (${eur(RET65_SINGLE_MONTHLY_2026)} al mes en 14 pagues), i pensió no contributiva, ${eur(PNC_2026_ANNUAL)} l'any (${eur(PNC_MONTHLY_2026)} al mes).`,
+    en: `The law fixes the rule, not the figure: non-contributory pensions are updated in the Budget Act "at least by the same percentage" as contributory ones (LGSS art. 62), and for the minimum contributory pensions additional provision 53 says that on 1 January 2027 the reference amount rises, if needed, to the poverty threshold of a two-adult household. The 2027 amounts are not official until the BOE publishes them. The 2026 ones are: minimum retirement pension at 65, "no spouse: single-person economic unit" (RD 241/2026, annex I), ${eur(RET65_SINGLE)} a year (${eur(RET65_SINGLE_MONTHLY_2026)} a month in 14 payments), and non-contributory pension, ${eur(PNC_2026_ANNUAL)} a year (${eur(PNC_MONTHLY_2026)} a month).`,
+  });
+  const roundingNote = L(locale, {
+    es: `El porcentaje oficial se redondea a un decimal (RDL 3/2026: «${QUOTE.rdl3_decimal}»); la tabla usa la media provisional con dos decimales, así que el porcentaje definitivo y las cifras pueden cambiar.`,
+    ca: `El percentatge oficial s'arrodoneix a un decimal (RDL 3/2026: «${QUOTE.rdl3_decimal}»); la taula fa servir la mitjana provisional amb dos decimals, de manera que el percentatge definitiu i les xifres poden canviar.`,
+    en: `The official percentage is rounded to one decimal (RDL 3/2026: "${QUOTE.rdl3_decimal}", in Spanish); the table uses the running average to two decimals, so the final percentage and the figures may change.`,
   });
   return {
     title: L(locale, { es: "Cuánto sube tu pensión: ejemplos con el dato de hoy", ca: "Quant puja la teva pensió: exemples amb la dada d'avui", en: "How much your pension rises: examples on today's figure" }),
     intro: status
-      ? L(locale, {
+      ? (L(locale, {
           es: `Con el ${p} (${kindWord}), calculado con la misma función que la calculadora, en 14 pagas. Si la cifra cambia (nuevo dato del INE o el BOE), la tabla cambia con ella.`,
           ca: `Amb el ${p} (${kindWord}), calculat amb la mateixa funció que la calculadora, en 14 pagues. Si la xifra canvia (nova dada de l'INE o el BOE), la taula canvia amb ella.`,
           en: `At ${p} (${kindWord}), worked out with the same function as the calculator, in 14 payments. If the figure changes (a new INE release or the BOE), the table changes with it.`,
-        })
+        }) +
+          (status.kind === "provisional" ? ` ${roundingNote}` : ""))
       : "",
     caption: L(locale, {
       es: "Pensión contributiva por debajo del máximo, antes de IRPF",

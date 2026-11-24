@@ -105,7 +105,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
         },
         {
           q: "¿Cuándo se cobra el paro?",
-          a: `El SEPE paga el día 10 de cada mes, o el primer día hábil siguiente si es festivo, y cada pago corresponde al mes anterior. Fechas mes a mes en la guía de días de pago.`,
+          a: `El SEPE paga el día 10 de cada mes, o el primer día hábil siguiente si es festivo. Fechas mes a mes en la guía de días de pago.`,
         },
       ],
     };
@@ -133,7 +133,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
         },
         {
           q: "Quan es cobra l'atur?",
-          a: `El SEPE paga el dia 10 de cada mes, o el primer dia hàbil següent si és festiu, i cada pagament correspon al mes anterior. Dates mes a mes a la guia de dies de pagament.`,
+          a: `El SEPE paga el dia 10 de cada mes, o el primer dia hàbil següent si és festiu. Dates mes a mes a la guia de dies de pagament.`,
         },
       ],
     };
@@ -160,7 +160,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
       },
       {
         q: "When is unemployment benefit paid in Spain?",
-        a: `SEPE pays on the 10th of each month, or the next business day if it is a holiday, and each payment covers the previous month. Month-by-month dates are in the payment-dates guide.`,
+        a: `SEPE pays on the 10th of each month, or the next business day if it is a holiday. Month-by-month dates are in the payment-dates guide.`,
       },
     ],
   };

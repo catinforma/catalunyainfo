@@ -98,3 +98,16 @@ test("the page prints the questions it puts in FAQPage, and the table", () => {
   assert.match(page, /mainEntity: ex\.faq\.map/);
   assert.match(page, /<h2 id="ejemplos">\{ex\.title\}<\/h2>/);
 });
+
+test("review fixes: the minimum is the decree's «unidad económica unipersonal»; the provisional intro says the official figure has one decimal", () => {
+  const prov = statusOn(IPC, "2026-11-25")!;
+  assert.equal(prov.kind, "provisional");
+  for (const locale of PENSION_LOCALES) {
+    const c = exampleCopy(locale, prov);
+    assert.match(c.faq[2]!.a, /unipersonal|single-person economic unit/);
+    assert.doesNotMatch(c.faq[2]!.a, /cónyuge a cargo|cònjuge a càrrec|dependent spouse/);
+    assert.match(c.intro, /expresado con un decimal/);
+  }
+  const flash = revaluationStatus(IPC, "2026-11-27", FLASH, null)!;
+  assert.doesNotMatch(exampleCopy("es", flash).intro, /expresado con un decimal/); // already one decimal
+});

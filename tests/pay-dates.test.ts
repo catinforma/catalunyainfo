@@ -154,3 +154,11 @@ test("25 Nov 2026 additions: the SEPE sentence verbatim with its read date, week
   assert.equal(sepeDay(2027, 1), "2027-01-11");
   assert.equal(weekdayIndex("2027-01-10"), 0);
 });
+
+test("review fix: the weekend rule is presented as ours, SEPE's sentence only covers holidays", () => {
+  for (const locale of LOCALES) {
+    const items = (PAY_DATES.editions[locale].blocks as unknown as { type: string; items?: { answer: string }[] }[]).find((b) => b.type === "faq")!.items!;
+    assert.match(items[4]!.answer, /festius|festivos|holidays/);
+    assert.match(items[4]!.answer, /no hem trobat|no hemos encontrado|found no official text/);
+  }
+});
