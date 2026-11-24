@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -511,6 +513,7 @@ export function NcPensionRoute({ locale }: { locale: NcLocale }) {
               </p>
               <CalculatorNextStep current="non-contributory-pension" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="cuantia">{hd.amounts}</h2>
               {table(
                 amountCols,

@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -113,6 +114,7 @@ export function LinePage({ line, locale, initial = null, today }: { line: Snapsh
 
                 {timetable ? <TimetableSection view={timetable} /> : null}
 
+                <AdSlot kind="top" locale={locale} path={crumbPath(lineCrumbs(line, locale))} />
                 <h2 id="estacions">{t.stationsTitle}</h2>
                 <p className="text-sm text-[var(--color-muted)]">{t.stationsNote}</p>
                 <div className="ci-table-scroll mt-4">

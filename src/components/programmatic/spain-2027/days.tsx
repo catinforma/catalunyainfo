@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -404,6 +405,7 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
             </p>
           ) : null}
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(dayCrumbs(iso, locale))} />
           {sections.map((s) => (
             <section key={s.id} aria-labelledby={`ci-dia-${s.id}`}>
               <h2 id={`ci-dia-${s.id}`}>{s.question}</h2>

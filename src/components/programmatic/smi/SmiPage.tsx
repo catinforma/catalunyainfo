@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -413,6 +415,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                 </>
               ) : null}
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="smi-2026">{h.y26}</h2>
               <p>{y26Text[0]}</p>
               <Quote>{QUOTE.rd126art1}</Quote>

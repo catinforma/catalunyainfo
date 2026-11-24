@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import type { Metadata } from "next";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -162,6 +163,7 @@ export function ButaneArticle({ locale, day }: { locale: Locale; day: string }) 
             </>
           ) : null}
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(trail)} />
           <h2 id="revision" className={taxed ? undefined : "!mt-0"}>
             {w.rulesTitle}
           </h2>

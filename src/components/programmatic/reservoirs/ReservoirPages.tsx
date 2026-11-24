@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -147,6 +148,7 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
                 </h2>
                 <ReservoirReading locale={locale} slug={r.slug} own={own} capacity={o.capacity} officialUrl={officialUrl.reserves(locale)} />
 
+                <AdSlot kind="top" locale={locale} path={crumbPath(reservoirCrumbs(r, locale))} />
                 <h2 id="fitxa">{w.facts}</h2>
                 <section className="ci-margin-block" aria-labelledby="fitxa">
                   <dl className="ci-facts">
@@ -337,6 +339,7 @@ export function ReservoirHubPage({ locale, server, totalPct }: { locale: Locale;
               yearAgo={server.yearAgo}
             />
 
+            <AdSlot kind="top" locale={locale} path={crumbPath(hubCrumbs(locale))} />
             <nav aria-labelledby="ci-reservoir-pages">
               <h2 id="ci-reservoir-pages">{w.hub}</h2>
               <ul>

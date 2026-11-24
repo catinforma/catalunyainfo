@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -417,6 +419,7 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
               </p>
               <CalculatorNextStep current="iprem" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="iprem-2026">{hd.now}</h2>
               <Table
                 stack={false}

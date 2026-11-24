@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -298,6 +300,7 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
               </p>
               <CalculatorNextStep current="lottery-tax" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="tabla">{hd.table}</h2>
               <div className="ci-table-scroll mt-4">
                 <table className="ci-local-table ci-stack-table">

@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -430,6 +431,7 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
             <dd>{localWord(s.local.status)}</dd>
           </dl>
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(communityCrumbsIntl(c, locale))} />
           <h2 id="diferencies">{tr(locale, "Què canvia respecte a la resta d'Espanya", "How it differs from the rest of Spain")}</h2>
           <p>
             {tr(locale, `Són festius a tot Espanya el ${YEAR}: `, `Holidays across Spain in ${YEAR}: `)}
@@ -706,6 +708,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
 
           <p className="ci-lead">{hubLeadIntl(locale)}</p>
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(hubCrumbsIntl(locale))} />
           <h2 id="mesos">{tr(locale, `Calendari laboral ${YEAR} mes a mes: festius i dies feiners`, `${YEAR} work calendar month by month: holidays and working days`)}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
@@ -980,6 +983,7 @@ export function SpainBridgesPageIntl({ locale }: { locale: Edition }) {
             </table>
           </div>
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(bridgesCrumbsIntl(locale))} />
           <h2 id="per-comunitat">{tr(locale, "Caps de setmana llargs sense vacances, per comunitat", "Long weekends with no leave, by region")}</h2>
           <ul>
             {editionCommunitiesAZ(locale).map((c) => {

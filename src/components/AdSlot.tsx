@@ -8,10 +8,15 @@ import { adsensePublisherId } from "@/lib/site";
  * filling it later does not move the text (no layout shift); AdsRuntime puts
  * the AdSense unit inside it. Renders nothing when ads are off or the page
  * may not carry ads (lib/ads/config.ts: REE pages, legal pages).
+ *
+ * "top" goes on every programmatic template after its first answer block and
+ * at the start of EntryArticle bodies; "home-feed" is one card-sized item in
+ * the first headlines grid of the home pages. Each box reserves its height in
+ * CSS (.ci-ad-*); Google's `unfilled` status collapses it.
  */
 const LABEL: Record<Locale, string> = { ca: "Publicitat", es: "Publicidad", en: "Advertisement" };
 
-export function AdSlot({ kind, locale, path, className = "" }: { kind: "top" | "home-top" | "home-end"; locale: Locale; path: string; className?: string }) {
+export function AdSlot({ kind, locale, path, className = "" }: { kind: "top" | "home-top" | "home-feed" | "home-end"; locale: Locale; path: string; className?: string }) {
   if (!adClient(adsensePublisherId())) return null;
   if (!allowsAdUnits(path)) return null;
   return (

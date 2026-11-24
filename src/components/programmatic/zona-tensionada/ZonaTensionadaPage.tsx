@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -310,6 +312,7 @@ export function ZonaTensionadaRoute({ locale }: { locale: ZtLocale }) {
               </p>
               <CalculatorNextStep current="zona-tensionada" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="que-cambia">{hd.changes}</h2>
               <p>{changesText[0]}</p>
               <Quote text={QUOTE.cap} href={ANCHOR.lauArt17} label={lau("art. 17.6")} />

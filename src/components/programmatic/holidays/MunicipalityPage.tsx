@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 import { Fragment } from "react";
 import { renderInline } from "@/lib/content/inline";
@@ -189,6 +190,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair. */}
           <NextStep step={townNextStep(m.slug, name, locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
           <h2 id="avui">{t.statusTitle}</h2>
           <HolidayStatus
             place={name}

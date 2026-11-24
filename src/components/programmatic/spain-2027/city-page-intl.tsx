@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
@@ -152,6 +153,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             ))}
           </ul>
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <AdSlot kind="top" locale={locale} path={crumbPath(cityCrumbsIntl(c, locale))} />
           <h2 id="calendario">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table">

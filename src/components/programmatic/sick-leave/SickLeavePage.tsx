@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -380,6 +382,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
               <SickLeaveCalculator locale={locale} initial={DEFAULT_INPUT} />
               <CalculatorNextStep current="sick-leave" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="porcentajes">{h.pct}</h2>
               <p>{pctText[0]}</p>
               <ScheduleTable bands={schedule("common", "menstruation", REFORM_FROM)} locale={locale} caption={captions.common} />

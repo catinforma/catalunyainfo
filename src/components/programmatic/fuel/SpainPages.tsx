@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -454,6 +455,7 @@ export function SpainHubPage({ locale, summary }: { locale: FuelHubLocale; summa
       <div className="ci-shell py-10">
         <div className="ci-prose">
           {summary ? <ProvinceTable summary={summary} locale={locale} /> : <NoPrices locale={locale} />}
+          <AdSlot kind="top" locale={locale} path={crumbPath(spainHubCrumbs(locale))} />
           <FaqSection faq={spainHubFaq(locale, summary)} locale={locale} />
           <Guidance locale={locale} read="render" />
         </div>

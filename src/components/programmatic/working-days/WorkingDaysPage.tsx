@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -271,6 +273,7 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="working-days" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="ejemplos">{h.examples}</h2>
               <ul>
                 {examples.map((e) => (

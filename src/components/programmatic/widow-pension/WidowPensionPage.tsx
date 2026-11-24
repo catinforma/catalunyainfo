@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -586,6 +588,7 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
               </p>
               <CalculatorNextStep current="widow-pension" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="porcentajes">{hd.pct}</h2>
               {table(
                 pctCols,

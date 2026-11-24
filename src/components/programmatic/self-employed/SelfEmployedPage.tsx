@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -347,6 +349,7 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
               </p>
               <CalculatorNextStep current="self-employed" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="tramos">{h.table}</h2>
               <p>{tableLead}</p>
               <div className="ci-table-scroll mt-4">

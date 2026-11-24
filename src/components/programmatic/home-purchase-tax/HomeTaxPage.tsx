@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -185,6 +187,7 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="home-purchase-tax" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="itp">{h.itp}</h2>
               <p>
                 {L(locale, {

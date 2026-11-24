@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -149,6 +150,7 @@ export function FuelHubPage({ locale, prices = null, now }: { locale: FuelHubLoc
 
           <AreaTable locale={locale} summary={areaSummary(prices, now)} />
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(hubCrumbs(locale))} />
           <h2 id="zones">{t.provinces}</h2>
           {provinces().map((p) => {
             const comarques = comarquesIn(p.code);

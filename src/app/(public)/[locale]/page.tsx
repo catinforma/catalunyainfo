@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Fragment } from "react";
 import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
@@ -93,6 +94,8 @@ export default async function HomePage({
     { key: "news", items: notLead(data.news) },
   ];
   const populated = sections.filter((s) => s.items.length > 0);
+  // The first section that is a grid of cards (not the event list) carries the in-feed ad.
+  const feedKey = populated.find((s) => s.key !== "events" && s.items.length > 2)?.key;
 
   return (
     <>
@@ -153,8 +156,12 @@ export default async function HomePage({
               <EventList items={items as typeof data.events} locale={locale} />
             ) : (
               <div className="ci-grid ci-grid--hub">
-                {items.map((item) => (
-                  <EntryCard key={item.translationId} entry={item} locale={locale} phoneThumb />
+                {items.map((item, i) => (
+                  <Fragment key={item.translationId}>
+                    <EntryCard entry={item} locale={locale} phoneThumb />
+                    {/* One in-feed ad as the 3rd item of the first headlines grid (owner, 24 Nov 2026), box in the HTML. */}
+                    {i === 1 && key === feedKey ? <AdSlot kind="home-feed" locale={locale} path={`/${locale}/`} /> : null}
+                  </Fragment>
                 ))}
               </div>
             )}

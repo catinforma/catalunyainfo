@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -364,6 +366,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
               <CalculatorNextStep current="net-salary" locale={locale} />
               {expatFirst ? expatSections : null}
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="tabla">{h.table}</h2>
               <p>{tableLead}</p>
               <div className="ci-table-scroll mt-4">

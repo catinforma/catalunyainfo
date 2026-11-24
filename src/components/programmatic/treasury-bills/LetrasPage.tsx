@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -379,6 +381,7 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
                 {sourceLine} <A href={latestResultsUrl(locale)}>{resultsLink}</A> · <A href={URLS.tesoroPastResults}>{pastLink}</A>
               </p>
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="por-letra">{h.per1000}</h2>
               <div className="ci-table-scroll mt-4">
                 <table className="ci-local-table ci-stack-table">

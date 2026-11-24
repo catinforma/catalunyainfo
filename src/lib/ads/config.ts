@@ -12,10 +12,12 @@ import { todayPath } from "@/lib/programmatic/today/paths";
  *   message, IAB TCF certified) replaces the first-party banner. It is loaded
  *   by the AdSense script; Google Analytics waits for its answer
  *   (components/ConsentGate.tsx).
- * - Three manual units placed by components/AdsRuntime.tsx under our rules:
- *   never above the answer, at most one mid-article on long pages, one at the
- *   end, one in the desktop sidebar when it fits. The owner also enabled the
- *   bottom anchor on phones in AdSense (auto ads, overlays only).
+ * - Manual units placed by components/AdsRuntime.tsx under our rules
+ *   (lib/ads/placement.ts): a server-rendered box after the first answer, an
+ *   in-article unit every ~2 screens (0.75 of a screen from any other unit),
+ *   one at the end, one in the desktop sidebar when it fits, at most five per
+ *   page. Home: top, one card in the first grid, end. The owner also enabled
+ *   the bottom anchor and the vignette in AdSense (auto ads, overlays only).
  * - No ad at all on the pages that show Red Eléctrica PVPC prices: REE's
  *   terms are non-commercial and its written permission has not been given
  *   (SEO_EXPERIMENTS 2026-11-17 (c)). The script still loads there, paused,
@@ -27,15 +29,27 @@ import { todayPath } from "@/lib/programmatic/today/paths";
 
 export { ADS_LIVE };
 
-/** Ad unit ids created in AdSense by the owner on 24 Nov 2026. */
+/**
+ * Ad unit ids created in AdSense by the owner on 24 Nov 2026 (the first
+ * three in the morning, the rest at night when he asked for more ads).
+ */
 export const AD_SLOTS = {
-  /** "ci-mig": in-article (fluid). */
+  /** "ci-mig": in-article (fluid): the first in-article unit of a page. */
   middle: "9170740903",
+  /** "ci-mig-2": in-article (fluid): the further ones, ~2 screens apart. */
+  middle2: "7647574549",
   /** "ci-final": Multiplex (autorelaxed). */
   end: "3510773003",
   /** "ci-lateral": display, vertical, responsive (desktop sidebar). */
   side: "9517264801" as string | null,
+  /** "ci-dalt": display, format auto, full-width responsive (server-rendered top box). */
+  top: "2586819556",
+  /** "ci-portada": in-feed, image on top (a card in the home grid). */
+  feed: "8576552379",
 } as const;
+
+/** data-ad-layout-key of "ci-portada" (AdSense gives it with the in-feed code). */
+export const AD_FEED_LAYOUT_KEY = "-6t+ed+2i-1n-4w";
 
 export const ADSENSE_SCRIPT = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
 

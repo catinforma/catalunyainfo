@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -162,6 +164,7 @@ export function MortgageRoute({ locale, data }: { locale: MortgageLocale; data: 
               </p>
               <CalculatorNextStep current="mortgage" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="como-se-calcula">{h.how}</h2>
               {how.map((p) => (
                 <p key={p}>{p}</p>

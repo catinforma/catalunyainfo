@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -461,6 +463,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               <SubsidyCalculator locale={locale} initial={DEFAULT_INPUT} />
               <CalculatorNextStep current="unemployment-subsidy" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="cuantia">{h.amount}</h2>
               <p>{amountText}</p>
               <Table head={amountHead} rows={amountRows} />

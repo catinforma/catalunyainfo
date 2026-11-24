@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -442,6 +444,7 @@ export function TrafficFinesRoute({ locale }: { locale: TfLocale }) {
               </p>
               <CalculatorNextStep current="traffic-fines" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="servicios-oficiales">{hd.services}</h2>
               <ul>
                 {services.map((s) => (

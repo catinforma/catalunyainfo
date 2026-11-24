@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -92,6 +94,7 @@ export function FuelPlacePage({ place, locale, prices = null, now }: { place: Pl
             initial={initialPrices(prices, placeFilter(place), now)}
           />
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(placeCrumbs(place, locale))} />
           <h2 id="estacions">{t.stations}</h2>
           <StationSection place={place} locale={locale} />
 

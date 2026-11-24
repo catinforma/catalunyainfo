@@ -234,7 +234,97 @@ export function normalizedSource(file: string, text: string): string {
   }
   const kind = file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
   const sourceFile = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, false, kind);
-  return printer.printFile(sourceFile);
+  return printer.printFile(withoutAdBoxes(sourceFile));
+}
+
+/** The server-rendered ad box (components/AdSlot.tsx): `<AdSlot kind=… />`. */
+function isAdBox(node: ts.Node): boolean {
+  return ts.isJsxSelfClosingElement(node) && ts.isIdentifier(node.tagName) && node.tagName.text === "AdSlot";
+}
+
+/** True for a JSX child that is an ad box, or an expression that is only one (`{cond ? <AdSlot … /> : null}`, `{cond && <AdSlot … />}`). */
+function isAdChild(node: ts.Node): boolean {
+  if (isAdBox(node)) return true;
+  if (!ts.isJsxExpression(node) || !node.expression) return false;
+  let e: ts.Expression = node.expression;
+  while (ts.isParenthesizedExpression(e)) e = e.expression;
+  if (ts.isConditionalExpression(e)) {
+    const empty = (x: ts.Expression) => x.kind === ts.SyntaxKind.NullKeyword;
+    return (isAdBox(e.whenTrue) && empty(e.whenFalse)) || (empty(e.whenTrue) && isAdBox(e.whenFalse));
+  }
+  return ts.isBinaryExpression(e) && e.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken && isAdBox(e.right);
+}
+
+/**
+ * An ad box is not page content (the words, tables and links around it are
+ * unchanged), so a body that gains or moves one keeps its date: the
+ * `<AdSlot … />` elements are dropped, and so are the imports only they used
+ * (AdSlot itself, crumbPath for its path).
+ */
+function withoutAdBoxes(sourceFile: ts.SourceFile): ts.SourceFile {
+  if (!sourceFile.text.includes("AdSlot")) return sourceFile;
+  const used = new Set<string>();
+  const collect = (n: ts.Node) => {
+    if (isAdBox(n) || isAdChild(n)) {
+      const names = (m: ts.Node) => {
+        if (ts.isIdentifier(m)) used.add(m.text);
+        ts.forEachChild(m, names);
+      };
+      names(n);
+      return;
+    }
+    ts.forEachChild(n, collect);
+  };
+  collect(sourceFile);
+  // Identifiers still used once the boxes are gone.
+  const stillUsed = new Set<string>();
+  const count = (n: ts.Node) => {
+    if (isAdBox(n) || isAdChild(n) || ts.isImportDeclaration(n)) return;
+    if (ts.isIdentifier(n)) stillUsed.add(n.text);
+    ts.forEachChild(n, count);
+  };
+  count(sourceFile);
+  const dropImport = (name: string) => name === "AdSlot" || (used.has(name) && !stillUsed.has(name));
+  const result = ts.transform(sourceFile, [
+    (ctx) => {
+      const visit = (node: ts.Node): ts.Node | undefined => {
+        if (ts.isImportDeclaration(node)) {
+          const clause = node.importClause;
+          if (clause && !clause.name && clause.namedBindings && ts.isNamedImports(clause.namedBindings)) {
+            const all = clause.namedBindings.elements;
+            const keep = all.filter((e) => !dropImport(e.name.text));
+            if (keep.length === 0) return undefined;
+            if (keep.length === all.length) return node;
+            return ctx.factory.updateImportDeclaration(
+              node,
+              node.modifiers,
+              ctx.factory.updateImportClause(clause, clause.isTypeOnly, undefined, ctx.factory.updateNamedImports(clause.namedBindings, keep)),
+              node.moduleSpecifier,
+              node.attributes,
+            );
+          }
+          return node;
+        }
+        if ((ts.isJsxElement(node) || ts.isJsxFragment(node)) && node.children.some(isAdChild)) {
+          const blank = (c: ts.JsxChild | undefined) => c !== undefined && ts.isJsxText(c) && c.containsOnlyTriviaWhiteSpaces;
+          const kept: ts.JsxChild[] = [];
+          for (const c of node.children) {
+            if (isAdChild(c)) continue;
+            // The two blanks either side of a dropped box are one.
+            if (blank(c) && blank(kept[kept.length - 1])) continue;
+            kept.push(ts.visitNode(c, visit) as ts.JsxChild);
+          }
+          const children = ctx.factory.createNodeArray(kept);
+          return ts.isJsxElement(node)
+            ? ctx.factory.updateJsxElement(node, node.openingElement, children, node.closingElement)
+            : ctx.factory.updateJsxFragment(node, node.openingFragment, children, node.closingFragment);
+        }
+        return ts.visitEachChild(node, visit, ctx);
+      };
+      return (root) => ts.visitEachChild(root, visit, ctx);
+    },
+  ]);
+  return result.transformed[0] as ts.SourceFile;
 }
 
 const normalizedCache = new Map<string, string>();

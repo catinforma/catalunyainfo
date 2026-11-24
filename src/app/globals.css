@@ -1016,11 +1016,48 @@
   .ci-ad-home-end {
     min-height: 320px;
   }
+  /* The top box reserves the whole ad AND its own chrome (border 1px, padding
+     0.5rem, label line 1.25rem, label margin 0.5rem), so a 300x250 or 336x280
+     creative moves nothing. The ins gets an explicit height (250px on phones,
+     280px from 48rem): a responsive unit picks the size that fits it, so a
+     taller creative cannot push the text. */
   .ci-ad-top,
   .ci-ad-home-top {
-    min-height: 250px;
+    --ci-ad-h: 250px;
+    --ci-ad-chrome: calc(1px + 2.25rem);
+    min-height: calc(var(--ci-ad-h) + var(--ci-ad-chrome));
     margin: 0 0 2rem;
   }
+  @media (min-width: 48rem) {
+    .ci-ad-top,
+    .ci-ad-home-top {
+      --ci-ad-h: 280px;
+    }
+  }
+  .ci-ad-top .ci-ad-label,
+  .ci-ad-home-top .ci-ad-label {
+    line-height: 1.25rem;
+  }
+  .ci-ad-top ins.adsbygoogle,
+  .ci-ad-home-top ins.adsbygoogle {
+    height: var(--ci-ad-h);
+  }
+  /* A top box inside an article body (programmatic templates: after the first
+     answer block), with room on both sides. */
+  .ci-prose > .ci-ad-top {
+    margin: 2rem 0;
+  }
+  /* The in-feed card in the home grid: a card-sized cell with its own frame,
+     so the grid keeps its rhythm whether or not Google fills it. */
+  .ci-ad-home-feed {
+    margin: 0;
+    padding: 0.5rem 0.75rem 0.75rem;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
+    min-height: 300px;
+  }
+  /* The sidebar unit lives inside .ci-article-aside, which is sticky (top:
+     6rem) and ends with its grid, so it never reaches the footer. */
   .ci-ad-side {
     margin: 1.5rem 0 0;
     min-height: 0;
@@ -1035,6 +1072,18 @@
   }
   .ci-ad:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
     display: none;
+  }
+  /* The top boxes keep their space when Google has nothing for them (without
+     the label and the rule): collapsing them later would shift the text up
+     after the reader has started reading. */
+  .ci-ad.ci-ad-top:has(ins.adsbygoogle[data-ad-status="unfilled"]),
+  .ci-ad.ci-ad-home-top:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+    display: block;
+    border-top-color: transparent;
+  }
+  .ci-ad-top:has(ins.adsbygoogle[data-ad-status="unfilled"]) .ci-ad-label,
+  .ci-ad-home-top:has(ins.adsbygoogle[data-ad-status="unfilled"]) .ci-ad-label {
+    visibility: hidden;
   }
 
   /* --- Calculator and calendar blocks ------------------------------------ */

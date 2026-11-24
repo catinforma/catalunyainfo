@@ -201,6 +201,20 @@ test("normalizedSource: comments and layout do not change a body; a string or a 
   assert.equal(lib.normalizedSource("x.json", '{"a": 1,\n "b": [2]}'), lib.normalizedSource("x.json", '{"a":1,"b":[2]}'));
 });
 
+test("normalizedSource: an ad box (<AdSlot />), its import and the path helper only it used do not change a body", () => {
+  const before = `import { A } from "@/a";\nimport { crumbPath } from "@/x";\nexport function P({ crumbs }: { crumbs: string[] }) {\n  return (\n    <div>\n      <p>Festius 2027</p>\n      <h2>Taula</h2>\n    </div>\n  );\n}\n`;
+  const after = `import { AdSlot } from "@/components/AdSlot";\nimport { A } from "@/a";\nimport { crumbPath } from "@/x";\nexport function P({ crumbs }: { crumbs: string[] }) {\n  return (\n    <div>\n      <p>Festius 2027</p>\n      <AdSlot kind="top" locale="es" path={crumbPath(crumbs)} />\n      {i === 1 ? <AdSlot kind="home-feed" locale="es" path="/es/" /> : null}\n      <h2>Taula</h2>\n    </div>\n  );\n}\n`;
+  // `crumbPath` was only imported for the box: the same body without both.
+  const bare = before.replace('import { crumbPath } from "@/x";\n', "");
+  assert.equal(lib.normalizedSource("x.tsx", after), lib.normalizedSource("x.tsx", bare));
+  // A word changed next to the box is still a change.
+  assert.notEqual(lib.normalizedSource("x.tsx", after), lib.normalizedSource("x.tsx", bare.replace("2027", "2028")));
+  // crumbPath used elsewhere (a ShareBar) stays in the body.
+  const shared = after.replace("<h2>Taula</h2>", "<h2>{crumbPath(crumbs)}</h2>");
+  assert.ok(lib.normalizedSource("x.tsx", shared).includes("crumbPath"));
+  assert.equal(lib.normalizedSource("x.tsx", "export const a = 1;"), lib.normalizedSource("x.tsx", "export const a = 1; // AdSlot"));
+});
+
 test("nextRecord: same body keeps its date; a changed body takes the new one", () => {
   const previous = { date: "2026-11-01T00:00:00.000Z", fingerprint: "v1:a", files: 3 };
   assert.equal(lib.nextRecord(previous, { fingerprint: "v1:a", files: 4 }, () => "NOW").date, previous.date);

@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 import { renderInline } from "@/lib/content/inline";
 
@@ -118,6 +119,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
 
+          <AdSlot kind="top" locale="en" path={crumbPath(englishTownCrumbs(m))} />
           <h2 id="today">{t.statusTitle}</h2>
           <HolidayStatus
             place={name}

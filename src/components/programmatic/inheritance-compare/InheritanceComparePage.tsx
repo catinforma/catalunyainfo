@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -268,6 +270,7 @@ export function InheritanceCompareRoute({ locale }: { locale: CmpLocale }) {
                   en: `Reductions: kinship and the home, in the law's order. Tax: after the group II coefficient with no prior wealth. For Catalonia, Madrid, Andalusia and the Valencia region the site's own calculator works it out (linked from the name); elsewhere, the rules quoted below, step by step, rounded to the cent. A territory missing any rule is not computed.`,
                 })}
               </p>
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <CalculatorNextStep current="inheritance-tax-by-region" locale={locale} />
 
               <h2 id="herencias">{hd.inheritance}</h2>

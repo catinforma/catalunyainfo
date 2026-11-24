@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -205,6 +207,7 @@ export function EuriborRoute({ locale, data }: { locale: EuriborLocale; data: Eu
 
               {rows.length ? (
                 <>
+                  <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
                   <h2 id="ultimos-24-meses">{h.table}</h2>
                   <div className="ci-table-scroll mt-4">
                     <table className="ci-local-table ci-stack-table">

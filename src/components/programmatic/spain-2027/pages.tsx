@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -376,6 +377,7 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             <dd>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "Publicados en parte" : "Pendientes de publicar"}</dd>
           </dl>
 
+          <AdSlot kind="top" locale="es" path={crumbPath(communityCrumbs(c))} />
           <h2 id="diferencias">Qué cambia respecto al resto de España</h2>
           <p>
             Son festivo en toda España en {YEAR}: {commonRows().map((r) => `${r.name} (${weekdayDate(r.date)})`).join(", ")}.
@@ -591,6 +593,7 @@ export function SpainHubPage() {
 
           <p className="ci-lead">{hubLead()}</p>
 
+          <AdSlot kind="top" locale="es" path={crumbPath(hubCrumbs())} />
           <h2 id="meses">Calendario laboral {YEAR} mes a mes: festivos y días laborables</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
@@ -838,6 +841,7 @@ export function SpainBridgesPage() {
             </table>
           </div>
 
+          <AdSlot kind="top" locale="es" path={crumbPath(bridgesCrumbs())} />
           <h2 id="por-comunidad">Fines de semana largos sin vacaciones, por comunidad</h2>
           <ul>
             {COMMUNITIES_AZ.map((c) => {

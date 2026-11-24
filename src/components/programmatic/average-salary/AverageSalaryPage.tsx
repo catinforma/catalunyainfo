@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -404,6 +406,7 @@ export function AverageSalaryRoute({ locale }: { locale: WageLocale }) {
               <WageFinder locale={locale} data={finderData(S)} initial={FINDER_DEFAULT} />
               <CalculatorNextStep current="average-salary" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="comunidades">{hd.regions}</h2>
               <RegionChart locale={locale} rows={ranking} national={h.mean} year={y} tableId={TABLES.dist.id} />
               <Grid

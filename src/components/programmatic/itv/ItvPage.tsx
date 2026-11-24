@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -266,6 +268,7 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="itv" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="frecuencia">{h.table}</h2>
               <p>{tableText[0]}</p>
               <Quote>{QUOTE.age}</Quote>

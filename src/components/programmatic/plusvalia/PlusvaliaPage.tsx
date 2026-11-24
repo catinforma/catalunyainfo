@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -219,6 +221,7 @@ export function PlusvaliaRoute({ locale }: { locale: PvLocale }) {
               </p>
               <CalculatorNextStep current="plusvalia" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="como-se-calcula">{hd.how}</h2>
               <ol>
                 {steps.map((s) => (

@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -457,6 +459,7 @@ export function PaidLeaveRoute({ locale }: { locale: PlLocale }) {
               <PaidLeaveCalculator locale={locale} initial={initial} places={places} />
               <CalculatorNextStep current="paid-leave" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="tabla">{h.table}</h2>
               <div className="ci-table-scroll mt-4">
                 <table className="ci-local-table ci-stack-table">

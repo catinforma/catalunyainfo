@@ -128,18 +128,50 @@ AdSense accepted the site on 24 Nov 2026; the owner completed the US tax form
   analytics enabled at account level). It replaces the first-party banner;
   GA4 loads only when it reports `analytics_storage` granted
   (`components/ConsentGate.tsx`, `lib/ads/client.ts`).
-- **Units:** `ci-mig` (in-article, 9170740903), `ci-final` (Multiplex,
-  3510773003), `ci-lateral` (display, desktop sidebar, 9517264801). Placed by
-  `components/AdsRuntime.tsx`: nothing above the answer, middle only on long
-  pages and below the first screen, end before in-article sources, sidebar only
-  when it fits; reserved height; unfilled units hide (`data-ad-status`).
-- **Auto ads:** owner setting, overlays only (bottom anchor on phones);
-  vignettes, side rails, intent formats, in-page auto ads and auto
-  optimisation off; the nine pages below excluded.
+- **Units** (ids in `lib/ads/config.ts`, `AD_SLOTS`): `ci-mig` (in-article
+  fluid, 9170740903), `ci-mig-2` (in-article fluid, 7647574549), `ci-final`
+  (Multiplex, 3510773003), `ci-lateral` (display, desktop sidebar,
+  9517264801), `ci-dalt` (display, format auto, full-width responsive,
+  2586819556: the server-rendered top box) and `ci-portada` (in-feed, image on
+  top, 8576552379, layout key `-6t+ed+2i-1n-4w`: a card in the home grid).
+- **Placement, since the owner's "more ads, even if they annoy" (24 Nov,
+  night)** (`components/AdsRuntime.tsx`, rules in `lib/ads/placement.ts`,
+  pinned in `tests/ads-live.test.ts`):
+  - server box `ci-dalt` (`<AdSlot kind="top">`, height reserved in the HTML) at
+    the start of `EntryArticle` bodies, and after the first answer block (never
+    above the H1 or the lead) on: Catalan/English town holiday pages, Spain 2027
+    (hub, community, bridges, city, day pages, es + ca/en), Christmas fairs town
+    pages, Rodalies line pages, fuel and reservoir hubs/places, and 30
+    calculators (after the tool). Not on PVPC/today (REE) nor legal pages
+    (`allowsAdUnits`).
+  - the top box reserves the ad plus its label, rule and padding (286 px phone,
+    316 px from 48rem, explicit `ins` height 250/280 px) and keeps that space
+    when unfilled (label hidden); sitemap lastmod ignores ad boxes
+    (`scripts/lib/body-dates.ts`).
+  - in-article: `ci-mig` before the second H2 (after the first section, past
+    half a screen), then `ci-mig-2` about every 2 screens (top to top), at least
+    0.75 of a screen of text from any other unit, only before a direct H2 of
+    the body (never inside a table, list or block; the sources heading is never
+    a candidate), at most five units per page counting top, end and sidebar.
+    The end unit still sits right before the sources heading (it closes the
+    article).
+  - sidebar: the aside is sticky (top 6rem) and the unit lives under the index,
+    only if it fits the viewport; the sticky range ends with the article grid,
+    so it never reaches the footer.
+  - home: `home-top` (under the hero), `home-feed` (`ci-portada`, the 3rd card of
+    the first headlines grid, framed card with 300 px reserved), `home-end`.
+  - every box reserves its height before it loads; unfilled boxes collapse only
+    through `data-ad-status="unfilled"`.
+  Not covered (no top box): calculators with their own layouts (`employment/`
+  CalcLayout, lottery/Niño/Grossa checkers, widgets), holiday hubs, comarca and
+  date pages, elections, weekend, ZBE, zona azul, warnings: queue if the 8 Dec
+  review favours it.
+- **Auto ads:** owner setting: bottom anchor on phones and vignette only (no
+  side rails, no in-page auto ads); the nine pages below excluded.
 - **No ads:** `/es/precio-luz/`, `/ca/preu-llum/`, `/en/electricity-price-spain/`
   (+ tomorrow) and `/es/hoy/`, `/ca/avui/`, `/en/today/`: they show REE PVPC
   data (non-commercial terms). The script loads paused there so the consent
-  tool still works. Home and legal pages get no manual units.
+  tool still works. Legal pages get no manual units; home pages get three.
 - **CSP:** opened to `https:` for scripts, styles, fonts, connections and
   frames (`docs/SECURITY.md`).
 - **Legal copy:** privacy, cookies, legal notice, editorial policy, about and

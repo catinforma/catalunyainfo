@@ -3,26 +3,31 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-import { AD_SLOTS, ADSENSE_SCRIPT, allowsAdUnits, isAdFreePath } from "@/lib/ads/config";
+import { AD_FEED_LAYOUT_KEY, AD_SLOTS, ADSENSE_SCRIPT, allowsAdUnits, isAdFreePath } from "@/lib/ads/config";
 import { adsQueue, fcQueue } from "@/lib/ads/client";
+import { planInArticle, unitBudget } from "@/lib/ads/placement";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
  * AdSense on the page: loads Google's script once, after the page is
- * interactive, and places our three manual units by rule (lib/ads/config.ts).
+ * interactive, fills the server-rendered boxes (components/AdSlot.tsx) and
+ * places the manual units by rule (lib/ads/config.ts, lib/ads/placement.ts).
  *
- * Rules, so that ads never stand between a reader and the answer:
- * - nothing above the answer: the first in-article unit goes after the
- *   first section (before the second H2) once that point is past the top
- *   half of the screen; a second one further down on longer pages (5+
- *   sections, 3,000+ characters); each at least a screen from the next
- *   (owner, 24 Nov 2026: visible, but not annoying);
+ * Rules (owner, 24 Nov 2026: "more ads, even if they annoy"), which keep an
+ * ad from ever standing between a reader and the answer:
+ * - nothing above the answer: the first in-article unit goes after the first
+ *   section (before the second H2) once that point is past the top half of
+ *   the screen; then one every ~2 screens, each at least 0.75 of a screen of
+ *   text from any other unit, only before a direct H2 of the article body
+ *   (never inside a table, list or block) and never before the sources
+ *   heading;
  * - the end unit closes the article, before its "sources" heading when the
  *   sources sit inside it, and only on pages with something to read;
  * - the sidebar unit (desktops) only where the sticky sidebar still fits on
  *   screen with it;
- * - at most four per page (two in-article, the end unit, the desktop sidebar); every unit reserves its height before it loads
- *   (no jump) and hides itself if Google has nothing to fill it with
+ * - at most five units per page in all (server box, in-article, end,
+ *   sidebar); every unit reserves its height before it loads (no jump) and
+ *   hides itself if Google has nothing to fill it with
  *   (data-ad-status="unfilled", support.google.com/adsense/answer/10762946).
  *
  * The site navigates without full reloads, so units are removed and placed
@@ -34,7 +39,7 @@ const LABEL: Record<Locale, string> = { ca: "Publicitat", es: "Publicidad", en: 
 
 const SOURCES = /^(fonts|fuentes|sources|official sources|fonts oficials|fuentes oficiales)\b/i;
 
-function unit(kind: "top" | "middle" | "end" | "side", client: string, slot: string, label: string, height?: number): HTMLElement {
+function unit(kind: "middle" | "end" | "side", client: string, slot: string, label: string, height?: number): HTMLElement {
   const box = document.createElement("aside");
   box.className = `ci-ad ci-ad-${kind}`;
   box.setAttribute("aria-label", label);
@@ -45,7 +50,7 @@ function unit(kind: "top" | "middle" | "end" | "side", client: string, slot: str
   ins.className = "adsbygoogle";
   ins.dataset.adClient = client;
   ins.dataset.adSlot = slot;
-  if (kind === "middle" || kind === "top") {
+  if (kind === "middle") {
     ins.style.cssText = "display:block;text-align:center";
     ins.dataset.adLayout = "in-article";
     ins.dataset.adFormat = "fluid";
@@ -64,11 +69,10 @@ function topOf(el: Element): number {
   return el.getBoundingClientRect().top + window.scrollY;
 }
 
-/** Places the units for the current page; returns them so they can be removed. */
 /**
- * Fills the server-rendered slots (components/AdSlot.tsx): top of the article
- * and the home page. Their boxes are already in the HTML with their height, so
- * filling them moves nothing. Returns the inserted <ins> elements.
+ * Fills the server-rendered slots (components/AdSlot.tsx): the top box of an
+ * article, the home boxes. Their height is already in the HTML, so filling
+ * them moves nothing. Returns the inserted <ins> elements.
  */
 function fillSlots(main: HTMLElement, client: string): HTMLElement[] {
   const filled: HTMLElement[] = [];
@@ -82,11 +86,18 @@ function fillSlots(main: HTMLElement, client: string): HTMLElement[] {
       ins.dataset.adSlot = AD_SLOTS.end;
       ins.style.cssText = "display:block";
       ins.dataset.adFormat = "autorelaxed";
-    } else {
-      ins.dataset.adSlot = AD_SLOTS.middle;
-      ins.style.cssText = "display:block;text-align:center";
-      ins.dataset.adLayout = "in-article";
+    } else if (kind === "home-feed") {
+      // "ci-portada": in-feed, image on top (AdSense's own snippet).
+      ins.dataset.adSlot = AD_SLOTS.feed;
+      ins.style.cssText = "display:block";
       ins.dataset.adFormat = "fluid";
+      ins.dataset.adLayoutKey = AD_FEED_LAYOUT_KEY;
+    } else {
+      // "ci-dalt": responsive display, full width (AdSense's own snippet).
+      ins.dataset.adSlot = AD_SLOTS.top;
+      ins.style.cssText = "display:block";
+      ins.dataset.adFormat = "auto";
+      ins.dataset.fullWidthResponsive = "true";
     }
     box.append(ins);
     filled.push(ins);
@@ -117,52 +128,51 @@ function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[
   const sources = h2s.find((h) => /fuent|font|sourc/i.test(h.id) || SOURCES.test(h.textContent?.trim() ?? ""));
   const placed: HTMLElement[] = [];
 
+  // Desktop sidebar, only when it still fits under the sticky header: the
+  // aside is sticky (top: 6rem) and the unit sits below its index.
+  const sideSlot = AD_SLOTS.side;
+  const aside = main.querySelector<HTMLElement>(".ci-article-aside");
+  let sideBox: HTMLElement | null = null;
+  if (sideSlot && aside && window.matchMedia("(min-width: 64rem)").matches) {
+    const room = viewport - 96 - aside.offsetHeight - 48;
+    if (room >= 250) sideBox = unit("side", client, sideSlot, label, Math.min(600, room));
+  }
+
   // End of the article.
-  let endTop = Infinity;
+  let endBox: HTMLElement | null = null;
   if (chars >= 1500) {
-    const box = unit("end", client, AD_SLOTS.end, label);
-    if (sources) prose.insertBefore(box, sources);
-    else prose.append(box);
-    endTop = topOf(box);
-    placed.push(box);
+    endBox = unit("end", client, AD_SLOTS.end, label);
+    if (sources) prose.insertBefore(endBox, sources);
+    else prose.append(endBox);
+    placed.push(endBox);
   }
 
   // Top of the article: the server-rendered slot, if the template has one.
-  const topTops: number[] = slots.map((ins) => topOf(ins.parentElement ?? ins));
   placed.push(...slots);
 
-  // In-article units (owner, 24 Nov 2026: "els anuncis surten molt amagats").
-  // First: right after the first section, so the answer is always read
-  // first, and only once that point is past the top half of the screen.
-  // Second: on longer pages, further down. Every unit at least one screen
-  // from the next, and from the end unit.
-  const body = sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s;
-  const half = viewport * 0.5;
-  const tops: number[] = [...topTops];
-  const far = (top: number) => tops.every((t) => Math.abs(t - top) > viewport) && endTop - top > viewport;
-  const candidates: HTMLElement[] = [];
-  if (body.length >= 2 && chars >= 2000) candidates.push(body[1]!);
-  if (body.length >= 5 && chars >= 3000) candidates.push(body[Math.floor(body.length * 0.65)]!);
-  for (const at of candidates) {
-    const top = topOf(at);
-    if (top > half && far(top)) {
-      const box = unit("middle", client, AD_SLOTS.middle, label);
-      prose.insertBefore(box, at);
-      placed.push(box);
-      tops.push(top);
+  // In-article units: the first after the first section, the rest every ~2
+  // screens (lib/ads/placement.ts), up to five units on the page in all.
+  const boxes: HTMLElement[] = [...slots.map((ins) => ins.parentElement ?? ins), ...(endBox ? [endBox] : [])];
+  const body = (sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s).filter((h) => !h.closest("table, ul, ol, details"));
+  const budget = unitBudget(boxes.length + (sideBox ? 1 : 0));
+  if (chars >= 2000 && body.length >= 2) {
+    const units = boxes.map((b) => ({ top: topOf(b), bottom: topOf(b) + b.offsetHeight }));
+    const picks = planInArticle({ headings: body.map(topOf), units, viewport, budget });
+    // Insert from the last up, so the measured tops above stay true while placing.
+    const made: HTMLElement[] = [];
+    for (const i of picks.slice().reverse()) {
+      // The first (topmost) pick has "ci-mig"; the further ones "ci-mig-2".
+      const slot = i === picks[0] ? AD_SLOTS.middle : AD_SLOTS.middle2;
+      const box = unit("middle", client, slot, label);
+      prose.insertBefore(box, body[i]!);
+      made.push(box);
     }
+    placed.push(...made.reverse());
   }
 
-  // Desktop sidebar, only when it still fits under the sticky header.
-  const side = AD_SLOTS.side;
-  const aside = main.querySelector<HTMLElement>(".ci-article-aside");
-  if (side && aside && window.matchMedia("(min-width: 64rem)").matches) {
-    const room = viewport - 96 - aside.offsetHeight - 48;
-    if (room >= 250) {
-      const box = unit("side", client, side, label, Math.min(600, room));
-      aside.append(box);
-      placed.push(box);
-    }
+  if (sideBox && aside) {
+    aside.append(sideBox);
+    placed.push(sideBox);
   }
 
   return pushAll(placed);

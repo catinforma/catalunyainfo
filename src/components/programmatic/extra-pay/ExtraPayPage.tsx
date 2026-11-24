@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -311,6 +313,7 @@ export function ExtraPayRoute({ locale }: { locale: EpLocale }) {
               <ExtraPayCalculator locale={locale} initial={DEFAULT_INPUT} />
               <CalculatorNextStep current="extra-pay" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="cuando">{h.when}</h2>
               <p>{when[0]}</p>
               <Quote text={QUOTE.et31} cite={L(locale, { es: "Estatuto de los Trabajadores, art. 31", ca: "Estatut dels Treballadors, art. 31", en: "Workers' Statute, art. 31" })} href={SOURCES.et.url} />

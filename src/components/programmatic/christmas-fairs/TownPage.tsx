@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -146,6 +147,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
               the next step, so the dates keep their place; lazy-loaded. */}
           <PlacePhoto photo={fairPagePhoto(town.slug, locale)} locale={locale} />
 
+          <AdSlot kind="top" locale={locale} path={crumbPath(townCrumbs(town, locale))} />
           <h2 id="com-arribar">{accessTitle ?? t.getThere}</h2>
           <FairAccess fairs={withDetails} locale={locale} />
           <p>{renderInline(trains.intro)}</p>

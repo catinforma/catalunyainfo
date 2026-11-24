@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -263,6 +265,7 @@ export function LeaveRoute({ locale }: { locale: LeaveLocale }) {
               <p className="text-sm text-[var(--color-muted)]">{caveat}</p>
               <CalculatorNextStep current="leave-2027" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="taula">{headings.table}</h2>
               <p>{tableLead}</p>
               <div className="ci-table-scroll mt-4">

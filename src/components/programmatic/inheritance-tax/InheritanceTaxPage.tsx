@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/AdSlot";
+import { crumbPath } from "@/components/share/ShareBar";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -330,6 +332,7 @@ export function InheritanceTaxRoute({ locale }: { locale: IsdLocale }) {
               </p>
               <CalculatorNextStep current="inheritance-tax" locale={locale} />
 
+              <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="com-es-calcula">{hd.how}</h2>
               <ol>
                 {steps.map((s) => (
