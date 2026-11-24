@@ -68,9 +68,9 @@
    "files": 9
   },
   "employment": {
-   "date": "2026-11-24T22:52:32.182Z",
-   "fingerprint": "v1:99a4d773e15fb70f416c407ff79d7f1c",
-   "files": 23
+   "date": "2026-11-24T23:22:32.000Z",
+   "fingerprint": "v1:6d4419e9c5a886e128184fe448fe3e31",
+   "files": 24
   },
   "euribor": {
    "date": "2026-11-18T10:43:24.000Z",
@@ -193,9 +193,9 @@
    "files": 9
   },
   "pensions-2027": {
-   "date": "2026-11-24T22:52:32.182Z",
-   "fingerprint": "v1:49d36017039b0e8f10fcb7fae18e942d",
-   "files": 11
+   "date": "2026-11-24T23:22:32.000Z",
+   "fingerprint": "v1:ca123d66d374ca473631b7771834048e",
+   "files": 12
   },
   "plusvalia": {
    "date": "2026-11-19T19:02:41.000Z",
@@ -238,8 +238,8 @@
    "files": 22
   },
   "self-employed": {
-   "date": "2026-11-18T10:43:24.000Z",
-   "fingerprint": "v1:efb78b90def4f122b9db13c8ca2e540b",
+   "date": "2026-11-24T23:22:27.000Z",
+   "fingerprint": "v1:0e0636b39acd1fdffdc8eb36579da64d",
    "files": 8
   },
   "sick-leave": {
