@@ -21,8 +21,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
  * and answer-first lead, the calculator and the page's own sections
  * (children), then the estimate disclaimer, the official sources with the day
  * they were read, and the family's other calculators (MoreCalculators). Breadcrumb JSON-LD
- * only: no FAQ or calculator schema (Google shows FAQ results only for
- * government and health sites, and there is no rich result for a calculator).
+ * plus the WebApplication; FAQPage only on a page that prints the same
+ * questions (the unemployment calculator, 25 Nov 2026), for answer engines, not for a rich
+ * result (Google shows FAQ results only for government and health sites).
  */
 
 export interface CalcMeta {
@@ -77,6 +78,7 @@ export function CalcLayout({
   meta,
   lead,
   sources,
+  faq,
   children,
 }: {
   calcKey: CalcKey;
@@ -84,6 +86,8 @@ export function CalcLayout({
   meta: CalcMeta;
   lead: ReactNode;
   sources: SourceKey[];
+  /** Questions the page prints in its own body (same strings): they also go out as FAQPage JSON-LD. */
+  faq?: readonly { q: string; a: string }[];
   children: ReactNode;
 }) {
   const t = T[locale];
@@ -141,7 +145,7 @@ export function CalcLayout({
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: calcPath(calcKey, locale), description: meta.description, locale, category: "FinanceApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: calcPath(calcKey, locale), description: meta.description, locale, category: "FinanceApplication" }), faq?.length ? { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) } : null])} />
       <SiteFooter locale={locale} />
     </>
   );

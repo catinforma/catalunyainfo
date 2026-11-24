@@ -6,6 +6,7 @@ import { BENEFIT_SS_RATE, DURATION_SCALE, IPREM_PLUS_SIXTH, MAX_CONTRIBUTION_BAS
 import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
 import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 import { HOWTO_LINKS, unemploymentHowTo } from "@/lib/programmatic/employment/unemployment-howto";
+import { daysRows, exampleCopy } from "@/lib/programmatic/employment/unemployment-examples";
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { UnemploymentCalculator, type UnemploymentInitial } from "./UnemploymentCalculator";
@@ -65,6 +66,8 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
   const ss = pct(BENEFIT_SS_RATE, locale);
   const lgssDate = dateWords("2026-11-11", locale);
   const howTo = unemploymentHowTo(locale);
+  const ex2 = exampleCopy(locale);
+  const dayRows = daysRows();
 
   const copy = {
     es: {
@@ -169,7 +172,7 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
   }[locale];
 
   return (
-    <CalcLayout calcKey="unemployment" locale={locale} meta={UNEMPLOYMENT_META[locale]} lead={copy.lead} sources={["lgssArt269", "lgssArt270", "lgss", "sepeAmounts", "sepeContributory", "pge2023", "cotizacion2026"]}>
+    <CalcLayout calcKey="unemployment" locale={locale} meta={UNEMPLOYMENT_META[locale]} lead={copy.lead} sources={["lgssArt269", "lgssArt270", "lgss", "sepeAmounts", "sepeContributory", "pge2023", "cotizacion2026"]} faq={ex2.faq}>
       <UnemploymentCalculator locale={locale} initial={UNEMPLOYMENT_EXAMPLE} />
       <p>{copy.pay}</p>
       <CalculatorNextStep current="unemployment" locale={locale} />
@@ -285,6 +288,38 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
         </a>
       </p>
 
+      <h2 id="ejemplos">{ex2.title}</h2>
+      <p>{ex2.intro}</p>
+      <div className="ci-table-scroll">
+        <table className="ci-local-table">
+          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex2.daysCaption}</caption>
+          <thead>
+            <tr>
+              {ex2.daysCols.map((c) => (
+                <th key={c} scope="col">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {dayRows.map((d) => (
+              <tr key={d.days}>
+                <th scope="row" className="font-normal">
+                  {n(d.days)}
+                </th>
+                <td>{d.benefitDays}</td>
+                <td>{d.months}</td>
+                {d.totals.map((t, i) => (
+                  <td key={i}>{m(t)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-sm text-[var(--color-muted)]">{ex2.daysNote}</p>
+
       <h2 id="reforma-2024">{copy.reformTitle}</h2>
       <p>{copy.reform}</p>
       <p>
@@ -300,6 +335,15 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
           <li key={i}>{s}</li>
         ))}
       </ul>
+
+      <h2 id="preguntas">{ex2.faqTitle}</h2>
+      {ex2.faq.map((f, i) => (
+        <section key={f.q}>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+          {i === ex2.faq.length - 1 ? <p>{copy.pay}</p> : null}
+        </section>
+      ))}
     </CalcLayout>
   );
 }

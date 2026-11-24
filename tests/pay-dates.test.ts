@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 import { bodySchema, type Block } from "../src/lib/content/blocks.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
-import { PAY_DATES, PAY_DATES_AS_OF, buildPayBody, pensionDeadline, sepeDay, tgssBusinessDay } from "../src/lib/content/batch02/pay-dates.ts";
+import { PAY_DATES, PAY_DATES_AS_OF, SEPE_QUOTE, SEPE_READ_ON, buildPayBody, pensionDeadline, sepeDay, tgssBusinessDay } from "../src/lib/content/batch02/pay-dates.ts";
 import { B2_PATHS, B2_TITLES, b2href } from "../src/lib/content/batch02/shared.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { WEEKDAY_NAMES, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -125,4 +125,32 @@ test("internal links stay in the edition's own language and point at published p
 test("publish group pagos sends the three editions", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /wants\("pagos"\)\) published\.push\(await publishB2Article\(PAY_DATES\)\)/);
+});
+
+test("25 Nov 2026 additions: the SEPE sentence verbatim with its read date, weekend-moved months from sepeDay, first payment from RD 696/2018 art. 24", () => {
+  assert.equal(SEPE_READ_ON, "2026-11-25");
+  assert.equal(SEPE_QUOTE, "El pago de prestaciones del SEPE se produce el día 10 de cada mes, y si coincide que es festivo, el primer día hábil siguiente.");
+  const age = (Date.now() - Date.parse(`${SEPE_READ_ON}T00:00:00Z`)) / 86_400_000;
+  assert.ok(age < 60, `SEPE sentence last read ${SEPE_READ_ON}: re-read the SEPE FAQ, then move SEPE_READ_ON`);
+  const span: [number, number][] = [[2026, 12], ...Array.from({ length: 12 }, (_, i) => [2027, i + 1] as [number, number])];
+  const moved = span.filter(([y, m]) => !sepeDay(y, m).endsWith("-10"));
+  assert.ok(moved.length >= 4);
+  type B = { type: string; tone?: string; title?: string; text?: string; items?: { question: string; answer: string }[] };
+  for (const locale of LOCALES) {
+    const blocks = PAY_DATES.editions[locale].blocks as unknown as B[];
+    const callout = blocks[1]!;
+    assert.equal(callout.type, "callout", `${locale}: the source sits right under the lead`);
+    assert.equal(callout.tone, "official");
+    assert.match(callout.title!, /25/);
+    assert.ok(callout.text!.includes(SEPE_QUOTE), `${locale}: quote`);
+    const text = JSON.stringify(blocks);
+    for (const [y, m] of moved) assert.ok(text.includes(`${Number(sepeDay(y, m).slice(8))}`), `${locale} ${y}-${m}`);
+    assert.match(text, /24\.2/);
+    const faqItems = blocks.find((b) => b.type === "faq")!.items!;
+    assert.equal(new Set(faqItems.map((f) => f.question)).size, faqItems.length, `${locale}: duplicate question`);
+    assert.equal(faqItems.length, 7);
+    assert.match(faqItems[3]!.answer, /11/);
+  }
+  assert.equal(sepeDay(2027, 1), "2027-01-11");
+  assert.equal(weekdayIndex("2027-01-10"), 0);
 });

@@ -25,8 +25,8 @@
  *    2027 while it is null.
  */
 
-/** The day every figure and quote below was read on the official text. */
-export const PENSION_RULES_AS_OF = "2026-11-13";
+/** The day every figure and quote below was read on the official text: first 13 Nov 2026; re-read 25 Nov 2026 (LGSS art. 58.2-58.3 and DA 53ª on the BOE consolidated text, RDL 3/2026 art. 2.1 and RD 241/2026 amounts, INE release calendar: flash 27 Nov, final 15 Dec). */
+export const PENSION_RULES_AS_OF = "2026-11-25";
 
 /**
  * The day the "how is it calculated" section's source (LGSS art. 58, the

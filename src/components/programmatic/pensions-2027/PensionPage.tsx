@@ -14,6 +14,7 @@ import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { MINIMUM_COLS, MINIMUM_LABEL, bareDay, elDay, euros, monthText, pct, pensionEditions, pensionPath, percentText, type PensionLocale } from "@/lib/programmatic/pensions-2027/copy";
 import { DEFAULT_INPUT, novemberScenarios, perMonth, type RateStatus } from "@/lib/programmatic/pensions-2027/engine";
 import { pensionHowTo } from "@/lib/programmatic/pensions-2027/howto";
+import { exampleCopy, exampleRows } from "@/lib/programmatic/pensions-2027/examples";
 import { freshnessText, leadText, pensionMeta, statusOn } from "@/lib/programmatic/pensions-2027/page";
 import {
   GENDER_GAP_2026,
@@ -136,6 +137,8 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
   const scenarios = status ? novemberScenarios(status) : [];
   const official = status?.official ?? null;
   const day = (iso: string) => bareDay(iso, locale);
+  const ex = exampleCopy(locale, status);
+  const exRows = status ? exampleRows(status.percent) : [];
 
   const h = L(locale, {
     es: {
@@ -504,6 +507,40 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
                 </>
               ) : null}
 
+              {status ? (
+                <>
+                  <h2 id="ejemplos">{ex.title}</h2>
+                  <p>{ex.intro}</p>
+                  <div className="ci-table-scroll mt-4">
+                    <table className="ci-local-table ci-stack-table">
+                      <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex.caption}</caption>
+                      <thead>
+                        <tr>
+                          {ex.cols.map((c) => (
+                            <th key={c} scope="col">
+                              {c}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {exRows.map((r) => (
+                          <tr key={r.monthly2026}>
+                            <th scope="row" className="font-normal" data-label={ex.cols[0]}>
+                              {euros(r.monthly2026, locale)}
+                            </th>
+                            <td data-label={ex.cols[1]}>{euros(r.monthly2027, locale)}</td>
+                            <td data-label={ex.cols[2]}>+{euros(r.monthlyRise, locale)}</td>
+                            <td data-label={ex.cols[3]}>+{euros(r.annualRise, locale)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-sm text-[var(--color-muted)]">{ex.note}</p>
+                </>
+              ) : null}
+
               <h2 id="paguilla">{h.paguilla}</h2>
               {paguilla.map((p) => (
                 <p key={p}>{p}</p>
@@ -564,6 +601,14 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
                 <Link href={calcPath("retirement-age", locale)}>{L(locale, { es: "Calcula a qué edad te puedes jubilar", ca: "Calcula a quina edat et pots jubilar", en: "Work out when you can retire in Spain" })}</Link>.
               </p>
 
+              <h2 id="preguntas">{ex.faqTitle}</h2>
+              {ex.faq.map((f) => (
+                <section key={f.q}>
+                  <h3>{f.q}</h3>
+                  <p>{f.a}</p>
+                </section>
+              ))}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 {sourceNorms.map((n) => (
@@ -590,7 +635,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: pensionPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: pensionPath(locale), description: meta.description, locale, category: "FinanceApplication" }), { "@type": "FAQPage", mainEntity: ex.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }])} />
       <SiteFooter locale={locale} />
     </>
   );

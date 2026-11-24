@@ -82,7 +82,7 @@ test("date guard: from 1 Feb 2027 the 2027 revaluation norm from the BOE is type
 });
 
 test("rules: dated, quoted, and every norm has a BOE link", () => {
-  assert.equal(PENSION_RULES_AS_OF, "2026-11-13");
+  assert.equal(PENSION_RULES_AS_OF, "2026-11-25");
   assert.equal(WINDOW_FROM, "2025-12");
   assert.equal(WINDOW_TO, "2026-11");
   assert.equal(INE_FLASH_DAY, "2026-11-27");
