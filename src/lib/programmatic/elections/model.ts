@@ -489,6 +489,7 @@ export function townElectionDay(
   phase: ElectionDayPhase,
   polling: PollingModel = buildPolling(m, locale, (iso) => longDate(iso, locale)),
   snapshot: ElectionsSnapshot = SNAPSHOT,
+  now?: Date,
 ): ElectionDayBlock | null {
   const place = placeName(m, locale);
   const where = locale === "ca" ? inCa(place) : locale === "es" ? `en ${place}` : `in ${place}`;
@@ -500,6 +501,7 @@ export function townElectionDay(
       tables: polling.totals?.tables ?? null,
     },
     hasResults: generalOf(m, snapshot) !== null,
+    now,
   });
 }
 

@@ -19,6 +19,7 @@ import { decodeAnsi, electionFiles, parseElection, type ParsedElection } from ".
 import { fromInteriorFinal, INTERIOR_FINAL_ADAPTER } from "../src/lib/programmatic/elections/live/adapters/interior-final.ts";
 import { liveResultsEnabled, LIVE_RESULTS_FLAG } from "../src/lib/programmatic/elections/live/flag.ts";
 import { livePaths } from "../src/lib/programmatic/elections/live/paths.ts";
+import { BLACKOUT_END } from "../src/lib/programmatic/polls/window.ts";
 import { buildLiveView, countedShare, ELECTION_DATE_29N, POLLS_CLOSE_29N, rejectReason } from "../src/lib/programmatic/elections/live/render.ts";
 import { changedTowns, checkProgress, checkSnapshot, parseTownFile, serializeTownFile, townFile } from "../src/lib/programmatic/elections/live/store.ts";
 import type { LiveSnapshot, LiveTownFile } from "../src/lib/programmatic/elections/live/types.ts";
@@ -177,6 +178,44 @@ test("render: counting, then counted; the counted share travels with the figures
   const done = buildLiveView(night("2026-11-30T00:55:00+01:00", 100), new Date("2026-11-30T01:00:00+01:00"));
   assert.equal(done.phase, "counted");
   assert.equal(done.figures?.provisional, true, "100 % counted is still the provisional count");
+});
+
+test("render: absent vs zero vs provisional: nothing counted is 'awaiting', never a table of zeros; a real 0-vote list stays a figure", () => {
+  const now = new Date("2026-11-29T21:40:00+01:00");
+  // The feed is up but no polling station has reported: pending, with the reason logged.
+  const zero = night("2026-11-29T20:35:00+01:00", 0);
+  const zeroView = buildLiveView({ ...zero, town: { ...zero.town, stations: { counted: 0, total: 112 }, lists: zero.town.lists.map((l) => ({ ...l, votes: 0 })), voters: 0, blankVotes: 0 } }, now);
+  assert.equal(zeroView.phase, "awaiting");
+  assert.equal(zeroView.figures, null);
+  assert.match(zeroView.ignored ?? "", /no polling station counted/);
+  // No counted share at all in the file (neither % nor counts): also pending, not 0 %.
+  assert.equal(buildLiveView({ ...zero, town: { ...zero.town, countedPct: Number.NaN, stations: null } }, now).phase, "awaiting");
+  // Once some tables have reported, a list on 0 votes IS a figure (zero), and a list missing from the file is absent.
+  const counting = night("2026-11-29T20:35:00+01:00", 3.5);
+  const first = counting.town.lists[0]!;
+  const withZero: LiveTownFile = { ...counting, town: { ...counting.town, lists: [...counting.town.lists, { code: "999999", short: "ZERO", name: "Zero votes list", votes: 0 }] } };
+  const view = buildLiveView(withZero, now);
+  assert.equal(view.phase, "counting");
+  assert.equal(view.figures?.rows.find((r) => r.code === "999999")?.votes, 0, "a counted zero is shown as 0");
+  assert.equal(view.figures?.rows.find((r) => r.code === "999998"), undefined, "a list the source does not carry is absent, not 0");
+  assert.ok(view.figures?.rows.some((r) => r.code === first.code));
+  // Provisional is labelled, with the source's own time and the counted share.
+  assert.equal(view.figures?.provisional, true);
+  assert.equal(view.figures?.countedPct, 3.5);
+  assert.equal(view.figures?.sourceUpdatedAt, "2026-11-29T20:35:00+01:00");
+});
+
+test("render: no figure until 21:00 Madrid (the Canary Islands close, BLACKOUT_END), with a valid file on disk", () => {
+  assert.equal(BLACKOUT_END.toISOString(), "2026-11-29T20:00:00.000Z");
+  const file = night("2026-11-29T20:30:00+01:00", 40);
+  const early = buildLiveView(file, new Date("2026-11-29T20:59:59+01:00"));
+  assert.equal(early.phase, "awaiting");
+  assert.equal(early.figures, null);
+  assert.match(early.ignored ?? "", /Canary Islands/);
+  assert.equal(buildLiveView(file, new Date("2026-11-29T21:00:00+01:00")).phase, "counting");
+  // Between 20:00 and 21:00 it is the pre-count copy, not the "before the polls close" one.
+  assert.equal(buildLiveView(null, new Date("2026-11-29T20:30:00+01:00")).phase, "awaiting");
+  assert.equal(buildLiveView(null, new Date("2026-11-29T19:59:59+01:00")).phase, "before-close");
 });
 
 test("render: 15 minutes without a successful fetch flags the feed as down; the last good figures stay", () => {

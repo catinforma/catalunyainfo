@@ -40,7 +40,8 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
   const copy = hubCopy(locale);
   const groups = byComarca(locale);
   // Server clock at render time (the route regenerates every 5 minutes): from 28 Nov to 7 Dec 2026 the hub leads with the day.
-  const day = electionDayBlock(locale, electionPhase(new Date()));
+  const now = new Date();
+  const day = electionDayBlock(locale, electionPhase(now), { now });
   const whole = new Intl.NumberFormat(INTL_LOCALE[locale], { maximumFractionDigits: 0 });
   const crumbs: Crumb[] = [
     { label: t.common.home, href: `/${locale}/` },

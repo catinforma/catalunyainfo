@@ -1,3 +1,4 @@
+import { checkedDay } from "../src/lib/programmatic/elections/results-night.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -1068,14 +1069,14 @@ test("neutral: no polls, forecasts or winners; no guessed results site; no templ
     }
   }
   assert.equal(ELECTION_NIGHT_RESULTS_URL, null, "no results-night link until Interior announces it");
-  // Re-checked 18 Nov 2026 (results-night.ts): no public results site announced yet.
-  assert.equal(INTERIOR_CHECKED, "2026-11-18");
+  // The check date lives in results-night.ts and moves only when the official sites are re-read.
+  assert.match(INTERIOR_CHECKED, /^2026-11-(1[89]|2\d|30)$/);
   if (SNAPSHOT.general2026) {
     // Once the official file is in, the slot shows it and nothing about provisional results.
     for (const locale of LOCALES) assert.doesNotMatch(JSON.stringify(buildElectionPage(bySlug("salou"), locale).slot), /provisional/i, locale);
   } else {
-    assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 18 de novembre de 2026/);
-    assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 18 November 2026/);
+    assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, new RegExp(`comprovat el ${checkedDay("ca", INTERIOR_CHECKED)}`));
+    assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, new RegExp(`checked on ${checkedDay("en", INTERIOR_CHECKED)}`));
   }
 });
 

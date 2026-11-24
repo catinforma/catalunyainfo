@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
-import { ELECTION_NIGHT_RESULTS_SOURCE, ELECTION_NIGHT_RESULTS_URL } from "@/lib/programmatic/elections/results-night";
+import { ELECTION_NIGHT_RESULTS_SOURCE, ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED, checkedDay } from "@/lib/programmatic/elections/results-night";
 
 import {
   b2link,
@@ -127,7 +127,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Elecciones Generales 29-N", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/Elecciones-Generales-29-N/", publisher: "Ministerio del Interior" },
   { name: "Datos abiertos de resultados electorales", url: "https://infoelectoral.interior.gob.es/es/elecciones-celebradas/datos-abiertos/", publisher: "Ministerio del Interior" },
   { name: "Voting in person: polling hours, 9:00 to 20:00 (29neleccionesgenerales.es)", url: "https://29neleccionesgenerales.es/en/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
-  { name: "Elecciones a las Cortes Generales 2026, web oficial (portada consultada el 13 de noviembre de 2026: todavía sin página ni enlace de resultados)", url: "https://29neleccionesgenerales.es/", publisher: "Ministerio del Interior" },
+  { name: "Elecciones a las Cortes Generales 2026, web oficial (portada consultada el " + checkedDay("es", RESULTS_SITE_CHECKED) + ": todavía sin página ni enlace de resultados)", url: "https://29neleccionesgenerales.es/", publisher: "Ministerio del Interior" },
   { name: "Real Decreto 806/2026, de convocatoria de elecciones (artículo 3 y anexo: diputados y senadores de cada provincia)", url: RD_806, publisher: "Boletín Oficial del Estado" },
 ];
 
@@ -232,7 +232,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Fonts: LOREG, calendari de la Junta Electoral Central i Ministeri de l'Interior. Interior encara no ha anunciat l'hora d'inici per al 29N.",
     whereTitle: "On veure els resultats de les eleccions generals del 29N",
     where: [
-      `Els dona el **Ministeri de l'Interior**, que en cada elecció obre un web de resultats propi i una aplicació. Per al 23J del 2023 ho va anunciar tres dies abans. ${SITE ? `Per al 29N, el web oficial de resultats és [aquest](${SITE}).` : "Per al 29N encara no ho ha fet (consultat el 13 de novembre del 2026)."}`,
+      `Els dona el **Ministeri de l'Interior**, que en cada elecció obre un web de resultats propi i una aplicació. Per al 23J del 2023 ho va anunciar tres dies abans. ${SITE ? `Per al 29N, el web oficial de resultats és [aquest](${SITE}).` : "Per al 29N encara no ho ha fet (consultat el " + checkedDay("ca", RESULTS_SITE_CHECKED) + ")."}`,
       "El 20 d'octubre, Interior va presentar **29neleccionesgenerales.es** com el web oficial d'aquestes eleccions, però no ha dit si hi publicarà els resultats. Fins que ho anunciï, la referència és aquest web i la pàgina del 29N a **Infoelectoral**, el portal electoral d'Interior. La Generalitat no publica un recompte propi de les eleccions generals: les seves dades obertes arriben més tard.",
     ],
     countTitle: "D'on surten les xifres",
@@ -339,7 +339,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Fuentes: LOREG, calendario de la Junta Electoral Central y Ministerio del Interior. Interior aún no ha anunciado la hora de inicio para el 29N.",
     whereTitle: "Dónde ver los resultados de las elecciones generales del 29N",
     where: [
-      `Los da el **Ministerio del Interior**, que en cada elección abre una web de resultados propia y una aplicación. Para el 23J de 2023 lo anunció tres días antes. ${SITE ? `Para el 29N, la web oficial de resultados es [esta](${SITE}).` : "Para el 29N todavía no lo ha hecho (consultado el 13 de noviembre de 2026)."}`,
+      `Los da el **Ministerio del Interior**, que en cada elección abre una web de resultados propia y una aplicación. Para el 23J de 2023 lo anunció tres días antes. ${SITE ? `Para el 29N, la web oficial de resultados es [esta](${SITE}).` : "Para el 29N todavía no lo ha hecho (consultado el " + checkedDay("es", RESULTS_SITE_CHECKED) + ")."}`,
       "El 20 de octubre, Interior presentó **29neleccionesgenerales.es** como la web oficial de estas elecciones, pero no ha dicho si publicará allí los resultados. Hasta que lo anuncie, la referencia es esa web y la página del 29N en **Infoelectoral**, el portal electoral de Interior. La Generalitat no publica un recuento propio de las elecciones generales: sus datos abiertos llegan más tarde.",
     ],
     countTitle: "De dónde salen las cifras",
@@ -429,7 +429,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   en: {
-    lead: `Results of Spain's 2026 general election, held on **Sunday 29 November**, start to come in after polls close at **20:00** (they open at 9:00; the Canary Islands close at 21:00 mainland time). In 2023 the Interior Ministry began publishing results at 21:00; ${SITE ? `for 29 November its results are on its [official results site](${SITE}).` : "for 29 November it has not yet announced its results site or start time (checked on 13 November 2026)."} Those first figures are the ministry's **provisional count**: they are for information, and the official result comes weeks later, in the official gazette (BOE).`,
+    lead: `Results of Spain's 2026 general election, held on **Sunday 29 November**, start to come in after polls close at **20:00** (they open at 9:00; the Canary Islands close at 21:00 mainland time). In 2023 the Interior Ministry began publishing results at 21:00; ${SITE ? `for 29 November its results are on its [official results site](${SITE}).` : "for 29 November it has not yet announced its results site or start time (checked on " + checkedDay("en", RESULTS_SITE_CHECKED) + ")."} Those first figures are the ministry's **provisional count**: they are for information, and the official result comes weeks later, in the official gazette (BOE).`,
     note: `This page publishes no polls, projections or seat forecasts. ${SITE ? `Results on the night: [the Interior Ministry's official site](${SITE}).` : "When the Interior Ministry announces its 29 November results site, we will add the official link here."}`,
     clockTitle: "The timeline on the night and after",
     clockCaption: "What happens after the vote, general election of 29 November 2026",
@@ -446,7 +446,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Sources: the electoral law (LOREG), the Central Electoral Board calendar and the Interior Ministry. The ministry has not yet announced a start time for 29 November.",
     whereTitle: "Where to see the 2026 Spain general election results",
     where: [
-      `They come from the **Spanish Ministry of the Interior**, which opens its own results website and app for each election. For the July 2023 election it announced them three days before. ${SITE ? `For 29 November, its official results site is [here](${SITE}).` : "For 29 November it has not done so yet (checked on 13 November 2026)."}`,
+      `They come from the **Spanish Ministry of the Interior**, which opens its own results website and app for each election. For the July 2023 election it announced them three days before. ${SITE ? `For 29 November, its official results site is [here](${SITE}).` : "For 29 November it has not done so yet (checked on " + checkedDay("en", RESULTS_SITE_CHECKED) + ")."}`,
       "On 20 October the ministry presented **29neleccionesgenerales.es** as the official website of this election, but it has not said whether results will be published there. Until it does, the reference is that site and the 29-N page on **Infoelectoral**, the ministry's election portal. The Catalan government does not publish its own count for general elections; its open data comes later.",
     ],
     countTitle: "Where the figures come from",
@@ -525,7 +525,7 @@ const COPY: Record<Locale, T> = {
     warnTitle: "Beware of unofficial sites",
     warn: "Some sites already advertise “29N live results”, and at least one shows 2023 figures under 2026 headings. Before trusting a figure, check that it comes from the Interior Ministry and that it states the share of polling tables counted.",
     faq: [
-      { question: "When are the 2026 Spain general election results?", answer: `On the night of Sunday 29 November, after polls close at 20:00 (21:00 mainland time in the Canary Islands). In 2023 the Interior Ministry started publishing results at 21:00. ${SITE ? `For 29 November they are on its [official results site](${SITE}).` : "It has not announced the time or the results site for 29 November yet (checked on 13 November 2026)."}` },
+      { question: "When are the 2026 Spain general election results?", answer: `On the night of Sunday 29 November, after polls close at 20:00 (21:00 mainland time in the Canary Islands). In 2023 the Interior Ministry started publishing results at 21:00. ${SITE ? `For 29 November they are on its [official results site](${SITE}).` : "It has not announced the time or the results site for 29 November yet (checked on " + checkedDay("en", RESULTS_SITE_CHECKED) + ")."}` },
       { question: "Where can I see the 2026 Spain general election results?", answer: `On the Interior Ministry's results website and app, which it opens anew for each election (for the July 2023 election it announced them three days before). ${SITE ? `For 29 November, [this is the official site](${SITE}).` : "When it announces the 29 November ones, we will put the official link at the top of this page."} Be wary of figures that do not say what share of polling tables has been counted.` },
       { question: "When is the Spanish general election?", answer: `On Sunday 29 November 2026, from 9:00 to 20:00: Spain elects the Congress and the Senate, and results start to come in after 20:00. The campaign runs from 13 to 27 November and Saturday 28 November is the day of reflection. Every date and what you need to vote: ${b2link("voting", "en", "2026 Spain general election dates and how to vote")}.` },
       { question: "What time do the polls open in the Spanish election on 29 November?", answer: "Voting runs from 9:00 to 20:00. Polling stations open earlier for the officers to set up, and anyone still inside at 20:00 may still vote. Where your polling station is, and what ID to bring, is in [how to vote in Spain's general election](/en/guides/how-to-vote-catalonia/)." },

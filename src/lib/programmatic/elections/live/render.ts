@@ -4,7 +4,8 @@
  * as an argument, so the tests pin every phase of the night.
  *
  * Rules carried over from the election-night guide and the 29N slot:
- *  - no figure before the polls close, and none that the source stamped
+ *  - no figure before the Canary Islands close (21:00 Madrid, BLACKOUT_END of
+ *    the poll blackout; the polls close at 20:00 elsewhere), and none that the source stamped
  *    before they closed (Interior's media tests on 18 Nov use fake data);
  *  - only data for the expected polling date (a 2023 replay can never reach
  *    a 2026 page);
@@ -17,6 +18,8 @@
  *  - Senate: each voter may mark up to three candidates in Catalonia's
  *    provinces (LOREG art. 166.1.a), so no percentages, votes only.
  */
+
+import { BLACKOUT_END } from "@/lib/programmatic/polls/window";
 
 import type { LiveCount, LiveSource, LiveTownFile } from "./types";
 
@@ -92,6 +95,12 @@ export interface LiveView {
 
 export interface LiveViewOptions {
   pollsClose?: string;
+  /**
+   * First instant figures may be shown. Default: BLACKOUT_END (21:00 Madrid on 29 Nov, when the Canary
+   * Islands close and the poll blackout ends) for the real election; with a custom `pollsClose` (the
+   * dry-run replay) one hour after it, the same gap.
+   */
+  figuresFrom?: string;
   electionDate?: string;
   feedDownAfterMinutes?: number;
 }
@@ -151,6 +160,12 @@ export function buildLiveView(file: LiveTownFile | null, now: Date, options: Liv
   if (!file) return { phase: "awaiting", figures: null, ignored: null };
   const reason = rejectReason(file, pollsClose, electionDate);
   if (reason) return { phase: "awaiting", figures: null, ignored: reason };
+  // The Canary Islands vote until 21:00 Madrid: no figure of the night before then, whatever the file says.
+  const figuresFrom = options.figuresFrom ? Date.parse(options.figuresFrom) : options.pollsClose ? Date.parse(pollsClose) + 60 * 60_000 : BLACKOUT_END.getTime();
+  if (now.getTime() < figuresFrom) return { phase: "awaiting", figures: null, ignored: "figures held until the Canary Islands close (21:00 Madrid)" };
+
+  // Nothing counted yet is "pending", not a table of zeros: a list with 0 votes is only a figure once some polling station has reported.
+  if (countedShare(file.town) <= 0) return { phase: "awaiting", figures: null, ignored: "no polling station counted yet" };
 
   const { town } = file;
   const senate = file.chamber === "senate";

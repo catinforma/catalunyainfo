@@ -13,6 +13,7 @@ import {
   ELECTION_NIGHT_RESULTS_SOURCE,
   ELECTION_NIGHT_RESULTS_URL as SWITCH,
   RESULTS_SITE_CHECKED,
+  checkedDay,
   isAnnouncementHost,
   resultsNightLine,
 } from "../src/lib/programmatic/elections/results-night.ts";
@@ -32,9 +33,9 @@ import { datePath } from "../src/lib/programmatic/holidays/paths.ts";
 // The civil date in Catalonia (the server clock is UTC: just after midnight in Madrid it is still the day before).
 const today = madridDate(new Date());
 const CHECKED: Record<Locale, RegExp> = {
-  ca: /comprovat el 18 de novembre de 2026/,
-  es: /comprobado el 18 de noviembre de 2026/,
-  en: /checked on 18 November 2026/,
+  ca: new RegExp(`comprovat el ${checkedDay("ca", RESULTS_SITE_CHECKED)}`),
+  es: new RegExp(`comprobado el ${checkedDay("es", RESULTS_SITE_CHECKED)}`),
+  en: new RegExp(`checked on ${checkedDay("en", RESULTS_SITE_CHECKED)}`),
 };
 const salou = () => {
   const m = SNAPSHOT.municipalities.find((x) => x.slug === "salou");
@@ -96,7 +97,7 @@ test("town pages, hubs and both guides print the same line in each language", ()
       assert.ok(hubCopy(locale).intro.includes(line), `${locale}: hub`);
     }
     const night = JSON.stringify(ELECTION_NIGHT.editions[locale].blocks);
-    if (SWITCH === null) assert.match(bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks), /13 (de )?(novembre|noviembre|November)/, `${locale}: election night re-dated`);
+    if (SWITCH === null) assert.match(bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks), new RegExp(checkedDay(locale, RESULTS_SITE_CHECKED)), `${locale}: election night carries the same check date as the switch`);
     else assert.ok(night.includes(SWITCH), `${locale}: election night links the site`);
     const congress = CONGRESS_RESULTS.editions[locale];
     assert.ok(JSON.stringify(congress.blocks).includes(JSON.stringify(line).slice(1, -1)), `${locale}: Congress results guide`);

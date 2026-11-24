@@ -33,7 +33,8 @@ export function electionComarcaCrumbs(locale: ComarcaLocale, g: ComarcaGroup): C
  */
 export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale; group: ComarcaGroup }) {
   const model = buildComarcaPage(group, locale);
-  const day = electionDayBlock(locale, electionPhase(new Date()));
+  const now = new Date();
+  const day = electionDayBlock(locale, electionPhase(now), { now });
   const crumbs = electionComarcaCrumbs(locale, group);
   const headers = model.table.headers;
 

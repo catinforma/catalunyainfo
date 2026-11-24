@@ -13,9 +13,11 @@ import { electionsStaticParams, resolveElectionPage } from "@/lib/programmatic/e
 const LOCALE = "en";
 
 // 29N election-day layer (lib/programmatic/elections/election-day.ts): the page prints the phase it was
-// rendered in, so it regenerates every 5 minutes (s-maxage=300 at Cloudflare) from 28 Nov to 7 Dec 2026
-// without a deploy or a purge on the night. Back to `false` in the first deploy after 8 Dec 2026 (tested).
-export const revalidate = 300;
+// rendered in, so it regenerates every minute (s-maxage=60 at Cloudflare) from 28 Nov to 7 Dec 2026
+// without a deploy or a purge on the night. 60, not 300: the first visit after a phase change is still served
+// the old page (x-nextjs-cache STALE) while the new one renders, so the window is one minute, not five.
+// Back to `false` in the first deploy after 8 Dec 2026 (tested).
+export const revalidate = 60;
 export const dynamicParams = true;
 
 export function generateStaticParams() {

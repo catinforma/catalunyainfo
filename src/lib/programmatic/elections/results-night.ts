@@ -41,6 +41,18 @@ import type { Locale } from "@/lib/i18n/config";
  * interior.gob.es / infoelectoral.interior.gob.es answered 403 (bot
  * challenge), so Interior's press notes were not read that day: re-read them
  * from a browser on or after 26 Nov (the test below fails until then).
+ *
+ * Checked 24 Nov 2026, 19:58 and 20:09 UTC (curl): 29neleccionesgenerales.es
+ * home page and /es/sitemap.xml answered 200 (no results page, link or note;
+ * sitemap newest lastmod 2026-11-03); lamoncloa.gob.es's Interior press list
+ * answered 200 (newest notes: police operation 24 Nov, basic guide 20 Oct, postal
+ * and abroad voting; none about results or the media repository);
+ * interior.gob.es and infoelectoral.interior.gob.es answered 403 (bot
+ * challenge) every time, so their notes were still not read: the 26 Nov
+ * re-read from a browser stays due. RESULTS_SITE_CHECKED is that 24 Nov read
+ * (the sites it could read), not a read of Interior's own notes.
+ * resultados.29neleccionesgenerales.es answers 401 (Basic auth): not public,
+ * not announced, not linked.
  * The election-day layer (election-day.ts) prints this switch as a button
  * from 20:00 on 29 Nov.
  */
@@ -50,16 +62,58 @@ export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 export const ELECTION_NIGHT_RESULTS_SOURCE: string | null = null;
 
 /** When the official sites were last read for it. */
-export const RESULTS_SITE_CHECKED = "2026-11-18";
+export const RESULTS_SITE_CHECKED = "2026-11-24";
 
 /** Hosts an announcement may come from (the results site itself may be on another domain). */
 export const RESULTS_ANNOUNCEMENT_HOSTS = ["lamoncloa.gob.es", "interior.gob.es", "29neleccionesgenerales.es"] as const;
 
-const CHECKED_LABEL: Record<Locale, string> = {
-  ca: "18 de novembre de 2026",
-  es: "18 de noviembre de 2026",
-  en: "18 November 2026",
+const MONTHS: Record<Locale, string[]> = {
+  ca: ["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"],
+  es: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 };
+
+/** An ISO date (YYYY-MM-DD) as the page writes it: "18 de novembre de 2026", "18 de noviembre de 2026", "18 November 2026". */
+export function checkedDay(locale: Locale, iso: string): string {
+  const day = Number(iso.slice(8, 10));
+  const month = MONTHS[locale][Number(iso.slice(5, 7)) - 1];
+  const year = iso.slice(0, 4);
+  return locale === "en" ? `${day} ${month} ${year}` : `${day} de ${month} de ${year}`;
+}
+
+/**
+ * Where a reader goes while no results site is announced. What was actually
+ * read, with the dates (curl from this server):
+ *  - 24 Nov 2026, 19:58 and 20:09 UTC: 29neleccionesgenerales.es, Interior's
+ *    election site, HTTP 200 on the home page and on /es/sitemap.xml (324 URLs,
+ *    newest lastmod 2026-11-03); its "Enlaces de interés" page lists
+ *    Infoelectoral (https://infoelectoral.interior.gob.es/), the INE, the JEC and the BOE;
+ *    no results page, link or note in any of them. A later read by the
+ *    reviewer got HTTP 403 (CloudFront) from the same address, so the site
+ *    answers scripts intermittently: re-read it from a browser;
+ *  - same day: Infoelectoral answered 403 (Cloudflare challenge) every time,
+ *    so nothing on it was read; the address is the one Interior's own site links.
+ * The links say what they are (the election site, the data portal): neither is
+ * presented as the results site.
+ */
+export const OFFICIAL_ELECTION_SITE = "https://29neleccionesgenerales.es/";
+export const INFOELECTORAL = "https://infoelectoral.interior.gob.es/";
+
+/**
+ * "Results site: pending", when it was last looked for, and the official
+ * places to look meanwhile: ONE line per language, present tense. `tail` is an
+ * optional Markdown sentence appended (the page's own guide link).
+ */
+export function pendingSiteLine(locale: Locale, tail = "", checked: string = checkedDay(locale, RESULTS_SITE_CHECKED)): string {
+  const end = tail ? ` ${tail}` : "";
+  if (locale === "ca") {
+    return `**Web oficial de resultats: pendent d'anunci** (comprovat el ${checked}). Mentrestant, la informació oficial és al [web de les eleccions del Ministeri de l'Interior](${OFFICIAL_ELECTION_SITE}) i a [Infoelectoral](${INFOELECTORAL}), el seu portal de dades electorals.${end}`;
+  }
+  if (locale === "es") {
+    return `**Web oficial de resultados: pendiente de anuncio** (comprobado el ${checked}). Mientras tanto, la información oficial está en la [web de las elecciones del Ministerio del Interior](${OFFICIAL_ELECTION_SITE}) y en [Infoelectoral](${INFOELECTORAL}), su portal de datos electorales.${end}`;
+  }
+  return `**Official results site: pending announcement** (checked on ${checked}). Meanwhile the official information is on the [Interior Ministry's election site](${OFFICIAL_ELECTION_SITE}) and on [Infoelectoral](${INFOELECTORAL}), its election-data portal.${end}`;
+}
 
 /**
  * One paragraph, true on any day from now to the BOE publication (static
@@ -71,16 +125,16 @@ export function resultsNightLine(locale: Locale, url: string | null = ELECTION_N
   if (locale === "ca") {
     return url
       ? `**Resultats del 29N:** la votació acaba a les 20:00 (a les Canàries, a les 21:00 hora peninsular) i el Ministeri de l'Interior publica l'escrutini provisional aquella mateixa nit, a mesura que es compten les meses, al seu [web oficial de resultats](${url}). Són provisionals: els oficials surten de l'escrutini general de les juntes electorals provincials, del 4 al 7 de desembre, i es publiquen al BOE.`
-      : `**Resultats del 29N:** la votació acaba a les 20:00 (a les Canàries, a les 21:00 hora peninsular) i el Ministeri de l'Interior publica l'escrutini provisional aquella mateixa nit, a mesura que es compten les meses. Encara no ha anunciat el web on el publicarà (comprovat el ${CHECKED_LABEL.ca}); hi enllaçarem el web oficial quan ho faci. Els resultats oficials surten de l'escrutini general de les juntes electorals provincials, del 4 al 7 de desembre, i es publiquen al BOE.`;
+      : `**Resultats del 29N:** la votació acaba a les 20:00 (a les Canàries, a les 21:00 hora peninsular) i el Ministeri de l'Interior publica l'escrutini provisional aquella mateixa nit, a mesura que es compten les meses. Encara no ha anunciat el web on el publicarà (comprovat el ${checkedDay("ca", RESULTS_SITE_CHECKED)}); hi enllaçarem el web oficial quan ho faci. Els resultats oficials surten de l'escrutini general de les juntes electorals provincials, del 4 al 7 de desembre, i es publiquen al BOE.`;
   }
   if (locale === "es") {
     return url
       ? `**Resultados del 29N:** la votación termina a las 20:00 (en Canarias, a las 21:00 hora peninsular) y el Ministerio del Interior publica el escrutinio provisional esa misma noche, a medida que se cuentan las mesas, en su [web oficial de resultados](${url}). Son provisionales: los oficiales salen del escrutinio general de las juntas electorales provinciales, del 4 al 7 de diciembre, y se publican en el BOE.`
-      : `**Resultados del 29N:** la votación termina a las 20:00 (en Canarias, a las 21:00 hora peninsular) y el Ministerio del Interior publica el escrutinio provisional esa misma noche, a medida que se cuentan las mesas. Aún no ha anunciado la web donde lo publicará (comprobado el ${CHECKED_LABEL.es}); enlazaremos la web oficial cuando lo haga. Los resultados oficiales salen del escrutinio general de las juntas electorales provinciales, del 4 al 7 de diciembre, y se publican en el BOE.`;
+      : `**Resultados del 29N:** la votación termina a las 20:00 (en Canarias, a las 21:00 hora peninsular) y el Ministerio del Interior publica el escrutinio provisional esa misma noche, a medida que se cuentan las mesas. Aún no ha anunciado la web donde lo publicará (comprobado el ${checkedDay("es", RESULTS_SITE_CHECKED)}); enlazaremos la web oficial cuando lo haga. Los resultados oficiales salen del escrutinio general de las juntas electorales provinciales, del 4 al 7 de diciembre, y se publican en el BOE.`;
   }
   return url
     ? `**Results of 29 November:** voting ends at 20:00 (21:00 peninsular time in the Canary Islands) and the Spanish Ministry of the Interior publishes the provisional count the same night, as tables are counted, on its [official results site](${url}). These figures are provisional: the official result comes from the provincial electoral boards' general count, 4 to 7 December, and is published in the BOE.`
-    : `**Results of 29 November:** voting ends at 20:00 (21:00 peninsular time in the Canary Islands) and the Spanish Ministry of the Interior publishes the provisional count the same night, as tables are counted. It has not yet announced the website it will use (checked on ${CHECKED_LABEL.en}); we will link the official site once it does. The official result comes from the provincial electoral boards' general count, 4 to 7 December, and is published in the BOE.`;
+    : `**Results of 29 November:** voting ends at 20:00 (21:00 peninsular time in the Canary Islands) and the Spanish Ministry of the Interior publishes the provisional count the same night, as tables are counted. It has not yet announced the website it will use (checked on ${checkedDay("en", RESULTS_SITE_CHECKED)}); we will link the official site once it does. The official result comes from the provincial electoral boards' general count, 4 to 7 December, and is published in the BOE.`;
 }
 
 /** Is `url` on one of the hosts an announcement may come from? */

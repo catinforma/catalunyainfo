@@ -457,3 +457,18 @@ night).
   the night count), implying Interior endorses us (attribution wording).
 - **Test data leak** from the 18 Nov media tests (refused by timestamp and
   date gates; tested).
+
+---
+
+## Update 24 Nov 2026 (curl, 19:58 UTC)
+
+- Still **no announced public results site**: `29neleccionesgenerales.es` (home, `/es/sitemap.xml` newest lastmod 2026-11-03, "Enlaces de interés") and La Moncloa's Interior press list (newest notes: police operation 24 Nov, guide 20 Oct) carry nothing about results. `interior.gob.es` and `infoelectoral.interior.gob.es` still answer scripts with a 403 challenge: the Interior note on the media repository could not be re-read.
+- `resultados.29neleccionesgenerales.es` resolves and answers HTTP 401 (Basic auth): a non-public host; not announced, not linked, never scraped.
+- Render model: a town file with no polling station counted is `awaiting` (pending), never a table of zeros (`render.ts`, tested). Everything else in 2.7 (last good figures kept, `feedDown` after 15 min) was already in place.
+- The live block stays unwired: no source, so link-out only; the pages show "pending" with the ministry's election site and Infoelectoral until `ELECTION_NIGHT_RESULTS_URL` is set (`results-night.ts`).
+- **Correction, same day.** Reads of `29neleccionesgenerales.es` from this server: HTTP 200 at 19:58 and 20:09 UTC (home page, `/es/sitemap.xml`; content as above); a later read by the reviewer got HTTP 403 (CloudFront) on it. It answers scripts intermittently: what was read is what is written above, nothing more. `RESULTS_SITE_CHECKED` is `2026-11-24` for those reads; Interior's own notes (interior.gob.es, Infoelectoral: 403 every time) were not read, so the 26 Nov browser re-read stays due.
+- **Live figures** are held until 21:00 Madrid (`BLACKOUT_END`: the Canary Islands close), not 20:00; the page callout's title says "closed, except the Canary Islands (until 21:00 peninsular time)" from 20:00 to 20:59:59.
+
+### Runbook (results site address is a build-time constant)
+
+Check **27-28 Nov** (browser) for Interior's official results site on 29neleccionesgenerales.es, La Moncloa's Interior notes and interior.gob.es (`resultados.29neleccionesgenerales.es` currently answers 401, Basic auth: not public, do not link). If it is announced: set `ELECTION_NIGHT_RESULTS_URL` and `ELECTION_NIGHT_RESULTS_SOURCE` in `results-night.ts`, run the election tests, deploy and publish **before the 29 Nov 19:00 freeze**. Nothing else needs a deploy on the night: the phase, the 21:00 title, the poll blackout and the button switch by clock (routes regenerate every 60 s until 8 Dec).

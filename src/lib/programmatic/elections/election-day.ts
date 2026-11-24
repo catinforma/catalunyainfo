@@ -2,7 +2,7 @@ import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 
 import { INE_MESA_URL } from "./polling";
-import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED } from "./results-night";
+import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED, checkedDay, pendingSiteLine } from "./results-night";
 
 /**
  * The election-day layer of 29 November 2026 (18 Nov 2026, logged in
@@ -11,7 +11,7 @@ import { ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED } from "./results-nigh
  * eve, on polling day, once the polls close and in the week of the general
  * count. Pure and deterministic: the phase is a function of an instant, and
  * the pages call it on the server when they render (no client clock). The
- * routes that print it regenerate every 5 minutes (`revalidate = 300`), so
+ * routes that print it regenerate every minute (`revalidate = 60`), so
  * each phase reaches the cached HTML, and Cloudflare, within minutes of its
  * start without a deploy, a purge or a timer on the night.
  *
@@ -78,6 +78,9 @@ export const ELECTION_DAY = { eve: "2026-11-28", day: "2026-11-29", lastDay: "20
 /** 20:00 in Madrid, in minutes after midnight: polls close in Catalonia (LOREG art. 84.1). */
 export const POLLS_CLOSE_MINUTES = 20 * 60;
 
+/** 21:00 Madrid (20:00 local): the Canary Islands close, so "polls closed" is only true everywhere from here. */
+export const CANARY_CLOSE_MINUTES = 21 * 60;
+
 const MADRID = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Europe/Madrid",
   year: "numeric",
@@ -103,6 +106,12 @@ export function electionPhase(now: Date): ElectionDayPhase {
   return "over";
 }
 
+/** True in the "count" phase before the Canary Islands close: 20:00 to 20:59:59 Madrid on 29 Nov. */
+export function canaryStillVoting(now: Date): boolean {
+  const { date, minutes } = madridClock(now);
+  return date === ELECTION_DAY.day && minutes >= POLLS_CLOSE_MINUTES && minutes < CANARY_CLOSE_MINUTES;
+}
+
 /**
  * When each phase begins, as instants (Madrid is on UTC+1 from 25 Oct 2026 to
  * 28 Mar 2027, so the offset is fixed for these dates). "after" starts the day
@@ -118,7 +127,7 @@ const PHASE_STARTS: Record<Exclude<ElectionDayPhase, "before">, string> = {
 
 /**
  * The instant the phase `now` falls in began, or null before the layer starts.
- * The pages print the phase (revalidated every 5 minutes), so their content
+ * The pages print the phase (revalidated every minute), so their content
  * changes at these instants: the sitemap dates them no earlier (app/sitemap.ts).
  */
 export function electionPhaseStart(now: Date): Date | null {
@@ -143,6 +152,12 @@ export interface DayContext {
   hasResults?: boolean;
   resultsUrl?: string | null;
   checked?: string;
+  /**
+   * The instant the page renders at. In the "count" phase the title says the polls
+   * are closed only from 21:00 Madrid; before that the Canary Islands still vote.
+   * Without it the title is the later (21:00 on) one.
+   */
+  now?: Date;
 }
 
 export interface ElectionDayBlock {
@@ -168,11 +183,6 @@ const PRESENCIAL = "https://29neleccionesgenerales.es/informacion-general/como-v
 /** The Generalitat's 29N voter-leave order (DOGC núm. 9799, 20 Nov 2026). */
 const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
 
-const CHECKED_DAY: Record<Locale, (iso: string) => string> = {
-  ca: (iso) => `${Number(iso.slice(8, 10))} de ${["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"][Number(iso.slice(5, 7)) - 1]} de ${iso.slice(0, 4)}`,
-  es: (iso) => `${Number(iso.slice(8, 10))} de ${["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][Number(iso.slice(5, 7)) - 1]} de ${iso.slice(0, 4)}`,
-  en: (iso) => `${Number(iso.slice(8, 10))} ${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}`,
-};
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
@@ -180,12 +190,13 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 export function electionDayBlock(locale: Locale, phase: ElectionDayPhase, ctx: DayContext = {}): ElectionDayBlock | null {
   if (phase === "before" || phase === "over") return null;
   const url = ctx.resultsUrl === undefined ? ELECTION_NIGHT_RESULTS_URL : ctx.resultsUrl;
-  const checked = CHECKED_DAY[locale](ctx.checked ?? RESULTS_SITE_CHECKED);
+  const checked = checkedDay(locale, ctx.checked ?? RESULTS_SITE_CHECKED);
   const town = ctx.town ?? null;
   const copy = COPY[locale];
   const tone = phase === "eve" || phase === "polling" ? "warning" : "info";
   const cta = url && (phase === "count" || phase === "after") ? { href: url, label: copy.ctaLabel } : null;
-  return { phase, tone, title: copy.title[phase], md: copy.lines(phase, { url, checked, town, hasResults: ctx.hasResults ?? false }), cta };
+  const title = phase === "count" && ctx.now && canaryStillVoting(ctx.now) ? copy.canaryTitle : copy.title[phase];
+  return { phase, tone, title, md: copy.lines(phase, { url, checked, town, hasResults: ctx.hasResults ?? false }), cta };
 }
 
 interface LineArgs {
@@ -197,6 +208,8 @@ interface LineArgs {
 
 interface Copy {
   title: Record<ElectionDayBlock["phase"], string>;
+  /** The count-phase title from 20:00 to 21:00 Madrid, while the Canary Islands still vote. */
+  canaryTitle: string;
   ctaLabel: string;
   lines: (phase: ElectionDayBlock["phase"], a: LineArgs) => string[];
 }
@@ -209,6 +222,7 @@ const COPY: Record<Locale, Copy> = {
       count: "Urnes tancades: l'escrutini provisional, aquesta nit",
       after: "Eleccions del 29 de novembre: resultats provisionals i escrutini general",
     },
+    canaryTitle: "Col·legis tancats, excepte a les Canàries (fins a les 21:00 hora peninsular): l'escrutini provisional, aquesta nit",
     ctaLabel: "Resultats al web oficial del Ministeri de l'Interior",
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
@@ -235,17 +249,19 @@ const COPY: Record<Locale, Copy> = {
         return [
           url
             ? `El Ministeri de l'Interior publica l'escrutini provisional a mesura que es compten les meses, al seu [web oficial de resultats](${url}); a les Canàries es vota fins a les 21:00 hora peninsular.`
-            : `El Ministeri de l'Interior publica l'escrutini provisional a mesura que es compten les meses; a les Canàries es vota fins a les 21:00 hora peninsular. No havia anunciat el web on el publicarà (comprovat el ${checked}): [com seguir la nit electoral](${b2href("electionNight", "ca")}).`,
+            : `El Ministeri de l'Interior publica l'escrutini provisional a mesura que es compten les meses; a les Canàries es vota fins a les 21:00 hora peninsular.`,
           official,
           ...townLine,
+          ...(url ? [] : [pendingSiteLine("ca", `[com seguir la nit electoral](${b2href("electionNight", "ca")}).`, checked)]),
         ];
       }
       return [
         url
           ? `**Escrutini provisional:** el del Ministeri de l'Interior, al seu [web oficial de resultats](${url}).`
-          : `**Escrutini provisional:** el difon el Ministeri de l'Interior (LOREG, article 98); no havia anunciat el web on el publicarà (comprovat el ${checked}).`,
+          : `**Escrutini provisional:** el difon el Ministeri de l'Interior (LOREG, article 98).`,
         "**Escrutini general:** el fan les juntes electorals provincials del 4 al 7 de desembre; el resultat oficial es publica al BOE.",
         ...townLine,
+        ...(url ? [] : [pendingSiteLine("ca", "", checked)]),
         `**Membres de mesa:** si treballes per compte d'altri o ets funcionari, el dilluns 30 de novembre tens dret a cinc hores menys de feina, les cinc primeres de la jornada ([LOREG, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
@@ -257,6 +273,7 @@ const COPY: Record<Locale, Copy> = {
       count: "Urnas cerradas: el escrutinio provisional, esta noche",
       after: "Elecciones del 29 de noviembre: resultados provisionales y escrutinio general",
     },
+    canaryTitle: "Colegios cerrados, salvo en Canarias (hasta las 21:00 hora peninsular): el escrutinio provisional, esta noche",
     ctaLabel: "Resultados en la web oficial del Ministerio del Interior",
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
@@ -283,17 +300,19 @@ const COPY: Record<Locale, Copy> = {
         return [
           url
             ? `El Ministerio del Interior publica el escrutinio provisional a medida que se cuentan las mesas, en su [web oficial de resultados](${url}); en Canarias se vota hasta las 21:00 hora peninsular.`
-            : `El Ministerio del Interior publica el escrutinio provisional a medida que se cuentan las mesas; en Canarias se vota hasta las 21:00 hora peninsular. No había anunciado la web donde lo publicará (comprobado el ${checked}): [cómo seguir la noche electoral](${b2href("electionNight", "es")}).`,
+            : `El Ministerio del Interior publica el escrutinio provisional a medida que se cuentan las mesas; en Canarias se vota hasta las 21:00 hora peninsular.`,
           official,
           ...townLine,
+          ...(url ? [] : [pendingSiteLine("es", `[cómo seguir la noche electoral](${b2href("electionNight", "es")}).`, checked)]),
         ];
       }
       return [
         url
           ? `**Escrutinio provisional:** el del Ministerio del Interior, en su [web oficial de resultados](${url}).`
-          : `**Escrutinio provisional:** lo difunde el Ministerio del Interior (LOREG, artículo 98); no había anunciado la web donde lo publicará (comprobado el ${checked}).`,
+          : `**Escrutinio provisional:** lo difunde el Ministerio del Interior (LOREG, artículo 98).`,
         "**Escrutinio general:** lo hacen las juntas electorales provinciales del 4 al 7 de diciembre; el resultado oficial se publica en el BOE.",
         ...townLine,
+        ...(url ? [] : [pendingSiteLine("es", "", checked)]),
         `**Miembros de mesa:** si trabajas por cuenta ajena o eres funcionario, el lunes 30 de noviembre tienes derecho a cinco horas menos de jornada, las cinco primeras ([LOREG, artículo 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },
@@ -305,6 +324,7 @@ const COPY: Record<Locale, Copy> = {
       count: "Polls closed: the provisional count comes in tonight",
       after: "29 November election: provisional results and the official count",
     },
+    canaryTitle: "Polls closed except in the Canary Islands (open until 21:00 peninsular time): the provisional count comes in tonight",
     ctaLabel: "Results on the Spanish Interior Ministry's official site",
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
@@ -331,17 +351,19 @@ const COPY: Record<Locale, Copy> = {
         return [
           url
             ? `The Spanish Interior Ministry publishes the provisional count as tables are counted, on its [official results site](${url}); the Canary Islands vote until 21:00 peninsular time.`
-            : `The Spanish Interior Ministry publishes the provisional count as tables are counted; the Canary Islands vote until 21:00 peninsular time. It had not announced the website it will use (checked on ${checked}): [how to follow election night](${b2href("electionNight", "en")}).`,
+            : `The Spanish Interior Ministry publishes the provisional count as tables are counted; the Canary Islands vote until 21:00 peninsular time.`,
           official,
           ...townLine,
+          ...(url ? [] : [pendingSiteLine("en", `[how to follow election night](${b2href("electionNight", "en")}).`, checked)]),
         ];
       }
       return [
         url
           ? `**Provisional count:** the Interior Ministry's, on its [official results site](${url}).`
-          : `**Provisional count:** published by the Interior Ministry (electoral law, article 98); it had not announced the website it will use (checked on ${checked}).`,
+          : `**Provisional count:** published by the Interior Ministry (electoral law, article 98).`,
         "**Official count:** the provincial electoral boards hold the general count from 4 to 7 December; the official result is published in the BOE.",
         ...townLine,
+        ...(url ? [] : [pendingSiteLine("en", "", checked)]),
         `**Polling-station members:** employees and civil servants who sat at a table are entitled to five fewer working hours on Monday 30 November, the first five of their day ([electoral law, article 28](${LOREG}); [Ordre EMT/232/2026](${EMT_232})).`,
       ];
     },

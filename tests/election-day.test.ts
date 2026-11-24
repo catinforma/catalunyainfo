@@ -4,11 +4,14 @@ import { test } from "node:test";
 
 import { slugifyAnchor } from "../src/lib/content/blocks.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
-import { electionDayBlock, electionPhase, madridClock, type ElectionDayBlock } from "../src/lib/programmatic/elections/election-day.ts";
+import { ELECTION_DAY, canaryStillVoting, electionDayBlock, electionPhase, electionPhaseStart, madridClock, type ElectionDayBlock } from "../src/lib/programmatic/elections/election-day.ts";
+import { ELECTION_DATE_29N, POLLS_CLOSE_29N } from "../src/lib/programmatic/elections/live/render.ts";
+import { BLACKOUT_END } from "../src/lib/programmatic/polls/window.ts";
+import { homeLeadKey } from "../src/lib/content/home-lead.ts";
 import { buildElectionPage, townElectionDay } from "../src/lib/programmatic/elections/model.ts";
 import { electionPath } from "../src/lib/programmatic/elections/paths.ts";
 import { INE_MESA_URL } from "../src/lib/programmatic/elections/polling.ts";
-import { ELECTION_NIGHT_RESULTS_URL } from "../src/lib/programmatic/elections/results-night.ts";
+import { ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay } from "../src/lib/programmatic/elections/results-night.ts";
 import { SNAPSHOT } from "../src/lib/programmatic/elections/snapshot.ts";
 import { madridDate } from "../src/lib/programmatic/elections/today.ts";
 
@@ -67,9 +70,9 @@ const TOMORROW: Record<Locale, RegExp> = { ca: /^Demà es vota/, es: /^Mañana s
 const TODAY: Record<Locale, RegExp> = { ca: /^Avui es vota/, es: /^Hoy se vota/, en: /today/ };
 const REFLECTION: Record<Locale, RegExp> = { ca: /jornada de reflexió/, es: /jornada de reflexión/, en: /day of reflection/ };
 const PENDING: Record<Locale, RegExp> = {
-  ca: /comprovat el 18 de novembre de 2026/,
-  es: /comprobado el 18 de noviembre de 2026/,
-  en: /checked on 18 November 2026/,
+  ca: new RegExp(`comprovat el ${checkedDay("ca", RESULTS_SITE_CHECKED)}`),
+  es: new RegExp(`comprobado el ${checkedDay("es", RESULTS_SITE_CHECKED)}`),
+  en: new RegExp(`checked on ${checkedDay("en", RESULTS_SITE_CHECKED)}`),
 };
 
 test("28 Nov (eve): tomorrow's hours, ID, where to vote, the help line and the reflection day; no results button", () => {
@@ -183,12 +186,12 @@ const ROUTES = [
   "src/app/(public)/[locale]/elecciones/comarca/[comarca]/page.tsx",
 ];
 
-test("the hubs, comarca and town routes regenerate every 5 minutes through 7 Dec, then go back to static", () => {
+test("the hubs, comarca and town routes regenerate every minute through 7 Dec, then go back to static", () => {
   const today = madridDate(new Date());
   for (const route of ROUTES) {
     const source = readFileSync(new URL(`../${route}`, import.meta.url), "utf8");
     const value = /export const revalidate = (\w+);/.exec(source)?.[1];
-    if (today <= "2026-12-08") assert.equal(value, "300", `${route}: each phase must reach the cache within minutes`);
+    if (today <= "2026-12-08") assert.equal(value, "60", `${route}: each phase must reach the cache within a minute (300 left the first visitor on the old phase for up to five)`);
     else assert.equal(value, "false", `${route}: the election-day layer is over; set revalidate back to false`);
   }
 });
@@ -198,8 +201,89 @@ test("the pages compute the phase on the server, and the callout has no client c
   assert.doesNotMatch(callout, /^["']use client["']/m);
   for (const file of ["ElectionResultsPage", "ElectionsHubPage", "ElectionsComarcaPage"]) {
     const source = readFileSync(new URL(`../src/components/programmatic/${file}.tsx`, import.meta.url), "utf8");
-    assert.match(source, /electionPhase\(new Date\(\)\)/, file);
+    assert.match(source, /electionPhase\(now\)/, file);
     assert.match(source, /<ElectionDayCallout block=\{day\} \/>/, file);
     assert.doesNotMatch(source, /^["']use client["']/m, file);
+  }
+});
+
+test("no announced site: the night says 'pending' and still links the official election site and Infoelectoral, in every language", () => {
+  const PENDING_WORD: Record<Locale, RegExp> = { ca: /pendent/, es: /pendiente/, en: /pending/ };
+  for (const locale of LOCALES) {
+    for (const phase of ["count", "after"] as const) {
+      const off = electionDayBlock(locale, phase, { resultsUrl: null });
+      assert.ok(off, `${locale} ${phase}`);
+      const all = text(off);
+      assert.match(all, PENDING_WORD[locale], `${locale} ${phase}: says the site is pending`);
+      assert.ok(all.includes(`](${OFFICIAL_ELECTION_SITE})`), `${locale} ${phase}: links the ministry's election site`);
+      assert.ok(all.includes(`](${INFOELECTORAL})`), `${locale} ${phase}: links Infoelectoral`);
+      assert.equal(off.cta, null, `${locale} ${phase}: no results button for a site that is not announced`);
+      // Once the site is announced, the pending line and the stopgap links go.
+      const on = text(electionDayBlock(locale, phase, { resultsUrl: FAKE_SITE }));
+      assert.doesNotMatch(on, PENDING_WORD[locale], `${locale} ${phase}: no 'pending' once announced`);
+      assert.ok(!on.includes(INFOELECTORAL), `${locale} ${phase}: no stopgap link once announced`);
+    }
+  }
+});
+
+test("everything time-based on the night flips by the clock alone: one set of instants, no deploy", () => {
+  // The election-day layer, the live-results prototype and the polls blackout agree on 20:00 / 21:00 Madrid on 29 Nov.
+  assert.equal(ELECTION_DATE_29N, ELECTION_DAY.day);
+  assert.equal(new Date(POLLS_CLOSE_29N).getTime(), electionPhaseStart(new Date("2026-11-29T19:30:00Z"))!.getTime(), "polls close = start of the count phase");
+  assert.equal(electionPhase(new Date(new Date(POLLS_CLOSE_29N).getTime() - 1)), "polling");
+  assert.equal(electionPhase(new Date(POLLS_CLOSE_29N)), "count");
+  assert.equal(BLACKOUT_END.getTime() - new Date(POLLS_CLOSE_29N).getTime(), 60 * 60_000, "poll figures stay off one hour longer: the Canary Islands close at 21:00 Madrid");
+  // The count phase runs through the Canary hour and the night; the next day is "after".
+  assert.equal(electionPhase(new Date("2026-11-29T20:00:00Z")), "count"); // 21:00 Madrid
+  assert.equal(electionPhase(new Date("2026-11-29T22:59:59Z")), "count"); // 23:59:59 Madrid
+  // The home page lead switches on the Madrid date: the voting guide to 28 Nov, the election-night guide from 29 Nov.
+  assert.equal(homeLeadKey("2026-11-28"), "voting");
+  assert.equal(homeLeadKey("2026-11-29"), "electionNight");
+  assert.equal(homeLeadKey("2026-11-30"), "electionNight");
+  // The constants' fixed +01:00 offset is Madrid's on that date (CET since 25 Oct 2026).
+  assert.equal(madridClock(new Date(POLLS_CLOSE_29N)).minutes, 20 * 60);
+  assert.equal(madridClock(BLACKOUT_END).minutes, 21 * 60);
+});
+
+test("count phase title is true for the Canary hour: 'polls closed' only from 21:00 Madrid (boundaries 20:30 and 21:00)", () => {
+  const CLOSED_EVERYWHERE: Record<Locale, RegExp> = { ca: /^Urnes tancades/, es: /^Urnas cerradas/, en: /^Polls closed:/ };
+  const CANARY: Record<Locale, RegExp> = { ca: /excepte a les Canàries.*21:00/, es: /salvo en Canarias.*21:00/, en: /except in the Canary Islands.*21:00/ };
+  const at2030 = at("2026-11-29T19:30:00Z"); // 20:30 Madrid
+  const at2059 = at("2026-11-29T19:59:59Z"); // 20:59:59 Madrid
+  const at2100 = at("2026-11-29T20:00:00Z"); // 21:00 Madrid
+  assert.equal(canaryStillVoting(at("2026-11-29T18:59:59Z")), false, "19:59:59: polling, not the count");
+  assert.equal(canaryStillVoting(at("2026-11-29T19:00:00Z")), true, "20:00");
+  assert.equal(canaryStillVoting(at2059), true);
+  assert.equal(canaryStillVoting(at2100), false);
+  assert.equal(canaryStillVoting(at("2026-11-30T19:30:00Z")), false, "the next evening is not the Canary hour");
+  for (const locale of LOCALES) {
+    for (const url of [null, FAKE_SITE]) {
+      for (const now of [at2030, at2059]) {
+        const block = electionDayBlock(locale, electionPhase(now), { resultsUrl: url, now });
+        assert.ok(block);
+        assert.doesNotMatch(block.title, CLOSED_EVERYWHERE[locale], `${locale}: not "closed" at ${now.toISOString()}`);
+        assert.match(block.title, CANARY[locale], `${locale}: says the Canary Islands still vote`);
+      }
+      const late = electionDayBlock(locale, electionPhase(at2100), { resultsUrl: url, now: at2100 });
+      assert.match(late!.title, CLOSED_EVERYWHERE[locale], `${locale}: closed everywhere from 21:00`);
+    }
+    // No clock given (static callers, the other phases): the 21:00 title, and polling/after unchanged.
+    assert.match(electionDayBlock(locale, "count")!.title, CLOSED_EVERYWHERE[locale]);
+    assert.equal(electionDayBlock(locale, "after", { now: at2030 })!.title, electionDayBlock(locale, "after")!.title);
+    // Town pages pass the clock through.
+    const town = townElectionDay(salou(), locale, "count", undefined, undefined, at2030);
+    assert.match(town!.title, CANARY[locale]);
+  }
+});
+
+test("no announced site: one pending line per language, no second 'not announced' sentence, no mixed tenses", () => {
+  const checkedWord: Record<Locale, RegExp> = { ca: /comprovat el/g, es: /comprobado el/g, en: /checked on/g };
+  const notAnnounced: Record<Locale, RegExp> = { ca: /havia anunciat|no ha anunciat/, es: /había anunciado|no ha anunciado/, en: /had not announced|has not announced|not yet announced/ };
+  for (const locale of LOCALES) {
+    for (const phase of ["count", "after"] as const) {
+      const all = text(electionDayBlock(locale, phase, { resultsUrl: null }));
+      assert.equal((all.match(checkedWord[locale]) ?? []).length, 1, `${locale} ${phase}: the check date is said once`);
+      assert.doesNotMatch(all, notAnnounced[locale], `${locale} ${phase}: the pending line says it, nothing repeats it`);
+    }
   }
 });
