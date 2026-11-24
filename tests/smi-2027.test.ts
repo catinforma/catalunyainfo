@@ -8,8 +8,9 @@ import { CALC_COPY, SMI_LOCALES, money, netSalaryPreset, smiEditions, smiPath } 
 import { readHash } from "../src/lib/programmatic/net-salary/copy.ts";
 import { DEFAULT_INPUT as NET_DEFAULT } from "../src/lib/programmatic/net-salary/engine.ts";
 import { boeNumber, currentYear, domesticFor, findSmiDecree, increaseOn, isSmiDecreeTitle, officialYears, parseSmiDecree, prorated12, smi2027Status, smiFor, type LiveBoe } from "../src/lib/programmatic/smi/engine.ts";
+import { HOWTO_DOMESTIC_HOURS, HOWTO_PART_TIME, smiHowTo } from "../src/lib/programmatic/smi/howto.ts";
 import { freshnessText, leadText, smiMeta, smiSitemapEntries } from "../src/lib/programmatic/smi/page.ts";
-import { DRAFT_2027, NORMS, OFFICIAL_2027, OFFICIAL_2027_DUE, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, STATUS_RECHECK_BY, boeUrl } from "../src/lib/programmatic/smi/rules.ts";
+import { DRAFT_2027, NORMS, OFFICIAL_2027, OFFICIAL_2027_DUE, QUOTE, SMI_2026, SMI_HISTORY, SMI_HOWTO_READ, SMI_HOWTO_REREAD_BY, SMI_RULES_AS_OF, STATUS_RECHECK_BY, boeUrl } from "../src/lib/programmatic/smi/rules.ts";
 import { loadSmiBoe, searchUrl, summaryUrl, xmlUrl, type Fetcher } from "../src/lib/programmatic/smi/boe.ts";
 
 /**
@@ -63,7 +64,7 @@ test("2027: OFFICIAL_2027 is RD 1013/2026 as the parser reads it from the BOE's 
   );
   assert.ok(Math.abs(OFFICIAL_2027.annual - OFFICIAL_2027.monthly * 14) < 0.001);
   const flat = xml.replace(/<[^>]+>/g, " ").replace(/[\s  ]+/g, " ");
-  for (const q of [QUOTE.rd1013effects, QUOTE.rd1013competence]) assert.ok(flat.includes(q), q.slice(0, 60));
+  for (const q of [QUOTE.rd1013effects, QUOTE.rd1013competence, QUOTE.rd1013partTime, QUOTE.rd1013annual, QUOTE.rd1013domestic]) assert.ok(flat.includes(q), q.slice(0, 60));
   assert.equal(smi2027Status(null).kind, "official", "the page no longer depends on the live BOE answer");
 });
 
@@ -299,4 +300,77 @@ test("routes: one static route per language, hourly revalidation, never dynamicP
   assert.match(readFileSync(join(ROOT, "src/lib/seo/llms.ts"), "utf8"), /hubs: smiEditions\(\)/);
   assert.match(readFileSync(join(ROOT, "src/components/programmatic/smi/SmiPage.tsx"), "utf8"), /<MoreCalculators current="smi-2027" locale=\{locale\} \/>/);
   assert.match(readFileSync(join(ROOT, "src/components/programmatic/smi/SmiPage.tsx"), "utf8"), /hubCrumb\(locale\),/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* "How is the SMI calculated": 12 payments, part time, per hour              */
+/* -------------------------------------------------------------------------- */
+
+test(`date guard: the how-to's examples are the 2027 decree's; re-read before ${SMI_HOWTO_REREAD_BY}`, () => {
+  assert.ok(
+    today() < SMI_HOWTO_REREAD_BY,
+    `From ${SMI_HOWTO_REREAD_BY}: the "¿Cómo se calcula el SMI?" section (smi/howto.ts, SmiPage.tsx) still quotes RD 1013/2026 for 2027. Read the 2028 decree in the BOE (QUOTE.rd1013*), point the section at it and move SMI_HOWTO_READ and SMI_HOWTO_REREAD_BY.`,
+  );
+  assert.ok(SMI_HOWTO_READ <= today(), "the read day is not in the future");
+});
+
+test("how-to: the figures are the calculator's own, pinned (RD 1013/2026: 1.286 × 14 = 18.004; 12 payments 1.500,33)", () => {
+  assert.ok(OFFICIAL_2027);
+  assert.deepEqual(HOWTO_PART_TIME, [
+    [20, 40],
+    [30, 37.5],
+  ]);
+  // 20 h of 40 (50 %): half of 1.286 = 643, half of 18.004 ÷ 12 = 750,17, half of 18.004 = 9.002.
+  const a14 = smiFor(OFFICIAL_2027, { weeklyHours: 20, fullTimeHours: 40, payments: 14 });
+  const a12 = smiFor(OFFICIAL_2027, { weeklyHours: 20, fullTimeHours: 40, payments: 12 });
+  assert.ok(a14.status === "ok" && a12.status === "ok");
+  assert.deepEqual([a14.perPayment, a12.perPayment, a14.yearly], [643, 750.17, 9002]);
+  // 30 h of a 37,5 h agreement (80 %): 1.028,80 / 1.200,27 / 14.403,20.
+  const b14 = smiFor(OFFICIAL_2027, { weeklyHours: 30, fullTimeHours: 37.5, payments: 14 });
+  const b12 = smiFor(OFFICIAL_2027, { weeklyHours: 30, fullTimeHours: 37.5, payments: 12 });
+  assert.ok(b14.status === "ok" && b12.status === "ok");
+  assert.deepEqual([b14.perPayment, b12.perPayment, b14.yearly], [1028.8, 1200.27, 14403.2]);
+  assert.equal(prorated12(OFFICIAL_2027), 1500.33);
+  assert.equal(OFFICIAL_2027.monthly * 14, OFFICIAL_2027.annual);
+  assert.deepEqual(domesticFor(OFFICIAL_2027, HOWTO_DOMESTIC_HOURS), { weekly: 100.6, monthly: 435.93 });
+});
+
+test("how-to: the section prints those figures in es, ca and en, from the same functions", () => {
+  assert.ok(OFFICIAL_2027);
+  const es = smiHowTo("es", OFFICIAL_2027);
+  assert.equal(es.heading, "¿Cómo se calcula el SMI de 2027? En 12 pagas, a media jornada y por hora");
+  assert.equal(es.yearly, "El decreto fija 1.286 € al mes (art. 1; 42,87 € por día) y un mínimo anual de 18.004 € (art. 3.1). Es lo mismo que 14 pagas: 1.286 € × 14 = 18.004 €.");
+  assert.match(smiHowTo("ca", OFFICIAL_2027).yearly, /^El decret fixa 1\.286 € al mes \(art\. 1; 42,87 € per dia\) i un mínim anual de 18\.004 € \(art\. 3\.1\)\. És el mateix que 14 pagues/);
+  assert.match(smiHowTo("en", OFFICIAL_2027).yearly, /^The decree sets €1,286 a month \(art\. 1; €42\.87 a day\) and a yearly minimum of €18,004 \(art\. 3\.1\)\. That equals 14 payments/);
+  for (const l of SMI_LOCALES) assert.ok(!/simulad|simulator/i.test(smiHowTo(l, OFFICIAL_2027).source), `${l}: no unsourced claim about simulators`);
+  assert.match(es.twelve, /18\.004 € ÷ 12 = 1\.500,33 € al mes/);
+  assert.deepEqual(es.examples, [
+    "20 horas a la semana con una jornada completa de 40 (50 %): 643 € en cada una de las 14 pagas, 750,17 € al mes en 12 pagas y 9.002 € al año.",
+    "30 horas a la semana con una jornada completa de 37,5 (80 %): 1.028,80 € en cada una de las 14 pagas, 1.200,27 € al mes en 12 pagas y 14.403,20 € al año.",
+  ]);
+  assert.match(es.hourly, /10,06 € por hora efectivamente trabajada \(art\. 4\.2\).* 10 horas a la semana son 100,60 € a la semana, unos 435,93 € al mes/);
+  assert.match(es.source, /Real Decreto 1013\/2026, BOE del 19 de noviembre de 2026, texto leído en el BOE el 24 de noviembre de 2026/);
+
+  const ca = smiHowTo("ca", OFFICIAL_2027);
+  assert.equal(ca.heading, "Com es calcula l'SMI del 2027? En 12 pagues, a mitja jornada i per hora");
+  assert.match(ca.twelve, /18\.004 € ÷ 12 = 1\.500,33 € al mes/);
+  assert.equal(ca.examples[0], "20 hores a la setmana amb una jornada completa de 40 (50 %): 643 € a cadascuna de les 14 pagues, 750,17 € al mes en 12 pagues i 9.002 € l'any.");
+  assert.match(ca.hourly, /10,06 € per hora efectivament treballada.*100,60 € a la setmana, uns 435,93 € al mes/);
+
+  const en = smiHowTo("en", OFFICIAL_2027);
+  assert.equal(en.heading, "How is the 2027 SMI worked out? In 12 payments, part time and per hour");
+  assert.match(en.twelve, /€18,004 ÷ 12 = €1,500\.33 a month/);
+  assert.equal(en.examples[1], "30 hours a week with a full-time week of 37.5 (80%): €1,028.80 in each of the 14 payments, €1,200.27 a month in 12 payments and €14,403.20 a year.");
+  assert.match(en.hourly, /€10\.06 per hour actually worked \(art\. 4\.2\).*€100\.60 a week, about €435\.93 a month/);
+});
+
+test("how-to: the page renders the section for the typed decree, with the three BOE quotes and the BOE link", () => {
+  const src = readFileSync(join(ROOT, "src", "components", "programmatic", "smi", "SmiPage.tsx"), "utf8");
+  assert.match(src, /const howTo = decree27 \? smiHowTo\(locale, decree27\) : null;/);
+  assert.match(src, /<h2 id="como-se-calcula">\{howTo\.heading\}<\/h2>/);
+  for (const q of ["rd1013annual", "rd1013partTime", "rd1013domestic"]) assert.match(src, new RegExp(`<Quote>\\{QUOTE\\.${q}\\}</Quote>`), q);
+  assert.match(src, /boeUrl\(decree27!\)/);
+  // The quotes are the BOE's words, read in the XML fixture of the decree (the same bytes the BOE served on SMI_HOWTO_READ).
+  const flat = fixture("boe-smi-2027-rd1013.xml").replace(/<[^>]+>/g, " ").replace(/[\s  ]+/g, " ");
+  assert.ok(flat.includes(QUOTE.rd1013annual) && flat.includes(QUOTE.rd1013partTime) && flat.includes(QUOTE.rd1013domestic));
 });

@@ -13,6 +13,7 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { MINIMUM_COLS, MINIMUM_LABEL, bareDay, elDay, euros, monthText, pct, pensionEditions, pensionPath, percentText, type PensionLocale } from "@/lib/programmatic/pensions-2027/copy";
 import { DEFAULT_INPUT, novemberScenarios, perMonth, type RateStatus } from "@/lib/programmatic/pensions-2027/engine";
+import { pensionHowTo } from "@/lib/programmatic/pensions-2027/howto";
 import { freshnessText, leadText, pensionMeta, statusOn } from "@/lib/programmatic/pensions-2027/page";
 import {
   GENDER_GAP_2026,
@@ -130,6 +131,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
   const meta = pensionMeta(locale, status);
   const crumbs = pensionCrumbs(locale, meta.breadcrumb);
   const lead = leadText(locale, status, data.today);
+  const howTo = status ? pensionHowTo(locale, status) : null;
   const freshness = freshnessText(locale, data.live, data.today, data.snapshotAsOf);
   const scenarios = status ? novemberScenarios(status) : [];
   const official = status?.official ?? null;
@@ -486,6 +488,21 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <Quote>{QUOTE.art58_3}</Quote>
               <p>{lawParas.extra}</p>
               <p>{lawParas.y2026}</p>
+
+              {howTo ? (
+                <>
+                  <h2 id="como-se-calcula">{howTo.heading}</h2>
+                  <ol>
+                    {howTo.steps.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
+                  <p>{howTo.example}</p>
+                  <p className="text-sm text-[var(--color-muted)]">
+                    {howTo.source} <A href={NORMS.lgss58.url}>{NORMS.lgss58.name}</A>
+                  </p>
+                </>
+              ) : null}
 
               <h2 id="paguilla">{h.paguilla}</h2>
               {paguilla.map((p) => (

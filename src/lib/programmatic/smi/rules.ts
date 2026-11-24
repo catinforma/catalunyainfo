@@ -113,6 +113,17 @@ export const OFFICIAL_2027: SmiYear | null = {
 /** The day OFFICIAL_2027 and its quotes (QUOTE.rd1013*) were read in the BOE's XML. */
 export const OFFICIAL_2027_READ = "2026-11-19";
 
+/**
+ * The day the "how is it calculated" section's quotes (QUOTE.rd1013partTime,
+ * rd1013annual, rd1013domestic) were grepped in the BOE's XML of RD 1013/2026
+ * (byte-identical to tests/fixtures/boe-smi-2027-rd1013.xml that day). Its worked
+ * examples are the calculator's own function (smiFor, domesticFor) on the 2027
+ * decree; they are about 2027 only: from SMI_HOWTO_REREAD_BY a test fails until
+ * the section follows the next decree (2028) or the day is moved after a re-read.
+ */
+export const SMI_HOWTO_READ = "2026-11-24";
+export const SMI_HOWTO_REREAD_BY = "2028-01-15";
+
 /* -------------------------------------------------------------------------- */
 /* 2027: where it stands, from official documents only                        */
 /* -------------------------------------------------------------------------- */
@@ -183,6 +194,12 @@ export const QUOTE = {
   /** RD 1013/2026 (SMI 2027), disposición final tercera: when it applies, and so when it is paid. */
   rd1013effects:
     "Este real decreto entrará en vigor el 1 de enero de 2027 y surtirá efectos durante el período comprendido entre el 1 de enero y el 31 de diciembre de 2027, procediendo, en consecuencia, el abono del salario mínimo fijado en este con efectos desde el 1 de enero de 2027.",
+  /** RD 1013/2026, art. 1, third paragraph: part-time work (the same words as RD 126/2026). Read in the BOE's XML on SMI_HOWTO_READ. */
+  rd1013partTime: "Este salario se entiende referido a la jornada legal de trabajo en cada actividad, sin incluir en el caso del salario diario la parte proporcional de los domingos y festivos. Si se realizase jornada inferior se percibirá a prorrata.",
+  /** RD 1013/2026, art. 3.1: the yearly floor. */
+  rd1013annual: "sin que en ningún caso pueda considerarse una cuantía anual inferior a 18 004 euros.",
+  /** RD 1013/2026, art. 4.2: the only hourly SMI (domestic work). */
+  rd1013domestic: "el salario mínimo de dichas empleadas y empleados de hogar será para 2027 de 10,06 euros por hora efectivamente trabajada.",
   /** RD 1013/2026, disposición final primera: State competence, so one SMI for all of Spain (Catalonia included). */
   rd1013competence:
     "Este real decreto se dicta al amparo de lo dispuesto en el artículo 149.1.7.ª de la Constitución Española, que atribuye al Estado la competencia exclusiva en materia de legislación laboral, sin perjuicio de su ejecución por los órganos de las comunidades autónomas.",

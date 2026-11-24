@@ -5,6 +5,7 @@ import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths"
 import { BENEFIT_SS_RATE, DURATION_SCALE, IPREM_PLUS_SIXTH, MAX_CONTRIBUTION_BASE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
 import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
 import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
+import { HOWTO_LINKS, unemploymentHowTo } from "@/lib/programmatic/employment/unemployment-howto";
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { UnemploymentCalculator, type UnemploymentInitial } from "./UnemploymentCalculator";
@@ -63,6 +64,7 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
   const iprem7 = m(IPREM_PLUS_SIXTH);
   const ss = pct(BENEFIT_SS_RATE, locale);
   const lgssDate = dateWords("2026-11-11", locale);
+  const howTo = unemploymentHowTo(locale);
 
   const copy = {
     es: {
@@ -229,6 +231,59 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
         </table>
       </div>
       <p className="text-sm text-[var(--color-muted)]">{copy.amtNote}</p>
+
+      <h2 id="como-se-calcula">{howTo.heading}</h2>
+      <ol>
+        {howTo.steps.map((s) => (
+          <li key={s}>{s}</li>
+        ))}
+      </ol>
+      {howTo.quotes.map((q) => (
+        <blockquote key={q} lang="es">
+          <p>«{q}»</p>
+        </blockquote>
+      ))}
+      <p>{howTo.asked}</p>
+      <div className="ci-table-scroll">
+        <table className="ci-local-table">
+          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{howTo.caption}</caption>
+          <thead>
+            <tr>
+              {howTo.cols.map((c) => (
+                <th key={c} scope="col">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {howTo.rows.map((row) => (
+              <tr key={row[0]}>
+                {row.map((cellText, i) =>
+                  i === 0 ? (
+                    <th key={cellText} scope="row" className="font-normal">
+                      {cellText}
+                    </th>
+                  ) : (
+                    <td key={`${row[0]}-${i}`}>{cellText}</td>
+                  ),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-sm text-[var(--color-muted)]">{howTo.note}</p>
+      <p className="text-sm text-[var(--color-muted)]">
+        {howTo.source}{" "}
+        <a href={HOWTO_LINKS.contributory.url} rel="noopener" target="_blank">
+          {HOWTO_LINKS.contributory.name}
+        </a>{" "}
+        ·{" "}
+        <a href={HOWTO_LINKS.amounts.url} rel="noopener" target="_blank">
+          {HOWTO_LINKS.amounts.name}
+        </a>
+      </p>
 
       <h2 id="reforma-2024">{copy.reformTitle}</h2>
       <p>{copy.reform}</p>

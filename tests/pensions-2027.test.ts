@@ -5,11 +5,15 @@ import { test } from "node:test";
 
 import { PAY_DATES } from "../src/lib/content/batch02/pay-dates.ts";
 import { CALCULATORS, CALCULATORS_ROOT } from "../src/lib/programmatic/calculators/paths.ts";
-import { CALC_COPY, MINIMUM_LABEL, PENSION_LOCALES, pensionEditions, pensionPath, percentText } from "../src/lib/programmatic/pensions-2027/copy.ts";
+import { CALC_COPY, MINIMUM_LABEL, PENSION_LOCALES, euros, pensionEditions, pensionPath, percentText } from "../src/lib/programmatic/pensions-2027/copy.ts";
 import { DEFAULT_INPUT, monthsBetween, novemberScenarios, perMonth, revaluationStatus, revaluePension, roundedMean, type RateStatus } from "../src/lib/programmatic/pensions-2027/engine.ts";
+import { HOWTO_EXAMPLE, pensionHowTo } from "../src/lib/programmatic/pensions-2027/howto.ts";
 import { freshnessText, leadText, pensionMeta, pensionSitemapEntries, statusOn } from "../src/lib/programmatic/pensions-2027/page.ts";
 import {
   INE_FINAL_DAY,
+  HOWTO_LGSS_UPDATED,
+  HOWTO_READ,
+  HOWTO_REREAD_BY,
   INE_FLASH_DAY,
   MINIMUMS_2026,
   NORMS,
@@ -338,4 +342,82 @@ test("routes: one static folder per language under the calculators root, registr
   // Pay-dates guide → calculator, in each language; calculator → pay-dates guide.
   for (const l of PENSION_LOCALES) assert.ok(JSON.stringify(PAY_DATES.editions[l].blocks).includes(`](${pensionPath(l)})`), l);
   assert.match(readFileSync(join(ROOT, "src/components/programmatic/pensions-2027/PensionPage.tsx"), "utf8"), /PAY_DATES_PATH\[locale\]/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* "How is the increase calculated"                                           */
+/* -------------------------------------------------------------------------- */
+
+test(`date guard: art. 58 LGSS, the how-to's source, is read again by ${HOWTO_REREAD_BY}`, () => {
+  assert.ok(
+    today() < HOWTO_REREAD_BY,
+    `From ${HOWTO_REREAD_BY}: read art. 58 LGSS again on boe.es (BOE-A-2015-11724, consolidated text), grep QUOTE.art58_2 and art58_3, refresh tests/fixtures/boe-lgss-art58-*.txt and move HOWTO_READ, HOWTO_LGSS_UPDATED and HOWTO_REREAD_BY (pensions-2027/rules.ts). By then OFFICIAL_2027 should hold the BOE norm of the 2027 revaluation.`,
+  );
+  assert.ok(HOWTO_READ <= today() && HOWTO_LGSS_UPDATED <= HOWTO_READ);
+});
+
+test("how-to: the quoted art. 58 sentences are in the BOE text read on HOWTO_READ (fixture copied from boe.es that day)", () => {
+  const txt = readFileSync(join(ROOT, "tests", "fixtures", `boe-lgss-art58-${HOWTO_READ.replaceAll("-", "")}.txt`), "utf8").replace(/\s+/g, " ");
+  assert.ok(txt.includes(`consolidated text, last update ${HOWTO_LGSS_UPDATED.slice(8)}/${HOWTO_LGSS_UPDATED.slice(5, 7)}/${HOWTO_LGSS_UPDATED.slice(0, 4)}`));
+  assert.ok(txt.includes(QUOTE.art58_2), "art. 58.2");
+  assert.ok(txt.includes(QUOTE.art58_2b), "art. 58.2, second paragraph");
+  assert.ok(txt.includes(QUOTE.art58_3), "art. 58.3");
+  // art. 58 says nothing about decimals: the "one decimal" is RDL 3/2026's preamble, read the same day.
+  assert.ok(!/decimal/.test(txt.slice(txt.indexOf("Artículo 58"))), "art. 58 has no word about decimals");
+  const rdl = readFileSync(join(ROOT, "tests", "fixtures", `boe-rdl3-2026-preamble-${HOWTO_READ.replaceAll("-", "")}.txt`), "utf8").replace(/\s+/g, " ");
+  assert.ok(rdl.includes(QUOTE.rdl3_decimal), "RDL 3/2026 preamble: expresado con un decimal");
+  for (const l of PENSION_LOCALES) {
+    const h = pensionHowTo(l, PROV);
+    assert.ok(h.steps[1]!.includes("RDL 3/2026") && h.steps[1]!.includes("expresado con un decimal"), `${l}: the decimal is attributed to RDL 3/2026`);
+    assert.ok(h.source.includes("3/2026 (BOE-A-2026-2548"), `${l}: source line names the RDL`);
+  }
+});
+
+test("how-to: the steps and the worked pension are the engine's own figures (13 Nov series: 38,2 ÷ 11 = 3,47 %; 1.500 € → 1.552,05 €)", () => {
+  // 1.500 × 1,0347 = 1.552,05 per month, ×14 = 21.728,70; the calculator gives the same.
+  const r = revaluePension(HOWTO_EXAMPLE, PROV.percent);
+  assert.ok(r.status === "ok");
+  assert.deepEqual([r.monthly2027, r.monthlyRise, r.annual2027, r.annualRise], [1552.05, 52.05, 21728.7, 728.7]);
+  const es = pensionHowTo("es", PROV);
+  assert.equal(es.heading, "¿Cómo se calcula la subida de las pensiones en 2027?");
+  assert.equal(es.steps.length, 3);
+  assert.match(es.steps[1]!, /con los 11 meses publicados, 38,2 ÷ 11 = 3,47 %\. Falta el IPC de noviembre de 2026/);
+  assert.match(es.steps[2]!, /\(art\. 58\.3\)/);
+  assert.equal(es.example, "Ejemplo con el 3,47 % (provisional, con los meses publicados): una pensión de 1.500,00 € al mes en 14 pagas × 1,0347 = 1.552,05 € al mes (+52,05 €), o 21.728,70 € al año frente a 21.000,00 € (+728,70 €). Es bruto, antes del IRPF.");
+  assert.match(es.source, /art\. 58 de la Ley General de la Seguridad Social.*actualización del 11 de noviembre de 2026\), leído el 24 de noviembre de 2026/);
+  const ca = pensionHowTo("ca", PROV);
+  assert.equal(ca.heading, "Com es calcula la pujada de les pensions el 2027?");
+  assert.match(ca.steps[1]!, /amb els 11 mesos publicats, 38,2 ÷ 11 = 3,47 %/);
+  assert.match(ca.example, /1\.500,00 € al mes en 14 pagues × 1,0347 = 1\.552,05 € al mes \(\+52,05 €\), o 21\.728,70 € l'any davant de 21\.000,00 €/);
+  const en = pensionHowTo("en", PROV);
+  assert.equal(en.heading, "How is the 2027 pension increase calculated?");
+  assert.match(en.steps[1]!, /on the 11 months released, 38\.2 ÷ 11 = 3\.47%/);
+  assert.match(en.example, /€1,500\.00 a month in 14 payments × 1\.0347 = €1,552\.05 a month \(\+€52\.05\), or €21,728\.70 a year against €21,000\.00/);
+});
+
+test("how-to: it follows the states (flash, final, official) with the same figures as the lead", () => {
+  const flash = revaluationStatus(IPC, "2026-11-27", { month: "2026-11", value: 4.5, published: "2026-11-27", url: "https://www.ine.es/x" }, null)!;
+  const f = pensionHowTo("es", flash);
+  assert.match(f.steps[1]!, /con el dato adelantado de noviembre: 42,7 ÷ 12 = 3,56 %, que con un decimal, como en el RDL 3\/2026 para 2026, es 3,6 %/);
+  assert.match(f.example, /Ejemplo con el 3,6 % \(que sale con el IPC adelantado de noviembre\).* × 1,036 = 1\.554,00 € al mes/);
+  const fin = revaluationStatus(withMonths({ "2026-11": 4.2 }), "2026-12-15", null, null)!;
+  const g = pensionHowTo("es", fin);
+  assert.match(g.steps[1]!, /con los datos definitivos: 42,4 ÷ 12 = 3,53 %, que con un decimal, como en el RDL 3\/2026 para 2026, es 3,5 %/);
+  assert.match(g.example, /× 1,035 = 1\.552,50 € al mes/);
+  const off: Official2027 = { norm: "Real Decreto-ley 99/2027", published: "2027-01-20", percent: 3.5 } as unknown as Official2027;
+  const o = pensionHowTo("es", revaluationStatus(withMonths({ "2026-11": 4.2 }), "2027-01-21", null, off)!);
+  assert.match(o.steps[1]!, /La subida oficial es del 3,5 %, la que fija Real Decreto-ley 99\/2027 \(BOE del 20 de enero de 2027\)/);
+  // The calculator's number for the lead's own example agrees with the lead.
+  for (const s of [PROV, flash, fin]) {
+    const ex = revaluePension(DEFAULT_INPUT, s.percent);
+    assert.ok(ex.status === "ok" && leadText("es", s, "2026-12-15").includes(euros(ex.monthly2027, "es")));
+  }
+});
+
+test("how-to: the page renders the section after the law, once per language, with the BOE link", () => {
+  const src = readFileSync(join(ROOT, "src/components/programmatic/pensions-2027/PensionPage.tsx"), "utf8");
+  assert.match(src, /const howTo = status \? pensionHowTo\(locale, status\) : null;/);
+  assert.match(src, /<h2 id="como-se-calcula">\{howTo\.heading\}<\/h2>/);
+  assert.ok(src.indexOf('id="ley"') < src.indexOf('id="como-se-calcula"') && src.indexOf('id="como-se-calcula"') < src.indexOf('id="paguilla"'));
+  assert.match(src, /NORMS\.lgss58\.url/);
 });

@@ -12,6 +12,7 @@ import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, money, netSalaryPreset, pct, smiEditions, smiPath, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/programmatic/smi/engine";
+import { smiHowTo } from "@/lib/programmatic/smi/howto";
 import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/smi/page";
 import { DRAFT_2027, NORMS, OFFICIAL_2027_READ, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
 import type { LiveBoe } from "@/lib/programmatic/smi/engine";
@@ -131,6 +132,8 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
   const official27 = status.kind === "official" ? status.year : null;
   // The 2027 decree as typed in rules.ts (RD 1013/2026): its own quotes (QUOTE.rd1013*) print only then.
   const decree27 = status.kind === "official" && status.source === "rules" ? status.year : null;
+  // The worked examples quote RD 1013/2026's own articles, so they print only for the decree typed in rules.ts.
+  const howTo = decree27 ? smiHowTo(locale, decree27) : null;
   const day = (iso: string) => bareDay(iso, locale);
   const d = DRAFT_2027;
   const heard = data.today > d.hearingTo;
@@ -385,6 +388,28 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                       <Quote>{QUOTE.rd1013competence}</Quote>
                     </>
                   ) : null}
+                </>
+              ) : null}
+
+              {howTo ? (
+                <>
+                  <h2 id="como-se-calcula">{howTo.heading}</h2>
+                  <p>{howTo.yearly}</p>
+                  <Quote>{QUOTE.rd1013annual}</Quote>
+                  <p>{howTo.twelve}</p>
+                  <p>{howTo.partTimeRule}</p>
+                  <Quote>{QUOTE.rd1013partTime}</Quote>
+                  <p>{howTo.examplesIntro}</p>
+                  <ul>
+                    {howTo.examples.map((e) => (
+                      <li key={e}>{e}</li>
+                    ))}
+                  </ul>
+                  <p>{howTo.hourly}</p>
+                  <Quote>{QUOTE.rd1013domestic}</Quote>
+                  <p className="text-sm text-[var(--color-muted)]">
+                    {howTo.source} <A href={boeUrl(decree27!)}>{decree27!.boeId}</A>
+                  </p>
                 </>
               ) : null}
 

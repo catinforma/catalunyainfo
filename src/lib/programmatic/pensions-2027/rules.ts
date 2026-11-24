@@ -28,6 +28,17 @@
 /** The day every figure and quote below was read on the official text. */
 export const PENSION_RULES_AS_OF = "2026-11-13";
 
+/**
+ * The day the "how is it calculated" section's source (LGSS art. 58, the
+ * consolidated text on boe.es, last updated 11/11/2026) was grepped again:
+ * QUOTE.art58_2 and art58_3 are in tests/fixtures/boe-lgss-art58-20261124.txt,
+ * copied from that page. A test fails from HOWTO_REREAD_BY until the article
+ * is read again (the 2027 revaluation norm is due by OFFICIAL_DUE anyway).
+ */
+export const HOWTO_READ = "2026-11-24";
+export const HOWTO_LGSS_UPDATED = "2026-11-11";
+export const HOWTO_REREAD_BY = "2027-03-01";
+
 /** The year whose revaluation the page computes. */
 export const TARGET_YEAR = 2027;
 /** "los doce meses previos a diciembre del año anterior": December 2025 to November 2026. */
