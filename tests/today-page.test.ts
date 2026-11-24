@@ -439,7 +439,7 @@ test("Rodalies: notice count and affected lines in the official order", () => {
   assert.deepEqual(noticeSummary([alert("1", ["R4", "R2S"]), alert("2", ["R2S", "R1"]), alert("3", [])]), { count: 3, lines: ["R1", "R2S", "R4"], everyLine: false });
   const all = rodaliesLines("ca").names;
   assert.equal(noticeSummary([alert("x", Object.keys(all) as CompactAlert["lines"])]).everyLine, true);
-  assert.deepEqual(rodaliesLines("en").hrefs, {}, "no English line pages");
+  assert.equal(rodaliesLines("en").hrefs.R4, "/en/rodalies/r4/", "the English line pages exist (21 Nov 2026) and the list links them");
   assert.equal(rodaliesLines("es").hrefs.R2S, "/es/rodalies/r2-sud/");
 });
 
@@ -520,6 +520,7 @@ test("every internal link resolves to a real page (family routes or the path its
     const data = holidayData(locale);
     const hrefs = [
       l.holidays.hub,
+      l.holidays.barcelona,
       l.holidays.today,
       l.holidays.local,
       l.holidays.calendar,

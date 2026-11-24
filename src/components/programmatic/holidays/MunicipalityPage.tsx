@@ -358,7 +358,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
         </section>
 
         <GuideLinks
-          keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge"]}
+          keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge", ...(m.slug === "barcelona" ? (["metroHours"] as const) : [])]}
           locale={locale}
           title={t.guidesTitle}
         />

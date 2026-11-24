@@ -6,7 +6,7 @@ import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
-import { LIVE_FOOTER_TITLE, liveFooterLinks, seasonalFooterLinks } from "@/lib/nav/footer";
+import { FREQUENT_FOOTER_TITLE, LIVE_FOOTER_TITLE, frequentFooterLinks, liveFooterLinks, seasonalFooterLinks } from "@/lib/nav/footer";
 import { SITE, adsensePublisherId } from "@/lib/site";
 import { adClient } from "@/lib/ads/config";
 import { Wordmark } from "@/components/Wordmark";
@@ -80,19 +80,36 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         </nav>
 
         {/* The live-data pages (lib/nav/footer.ts liveFooterLinks): linked
-            from nowhere else since the homepage grid went (12 Nov 2026). */}
-        <nav aria-labelledby="ci-foot-live">
-          <h2 id="ci-foot-live" className="ci-label mb-3 font-sans">
-            {LIVE_FOOTER_TITLE[locale]}
-          </h2>
-          <ul className="flex list-none flex-col gap-2 p-0 text-sm">
-            {liveFooterLinks(locale).map((item) => (
-              <li key={item.key}>
-                <Link prefetch={false} href={item.href}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+            from nowhere else since the homepage grid went (12 Nov 2026).
+            Under them, in the same grid cell so the footer keeps five
+            columns: "most searched" (frequentFooterLinks), four evergreen
+            pages that lost their homepage link the same day. */}
+        <div className="flex flex-col gap-6">
+          <nav aria-labelledby="ci-foot-live">
+            <h2 id="ci-foot-live" className="ci-label mb-3 font-sans">
+              {LIVE_FOOTER_TITLE[locale]}
+            </h2>
+            <ul className="flex list-none flex-col gap-2 p-0 text-sm">
+              {liveFooterLinks(locale).map((item) => (
+                <li key={item.key}>
+                  <Link prefetch={false} href={item.href}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <nav aria-labelledby="ci-foot-frequent">
+            <h2 id="ci-foot-frequent" className="ci-label mb-3 font-sans">
+              {FREQUENT_FOOTER_TITLE[locale]}
+            </h2>
+            <ul className="flex list-none flex-col gap-2 p-0 text-sm">
+              {frequentFooterLinks(locale).map((item) => (
+                <li key={item.key}>
+                  <Link prefetch={false} href={item.href}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
 
         <nav aria-labelledby="ci-foot-about">
           <h2 id="ci-foot-about" className="ci-label mb-3 font-sans">

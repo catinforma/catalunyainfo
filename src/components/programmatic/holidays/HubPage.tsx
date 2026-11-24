@@ -149,7 +149,7 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
           </section>
         ) : null}
 
-        <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge"]} locale={locale} title={t.guidesTitle} />
+        <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "metroHours", "school", "decemberBridge"]} locale={locale} title={t.guidesTitle} />
 
         <Sources keys={["localOrder", "amendment", "openData", "regional2026", "regional2027", "population"]} locale={locale} title={t.sourcesTitle} />
         <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={t.h1} contentType="holidays_hub" variant="full" />

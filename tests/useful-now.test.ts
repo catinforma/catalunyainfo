@@ -106,20 +106,20 @@ test("off the strike families, and on the 11N pages for the rest of Spain (their
   assert.equal(usefulNowScope({ href: "/es/guias/no-existe/", key: null }), null);
 });
 
-test("Catalonia: the December bridge, shops, Barcelona parking, then the ZBE and zona azul hubs (2 clicks from the header's strikes hub)", () => {
+test("Catalonia: the December bridge, shops, metro hours (24 Nov 2026), Barcelona parking, then the ZBE and zona azul hubs (2 clicks from the header's strikes hub)", () => {
   for (const locale of LOCALES) {
     const href = b2href("strikeEducation", locale);
     const data = usefulNow({ href, key: null, locale }, null, AS_OF)!;
     assert.deepEqual(
       data.links.map((l) => l.href),
-      [b2href("decemberBridge", locale), b2href("shops", locale), b2href("parking", locale), zbeHubPath(locale), zaHubPath(locale)],
+      [b2href("decemberBridge", locale), b2href("shops", locale), b2href("hours", locale), b2href("parking", locale), zbeHubPath(locale), zaHubPath(locale)],
     );
     // The header's strikes entry is the Catalan hub: the two family hubs sit one click below it.
     assert.equal(MENU_PATHS.strikes[locale], b2href("strikes", locale));
     const self = b2href("strikes", locale);
     const hub = usefulNow({ href: self, key: null, locale }, entryNextStep({ href: self, key: null, locale }, AS_OF), AS_OF)!;
     assert.ok(hub.links.some((l) => l.href === zbeHubPath(locale)) && hub.links.some((l) => l.href === zaHubPath(locale)), `${locale}: strikes hub without the two hubs`);
-    for (const key of ["decemberBridge", "shops", "parking"] as B2Key[]) {
+    for (const key of ["decemberBridge", "shops", "hours", "parking"] as B2Key[]) {
       assert.ok(data.links.some((l) => l.label === B2_TITLES[key][locale]), `${locale}: ${key} anchor is not the page's title`);
     }
   }

@@ -12732,3 +12732,21 @@ Check against `tests/holiday-first-screen.test.ts` and the 19 Nov rule that phot
 **Review:** 2026-12-15 (the date guard expires; `find`), and the day the order appears.
 
 **Outcome:** _pending_
+
+## 2026-11-24 (late) — Internal links to the pages the November core update hit: footer "most searched", metro hours in "Útil ahora", Barcelona page, holidays hub, today page, Spain 2027 Catalonia (links only; deploy, no republish; commit 2825750 + body dates)
+
+**Why.** Analyst report `batch3/drop14nov.md` (GSC API, fixed query+page cohort, A = 7-13 Nov vs B = 14-20 Nov): after the November core update (10-24 Nov) the Spanish evergreen pages lost about 2.3 positions (ES cohort 10.41 -> 12.68; CA 9.23 -> 9.75; EN 23.7 -> 24.3). Worst pages (position A -> B): `/es/festivos/barcelona/` 9.2 -> 33.5 (4,494 -> 594 impressions; "hoy es festivo en barcelona" 8.3 -> 18.0, "mañana es festivo" 10.2 -> 65.5), `/es/guias/es-festivo-hoy-cataluna/` 15.2 -> 53.8, `/es/guias/calendario-laboral-cataluna/` 21.4 -> 50.8, `/es/rodalies/r4/` 11.2 -> 34.2, `/es/rodalies/` 12.7 -> 25.9, `/es/guias/horarios-metro-barcelona/` 11.1 -> 22.1; school calendars 12.9k @8.7 -> 8.1k @10.2. The cause is mostly the core update; a secondary, unproven one is that the 12 Nov removal of the homepage grid left `/es/` with no link to any of them (curl 24 Nov). The homepage stays as it is (owner, phone layout).
+
+**What changed (links only; no title, description, H1 or lead).**
+- Footer, every page, ca/es/en: a "Lo más consultado / El més consultat / Most searched" group under the live-data column (same grid cell, still five columns), 4 links: "¿Es festivo hoy o mañana en Cataluña?" (the guide), "Festivos en Barcelona: hoy, mañana y todo el año" (`/es/festivos/barcelona/`), "Horarios del metro de Barcelona", "Rodalies R4: incidencias y horarios". The Rodalies hub, the day's page and the work and school calendars were already in the footer or header.
+- "Útil ahora / Útil ara / Useful now" on the Catalonia strike pages: + the metro hours guide (list of 5 -> 6; the Spain list stays at 5).
+- `/es|ca/festivos|festius/barcelona/`: + metro hours in the guides block (Barcelona only). `/es|ca/festivos|festius/` hub: + metro hours (the English hub had it).
+- Today page (`/ca/avui/`, `/es/hoy/`, `/en/today/`): + Barcelona holidays in the holidays item; the English page now links every Rodalies line page (`/en/rodalies/r4/` included; the line pages exist in English since 21 Nov).
+- Spain 2027 Catalonia page (ca/es/en): + the Catalonia work calendar and the "is it a holiday today or tomorrow" guide next to the existing bridges link.
+- Every target is indexable (none in `low-demand.ts`; the footer test checks it), a sitemap URL, and linked at most once per page. Tests: `tests/footer-links.test.ts` (new "most searched" and "internal links" tests), `tests/useful-now.test.ts`, `tests/today-page.test.ts`.
+
+**Not done, on purpose.** Homepage, header and the title/H1/lead of the Barcelona page (its measurement window runs to 2 Dec). No link added from the election pages (no relevant target).
+
+**Baseline (GSC, analyst cohort above; page level, A 7-13 Nov -> B 14-20 Nov).** Barcelona holidays ES 9.2 -> 33.5 (daily 53, 36, 33, 24, 20, 23, 29, 31, 22, 16 on 14-23 Nov); today-holiday guide 15.2 -> 53.8; work calendar 21.4 -> 50.8; R4 11.2 -> 34.2; Rodalies hub 12.7 -> 25.9; metro hours 11.1 -> 22.1; "other ES guides" cohort 25.8 -> 31.5; school calendars cohort 9.9 -> 13.5. Control: CA cohort +0.5, EN +0.65.
+
+**Review 2026-12-04:** re-run the fixed cohort (`scratchpad/batch3/d14/pull.py` + `coh.py`, C = 28 Nov-4 Dec against A) and `snapshot.py page` on the six URLs above. The December core update started 24 Nov, so read the ES-minus-CA delta (was +1.8) rather than absolute positions. Success: "hoy es festivo en barcelona" at 10 or better with 100+ impressions a week; Barcelona page under 15. **Review 2026-12-22:** same pages, 28 days after the links; keep the footer group if the six pages are back inside 5 positions of their A value or the links draw clicks (GA4 `related_content_click` is not on footer links, so use landing-page sessions with referrer internal); drop it if there is no movement and the ES-minus-CA gap is unchanged (the loss was then the core update, not the links).

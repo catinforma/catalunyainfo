@@ -141,8 +141,9 @@ export { STRIKES_AS_OF, STRIKES_VERIFIED };
 export function rodaliesLines(locale: Locale): { names: Record<string, string>; hrefs: Partial<Record<LineId, string>> } {
   return {
     names: Object.fromEntries(LINES.map((l) => [l.id, l.name])),
-    // Line pages exist in Catalan and Spanish; the English edition is the hub only.
-    hrefs: locale === "en" ? {} : Object.fromEntries(LINES.map((l) => [l.id, linePath(locale, l.id)])),
+    // Every line page exists in ca, es and en (since 21 Nov 2026, rodalies/paths.ts); the English
+    // list linked none until 24 Nov, /en/rodalies/r4/ included.
+    hrefs: Object.fromEntries(LINES.map((l) => [l.id, linePath(locale, l.id)])),
   };
 }
 
@@ -180,6 +181,7 @@ export function todayLinks(locale: Locale) {
     holidays: {
       hub: muni ? holidayHubPath(muni) : null,
       today: GUIDES.holidayToday[locale],
+      barcelona: municipalityPath(locale, "barcelona"),
       local: GUIDES.localHolidays[locale],
       calendar: GUIDES.workCalendar[locale],
     },

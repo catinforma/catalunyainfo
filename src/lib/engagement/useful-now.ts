@@ -49,7 +49,9 @@ export interface UsefulNow {
   links: NextStepLink[];
 }
 
-export const USEFUL_NOW_MAX_LINKS = 5;
+/** The upper bound; the Spain list stops at USEFUL_NOW_SPAIN_MAX_LINKS (it has not changed since 23 Nov). */
+export const USEFUL_NOW_MAX_LINKS = 6;
+export const USEFUL_NOW_SPAIN_MAX_LINKS = 5;
 export const USEFUL_NOW_MIN_LINKS = 3;
 
 export const USEFUL_NOW_TITLE: Record<Locale, string> = {
@@ -104,7 +106,7 @@ export const ZBE_HUB_LABEL: Record<Locale, string> = {
 /**
  * Catalonia (the strikes hub, 11N, Renfe and education guides): the season's
  * holiday page (December bridge to 8 Dec, Christmas transport to 7 Jan, then
- * the 2027 bridges), shops on Sundays and holidays, then driving in instead
+ * the 2027 bridges), shops on Sundays and holidays, the metro hours, then driving in instead
  * of the train (Barcelona parking, the ZBE hub, the zona azul hub).
  *
  * The two hubs rather than the Barcelona ZBE page: the crawl of 23 Nov found
@@ -120,6 +122,9 @@ function cataloniaLinks(locale: Locale, asOf: string): NextStepLink[] {
   return [
     season,
     b("shops", locale),
+    // 24 Nov 2026: the Barcelona metro hours guide (11.1 -> 22.1 after the November core update, no sitewide link
+    // since the homepage grid went): what a reader of a rail strike asks next, after the trains.
+    b("hours", locale),
     b("parking", locale),
     { href: zbeHubPath(locale), label: ZBE_HUB_LABEL[locale] },
     { href: zaHubPath(locale), label: ZONA_AZUL_HUB_LABEL[locale] },
@@ -174,7 +179,7 @@ export function usefulNow(
     if (seen.has(path)) continue;
     seen.add(path);
     links.push(link);
-    if (links.length >= USEFUL_NOW_MAX_LINKS) break;
+    if (links.length >= (scope === "spain" ? USEFUL_NOW_SPAIN_MAX_LINKS : USEFUL_NOW_MAX_LINKS)) break;
   }
   return links.length >= USEFUL_NOW_MIN_LINKS ? { scope, links } : null;
 }

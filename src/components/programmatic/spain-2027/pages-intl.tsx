@@ -565,13 +565,21 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
                 <>
                   Festius de cada municipi català: <Link href={hubPath("ca")}>festius locals dels 947 municipis de Catalunya</Link>
                   {" · "}
-                  <Link href={GUIDES.bridges2027.ca}>Ponts 2027 a Catalunya, municipi a municipi</Link>.
+                  <Link href={GUIDES.bridges2027.ca}>Ponts 2027 a Catalunya, municipi a municipi</Link>
+                  {" · "}
+                  <Link href={GUIDES.workCalendar.ca}>Calendari laboral 2027 de Catalunya</Link>
+                  {" · "}
+                  <Link href={GUIDES.holidayToday.ca}>És festiu avui o demà a Catalunya?</Link>.
                 </>
               ) : (
                 <>
                   Holidays in each Catalan town: <Link href={hubPath("en")}>public holidays in Catalonia, town by town</Link>
                   {" · "}
-                  <Link href={GUIDES.bridges2027.en}>Long weekends in Catalonia in 2027</Link>.
+                  <Link href={GUIDES.bridges2027.en}>Long weekends in Catalonia in 2027</Link>
+                  {" · "}
+                  <Link href={GUIDES.workCalendar.en}>Catalonia public holidays 2027</Link>
+                  {" · "}
+                  <Link href={GUIDES.holidayToday.en}>Is today or tomorrow a holiday in Catalonia?</Link>.
                 </>
               )}
             </p>

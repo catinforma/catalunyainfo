@@ -494,7 +494,11 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             <p>
               Festivos de cada municipio catalán: <Link href={hubPath("es")}>festivos locales de los 947 municipios de Cataluña</Link>
               {" · "}
-              <Link href={GUIDES.bridges2027.es}>Puentes 2027 en Cataluña, municipio a municipio</Link>.
+              <Link href={GUIDES.bridges2027.es}>Puentes 2027 en Cataluña, municipio a municipio</Link>
+              {" · "}
+              <Link href={GUIDES.workCalendar.es}>Calendario laboral 2027 de Cataluña</Link>
+              {" · "}
+              <Link href={GUIDES.holidayToday.es}>¿Es festivo hoy o mañana en Cataluña?</Link>.
             </p>
           ) : null}
 

@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-24T19:49:07.000Z",
-   "fingerprint": "v1:e7ff925f4177be62911f339f85a404f7",
+   "date": "2026-11-24T20:23:04.000Z",
+   "fingerprint": "v1:d7b3842918e254d7956ad8ac71dda799",
    "files": 49
   },
   "holidays-report": {
@@ -253,8 +253,8 @@
    "files": 10
   },
   "spain-2027": {
-   "date": "2026-11-24T17:00:37.781Z",
-   "fingerprint": "v1:2fc58a632a250c5dc878991a50ea93f4",
+   "date": "2026-11-24T20:23:04.000Z",
+   "fingerprint": "v1:c34293f6e883faae920e0c1d328e99e4",
    "files": 27
   },
   "spain-2027-days": {
@@ -263,13 +263,13 @@
    "files": 21
   },
   "spain-2027-editions": {
-   "date": "2026-11-24T17:00:37.781Z",
-   "fingerprint": "v1:85d71f086158d4ade0528f50016e9965",
+   "date": "2026-11-24T20:23:04.000Z",
+   "fingerprint": "v1:61e5b5e6c444dbf0923c23114650313d",
    "files": 35
   },
   "today": {
-   "date": "2026-11-21T11:33:05.000Z",
-   "fingerprint": "v1:279c2f466dd383f19784408848d2d7f1",
+   "date": "2026-11-24T20:23:04.000Z",
+   "fingerprint": "v1:115fc416c2630bc632dbcf7e162cd5cf",
    "files": 13
   },
   "traffic-fines": {

@@ -60,6 +60,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     holidayHub: "Festius per municipi",
     holidayToday: "És festiu avui a Catalunya? Avui, demà i a cada municipi",
     holidayLocal: "Festius locals de cada municipi",
+    holidayBarcelona: "Festius a Barcelona: avui, demà i tot l'any",
     holidayCalendar: "Calendari laboral",
     strikesHub: "Vaga avui: què funciona",
     strikesGeneral: "Vaga general de l'11 de novembre",
@@ -82,6 +83,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     holidayHub: "Festivos por municipio",
     holidayToday: "¿Es festivo hoy en Cataluña? Hoy, mañana y en cada municipio",
     holidayLocal: "Festivos locales de cada municipio",
+    holidayBarcelona: "Festivos en Barcelona: hoy, mañana y todo el año",
     holidayCalendar: "Calendario laboral",
     strikesHub: "Huelga hoy: qué funciona",
     strikesGeneral: "Huelga general del 11 de noviembre",
@@ -104,6 +106,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     holidayHub: "",
     holidayToday: "Is today a holiday in Catalonia? Today, tomorrow and in every town",
     holidayLocal: "Local holidays by town",
+    holidayBarcelona: "Barcelona public holidays and local days",
     holidayCalendar: "Catalonia's public holidays",
     strikesHub: "Strike today: what runs",
     strikesGeneral: "General strike on 11 November",
@@ -136,6 +139,8 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
     holidays: some([
       { label: w.holidayToday!, href: l.holidays.today },
       l.holidays.hub ? { label: w.holidayHub!, href: l.holidays.hub } : null,
+      // 24 Nov 2026: Barcelona's own page, the one that fell from 9.2 to 33.5 on "hoy es festivo" (docs/SEO_EXPERIMENTS.md).
+      { label: w.holidayBarcelona!, href: l.holidays.barcelona },
       locale === "en" ? { label: w.holidayLocal!, href: l.holidays.local } : null,
       { label: w.holidayCalendar!, href: l.holidays.calendar },
     ]),
