@@ -168,31 +168,11 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      {
-        // The Christmas lottery checker's numbers (app/data/loteria-navidad.json,
-        // from the committed SELAE snapshot): shareable, short-lived. A deploy
-        // changes it and the publish groups `comprobar-loteria` and
-        // `gordo-navidad` purge it at Cloudflare; browsers keep it a minute.
-        source: "/data/loteria-navidad.json",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
-          },
-        ],
-      },
-      // The La Grossa de Cap d'Any and El Niño checkers' numbers
-      // (app/data/grossa-cap-d-any.json, app/data/loteria-nino.json): the same
-      // short shared lifetime; `comprobar-grossa` and `comprobar-nino` purge them.
-      ...["/data/grossa-cap-d-any.json", "/data/loteria-nino.json"].map((source) => ({
-        source,
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
-          },
-        ],
-      })),
+      // The three lottery checkers' numbers (app/data/loteria-navidad.json,
+      // grossa-cap-d-any.json, loteria-nino.json) set their own Cache-Control
+      // (30 s at the edge, LIVE_CACHE_CONTROL in lib/programmatic/lottery-live/
+      // feeds.ts): they are read at request time from the live feed, so a new
+      // draw file needs neither a deploy nor a purge. No rule here.
       {
         // The home-purchase tax calculator's rates (app/data/impuestos-compra-
         // vivienda.json, fetched on the first interaction): they only change

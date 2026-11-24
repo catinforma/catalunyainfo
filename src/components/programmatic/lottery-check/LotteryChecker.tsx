@@ -1,13 +1,15 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 
+import { LiveStatus } from "@/components/programmatic/lottery-live/LiveStatus";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 import { parseAmount } from "@/lib/programmatic/employment/paths";
 import { CATEGORY_LABEL, CHECKER_COPY, madridTime } from "@/lib/programmatic/lottery-check/client-copy";
 import type { CheckerData } from "@/lib/programmatic/lottery-check/data";
+import { useLiveFeed } from "@/lib/programmatic/lottery-live/use-live-feed";
 import { check, isNumber, withStake } from "@/lib/programmatic/lottery-check/engine";
-import { DECIMO_PRICE, PROGRAMME_CONFIRMED, PROGRAMME_YEAR } from "@/lib/programmatic/lottery-check/programme";
+import { DECIMO_PRICE, PROGRAMME_CONFIRMED } from "@/lib/programmatic/lottery-check/programme";
 import { money } from "@/lib/programmatic/lottery-tax/copy";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -20,37 +22,18 @@ import type { Locale } from "@/lib/i18n/config";
  * the engine's (programme.ts rules), the same the tests run.
  */
 
-type Load = { state: "idle" | "loading" | "error" } | { state: "ready"; data: CheckerData };
-
-export function LotteryChecker({ locale, dataUrl }: { locale: Locale; dataUrl: string }) {
+export function LotteryChecker({ locale, dataUrl, officialHref, initial = null }: { locale: Locale; dataUrl: string; officialHref: string; initial?: CheckerData | null }) {
   const t = CHECKER_COPY[locale];
   const id = useId();
   const [number, setNumber] = useState("");
   const [played, setPlayed] = useState(String(DECIMO_PRICE));
   const [submitted, setSubmitted] = useState(false);
-  const [load, setLoad] = useState<Load>({ state: "idle" });
-  const started = useRef(false);
-
-  function fetchData() {
-    if (started.current) return;
-    started.current = true;
-    setLoad({ state: "loading" });
-    fetch(dataUrl, { headers: { accept: "application/json" } })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: CheckerData) => {
-        if (data?.schema !== 1 || !data.available || !data.draw || data.year !== PROGRAMME_YEAR) throw new Error("no data");
-        setLoad({ state: "ready", data });
-      })
-      .catch(() => {
-        started.current = false;
-        setLoad({ state: "error" });
-      });
-  }
+  const feed = useLiveFeed<CheckerData>("navidad", dataUrl, initial);
 
   const clean = number.trim();
   const amount = parseAmount(played);
   const validNumber = isNumber(clean);
-  const data = load.state === "ready" ? load.data : null;
+  const data = feed.data?.available && feed.data.draw ? feed.data : null;
   const result = data?.draw && validNumber ? check(clean, data.draw) : null;
   const stake = result ? withStake(result.perDecimo, amount) : null;
   const calcUse = useCalculatorUse("lottery-check", locale, result ? [result.number, result.perDecimo, stake?.status === "ok" ? stake.total.net : null] : null);
@@ -59,7 +42,6 @@ export function LotteryChecker({ locale, dataUrl }: { locale: Locale; dataUrl: s
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    fetchData();
   }
 
   const showErrors = submitted || clean.length >= 5;
@@ -89,7 +71,6 @@ export function LotteryChecker({ locale, dataUrl }: { locale: Locale; dataUrl: s
                 aria-describedby={`${id}-number-hint`}
                 aria-invalid={showErrors && !validNumber ? true : undefined}
                 value={number}
-                onFocus={fetchData}
                 onChange={(e) => setNumber(e.target.value.replace(/\D/g, "").slice(0, 5))}
               />
             </span>
@@ -115,9 +96,9 @@ export function LotteryChecker({ locale, dataUrl }: { locale: Locale; dataUrl: s
         </p>
       </form>
 
+      <LiveStatus game="navidad" locale={locale} feed={feed} officialHref={officialHref} number={submitted && validNumber ? clean : undefined} />
+
       <div aria-live="polite">
-        {load.state === "loading" ? <p className="ci-calc-note">{t.loading}</p> : null}
-        {load.state === "error" ? <p role="alert">{t.loadError}</p> : null}
         {showErrors && !validNumber ? <p role="alert">{t.badNumber}</p> : null}
         {result && stake?.status === "invalid" ? <p role="alert">{t.badPlayed}</p> : null}
         {result && data ? (

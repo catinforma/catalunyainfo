@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { NADAL_URLS } from "@/lib/content/batch02/loteria-nadal";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { CATEGORY_LABEL } from "@/lib/programmatic/lottery-check/client-copy";
@@ -22,7 +23,6 @@ import {
   freshLine,
   officialText,
   payText,
-  preDrawNotice,
   prizeRows,
   prizeTableText,
   relatedLinks,
@@ -200,7 +200,6 @@ export function LotteryCheckRoute({ locale }: { locale: Locale }) {
   const data = checkerData();
   const meta = checkMeta(locale, data);
   const crumbs = checkCrumbs(locale, data);
-  const pre = preDrawNotice(locale);
   const will = willDo(locale);
   const pt = prizeTableText(locale);
   const rules = rulesText(locale);
@@ -251,16 +250,8 @@ export function LotteryCheckRoute({ locale }: { locale: Locale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              {data.available ? (
-                <LotteryChecker locale={locale} dataUrl={CHECK_DATA_PATH} />
-              ) : (
-                <div role="note" className="ci-callout ci-callout-info">
-                  <p>
-                    <strong>{pre.title}</strong>
-                  </p>
-                  <p>{pre.text}</p>
-                </div>
-              )}
+              {/* Always rendered: it reads the live feed in the browser (lib/programmatic/lottery-live/) and says "pending" until the numbers are in. */}
+              <LotteryChecker locale={locale} dataUrl={CHECK_DATA_PATH} officialHref={NADAL_URLS.lnac} initial={data} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer(locale)}</p>
 
               {data.available ? <Results locale={locale} data={data} /> : null}

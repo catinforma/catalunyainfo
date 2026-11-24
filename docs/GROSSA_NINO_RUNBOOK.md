@@ -25,6 +25,32 @@ PC (residential IP) or a browser does those fetches. Exception:
 notes carried the eight Grossa numbers on 31 December in 2024 and 2025
 (`2024_GCA_Numeros_premiats.pdf`, `2025_GCA_Numeros_Premiats.pdf`).
 
+## Live feed: numbers without a deploy (24 Nov 2026)
+
+Both checkers' JSON (`/data/grossa-cap-d-any.json`, `/data/loteria-nino.json`)
+are read at request time from `$LOTTERY_LIVE_DIR/grossa.json` and `nino.json`
+(default `/srv/catalunyainfo/live/lottery/`, owned by the deploy user), exactly as the Christmas
+checker's `navidad.json`; how it works, the one-off setup, what is validated
+and how to roll back or correct a number (delete, curl the origin until it says `committed`, only then write) are in docs/GORDO_NAVIDAD_RUNBOOK.md, "Live feed". On the
+day, replace the `build` + commit + deploy steps below by:
+
+```bash
+L=/srv/catalunyainfo/live/lottery        # owned by deploy
+python3 -I scripts/gordo-snapshot.py build --game grossa --year 2026 --dir "$D" --out "$D/grossa.json"
+sudo -u deploy cp "$D/grossa.json" "$L/grossa.json.new" && sudo -u deploy mv "$L/grossa.json.new" "$L/grossa.json"
+python3 -I scripts/gordo-snapshot.py build --game nino --year 2027 --dir "$D" --out "$D/nino.json"
+sudo -u deploy cp "$D/nino.json" "$L/nino.json.new" && sudo -u deploy mv "$L/nino.json.new" "$L/nino.json"
+```
+
+The pages say "pendiente / pendent / pending" until the file holds a number,
+show the numbers so far with the time they were read, and always link the
+official place (Loteries de Catalunya's results page, SELAE's checker). The
+El Niño file is only served once `programme-2027.json` is committed (the
+programme is code, not feed: that transcription still needs its deploy, by
+28 Dec). The committed `snapshot.json` is still committed afterwards, in one
+deploy outside any peak: the failing guard from 1 Jan / 7 Jan
+(`tests/grossa-check.test.ts`, `tests/nino-check.test.ts`) asks for it.
+
 ## Go-live (now)
 
 ```bash

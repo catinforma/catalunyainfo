@@ -1303,6 +1303,17 @@
     border-left-color: var(--color-amber);
     background: var(--color-amber-wash);
   }
+  /* Draw-day status box (components/programmatic/lottery-live): the height of its tallest
+     state is reserved (lib/programmatic/lottery-live/copy.ts reservedHeight), so pending,
+     "so far" and "complete" swap without moving the page. */
+  .ci-live-status {
+    min-height: var(--live-min-narrow);
+  }
+  @media (min-width: 48rem) {
+    .ci-live-status {
+      min-height: var(--live-min-wide);
+    }
+  }
   .ci-callout-official {
     border-left-color: var(--color-ink);
     background: var(--color-surface-sunk);

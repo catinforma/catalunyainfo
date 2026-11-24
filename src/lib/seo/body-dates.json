@@ -98,13 +98,13 @@
    "files": 29
   },
   "gordo": {
-   "date": "2026-11-24T20:16:04.000Z",
-   "fingerprint": "v1:283b86fc2e9f754d1d0d4fcc62ae0026",
+   "date": "2026-11-24T21:32:58.000Z",
+   "fingerprint": "v1:b49d36d3fb174aa3fa82ebe6094d8c2f",
    "files": 37
   },
   "grossa-check": {
-   "date": "2026-11-19T12:28:50.000Z",
-   "fingerprint": "v1:f527c8e21d2c4826293aaab3853185c1",
+   "date": "2026-11-24T21:32:58.000Z",
+   "fingerprint": "v1:3c0088b131acd3789f2e6ef7ebad0206",
    "files": 13
   },
   "holidays": {
@@ -158,8 +158,8 @@
    "files": 8
   },
   "lottery-check": {
-   "date": "2026-11-20T17:37:14.000Z",
-   "fingerprint": "v1:6173a2c87bcf5b7ab6c716c6a8a165cc",
+   "date": "2026-11-24T21:32:58.000Z",
+   "fingerprint": "v1:da8240b6a8d1a0410f6ab367aac5c8be",
    "files": 12
   },
   "lottery-tax": {
@@ -178,8 +178,8 @@
    "files": 12
   },
   "nino-check": {
-   "date": "2026-11-19T12:28:50.000Z",
-   "fingerprint": "v1:a1a97b18665e35c4ef8a72634df37a3b",
+   "date": "2026-11-24T21:32:58.000Z",
+   "fingerprint": "v1:87b14158be1595e204594ceb3a4ef292",
    "files": 15
   },
   "non-contributory-pension": {

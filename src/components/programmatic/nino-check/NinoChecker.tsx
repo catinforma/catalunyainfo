@@ -1,15 +1,17 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 
+import { LiveStatus } from "@/components/programmatic/lottery-live/LiveStatus";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 import type { Locale } from "@/lib/i18n/config";
 import { parseAmount } from "@/lib/programmatic/employment/paths";
 import { money } from "@/lib/programmatic/lottery-tax/copy";
 import { NINO_CHECKER_COPY, categoryLabel, madridTime } from "@/lib/programmatic/nino-check/client-copy";
 import type { NinoCheckerData } from "@/lib/programmatic/nino-check/data";
+import { useLiveFeed } from "@/lib/programmatic/lottery-live/use-live-feed";
 import { check, isNumber, withStake } from "@/lib/programmatic/nino-check/engine";
-import { DECIMO_PRICE, NINO_YEAR, programmeProblems } from "@/lib/programmatic/nino-check/programme";
+import { DECIMO_PRICE, programmeProblems } from "@/lib/programmatic/nino-check/programme";
 
 /**
  * The El Niño checker: a five-digit number and what the reader plays on it →
@@ -19,37 +21,18 @@ import { DECIMO_PRICE, NINO_YEAR, programmeProblems } from "@/lib/programmatic/n
  * is re-validated in the browser before anything is shown.
  */
 
-type Load = { state: "idle" | "loading" | "error" } | { state: "ready"; data: NinoCheckerData };
-
-export function NinoChecker({ locale, dataUrl }: { locale: Locale; dataUrl: string }) {
+export function NinoChecker({ locale, dataUrl, officialHref, initial = null }: { locale: Locale; dataUrl: string; officialHref: string; initial?: NinoCheckerData | null }) {
   const t = NINO_CHECKER_COPY[locale];
   const id = useId();
   const [number, setNumber] = useState("");
   const [played, setPlayed] = useState(String(DECIMO_PRICE));
   const [submitted, setSubmitted] = useState(false);
-  const [load, setLoad] = useState<Load>({ state: "idle" });
-  const started = useRef(false);
-
-  function fetchData() {
-    if (started.current) return;
-    started.current = true;
-    setLoad({ state: "loading" });
-    fetch(dataUrl, { headers: { accept: "application/json" } })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: NinoCheckerData) => {
-        if (data?.schema !== 1 || data.game !== "nino" || !data.available || !data.draw || !data.programme || data.year !== NINO_YEAR || programmeProblems(data.programme).length) throw new Error("no data");
-        setLoad({ state: "ready", data });
-      })
-      .catch(() => {
-        started.current = false;
-        setLoad({ state: "error" });
-      });
-  }
+  const feed = useLiveFeed<NinoCheckerData>("nino", dataUrl, initial);
 
   const clean = number.trim();
   const amount = parseAmount(played);
   const validNumber = isNumber(clean);
-  const data = load.state === "ready" ? load.data : null;
+  const data = feed.data?.available && feed.data.draw && feed.data.programme && !programmeProblems(feed.data.programme).length ? feed.data : null;
   const programme = data?.programme ?? null;
   const result = data?.draw && programme && validNumber ? check(clean, data.draw, programme) : null;
   const stake = result && programme ? withStake(result.perDecimo, amount, programme) : null;
@@ -60,7 +43,6 @@ export function NinoChecker({ locale, dataUrl }: { locale: Locale; dataUrl: stri
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    fetchData();
   }
 
   return (
@@ -88,7 +70,6 @@ export function NinoChecker({ locale, dataUrl }: { locale: Locale; dataUrl: stri
                 aria-describedby={`${id}-number-hint`}
                 aria-invalid={showErrors && !validNumber ? true : undefined}
                 value={number}
-                onFocus={fetchData}
                 onChange={(e) => setNumber(e.target.value.replace(/\D/g, "").slice(0, 5))}
               />
             </span>
@@ -114,9 +95,9 @@ export function NinoChecker({ locale, dataUrl }: { locale: Locale; dataUrl: stri
         </p>
       </form>
 
+      <LiveStatus game="nino" locale={locale} feed={feed} officialHref={officialHref} number={submitted && validNumber ? clean : undefined} />
+
       <div aria-live="polite">
-        {load.state === "loading" ? <p className="ci-calc-note">{t.loading}</p> : null}
-        {load.state === "error" ? <p role="alert">{t.loadError}</p> : null}
         {showErrors && !validNumber ? <p role="alert">{t.badNumber}</p> : null}
         {result && stake?.status === "invalid" ? <p role="alert">{t.badPlayed}</p> : null}
         {result && data && programme ? (

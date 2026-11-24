@@ -1,14 +1,16 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 
+import { LiveStatus } from "@/components/programmatic/lottery-live/LiveStatus";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 import type { Locale } from "@/lib/i18n/config";
 import { parseAmount } from "@/lib/programmatic/employment/paths";
 import { GROSSA_CHECKER_COPY, PRIZE_LABEL, TIER_LABEL, barcelonaTime } from "@/lib/programmatic/grossa-check/client-copy";
 import type { GrossaCheckerData } from "@/lib/programmatic/grossa-check/data";
+import { useLiveFeed } from "@/lib/programmatic/lottery-live/use-live-feed";
 import { check, isNumber, withStake } from "@/lib/programmatic/grossa-check/engine";
-import { GROSSA_YEAR, TICKET_PRICE } from "@/lib/programmatic/grossa-check/programme";
+import { TICKET_PRICE } from "@/lib/programmatic/grossa-check/programme";
 import { money } from "@/lib/programmatic/lottery-tax/copy";
 
 /**
@@ -19,37 +21,18 @@ import { money } from "@/lib/programmatic/lottery-tax/copy";
  * arithmetic is the engine's (DOGC 9640 annex 3), the same the tests run.
  */
 
-type Load = { state: "idle" | "loading" | "error" } | { state: "ready"; data: GrossaCheckerData };
-
-export function GrossaChecker({ locale, dataUrl }: { locale: Locale; dataUrl: string }) {
+export function GrossaChecker({ locale, dataUrl, officialHref, initial = null }: { locale: Locale; dataUrl: string; officialHref: string; initial?: GrossaCheckerData | null }) {
   const t = GROSSA_CHECKER_COPY[locale];
   const id = useId();
   const [number, setNumber] = useState("");
   const [played, setPlayed] = useState(String(TICKET_PRICE));
   const [submitted, setSubmitted] = useState(false);
-  const [load, setLoad] = useState<Load>({ state: "idle" });
-  const started = useRef(false);
-
-  function fetchData() {
-    if (started.current) return;
-    started.current = true;
-    setLoad({ state: "loading" });
-    fetch(dataUrl, { headers: { accept: "application/json" } })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: GrossaCheckerData) => {
-        if (data?.schema !== 1 || data.game !== "grossa" || !data.available || !data.draw || data.year !== GROSSA_YEAR) throw new Error("no data");
-        setLoad({ state: "ready", data });
-      })
-      .catch(() => {
-        started.current = false;
-        setLoad({ state: "error" });
-      });
-  }
+  const feed = useLiveFeed<GrossaCheckerData>("grossa", dataUrl, initial);
 
   const clean = number.trim();
   const amount = parseAmount(played);
   const validNumber = isNumber(clean);
-  const data = load.state === "ready" ? load.data : null;
+  const data = feed.data?.available && feed.data.draw ? feed.data : null;
   const result = data?.draw && validNumber ? check(clean, data.draw) : null;
   const stake = result ? withStake(result.perTicket, amount) : null;
   const calcUse = useCalculatorUse("grossa-check", locale, result ? [result.number, result.perTicket, stake?.status === "ok" ? stake.total.net : null] : null);
@@ -59,7 +42,6 @@ export function GrossaChecker({ locale, dataUrl }: { locale: Locale; dataUrl: st
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    fetchData();
   }
 
   return (
@@ -87,7 +69,6 @@ export function GrossaChecker({ locale, dataUrl }: { locale: Locale; dataUrl: st
                 aria-describedby={`${id}-number-hint`}
                 aria-invalid={showErrors && !validNumber ? true : undefined}
                 value={number}
-                onFocus={fetchData}
                 onChange={(e) => setNumber(e.target.value.replace(/\D/g, "").slice(0, 5))}
               />
             </span>
@@ -113,9 +94,9 @@ export function GrossaChecker({ locale, dataUrl }: { locale: Locale; dataUrl: st
         </p>
       </form>
 
+      <LiveStatus game="grossa" locale={locale} feed={feed} officialHref={officialHref} number={submitted && validNumber ? clean : undefined} />
+
       <div aria-live="polite">
-        {load.state === "loading" ? <p className="ci-calc-note">{t.loading}</p> : null}
-        {load.state === "error" ? <p role="alert">{t.loadError}</p> : null}
         {showErrors && !validNumber ? <p role="alert">{t.badNumber}</p> : null}
         {result && stake?.status === "invalid" ? <p role="alert">{t.badPlayed}</p> : null}
         {result && data ? (

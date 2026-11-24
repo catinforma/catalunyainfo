@@ -391,13 +391,14 @@ test("routes: one static page per language, a 404 in the others; the JSON is sta
     assert.equal(ninoCheckPath(locale), `/${locale}/${NINO_CHECK_ROUTE[locale]}/`);
   }
   const route = readFileSync(join(ROOT, "src/app/data/loteria-nino.json/route.ts"), "utf8");
-  assert.match(route, /export const dynamic = "force-static";/);
-  assert.match(route, /ninoData\(\)/);
+  assert.match(route, /export const dynamic = "force-dynamic";/);
+  assert.match(route, /ninoFeed\.read\(\)/);
+  assert.match(route, /ninoData\(snapshot\)/);
   assert.equal(NINO_DATA_PATH, "/data/loteria-nino.json");
-  assert.match(readFileSync(join(ROOT, "next.config.ts"), "utf8"), /"\/data\/loteria-nino\.json"/);
+  assert.doesNotMatch(readFileSync(join(ROOT, "next.config.ts"), "utf8"), /"\/data\/loteria-nino\.json"/, "the route sets its own live Cache-Control");
   assert.match(readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8"), /wants\("comprobar-nino"\)/);
   assert.match(readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8"), /ninoCheckSitemapEntries\(\)/);
-  assert.match(readFileSync(join(ROOT, "src/components/programmatic/nino-check/NinoCheckPage.tsx"), "utf8"), /<NinoChecker locale=\{locale\} dataUrl=\{NINO_DATA_PATH\} \/>/);
+  assert.match(readFileSync(join(ROOT, "src/components/programmatic/nino-check/NinoCheckPage.tsx"), "utf8"), /<NinoChecker locale=\{locale\} dataUrl=\{NINO_DATA_PATH\} officialHref=\{NADAL_URLS\.lnac\} initial=\{data\} \/>/);
   const entries = ninoCheckSitemapEntries(null);
   if (entries.length) {
     assert.equal(entries.length, 3);

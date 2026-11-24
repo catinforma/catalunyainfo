@@ -365,14 +365,15 @@ test("routes: one static page per language, a 404 in the others; the JSON is sta
     assert.equal(grossaCheckPath(locale), `/${locale}/${GROSSA_CHECK_ROUTE[locale]}/`);
   }
   const route = readFileSync(join(ROOT, "src/app/data/grossa-cap-d-any.json/route.ts"), "utf8");
-  assert.match(route, /export const dynamic = "force-static";/);
-  assert.match(route, /grossaData\(\)/);
+  assert.match(route, /export const dynamic = "force-dynamic";/);
+  assert.match(route, /grossaFeed\.read\(\)/);
+  assert.match(route, /grossaData\(snapshot\)/);
   assert.equal(GROSSA_DATA_PATH, "/data/grossa-cap-d-any.json");
   assert.ok(ALWAYS_NOINDEX_SOURCES.includes("/data/:path*"));
-  assert.match(readFileSync(join(ROOT, "next.config.ts"), "utf8"), /"\/data\/grossa-cap-d-any\.json"/);
+  assert.doesNotMatch(readFileSync(join(ROOT, "next.config.ts"), "utf8"), /source: "\/data\/grossa-cap-d-any\.json"|"\/data\/grossa-cap-d-any\.json",/, "the route sets its own live Cache-Control");
   assert.match(readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8"), /wants\("comprobar-grossa"\)/);
   assert.match(readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8"), /grossaCheckSitemapEntries\(\)/);
-  assert.match(readFileSync(join(ROOT, "src/components/programmatic/grossa-check/GrossaCheckPage.tsx"), "utf8"), /<GrossaChecker locale=\{locale\} dataUrl=\{GROSSA_DATA_PATH\} \/>/);
+  assert.match(readFileSync(join(ROOT, "src/components/programmatic/grossa-check/GrossaCheckPage.tsx"), "utf8"), /<GrossaChecker locale=\{locale\} dataUrl=\{GROSSA_DATA_PATH\} officialHref=\{GROSSA_URLS\.results\} initial=\{data\} \/>/);
   const entries = grossaCheckSitemapEntries(null);
   if (entries.length) {
     assert.equal(entries.length, 3);

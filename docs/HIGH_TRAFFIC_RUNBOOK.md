@@ -95,8 +95,8 @@ requests, `/api/`, `/admin`, cookies and the polls page uncached):
 ))
 ```
 
-(for 22 Dec: `/es/donde-ha-tocado-el-gordo/`, `/ca/on-ha-tocat-la-loteria-de-nadal/`,
-`/en/spanish-christmas-lottery-results/`, `/es/guias/loteria-de-navidad/`.)
+(for 22 Dec: see §7 for the exact list. **Never put `/data/` in this rule**: the
+checkers' JSON must follow the origin's 30 s, not the rule's 300 s.)
 → Eligible for cache; Edge TTL **"Ignore cache-control header and use this
 TTL": 300 s** (the pages' own ISR interval: shorter only adds origin
 refreshes, longer delays the 20:00 phase change); Browser TTL: respect origin;
@@ -229,3 +229,56 @@ exactly that, and it is what lever 4b and a rate limit are for.
   the election pages.
 - `scripts/origin-mix.py`: the origin request mix and latency from Caddy's
   log (§3).
+
+## 7. 22 Dec lottery (and 31 Dec, 6 Jan): what is static, what is live (24 Nov 2026)
+
+Measured 24 Nov 2026 with `curl -sI` on www (gently, once per URL):
+
+| Page | Origin sends | At Cloudflare | Cost at the origin on the day |
+| --- | --- | --- | --- |
+| Checkers `/es/comprobar-loteria-navidad/`, `/ca/comprovar-loteria-nadal/`, `/en/check-spanish-christmas-lottery-ticket/`, Grossa and Niño checkers | `s-maxage=31536000` (`revalidate = false`, static) | HIT after the first request per colo | None: the check runs in the visitor's browser |
+| Gordo hubs `/es/donde-ha-tocado-el-gordo/`, `/ca/on-ha-tocat-la-loteria-de-nadal/`, `/en/spanish-christmas-lottery-results/` | `s-maxage=31536000` (static) | HIT | None (a province page not in the snapshot answers 404, also `s-maxage=31536000`: the post-draw deploy purges everything) |
+| Prize calculator `/es/calculadoras/premios-loteria/`, `/ca/calculadores/premis-loteria/` | `s-maxage=31536000` (static) | HIT | None |
+| Lottery guides `/ca/guies/loteria-de-nadal/`, `/es/guias/loteria-de-navidad/`, `/en/guides/spanish-christmas-lottery/` | `s-maxage=86400, stale-while-revalidate=31449600` (`[...slug]`, `revalidate = 86400`) | HIT, purged on publish | One regeneration per day per page and per publish |
+| **`/data/loteria-navidad.json`, `/data/grossa-cap-d-any.json`, `/data/loteria-nino.json`** | from this release: `public, max-age=15, s-maxage=30, stale-while-revalidate=60` (before: `max-age=60, s-maxage=300`) | HIT for 30 s per colo | About 2 requests a minute per colo, each a `stat` and a cached 15 KB read |
+
+So the HTML is free; the load of the day is (1) the first MISS per colo after a
+deploy or purge, (2) RSC requests from client-side navigations (never cached),
+(3) the JSON polls, which Cloudflare absorbs: a tab polls once a minute on the
+draw day while the draw is incomplete (`lottery-live/phases.ts`, `POLL_MS`,
+plus up to 10 s of jitter), paused while the tab is hidden; 20,000 open tabs
+are ~330 requests/s at the edge and ~2/s at the origin per colo.
+
+Levers for 22 Dec, cheapest first:
+1. Lever 4a on exactly these paths, prepared disabled and turned on by 07:00,
+   but with **Edge TTL "use cache-control if present"** (not the 300 s override:
+   these pages are static with a year-long `s-maxage`, 300 s would make them
+   refresh more often than today) and "ignore query string": `/es/donde-ha-tocado-el-gordo/`,
+   `/ca/on-ha-tocat-la-loteria-de-nadal/`, `/en/spanish-christmas-lottery-results/`,
+   `/es/comprobar-loteria-navidad/`, `/ca/comprovar-loteria-nadal/`,
+   `/en/check-spanish-christmas-lottery-ticket/`, `/es/guias/loteria-de-navidad/`,
+   `/ca/guies/loteria-de-nadal/`, `/en/guides/spanish-christmas-lottery/`,
+   `/es/calculadoras/premios-loteria/`, `/ca/calculadores/premis-loteria/`. It
+   only removes the `?utm_`/`?fbclid=` copies (WhatsApp shares) from the origin.
+   **Not `/data/`.**
+2. Lever 4b for crawlers; the rate-limit rule.
+3. If the JSON ever has to be slower (the origin is struggling): raise
+   `s-maxage` in `LIVE_CACHE_CONTROL` (`lottery-live/feeds.ts`), which needs a
+   deploy, so decide by 14 Dec, not on the day. Do not turn the lottery paths
+   into a dynamic route.
+
+No deploy on the day is needed for the numbers (docs/GORDO_NAVIDAD_RUNBOOK.md,
+"Live feed"): a file write is seen in about a minute. The one deploy of the day
+(server-rendered tables, titles naming the Gordo, province pages) goes after
+15:00.
+
+Checks the head runs after the last deploy (before 21 Dec) and again at 06:30
+on 22 Dec:
+
+```bash
+for p in /es/comprobar-loteria-navidad/ /es/donde-ha-tocado-el-gordo/ /es/guias/loteria-de-navidad/ /es/calculadoras/premios-loteria/ /data/loteria-navidad.json; do
+  echo $p; for i in 1 2; do curl -sI "https://www.catalunyainfo.com$p" | grep -i -E "^HTTP|cache-control|cf-cache-status" | tr '\r\n' ' '; echo; done; done
+```
+Expected: pages `HIT` on the second request; the JSON `s-maxage=30`, `HIT` on the
+second, body `"feed":"committed"` or `"none"`, `"available":false` until the
+first file is written.

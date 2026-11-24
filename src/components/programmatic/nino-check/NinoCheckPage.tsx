@@ -7,6 +7,7 @@ import { A, Quote, Rich } from "@/components/programmatic/lottery-check/Rich";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { NADAL_URLS } from "@/lib/content/batch02/loteria-nadal";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { clampText } from "@/lib/programmatic/gordo/copy";
@@ -24,7 +25,6 @@ import {
   ninoLead,
   ninoOfficialText,
   ninoPayText,
-  ninoPreDrawNotice,
   ninoPrizeRows,
   ninoPrizeTableText,
   ninoRelatedLinks,
@@ -128,7 +128,6 @@ export function NinoCheckRoute({ locale }: { locale: Locale }) {
   const data = ninoData();
   const meta = ninoCheckMeta(locale, data);
   const crumbs = ninoCheckCrumbs(locale, data);
-  const pre = ninoPreDrawNotice(locale);
   const will = ninoWillDo(locale);
   const pt = ninoPrizeTableText(locale);
   const rules = ninoRulesText(locale);
@@ -177,16 +176,8 @@ export function NinoCheckRoute({ locale }: { locale: Locale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              {data.available ? (
-                <NinoChecker locale={locale} dataUrl={NINO_DATA_PATH} />
-              ) : (
-                <div role="note" className="ci-callout ci-callout-info">
-                  <p>
-                    <strong>{pre.title}</strong>
-                  </p>
-                  <p>{pre.text}</p>
-                </div>
-              )}
+              {/* Always rendered: it reads the live feed in the browser (lib/programmatic/lottery-live/) and says "pending" until the numbers are in. */}
+              <NinoChecker locale={locale} dataUrl={NINO_DATA_PATH} officialHref={NADAL_URLS.lnac} initial={data} />
               <p className="text-sm text-[var(--color-muted)]">{ninoDisclaimer(locale)}</p>
 
               {data.available ? <Results locale={locale} data={data} /> : null}

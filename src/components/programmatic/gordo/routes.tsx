@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 import { BlockRenderer } from "@/components/blocks/BlockRenderer";
+import { LiveNumbers } from "@/components/programmatic/lottery-live/LiveNumbers";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import type { Block } from "@/lib/content/blocks";
+import { NADAL_URLS } from "@/lib/content/batch02/loteria-nadal";
 import { getMessages } from "@/lib/i18n";
+import { checkerData } from "@/lib/programmatic/lottery-check/data";
+import { CHECK_DATA_PATH, checkPath } from "@/lib/programmatic/lottery-check/paths";
 import type { Locale } from "@/lib/i18n/config";
 import {
   DESCRIPTION_LIMIT,
@@ -55,7 +60,7 @@ function meta(
   return buildMetadata({ locale, path, title: clampText(m.title, TITLE_LIMIT), description: clampText(m.description, DESCRIPTION_LIMIT), translations, image });
 }
 
-function Shell({ locale, m, crumbs, blocks, translations }: { locale: Locale; m: PageMeta; crumbs: Crumb[]; blocks: Block[]; translations: Record<Locale, string> }) {
+function Shell({ locale, m, crumbs, blocks, translations, lead }: { locale: Locale; m: PageMeta; crumbs: Crumb[]; blocks: Block[]; translations: Record<Locale, string>; lead?: ReactNode }) {
   return (
     <>
       <SiteHeader locale={locale} translations={translations} activeSection={null} />
@@ -69,6 +74,7 @@ function Shell({ locale, m, crumbs, blocks, translations }: { locale: Locale; m:
             </div>
           </header>
           <div className="ci-shell py-10">
+            {lead}
             <BlockRenderer body={blocks} context={{ locale, media: new Map(), related: new Map(), sources: new Map(), translations }} />
             <ShareBar locale={locale} path={crumbPath(crumbs)} title={m.h1} contentType="gordo" variant="full" />
           </div>
@@ -96,7 +102,17 @@ export function gordoHubMetadata(locale: Locale): Metadata {
 }
 
 export function GordoHubRoute({ locale }: { locale: Locale }) {
-  return <Shell locale={locale} m={hubMeta(locale, SNAPSHOT)} crumbs={hubCrumbs(locale, SNAPSHOT)} blocks={hubBlocks(locale, SNAPSHOT)} translations={gordoHubTranslations()} />;
+  return (
+    <Shell
+      locale={locale}
+      m={hubMeta(locale, SNAPSHOT)}
+      crumbs={hubCrumbs(locale, SNAPSHOT)}
+      blocks={hubBlocks(locale, SNAPSHOT)}
+      translations={gordoHubTranslations()}
+      // Read in the browser from the live feed: the numbers need no deploy (lib/programmatic/lottery-live/).
+      lead={<LiveNumbers locale={locale} dataUrl={CHECK_DATA_PATH} officialHref={NADAL_URLS.lnac} checkerHref={checkPath(locale)} initial={checkerData(SNAPSHOT)} />}
+    />
+  );
 }
 
 /* ------------------------------------------------------------- Province --- */

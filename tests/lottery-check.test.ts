@@ -441,17 +441,18 @@ test("routes: one static page per language, a 404 in the others; the JSON is sta
     assert.equal(checkPath(locale), `/${locale}/${CHECK_ROUTE[locale]}/`);
   }
   const route = readFileSync(join(ROOT, "src/app/data/loteria-navidad.json/route.ts"), "utf8");
-  assert.match(route, /export const dynamic = "force-static";/);
-  assert.match(route, /checkerData\(\)/);
+  assert.match(route, /export const dynamic = "force-dynamic";/);
+  assert.match(route, /navidadFeed\.read\(\)/);
+  assert.match(route, /checkerData\(snapshot\)/);
   assert.equal(CHECK_DATA_PATH, "/data/loteria-navidad.json");
   assert.ok(ALWAYS_NOINDEX_SOURCES.includes("/data/:path*"));
   const config = readFileSync(join(ROOT, "next.config.ts"), "utf8");
-  assert.match(config, /source: "\/data\/loteria-navidad\.json"/);
+  assert.doesNotMatch(config, /source: "\/data\/loteria-navidad\.json"/, "the route sets its own live Cache-Control");
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
   assert.match(publish, /wants\("comprobar-loteria"\)/);
   assert.match(readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8"), /checkSitemapEntries\(\)/);
   const page = readFileSync(join(ROOT, "src/components/programmatic/lottery-check/LotteryCheckPage.tsx"), "utf8");
-  assert.match(page, /<LotteryChecker locale=\{locale\} dataUrl=\{CHECK_DATA_PATH\} \/>/);
+  assert.match(page, /<LotteryChecker locale=\{locale\} dataUrl=\{CHECK_DATA_PATH\} officialHref=\{NADAL_URLS\.lnac\} initial=\{data\} \/>/);
   assert.match(page, /<details/);
 });
 

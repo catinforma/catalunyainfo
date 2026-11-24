@@ -1,18 +1,21 @@
 import { grossaData } from "@/lib/programmatic/grossa-check/data";
+import { LIVE_CACHE_CONTROL, grossaFeed } from "@/lib/programmatic/lottery-live/feeds";
 
 /**
- * /data/grossa-cap-d-any.json — the winning numbers the La Grossa de Cap
- * d'Any checker runs on in the browser (lib/programmatic/grossa-check/data.ts):
- * the eight numbers from the committed snapshot, nothing derived. Built once
- * per deploy (force-static). Cache-Control from next.config.ts (short, shared;
- * the publish group `comprobar-grossa` purges it); X-Robots-Tag noindex from
- * ALWAYS_NOINDEX_SOURCES (/data/:path*).
+ * /data/grossa-cap-d-any.json — what the La Grossa de Cap d'Any checker runs
+ * on in the browser (lib/programmatic/grossa-check/data.ts): the eight
+ * winning numbers exactly as Loteries de Catalunya published them, nothing
+ * derived. Read at request time from the live feed (lib/programmatic/
+ * lottery-live/: a validated file in LOTTERY_LIVE_DIR, else the committed
+ * snapshot), so the numbers go out without a deploy; the CDN holds each
+ * answer 30 s. X-Robots-Tag noindex from ALWAYS_NOINDEX_SOURCES (/data/:path*).
  */
-export const dynamic = "force-static";
-export const revalidate = false;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-export function GET() {
-  return new Response(JSON.stringify(grossaData()), {
-    headers: { "content-type": "application/json; charset=utf-8" },
+export async function GET() {
+  const { snapshot, origin, warning } = await grossaFeed.read();
+  return new Response(JSON.stringify({ ...grossaData(snapshot), feed: origin, warning }), {
+    headers: { "content-type": "application/json; charset=utf-8", "cache-control": LIVE_CACHE_CONTROL },
   });
 }

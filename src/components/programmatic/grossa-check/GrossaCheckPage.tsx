@@ -7,6 +7,7 @@ import { A, Quote, Rich } from "@/components/programmatic/lottery-check/Rich";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { GROSSA_URLS } from "@/lib/content/batch02/grossa";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { clampText } from "@/lib/programmatic/gordo/copy";
@@ -24,7 +25,6 @@ import {
   grossaLead,
   grossaOfficialText,
   grossaPayText,
-  grossaPreDrawNotice,
   grossaPrizeRows,
   grossaPrizeTableText,
   grossaRelatedLinks,
@@ -108,7 +108,6 @@ export function GrossaCheckRoute({ locale }: { locale: Locale }) {
   const data = grossaData();
   const meta = grossaCheckMeta(locale, data);
   const crumbs = grossaCheckCrumbs(locale, data);
-  const pre = grossaPreDrawNotice(locale);
   const will = grossaWillDo(locale);
   const pt = grossaPrizeTableText(locale);
   const rules = grossaRulesText(locale);
@@ -156,16 +155,8 @@ export function GrossaCheckRoute({ locale }: { locale: Locale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              {data.available ? (
-                <GrossaChecker locale={locale} dataUrl={GROSSA_DATA_PATH} />
-              ) : (
-                <div role="note" className="ci-callout ci-callout-info">
-                  <p>
-                    <strong>{pre.title}</strong>
-                  </p>
-                  <p>{pre.text}</p>
-                </div>
-              )}
+              {/* Always rendered: it reads the live feed in the browser (lib/programmatic/lottery-live/) and says "pending" until the numbers are in. */}
+              <GrossaChecker locale={locale} dataUrl={GROSSA_DATA_PATH} officialHref={GROSSA_URLS.results} initial={data} />
               <p className="text-sm text-[var(--color-muted)]">{grossaDisclaimer(locale)}</p>
 
               {data.available ? <Results locale={locale} data={data} /> : null}
