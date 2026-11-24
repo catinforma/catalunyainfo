@@ -8,6 +8,7 @@ import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
 import { INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
 import {
@@ -23,6 +24,7 @@ import {
   localDays,
   localRuns,
   sharedWith,
+  similarCities,
   weekendLocalDays,
   type City,
   type CityDayKind,
@@ -125,6 +127,9 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
   const name = editionCityName(c, locale);
   const Name = name.charAt(0).toUpperCase() + name.slice(1);
   const neighbours = citiesOf(c.region).filter((x) => x.slug !== c.slug);
+  // Indexable only: the Catalan and English city pages are mostly out of the index (low-demand.ts), and a link to one passes nothing on.
+  const isKept = (x: City) => !isLowDemandPath(editionCityPath(locale, x));
+  const similar = similarCities(c, neighbours.filter(isKept).length, isKept);
   const weekend = weekendLocalDays(c);
   const common = commonLocalDays(c);
   const freeRuns = runs.filter((x) => x.take.length === 0).length;
@@ -414,6 +419,21 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
                 </li>
               ))}
             </ul>
+          ) : null}
+          {similar.length ? (
+            <>
+              <h3>{tr(locale, "Ciutats d'altres comunitats de mida semblant", "Cities of a similar size in other regions")}</h3>
+              <ul>
+                {similar.map((x) => (
+                  <li key={`${x.region}/${x.slug}`}>
+                    <Link href={editionCityPath(locale, x)}>
+                      {tr(locale, `Festius locals ${caOf(editionCityName(x, "ca"))}`, `${editionCityName(x, "en")} local holidays`)}
+                    </Link>{" "}
+                    <small className="text-[var(--color-muted)]">({cityListLineIntl(x, locale)})</small>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : null}
           <p>
             <Link href={`${editionCommunityPath(locale, c.region)}#locals`}>

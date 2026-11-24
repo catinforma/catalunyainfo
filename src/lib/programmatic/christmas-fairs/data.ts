@@ -156,10 +156,11 @@ export function townsByPopulation(): Town[] {
   return [...TOWNS].sort((a, b) => populationRank(a.ine) - populationRank(b.ine) || a.name.localeCompare(b.name, "ca"));
 }
 
-/** Other towns with a page, nearest first: same comarca, then same province; each by first fair date. */
-export function nearbyTowns(town: Town, limit = 6): Town[] {
+/** Other towns with a page (and `accept`ed, e.g. those with an English page), nearest first: same comarca, then same province; each by first fair date. */
+export function nearbyTowns(town: Town, limit = 6, accept: (t: Town) => boolean = () => true): Town[] {
   const first = (t: Town) => t.fairs[0]?.start ?? "";
-  const others = TOWNS.filter((t) => t.ine !== town.ine);
+  // `accept` runs before the limit: the English pages (5 towns) must be picked from every town, not from the 12 nearest.
+  const others = TOWNS.filter((t) => t.ine !== town.ine && accept(t));
   const sameComarca = others.filter((t) => t.comarca === town.comarca).sort((a, b) => first(a).localeCompare(first(b)));
   const sameProvince = others
     .filter((t) => t.comarca !== town.comarca && t.province === town.province)

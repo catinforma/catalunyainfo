@@ -16,7 +16,7 @@ import { shortDate } from "@/lib/content/holidays/calendar";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 
-import { caOfComarca, comarcaOf, comarcaPath, electionPath, hubPath, inCa, isComarcaLocale, latestDataDate, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
+import { caOfComarca, comarcaOf, comarcaPath, electionPath, hubPath, inCa, isComarcaLocale, keptSiblings, latestDataDate, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
 import {
   councilSize,
   councilSystem,
@@ -529,7 +529,11 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
     parliament: f.date(snapshot.elections.parliament.date),
     read: f.date(dataDate),
   };
-  const { sameComarca, sameProvince } = siblings(m, locale);
+  const { sameComarca: listedComarca, sameProvince } = siblings(m, locale);
+  // Indexable pages the neighbours-in-size list left out (pages.ts keptSiblings).
+  const extra = keptSiblings(m, locale, [...listedComarca, ...sameProvince]);
+  const sameComarca = [...listedComarca, ...extra.sameComarca].sort((a, b) => b.population - a.population || a.slug.localeCompare(b.slug));
+  const elsewhere = extra.elsewhere;
   const link = (x: Municipality): Link => ({ href: electionPath(locale, x.slug), label: placeName(x, locale) });
   const last = mv.dhondt.last;
   const nextOut = mv.dhondt.nextOut;
@@ -771,6 +775,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         groups: [
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Altres municipis de la província de ${m.province}`, links: sameProvince.map(link) }] : []),
+          ...(elsewhere.length ? [{ label: "Altres municipis de Catalunya", links: elsewhere.map(link) }] : []),
         ],
         hub: { ...hub, label: `Els ${PAGES_PER_LOCALE.ca} municipis de Catalunya, per comarques` },
         comarca,
@@ -961,6 +966,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         groups: [
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Otros municipios de la provincia de ${m.province}`, links: sameProvince.map(link) }] : []),
+          ...(elsewhere.length ? [{ label: "Otros municipios de Cataluña", links: elsewhere.map(link) }] : []),
         ],
         hub: { ...hub, label: `Los ${PAGES_PER_LOCALE.es} municipios de Cataluña, por comarcas` },
         comarca,
@@ -1150,6 +1156,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
       groups: [
         ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
         ...(sameProvince.length ? [{ label: `Elsewhere in the province of ${m.province}`, links: sameProvince.map(link) }] : []),
+        ...(elsewhere.length ? [{ label: "Elsewhere in Catalonia", links: elsewhere.map(link) }] : []),
       ],
       hub: { ...hub, label: "Catalonia's largest towns and resorts, by comarca" },
       comarca,

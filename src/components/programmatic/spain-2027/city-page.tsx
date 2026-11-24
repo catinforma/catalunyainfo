@@ -23,6 +23,7 @@ import {
   localDays,
   localRuns,
   sharedWith,
+  similarCities,
   weekendLocalDays,
   type City,
   type CityDayKind,
@@ -102,6 +103,7 @@ export function CityPage({ c }: { c: City }) {
   const faq = cityFaq(c);
   const s = SOURCES[c.region];
   const neighbours = citiesOf(c.region).filter((x) => x.slug !== c.slug);
+  const similar = similarCities(c, neighbours.length, () => true);
   const weekend = weekendLocalDays(c);
   const common = commonLocalDays(c);
   const answer = cityAnswer(c);
@@ -316,6 +318,18 @@ export function CityPage({ c }: { c: City }) {
                 </li>
               ))}
             </ul>
+          ) : null}
+          {similar.length ? (
+            <>
+              <h3>Ciudades de otras comunidades de tamaño parecido</h3>
+              <ul>
+                {similar.map((x) => (
+                  <li key={`${x.region}/${x.slug}`}>
+                    <Link href={cityPath(x)}>Festivos locales de {x.name}</Link> <small className="text-[var(--color-muted)]">({cityListLine(x)})</small>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : null}
           <p>
             <Link href={`${communityPath(c.community)}#locales`}>Dónde se publican las fiestas locales del resto de municipios {c.community.de}</Link>

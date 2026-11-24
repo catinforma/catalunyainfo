@@ -23,8 +23,8 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-24T21:08:17.305Z",
-   "fingerprint": "v1:2b2634f226ced9daa72e7ad98495e0f3",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:d1ad7eeae3bf3764590a83852b4f8038",
    "files": 16
   },
   "block:touristTax": {
@@ -53,13 +53,13 @@
    "files": 6
   },
   "christmas-fairs": {
-   "date": "2026-11-24T16:25:17.408Z",
-   "fingerprint": "v1:3b879bf837608e353a59f6d2b32c6222",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:28d3e7d07177bee8b075c156aa4d421d",
    "files": 23
   },
   "elections": {
-   "date": "2026-11-24T21:21:46.000Z",
-   "fingerprint": "v1:297d18072e042eda64ce837df1a890b9",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:93d29418815993add9f1de00dc8e444b",
    "files": 35
   },
   "embed-2027": {
@@ -108,13 +108,13 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-24T21:34:52.000Z",
-   "fingerprint": "v1:976ff1059202214a3d793d1d1b938f40",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:f2589d0ff42c0c601f1cd0c61f884782",
    "files": 51
   },
   "holidays-report": {
-   "date": "2026-11-18T15:12:20.000Z",
-   "fingerprint": "v1:3ef639b73113ecea24d60a8803cdf275",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:1e8570ec8f5a768e9d6cabba4bcc6fba",
    "files": 15
   },
   "home-purchase-tax": {
@@ -258,8 +258,8 @@
    "files": 27
   },
   "spain-2027-days": {
-   "date": "2026-11-24T17:00:37.781Z",
-   "fingerprint": "v1:1ab33932bfe5f1596041e65e96385bbc",
+   "date": "2026-11-24T23:31:12.000Z",
+   "fingerprint": "v1:c0ddbb48f503858be287ac5dc6299a9d",
    "files": 21
   },
   "spain-2027-editions": {

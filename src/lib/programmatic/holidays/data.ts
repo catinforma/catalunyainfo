@@ -420,6 +420,32 @@ export function siblings(
   return { sameComarca, others, comarcaTotal: all.length + 1 };
 }
 
+/**
+ * Comarca towns Google keeps in its index that `siblings` left out (25 Nov 2026,
+ * docs/SEO_EXPERIMENTS.md): in a comarca with more towns than links (Alt Empordà,
+ * 68), the neighbours-in-size are mostly pages kept out of the index
+ * (lib/seo/low-demand.ts), so the few towns people do search for (Ordis, Sort,
+ * Porrera) were linked from the hub and one neighbour. These are the indexable
+ * comarca-mates not yet listed, nearest in the comarca's population order first,
+ * at most `limit`; the page adds them to its comarca list. `isKept` is the
+ * caller's "this page is indexable" test (it knows the locale's path).
+ */
+export function keptComarcaSiblings(
+  m: SnapshotMunicipality,
+  listed: readonly SnapshotMunicipality[],
+  isKept: (o: SnapshotMunicipality) => boolean,
+  limit = 6,
+): SnapshotMunicipality[] {
+  const ordered = comarcaOf(m).municipalities;
+  const position = new Map(ordered.map((o, i) => [o.slug, i]));
+  const here = position.get(m.slug) ?? 0;
+  const shown = new Set(listed.map((o) => o.slug));
+  return ordered
+    .filter((o) => o.slug !== m.slug && !shown.has(o.slug) && isKept(o))
+    .sort((a, b) => Math.abs((position.get(a.slug) ?? 0) - here) - Math.abs((position.get(b.slug) ?? 0) - here) || a.rank - b.rank)
+    .slice(0, limit);
+}
+
 /** The `generateStaticParams` set: the biggest places only, to keep the build short. */
 export function prerenderSlugs(count = 20): string[] {
   return [...SNAPSHOT.municipalities].sort((a, b) => a.rank - b.rank).slice(0, count).map((m) => m.slug);

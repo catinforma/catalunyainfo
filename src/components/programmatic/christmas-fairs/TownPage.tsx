@@ -79,7 +79,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
   const held = Boolean(BODY_HOLDS[town.ine]);
   const sameWeekend = held
     ? []
-    : sameWeekendFairs(town, 16)
+    : sameWeekendFairs(town, locale === "en" ? 99 : 16)
         .filter((s) => locale !== "en" || hasEnglish(s.town))
         .slice(0, 8);
   const sameWeekendLinks = sameWeekend.map((s) => ({
@@ -88,8 +88,9 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
     note: `${s.fair.name} · ${shortRange(s.fair.start, s.fair.end, locale)}`,
   }));
   const sameWeekendIne = new Set(sameWeekend.map((s) => s.town.ine));
-  const nearby = nearbyTowns(town, 12)
-    .filter((n) => locale !== "en" || hasEnglish(n))
+  // English: only 5 towns have a page, so they are picked from every town, not from the 12 nearest (Vic's English
+  // page was linked from the hub and Barcelona only: its nearest 12 towns have no English page).
+  const nearby = nearbyTowns(town, 12, locale === "en" ? hasEnglish : undefined)
     .filter((n) => !sameWeekendIne.has(n.ine))
     .slice(0, 6)
     .map((n) => ({

@@ -27,6 +27,7 @@ import type { MetadataRoute } from "next";
 
 import { caA, caComarca, caDe } from "@/lib/programmatic/holidays/names";
 import { HTML_LANG, INTL_LOCALE, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
 import { englishSelection } from "./english";
@@ -402,6 +403,44 @@ export function siblings(m: Municipality, locale: Locale, limit = 8): { sameComa
       : [largest, ...rest.sort(nearest).slice(0, comarcaRoom - 1)].sort((a, b) => b.population - a.population || a.slug.localeCompare(b.slug));
   const room = Math.max(0, Math.min(4, limit - sameComarca.length));
   return { sameComarca, sameProvince: province.slice(0, room) };
+}
+
+/**
+ * Indexable pages `siblings` left out (25 Nov 2026, docs/SEO_EXPERIMENTS.md):
+ * the neighbours-in-size of a town in a big comarca are mostly pages kept out
+ * of the index (lib/seo/low-demand.ts), so the towns people search for were
+ * linked from the hub and one neighbour. `sameComarca`: up to `limit` indexable
+ * comarca-mates not listed yet, nearest in size first. `elsewhere`: where the
+ * page has fewer than `MIN_SIBLINGS` links in all (the English selection has
+ * no neighbour in Lleida's province), the nearest in size among the indexable
+ * pages of other comarques, up to the minimum. Both only ever name pages of
+ * this language that Google keeps.
+ */
+export const MIN_SIBLINGS = 4;
+
+export function keptSiblings(
+  m: Municipality,
+  locale: Locale,
+  listed: readonly Municipality[],
+  limit = 6,
+): { sameComarca: Municipality[]; elsewhere: Municipality[] } {
+  const shown = new Set([m.slug, ...listed.map((x) => x.slug)]);
+  const isKept = (x: Municipality) => !isLowDemandPath(electionPath(locale, x.slug));
+  const candidates = municipalitiesFor(locale).filter((x) => !shown.has(x.slug));
+  const nearest = (a: Municipality, b: Municipality) =>
+    Math.abs(a.population - m.population) - Math.abs(b.population - m.population) || b.population - a.population || a.slug.localeCompare(b.slug);
+  const bySize = (a: Municipality, b: Municipality) => b.population - a.population || a.slug.localeCompare(b.slug);
+  const sameComarca = candidates.filter((x) => x.comarca === m.comarca && isKept(x)).sort(nearest).slice(0, limit).sort(bySize);
+  const total = listed.length + sameComarca.length;
+  const elsewhere =
+    total >= MIN_SIBLINGS
+      ? []
+      : candidates
+          .filter((x) => x.comarca !== m.comarca && !sameComarca.includes(x) && isKept(x))
+          .sort(nearest)
+          .slice(0, MIN_SIBLINGS - total)
+          .sort(bySize);
+  return { sameComarca, elsewhere };
 }
 
 /* -------------------------------------------------------------------------- */

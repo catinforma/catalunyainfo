@@ -21,12 +21,14 @@ import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { SchoolFreeDays } from "@/components/programmatic/holidays/SchoolFreeDays";
 import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead, workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import {
   NEXT,
   YEAR,
   comarcaOf,
   councilApproved2027,
   isAran,
+  keptComarcaSiblings,
   localThrough,
   nextYearFor,
   regionalDays,
@@ -111,7 +113,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   // Before the DOGC order: the council's own days, if it has approved them, marked pending.
   const rows2027 = yearRows(m, NEXT, locale, { council: true });
   const council = next ? null : councilApproved2027(m.slug);
-  const { sameComarca, others, comarcaTotal } = siblings(m);
+  const { sameComarca: listedComarca, others, comarcaTotal } = siblings(m);
+  // Indexable comarca-mates the neighbours-in-size list left out (data.ts keptComarcaSiblings), so the towns people search for are linked from their comarca.
+  const sameComarca = [...listedComarca, ...keptComarcaSiblings(m, listedComarca, (o) => !isLowDemandPath(municipalityPath(locale, o.slug)))].sort((a, b) => a.rank - b.rank);
   const crumbs = municipalityCrumbs(m, locale);
   const shared = municipalityDatePages(m);
   // Static page: "today" is the build date; each question names its date.

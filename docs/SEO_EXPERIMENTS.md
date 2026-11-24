@@ -13232,3 +13232,75 @@ indefinite strike. 30 Nov: SAERCO, Groundforce and Outsmart resolutions expire (
 `/en/guides/strikes-spain`, `/es/guias/huelga-hoy-cataluna`, `/ca/guies/vaga-avui-catalunya`, `/en/guides/strike-barcelona-catalonia-today`,
 `/es/guias/huelga-26-noviembre`, `/ca/guies/vaga-26-novembre`, `/en/guides/spain-strike-26-november`, `/es/guias/huelga-renfe-rodalies-noviembre`,
 `/ca/guies/vaga-renfe-rodalies-novembre`, `/en/guides/renfe-rodalies-strike-november`.
+## 2026-11-25 — Weakly linked indexable pages: town and city pages Google keeps now get links from their comarca-mates and cities of a similar size (deploy only; no publish group; no title, description, H1 or lead touched; no homepage or footer change)
+
+**Observation (live crawl, 24 Nov 22:16 to 25 Nov 00:20 UTC, `npm run site:audit` with `SEO_UA=curl/8.5.0 SEO_MAX_RPS=3 SEO_CONCURRENCY=3`).**
+Sitemap 3,319 URLs; 7,057 URLs crawled (every sitemap URL, then every internal page they link to: 3,737 more, all noindex), server
+HTML, `<main>` links counted apart from the header (before `<main>`) and the footer (after it). Whole sitemap, no sampling.
+Six URLs timed out once under the crawl (`/ca/eleccions/cabanes/`, `/ca/festius/celra/`, `/ca/festius/capellades/`,
+`/es/festivos/das/`, `/es/festivos/sant-marti-vell/`, `/ca/festius/sant-marti-vell/`) and answered 200 on a re-fetch. **Not mine, for the
+head: the three polls guides answer 500 live and are in the sitemap** (`/ca/guies/enquestes-eleccions-generals-catalunya/`,
+`/es/guias/encuestas-elecciones-generales-cataluna/`, `/en/guides/spain-general-election-polls-catalonia/`; 25 Nov 00:20, "Internal Server Error").
+
+| Inbound links per sitemap URL | 0 | 1-2 | 3-5 | 6-20 | >20 |
+| --- | --- | --- | --- | --- | --- |
+| Any link (menu and footer included) | **0** | 0 | 43 | 1,742 | 1,534 |
+| In `<main>` (all linking pages, noindex ones too) | 3 | 25 | 121 | 1,752 | 1,418 |
+| In `<main>`, from indexable pages only | 4 | 139 | 425 | 1,550 | 1,201 |
+
+No orphan in the strict sense. The 3 pages with no body link are the legal hubs (`/ca|es|en/legal/`), reached from the footer of every page
+(3,024 / 3,024 / 1,003 links) and left alone (footer untouched today). The honest count is the last row: Google gives little weight to links on pages
+it does not index (`noindex, follow` ends up read as `nofollow`), and most town pages are noindex (low-demand.ts), so 143 indexable pages have two or fewer
+body links from indexable pages (4,030 impressions in 28 days).
+
+**Pages with at least 100 impressions in 28 days (GSC 28 Oct-24 Nov, `snapshot.py` helpers) and two or fewer body links.** All linking pages: 1
+(`/en/christmas-markets/vic/`, 152 impr, 7 clicks, pos 6.4, 2 links). Indexable linking pages only: 8, with their impressions and links:
+`/en/christmas-markets/vic/` 152 (2), `/en/holidays/2027/basque-country/bilbao/` 146 (2, pos 17.7), `/es/festivos/sant-marti-de-tous/` 127 (2),
+`/ca/festius/porrera/` 123 (2), `/en/holidays/2027/murcia/mazarron/` 122 (1), `/es/elecciones/l-albiol/` 119 (1, 13 clicks, pos 4.3),
+`/es/elecciones/sant-boi-de-llucanes/` 110 (2), `/ca/festius/2027/dia/29-marc/` 102 (1).
+By family, the 143 pages (indexable sources, two or fewer): es elections 36, ca elections 29, ca holidays 24, es holidays 17, en holidays (2027 cities) 12,
+legal 9, en elections 2, one each for 12 guides, events, price and about pages.
+
+**Cause.** A town page links 12 neighbours "nearest in size in its comarca"; in a big comarca those are mostly noindex towns, so the few towns people search for
+(Ordis, Sort, Porrera, l'Albiol) were linked from the hub and one neighbour. The 2027 city pages list their community's cities, all noindex in en/ca
+except one or two (Mazarrón's 40 neighbours: none indexable). The English Christmas market pages (4 towns) picked their "nearby" towns from the 12 nearest
+overall, none with an English page.
+
+**Change (template level, ca/es/en as each family exists; every link names the town in the reader's language).**
+- Holiday town pages ca/es (`MunicipalityPage`, `keptComarcaSiblings` in `holidays/data.ts`): the comarca list also names up to 6 indexable comarca-mates the
+  neighbours list left out. Sibling-block links between indexable pages: towns with 2 or fewer, **ca 62 -> 30, es 59 -> 31** (of 341 / 306 indexable).
+- Election town pages ca/es/en (`keptSiblings` in `elections/pages.ts`, used by `buildElectionPage`): same rule, up to 6; a page with fewer than 4 siblings in all
+  (the English selection: Lleida, Girona) is topped up with the nearest indexable towns elsewhere in Catalonia. **ca 70 -> 6, es 73 -> 15, en 2 -> 2**.
+- Spain 2027 city pages es/ca/en (`similarCities` in `spain-2027/cities.ts`): a city with fewer than 6 indexable neighbours in its community gets a
+  "Cities of a similar size in other regions" list of indexable cities up to 6 (Mazarrón, Pamplona, Gandia). English indexable cities with 2 or fewer: **10 -> 3**; ca 3 -> 3
+  (3 indexable cities in all); es: no inbound gain (outbound for single-city communities only).
+- English Christmas market pages (`nearbyTowns(town, limit, accept)`, same-weekend limit): the English pages are chosen from every town. Girona and Figueres now link Vic (Vic: 2 links -> 4).
+Rules kept: never a noindex target in the new links (`isLowDemandPath`), one link per target per page, no menu/footer/homepage change.
+
+**Not done, with the reason.** Legal hubs (footer only; footer not touched today). `/ca/festius/2027/dia/29-marc/` (102 impr) and `/en/holidays/2027/day/8-september/`:
+only the day pages link them, the 2027 hubs list no day pages; needs a design decision (a "day by day" row on the hub). Sitges film festival guides in ca/es/en
+(1 body link, from the section hub: related cards live in the content database, a publish group). Electricity "tomorrow" pages (2 links; PVPC pages are off limits).
+`/en/weekend/barcelona/` (1 link).
+
+**Tests.** `tests/internal-link-weak-pages.test.ts` (new, 10): extra links only to indexable pages, same language, once, never self, not listed twice; weak-page counts
+fall by a third (holidays), two thirds (elections) and a half (cities) against the sibling-only baseline, computed in the test so a change of the low-demand list at the
+10 Dec review cannot fail it; Ordis linked from 3 or more indexable town pages; English padding; the components call the helpers; Christmas market `accept` runs before the limit.
+Also green: election-municipal-pages, holiday-engine, holiday-english, christmas-fairs, christmas-markets, spain-cities-2027 (4 files), spain-holidays-2027-editions, spain-2027-council-towns,
+low-demand, elections, election-cluster, town-hub, sitemap-lastmod; `tsc --noEmit` clean.
+
+**Baseline for the review.** The crawl above (its files are in the session scratch directory only; re-run the same command) and GSC 28 Oct-24 Nov for the 8 pages. After deploy the "after"
+figures above are what the code produces (simulated on the same pages, not yet live).
+
+**Prediction.** After deploy and a re-crawl: indexable pages with 2 or fewer body links from indexable pages fall from 139 clearly (the family reductions above count neighbour-block links only,
+without the hub's link, so the crawl figure will be 1 higher per page); of the 8 pages of 100+ impressions, the town pages (Porrera, Sant Martí de Tous, l'Albiol, Sant Boi de Llucanès),
+Vic, Bilbao and Mazarrón reach 3 or more (the ca 29 March date page is not helped by this change). No ranking claim for any single page: internal links move impressions slowly. Right if the 8 pages hold or gain impressions per day against their
+28-day baseline and none loses its position; wrong if a town page's position drops by 2 or more with no other change.
+
+**Review 2026-12-23** (28 days after a deploy no later than 25 Nov; if the deploy is later, 28 days after it): re-run `SEO_UA=curl/8.5.0 SEO_MAX_RPS=3 SEO_CONCURRENCY=3 npm run site:audit` and
+the indexable-source inbound count; `snapshot.py page /ca/festius/porrera/ 28`, `/en/christmas-markets/vic/`, `/es/elecciones/l-albiol/`, `/en/holidays/2027/murcia/mazarron/`. The 10 Dec low-demand
+review changes which pages are indexable: the neighbour blocks follow it automatically.
+
+**Deploy.** Deploy only (code routes, no database page changed: no publish group). IndexNow prefixes: `/ca/festius/`, `/es/festivos/`, `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`,
+`/en/christmas-markets/`, `/ca/festius/2027/`, `/es/festivos/2027/`, `/en/holidays/2027/`.
+
+**Outcome:** _pending_

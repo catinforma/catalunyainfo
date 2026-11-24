@@ -27,6 +27,25 @@ export function citiesOf(region: Region): City[] {
   return CITIES.filter((c) => c.region === region).sort((a, b) => b.population - a.population);
 }
 
+/** Links to city pages a city page carries at least (25 Nov 2026): fewer indexable neighbours in its community are topped up from other communities. */
+export const MIN_CITY_LINKS = 6;
+
+/**
+ * Cities of other communities, nearest in population first, to top up a city
+ * page whose own community has fewer than `MIN_CITY_LINKS` indexable cities
+ * (Pamplona is Navarre's only city page; Mazarrón's neighbours in Murcia are
+ * all out of the English index, so Mazarrón was linked from the hub only).
+ * `keptNeighbours` is how many of the page's community neighbours Google keeps;
+ * `isKept` tests a candidate in the page's own edition.
+ */
+export function similarCities(c: City, keptNeighbours: number, isKept: (x: City) => boolean): City[] {
+  const need = MIN_CITY_LINKS - keptNeighbours;
+  if (need <= 0) return [];
+  return CITIES.filter((x) => x.region !== c.region && isKept(x))
+    .sort((a, b) => Math.abs(a.population - c.population) - Math.abs(b.population - c.population) || b.population - a.population || a.slug.localeCompare(b.slug))
+    .slice(0, need);
+}
+
 export function cityBySlug(region: Region, slug: string): City | null {
   return CITIES.find((c) => c.region === region && c.slug === slug) ?? null;
 }
