@@ -25,6 +25,7 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
+import { EnglishChristmasShops } from "./ChristmasShops";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
 import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
 
@@ -217,6 +218,9 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
             <Link href={GUIDES.strikes.en}>{t.strikesLine.label}</Link>
             {t.strikesLine.after}
           </p>
+
+          {/* Christmas shop opening, day by day (24 Nov 2026; the same data as the ca/es section). */}
+          <EnglishChristmasShops m={m} />
 
           <h2 id="what-closes">{t.closesTitle}</h2>
           <h3>{t.shops.title}</h3>

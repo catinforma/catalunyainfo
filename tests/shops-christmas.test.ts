@@ -205,3 +205,26 @@ test("town page renderer: the section is one line, after the shops section, and 
   assert.ok(page.indexOf("<ChristmasShops") > page.indexOf('<h2 id="botigues">'), "after the shops section");
   assert.match(page, /<h1 className="ci-measure">\{municipalityH1\(m, locale\)\}<\/h1>/);
 });
+
+test("English town pages: the same Christmas answers, day by day (24 Nov 2026)", async () => {
+  const { christmasShopsCopyEn } = await import("../src/lib/programmatic/holidays/christmas-shops.ts");
+  const { englishTowns } = await import("../src/lib/programmatic/holidays/english.ts");
+  const towns = englishTowns();
+  assert.ok(towns.length > 20);
+  for (const m of towns) {
+    const en = christmasShopsCopyEn(m);
+    const ca = christmasShopsCopy(m, "ca");
+    // Same days and the same yes/no as the Catalan section.
+    assert.deepEqual(en.rows.map((r) => [r.iso, r.verdict === "Yes" ? "Sí" : "No"]), ca.rows.map((r) => [r.iso, r.verdict]), m.slug);
+    assert.match(en.source, /Checked on 23 November 2026/);
+    assert.doesNotMatch(en.lead + en.after, /undefined|NaN/);
+  }
+  const terrassa = christmasShopsCopyEn(towns.find((m) => m.slug === "terrassa")!);
+  assert.match(terrassa.lead, /Not on Sunday 6 December: the council swapped it for another day/);
+  assert.match(terrassa.lead, /may open on 8, 13, 20 and 27 December/);
+  const bcn = christmasShopsCopyEn(towns.find((m) => m.slug === "barcelona")!);
+  assert.match(bcn.lead, /may open on 6, 8, 13, 20 and 27 December\. On 25/);
+  const page = readFileSync(join(import.meta.dirname, "../src/components/programmatic/holidays/EnglishTownPage.tsx"), "utf8");
+  assert.equal(page.match(/<EnglishChristmasShops m=\{m\} \/>/g)?.length, 1);
+  assert.ok(page.indexOf("<EnglishChristmasShops") < page.indexOf('<h2 id="what-closes">'));
+});

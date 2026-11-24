@@ -12629,3 +12629,15 @@ those date reasons; all eight strike test files pass now.
 **Baseline (GSC, 18–23 Nov):** clicks 1,740 / 1,383 / 681 / 601 / 1,535 / 3,109 per day; average position 6.7–8.0; GA4 sessions 402–2,577 per day.
 
 **Review 2026-12-08:** GSC clicks and position against the baseline (traffic must not drop because of the ads); CWV on `/es/guias/huelgas-espana/`, `/es/festivos/2027/`, one town page; AdSense RPM, viewability and the share of unfilled units; GA4 consent rate (sessions / GSC clicks).
+
+## 2026-11-24 — Owner's master prompt, batch 1: tickets A, B and C read against the live site; one change shipped (English town pages get the Christmas shop table, day by day; deploy; body only, no title, description, H1 or lead touched)
+
+**Source.** The owner uploaded `CATALUNYAINFO_PROMPT_MESTRE_UNIFICAT.md` (copy: `research_notes/x10/prompt-mestre-owner-2026-11-24.md`), built on the 24 Nov PDF report. Its numbers match the report.
+
+**Ticket A (shops by town, 6 Dec).** Verified live: `/ca/festius/terrassa/` and `/es/festivos/terrassa/` say "6 de desembre, no: l'Ajuntament el va canviar" (Resolució EMT/4342/2025); Barcelona lists 6 Dec as an opening day; the 947-town table is on the shops guide. Path already good in ca/es. **Gap found:** the 29 English town pages listed the year's opening days but had no yes/no per Christmas Sunday and holiday, and no reason for a missing day. **Shipped:** `christmasShopsCopyEn` + `EnglishChristmasShops` (same data and verdicts as ca/es, test pins equality for all 29 towns; Terrassa "Not on Sunday 6 December"). **Baseline (28 Oct–24 Nov, 27 EN town pages with impressions):** 14 clicks, 837 impressions, position 7.8; Barcelona EN 360 impressions at 11.7, 0 clicks. **Review 2026-12-22** (EN town pages clicks and the queries with "shops"/"open").
+
+**Ticket B (December bridge).** Verified live: the Catalan bridge guide, the Spain guide and the 7 Dec date page link each other in es, ca and en (`/en/guides/december-long-weekend-catalonia/` ↔ `/en/guides/december-holidays-spain/` ↔ `/en/holidays/day/7-december-2026/`). No change; the family stays inside its 23 Nov window.
+
+**Ticket C (Vic weekly market pilot).** Facts verified on Vic Turisme ("Dimarts 8 de desembre: mercat normal"; "Dissabte 26 de desembre: canvi de data a Dijous 24 de desembre"); the prompt's edicte URL (`seuelectronica.vic.cat/…id=6234`) answers 404. Demand: GSC has "mercats setmanals catalunya" 17 impressions at 47.9 and "mercats avui a catalunya" 14 at 57.9 in 28 days, nothing for Vic. **Decision: observe, not build** (no demand evidence); reopen if weekly-market queries pass ~200 impressions/28 d.
+
+**Other candidates read and left alone, on purpose.** Spain school hub already retitled "Vacaciones de Navidad 2026 en los colegios" (window open; `school-calendar` publish 26 Nov). Christmas lights pages already say Thursday 26 Nov, passeig de Gràcia (verified 20 Nov). 26N page at position 4.2, CTR 12.1 %.

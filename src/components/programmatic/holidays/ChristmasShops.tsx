@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
-import { christmasShopsCopy, showChristmasShops } from "@/lib/programmatic/holidays/christmas-shops";
+import { christmasShopsCopy, christmasShopsCopyEn, showChristmasShops, type ChristmasShopsCopy } from "@/lib/programmatic/holidays/christmas-shops";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import type { MuniLocale } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
@@ -15,10 +15,19 @@ import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
  */
 export function ChristmasShops({ m, locale, today = todayInCatalonia() }: { m: SnapshotMunicipality; locale: MuniLocale; today?: string }) {
   if (!showChristmasShops(today)) return null;
-  const t = christmasShopsCopy(m, locale);
+  return <ShopsSection t={christmasShopsCopy(m, locale)} id="botigues-nadal" guideHref={GUIDES.shops[locale]} />;
+}
+
+/** The English town pages' version (24 Nov 2026). */
+export function EnglishChristmasShops({ m, today = todayInCatalonia() }: { m: SnapshotMunicipality; today?: string }) {
+  if (!showChristmasShops(today)) return null;
+  return <ShopsSection t={christmasShopsCopyEn(m)} id="christmas-shops" guideHref={GUIDES.shops.en} />;
+}
+
+function ShopsSection({ t, id, guideHref }: { t: ChristmasShopsCopy; id: string; guideHref: string }) {
   return (
     <>
-      <h2 id="botigues-nadal">{t.title}</h2>
+      <h2 id={id}>{t.title}</h2>
       <p>{t.lead}</p>
       <div className="ci-table-scroll mt-4">
         <table className="ci-local-table">
@@ -46,7 +55,7 @@ export function ChristmasShops({ m, locale, today = todayInCatalonia() }: { m: S
       </div>
       <p>{t.after}</p>
       <p className="text-sm">
-        {t.source} <Link href={GUIDES.shops[locale]}>{t.guide}</Link>
+        {t.source} <Link href={guideHref}>{t.guide}</Link>
       </p>
     </>
   );

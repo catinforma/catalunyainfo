@@ -160,3 +160,77 @@ export function christmasShopsCopy(
     guide: "Tiendas abiertas en Navidad en todos los municipios de Cataluña",
   };
 }
+
+const NAMED_EN: Record<string, string> = {
+  "2026-12-08": "Immaculate Conception",
+  "2026-12-25": "Christmas Day",
+  "2026-12-26": "St Stephen's Day",
+  "2027-01-01": "New Year's Day",
+  "2027-01-06": "Epiphany",
+};
+
+/**
+ * The same section for the English town pages (24 Nov 2026): the English
+ * page listed the year's opening days but not the yes/no per Christmas
+ * Sunday and holiday, nor why a day is missing (a council swap).
+ */
+export function christmasShopsCopyEn(
+  m: Pick<SnapshotMunicipality, "name" | "slug" | "comarca" | "shops" | "local" | "shopsOwnList">,
+): ChristmasShopsCopy {
+  const name = m.name.charAt(0).toUpperCase() + m.name.slice(1);
+  const days = christmasDays(m);
+  const aran = isAran(m);
+  const december = (d: ChristmasDay) => d.iso.startsWith("2026-12");
+  const open = days.filter((d) => december(d) && d.answer === "open").map((d) => String(Number(d.iso.slice(8, 10))));
+  const swapped = days.filter((d) => december(d) && d.answer === "swapped").map((d) => d.iso);
+  const working = WORKING_ASKED.filter((d) => !m.local.includes(d));
+  const rows: ChristmasShopsRow[] = days.map((d) => {
+    const notes = [NAMED_EN[d.iso], d.local ? "local holiday" : null].filter(Boolean);
+    const base = weekdayDayMonth(d.iso, "en") + (d.iso.startsWith("2027") ? " 2027" : "");
+    const reason = (() => {
+      switch (d.answer) {
+        case "open":
+          return d.local ? ": a local holiday and an opening day" : "";
+        case "swapped":
+          return ": the council swapped it for another day";
+        case "localClosed":
+          return ": a local holiday that is not an opening day";
+        case "lawClosed": {
+          const law = ": shops must close (Catalan Law 18/2017, art. 36.2.d)";
+          return aran && d.iso === "2026-12-26" ? `${law}, although it is not a holiday in Aran` : law;
+        }
+        case "pending2027":
+          return ", unless the council has changed it: the 2027 list of changes is not out yet";
+      }
+    })();
+    return {
+      iso: d.iso,
+      day: notes.length ? `${base} (${notes.join(", ")})` : base,
+      verdict: d.answer === "open" || d.answer === "pending2027" ? "Yes" : "No",
+      reason,
+      answer: d.answer,
+    };
+  });
+  const swappedLine = swapped.length
+    ? swapped.length === 1
+      ? ` Not on ${weekdayDayMonth(swapped[0]!, "en")}: the council swapped it for another day (Resolution EMT/4342/2025).`
+      : ` Not on ${joinList(swapped.map((d) => String(Number(d.slice(8, 10)))), "en")} December: the council swapped them for other days (Resolution EMT/4342/2025).`
+    : "";
+  const workingLine = working.length
+    ? `${working.length === 1 ? `${dayMonth(working[0]!, "en")} is a working day` : `${joinList(working.map((d) => String(Number(d.slice(8, 10)))), "en")} December are working days`}: each shop keeps its own hours, between 6.00 and 21.00. `
+    : "";
+  const tourist =
+    m.slug === "barcelona"
+      ? "In Barcelona the tourist zone (ZGAT) only extends opening from 15 May to 15 September: in December these same days apply."
+      : "In towns declared tourist areas for shop hours, shops inside the declared zone are exempt during the approved period; that declaration is published in the provincial gazette and is not in the sources of this table.";
+  return {
+    title: `Are shops open at Christmas in ${name}?`,
+    lead: `Shops on the general timetable in ${name} may open on ${joinList(open, "en")} December.${swappedLine} On 25 and 26 December and on 1 and 6 January they must close, and Sunday 3 January 2027 is an opening day on the general calendar unless the council has changed it.`,
+    cols: { day: "Day", answer: "Shops on the general timetable" },
+    caption: `Christmas Sundays and holidays in ${name}: can shops open?`,
+    rows,
+    after: `${workingLine}Bakeries, cake shops, florists, convenience stores, chemists and food shops or small businesses up to 300 m², among others, may open any day, closing days included (Catalan Law 18/2017, article 37). ${tourist}`,
+    source: `${name} ${m.shopsOwnList ? "is listed with its own days in Resolution EMT/4342/2025" : "is not listed in Resolution EMT/4342/2025, which sets the default days for towns not listed"}; Order EMT/89/2026 for 2027 and Law 18/2017, articles 36 and 37. Checked on ${dayMonthYear(CHRISTMAS_SHOPS_CHECKED, "en")}.`,
+    guide: "Shops open on Sundays and holidays in every town in Catalonia",
+  };
+}
