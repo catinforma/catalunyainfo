@@ -110,6 +110,12 @@ export interface ContentDates {
   /** The last publish that changed what a reader sees (entries.updated_at). */
   contentChangedAt: Date | null;
   dayDependent: boolean;
+  /**
+   * The start of the election-day phase the page is in, for a page carrying an
+   * `electionPhased` block (day-dependent.ts): its text changes then, not every
+   * night. Null otherwise.
+   */
+  phaseStart?: Date | null;
   /** The code-data blocks the body carries. */
   dataBlocks: readonly string[];
 }
@@ -121,6 +127,7 @@ export function contentLastModified(row: ContentDates, startOfToday: Date, file:
       row.updatedAt,
       row.contentChangedAt,
       row.dayDependent ? startOfToday : null,
+      row.phaseStart,
       ...row.dataBlocks.map((type) => bodyDate(blockBodyKey(type), file)),
     ) ?? row.updatedAt
   );

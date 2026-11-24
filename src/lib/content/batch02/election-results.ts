@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { hubPath } from "@/lib/programmatic/elections/paths";
 import { ELECTION_NIGHT_RESULTS_URL, resultsNightLine } from "@/lib/programmatic/elections/results-night";
 
+import { CONGRESS_NEXT_AFTER, phased, resultsAfterLine } from "./election-after";
 import {
   b2link,
   b2Related,
@@ -61,6 +62,13 @@ const PARLIAMENT_VERIFIED = "2026-11-11";
  * provisional vs official; the official link once the switch in
  * elections/results-night.ts is set), then the night guide and the town pages.
  */
+/** The guide's own link sentence under the 29N paragraph, the same before and after the vote. */
+const NIGHT_TAIL: Record<Locale, string> = {
+  ca: `Més detalls: ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}; per municipis, els [resultats electorals de cada municipi](${hubPath("ca")}).`,
+  es: `Más detalles: ${b2link("electionNight", "es", "a qué hora salen y cómo es el escrutinio provisional")}; por municipios, los [resultados electorales de cada municipio](${hubPath("es")}).`,
+  en: `More: ${b2link("electionNight", "en", "when they come out and how the provisional count works")}; town by town, the [election results in each Catalan town](${hubPath("en")}).`,
+};
+
 const NIGHT: Record<Locale, string> = {
   ca: `${resultsNightLine("ca")} Més detalls: ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}; per municipis, els [resultats electorals de cada municipi](${hubPath("ca")}).`,
   es: `${resultsNightLine("es")} Más detalles: ${b2link("electionNight", "es", "a qué hora salen y cómo es el escrutinio provisional")}; por municipios, los [resultados electorales de cada municipio](${hubPath("es")}).`,
@@ -89,12 +97,23 @@ type T = {
 function body(kind: "congress" | "parliament", t: T, locale: Locale): Block[] {
   return [
     lead(t.lead),
-    ...(kind === "congress" ? [{ type: "paragraph", text: NIGHT[locale] } as Block] : []),
+    // 24 Nov 2026: from 30 Nov the paragraph is past tense (election-after.ts); the pre text is what it always was.
+    ...(kind === "congress"
+      ? [
+          phased(
+            [{ type: "paragraph", text: NIGHT[locale] } as Block],
+            [{ type: "paragraph", text: resultsAfterLine(locale, "after", ELECTION_NIGHT_RESULTS_URL, NIGHT_TAIL[locale]) } as Block],
+            [{ type: "paragraph", text: resultsAfterLine(locale, "over", ELECTION_NIGHT_RESULTS_URL, NIGHT_TAIL[locale]) } as Block],
+          ),
+        ]
+      : []),
     callout("official", verifiedLine(locale, kind === "parliament" ? PARLIAMENT_VERIFIED : VERIFIED), t.note),
     { type: "electionHistory", kind } as Block,
     ...h2(t.readTitle, ...t.read),
     ...(t.seats ? h2(t.seats.title, ...t.seats.text) : []),
-    ...h2(t.nextTitle, t.next),
+    ...(kind === "congress"
+      ? [phased(h2(t.nextTitle, t.next), h2(CONGRESS_NEXT_AFTER[locale].title, CONGRESS_NEXT_AFTER[locale].text))]
+      : h2(t.nextTitle, t.next)),
     faq(t.faq),
     ...b2Related(kind === "congress" ? ["electionNight", "voting", "mesa", "parliamentResults", "municipalResults"] : ["voting", "mesa", "congressResults", "municipalResults"], locale),
   ];

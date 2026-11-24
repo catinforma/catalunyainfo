@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import { checkedDay } from "../src/lib/programmatic/elections/results-night.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
@@ -1236,6 +1237,6 @@ test("the lookup guide and the election-night guide each link to the hub once pe
   for (const locale of LOCALES) {
     const target = `(${hubPath(locale)})`;
     assert.equal(JSON.stringify(MUNICIPAL_RESULTS.editions[locale].blocks).split(target).length - 1, 1, `municipal results/${locale}`);
-    assert.equal(JSON.stringify(ELECTION_NIGHT.editions[locale].blocks).split(target).length - 1, 1, `election night/${locale}`);
+    assert.equal(JSON.stringify(preVote(ELECTION_NIGHT.editions[locale].blocks)).split(target).length - 1, 1, `election night/${locale}`);
   }
 });

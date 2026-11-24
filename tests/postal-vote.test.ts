@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -335,7 +336,7 @@ test("closed (20 Nov): hand in by Thursday 26 Nov at 14:00 (JEC 418/2026), the C
 test("the how-to-vote guide keeps its 'Postal vote' heading and links here from it, the warning and the rail", () => {
   const heading: Record<Locale, string> = { ca: "Vot per correu", es: "Voto por correo", en: "Postal vote" };
   for (const locale of LOCALES) {
-    const blocks = VOTING.editions[locale].blocks as unknown as { type: string; text?: string; level?: number; items?: string[] }[];
+    const blocks = preVote(VOTING.editions[locale].blocks) as unknown as { type: string; text?: string; level?: number; items?: string[] }[];
     const target = `](${b2href("postalVote", locale)})`;
     const at = blocks.findIndex((b) => b.type === "heading" && b.level === 2 && b.text === heading[locale]);
     assert.ok(at > 0, `${locale}: the #voto-por-correo heading is unchanged`);

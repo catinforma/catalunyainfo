@@ -4,6 +4,8 @@ import { datePath } from "@/lib/programmatic/holidays/paths";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
 
+import { phased } from "./election-after";
+import { VOTING_AFTER } from "./voting-after";
 import {
   b2link,
   b2Related,
@@ -801,31 +803,50 @@ const POLLS_LABEL: Record<Locale, string> = {
   en: "the CIS and CEO estimates for Catalonia, with their technical sheets",
 };
 
+/**
+ * 24 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "24 Nov 2026 — 29N guides after the vote"): from Mon 30 Nov the
+ * guide says the vote is held, looks to the municipal elections, replaces the what-to-do sections (where, hours and
+ * ID, paid time off, postal deadlines, overseas vote) by one past-tense paragraph and drops the FAQ questions that
+ * only made sense before the vote (voting-after.ts). Each stretch is an `electionPhased` block whose `pre` is the text
+ * that was live; title, description and lead are untouched.
+ */
 function body(locale: Locale) {
   const t = COPY[locale];
-  const next = [...h2(t.nextTitle, ...t.next), table(t.nextCaption, t.nextHeaders, t.nextRows, t.nextNote)];
-  const where = [...h2(t.whereTitle), list(...t.where), callout("warning", t.warnTitle, t.warn)];
-  const register = h2(t.registerTitle, ...t.register);
+  const x = VOTING_AFTER[locale];
+  if (!t.lead.includes(x.leadFrom)) throw new Error(`voting lead (${locale}) no longer holds the clause voting-after.ts corrects`);
+  const leadAfter = t.lead.replace(x.leadFrom, x.leadTo);
+  const nextPre = [...h2(t.nextTitle, ...t.next), table(t.nextCaption, t.nextHeaders, t.nextRows, t.nextNote)];
+  const nextAfter = [...h2(x.nextTitle, x.nextLead, ...t.next.slice(1)), table(x.nextCaption, t.nextHeaders, x.nextRows, x.nextNote)];
+  const next = [phased(nextPre, nextAfter)];
+  const wherePre = [...h2(t.whereTitle), list(...t.where), callout("warning", t.warnTitle, t.warn)];
+  const where = [phased(wherePre, [])];
+  // After the vote the "missing from the list on the day" paragraph (the census office's election-day line) is dropped.
+  const registerAfter = t.register
+    .filter((paragraph) => !paragraph.includes("900 343 232"))
+    .map((paragraph) => paragraph.replace(" So there is nothing to sign up for: just check where you vote with the INE's finder.", ""));
+  const register = [phased(h2(t.registerTitle, ...t.register), h2(t.registerTitle, ...registerAfter))];
   const calendar = [...h2(t.calTitle), table(t.calCaption, t.calHeaders, t.calRows, t.calNote), callout("official", verifiedLine(locale, VERIFIED), t.note)];
   // 21 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "21 Nov 2026 — 29N election-week questions"): the paid hours to vote
   // from Ordre EMT/232/2026 (DOGC 20 Nov), in a section of their own right after hours and ID, in every edition.
   const leave = [...h2(t.leaveTitle, t.leave), table(t.leaveCaption, t.leaveHeaders, t.leaveRows, t.leaveNote), list(...t.leaveItems)];
-  const day = [...h2(t.dayTitle), list(...t.day), ...leave];
+  const dayPre = [...h2(t.dayTitle), list(...t.day), ...leave];
+  const day = [phased(dayPre, h2(x.ranTitle, x.ran))];
   // 18 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "18 Nov 2026 — 29N election-day layer"): the sections in the order
   // each edition's queries ask. English: "how to register to vote" (1,602 impressions at 5.8 in 14 days), "how to vote",
   // "dates", "polling stations", so registration, where, hours and ID, then the calendar; "next elections in Catalonia"
   // (what the Catalan and Spanish queries ask first) moves down. ca/es keep it first and get registration after "where".
   const order =
     locale === "en"
-      ? [...register, ...where, ...day, ...calendar, ...h2(t.postTitle, ...t.post), ...next]
-      : [...next, ...where, ...register, ...calendar, ...day, ...h2(t.postTitle, ...t.post)];
+      ? [...register, ...where, ...day, ...calendar, phased(h2(t.postTitle, ...t.post), []), ...next]
+      : [...next, ...where, ...register, ...calendar, ...day, phased(h2(t.postTitle, ...t.post), [])];
   return [
-    lead(t.lead),
+    // The lead's one false clause from 30 Nov (voting-after.ts): "the next election is on 29 November".
+    phased([lead(t.lead)], [lead(leadAfter)]),
     // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
     languageLinks(),
+    phased([], [callout("info", x.calloutTitle, x.callout)]),
     ...order,
-    ...h2(t.abroadTitle),
-    list(...t.abroad),
+    phased([...h2(t.abroadTitle), list(...t.abroad)], []),
     ...h2(t.seatsTitle, ...t.seats),
     list(
       MESA_LINK[locale] + b2link("mesa", locale, MESA_LABEL[locale]) + ".",
@@ -834,7 +855,7 @@ function body(locale: Locale) {
       `${POLLS_LINK[locale]}[${POLLS_LABEL[locale]}](${pollsPath(locale)}).`,
     ),
     ...h2(t.muniTitle, ...t.muni),
-    faq(t.faq),
+    phased([faq(t.faq)], [faq(t.faq.flatMap((item, index) => (x.faqReplace[index] ? [{ ...item, answer: x.faqReplace[index] }] : x.faqKeep.includes(index) ? [item] : [])))]),
     ...b2Related(["postalVote", "mesa", "electionNight", "congressResults", "parliamentResults", "municipalResults"], locale),
   ];
 }

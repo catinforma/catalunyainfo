@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -96,12 +97,12 @@ test("town pages, hubs and both guides print the same line in each language", ()
       assert.ok(md.includes(line), `${locale}: town page`);
       assert.ok(hubCopy(locale).intro.includes(line), `${locale}: hub`);
     }
-    const night = JSON.stringify(ELECTION_NIGHT.editions[locale].blocks);
-    if (SWITCH === null) assert.match(bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks), new RegExp(checkedDay(locale, RESULTS_SITE_CHECKED)), `${locale}: election night carries the same check date as the switch`);
+    const night = JSON.stringify(preVote(ELECTION_NIGHT.editions[locale].blocks));
+    if (SWITCH === null) assert.match(bodyToPlainText(preVote(ELECTION_NIGHT.editions[locale].blocks)), new RegExp(checkedDay(locale, RESULTS_SITE_CHECKED)), `${locale}: election night carries the same check date as the switch`);
     else assert.ok(night.includes(SWITCH), `${locale}: election night links the site`);
     const congress = CONGRESS_RESULTS.editions[locale];
-    assert.ok(JSON.stringify(congress.blocks).includes(JSON.stringify(line).slice(1, -1)), `${locale}: Congress results guide`);
-    assert.ok(JSON.stringify(congress.blocks).includes(`](${hubPath(locale)})`), `${locale}: Congress results guide links the town pages in its language`);
+    assert.ok(JSON.stringify(preVote(congress.blocks)).includes(JSON.stringify(line).slice(1, -1)), `${locale}: Congress results guide`);
+    assert.ok(JSON.stringify(preVote(congress.blocks)).includes(`](${hubPath(locale)})`), `${locale}: Congress results guide links the town pages in its language`);
   }
   if (SWITCH === null) {
     assert.ok(!ELECTION_NIGHT.sources.some((s) => /resultados/i.test(s.name) && s.publisher === "Ministerio del Interior" && /web oficial\)$/.test(s.name)), "no results-site source while off");
@@ -116,7 +117,7 @@ test("voting FAQ: is 29 / 30 November a holiday, and the day of reflection, in a
   };
   const reflection: Record<Locale, RegExp> = { ca: /jornada de reflexió/, es: /jornada de reflexión/, en: /day of reflection/ };
   for (const locale of LOCALES) {
-    const faqBlock = VOTING.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
+    const faqBlock = preVote(VOTING.editions[locale].blocks).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
     assert.ok(faqBlock, `${locale}: FAQ`);
     const item = faqBlock.items.find((q) => holiday[locale].test(q.question));
     assert.ok(item, `${locale}: holiday question`);

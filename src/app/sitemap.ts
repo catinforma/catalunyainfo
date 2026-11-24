@@ -70,6 +70,7 @@ import { ncSitemapEntries } from "@/lib/programmatic/non-contributory-pension/pa
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
 import { zbeSitemapEntries } from "@/lib/programmatic/zbe/sitemap";
 import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
+import { guidePhaseStart } from "@/lib/content/election-phased";
 import { electionPhaseStart } from "@/lib/programmatic/elections/election-day";
 import { contentLastModified, dated, latestDate } from "@/lib/seo/body-dates";
 
@@ -123,11 +124,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // lastmod of an article: its last reader-visible publish, today when it carries a
   // day-dependent block, the body date of any code-data block in it (lib/seo/body-dates.ts).
   const today = startOfTodayInMadrid();
+  // A page with an `electionPhased` block changes at the start of an election-day phase (30 Nov, 8 Dec), not nightly.
+  const phaseStart = guidePhaseStart(new Date());
   const entries: MetadataRoute.Sitemap = rows.map((row) => {
     const group = byEntry.get(row.entryId) ?? {};
     return {
       url: absoluteUrl(`/${row.locale}/${row.path}/`),
-      lastModified: contentLastModified(row, today),
+      lastModified: contentLastModified(row.phased ? { ...row, phaseStart } : row, today),
       changeFrequency: row.dayDependent ? "daily" : "monthly",
       priority: 0.7,
       alternates: { languages: languageMap(group) },

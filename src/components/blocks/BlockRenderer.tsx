@@ -26,6 +26,7 @@ import { CandidateLists } from "@/components/blocks/CandidateLists";
 import { SpainSchoolCalendar } from "@/components/blocks/SpainSchoolCalendar";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
+import { resolveElectionPhased } from "@/lib/content/election-phased";
 import { renderInline, safeHref } from "@/lib/content/inline";
 import type { EntrySummary, MediaView, SourceView } from "@/lib/content/types";
 import { HTML_LANG, LOCALES, type Locale } from "@/lib/i18n/config";
@@ -440,6 +441,16 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "parkingToday":
       // Server-rendered for the same reason; the nightly cron keeps the date.
       return <ParkingToday locale={context.locale} />;
+
+    case "electionPhased":
+      // Normally resolved by the page before rendering; this keeps any other caller correct too.
+      return (
+        <>
+          {resolveElectionPhased([block]).map((inner, index) => (
+            <BlockView key={index} block={inner} context={context} />
+          ))}
+        </>
+      );
 
     case "reservoirLevels":
       // Async server component: the ACA's daily reading, cached three hours.

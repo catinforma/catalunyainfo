@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -30,12 +31,12 @@ import { SNAPSHOT } from "../src/lib/programmatic/elections/snapshot.ts";
 type Item = { question: string; answer: string };
 type B = { type: string; text?: string; level?: number; items?: (string | Item)[]; rows?: string[][] };
 
-const blocks = (article: typeof MESA, locale: Locale) => article.editions[locale].blocks as unknown as B[];
+const blocks = (article: typeof MESA, locale: Locale) => preVote(article.editions[locale].blocks) as unknown as B[];
 const h2s = (article: typeof MESA, locale: Locale) =>
   blocks(article, locale).filter((b) => b.type === "heading" && b.level === 2).map((b) => b.text ?? "");
 const faqItems = (article: typeof MESA, locale: Locale) =>
   blocks(article, locale).filter((b) => b.type === "faq").flatMap((b) => b.items as Item[]);
-const plain = (article: typeof MESA, locale: Locale) => bodyToPlainText(article.editions[locale].blocks);
+const plain = (article: typeof MESA, locale: Locale) => bodyToPlainText(preVote(article.editions[locale].blocks));
 
 const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
 const DOGC_NOT_YET = /DOGC[^.]*(encara no|aún no|still not)|(encara no|aún no|still not)[^.]*DOGC/;
@@ -101,7 +102,7 @@ test("election night answers blank vs null, D'Hondt with the law's own example, 
     assert.ok(text.includes("Se considera voto en blanco, pero válido"), `${locale}: 96.5`);
     assert.ok(text.includes("el 3 por 100 de los votos válidos emitidos en la circunscripción"), `${locale}: 163.1.a`);
     assert.ok(text.includes("serán proclamados electos aquellos candidatos que obtengan mayor número de votos"), `${locale}: 166.1.b`);
-    const json = JSON.stringify(ELECTION_NIGHT.editions[locale].blocks);
+    const json = JSON.stringify(preVote(ELECTION_NIGHT.editions[locale].blocks));
     for (const anchor of ["#anoventayseis", "#acientosesentaytres", "#acientosesentayseis", "#acientotres"]) assert.ok(json.includes(anchor), `${locale}: ${anchor}`);
     const tables = blocks(ELECTION_NIGHT, locale).filter((b) => b.type === "table");
     // The worked example is the LOREG's own (art. 163.1.c): recompute D'Hondt for 8 seats from the ÷1 column.

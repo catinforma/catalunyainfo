@@ -19,7 +19,7 @@ import type {
   TagView,
 } from "./types";
 import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
-import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
+import { DAY_DEPENDENT_PATTERN, PHASE_DEPENDENT_PATTERN } from "./day-dependent";
 import { DATA_BLOCK_TYPES, dataBlockPattern, type DataBlockType } from "@/lib/seo/body-dates";
 import { RELATED_FILL_HEADROOM, relatedFillAllowed } from "./related-filter";
 import { relatedTerms } from "./related-terms";
@@ -969,6 +969,8 @@ export interface SitemapRow {
   entryId: string;
   /** Carries a block whose output changes every day (see day-dependent.ts). */
   dayDependent: boolean;
+  /** Carries an `electionPhased` block: its text changes on 30 Nov and 8 Dec, not every night. */
+  phased: boolean;
   /**
    * The last publish that changed what a reader sees of the entry
    * (entries.updated_at; publish-article.ts moves it only then). The sitemap's
@@ -1002,6 +1004,7 @@ export async function allIndexablePaths({ strict = false }: { strict?: boolean }
         publishedAt: entryTranslations.publishedAt,
         entryId: entryTranslations.entryId,
         dayDependent: sql<boolean>`${entryTranslations.body}::text ~ ${DAY_DEPENDENT_PATTERN}`,
+        phased: sql<boolean>`${entryTranslations.body}::text ~ ${PHASE_DEPENDENT_PATTERN}`,
         contentChangedAt: entries.updatedAt,
         ...DATA_BLOCK_COLUMNS,
       })
@@ -1027,6 +1030,7 @@ export async function allIndexablePaths({ strict = false }: { strict?: boolean }
         publishedAt: row.publishedAt,
         entryId: row.entryId,
         dayDependent: Boolean(row.dayDependent),
+        phased: Boolean(row.phased),
         contentChangedAt: row.contentChangedAt ?? null,
         dataBlocks: DATA_BLOCK_TYPES.filter((type) => flags[`block_${type}`] === true),
       } as SitemapRow;

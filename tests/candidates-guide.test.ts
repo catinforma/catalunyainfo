@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -173,8 +174,8 @@ test("internal links stay in their language, end in a slash and point at publish
 test("how-to-vote and election night each link to this page in every language", () => {
   for (const locale of LOCALES) {
     const target = `(/${locale}/${B2_PATHS.candidates[locale]}/)`;
-    assert.equal(JSON.stringify(VOTING.editions[locale].blocks).split(target).length - 1, 1, `voting/${locale}`);
-    assert.equal(JSON.stringify(ELECTION_NIGHT.editions[locale].blocks).split(target).length - 1, 1, `election night/${locale}`);
+    assert.equal(JSON.stringify(preVote(VOTING.editions[locale].blocks)).split(target).length - 1, 1, `voting/${locale}`);
+    assert.equal(JSON.stringify(preVote(ELECTION_NIGHT.editions[locale].blocks)).split(target).length - 1, 1, `election night/${locale}`);
   }
 });
 

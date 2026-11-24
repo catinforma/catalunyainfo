@@ -12,5 +12,20 @@
  */
 export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels", "metroTonight", "livingNativities", "snowDepth", "candidateLists", "spainSchoolCalendar", "shopsToday", "parkingToday"];
 
-/** Matches a block of one of those types in a body's jsonb text form. */
+/**
+ * Blocks that change on a few known dates rather than every day: an
+ * `electionPhased` stretch of a 29N guide reads differently from 30 Nov and from
+ * 8 Dec (24 Nov 2026). The nightly cron re-renders pages carrying one, so the
+ * switch needs no publish, but the sitemap does not date them "today" (their
+ * `lastmod` moves at the phase start, `electionPhaseStart`, not every night).
+ */
+export const PHASE_DEPENDENT_BLOCKS = ["electionPhased"];
+
+/** Matches a block of one of those types in a body's jsonb text form: the sitemap's "changes daily". */
 export const DAY_DEPENDENT_PATTERN = `"type":\\s*"(${DAY_DEPENDENT_BLOCKS.join("|")})"`;
+
+/** Same, plus the phase-dependent blocks: every page the nightly cron must re-render. */
+export const REVALIDATE_NIGHTLY_PATTERN = `"type":\\s*"(${[...DAY_DEPENDENT_BLOCKS, ...PHASE_DEPENDENT_BLOCKS].join("|")})"`;
+
+/** Matches an `electionPhased` block in a body's jsonb text form. */
+export const PHASE_DEPENDENT_PATTERN = `"type":\\s*"(${PHASE_DEPENDENT_BLOCKS.join("|")})"`;

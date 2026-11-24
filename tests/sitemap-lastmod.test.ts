@@ -101,7 +101,7 @@ test("contentLastModified: a body-only change re-dates the article (the Easter 2
 });
 
 test("sitemap.ts dates articles with contentLastModified and the hubs by the newest article lastmod", () => {
-  assert.match(SITEMAP, /lastModified: contentLastModified\(row, today\)/);
+  assert.match(SITEMAP, /lastModified: contentLastModified\(row\.phased \? \{ \.\.\.row, phaseStart \} : row, today\)/);
   assert.match(SITEMAP, /latestDate\(\.\.\.entries\.map\(\(entry\) => entry\.lastModified\)\)/);
   assert.match(SITEMAP, /\.\.\.dated\("elections", \[\.\.\.electionsSitemap\(\)\], \{ floor: electionPhaseStart\(new Date\(\)\) \}\)/);
 });

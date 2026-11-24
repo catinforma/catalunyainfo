@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -471,7 +472,7 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
   const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
   assert.deepEqual(zones?.rows?.[0], ["1", "€2.90", "€13.00", "€12.00", "€22.80"], "EN zone 1 row");
   assert.deepEqual(zones?.rows?.[1], ["2", "€4.15", "€25.50", "€18.30", "€30.55"], "EN zone 2 row");
-  const text = bodyToPlainText(en.blocks);
+  const text = bodyToPlainText(preVote(en.blocks));
   assert.match(text.slice(0, 200), /T-casual.*€13.*T-dia.*€12/, "EN answer first");
   assert.match(text, /€24\.80/, "EN: T-casual plus two airport tickets");
   assert.match(text, /T-familiar[^.]*€11\.50/, "EN: T-familiar fare");
@@ -649,7 +650,7 @@ test("voting: dated calendar from the decree, MiDNI suspension and its lifting c
     en: ["31 October", "2 November", "19 November", "26 November, 14:00", "4–7 December", "23 December"],
   };
   for (const locale of ["ca", "es", "en"] as const) {
-    const text = bodyToPlainText(VOTING.editions[locale].blocks);
+    const text = bodyToPlainText(preVote(VOTING.editions[locale].blocks));
     assert.match(text, /806\/2026/, `${locale}: decree`);
     for (const day of dates[locale]!) assert.ok(text.includes(day), `${locale}: ${day}`);
     assert.match(text, /Acuerdo 94\/2026|Acord 94\/2026/, `${locale}: MiDNI suspension cited`);
@@ -672,7 +673,7 @@ test("election night: provisional, no CERA, no forecasts, no invented site", () 
     en: [/provisional count/, /CERA/, /BOE/, /24 to 28 November/],
   };
   for (const locale of ["ca", "es", "en"] as const) {
-    const text = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
+    const text = bodyToPlainText(preVote(ELECTION_NIGHT.editions[locale].blocks));
     for (const pattern of words[locale]!) assert.match(text, pattern, `${locale}: ${pattern}`);
     // 21 Nov 2026: the legal 3 % threshold (LOREG art. 163.1.a) joins the 30 % reading example; no result percentage.
     const percentages: string[] = text.match(/\d+(,\d+)? ?%/g) ?? [];
@@ -689,12 +690,12 @@ test("election night EN: the snippet and lead answer 'what time' with the pollin
   assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, en.seoTitle);
   assert.match(en.seoTitle, /Spain general election results 2026/);
   assert.match(en.seoDescription, /9:00-20:00/);
-  const text = bodyToPlainText(en.blocks);
+  const text = bodyToPlainText(preVote(en.blocks));
   assert.match(text.slice(0, 400), /20:00/);
   assert.match(text.slice(0, 400), /9:00/);
   assert.match(text, /not yet announced its results site/);
   for (const locale of ["ca", "es", "en"] as const) {
-    const body = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
+    const body = bodyToPlainText(preVote(ELECTION_NIGHT.editions[locale].blocks));
     assert.match(body, /29 (de )?(novembre|noviembre|November), 9[.:]00/, `${locale}: polls-open row`);
   }
   assert.ok(ELECTION_NIGHT.sources.some((s) => s.url.includes("29neleccionesgenerales.es")));
@@ -836,7 +837,7 @@ test("zoo EN: both prices in the snippet and the first line, family pack and onl
   assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, `${en.seoTitle.length}/${en.seoDescription.length}`);
   assert.match(en.seoTitle, /Zoo & Aquarium tickets 2026: Zoo €23, Aquarium €30/);
   assert.match(en.seoDescription, /€13\.90.*€30.*€23.*€88/);
-  const text = bodyToPlainText(en.blocks);
+  const text = bodyToPlainText(preVote(en.blocks));
   assert.match(text.slice(0, 260), /Zoo tickets cost €23.*€13\.90.*Aquarium tickets cost €30.*€23.*€88/, "answer first");
   assert.doesNotMatch(text.slice(0, 700), /until 1 November/, "the lead no longer leads with hours that end on 1 November");
   assert.match(text, /Is there a family ticket for the Barcelona Aquarium\?/);

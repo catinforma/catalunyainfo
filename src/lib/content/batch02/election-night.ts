@@ -1,8 +1,9 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
-import { ELECTION_NIGHT_RESULTS_SOURCE, ELECTION_NIGHT_RESULTS_URL, RESULTS_SITE_CHECKED, checkedDay } from "@/lib/programmatic/elections/results-night";
+import { ELECTION_NIGHT_RESULTS_SOURCE, ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay } from "@/lib/programmatic/elections/results-night";
 
+import { NIGHT_AFTER, phased } from "./election-after";
 import {
   b2link,
   b2Related,
@@ -11,6 +12,7 @@ import {
   h2,
   languageLinks,
   lead,
+  paras,
   list,
   table,
   verifiedLine,
@@ -538,20 +540,60 @@ const COPY: Record<Locale, T> = {
   },
 };
 
+/** Link label of the past-results guide in the "when official" section after the vote. */
+const HIST_LABEL: Record<Locale, string> = {
+  ca: "la guia de resultats de les eleccions generals a Catalunya",
+  es: "la guía de resultados de las elecciones generales en Cataluña",
+  en: "our guide to general election results in Catalonia",
+};
+
+/**
+ * 24 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "24 Nov 2026 — 29N guides after the vote"): from Mon 30 Nov the
+ * status callout, the timetable, "where to see the results", "when official", the polls ban and the first FAQ answers
+ * speak in the past and give the law's schedule (election-after.ts). Each stretch is an `electionPhased` block whose
+ * `pre` is the text that was live; title, description and lead are untouched.
+ */
 function body(locale: Locale) {
   const t = COPY[locale];
+  const x = NIGHT_AFTER[locale];
+  const faqAfter = t.faq.map((item, index) => (x.faq[index] ? { ...item, answer: x.faq[index](SITE) } : item));
+  const noPolls = t.note.split(". ")[0] + ".";
+  // The English lead says the ministry "has not yet announced its results site or start time (checked on 24 November)":
+  // false from 30 Nov. Only that clause changes (a factual correction, as on 20 Nov); the other two leads say nothing
+  // that the vote makes false, and no title, description or heading moves.
+  const staleClause = /for 29 November it has not yet announced its results site or start time \(checked on [^)]+\)\./;
+  const leadBlock = lead(t.lead);
+  const leadAfter =
+    locale === "en" && !SITE && staleClause.test(t.lead)
+      ? lead(t.lead.replace(staleClause, `for 29 November the official information is on its [election site](${OFFICIAL_ELECTION_SITE}) and on [Infoelectoral](${INFOELECTORAL}), its election-data portal.`))
+      : null;
   return [
-    lead(t.lead),
+    leadAfter ? phased([leadBlock], [leadAfter]) : leadBlock,
     // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
     languageLinks(),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
+    phased(
+      [callout("official", verifiedLine(locale, VERIFIED), t.note)],
+      [callout("info", x.statusTitle, x.status("after", SITE)), callout("official", verifiedLine(locale, VERIFIED), noPolls)],
+      [callout("info", x.statusTitle, x.status("over", SITE)), callout("official", verifiedLine(locale, VERIFIED), noPolls)],
+    ),
     ...h2(t.clockTitle),
-    table(t.clockCaption, t.clockHeaders, t.clockRows, t.clockNote),
-    ...h2(t.whereTitle, ...t.where),
+    phased(
+      [table(t.clockCaption, t.clockHeaders, t.clockRows, t.clockNote)],
+      [table(x.clockCaption, t.clockHeaders, x.clockRows, x.clockNote)],
+    ),
+    ...h2(t.whereTitle),
+    phased(paras(...t.where), paras(...x.where(SITE))),
     ...h2(t.countTitle, ...t.count),
     ...h2(t.readTitle),
     list(...t.read),
-    ...h2(t.finalTitle, ...t.final),
+    ...h2(t.finalTitle),
+    phased(
+      paras(...t.final),
+      paras(
+        x.final0,
+        ...x.finalRest({ hist: b2link("congressResults", locale, HIST_LABEL[locale]), hub: hubPath(locale), pages: PAGES_PER_LOCALE[locale] }),
+      ),
+    ),
     ...h2(t.catTitle, ...t.cat),
     table(t.catCaption, t.catHeaders, t.catRows, t.catNote),
     // 21 Nov 2026 (body only, docs/SEO_EXPERIMENTS.md, "21 Nov 2026 — 29N election-week questions"): how each vote counts.
@@ -561,9 +603,11 @@ function body(locale: Locale) {
     list(...t.dhondtSteps),
     table(t.dhondtCaption, t.dhondtHeaders, t.dhondtRows, t.dhondtNote),
     ...h2(t.senateTitle, t.senate),
-    ...h2(t.pollsTitle, ...t.polls),
-    callout("warning", t.warnTitle, t.warn),
-    faq(t.faq),
+    ...h2(t.pollsTitle),
+    phased(paras(...t.polls), paras(x.polls0, ...t.polls.slice(1))),
+    // The "beware of sites advertising 29N live results" warning is about the run-up; it is not repeated after the vote.
+    phased([callout("warning", t.warnTitle, t.warn)], []),
+    phased([faq(t.faq)], [faq(faqAfter)]),
     ...b2Related(["voting", "postalVote", "mesa", "congressResults", "parliamentResults"], locale),
   ];
 }

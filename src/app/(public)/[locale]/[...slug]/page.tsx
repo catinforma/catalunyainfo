@@ -5,6 +5,7 @@ import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/EmptyState";
 import { EntryCard } from "@/components/EntryCard";
+import { resolveElectionPhased } from "@/lib/content/election-phased";
 import { SHORTCUTS_HEADING, hubShortcuts } from "@/lib/content/hub-shortcuts";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -515,7 +516,9 @@ export default async function CatchAllPage({
   }
 
   // ---- A content page -------------------------------------------------------
-  const entry = resolution.entry;
+  // An `electionPhased` stretch of a 29N guide reads as of the render time; resolved here, before the
+  // table of contents and the FAQ structured data are built from the body (content/election-phased.ts).
+  const entry = { ...resolution.entry, body: resolveElectionPhased(resolution.entry.body) };
 
   const [mediaMap, relatedMap] = await Promise.all([
     getMediaByIds(mediaIdsInBody(entry.body), locale),

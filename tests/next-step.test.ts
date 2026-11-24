@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -188,7 +189,7 @@ test("elections: postal vote while it can be requested, then where to vote, then
 
 test("elections: the 'where do I vote' anchor is the how-to-vote guide's own heading and id", () => {
   for (const locale of LOCALES) {
-    const headings = (VOTING.editions[locale].blocks as Block[]).filter((b): b is Extract<Block, { type: "heading" }> => b.type === "heading");
+    const headings = (preVote(VOTING.editions[locale].blocks) as Block[]).filter((b): b is Extract<Block, { type: "heading" }> => b.type === "heading");
     const match = headings.find((h) => h.text === VOTING_WHERE[locale].label);
     assert.ok(match, `${locale}: no heading "${VOTING_WHERE[locale].label}" in the guide`);
     assert.equal(headingId(match), VOTING_WHERE[locale].id, locale);

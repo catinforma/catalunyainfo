@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -23,7 +24,7 @@ import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 type Item = { question: string; answer: string };
 type B = { type: string; text?: string; level?: number; lead?: boolean; items?: (string | Item)[]; rows?: string[][] };
 
-const blocks = (article: typeof MESA, locale: Locale) => article.editions[locale].blocks as unknown as B[];
+const blocks = (article: typeof MESA, locale: Locale) => preVote(article.editions[locale].blocks) as unknown as B[];
 const leadOf = (article: typeof MESA, locale: Locale) => blocks(article, locale).find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
 const h2s = (article: typeof MESA, locale: Locale) =>
   blocks(article, locale).filter((b) => b.type === "heading" && b.level === 2).map((b) => b.text ?? "");
@@ -144,7 +145,7 @@ test("voting: municipal elections 'expected' on 23 May 2027 with LOREG 42.3, wor
   const expected = { ca: /previstes per al (diumenge )?\*?\*?23 de maig de 2027/, es: /previstas para el (domingo )?\*?\*?23 de mayo de 2027/, en: /expected on (Sunday )?\*?\*?23 May 2027/ };
   const decree = { ca: /29 i el 30 de març de 2027/, es: /29 y el 30 de marzo de 2027/, en: /29 and 30 March 2027/ };
   for (const locale of LOCALES) {
-    const raw = JSON.stringify(VOTING.editions[locale].blocks);
+    const raw = JSON.stringify(preVote(VOTING.editions[locale].blocks));
     assert.match(raw, expected[locale], `${locale}: expected, not fixed`);
     assert.match(raw, decree[locale], `${locale}: decree dates`);
     assert.match(raw, /42\.3/, `${locale}: legal basis`);
@@ -159,10 +160,10 @@ test("voting: municipal elections 'expected' on 23 May 2027 with LOREG 42.3, wor
 
 test("voting: where to vote = the INE finder, the census card, the 19 Nov list, no guessed domain", () => {
   for (const locale of LOCALES) {
-    const raw = JSON.stringify(VOTING.editions[locale].blocks);
+    const raw = JSON.stringify(preVote(VOTING.editions[locale].blocks));
     assert.match(raw, /https:\/\/sede\.ine\.gob\.es\/ce-mesas\/\?lang=es_ES/, `${locale}: official finder`);
     assert.match(raw, /900 343 232/, `${locale}: census office line`);
-    const text = bodyToPlainText(VOTING.editions[locale].blocks);
+    const text = bodyToPlainText(preVote(VOTING.editions[locale].blocks));
     assert.match(text, /2 (i|y|and) (el )?10 (de )?(novembre|noviembre|November)/, `${locale}: census card window`);
     assert.match(text, /19 (de )?(novembre|noviembre|November)[^.]*(INE|definitiv|final)|(INE|definitiv|final)[^.]*19 (de )?(novembre|noviembre|November)/, `${locale}: final list`);
     // Every outbound link in the body goes to an official or primary source
@@ -200,7 +201,7 @@ test("voting: English answers the registration question in the first lines", () 
     "How do I find my polling station for the 2026 Spain general election?",
     "How do Spaniards living abroad vote (CERA)?",
   ]) assert.ok(faqQuestions(VOTING, "en").includes(q), `en FAQ: ${q}`);
-  const enText = bodyToPlainText(VOTING.editions.en.blocks);
+  const enText = bodyToPlainText(preVote(VOTING.editions.en.blocks));
   assert.match(enText, /by 24 November/, "en: CERA postal deadline");
   assert.match(enText, /from 21 to 26 November/, "en: CERA ballot box at the consulate");
   assert.doesNotMatch(enText, /EU citizens (can|may) vote in (the|a) general election/i);
@@ -208,7 +209,7 @@ test("voting: English answers the registration question in the first lines", () 
   const finder = "](https://sede.ine.gob.es/ce-mesas/?lang=es_ES)";
   const noId: Record<"ca" | "es" | "en", RegExp> = { ca: /sense DNI ni Cl@ve/, es: /sin DNI ni Cl@ve/, en: /with no ID number or login/ };
   for (const locale of ["ca", "es", "en"] as const) {
-    const leadBlock = JSON.stringify(VOTING.editions[locale].blocks[0]);
+    const leadBlock = JSON.stringify(preVote(VOTING.editions[locale].blocks)[0]);
     assert.ok(leadBlock.includes(finder), `${locale}: finder in the lead`);
     assert.match(leadBlock, noId[locale], locale);
   }
@@ -217,7 +218,7 @@ test("voting: English answers the registration question in the first lines", () 
 test("voting: one link to the per-municipality results hub in each language", () => {
   const hub = { ca: "](/ca/eleccions/)", es: "](/es/elecciones/)", en: "](/en/elections/)" };
   for (const locale of LOCALES) {
-    const raw = JSON.stringify(VOTING.editions[locale].blocks);
+    const raw = JSON.stringify(preVote(VOTING.editions[locale].blocks));
     assert.equal(raw.split(hub[locale]).length - 1, 1, `${locale}: hub link`);
   }
 });
@@ -241,8 +242,8 @@ test("voting: MiDNI valid since the JEC's Acuerdo 334/2026 of 5 Nov; MiDGT still
     en: /MiDGT,? is (still not accepted|not)/,
   };
   for (const locale of LOCALES) {
-    const raw = JSON.stringify(VOTING.editions[locale].blocks);
-    const text = bodyToPlainText(VOTING.editions[locale].blocks);
+    const raw = JSON.stringify(preVote(VOTING.editions[locale].blocks));
+    const text = bodyToPlainText(preVote(VOTING.editions[locale].blocks));
     assert.match(raw, valid[locale], `${locale}: MiDNI valid`);
     assert.match(text, /(Acuerdo|Acord) 334\/2026/, `${locale}: Acuerdo 334/2026`);
     assert.match(text, /5 (de )?(novembre|noviembre|November)/, `${locale}: dated 5 Nov`);

@@ -5,7 +5,7 @@ import { timingSafeEqual } from "node:crypto";
 
 import { getDb, schema } from "@/lib/db/client";
 import { pruneExpiredSessions } from "@/lib/auth/session";
-import { DAY_DEPENDENT_PATTERN } from "@/lib/content/day-dependent";
+import { REVALIDATE_NIGHTLY_PATTERN } from "@/lib/content/day-dependent";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
   // Content pages are cached for a day. The ones whose answer depends on
   // today's date are refreshed here, once, just after midnight in Madrid.
   // jsonb's text form puts a space after the colon; allow either.
-  const pattern = DAY_DEPENDENT_PATTERN;
+  const pattern = REVALIDATE_NIGHTLY_PATTERN;
   const dayDependent = await db
     .select({ locale: entryTranslations.locale, path: entryTranslations.path })
     .from(entryTranslations)

@@ -547,6 +547,25 @@ export const spainSchoolCalendarBlock = z.object({
   region: z.string().regex(/^[a-z-]+$/).max(40),
 });
 
+/**
+ * A stretch of an election guide that reads differently once the vote has
+ * happened (24 Nov 2026): `pre` is what the page says until the end of polling
+ * day, `after` what it says from Monday 30 November, `over` (optional, else
+ * `after`) from Tuesday 8 December. The variants are ordinary blocks, kept as
+ * raw objects here and parsed with `parseBody` when `resolveElectionPhased`
+ * (content/election-phased.ts) picks one, so the schema needs no recursion.
+ * The page resolves it on the server with the render time, before the table of
+ * contents and the FAQ structured data are built; the nightly cron re-renders
+ * pages carrying it (day-dependent.ts), which is what moves 30 Nov and 8 Dec.
+ */
+const rawBlocks = z.array(z.record(z.string(), z.unknown())).max(80);
+export const electionPhasedBlock = z.object({
+  type: z.literal("electionPhased"),
+  pre: rawBlocks,
+  after: rawBlocks,
+  over: rawBlocks.optional(),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -587,6 +606,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   snowDepthBlock,
   candidateListsBlock,
   spainSchoolCalendarBlock,
+  electionPhasedBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
@@ -705,6 +725,10 @@ export function bodyToPlainText(body: Body): string {
       case "map":
       case "embed":
         if (block.title) parts.push(block.title);
+        break;
+      case "electionPhased":
+        // Search reads the page as it is until polling day.
+        parts.push(bodyToPlainText(parseBody(block.pre)));
         break;
       default:
         break;

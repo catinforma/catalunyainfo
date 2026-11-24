@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -402,7 +403,7 @@ test("the how-to-vote guide and the municipal results page each link here once, 
         assert.ok(!raw.includes(`](${b2href("foreignVote", other)})`), `${name}/${locale} links to the ${other} edition`);
       }
     }
-    assert.doesNotMatch(JSON.stringify(VOTING.editions[locale].blocks), /have not been published yet|aún no se han publicado|encara no s'han publicat/, `${locale}: the stale 'window not published' line is gone`);
+    assert.doesNotMatch(JSON.stringify(preVote(VOTING.editions[locale].blocks)), /have not been published yet|aún no se han publicado|encara no s'han publicat/, `${locale}: the stale 'window not published' line is gone`);
   }
 });
 
