@@ -409,7 +409,7 @@ test("24 Nov 2026: newly confirmed fairs, Vic's open days, Granollers' own page"
   assert.deepEqual(vallirana.datasetDates, { start: "2026-11-28", end: "2026-11-29" });
   // Vic: fifteen open days between 5 Dec and 4 Jan, as the organiser lists them.
   const vic = FAIRS.find((f) => f.id === "org:vic-artesania-de-nadal")!;
-  const dated: DatedFair = { id: vic.id, s: vic.start, e: vic.end, n: vic.name, t: "Vic", x: vic.closed };
+  const dated: DatedFair = { id: vic.id, s: vic.start, e: vic.end, n: vic.name, t: "Vic", x: vic.closed ? [...vic.closed] : undefined };
   const open: string[] = [];
   for (let t = Date.parse(`${vic.start}T12:00:00Z`); t <= Date.parse(`${vic.end}T12:00:00Z`); t += 86_400_000) {
     const day = new Date(t).toISOString().slice(0, 10);
