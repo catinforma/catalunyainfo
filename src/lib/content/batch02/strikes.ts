@@ -441,7 +441,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * next four days (`strikeDayAnswers`), for "el 25 de noviembre hay huelga",
  * "huelga 24 noviembre 2026", "mañana hay huelga", "vaga 27 novembre".
  */
-export const STRIKES_AS_OF: string = "2026-11-24";
+export const STRIKES_AS_OF: string = "2026-11-25";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts

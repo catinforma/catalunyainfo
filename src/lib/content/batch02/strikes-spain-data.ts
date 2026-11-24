@@ -220,7 +220,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * (Correos is Madrid only on the 26th and the 27th), `doctors` and
  * `rereadBy`; new on the page: the day-by-day answers (`spainDayAnswers`).
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-24";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.
