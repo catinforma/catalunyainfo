@@ -234,7 +234,7 @@ function script(args: string[]) {
   return spawnSync(
     process.execPath,
     ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "--import", "./tests/register-alias.mjs", "scripts/holidays-snapshot.ts", ...args],
-    { cwd: ROOT, encoding: "utf8", timeout: 120_000 },
+    { cwd: ROOT, encoding: "utf8", timeout: 120_000, maxBuffer: 64 * 1024 * 1024 },
   );
 }
 const LOCAL_2027_JSON = join(ROOT, "src/lib/programmatic/holidays/local-2027.json");

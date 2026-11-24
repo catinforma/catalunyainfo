@@ -671,7 +671,10 @@ async function runBuild(options: BuildOptions): Promise<void> {
     console.log(`COUNCIL DIFFERS: ${d.slug}: council ${d.council.join(", ")}; order ${d.dogc.join(", ") || "(none)"}`);
   }
   for (const warning of result.warnings) console.log(`WARNING: ${warning}`);
-  for (const error of result.errors) console.log(`PROBLEM: ${error}`);
+  // A wrong-year order makes every date a problem (thousands of lines): the first ones say what is wrong.
+  const SHOWN_PROBLEMS = 100;
+  for (const error of result.errors.slice(0, SHOWN_PROBLEMS)) console.log(`PROBLEM: ${error}`);
+  if (result.errors.length > SHOWN_PROBLEMS) console.log(`PROBLEM: … and ${result.errors.length - SHOWN_PROBLEMS} more (the first one is usually the cause)`);
 
   if (!options.write) {
     console.log(result.errors.length ? `DRY RUN: ${result.errors.length} problem(s); --write would refuse.` : "DRY RUN: clean. Add --write to store local-2027.json.");
@@ -735,5 +738,7 @@ if (!run) {
 }
 run().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : error);
-  process.exit(1);
+  // Not process.exit(1): on a pipe it drops whatever stdout has not drained yet (64 KB), so a caller
+  // reading the output lost the PROBLEM lines. Setting the code lets the process end when stdout is flushed.
+  process.exitCode = 1;
 });
