@@ -289,6 +289,43 @@ function localSection(copy: HolidayCopy, locale: Locale): Block[] {
   ];
 }
 
+/**
+ * 24 Nov 2026: the box under the twelve dates that answers "calendario laboral
+ * 2027 cataluña" with its documents and the local-days status in one place
+ * (docs/SEO_EXPERIMENTS.md, the guide dropped out of the top 20 for the head
+ * query on 13 Nov; 40 impressions at 10.0 before). Read with curl on 24 Nov 2026:
+ * - DOGC núm. 9637, 1.4.2026 (portaldogc PDF, documentId 1040896, ca_ES and es_ES):
+ *   "Ordre EMT/52/2026, de 25 de març, per la qual s'estableix el calendari oficial
+ *   de festes laborals a Catalunya per a l'any 2027"; art. 2: "A més de les festes
+ *   esmentades, mitjançant una ordre d'aquest Departament, s'han de fixar dues
+ *   festes locals, retribuïdes i no recuperables, a proposta dels ajuntaments."
+ * - BOE núm. 254, 13.10.2026, BOE-A-2026-21254 (PDF): "Resolución de 8 de octubre
+ *   de 2026, de la Dirección General de Trabajo, por la que se publica relación de
+ *   fiestas laborales para el año 2027", note 2 repeating the Catalan order.
+ * - Local order: none for 2027 on 24 Nov (open data dataset b4eh-r8up, newest
+ *   `any_calendari` 2026), the same date as `LOCAL_ORDER_CHECKED`, whose test guard
+ *   (21 days) covers this sentence too.
+ */
+const DOGC_ORDER_PDF = { ca: "ca_ES", es: "es_ES", en: "ca_ES" } as const;
+const BOE_2027_PDF = "https://www.boe.es/boe/dias/2026/10/13/pdfs/BOE-A-2026-21254.pdf";
+
+export function officialBox(copy: HolidayCopy, locale: Locale): Block {
+  const dogc = `https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=${DOGC_ORDER_PDF[locale]}`;
+  const asOf = `${formatDay(LOCAL_ORDER_CHECKED, copy, locale)}${locale === "en" ? " " : " de "}${LOCAL_ORDER_CHECKED.slice(0, 4)}`;
+  const local = localAnchor(copy, locale);
+  const text = {
+    ca: `Els dotze festius són els de l'[Ordre EMT/52/2026 (DOGC núm. 9637, de l'1 d'abril de 2026, PDF)](${dogc}); el BOE els recull a la [Resolució de 8 d'octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Els dos festius locals de cada municipi no hi són: els fixa una altra ordre del Departament d'Empresa i Treball, a proposta dels ajuntaments (art. 2). A ${asOf} encara no ha sortit al DOGC; mentrestant, els dies que ja han aprovat els ajuntaments són [més avall](${local}).`,
+    es: `Los doce festivos son los de la [Orden EMT/52/2026 (DOGC núm. 9637, de 1 de abril de 2026, PDF)](${dogc}); el BOE los recoge en la [Resolución de 8 de octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Los dos festivos locales de cada municipio no están en ella: los fija otra orden del Departament d'Empresa i Treball, a propuesta de los ayuntamientos (art. 2). A ${asOf} todavía no ha salido en el DOGC; mientras tanto, los días que ya han aprobado los ayuntamientos están [más abajo](${local}).`,
+    en: `The twelve days are those of [Order EMT/52/2026 (DOGC no. 9637, 1 April 2026, PDF, in Catalan)](${dogc}); the BOE lists them in the [Resolution of 8 October 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Each town's two local holidays are not in it: another order of the Catalan labour department sets them, on the town councils' proposals (art. 2). On ${asOf} it had not appeared in the DOGC; meanwhile, the days the councils have already approved are [further down](${local}).`,
+  }[locale];
+  const title = {
+    ca: "Calendari laboral 2027 de Catalunya: documents oficials i festius locals",
+    es: "Calendario laboral 2027 de Cataluña: documentos oficiales y festivos locales",
+    en: "Catalonia public holidays 2027: official documents and local holidays",
+  }[locale];
+  return { type: "callout", tone: "official", title, text };
+}
+
 function localAnchor(copy: HolidayCopy, locale: Locale): string {
   return `/${locale}/${copy.path}/#${slugifyAnchor(copy.localTitle)}`;
 }
@@ -474,6 +511,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     note: copy.tableNote.replace("{bcn}", barcelonaLocalLine(copy, locale)).replace("{local}", localAnchor(copy, locale)),
     stickyColumn: 0,
   });
+
+  /* ---- The documents and the local days (24 Nov 2026) ---------------------- */
+  blocks.push(officialBox(copy, locale));
 
   /* ---- What is left of this year ----------------------------------------- */
   blocks.push(last2026Callout(copy, locale));

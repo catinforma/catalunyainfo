@@ -413,8 +413,8 @@ test("first screen: the opening sentence, the 2027 table, then the last days of 
     for (const h of BARCELONA_LOCAL) assert.ok(table.note?.includes(formatDay(h.date, copy, locale)), `${locale}: ${h.date}`);
     assert.ok(!table.note?.includes("{bcn}"), locale);
 
-    const last = body[3];
-    assert.ok(last?.type === "callout" && last.title === copy.last2026Title, `${locale}: 2026 callout fourth`);
+    const last = body[4];
+    assert.ok(last?.type === "callout" && last.title === copy.last2026Title, `${locale}: 2026 callout fifth (after the official-documents box)`);
     // 8, 25 and 26 December 2026, each linked to its date page with its weekday; 7 December said not to be one.
     for (const iso of ["2026-12-08", "2026-12-25", "2026-12-26", "2026-12-07"]) {
       assert.ok(last.text.includes(`[${formatDay(iso, copy, locale)}](${datePath(locale, iso)})`), `${locale}: ${iso}`);
@@ -425,7 +425,7 @@ test("first screen: the opening sentence, the 2027 table, then the last days of 
     assert.ok(!/\{(days|dec7|link)\}/.test(last.text), locale);
     // The bridges and key facts come after the dates.
     const facts = body.findIndex((b) => b.type === "keyFacts");
-    assert.ok(facts > 3, `${locale}: key facts after the dates`);
+    assert.ok(facts > 4, `${locale}: key facts after the dates`);
   }
 });
 

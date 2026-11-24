@@ -388,6 +388,13 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
           {notKept ? <p>{notKept}</p> : null}
           {/* The working-days calculator with this community picked (19 Nov 2026). */}
           <WorkingDaysCommunityLink locale="es" region={c.region} esSlug={c.slug} inPlace={c.en} />
+          {/* 24 Nov 2026: the Catalonia guide owns "calendario laboral 2027 cataluña"; this page links it in those words (main-urls.ts). */}
+          {c.region === "CT" ? (
+            <p>
+              Si buscas el <Link href={mainElsewhere("CT", "es")!.href}>calendario laboral 2027 de Cataluña</Link> con el PDF oficial, los festivos locales
+              pendientes de la orden del DOGC, Semana Santa y los puentes mes a mes, está en su guía.
+            </p>
+          ) : null}
 
           <h2 id="puentes">Puentes y fines de semana largos de {YEAR} {c.en}</h2>
           <p>

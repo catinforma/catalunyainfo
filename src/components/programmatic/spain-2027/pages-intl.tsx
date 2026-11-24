@@ -448,6 +448,22 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
           {notKept ? <p>{notKept}</p> : null}
           {/* The working-days calculator with this community picked (19 Nov 2026); the value is the Spanish slug's. */}
           <WorkingDaysCommunityLink locale={locale} region={c.region} esSlug={c.esSlug} inPlace={c.in} />
+          {/* 24 Nov 2026: the Catalonia guide owns "calendari laboral 2027 catalunya"; this page links it in those words (main-urls.ts). */}
+          {c.region === "CT" ? (
+            <p>
+              {ca ? (
+                <>
+                  Si busques el <Link href={mainElsewhere("CT", "ca")!.href}>calendari laboral 2027 de Catalunya</Link> amb el PDF oficial, els festius locals
+                  pendents de l&apos;ordre del DOGC, Setmana Santa i els ponts mes a mes, és a la seva guia.
+                </>
+              ) : (
+                <>
+                  For the <Link href={mainElsewhere("CT", "en")!.href}>Catalonia public holidays 2027</Link> with the official PDF, the local holidays still
+                  waiting for the DOGC order, Easter and the long weekends month by month, see its guide.
+                </>
+              )}
+            </p>
+          ) : null}
 
           <h2 id="ponts">{tr(locale, `Ponts i caps de setmana llargs del ${YEAR} ${c.in}`, `Long weekends and bridges ${c.in} in ${YEAR}`)}</h2>
           <p>
