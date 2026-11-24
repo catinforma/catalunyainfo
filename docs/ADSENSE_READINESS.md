@@ -129,7 +129,7 @@ AdSense accepted the site on 24 Nov 2026; the owner completed the US tax form
   GA4 loads only when it reports `analytics_storage` granted
   (`components/ConsentGate.tsx`, `lib/ads/client.ts`).
 - **Units:** `ci-mig` (in-article, 9170740903), `ci-final` (Multiplex,
-  3510773003), `ci-lateral` (display, desktop sidebar; pending). Placed by
+  3510773003), `ci-lateral` (display, desktop sidebar, 9517264801). Placed by
   `components/AdsRuntime.tsx`: nothing above the answer, middle only on long
   pages and below the first screen, end before in-article sources, sidebar only
   when it fits; reserved height; unfilled units hide (`data-ad-status`).

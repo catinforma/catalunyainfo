@@ -12622,7 +12622,7 @@ those date reasons; all eight strike test files pass now.
 
 **What changed.** `lib/ads/{live,config,client}.ts`, `components/AdsRuntime.tsx`; `ConsentGate` and `ConsentSettingsButton` follow Google's consent tool; CSP opens to `https:` for script/style/font/connect/frame (`docs/SECURITY.md`); privacy, cookies, legal notice, editorial policy, about, sponsorship and accessibility copy rewritten in ca/es/en; `docs/ADSENSE_READINESS.md` "Live since 24 Nov 2026". AdSense settings (owner): European regulations message with "Do not consent", consent mode for ads and analytics, auto ads overlays only (bottom anchor), nine REE pages excluded, auto optimisation off.
 
-**Not done, on purpose.** No ad on the nine PVPC/today pages (REE). No unit on home or legal pages, none above the answer. Desktop sidebar unit waits for its slot id. LSSI-CE art. 10 identity on the legal notice waits for the owner.
+**Not done, on purpose.** No ad on the nine PVPC/today pages (REE). No unit on home or legal pages, none above the answer. LSSI-CE art. 10 identity on the legal notice waits for the owner.
 
 **Expected side effects (measure, do not guess).** (a) GA4 now counts only visitors who accept in Google's window, and none outside the EEA/UK/CH (status "not applicable" is treated as denied): GA4 sessions drop and are **not comparable** with the series before 25 Nov; use GSC clicks for traffic. (b) Page weight and INP/LCP: the ad script loads after hydration; check CrUX/PageSpeed on 3 pages after 7 days.
 

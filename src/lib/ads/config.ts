@@ -33,8 +33,8 @@ export const AD_SLOTS = {
   middle: "9170740903",
   /** "ci-final": Multiplex (autorelaxed). */
   end: "3510773003",
-  /** "ci-lateral": display, vertical, responsive. Null until the owner creates it. */
-  side: null as string | null,
+  /** "ci-lateral": display, vertical, responsive (desktop sidebar). */
+  side: "9517264801" as string | null,
 } as const;
 
 export const ADSENSE_SCRIPT = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
