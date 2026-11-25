@@ -690,3 +690,42 @@ test("the publish route republishes both guides with the hub, and has a group fo
 function strip(value: string): string {
   return value.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 }
+
+/**
+ * 25 Nov 2026: the education guide's FAQ after the strike (shown from 27 Nov) answers in the past tense. The reviewer's note: the answers
+ * reused the entry's present-tense strings ("Els fixa", "Los fija", "crida", "llama"). The entry carries past-tense variants (`pastFaq`),
+ * used by that FAQ only; the page before the strike keeps the present-tense strings.
+ */
+test("the education guide's past FAQ uses the past-tense variants, never the present-tense strings", () => {
+  const educationId = guideStrikeId("strikeEducation");
+  const strike = entry(educationId);
+  assert.ok(strike.pastFaq, "the education entry has past-tense FAQ variants");
+  const present: Record<Locale, RegExp> = {
+    ca: /Els fixa\b|\bcrida a\b|\bconvoca\b|\bdesigna\b|\bha de comunicar\b/,
+    es: /Los fija\b|\bllama a\b|\bconvoca\b|\bdesigna\b|\bdebe comunicár/,
+    en: /They are set\b|\bnames who\b|\bmust tell\b|\bcalls on\b/,
+  };
+  const hrefs = (value: string) => [...value.matchAll(/\]\(([^)]+)\)/g)].map((m) => m[1]);
+  for (const locale of LOCALES) {
+    const upcoming = STRIKES_AS_OF <= strike.dates[0]!;
+    const faqOf = (day: string) => {
+      const blocks = buildStrikeGuideBody("strikeEducation", locale, day);
+      const block = blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
+      assert.ok(block, `${locale}: FAQ on ${day}`);
+      return block.items;
+    };
+    const past = faqOf("2026-11-27");
+    const answers = past.map((item) => item.answer).join("\n");
+    // The past variants, and only they, answer "who" and "minimum services".
+    assert.ok(strip(answers).includes(strip(strike.pastFaq!.ms[locale])), `${locale}: past minimum-services answer`);
+    assert.ok(strip(answers).includes(strip(strike.pastFaq!.who[locale])), `${locale}: past organisers answer`);
+    assert.doesNotMatch(answers, present[locale], `${locale}: present tense in the past FAQ`);
+    assert.doesNotMatch(answers, new RegExp(strike.minimumServices.text[locale].slice(0, 40).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `${locale}: the present-tense text`);
+    // Same facts: the same links and figures as the present-tense strings.
+    assert.deepEqual(hrefs(strike.pastFaq!.ms[locale]), hrefs(strike.minimumServices.text[locale]), `${locale}: same links (ms)`);
+    for (const figure of ["50%", "33%", "Tarragona"]) assert.ok(strike.pastFaq!.ms[locale].includes(figure), `${locale}: ${figure}`);
+    assert.ok(strike.pastFaq!.who[locale].toLowerCase().includes("ustec"), locale);
+    // Before the strike the FAQ keeps the present-tense strings.
+    if (upcoming) assert.ok(strip(faqOf(STRIKES_AS_OF).map((item) => item.answer).join("\n")).includes(strip(strike.minimumServices.text[locale])), `${locale}: present before the strike`);
+  }
+});

@@ -840,11 +840,13 @@ function pastEducationFaq(c: Ctx): { question: string; answer: string }[] {
     es: " La huelga era del personal, no un cierre de centros.",
     en: " It was a strike by staff, not a closure of schools.",
   }[c.locale];
+  const who = c.strike.pastFaq?.who[c.locale] ?? c.who;
   return [
     { question: q.when, answer: c.when ?? cap(c.days) },
     ...(school ? [{ question: q.school, answer: `${open}${school}${notClosure}` }] : []),
-    { question: q.ms, answer: c.strike.minimumServices.text[c.locale] },
-    ...(c.who ? [{ question: q.who, answer: c.who }] : []),
+    // 25 Nov 2026: the entry's past-tense variants when it has them ("Los fijó", "llamó"), never its present-tense strings.
+    { question: q.ms, answer: c.strike.pastFaq?.ms[c.locale] ?? c.strike.minimumServices.text[c.locale] },
+    ...(who ? [{ question: q.who, answer: who }] : []),
     notice,
   ];
 }

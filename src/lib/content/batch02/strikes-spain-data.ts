@@ -253,6 +253,17 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * modified by Orden 4977/2026 (BOCM núm. 278, 19 Nov); BOCM of 20-24 Nov: no
  * further order. The indefinite strike of CCOO, UGT, CGT and others, covered by
  * the same orders, is not listed (its current notices were not read).
+ *
+ * 25 Nov 2026 (10:05-10:25 CET, Wednesday), second full re-read of the day (docs/SEO_EXPERIMENTS.md, "2026-11-25 — Strikes re-read for 26 Nov
+ * (ci-fonts)"). NEW: the Ministry of Transport's air list now opens with the resolution for the indefinite strike of the works council of
+ * SERVEO Facility Management, S.A.U., cleaning of terminals T1, T2 and T3 at Madrid-Barajas, from 23:00 on 25 Nov, 319 workers, 50% / 25% of the
+ * daily staff, in force to 31 Jan 2027 (signed 24 Nov, 20:45): `huelga-serveo-barajas-limpieza`, the fourth open airport strike. Unchanged: Correos
+ * (Orden INT/1239/2026; BOE of 25 Nov, núm. 293: no strike order; Correos' press room nothing); CSIF Madrid (BOCM núm. 283 of 25 Nov, 67
+ * items: no strike or minimum-services item; CSIF's newest items of 23 Nov, a court claim and a demand, keep "la huelga indefinida convocada por
+ * CSIF", no change to 26 Nov); CCOO Madrid (home page: nothing newer); the Ministry's rail list (newest still the 12 Nov resolution), SEMAF (newest 20 Nov),
+ * SCF (SCFCOM 40), ALFERRO (newest 83/2026); Basque list (newest 17 Nov); CESM (still postponed). SMU: medicosunidos.es did not resolve (DNS) from
+ * the server, so its notice PDF was not re-fetched; huelgamedica.es (the campaign's own site, read) still says "16 AL 27 DE NOVIEMBRE" and its feed's newest
+ * item is 20 Nov; the notice itself was read at 00:40 the same day ("hasta las 08:00 horas del sábado 28 de noviembre de 2026").
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
 
@@ -400,6 +411,16 @@ export const SPAIN_URLS = {
   saercoResolution: `${CDN}/aereo/huelga-servicios-minimos/51_26-10-01--resolucion-huelga-saerco_vi.pdf`,
   groundforceResolution: STRIKE_URLS.groundforce,
   outsmartResolution: `${CDN}/aereo/huelga-servicios-minimos/48_26-10-01---resolucion-outsmart--sate-mad_vi.pdf`,
+  /**
+   * Ministry of Transport, resolution signed 24 Nov 2026 20:45 (read 25 Nov 2026, ~10:10 CET; HTTP 200, on the air list that morning): «El Comité de Empresa de
+   * SERVEO FACILITY MANAGEMENT, S.A.U. […] ha convocado una huelga de carácter indefinido, que comenzará el día 25 de noviembre de 2026, a las 23:00 horas,
+   * afectando a la totalidad de la jornada de trabajo. Esta convocatoria afecta a los trabajadores de la empresa que prestan servicios de limpieza en las
+   * terminales T1, T2 y T3 del aeropuerto Adolfo Suárez Madrid-Barajas»; «la huelga afecta a 319 trabajadores»; «a) Una plantilla de servicios mínimos del 50% de la
+   * plantilla programada diaria para: la limpieza de aseos de los edificios terminales […] b) Una plantilla de servicios mínimos del 25% de la plantilla
+   * programada diaria para: el resto de las zonas públicas interiores […] deberá haber una persona por turno de trabajo, como mínimo»; «Esta resolución entrará en
+   * vigor el día 25 de noviembre de 2026, a las 23:00 horas y estará vigente hasta el día 31 de enero de 2027». The cleaning of aircraft is excluded from the request.
+   */
+  serveoResolution: `${CDN}/aereo/huelga-servicios-minimos/2026/55_26-11-25----resolucion-huelga-serveo-facility-management---mad_vi.pdf`,
   // Not happening.
   cesm: "https://www.cesm.org/2026/10/07/el-comite-de-huelga-aplaza-los-paros-indefinidos-tras-la-convocatoria-electoral-pero-mantiene-vivo-el-conflicto/",
   semafOuigo: STRIKE_URLS.semafOuigo,
@@ -1281,6 +1302,25 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
     },
     sources: [
       { name: "Resolución de servicios mínimos de la huelga en Outsmart Assistance S.L., SATE de Madrid-Barajas (efectos del 1 de octubre al 30 de noviembre de 2026)", url: U.outsmartResolution, publisher: MINISTRY },
+      SRC.ministryAir,
+    ],
+  },
+  {
+    // 25 Nov 2026 (read ~10:10 CET): new on the Ministry's air list that morning; the resolution was signed on 24 Nov at 20:45. It starts at 23:00 on the 25th, so 26 Nov is its first full day.
+    id: "huelga-serveo-barajas-limpieza",
+    msValidUntil: "2027-01-31",
+    title: {
+      ca: "Serveo: neteja de les terminals T1, T2 i T3 de Madrid-Barajas",
+      es: "Serveo: limpieza de las terminales T1, T2 y T3 de Madrid-Barajas",
+      en: "Serveo: cleaning of terminals T1, T2 and T3 at Madrid-Barajas",
+    },
+    text: {
+      ca: `Vaga indefinida convocada pel comitè d'empresa de SERVEO Facility Management, S.A.U. al servei de neteja de les terminals T1, T2 i T3 de l'aeroport Adolfo Suárez Madrid-Barajas, des de les 23.00 h del 25 de novembre de 2026 i durant tota la jornada de treball; segons la ${link(U.serveoResolution, "resolució del Ministeri de Transports")}, afecta 319 treballadors i no inclou la neteja d'aeronaus. Els serveis mínims són el 50% de la plantilla programada diària per als lavabos dels edificis terminals, les dependències tècniques i operatives i l'exterior del costat aire, i el 25% per a la resta de zones públiques interiors i l'exterior del costat terra, amb una persona per torn com a mínim, fins al 31 de gener de 2027, segons ${link(U.ministryAir, "la llista del Ministeri de Transports")}.`,
+      es: `Huelga indefinida convocada por el comité de empresa de SERVEO Facility Management, S.A.U. en el servicio de limpieza de las terminales T1, T2 y T3 del aeropuerto Adolfo Suárez Madrid-Barajas, desde las 23.00 h del 25 de noviembre de 2026 y durante toda la jornada de trabajo; según la ${link(U.serveoResolution, "resolución del Ministerio de Transportes")}, afecta a 319 trabajadores y no incluye la limpieza de aeronaves. Los servicios mínimos son el 50% de la plantilla programada diaria para los aseos de los edificios terminales, las dependencias técnicas y operativas y el exterior del lado aire, y el 25% para el resto de las zonas públicas interiores y el exterior del lado tierra, con una persona por turno como mínimo, hasta el 31 de enero de 2027, según ${link(U.ministryAir, "la lista del Ministerio de Transportes")}.`,
+      en: `An indefinite strike called by the works council of SERVEO Facility Management, S.A.U. in the cleaning service of terminals T1, T2 and T3 at Adolfo Suárez Madrid-Barajas airport, from 23:00 on 25 November 2026 and for the whole working day; according to the ${link(U.serveoResolution, "Ministry of Transport's resolution")}, it affects 319 workers and does not include cleaning aircraft. The minimum services are 50% of the daily scheduled staff for the toilets of the terminal buildings, technical and operational areas and the airside outdoors, and 25% for the rest of the indoor public areas and the landside outdoors, with at least one person per shift, until 31 January 2027, according to ${link(U.ministryAir, "the Ministry of Transport's list")}.`,
+    },
+    sources: [
+      { name: "Resolución de servicios mínimos de la huelga indefinida en SERVEO Facility Management, limpieza de las terminales T1, T2 y T3 de Madrid-Barajas (del 25 de noviembre de 2026 al 31 de enero de 2027)", url: U.serveoResolution, publisher: MINISTRY },
       SRC.ministryAir,
     ],
   },
