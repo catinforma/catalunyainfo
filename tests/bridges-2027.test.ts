@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { editionBridgesPath } from "../src/lib/programmatic/spain-2027/editions.ts";
+import { spainBridgesPath } from "../src/lib/programmatic/spain-2027/paths.ts";
 import { leaveEditions } from "../src/lib/programmatic/leave-2027/copy.ts";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -79,6 +81,10 @@ const PUBLISHED = new Set([
   ...holidayFamilyPaths().map((p) => p.path),
   // The 2027 leave planner (static routes, leave-2027/copy.ts), linked from the best-use section since 13 Nov 2026.
   ...Object.values(leaveEditions()),
+  // 25 Nov 2026: the Spain-wide "puentes 2027" page, linked from the leave section in the query's words.
+  spainBridgesPath(),
+  editionBridgesPath("ca"),
+  editionBridgesPath("en"),
 ]);
 // Built in parallel by another agent (31 Oct 2026); linked by its planned paths.
 const EASTER = new Set(LOCALES.map((locale) => `/${locale}/${EASTER_2027_PATHS[locale]}/`));

@@ -34,6 +34,19 @@ export const SPAIN_MAIN: Record<MainLocale, string> = {
   en: "/en/holidays/2027/",
 };
 
+/**
+ * "puentes 2027 [España]": the Spain-wide long-weekends page. The Catalonia
+ * guides (`GUIDES.bridges2027`, `GUIDES.workCalendar`) link it with these
+ * words (25 Nov 2026); it links the Catalonia bridges guide back. Different
+ * readers, so no merge and no redirect. `tests/owner-links.test.ts` ties the
+ * paths to `spainBridgesPath()` and `editionBridgesPath()`.
+ */
+export const SPAIN_BRIDGES: Record<MainLocale, string> = {
+  ca: "/ca/festius/2027/ponts/",
+  es: "/es/festivos/2027/puentes/",
+  en: "/en/holidays/2027/long-weekends/",
+};
+
 /** Communities whose calendar has its main page outside this family, and the anchor every link to it carries. */
 const ELSEWHERE: Partial<Record<Region, { paths: Record<MainLocale, string>; anchor: Record<MainLocale, string> }>> = {
   CT: {

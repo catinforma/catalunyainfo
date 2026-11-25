@@ -22,7 +22,13 @@ import { hubAnswer, relatedLinks } from "../src/lib/programmatic/reservoirs/copy
 import { snapshotReadings } from "../src/lib/programmatic/reservoirs/data.ts";
 import { reservoirHubPath } from "../src/lib/programmatic/reservoirs/paths.ts";
 import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
-import { SPAIN_MAIN, mainElsewhere } from "../src/lib/programmatic/spain-2027/main-urls.ts";
+import { SPAIN_BRIDGES, SPAIN_MAIN, mainElsewhere } from "../src/lib/programmatic/spain-2027/main-urls.ts";
+import { buildBridgesBody } from "../src/lib/content/batch02/bridges-2027.ts";
+import { COMMON_DATES, commonRows } from "../src/lib/programmatic/spain-2027/calendar.ts";
+import { hubLead, weekdayDate } from "../src/lib/programmatic/spain-2027/copy.ts";
+import { hubLeadIntl, weekdayDateIntl } from "../src/lib/programmatic/spain-2027/copy-intl.ts";
+import { editionBridgesPath } from "../src/lib/programmatic/spain-2027/editions.ts";
+import { spainBridgesPath } from "../src/lib/programmatic/spain-2027/paths.ts";
 import { todayLinks } from "../src/lib/programmatic/today/data.ts";
 
 /**
@@ -307,4 +313,80 @@ test("8. Spain-wide day pages of Maundy Thursday, Good Friday and Easter Monday 
   assert.match(intl, /GUIDES\.easter2027\[locale\]/, "ca/en hub sentence");
   assert.match(intl, /GUIDES\.easter2027\.ca/);
   assert.match(intl, /GUIDES\.easter2027\.en/);
+});
+
+/* ------------------------------------------------------------------ 9 */
+/* "puentes 2027" (25 Nov 2026): the Catalonia guides link the Spain-wide page in the query's words; it links the
+   Catalonia guide back. Two pages, two readers: no merge, no redirect. */
+
+test("9. Spain puentes path table = the page's own paths", () => {
+  assert.equal(SPAIN_BRIDGES.es, spainBridgesPath());
+  assert.equal(SPAIN_BRIDGES.ca, editionBridgesPath("ca"));
+  assert.equal(SPAIN_BRIDGES.en, editionBridgesPath("en"));
+});
+
+test("9. Catalonia long-weekends guide and Catalonia work calendar link 'puentes 2027 en España' (ca/es/en)", () => {
+  const words = {
+    ca: /ponts 2027 a Espanya/,
+    es: /puentes 2027 en España/,
+    en: /2027 long weekends in Spain/,
+  };
+  for (const locale of LOCALES) {
+    assertLinks(buildBridgesBody(locale), SPAIN_BRIDGES[locale], words[locale], `long-weekends guide ${locale}`);
+    assertLinks(workCalendarBody(locale), SPAIN_BRIDGES[locale], words[locale], `work calendar ${locale}`);
+  }
+});
+
+test("9. Spain puentes page links the Catalonia guide back; the hub links the Spain puentes page with the head words", () => {
+  const es = read("src/components/programmatic/spain-2027/pages.tsx");
+  const intl = read("src/components/programmatic/spain-2027/pages-intl.tsx");
+  const esBridges = es.slice(es.indexOf("export function SpainBridgesPage()"));
+  assert.match(esBridges, /data-catalonia-bridges[\s\S]{0,400}GUIDES\.bridges2027\.es[\s\S]{0,80}puentes 2027 en Cataluña/);
+  const intlBridges = intl.slice(intl.indexOf("export function SpainBridgesPageIntl"));
+  assert.match(intlBridges, /data-catalonia-bridges[\s\S]{0,700}GUIDES\.bridges2027\[locale\][\s\S]{0,160}ponts 2027 a Catalunya[\s\S]{0,80}2027 long weekends in Catalonia/);
+  // The hub's "puentes" section carries the head anchor.
+  assert.match(es, /Puentes \{YEAR\} en España, comunidad por comunidad/);
+  assert.match(intl, /Ponts \$\{YEAR\} a Espanya, comunitat per comunitat[\s\S]{0,40}\$\{YEAR\} long weekends in Spain, region by region/);
+  for (const locale of LOCALES) assert.equal(GUIDES.bridges2027[locale], b2("bridges2027", locale));
+});
+
+/* ------------------------------------------------------------------ 10 */
+/* "festivos 2027 España" (hub, position ~34): the first screen answers it: the nationwide days with their weekday,
+   the count in the heading, the source, then who sets the regional and local ones. */
+
+test("10. Spain 2027 hub: nationwide list (weekday + date) and count first, then the lead says who sets the rest (ca/es/en)", () => {
+  const rows = commonRows();
+  assert.equal(rows.length, COMMON_DATES.length);
+  assert.ok(rows.length >= 5 && rows.length <= 9, `nationwide days: ${rows.length}`);
+  for (const r of rows) {
+    assert.match(weekdayDate(r.date), /^(lunes|martes|miércoles|jueves|viernes|sábado|domingo) \d/);
+    assert.match(weekdayDateIntl(r.date, "ca"), /^(dilluns|dimarts|dimecres|dijous|divendres|dissabte|diumenge) \d/);
+    assert.match(weekdayDateIntl(r.date, "en"), /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday) \d/i);
+  }
+  const n = String(COMMON_DATES.length);
+  assert.match(hubLead(), new RegExp(`${n} días son festivo en todas partes; el resto los fija cada comunidad autónoma.*hasta 2 festivos locales por municipio`));
+  assert.match(hubLeadIntl("ca"), new RegExp(`${n} dies són festius arreu; la resta els fixa cada comunitat autònoma.*fins a 2 festius locals`));
+  assert.match(hubLeadIntl("en"), new RegExp(`${n} days are holidays everywhere; the rest are set by each autonomous community.*up to 2 local holidays`));
+  // Order on the page: H2 with the count, the list, the source line, the lead, and only then the month table.
+  const inOrder = (source: string, from: string, parts: RegExp[], what: string) => {
+    const page = source.slice(source.indexOf(from));
+    let at = -1;
+    for (const re of parts) {
+      const m = page.search(re);
+      assert.ok(m > at, `${what}: ${re} out of order`);
+      at = m;
+    }
+  };
+  inOrder(
+    read("src/components/programmatic/spain-2027/pages.tsx"),
+    "export function SpainHubPage()",
+    [/id="comunes"[^>]*>Los \{COMMON_DATES\.length\} festivos comunes a toda España/, /commonRows\(\)\.map/, /Fuente:/, /\{hubLead\(\)\}/, /id="meses"/],
+    "es hub",
+  );
+  inOrder(
+    read("src/components/programmatic/spain-2027/pages-intl.tsx"),
+    "export function SpainHubPageIntl",
+    [/id="comuns"/, /commonRows\(\)\.map/, /"Font: "/, /\{hubLeadIntl\(locale\)\}/, /id="mesos"/],
+    "ca/en hub",
+  );
 });

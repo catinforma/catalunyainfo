@@ -16,6 +16,8 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality, SourceRef } from "@/lib/programmatic/holidays/types";
 
+import { SPAIN_BRIDGES } from "@/lib/programmatic/spain-2027/main-urls";
+
 import { SIBLING_PATHS, runWords } from "./december-bridge";
 import { dayDate, span } from "./festive";
 import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
@@ -461,6 +463,20 @@ function easterHref(locale: Locale): string {
   return `/${locale}/${EASTER_2027_PATHS[locale]}/`;
 }
 
+/**
+ * 25 Nov 2026 ("puentes 2027" 22 impressions at 19.7 on this guide while the
+ * Spain-wide page had none): one line, in the query's words, to the page that
+ * covers every region. The two pages answer different readers (Catalonia and
+ * its towns here, every region there), so neither is merged or redirected.
+ */
+function spainBridges(locale: Locale): string {
+  return L(locale, {
+    ca: `Si busques els ponts del ${YEAR} d'altres comunitats, o de tot Espanya, amb els festius del BOE de cadascuna, són a [ponts ${YEAR} a Espanya](${SPAIN_BRIDGES.ca}): aquesta guia és només per a Catalunya.`,
+    es: `Si buscas los puentes de ${YEAR} de otras comunidades, o de toda España, con los festivos del BOE de cada una, están en [puentes ${YEAR} en España](${SPAIN_BRIDGES.es}): esta guía es solo para Cataluña.`,
+    en: `For the ${YEAR} long weekends of other regions, or across Spain, with each region's BOE holidays, see [${YEAR} long weekends in Spain](${SPAIN_BRIDGES.en}); this guide covers Catalonia only.`,
+  });
+}
+
 function sibling(key: "school" | "local", locale: Locale, label: string): string {
   return `[${label}](/${locale}/${SIBLING_PATHS[key][locale]}/)`;
 }
@@ -775,6 +791,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         ...(jumpLine ? [jumpLine] : []),
         "És un càlcul, no un dret: les vacances es demanen i es pacten amb l'empresa, i els torns, els convenis i les festes locals ho poden canviar tot.",
         `Si tens més dies o vols comptar-hi les festes del teu municipi, ${planner}: tries el municipi i els dies de vacances, i et diu quins dies demanar per fer més dies de festa seguits.`,
+        spainBridges("ca"),
       ),
       ...h2(
         "Barcelona: dos ponts més amb les festes locals",
@@ -847,6 +864,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         ...(jumpLine ? [jumpLine] : []),
         "Es un cálculo, no un derecho: las vacaciones se piden y se pactan con la empresa, y los turnos, los convenios y las fiestas locales pueden cambiarlo todo.",
         `Si tienes más días o quieres contar las fiestas de tu municipio, ${planner}: eliges el municipio y los días de vacaciones, y te dice qué días pedir para encadenar más días de fiesta.`,
+        spainBridges("es"),
       ),
       ...h2(
         "Barcelona: dos puentes más con las fiestas locales",
@@ -918,6 +936,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ...(jumpLine ? [jumpLine] : []),
       "This is a calculation, not an entitlement: leave has to be requested and agreed with your employer, and shifts, collective agreements and local holidays can change everything.",
       `With more leave, or to count your town's local holidays, ${planner}: pick the town and the days of leave, and it tells you which days to book for the most days off in a row.`,
+      spainBridges("en"),
     ),
     ...h2(
       "Barcelona: two more long weekends from its local holidays",

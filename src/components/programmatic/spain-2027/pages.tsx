@@ -725,7 +725,7 @@ export function SpainHubPage() {
             Sin gastar vacaciones y en todas las comunidades: {free.map((r) => rangeWords(r.from, r.to)).join("; ")}. La Semana Santa da al menos
             4 días seguidos en todas partes; el resto de puentes depende de cada comunidad. Los festivos, las vacaciones escolares y los puentes de
             la Semana Santa de 2027 en Cataluña, en <Link href={GUIDES.easter2027.es}>Semana Santa 2027 en Cataluña</Link>.{" "}
-            <Link href={spainBridgesPath()}>Todos los puentes de {YEAR}, comunidad por comunidad</Link>.
+            <Link href={spainBridgesPath()}>Puentes {YEAR} en España, comunidad por comunidad</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{COMPUTED_NOTE}</p>
           <DecemberBridgeLine locale="es" />
@@ -856,6 +856,11 @@ export function SpainBridgesPage() {
               );
             })}
           </ul>
+          {/* Catalan readers (25 Nov 2026): their own guide, with the towns' local days and the leave to book. */}
+          <p data-catalonia-bridges>
+            ¿Vives en Cataluña? Con los 12 festivos de la Orden EMT/52/2026, las fiestas locales de las grandes ciudades y los días de vacaciones que
+            hay que pedir, los puentes están en <Link href={GUIDES.bridges2027.es}>puentes 2027 en Cataluña</Link>.
+          </p>
         </div>
 
         <CommunityLinks />

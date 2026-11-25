@@ -861,7 +861,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
             )}
             {tr(locale, "Els festius, les vacances escolars i els ponts de la Setmana Santa del 2027 a Catalunya, a ", "The public holidays, school break and long weekends of Easter 2027 in Catalonia are in ")}
             <Link href={GUIDES.easter2027[locale]}>{tr(locale, "Setmana Santa 2027 a Catalunya", "Easter 2027 in Catalonia")}</Link>.{" "}
-            <Link href={editionBridgesPath(locale)}>{tr(locale, `Tots els ponts del ${YEAR}, comunitat per comunitat`, `Every long weekend of ${YEAR}, region by region`)}</Link>.
+            <Link href={editionBridgesPath(locale)}>{tr(locale, `Ponts ${YEAR} a Espanya, comunitat per comunitat`, `${YEAR} long weekends in Spain, region by region`)}</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{computedNote(locale)}</p>
           <DecemberBridgeLine locale={locale} />
@@ -1006,6 +1006,11 @@ export function SpainBridgesPageIntl({ locale }: { locale: Edition }) {
               );
             })}
           </ul>
+          {/* Catalan readers (25 Nov 2026): their own guide, with the towns' local days and the leave to book. */}
+          <p data-catalonia-bridges>
+            {tr(locale, "Vius a Catalunya? Amb els 12 festius de l'Ordre EMT/52/2026, les festes locals de les grans ciutats i els dies de vacances que cal demanar, els ponts són a ", "Live in Catalonia? With the 12 holidays of Order EMT/52/2026, the largest towns' local holidays and the days of leave to book, the long weekends are in ")}
+            <Link href={GUIDES.bridges2027[locale]}>{tr(locale, "ponts 2027 a Catalunya", "2027 long weekends in Catalonia")}</Link>.
+          </p>
         </div>
 
         <CommunityLinks locale={locale} />
