@@ -14753,3 +14753,15 @@ Tests: `carnival` (17), `batch02` (63) pass; `tsc --noEmit` clean; `seo:body-dat
 **Baseline** (GSC 90 d to 25 Nov): see Why; Barcelona page 1,553 impressions / 30 clicks, position 6.6. **Review 2026-12-15:** `snapshot.py page cabalgata 28`, per-town queries; re-read all watch pages from 1 Dec.
 
 Tests: `tests/reis.test.ts` (35 pass; BIG_TOWNS extended); `tsc --noEmit` clean; `seo:body-dates` run.
+
+## 2026-11-25 (night) - Calçotada de Valls 2027: re-read + Sant Antoni / Tres Tombs decision (O10; ci-fonts + ci-edicio; ca/es/en; group `calcots`) (review 2027-01-20)
+
+**URLs.** `/ca/tradicions/calcotada-valls-temporada-calcots/`, `/es/tradiciones/calcotada-valls-temporada-calcots/`, `/en/traditions/calcotada-valls-calcot-season/`. Title, meta, H1 and lead template untouched; the only change is the lead's "checked on" date, 23 -> 25 Nov (factual).
+
+**Read 25 Nov 2026 (curl, HTTP 200).** Press room `festacalcotadavalls.cat/premsa/`: newest post still the 23 Nov one; 19 Oct post: "el diumenge 31 de gener de 2027"; no 2027 programme, price or advance sale. Ajuntament `valls.cat/la-ciutat/la-calcotada`: "L'últim diumenge de gener se celebra cada any la Gran Festa de la Calçotada" (the page's "usually last Sunday" is council-sourced). IGP home: "La seva temporada és de novembre a abril". The page already answers date, season, IGP and getting there (R13 / Monbus) on the first screen, so nothing was added: the position (8.5) is an authority question, not a content gap. Rodalies/Monbus pages not re-read in depth today: `CALCOTS_VERIFIED` stays 2026-11-13.
+
+**Baseline (GSC 28 d to 25 Nov, `page calcotada`).** "calçotada valls 2027" 121 impr, pos 8.5, 3 clicks; "calçotada valls" 61 at 20.8; "festa calçotada valls 2027" 28 at 6.7; "festa calçotada valls" 29 at 25.9. Review 2027-01-20: `snapshot.py page calcotada 28`; the 8 Jan guard (`CALCOTS_REREAD_BY`) still applies.
+
+**Decision, Sant Antoni Abat / Tres Tombs: no page now.** Evidence: zero impressions on any query (GSC), no page, no query in `gaps`; demand is seasonal (January) and unmeasured, and a page would need per-town council programmes that are not published in November (Sunday 17 Jan 2027 would be only a calendar fact). A thin date-only page would break the "no thin pages" rule. Instead: when O9 ("Barcelona in January/February") or a January traditions section is built, add Sant Antoni with only the council dates then published. Revisit 2027-01-10: if `gaps`/queries show >= 100 impressions/28 d for "tres tombs"/"sant antoni abat 2027", build a compact ca/es/en guide from councils (Barcelona, Igualada, Vilanova, Valls, Sant Cugat) with date guards. No dates were put anywhere today.
+
+Tests: `tests/calcots.test.ts`, `tsc --noEmit`; `seo:body-dates` run.

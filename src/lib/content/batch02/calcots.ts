@@ -257,10 +257,11 @@ export const CALCOTS_META: Record<Locale, { path: string; title: string; seoTitl
 /* -------------------------------------------------------------------------- */
 
 const CHECKED: Record<Locale, string> = {
+  // 25 Nov 2026: the press room (newest post still 23 Nov), the Ajuntament page (L'últim diumenge de gener) and the IGP home re-read; no 2027 programme.
   // 23 Nov 2026: the press room, the home page and the tasting page re-read; no 2027 programme.
-  ca: "consultat el 23 de novembre de 2026",
-  es: "consultado el 23 de noviembre de 2026",
-  en: "checked on 23 November 2026",
+  ca: "consultat el 25 de novembre de 2026",
+  es: "consultado el 25 de noviembre de 2026",
+  en: "checked on 25 November 2026",
 };
 
 function check(programme: ProgrammeNotice | null): ProgrammeNotice | null {
