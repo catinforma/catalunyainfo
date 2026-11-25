@@ -15,6 +15,7 @@ import {
   dateYear,
   type Announcements,
 } from "./festive";
+import { seasonLinks } from "./christmas-season-links";
 import {
   b2Related,
   b2link,
@@ -72,8 +73,34 @@ import {
  * that night, what opens on 1 January).
  */
 
-/** The day the City Council's press room and Christmas site were last read for the 2026-27 New Year's Eve. */
-export const NEW_YEAR_CHECKED = "2026-11-21";
+/**
+ * The day the City Council's press room and Christmas site were last read for the 2026-27 New Year's Eve.
+ * 25 Nov 2026 (body only): re-read the press room tag "nadal-2026" (latest items 23 and 25 Nov, all about the
+ * lights switch-on of 26 Nov; nothing on Cap d'Any), barcelona.cat/nadal/ca ("Nadal 2025", "es tornarà a actualitzar
+ * al voltant del mes de novembre del 2026") and its Cap d'Any page (still the 2025 show), TMB's operating-hours page
+ * ("24 December", "31 December: Continuous service throughout New Year's Eve") and TMB's press room (latest item
+ * 25 Nov; no Christmas or New Year's Eve notice).
+ */
+export const NEW_YEAR_CHECKED = "2026-11-25";
+
+/**
+ * TMB's own notices of last season, for the sentence that says when they come out: Christmas Eve hours on 23 Dec 2025
+ * (the City Council's note, PAST.tmbChristmas2025) and "Per Cap d'Any, el metro funcionarà 43 hores sense interrupció"
+ * on 30 Dec 2025 (TMB press room, read 25 Nov 2026: "30.12.2025").
+ */
+export const TMB_NYE_NOTICE_2025 = "2025-12-30";
+
+/** Last year's TMB notices and what the standing timetable says for 24 December, in the searched words ("metro 24 diciembre"). */
+export function tmbNoticeSentence(locale: Locale): string {
+  const eve = dateYear(PAST.tmbChristmas2025.published, locale);
+  const nye = dateYear(TMB_NYE_NOTICE_2025, locale);
+  const checked = dateYear(NEW_YEAR_CHECKED, locale);
+  return {
+    ca: `**Metro el 24 de desembre i la nit de Cap d'Any, el 2026:** segons l'horari general de TMB, el 24 de desembre el metro tanca a les 23:00. TMB encara no ha publicat el servei especial del 2026 (comprovat el ${checked}); l'any passat va publicar els horaris de la vigília de Nadal el ${eve} i el servei de la nit de Cap d'Any el ${nye}.`,
+    es: `**Metro el 24 de diciembre y en Nochevieja, en 2026:** según el horario general de TMB, el 24 de diciembre el metro cierra a las 23:00. TMB aún no ha publicado el servicio especial de 2026 (comprobado el ${checked}); el año pasado publicó los horarios de Nochebuena el ${eve} y el servicio de Nochevieja el ${nye}.`,
+    en: `**Metro on 24 December and on New Year's Eve, 2026:** according to TMB's standing timetable, the metro closes at 23:00 on 24 December. TMB has not published its 2026 special service yet (checked on ${checked}); last year it published the Christmas Eve hours on ${eve} and the New Year's Eve service on ${nye}.`,
+  }[locale];
+}
 
 /**
  * The re-read checkpoints: from each day NEW_YEAR_CHECKED must be on or after
@@ -362,6 +389,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "El 2025, de 21:00 a 2:00 els trens passaven cada 4 minuts o menys a les línies 1 i 3, i de 2:00 a 5:00, cada 10 minuts o menys a les línies 1, 4 i 5.",
         "**Estacions recomanades (2025):** Espanya (L1 i L3), la més propera, i també Hostafrancs (L1), Tarragona (L3), Rocafort (L1) i Poble Sec (L3), amb personal per regular el pas de gent a l'entrada i a la sortida.",
         "**Autobusos (2025):** a partir de les 19:00 es van desviar les línies 13, 23, 150 i X3 i la ruta vermella del Bus Turístic, i a partir de les 20:00, la D20, H12, H16, 46, 65, 91, 109 i X2, pels talls de trànsit a la plaça d'Espanya.",
+        tmbNoticeSentence("ca"),
         "Aquesta taula aplica l'horari general de TMB a la nit de Cap d'Any i als dies de Reis. L'1 de gener de 2027 és divendres, i els divendres l'horari general arriba fins a les 2:00; TMB ho confirmarà al desembre:",
       ),
       metroTable("ca", NYE_METRO_DAYS),
@@ -385,6 +413,8 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Reis: el 5 de gener",
         `${cavalcadaSentence("ca", facts)} El 6 de gener de 2027 (dimecres) és festiu i les botigues amb horari general tanquen.`,
       ),
+      ...seasonLinks("ca", ["barcelonaDecember", "christmasLights", "holidayToday"]),
+
       faq([
         { question: "On es fan els focs de Cap d'Any a Barcelona?", answer: whereAnswer("ca", facts) },
         {
@@ -449,6 +479,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "En 2025, de 21:00 a 2:00 los trenes pasaban cada 4 minutos o menos en las líneas 1 y 3, y de 2:00 a 5:00, cada 10 minutos o menos en las líneas 1, 4 y 5.",
         "**Estaciones recomendadas (2025):** Espanya (L1 y L3), la más cercana, y también Hostafrancs (L1), Tarragona (L3), Rocafort (L1) y Poble Sec (L3), con personal para regular el paso de gente a la entrada y a la salida.",
         "**Autobuses (2025):** desde las 19:00 se desviaron las líneas 13, 23, 150 y X3 y la ruta roja del Bus Turístic, y desde las 20:00, la D20, H12, H16, 46, 65, 91, 109 y X2, por los cortes de tráfico en la plaza de España.",
+        tmbNoticeSentence("es"),
         "Esta tabla aplica el horario general de TMB a la Nochevieja y a los días de Reyes. El 1 de enero de 2027 es viernes, y los viernes el horario general llega hasta las 2:00; TMB lo confirmará en diciembre:",
       ),
       metroTable("es", NYE_METRO_DAYS),
@@ -472,6 +503,8 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Reyes: el 5 de enero",
         `${cavalcadaSentence("es", facts)} El 6 de enero de 2027 (miércoles) es festivo y las tiendas con horario general cierran.`,
       ),
+      ...seasonLinks("es", ["barcelonaDecember", "christmasLights", "holidayToday"]),
+
       faq([
         { question: "¿Dónde son los fuegos artificiales de fin de año en Barcelona?", answer: whereAnswer("es", facts) },
         {
@@ -535,7 +568,8 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "In 2025, from 21:00 to 2:00 trains ran every 4 minutes or less on lines 1 and 3, and from 2:00 to 5:00 every 10 minutes or less on lines 1, 4 and 5.",
       "**Recommended stations (2025):** Espanya (L1, L3), the closest, and also Hostafrancs (L1), Tarragona (L3), Rocafort (L1) and Poble Sec (L3), with staff managing the crowds on the way in and out.",
       "**Buses (2025):** from 19:00, lines 13, 23, 150 and X3 and the Bus Turístic red route were diverted, and from 20:00 lines D20, H12, H16, 46, 65, 91, 109 and X2, because of the road closures at Plaça d'Espanya.",
-      "This table applies TMB's standing timetable to New Year's Eve and the Three Kings days. 1 January 2027 is a Friday, and on Fridays the standing timetable runs to 2:00; TMB will confirm in December:",
+      tmbNoticeSentence("en"),
+        "This table applies TMB's standing timetable to New Year's Eve and the Three Kings days. 1 January 2027 is a Friday, and on Fridays the standing timetable runs to 2:00; TMB will confirm in December:",
     ),
     metroTable("en", NYE_METRO_DAYS),
     nightTransportTable("en"),
@@ -558,6 +592,8 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "Three Kings: 5 January",
       `${cavalcadaSentence("en", facts)} 6 January 2027 (a Wednesday) is a public holiday and shops on the general timetable close.`,
     ),
+    ...seasonLinks("en", ["barcelonaDecember", "christmasLights", "holidayToday"]),
+
     faq([
       { question: "Where are the New Year's Eve fireworks in Barcelona?", answer: whereAnswer("en", facts) },
       {

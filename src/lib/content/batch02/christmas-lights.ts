@@ -682,7 +682,7 @@ function afterSection(locale: Locale): Block[] {
       texts: [
         `La Fira de Santa Llúcia, davant de la Catedral, és ${sl}, ${slHours}, segons l'[Agenda Cultural de la Generalitat](${SANTA_LLUCIA_2026.url}). Aquesta i la resta de fires de Barcelona i de Catalunya són a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}, i totes les fires amb data oficial, poble a poble, a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
         `El pessebre de la plaça de Sant Jaume, què obre els festius i el metro per Nadal són a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}; els pessebres vivents de Catalunya, amb dates i horaris, són al ${b2link("pessebres", "ca", "calendari de pessebres vivents")}.`,
-        `Tot el que passa a la ciutat al desembre, dia a dia, és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}, i la Cavalcada del 5 de gener, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
+        `Tot el que passa a la ciutat al desembre, dia a dia, és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}, i la Cavalcada del 5 de gener, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}. Si surts a comprar, mira ${b2link("shops", "ca", "quines botigues obren els diumenges de desembre i els festius")}.`,
         `Per tornar a casa les nits de Nadal, Cap d'Any i Reis, el metro, el bus, Rodalies i FGC dia a dia són a ${b2link("christmasTransport", "ca", "horaris de transport per Nadal i Cap d'Any")}, i la festa del 31 de desembre, a ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}.`,
       ],
     },
@@ -691,7 +691,7 @@ function afterSection(locale: Locale): Block[] {
       texts: [
         `La Feria de Santa Llúcia, delante de la Catedral, es ${sl}, ${slHours}, según la [Agenda Cultural de la Generalitat](${SANTA_LLUCIA_2026.url}). Esta y el resto de ferias de Barcelona y de Cataluña están en ${b2link("christmas", "es", "la guía de mercados de Navidad")}, y todas las ferias con fecha oficial, pueblo a pueblo, en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
         `El belén de la plaza de Sant Jaume, qué abre los festivos y el metro en Navidad están en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}; los belenes vivientes de Cataluña, con fechas y horarios, en ${b2link("pessebres", "es", "el calendario de belenes vivientes")}.`,
-        `Todo lo que pasa en la ciudad en diciembre, día a día, está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}, y la Cabalgata del 5 de enero, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
+        `Todo lo que pasa en la ciudad en diciembre, día a día, está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}, y la Cabalgata del 5 de enero, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}. Si sales de compras, mira ${b2link("shops", "es", "qué tiendas abren en los domingos de diciembre y festivos")}.`,
         `Para volver a casa las noches de Navidad, Nochevieja y Reyes, el metro, el bus, Rodalies y FGC día a día están en ${b2link("christmasTransport", "es", "horarios de transporte en Navidad y Nochevieja")}, y la fiesta del 31 de diciembre, en ${b2link("newYear", "es", "Nochevieja en Barcelona")}.`,
       ],
     },
@@ -700,7 +700,7 @@ function afterSection(locale: Locale): Block[] {
       texts: [
         `The Fira de Santa Llúcia, in front of the Cathedral, runs from ${sl}, ${slHours}, according to the [Catalan government's cultural agenda](${SANTA_LLUCIA_2026.url}). This and the other markets in Barcelona and Catalonia are in ${b2link("christmas", "en", "our Christmas markets guide")}, and every market with an official date, town by town, in [Christmas markets by town](${fairsHubPath("en")}).`,
         `The Plaça de Sant Jaume nativity scene, what is open on the holidays and the metro at Christmas are in ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}; Catalonia's living nativity scenes, with dates and times, in ${b2link("pessebres", "en", "our living nativity calendar")}.`,
-        `Everything on in the city in December, day by day, is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}, and the parade on 5 January in ${b2link("reis", "en", "our 2027 Three Kings parade guide")}.`,
+        `Everything on in the city in December, day by day, is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}, and the parade on 5 January in ${b2link("reis", "en", "our 2027 Three Kings parade guide")}. If you are out shopping, see ${b2link("shops", "en", "which shops open on December Sundays and holidays")}.`,
         `Getting home on Christmas, New Year's Eve and Three Kings nights: the metro, buses, Rodalies and FGC day by day are in ${b2link("christmasTransport", "en", "Barcelona transport hours at Christmas and New Year")}, and the 31 December celebration in ${b2link("newYear", "en", "New Year's Eve in Barcelona")}.`,
       ],
     },

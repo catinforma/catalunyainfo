@@ -7,6 +7,7 @@ import { townBySlug } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 
+import { christmasTransportMention } from "./christmas-transport";
 import { CHRISTMAS, FAMILY, SAGRADA_2026, SANTA_LLUCIA_2025, hoursText } from "./christmas";
 import { metroTable, when } from "./christmas-barcelona";
 import { LIGHTS_TOWNS } from "./christmas-lights-towns";
@@ -917,7 +918,7 @@ export function buildBarcelonaDecemberBody(
       ...h2(
         "Quins dies són festius a Barcelona al desembre del 2026?",
         `Tres, i són de tot Catalunya: ${holidays}. El diumenge 6, Dia de la Constitució, no és festiu a Catalunya, i el dilluns 7 és feiner a Barcelona, perquè les seves festes locals del 2026 són ${localDaysPhrase("ca")}. El 24 i el 31 de desembre també són dies feiners.`,
-        `Si vols fer pont, mira ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}.`,
+        `Si vols fer pont, mira ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}. Per saber si un dia és festiu al teu municipi, mira ${b2link("holidayToday", "ca", "si avui és festiu a Catalunya")}.`,
       ),
       specialDayTable("ca"),
       ...h2(
@@ -936,7 +937,7 @@ export function buildBarcelonaDecemberBody(
       metroTable("ca", METRO_DECEMBER),
       ...paras(
         `**L2:** fins al ${weekdayDay(L2_WORKS.until, "ca")} de desembre no hi ha trens entre La Pau i Gorg, per obres; hi ha bus llançadora i alternatives com l'L4, l'L10, el tramvia i la R1. TMB preveu que tornin a circular el ${weekdayDay(L2_WORKS.back, "ca")} a les 5:00 ([Ajuntament de Barcelona](${L2_WORKS.url}), ${dateYear(L2_WORKS.published, "ca")}).`,
-        `Per als autobusos nocturns i l'horari de cada nit, mira ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
+        `Per als autobusos nocturns i l'horari de cada nit, mira ${b2link("hours", "ca", "l'horari del metro i del NitBus")}. ${christmasTransportMention("ca")}`,
       ),
       ...h2("Quin temps fa a Barcelona al desembre?", ...weatherParas("ca")),
       ...h2(
@@ -1003,7 +1004,7 @@ export function buildBarcelonaDecemberBody(
       ...h2(
         "¿Qué días son festivos en Barcelona en diciembre de 2026?",
         `Tres, y son de toda Cataluña: ${holidays}. El domingo 6, Día de la Constitución, no es festivo en Cataluña, y el lunes 7 es laborable en Barcelona, porque sus fiestas locales de 2026 son ${localDaysPhrase("es")}. El 24 y el 31 de diciembre también son laborables.`,
-        `Si quieres hacer puente, mira ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}.`,
+        `Si quieres hacer puente, mira ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}. Para saber si un día es festivo en tu municipio, mira ${b2link("holidayToday", "es", "si hoy es festivo en Cataluña")}.`,
       ),
       specialDayTable("es"),
       ...h2(
@@ -1022,7 +1023,7 @@ export function buildBarcelonaDecemberBody(
       metroTable("es", METRO_DECEMBER),
       ...paras(
         `**L2:** hasta el ${weekdayDay(L2_WORKS.until, "es")} de diciembre no hay trenes entre La Pau y Gorg, por obras; hay bus lanzadera y alternativas como la L4, la L10, el tranvía y la R1. TMB prevé que vuelvan a circular el ${weekdayDay(L2_WORKS.back, "es")} a las 5:00 ([Ayuntamiento de Barcelona](${L2_WORKS.url}), ${dateYear(L2_WORKS.published, "es")}).`,
-        `Para los autobuses nocturnos y el horario de cada noche, mira ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
+        `Para los autobuses nocturnos y el horario de cada noche, mira ${b2link("hours", "es", "el horario del metro y del NitBus")}. ${christmasTransportMention("es")}`,
       ),
       ...h2("¿Qué tiempo hace en Barcelona en diciembre?", ...weatherParas("es")),
       ...h2(
@@ -1088,7 +1089,7 @@ export function buildBarcelonaDecemberBody(
     ...h2(
       "Public holidays in Barcelona in December 2026",
       `Three, all Catalonia-wide: ${holidays}. Sunday 6 December, Constitution Day, is not a holiday in Catalonia, and Monday the 7th is a working day in Barcelona, whose 2026 local holidays are ${localDaysPhrase("en")}. 24 and 31 December are working days too.`,
-      `For a long weekend, see ${b2link("decemberBridge", "en", "the December 2026 long weekend")}.`,
+      `For a long weekend, see ${b2link("decemberBridge", "en", "the December 2026 long weekend")}. To check whether a day is a holiday in your town, see ${b2link("holidayToday", "en", "is today a holiday in Catalonia")}.`,
     ),
     specialDayTable("en"),
     ...h2(
@@ -1107,7 +1108,7 @@ export function buildBarcelonaDecemberBody(
     metroTable("en", METRO_DECEMBER),
     ...paras(
       `**L2:** until ${weekdayDay(L2_WORKS.until, "en")} December there are no trains between La Pau and Gorg because of engineering work; a shuttle bus runs, and the L4, L10, the tram and the R1 are alternatives. TMB expects trains back on ${weekdayDay(L2_WORKS.back, "en")} at 5:00 ([Barcelona City Council](${L2_WORKS.url}), ${dateYear(L2_WORKS.published, "en")}).`,
-      `For night buses and each night's hours, see ${b2link("hours", "en", "Barcelona metro hours and night buses")}.`,
+      `For night buses and each night's hours, see ${b2link("hours", "en", "Barcelona metro hours and night buses")}. ${christmasTransportMention("en")}`,
     ),
     ...h2("What is the weather like in Barcelona in December?", ...weatherParas("en")),
     ...h2(
