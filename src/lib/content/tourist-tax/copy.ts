@@ -157,7 +157,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 anys o menys",
       scope: "Recàrrec municipal vigent des de l'1/10/2026 a Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern",
-      verified: "20 de novembre de 2026",
+      verified: "25 de novembre de 2026",
       review: "1 de desembre de 2026",
     },
 
@@ -182,7 +182,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Cal comprovar-ho",
     tableNote:
-      "Tarifes verificades el 20 de novembre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
+      "Tarifes verificades el 25 de novembre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
 
     muniTitle: "Taxa turística a l'Hospitalet, Sabadell, Sant Cugat i els altres municipis amb recàrrec",
     muni: [
@@ -191,7 +191,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     muniCaption: "Recàrrec municipal fora de Barcelona, per persona i unitat d'estada (1/10/2026–31/3/2027)",
     muniHeaders: { municipality: "Municipi", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Habitatge d'ús turístic", hostel: "Alberg", other: "Resta" },
     muniNote:
-      "Agència Tributària de Catalunya, consultada el 20 de novembre de 2026. S'afegeix a la tarifa de la Generalitat. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres d'Esplugues són les que publica l'ATC. Els recàrrecs de creuers de Castelldefels i el Prat són a l'apartat sobre creuers.",
+      "Agència Tributària de Catalunya, consultada el 25 de novembre de 2026. S'afegeix a la tarifa de la Generalitat. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres d'Esplugues són les que publica l'ATC. Els recàrrecs de creuers de Castelldefels i el Prat són a l'apartat sobre creuers.",
     special:
       "També hi ha una tarifa especial per als establiments d'un centre recreatiu turístic situats a les zones on s'admet el joc: {te1} als hotels de 5 estrelles, {te2} als de 4 i {te3} a la resta, per persona i nit.",
 
@@ -206,7 +206,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "Qui cobra la taxa turística?", answer: "L'allotjament, que la cobra a qui s'hi allotja i la declara. A la factura ha d'aparèixer separada del preu, amb les unitats d'estada i la tarifa aplicada." },
       { question: "Què és la taxa turística de Barcelona?", answer: "És l'impost sobre les estades en establiments turístics (IEET) de la Generalitat més el recàrrec municipal de l'Ajuntament ({bcnSur} per persona i nit fins al 31 de març de 2027). Es paga per persona i nit, fins a {max} nits, i la cobra l'allotjament." },
       { question: "La taxa turística va inclosa en el preu de l'hotel?", answer: "No ha d'anar barrejada: a la factura ha de sortir separada del preu de l'allotjament, amb les unitats d'estada i la tarifa. Si vas pagar la reserva i l'impost alhora en reservar, s'aplica la tarifa vigent en aquell moment." },
-      { question: "Es paga taxa turística a Sitges, Girona o Tarragona?", answer: "Sí, la tarifa de la Generalitat: {rest4} per persona i nit en un hotel de 4 estrelles, de {restHostel} (alberg) a {rest5} (hotel de 5 estrelles). Cap dels tres no és a la llista de l'ATC de municipis amb recàrrec propi, consultada el 20 de novembre de 2026." },
+      { question: "Es paga taxa turística a Sitges, Girona o Tarragona?", answer: "Sí, la tarifa de la Generalitat: {rest4} per persona i nit en un hotel de 4 estrelles, de {restHostel} (alberg) a {rest5} (hotel de 5 estrelles). Cap dels tres no és a la llista de l'ATC de municipis amb recàrrec propi, consultada el 25 de novembre de 2026." },
     ],
 
     futureTitle: "Què canvia l'1 d'abril de 2027",
@@ -218,7 +218,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureBarcelonaCaption: "Taxa turística a Barcelona des de l'1 d'abril de 2027, per persona i unitat d'estada",
     barcelonaFutureTitle: "Barcelona: el recàrrec puja cada 1 d'abril fins al 2029",
     barcelonaFuture: [
-      "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **{s0}** fins al 31 de març de 2027, **{s1}** de l'1 d'abril de 2027 al 31 de març de 2028, **{s2}** fins al 31 de març de 2029 i **{s3}** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia.",
+      "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **{s0}** fins al 31 de març de 2027, **{s1}** de l'1 d'abril de 2027 al 31 de març de 2028, **{s2}** fins al 31 de març de 2029 i **{s3}** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia: la Llei 2/2026 (nou article 34.1.a de la Llei 5/2017, DOGC 9621) la fixa «a partir de l'1 d'abril de 2026», sense data de fi, i només la tarifa de la resta de Catalunya té un segon tram el 2027.",
       "Així, l'1 d'abril de 2027 un hotel a Barcelona pagarà **{step} més per persona i nit**. La calculadora ja aplica aquests imports segons la data.",
     ],
     muniFutureTitle: "Municipis amb recàrrec propi des de l'1 d'abril de 2027",
@@ -227,7 +227,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     muniFutureCaption: "Recàrrec municipal fora de Barcelona des de l'1 d'abril de 2027, per persona i unitat d'estada",
     muniFutureNote:
-      "Agència Tributària de Catalunya, consultada el 20 de novembre de 2026. S'afegeix a la tarifa de la Generalitat des de l'1 d'abril de 2027. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres de Castelldefels i d'Esplugues són les que publica l'ATC. Sant Just Desvern: import vigent des de l'1/10/2026, sense data final.",
+      "Agència Tributària de Catalunya, consultada el 25 de novembre de 2026. S'afegeix a la tarifa de la Generalitat des de l'1 d'abril de 2027. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres de Castelldefels i d'Esplugues són les que publica l'ATC. Sant Just Desvern: import vigent des de l'1/10/2026, sense data final.",
 
     cruiseTitle: "Creuers: qui paga la taxa i quant",
     cruise: [
@@ -244,7 +244,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     cruiseRows: { over12h: "Més de 12 hores", upTo12h: "12 hores o menys" },
     cruiseNote:
-      "Agència Tributària de Catalunya, consultada el 20 de novembre de 2026. Barcelona: tarifa de la Generalitat més recàrrec municipal. Resta de Catalunya: tarifa de la Generalitat sola. Castelldefels i el Prat de Llobregat hi sumen un recàrrec de creuers propi: {cdfOver} (més de 12 hores) i {cdfUnder} (12 hores o menys) fins al 31 de març de 2027; {cdfOver27} i {cdfUnder27} a partir de l'1 d'abril de 2027.",
+      "Agència Tributària de Catalunya, consultada el 25 de novembre de 2026. Barcelona: tarifa de la Generalitat més recàrrec municipal. Resta de Catalunya: tarifa de la Generalitat sola. Castelldefels i el Prat de Llobregat hi sumen un recàrrec de creuers propi: {cdfOver} (més de 12 hores) i {cdfUnder} (12 hores o menys) fins al 31 de març de 2027; {cdfOver27} i {cdfUnder27} a partir de l'1 d'abril de 2027.",
 
     childrenTitle: "Els menors paguen?",
     children: [
@@ -331,7 +331,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 años o menos",
       scope: "Recargo municipal vigente desde el 1/10/2026 en Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern",
-      verified: "20 de noviembre de 2026",
+      verified: "25 de noviembre de 2026",
       review: "1 de diciembre de 2026",
     },
 
@@ -356,7 +356,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Hay que comprobarlo",
     tableNote:
-      "Tarifas verificadas el 20 de noviembre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
+      "Tarifas verificadas el 25 de noviembre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
 
     muniTitle: "Tasa turística en L'Hospitalet, Sabadell, Sant Cugat y los demás municipios con recargo",
     muni: [
@@ -365,7 +365,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     muniCaption: "Recargo municipal fuera de Barcelona, por persona y unidad de estancia (1/10/2026–31/3/2027)",
     muniHeaders: { municipality: "Municipio", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Vivienda de uso turístico", hostel: "Albergue", other: "Resto" },
     muniNote:
-      "Agència Tributària de Catalunya, consultada el 20 de noviembre de 2026. Se suma a la tarifa de la Generalitat. «—»: la ATC no publica recargo para esa categoría. Las cifras de Esplugues son las que publica la ATC. Los recargos de cruceros de Castelldefels y El Prat están en el apartado sobre cruceros.",
+      "Agència Tributària de Catalunya, consultada el 25 de noviembre de 2026. Se suma a la tarifa de la Generalitat. «—»: la ATC no publica recargo para esa categoría. Las cifras de Esplugues son las que publica la ATC. Los recargos de cruceros de Castelldefels y El Prat están en el apartado sobre cruceros.",
     special:
       "Hay además una tarifa especial para los establecimientos de un centro recreativo turístico situados en las zonas donde se admite el juego: {te1} en hoteles de 5 estrellas, {te2} en los de 4 y {te3} en el resto, por persona y noche.",
 
@@ -380,7 +380,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "¿Quién cobra la tasa turística?", answer: "El alojamiento, que la cobra a quien se aloja y la declara. En la factura debe aparecer separada del precio, con las unidades de estancia y la tarifa aplicada." },
       { question: "¿Qué es la tasa turística de Barcelona?", answer: "Es el impuesto sobre las estancias en establecimientos turísticos (IEET) de la Generalitat más el recargo municipal del Ayuntamiento ({bcnSur} por persona y noche hasta el 31 de marzo de 2027). Se paga por persona y noche, hasta {max} noches, y la cobra el alojamiento." },
       { question: "¿La tasa turística está incluida en el precio del hotel?", answer: "No debe ir mezclada: en la factura tiene que aparecer separada del precio del alojamiento, con las unidades de estancia y la tarifa. Si pagaste la reserva y el impuesto a la vez al reservar, se aplica la tarifa vigente en ese momento." },
-      { question: "¿Se paga tasa turística en Sitges, Girona o Tarragona?", answer: "Sí, la tarifa de la Generalitat: {rest4} por persona y noche en un hotel de 4 estrellas, de {restHostel} (albergue) a {rest5} (hotel de 5 estrellas). Ninguno de los tres está en la lista de la ATC de municipios con recargo propio, consultada el 20 de noviembre de 2026." },
+      { question: "¿Se paga tasa turística en Sitges, Girona o Tarragona?", answer: "Sí, la tarifa de la Generalitat: {rest4} por persona y noche en un hotel de 4 estrellas, de {restHostel} (albergue) a {rest5} (hotel de 5 estrellas). Ninguno de los tres está en la lista de la ATC de municipios con recargo propio, consultada el 25 de noviembre de 2026." },
     ],
 
     futureTitle: "Qué cambia el 1 de abril de 2027",
@@ -392,7 +392,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureBarcelonaCaption: "Tasa turística en Barcelona desde el 1 de abril de 2027, por persona y unidad de estancia",
     barcelonaFutureTitle: "Barcelona: el recargo sube cada 1 de abril hasta 2029",
     barcelonaFuture: [
-      "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **{s0}** hasta el 31 de marzo de 2027, **{s1}** del 1 de abril de 2027 al 31 de marzo de 2028, **{s2}** hasta el 31 de marzo de 2029 y **{s3}** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia.",
+      "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **{s0}** hasta el 31 de marzo de 2027, **{s1}** del 1 de abril de 2027 al 31 de marzo de 2028, **{s2}** hasta el 31 de marzo de 2029 y **{s3}** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia: la Ley 2/2026 (nuevo artículo 34.1.a de la Ley 5/2017, DOGC 9621) la fija «a partir del 1 de abril de 2026», sin fecha de fin, y solo la tarifa del resto de Cataluña tiene un segundo tramo en 2027.",
       "Así, el 1 de abril de 2027 un hotel en Barcelona pagará **{step} más por persona y noche**. La calculadora ya aplica estos importes según la fecha.",
     ],
     muniFutureTitle: "Municipios con recargo propio desde el 1 de abril de 2027",
@@ -401,7 +401,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     muniFutureCaption: "Recargo municipal fuera de Barcelona desde el 1 de abril de 2027, por persona y unidad de estancia",
     muniFutureNote:
-      "Agència Tributària de Catalunya, consultada el 20 de noviembre de 2026. Se suma a la tarifa de la Generalitat desde el 1 de abril de 2027. «—»: la ATC no publica recargo para esa categoría. Las cifras de Castelldefels y Esplugues son las que publica la ATC. Sant Just Desvern: importe vigente desde el 1/10/2026, sin fecha final.",
+      "Agència Tributària de Catalunya, consultada el 25 de noviembre de 2026. Se suma a la tarifa de la Generalitat desde el 1 de abril de 2027. «—»: la ATC no publica recargo para esa categoría. Las cifras de Castelldefels y Esplugues son las que publica la ATC. Sant Just Desvern: importe vigente desde el 1/10/2026, sin fecha final.",
 
     cruiseTitle: "Cruceros: quién paga la tasa y cuánto",
     cruise: [
@@ -418,7 +418,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     cruiseRows: { over12h: "Más de 12 horas", upTo12h: "12 horas o menos" },
     cruiseNote:
-      "Agència Tributària de Catalunya, consultada el 20 de noviembre de 2026. Barcelona: tarifa de la Generalitat más recargo municipal. Resto de Cataluña: tarifa de la Generalitat sola. Castelldefels y El Prat de Llobregat suman un recargo de cruceros propio: {cdfOver} (más de 12 horas) y {cdfUnder} (12 horas o menos) hasta el 31 de marzo de 2027; {cdfOver27} y {cdfUnder27} a partir del 1 de abril de 2027.",
+      "Agència Tributària de Catalunya, consultada el 25 de noviembre de 2026. Barcelona: tarifa de la Generalitat más recargo municipal. Resto de Cataluña: tarifa de la Generalitat sola. Castelldefels y El Prat de Llobregat suman un recargo de cruceros propio: {cdfOver} (más de 12 horas) y {cdfUnder} (12 horas o menos) hasta el 31 de marzo de 2027; {cdfOver27} y {cdfUnder27} a partir del 1 de abril de 2027.",
 
     childrenTitle: "¿Los niños pagan?",
     children: [
@@ -507,7 +507,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 or younger",
       scope: "Municipal surcharge in force since 1 Oct 2026 in Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern",
-      verified: "20 November 2026",
+      verified: "25 November 2026",
       review: "1 December 2026",
     },
 
@@ -532,7 +532,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Needs checking",
     tableNote:
-      "Rates verified on 20 November 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
+      "Rates verified on 25 November 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
 
     muniTitle: "Tourist tax in L'Hospitalet, Sabadell, Sant Cugat and the other towns with a surcharge",
     muni: [
@@ -541,7 +541,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     muniCaption: "Municipal surcharge outside Barcelona, per liable guest per stay unit (1 Oct 2026–31 Mar 2027)",
     muniHeaders: { municipality: "Municipality", hotel5: "5★ hotel", hotel4: "4★ hotel", flat: "Tourist dwelling", hostel: "Youth hostel", other: "Other" },
     muniNote:
-      "Catalan Tax Agency (ATC), read on 20 November 2026. Added to the Catalan rate. \"—\": the ATC lists no surcharge for that category. Esplugues figures are as the ATC publishes them. The Castelldefels and El Prat cruise surcharges are in the cruise section.",
+      "Catalan Tax Agency (ATC), read on 25 November 2026. Added to the Catalan rate. \"—\": the ATC lists no surcharge for that category. Esplugues figures are as the ATC publishes them. The Castelldefels and El Prat cruise surcharges are in the cruise section.",
     special:
       "There is also a special rate for establishments inside a tourist recreation centre in the areas where gaming is allowed: {te1} in five-star hotels, {te2} in four-star hotels and {te3} elsewhere, per person per night.",
 
@@ -556,7 +556,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "Who collects the tourist tax?", answer: "The accommodation, which charges it to the guest and files it. On the invoice it must be shown separately from the price, with the stay units and the rate applied." },
       { question: "What is the city tax in Barcelona?", answer: "It is the Catalan tax on stays in tourist establishments (IEET) plus the City Council's municipal surcharge ({bcnSur} per person per night until 31 March 2027). It is charged per person per night, for up to {max} nights, and the accommodation collects it." },
       { question: "Is the city tax included in the hotel price?", answer: "It should not be mixed in: the invoice must show it separately from the room price, with the stay units and the rate. If you paid the booking and the tax together when you booked, the rate in force at that moment applies." },
-      { question: "Is there a tourist tax in Sitges, Girona or Tarragona?", answer: "Yes, the Catalan rate: {rest4} per person per night in a four-star hotel, from {restHostel} (youth hostel) to {rest5} (five-star hotel). None of the three is on the Catalan Tax Agency's list of municipalities with their own surcharge, read on 20 November 2026." },
+      { question: "Is there a tourist tax in Sitges, Girona or Tarragona?", answer: "Yes, the Catalan rate: {rest4} per person per night in a four-star hotel, from {restHostel} (youth hostel) to {rest5} (five-star hotel). None of the three is on the Catalan Tax Agency's list of municipalities with their own surcharge, read on 25 November 2026." },
     ],
 
     futureTitle: "What changes on 1 April 2027",
@@ -568,7 +568,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureBarcelonaCaption: "Tourist tax in Barcelona from 1 April 2027, per liable guest per stay unit",
     barcelonaFutureTitle: "Barcelona: the surcharge rises every 1 April until 2029",
     barcelonaFuture: [
-      "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **{s0}** until 31 March 2027, **{s1}** from 1 April 2027 to 31 March 2028, **{s2}** until 31 March 2029 and **{s3}** from then on, the legal maximum. The Catalan rate for Barcelona does not change.",
+      "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **{s0}** until 31 March 2027, **{s1}** from 1 April 2027 to 31 March 2028, **{s2}** until 31 March 2029 and **{s3}** from then on, the legal maximum. The Catalan rate for Barcelona does not change: Law 2/2026 (new article 34.1.a of Law 5/2017, DOGC 9621) sets it \"a partir de l'1 d'abril de 2026\" (from 1 April 2026) with no end date, and only the rate for the rest of Catalonia has a second step in 2027.",
       "So from 1 April 2027 a Barcelona hotel stay costs **{step} more per person per night**. The calculator already applies these amounts by date.",
     ],
     muniFutureTitle: "Towns with their own surcharge from 1 April 2027",
@@ -577,7 +577,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     muniFutureCaption: "Municipal surcharge outside Barcelona from 1 April 2027, per liable guest per stay unit",
     muniFutureNote:
-      "Catalan Tax Agency (ATC), read on 20 November 2026. Added to the Catalan rate from 1 April 2027. \"—\": the ATC lists no surcharge for that category. Castelldefels and Esplugues figures are as the ATC publishes them. Sant Just Desvern: the amount in force since 1 Oct 2026, with no end date.",
+      "Catalan Tax Agency (ATC), read on 25 November 2026. Added to the Catalan rate from 1 April 2027. \"—\": the ATC lists no surcharge for that category. Castelldefels and Esplugues figures are as the ATC publishes them. Sant Just Desvern: the amount in force since 1 Oct 2026, with no end date.",
 
     cruiseTitle: "Cruise passengers: who pays and how much",
     cruise: [
@@ -594,7 +594,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     cruiseRows: { over12h: "More than 12 hours", upTo12h: "12 hours or less" },
     cruiseNote:
-      "Catalan Tax Agency (ATC), read on 20 November 2026. Barcelona: Catalan rate plus municipal surcharge. Rest of Catalonia: Catalan rate only. Castelldefels and El Prat de Llobregat add their own cruise surcharge: {cdfOver} (more than 12 hours) and {cdfUnder} (12 hours or less) until 31 March 2027; {cdfOver27} and {cdfUnder27} from 1 April 2027.",
+      "Catalan Tax Agency (ATC), read on 25 November 2026. Barcelona: Catalan rate plus municipal surcharge. Rest of Catalonia: Catalan rate only. Castelldefels and El Prat de Llobregat add their own cruise surcharge: {cdfOver} (more than 12 hours) and {cdfUnder} (12 hours or less) until 31 March 2027; {cdfOver27} and {cdfUnder27} from 1 April 2027.",
 
     childrenTitle: "Do children pay?",
     children: [

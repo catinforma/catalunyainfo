@@ -16,8 +16,19 @@ import type { Locale } from "@/lib/i18n/config";
  *
  * ## Barcelona from April 2027
  *
- * The Generalitat's Barcelona rate is open-ended ("a partir de l'1 d'abril de
- * 2026"); only the city's surcharge steps up, by the ordinance's transitional
+ * The Generalitat's Barcelona rate is open-ended: Llei 2/2026, de 6 de març
+ * (DOGC 9621, 10.3.2026; PDF read 25 Nov 2026, 15:46 Madrid, portaldogc.gencat.cat
+ * PdfProviderServlet?documentId=1039028), article 2, new article 34.1 of Llei
+ * 5/2017: "a) La tarifa aplicable a partir de l'1 d'abril de 2026 per a Barcelona
+ * ciutat i la tarifa especial són les següents: ... 1. Hotel de 5 estrelles ...
+ * 7,00 ... 2. Hotel de 4 estrelles ... 3,40 ... 3. Habitatge d'ús turístic 4,50 ...
+ * 4. Albergs de joventut 1,00 ... 5. Resta de càmpings i resta d'establiments 2,00
+ * ... Més de 12 hores 4,00, 12 hores o menys 6,00", with no end date and no
+ * later step (only the rest of Catalonia has "b) de l'1 d'abril de 2026 al 31 de
+ * març de 2027" and "c) a partir de l'1 d'abril de 2027"). So the 1 April 2027
+ * Barcelona regional figures are the law's own open-ended ones, not an
+ * assumption. Art. 34 bis: surcharge "L'import màxim del recàrrec per a cada
+ * categoria d'establiment es fixa en 8 euros". Only the city's surcharge steps up, by the ordinance's transitional
  * provision: €5 to 31 March 2027, €6 to 31 March 2028, €7 to 31 March 2029,
  * then the article 2.2 figure of €8 (the legal maximum). An earlier version of
  * this file called the €6 a misread figure; it is the ordinance's own number.
@@ -103,7 +114,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     regional: BARCELONA_REGIONAL,
     surcharge,
     sourceUrl: surcharge === 5.0 ? ATC_RATES : BCN_ORDINANCE,
-    verifiedAt: "2026-11-20",
+    verifiedAt: "2026-11-25",
   })),
   {
     scope: "rest-of-catalonia",
@@ -122,7 +133,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     // (seven municipalities have one since 1 Oct 2026; the page names them).
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-11-20",
+    verifiedAt: "2026-11-25",
   },
   {
     scope: "rest-of-catalonia",
@@ -139,7 +150,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     },
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-11-20",
+    verifiedAt: "2026-11-25",
   },
 ];
 
@@ -299,6 +310,11 @@ export const SOURCES = [
     publisher: "Agència Tributària de Catalunya",
   },
   {
+    name: "Llei 2/2026, de 6 de març, de modificació de l'impost sobre les estades en establiments turístics (DOGC 9621)",
+    url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1039028&type=01&language=ca_ES",
+    publisher: "Diari Oficial de la Generalitat de Catalunya",
+  },
+  {
     name: "Impost sobre les estades en establiments turístics",
     url: "https://atc.gencat.cat/ca/tributs/ieet/",
     publisher: "Agència Tributària de Catalunya",
@@ -426,7 +442,19 @@ export const SPECIAL_RATE = { "hotel-5": 10.0, "hotel-4": 7.0, other: 5.0 } as c
 // El Prat, Sabadell, Sant Cugat, Sant Just) and the cruise rows all
 // unchanged; Barcelona's ordinance index still lists the 2-2-2026 Ordenança
 // fiscal 2.2 (no 2027 change).
-export const LAST_VERIFIED = "2026-11-20";
+// 25 Nov 2026: ATC tariff page re-read (https://atc.gencat.cat/ca/tributs/ieet/quota-tributaria):
+// "Tarifa per a Barcelona ciutat i recàrrec municipal ... Hotel de 5 estrelles
+// ... (EB1) | 7,00 € | 5,00 € | 6,00 € | 7,00 €", four-star 3,40 €, tourist
+// dwelling 4,50 €, youth hostel 1,00 €, other 2,00 € with the same 5/6/7 €
+// surcharge steps; "Tarifes a partir de l'01.04.2027" outside Barcelona (6,00 /
+// 2,40 / 2,50 / 1,00 / 1,20 €); "Castelldefels, Esplugues de Llobregat,
+// l'Hospitalet de Llobregat, El Prat de Llobregat, Sabadell, Sant Cugat del
+// Vallès i Sant Just Desvern han aprovat recàrrecs municipals ... a partir de
+// l'1 d'octubre de 2026": all unchanged, no 1 January 2027 date anywhere on the
+// page. Barcelona's ordinance index (ajuntament.barcelona.cat/hisenda/ca/ordenances-fiscals)
+// lists years 2026 back, 2.2 "Ordenança reguladora del recàrrec municipal en
+// relació amb l'impost sobre les estades en establiments turístics", no 2027.
+export const LAST_VERIFIED = "2026-11-25";
 // New municipal surcharges approved this autumn; then again before 1 Apr 2027.
 export const NEXT_REVIEW = "2026-12-01";
 /** By this date the 1 April 2027 figures are re-read on the ATC page (date-guard test). */

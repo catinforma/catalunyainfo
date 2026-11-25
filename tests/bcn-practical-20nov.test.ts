@@ -41,9 +41,9 @@ test("parking: the 2026 rates are dated to the ordinance and decomposed from the
   assert.ok(!PARKING.sources.some((s) => s.url.includes("/2021-01/3.12")), "the 2021 ordinance PDF is gone");
 });
 
-test("transport: where to buy, the airport by train or bus, Sitges zones, and the 20 Nov as-of", () => {
+test("transport: where to buy, the airport by train or bus, Sitges zones, and the 25 Nov as-of", () => {
   const buy = { ca: "On es compra la T-casual?", es: "¿Dónde se compra la T-casual?", en: "Where to buy a T-casual" } as const;
-  const asOf = { ca: /a 20 de novembre de 2026/, es: /a 20 de noviembre de 2026/, en: /as of 20 November 2026/ } as const;
+  const asOf = { ca: /a 25 de novembre de 2026/, es: /a 25 de noviembre de 2026/, en: /as of 25 November 2026/ } as const;
   for (const locale of LOCALES) {
     const blocks = TRANSPORT.editions[locale].blocks as B[];
     const text = bodyToPlainText(blocks as unknown as Body);
@@ -56,8 +56,8 @@ test("transport: where to buy, the airport by train or bus, Sitges zones, and th
   assert.ok(bodyToPlainText(TRANSPORT.editions.es.blocks).includes("¿Se puede compartir la T-casual?"));
 });
 
-test("tourist tax: re-read 20 Nov, three FAQs in the searchers' words, links to the practical guides", () => {
-  assert.equal(LAST_VERIFIED, "2026-11-20");
+test("tourist tax: re-read 25 Nov, three FAQs in the searchers' words, links to the practical guides", () => {
+  assert.equal(LAST_VERIFIED, "2026-11-25");
   const q = {
     ca: ["Què és la taxa turística de Barcelona?", "La taxa turística va inclosa en el preu de l'hotel?", "Es paga taxa turística a Sitges, Girona o Tarragona?"],
     es: ["¿Qué es la tasa turística de Barcelona?", "¿La tasa turística está incluida en el precio del hotel?", "¿Se paga tasa turística en Sitges, Girona o Tarragona?"],

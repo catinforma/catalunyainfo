@@ -65,10 +65,14 @@ export interface FareTable {
 
 /**
  * 2026: TMB, "2026 transport ticket fares — Prices in force from 15 January
- * 2026", read 28 Oct, 30 Oct, 13 Nov and 20 Nov 2026 (every cell unchanged).
+ * 2026", read 28 Oct, 30 Oct, 13 Nov, 20 Nov and 25 Nov 2026 (every cell unchanged; 25 Nov also T-aire, T-familiar, T-grup, the €5.90 airport ticket).
  * ATM's T-casual page shows the same row and the ATM home page says "En vigor
- * les tarifes de 2026" (13 and 20 Nov 2026). The T-usual carries the 50 % discount of
- * Real Decreto-ley 17/2025, whose aid runs 1 Jan to 31 Dec 2026.
+ * les tarifes de 2026" (13 and 20 Nov 2026). TMB attributes the T-usual's 50 %
+ * to Real Decreto-ley 17/2025 ("In accordance with Royal Decree-Law 17/2025, a
+ * 50% discount has been applied"); ATM's 19 Dec 2025 note says the 50 % is ATM's
+ * own bonificació, "condicionado a la aprobación por parte del Gobierno de España
+ * de su aportación económica". The State aid ran 1 Jan to 31 Dec 2026 and is
+ * continued for 2027 by RDL 45/2026 (see AID_AS_OF below).
  */
 export const FARES_2026: FareTable = {
   year: 2026,
@@ -85,15 +89,23 @@ export const FARES_2026: FareTable = {
   airportTicket: 5.9,
   sourceUrl: TMB_FARE_TABLE,
   quote: "2026 transport ticket fares. Prices in force from 15 January 2026",
-  verifiedAt: "2026-11-20",
+  verifiedAt: "2026-11-25",
 };
 
 /**
- * 2027: not published. On 13 Nov and again on 20 Nov 2026 neither ATM (press
+ * 2027: not published. On 13, 20 and 25 Nov 2026 neither ATM (press
  * room, latest note 9 Nov 2026; home page "En vigor les tarifes de 2026")
- * nor TMB lists 2027 fares, and the State aid of RDL 17/2025 covers "del 1
- * de enero al 31 de diciembre de 2026", with no 2027 extension on the
- * Ministry's news page (transportes.gob.es sala de prensa, items to 20 Nov).
+ * nor TMB lists 2027 fares. The State aid is no longer limited to 2026: the BOE
+ * of 25 Nov 2026 published Real Decreto-ley 45/2026, de 24 de noviembre
+ * (BOE-A-2026-24703; read on boe.es 25 Nov 2026, 15:41 Madrid), which "da
+ * continuidad durante el año 2027 al sistema de ayudas establecido en el
+ * capítulo III del Real Decreto-ley 17/2025 ... manteniendo inalterados los
+ * porcentajes de descuento": art. 8.c, 20 % on general abonos and multiviaje
+ * titles from 1 Jan to 31 Dec 2027, the second half "sujeto a lo que, en su
+ * caso, acuerde el Consejo de Ministros" (DA 6.ª: State funding may drop by up
+ * to 10 points). The T-usual's 50 % is not in the decree; ATM approves it each
+ * December and had announced nothing for 2027 on 25 Nov 2026. (The Ministry's
+ * news list, items to 25 Nov, did not show the decree: read the BOE.)
  *
  * To publish 2027: fill this from the operator's page the day it is out,
  * point CURRENT_FARES at it (one line), move FARES_AS_OF, run the tests. The
@@ -119,8 +131,19 @@ export function fareTableFor(iso: string): FareTable | null {
  * `FARES_AS_OF` is the last day ATM/TMB were read for a new table; the
  * date-guard test fails once a re-check date passes without a newer reading.
  */
-export const FARES_AS_OF = "2026-11-20";
+export const FARES_AS_OF = "2026-11-25";
 export const FARES_RECHECK = ["2026-12-16", "2027-01-15"] as const;
+
+/**
+ * The day RDL 45/2026 (State aid for 2027) and ATM's bonificacions were last
+ * read. Re-read before each date in AID_RECHECK: 31 Dec 2026 (ATM's decision on
+ * the T-usual's 2027 reduction, and whether the decree-law was ratified or
+ * changed) and 15 May 2027 (the Council of Ministers' decision on the 20 % from
+ * 1 July 2027, which DA 6.ª ties to a study due by 30 April 2027). A test fails
+ * when a date passes without a newer reading.
+ */
+export const AID_AS_OF = "2026-11-25";
+export const AID_RECHECK = ["2026-12-31", "2027-05-15"] as const;
 
 /** The latest re-check date that has passed since the last reading, or null. */
 export function overdueFareRecheck(today: string, asOf: string = FARES_AS_OF): string | null {

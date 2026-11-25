@@ -84,7 +84,8 @@ import { STRIKE_11N_DATE } from "./strike-11n";
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const L2_CLOSURE_AS_OF = "2026-11-03";
+// 25 Nov 2026: TMB notice re-read in ca and en (tmb.cat/en/-/avis-tall-l2): "Until 3 December inclusive, no service between La Pau and Gorg"; "From November 2, until the end of service on December 3, 2026, the section of L2 between La Pau and Gorg will be out of service"; shuttle bus with the metro timetable, no need to validate: unchanged.
+export const L2_CLOSURE_AS_OF = "2026-11-25";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const L2_CLOSURE_VERIFIED = L2_CLOSURE_AS_OF;

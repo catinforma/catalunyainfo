@@ -4,6 +4,8 @@ import { relatedItem, workingDaysLink } from "@/lib/content/audit-links";
 import { link } from "@/lib/content/features/shared";
 import {
   CURRENT_FARES,
+  FARES_AS_OF,
+  type ZoneFares,
   SOURCES as TMB_SOURCES,
   TICKETS,
   VERIFIED_AT,
@@ -208,6 +210,126 @@ function versusBlocks(locale: "ca" | "es" | "en"): Block[] {
   );
 }
 
+/**
+ * 25 Nov 2026 (GSC 28 d, EN: "t casual barcelona" 142 impressions at 9.0,
+ * "barcelona travel pass cost 24hrs" 74 at 6.8, "t-dia barcelona", "barcelona
+ * metro tickets price"): price, coverage and where to buy in one compact table
+ * under the price H2, ahead of the selector. Every euro is read from
+ * CURRENT_FARES / TICKETS, so the 2027 switch and the drift test cover it.
+ * Re-read 25 Nov 2026:
+ * - TMB, https://www.tmb.cat/en/barcelona-fares-metro-bus/transport-ticket-fares:
+ *   "Prices in force from 15 January 2026"; "The Airport ticket is sold
+ *   exclusively for the Barcelona Metro, and its price for 2026 is €5.90"; "In
+ *   accordance with Royal Decree-Law 17/2025, a 50% discount has been applied to
+ *   the price of these tickets" (T-usual 22,80 €); every zone cell unchanged.
+ * - ATM T-casual page: "Not valid at the Aeroport T1 and Aeroport T2 metro
+ *   stations on the L9 Sud line"; ATM T-dia page: "at most, one return journey to
+ *   or from the Aeroport T1 and Aeroport T2", "Where can I buy a T-dia? T-mobilitat
+ *   app ... self-service machines ... official sales points".
+ * - TMB Hola Barcelona page: "You can buy Hola Barcelona Travel Card online and
+ *   get 10% off. You can also buy it at the Hola Barcelona Store, located in the L3
+ *   lobby os the catalunya metro station or buy them from vending machines and
+ *   Punt TMB customer service centres in the metro, or from Tourist Information
+ *   Offices"; holabarcelona.com/en shows "From €12.50", "€11.25" (24 h).
+ * - ATM press room (latest 2026 note 9 Nov) and home page "En vigor les tarifes
+ *   de 2026": no 2027 fares. State aid for 2027: RDL 45/2026 (BOE 25 Nov 2026),
+ *   see AID_2027 below (it replaces the earlier "no extension" reading: the
+ *   Ministry's news list did not show it, the BOE did).
+ */
+/**
+ * State aid for 2027, read on boe.es on 25 Nov 2026 (15:41 Madrid):
+ * Real Decreto-ley 45/2026, de 24 de noviembre (BOE-A-2026-24703, BOE núm. 293 of
+ * 25 Nov 2026, in force the day after publication), "de medidas de promoción del
+ * uso del transporte público mediante la bonificación de abonos y títulos
+ * multiviaje en el año 2027". Preamble: "da continuidad durante el año 2027 al
+ * sistema de ayudas establecido en el capítulo III del Real Decreto-ley 17/2025
+ * ..., manteniendo inalterados los porcentajes de descuento aplicables ... No
+ * obstante, el mantenimiento durante el segundo semestre de 2027 de la ayuda
+ * correspondiente al descuento del 20 por ciento en los abonos y títulos
+ * multiviaje de carácter general queda sujeto a la decisión que adopte el
+ * Consejo de Ministros". Art. 5: ayudas "en el periodo del 1 de enero al 31 de
+ * diciembre de 2027"; art. 8.b: 50 % en títulos joven; art. 8.c: "Descuento del
+ * 20 % del importe de la tarifa en abonos y títulos multiviaje, para el periodo
+ * comprendido entre el 1 de enero y el 31 de diciembre de 2027, sin perjuicio de
+ * la posible revisión de dicho porcentaje durante el segundo semestre de 2027";
+ * DA 6.ª.2: "Durante el segundo semestre de 2027, el porcentaje de descuento
+ * previsto en el artículo 8.c) ... podrá reducirse hasta un máximo de 10 puntos
+ * porcentuales. La reducción afectará únicamente a la financiación estatal"; the
+ * administrations "podrán mantener el descuento del 20 por ciento, financiando
+ * la diferencia con cargo a sus propios recursos". The decree-law does not name
+ * the T-usual or a 50 % for it: the T-usual's half price is ATM's bonificació,
+ * approved each December ("manteniendo todas las bonificaciones vigentes del
+ * 50%, condicionado a la aprobación por parte del Gobierno de España de su
+ * aportación económica", ATM, 19 Dec 2025, atm.cat/es/w/ndp_tarifes-2026-aprovades).
+ * ATM had announced nothing for 2027 on 25 Nov 2026 (latest press note 9 Nov).
+ */
+const AID_2027 = {
+  ca: "L'Estat manté les ajudes el 2027: el Reial decret llei 45/2026 (BOE del 25 de novembre de 2026) les dona continuïtat de l'1 de gener al 31 de desembre de 2027 amb els mateixos percentatges que el 2026, entre ells un descompte del 20 % en els abonaments i títols multiviatge generals; però a partir de l'1 de juliol de 2027 el Consell de Ministres pot rebaixar fins a 10 punts la part que paga l'Estat (les administracions poden mantenir el 20 % pel seu compte). La bonificació del 50 % de la T-usual no surt del decret: la decideix l'ATM cada desembre i encara no ha anunciat què farà el 2027.",
+  es: "El Estado mantiene las ayudas en 2027: el Real Decreto-ley 45/2026 (BOE del 25 de noviembre de 2026) les da continuidad del 1 de enero al 31 de diciembre de 2027 con los mismos porcentajes que en 2026, entre ellos un descuento del 20 % en los abonos y títulos multiviaje generales; pero desde el 1 de julio de 2027 el Consejo de Ministros puede rebajar hasta 10 puntos la parte que paga el Estado (las administraciones pueden mantener el 20 % por su cuenta). La bonificación del 50 % de la T-usual no sale del decreto: la decide la ATM cada diciembre y todavía no ha anunciado qué hará en 2027.",
+  en: "State aid continues in 2027: Real Decreto-ley 45/2026 (BOE of 25 November 2026) extends it from 1 January to 31 December 2027 at the same percentages as in 2026, including a 20% discount on general season passes and multi-journey tickets; but from 1 July 2027 the Council of Ministers may cut the State's share by up to 10 points (the other administrations can keep the 20% themselves). The T-usual's 50% reduction does not come from the decree: ATM decides it every December and has not yet said what it will do for 2027.",
+} as const;
+
+const GLANCE_COPY = {
+  ca: {
+    caption: "Preus de TMB d'un cop d'ull, una zona, vigents des del 15 de gener de 2026",
+    headers: ["Títol", "Preu", "Què dona"],
+    rows: (e: (v: number) => string, z: ZoneFares, hola: number, airport: number) => [
+      ["T-casual", e(z.tCasual), "10 viatges en metro, bus, tramvia i tren; una persona alhora. No val a les estacions Aeroport T1 i T2"],
+      ["T-dia", e(z.tDia), "24 hores il·limitades des de la primera validació; un trajecte d'anada i un de tornada a l'aeroport"],
+      ["Hola Barcelona 24 h", `${e(hola)} (${e(Math.round(hola * 90) / 100)} en línia)`, "24 hores il·limitades, amb el metro de l'aeroport d'anada i tornada; també fins a 120 h"],
+      ["T-usual", e(z.tUsual), "30 dies il·limitats, personal; amb la bonificació del 50 % de l'ATM"],
+      ["Bitllet senzill", e(z.single), "Un trajecte en metro o bus de TMB"],
+      ["Bitllet aeroport", e(airport), "Un trajecte en metro per Aeroport T1 o T2"],
+    ],
+    where:
+      "**On es compra.** T-casual i T-dia: a l'app T-mobilitat, a les màquines de qualsevol estació o als punts de venda oficials (ATM). Hola Barcelona: en línia (10 % de descompte), a la botiga Hola Barcelona de l'accés L3 de Catalunya, a les màquines i als punts Punt TMB del metro o a les oficines de turisme (TMB).",
+    valid: (asOf: string) =>
+      `**Fins quan valen.** Són les tarifes del 2026. A ${asOf} ni l'ATM ni TMB han publicat les del 2027 (l'ATM va aprovar les del 2026 el 19 de desembre de 2025). ${AID_2027.ca}`,
+  },
+  es: {
+    caption: "Precios de TMB de un vistazo, una zona, vigentes desde el 15 de enero de 2026",
+    headers: ["Título", "Precio", "Qué da"],
+    rows: (e: (v: number) => string, z: ZoneFares, hola: number, airport: number) => [
+      ["T-casual", e(z.tCasual), "10 viajes en metro, bus, tranvía y tren; una persona a la vez. No vale en las estaciones Aeroport T1 y T2"],
+      ["T-dia", e(z.tDia), "24 horas ilimitadas desde la primera validación; un viaje de ida y otro de vuelta al aeropuerto"],
+      ["Hola Barcelona 24 h", `${e(hola)} (${e(Math.round(hola * 90) / 100)} en línea)`, "24 horas ilimitadas, con el metro del aeropuerto de ida y vuelta; también hasta 120 h"],
+      ["T-usual", e(z.tUsual), "30 días ilimitados, personal; con la bonificación del 50 % de la ATM"],
+      ["Billete sencillo", e(z.single), "Un trayecto en metro o bus de TMB"],
+      ["Billete aeropuerto", e(airport), "Un trayecto en metro por Aeroport T1 o T2"],
+    ],
+    where:
+      "**Dónde se compra.** T-casual y T-dia: en la app T-mobilitat, en las máquinas de cualquier estación o en los puntos de venta oficiales (ATM). Hola Barcelona: en línea (10 % de descuento), en la tienda Hola Barcelona del vestíbulo L3 de Catalunya, en las máquinas y los puntos Punt TMB del metro o en las oficinas de turismo (TMB).",
+    valid: (asOf: string) =>
+      `**Hasta cuándo valen.** Son las tarifas de 2026. A ${asOf} ni la ATM ni TMB han publicado las de 2027 (la ATM aprobó las de 2026 el 19 de diciembre de 2025). ${AID_2027.es}`,
+  },
+  en: {
+    caption: "TMB prices at a glance, one zone, in force since 15 January 2026",
+    headers: ["Ticket", "Price", "What you get"],
+    rows: (e: (v: number) => string, z: ZoneFares, hola: number, airport: number) => [
+      ["T-casual", e(z.tCasual), "10 journeys on metro, bus, tram and train; one person at a time. Not valid through the Aeroport T1 and T2 metro gates"],
+      ["T-dia", e(z.tDia), "24 hours of unlimited travel from first validation; one airport metro journey each way"],
+      ["Hola Barcelona 24 h", `${e(hola)} (${e(Math.round(hola * 90) / 100)} online)`, "24 hours of unlimited travel, airport metro there and back included; also up to 120 h"],
+      ["T-usual", e(z.tUsual), "30 days of unlimited travel, personal; carries ATM's 50% reduction"],
+      ["Single ticket", e(z.single), "One journey on TMB metro or bus"],
+      ["Airport ticket", e(airport), "One metro journey through Aeroport T1 or T2"],
+    ],
+    where:
+      "**Where to buy.** T-casual and T-dia: in the T-mobilitat app, at the machines in any station or at official sales points (ATM). Hola Barcelona: online (10% off), at the Hola Barcelona Store in the L3 lobby of Catalunya station, at the machines and Punt TMB centres in the metro or at tourist information offices (TMB).",
+    valid: (asOf: string) =>
+      `**Valid until.** These are the 2026 fares. As of ${asOf} neither ATM nor TMB has published the 2027 fares (ATM approved the 2026 ones on 19 December 2025). ${AID_2027.en}`,
+  },
+} as const;
+
+/** Compact price table plus where to buy and "valid until", under the card-price H2. */
+function glanceBlocks(locale: "ca" | "es" | "en"): Block[] {
+  const t = GLANCE_COPY[locale];
+  const e = (v: number) => euros(v, locale);
+  return [
+    table(t.caption, [...t.headers], t.rows(e, CURRENT_FARES.zones["1"], fareFor("hola-barcelona", 1), AIRPORT_TICKET)),
+    ...paras(t.where, t.valid(dayMonthYear(FARES_AS_OF, locale))),
+  ];
+}
+
 export const TRANSPORT: B2Article = {
   key: "transport",
   entryKey: "guide-barcelona-transport-passes",
@@ -265,15 +387,16 @@ export const TRANSPORT: B2Article = {
           "Resposta ràpida",
           "Si faràs pocs trajectes, compara primer la T-casual. Si vols viatges il·limitats durant 24 hores, la T-dia és especialment interessant. Per a estades llargues, la T-usual pot tenir molt sentit. La Hola Barcelona prioritza la simplicitat i inclou el metro de l'aeroport.",
         ),
-        { type: "transportPasses" } as Block,
         ...cardPriceBlocks("ca"),
+        ...glanceBlocks("ca"),
+        { type: "transportPasses" } as Block,
         ...h2(
           "Preu de la T-casual i de la resta de targetes per zones (2026)",
           "La T-casual val per a **deu viatges integrats** en tots els modes de transport. Costa **13 €** en una zona, **25,50 €** en dues i **34,70 €** en tres: 1,30 € per viatge en una zona, davant dels 2,90 € del bitllet senzill.",
         ),
-        table("Preus de TMB per zones, 2026", ["Zones", "Bitllet senzill", "T-casual (10 viatges)", "T-dia (24 h)", "T-usual (30 dies)"], ZONE_FARES, "Font: TMB, preus vigents des del 15 de gener de 2026; la T-usual porta el 50 % de descompte del Reial decret llei 17/2025. Barcelona i el Prat de Llobregat són a la zona 1."),
+        table("Preus de TMB per zones, 2026", ["Zones", "Bitllet senzill", "T-casual (10 viatges)", "T-dia (24 h)", "T-usual (30 dies)"], ZONE_FARES, "Font: TMB, preus vigents des del 15 de gener de 2026; la T-usual porta la bonificació del 50 % aprovada per l'ATM amb aportació de l'Estat (TMB cita el Reial decret llei 17/2025). Barcelona i el Prat de Llobregat són a la zona 1."),
         ...paras(
-          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 20 de novembre de 2026 ni l'ATM ni TMB no han publicat els del 2027 (l'any passat l'ATM els va aprovar el 19 de desembre). Les ajudes estatals del Reial decret llei 17/2025, que paguen el 50 % de descompte de la T-usual, cobreixen de l'1 de gener al 31 de desembre de 2026; encara no s'ha anunciat cap pròrroga per al 2027.",
+          `Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 25 de novembre de 2026 ni l'ATM ni TMB no han publicat els del 2027 (l'any passat l'ATM els va aprovar el 19 de desembre). Les ajudes estatals del 2027 i la T-usual, més amunt a «Fins quan valen».`,
           "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Badalona i Montgat són a la zona 1; el Masnou (amb Ocata) i Premià de Mar, a la zona 2. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
           `Per anar a Sitges amb títols integrats de l'ATM calen 3 zones (T-casual de 3 zones, 34,70 €); ho detallem a ${b2link("sitges", "ca", "el tren de Barcelona a Sitges")}.`,
           `L'R5 de Plaça Espanya a Montserrat són 4 zones, però el cremallera i l'Aeri no accepten la T-casual: ${b2link("montserratFree", "ca", "quin bitllet comprar per al cremallera o l'Aeri de Montserrat")}.`,
@@ -370,15 +493,16 @@ export const TRANSPORT: B2Article = {
           "Respuesta rápida",
           "T-casual para pocos desplazamientos; T-dia para un día de uso intensivo; T-usual para estancias largas; Hola Barcelona para quien valore especialmente los viajes ilimitados y el metro del aeropuerto.",
         ),
-        { type: "transportPasses" } as Block,
         ...cardPriceBlocks("es"),
+        ...glanceBlocks("es"),
+        { type: "transportPasses" } as Block,
         ...h2(
           "Precio de la T-casual y del resto de tarjetas por zonas (2026)",
           "La T-casual sirve para **diez viajes integrados** en todos los modos de transporte. Cuesta **13 €** en una zona, **25,50 €** en dos y **34,70 €** en tres: 1,30 € por viaje en una zona, frente a los 2,90 € del billete sencillo.",
         ),
-        table("Precios de TMB por zonas, 2026", ["Zonas", "Billete sencillo", "T-casual (10 viajes)", "T-dia (24 h)", "T-usual (30 días)"], ZONE_FARES, "Fuente: TMB, precios vigentes desde el 15 de enero de 2026; la T-usual lleva el 50 % de descuento del Real Decreto-ley 17/2025. Barcelona y El Prat de Llobregat están en la zona 1."),
+        table("Precios de TMB por zonas, 2026", ["Zonas", "Billete sencillo", "T-casual (10 viajes)", "T-dia (24 h)", "T-usual (30 días)"], ZONE_FARES, "Fuente: TMB, precios vigentes desde el 15 de enero de 2026; la T-usual lleva la bonificación del 50 % aprobada por la ATM con aportación del Estado (TMB cita el Real Decreto-ley 17/2025). Barcelona y El Prat de Llobregat están en la zona 1."),
         ...paras(
-          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 20 de noviembre de 2026 ni la ATM ni TMB han publicado los de 2027 (el año pasado la ATM los aprobó el 19 de diciembre). Las ayudas estatales del Real Decreto-ley 17/2025, que pagan el 50 % de descuento de la T-usual, cubren del 1 de enero al 31 de diciembre de 2026; aún no se ha anunciado ninguna prórroga para 2027.",
+          `Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 25 de noviembre de 2026 ni la ATM ni TMB han publicado los de 2027 (el año pasado la ATM los aprobó el 19 de diciembre). Las ayudas estatales de 2027 y la T-usual, más arriba en «Hasta cuándo valen».`,
           "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Badalona y Montgat están en la zona 1; El Masnou (con Ocata) y Premià de Mar, en la zona 2. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
           `Para ir a Sitges con títulos integrados de la ATM hacen falta 3 zonas (T-casual de 3 zonas, 34,70 €); lo detallamos en ${b2link("sitges", "es", "el tren de Barcelona a Sitges")}.`,
           `La R5 de Plaça Espanya a Montserrat son 4 zonas, pero el cremallera y el teleférico no aceptan la T-casual: ${b2link("montserratFree", "es", "qué billete comprar para el cremallera o el teleférico de Montserrat")}.`,
@@ -468,15 +592,16 @@ export const TRANSPORT: B2Article = {
           "Quick answer",
           "Look at T-casual for light public-transport use, T-dia for one intensive day, T-usual for longer stays, and Hola Barcelona if unlimited travel and airport metro access matter most.",
         ),
-        { type: "transportPasses" } as Block,
         ...cardPriceBlocks("en"),
+        ...glanceBlocks("en"),
+        { type: "transportPasses" } as Block,
         ...h2(
           "T-casual price by zone, and the other passes (2026)",
           "The T-casual is valid for **ten integrated journeys** on every mode of transport. It costs **€13** in one zone, **€25.50** in two and **€34.70** in three: €1.30 a journey in one zone, against €2.90 for a single ticket.",
         ),
-        table("TMB fares by zone, 2026", ["Zones", "Single ticket", "T-casual (10 journeys)", "T-dia (24 h)", "T-usual (30 days)"], ZONE_FARES_EN, "Source: TMB, prices in force from 15 January 2026; the T-usual carries the 50% discount of Royal Decree-Law 17/2025. Barcelona and El Prat de Llobregat are in zone 1."),
+        table("TMB fares by zone, 2026", ["Zones", "Single ticket", "T-casual (10 journeys)", "T-dia (24 h)", "T-usual (30 days)"], ZONE_FARES_EN, "Source: TMB, prices in force from 15 January 2026; the T-usual carries the 50% reduction approved by ATM with State funding (TMB cites Royal Decree-Law 17/2025). Barcelona and El Prat de Llobregat are in zone 1."),
         ...paras(
-          "These prices apply until ATM's next fare change; as of 20 November 2026 neither ATM nor TMB had published the 2027 fares (last year ATM approved them on 19 December). The State aid of Royal Decree-Law 17/2025, which pays for the T-usual's 50% discount, covers 1 January to 31 December 2026; no extension for 2027 has been announced yet.",
+          `These prices apply until ATM's next fare change; as of 25 November 2026 neither ATM nor TMB had published the 2027 fares (last year ATM approved them on 19 December). State aid for 2027 and the T-usual: see "Valid until" above.`,
           "**How many zones do you need?** Count the fare sector you leave from and the one you arrive in: Barcelona (zone 1) to Sabadell (zone 2C) needs a 2-zone ticket, according to TMB. Badalona and Montgat are in zone 1; El Masnou (with Ocata) and Premià de Mar in zone 2. Each journey allows up to 3 transfers within 75 minutes in one zone, plus 15 minutes for each extra zone. A T-casual on a cardboard T-mobilitat card costs €1 more.",
           `Sitges is 3 zones on ATM integrated tickets (a 3-zone T-casual is €34.70): see ${b2link("sitges", "en", "the Barcelona to Sitges train")}.`,
           `The R5 from Plaça Espanya to Montserrat is 4 zones, but the rack railway and the cable car do not take the T-casual: ${b2link("montserratFree", "en", "which ticket to buy for the Montserrat cable car or rack railway")}.`,

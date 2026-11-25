@@ -12,6 +12,7 @@ import {
 import { link } from "@/lib/content/features/shared";
 import { b2link } from "@/lib/content/batch02/shared";
 import { IMAGES } from "@/lib/content/images";
+import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import {
   ACCOMMODATION_LABEL,
   ACCOMMODATION_ORDER,
@@ -298,6 +299,72 @@ function barcelonaFuture(text: string, locale: Locale): string {
     .replace("{step}", money(s1 - s0, locale));
 }
 
+/**
+ * 25 Nov 2026 (GSC 28 d, EN page: "barcelona city tax" 186 impressions at 8.5,
+ * "city tax barcelona" 142 at 9.2, "how much is city tax in barcelona" 21 at 4.5,
+ * "city tax barcelona 2027" 4 at 8.0): the per-night total by accommodation, now
+ * and from 1 April 2027, on the first screen. Figures come from RATE_PERIODS;
+ * the headers' dates come from the periods, so the page-rollover guard in
+ * tests/tourist-tax.test.ts covers them. Nothing changes on 1 January 2027:
+ * the ATC tariff page (read 25 Nov 2026) dates the next change "a partir de
+ * l'01.04.2027" and Barcelona's ordinance 2.2 has no 2027 version.
+ */
+const GLANCE_COPY: Record<
+  Locale,
+  {
+    caption: string;
+    headers: (until: string, from: string) => string[];
+    note: (s1: string, s2: string) => string;
+    /** Where the "from 1 April 2027" Catalan part comes from: the law, read 25 Nov 2026 (rates.ts). */
+    law: string;
+  }
+> = {
+  ca: {
+    law: `**D'on surt la part de la Generalitat el 2027.** La Llei 2/2026 (DOGC 9621) fixa la tarifa de Barcelona ciutat «a partir de l'1 d'abril de 2026», sense data de fi ni cap segon tram (en té la resta de Catalunya): per això no canvia. El que puja és el recàrrec de l'Ajuntament, segons l'Ordenança fiscal 2.2 (consultades el 25 de novembre de 2026).`,
+    caption: "Taxa turística a Barcelona per persona i nit (tarifa de la Generalitat més recàrrec de l'Ajuntament)",
+    headers: (until, from) => ["Allotjament", `Fins al ${until}`, `Des de l'${from}`],
+    note: (s1, s2) =>
+      `Cap canvi no està datat l'1 de gener de 2027: l'Agència Tributària de Catalunya data el pròxim canvi l'1 d'abril de 2027, quan el recàrrec de Barcelona puja a ${s1} (i a ${s2} el 2028). Fins a ${MAX_STAY_UNITS} nits per persona; els hostes de ${EXEMPT_AGE_AT_OR_BELOW} anys o menys no paguen (consultat el 25 de novembre de 2026).`,
+  },
+  es: {
+    law: `**De dónde sale la parte de la Generalitat en 2027.** La Ley 2/2026 (DOGC 9621) fija la tarifa de Barcelona ciudad «a partir del 1 de abril de 2026», sin fecha de fin ni segundo tramo (lo tiene el resto de Cataluña): por eso no cambia. Lo que sube es el recargo del Ayuntamiento, según la Ordenanza fiscal 2.2 (consultadas el 25 de noviembre de 2026).`,
+    caption: "Tasa turística en Barcelona por persona y noche (tarifa de la Generalitat más recargo del Ayuntamiento)",
+    headers: (until, from) => ["Alojamiento", `Hasta el ${until}`, `Desde el ${from}`],
+    note: (s1, s2) =>
+      `Ningún cambio está fechado el 1 de enero de 2027: la Agència Tributària de Catalunya fecha el próximo cambio el 1 de abril de 2027, cuando el recargo de Barcelona sube a ${s1} (y a ${s2} en 2028). Hasta ${MAX_STAY_UNITS} noches por persona; los huéspedes de ${EXEMPT_AGE_AT_OR_BELOW} años o menos no pagan (consultado el 25 de noviembre de 2026).`,
+  },
+  en: {
+    law: `**Where the Catalan part comes from in 2027.** Law 2/2026 (DOGC 9621) sets Barcelona's rate "a partir de l'1 d'abril de 2026" (from 1 April 2026), with no end date and no second step (the rest of Catalonia has one), so it does not change. What rises is the City Council's surcharge, under Fiscal Ordinance 2.2 (both read on 25 November 2026).`,
+    caption: "Barcelona tourist tax per person per night (Catalan rate plus the city council's surcharge)",
+    headers: (until, from) => ["Where you stay", `Until ${until}`, `From ${from}`],
+    note: (s1, s2) =>
+      `No change is dated 1 January 2027: the Catalan Tax Agency dates the next change 1 April 2027, when Barcelona's surcharge rises to ${s1} (${s2} in 2028). Up to ${MAX_STAY_UNITS} nights per person; guests aged ${EXEMPT_AGE_AT_OR_BELOW} or younger pay nothing (read 25 November 2026).`,
+  },
+};
+
+/** Compact answer table: total per person per night now and from 1 April 2027. */
+function glanceBlocks(locale: Locale): Block[] {
+  const t = GLANCE_COPY[locale];
+  const untilIso = BCN_NOW.until ?? BCN_2027.from;
+  const rows = (["hostel", "other", "hotel-4", "tourist-dwelling", "hotel-5"] as AccommodationType[]).map((type) => [
+    ACCOMMODATION_LABEL[type][locale],
+    money(totalIn(BCN_NOW, type), locale),
+    money(totalIn(BCN_2027, type), locale),
+  ]);
+  const s2028 = RATE_PERIODS.find((p) => p.scope === "barcelona" && p.from === "2028-04-01")?.surcharge ?? 0;
+  return [
+    {
+      type: "table",
+      caption: t.caption,
+      headers: t.headers(dayMonthYear(untilIso, locale), dayMonthYear(BCN_2027.from, locale)),
+      rows,
+      note: t.note(money(BCN_2027.surcharge ?? 0, locale), money(s2028, locale)),
+      stickyColumn: 0,
+    },
+    { type: "paragraph", text: t.law },
+  ];
+}
+
 export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
@@ -328,6 +395,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
       { label: copy.keyFactLabels.review, value: copy.keyFactValues.review },
     ],
   });
+
+  /* ---- Barcelona at a glance, before the calculator ------------------------ */
+  blocks.push(...glanceBlocks(locale));
 
   /* ---- The calculator, high on the page ---------------------------------- */
   blocks.push({ type: "touristTax" });

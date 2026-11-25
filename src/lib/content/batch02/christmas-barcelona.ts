@@ -237,6 +237,23 @@ export function when(item: Announcement, locale: Locale): string {
   return `${locale === "en" ? "" : "el "}${dayDate(item.date, locale)}${time}${place}`;
 }
 
+/**
+ * 25 Nov 2026 (factual consistency): the lead prints the switch-on announcement's
+ * "about 140 km" while the July plan says 130 km; the plan section now says so.
+ * Re-read today, ajuntament.barcelona.cat/premsa/2026/11/09/barcelona-llums-de-nadal-arrenca-amb-lencesa-de-lenllumenat-nadalenc-el-26-de-novembre/:
+ * "La il·luminació nadalenca arriba a prop de 140 km de carrer a tots els districtes".
+ * Empty until the announcement is in ANNOUNCED_2026.
+ */
+function planKmNote(locale: Locale): string {
+  const km = ANNOUNCED_2026.lightsSwitchOn?.km;
+  if (!km || km === LIGHTS_PLAN_2026.km) return "";
+  return {
+    ca: ` (el comunicat de l'encesa del 9 de novembre ja parla de prop de ${km} km)`,
+    es: ` (el comunicado del encendido del 9 de noviembre ya habla de cerca de ${km} km)`,
+    en: ` (the 9 November switch-on announcement already says about ${km} km)`,
+  }[locale];
+}
+
 export const CHECKED: Record<Locale, string> = {
   ca: `comprovat el ${dateYear(ANNOUNCEMENTS_CHECKED, "ca")}`,
   es: `comprobado el ${dateYear(ANNOUNCEMENTS_CHECKED, "es")}`,
@@ -585,7 +602,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ),
       ...h2(
         "Llums de Nadal de Barcelona 2026: quins carrers",
-        `L'Ajuntament va presentar el pla del 2026 el 9 de juliol: **${LIGHTS_PLAN_2026.km} quilòmetres de carrers i places amb llums** a tots els districtes, amb els eixos i les associacions de comerciants, i un pressupost d'uns 4,6 milions d'euros, més del 65% pagat amb ${b2link("touristTax", "ca", "l'impost turístic")}.`,
+        `L'Ajuntament va presentar el pla del 2026 el 9 de juliol: **${LIGHTS_PLAN_2026.km} quilòmetres de carrers i places amb llums**${planKmNote("ca")} a tots els districtes, amb els eixos i les associacions de comerciants, i un pressupost d'uns 4,6 milions d'euros, més del 65% pagat amb ${b2link("touristTax", "ca", "l'impost turístic")}.`,
       ),
       list(
         "**Llums d'autor:** tornen a la Via Laietana, la plaça de Catalunya, el carrer d'Aragó, la Gran Via de les Corts Catalanes i el passeig de Sant Joan, i arriben a dos llocs nous, la Rambla de Prim i el passeig de Maragall.",
@@ -703,7 +720,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ),
       ...h2(
         "Luces de Navidad de Barcelona 2026: qué calles",
-        `El Ayuntamiento presentó el plan de 2026 el 9 de julio: **${LIGHTS_PLAN_2026.km} kilómetros de calles y plazas con luces** en todos los distritos, junto con los ejes y asociaciones de comerciantes, y un presupuesto de unos 4,6 millones de euros, más del 65% pagado con ${b2link("touristTax", "es", "la tasa turística")}.`,
+        `El Ayuntamiento presentó el plan de 2026 el 9 de julio: **${LIGHTS_PLAN_2026.km} kilómetros de calles y plazas con luces**${planKmNote("es")} en todos los distritos, junto con los ejes y asociaciones de comerciantes, y un presupuesto de unos 4,6 millones de euros, más del 65% pagado con ${b2link("touristTax", "es", "la tasa turística")}.`,
       ),
       list(
         "**Luces de autor:** vuelven a la Via Laietana, la plaza de Catalunya, la calle Aragó, la Gran Via de les Corts Catalanes y el paseo de Sant Joan, y llegan a dos sitios nuevos, la Rambla de Prim y el paseo de Maragall.",
@@ -820,7 +837,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ),
     ...h2(
       "Barcelona Christmas lights 2026: which streets",
-      `The City Council presented its 2026 plan on 9 July: **${LIGHTS_PLAN_2026.km} km of streets and squares with lights** in every district, together with the local shopkeepers' associations, on a budget of about €4.6 million, more than 65% of it paid from ${b2link("touristTax", "en", "the tourist tax")}.`,
+      `The City Council presented its 2026 plan on 9 July: **${LIGHTS_PLAN_2026.km} km of streets and squares with lights**${planKmNote("en")} in every district, together with the local shopkeepers' associations, on a budget of about €4.6 million, more than 65% of it paid from ${b2link("touristTax", "en", "the tourist tax")}.`,
     ),
     list(
       "**Designer lights** return to Via Laietana, Plaça de Catalunya, Carrer d'Aragó, Gran Via de les Corts Catalanes and Passeig de Sant Joan, and reach two new places: Rambla de Prim and Passeig de Maragall.",

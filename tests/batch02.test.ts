@@ -485,8 +485,8 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
     assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
     assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
   }
-  // TMB fare table and ATM press room re-read 20 Nov 2026 (no 2027 fares).
-  assert.equal(TRANSPORT.verifiedAt, "2026-11-20");
+  // TMB fare table and ATM press room re-read 25 Nov 2026 (no 2027 fares).
+  assert.equal(TRANSPORT.verifiedAt, "2026-11-25");
 });
 
 test("the selector block is placed on the transport article in every language", () => {
