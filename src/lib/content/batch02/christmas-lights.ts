@@ -93,6 +93,23 @@ import { SHOPS } from "./shops";
 /** The day the page was last brought up to date: the later of the Barcelona check and the town table's. */
 export const CHRISTMAS_LIGHTS_AS_OF = LIGHTS_SWITCH_ON_CHECKED > LIGHTS_TOWNS_AS_OF ? LIGHTS_SWITCH_ON_CHECKED : LIGHTS_TOWNS_AS_OF;
 
+/**
+ * The phase switch (prepared 25 Nov 2026 for the head to merge on 27 Nov): from
+ * this instant (00:00 Madrid on Friday 27 Nov, the day after the 26 Nov
+ * switch-on) the page is built in the past tense: Barcelona's lead, snippet,
+ * switch-on section and FAQ, the 2026 mobility paragraph is gone, and a town's
+ * row whose day has passed reads "went on". Everything is evaluated when the
+ * page is PUBLISHED (CHRISTMAS_LIGHTS.editions is a getter), so
+ * `publish.sh llums-nadal` on or after this instant writes the past-tense
+ * page; before it, nothing changes. The static seoTitle is the same in both
+ * phases ("...: 26 de novembre" stays true).
+ */
+export const LIGHTS_PAST_FROM = "2026-11-27T00:00:00+01:00";
+/** True once Barcelona's 2026 switch-on is behind us. */
+export const lightsPast = (now: Date = new Date()): boolean => now.getTime() >= Date.parse(LIGHTS_PAST_FROM);
+/** The calendar day in Madrid, ISO. */
+const madridDay = (now: Date): string => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(now);
+
 const TITLE_LIMIT = 60;
 const DESCRIPTION_LIMIT = 155;
 /** The first option that fits, or the last one. */
@@ -159,7 +176,8 @@ export function lightsTitle(locale: Locale, facts: Announcements = ANNOUNCED_202
  * The snippet answers first: Barcelona's date, or that it has none yet with
  * last year's day, time and place; then the towns that already have one.
  */
-export function lightsDescription(locale: Locale, facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS): string {
+export function lightsDescription(locale: Locale, facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS, now: Date = new Date()): string {
+  const past = lightsPast(now);
   const a = facts.lightsSwitchOn;
   const dated = announcedTowns(towns);
   const n = towns.length;
@@ -180,11 +198,17 @@ export function lightsDescription(locale: Locale, facts: Announcements = ANNOUNC
     const on = a.lightsOn ?? a.time;
     const at = on ? { ca: ` a les ${on}`, es: ` a las ${on}`, en: ` at ${on}` }[locale] : "";
     const show = a.lightsOn && a.time && a.time !== a.lightsOn ? { ca: ` (acte des de les ${a.time})`, es: ` (acto desde las ${a.time})`, en: ` (show from ${a.time})` }[locale] : "";
-    head = {
-      ca: `Barcelona encén els llums de Nadal el ${day}${at}${show}.`,
-      es: `Barcelona enciende las luces de Navidad el ${day}${at}${show}.`,
-      en: `Barcelona switches on its Christmas lights on ${day}${at}${show}.`,
-    };
+    head = past
+      ? {
+          ca: `Barcelona va encendre els llums de Nadal el ${day}${at}${show}.`,
+          es: `Barcelona encendió las luces de Navidad el ${day}${at}${show}.`,
+          en: `Barcelona switched on its Christmas lights on ${day}${at}${show}.`,
+        }
+      : {
+          ca: `Barcelona encén els llums de Nadal el ${day}${at}${show}.`,
+          es: `Barcelona enciende las luces de Navidad el ${day}${at}${show}.`,
+          en: `Barcelona switches on its Christmas lights on ${day}${at}${show}.`,
+        };
   } else {
     const last = shortDate(LAST.date, locale);
     head = {
@@ -216,8 +240,21 @@ function at(date: string, time: string | undefined, locale: Locale): string {
 }
 
 /** "de 17:30 a 1:00 de diumenge a dijous ...", the 2025 hours (or 2026's once announced). */
-export function barcelonaLead(locale: Locale, facts: Announcements = ANNOUNCED_2026): string {
+export function barcelonaLead(locale: Locale, facts: Announcements = ANNOUNCED_2026, now: Date = new Date()): string {
   const a = facts.lightsSwitchOn;
+  if (a && lightsPast(now)) {
+    const where = placePhrase(a, locale);
+    const place = where ? `, ${where}` : "";
+    const on =
+      a.lightsOn && a.time && a.lightsOn !== a.time
+        ? { ca: ` L'acte va començar a les ${a.time} i els llums es van encendre a les ${a.lightsOn}.`, es: ` El acto empezó a las ${a.time} y las luces se encendieron a las ${a.lightsOn}.`, en: ` The show started at ${a.time} and the lights came on at ${a.lightsOn}.` }[locale]
+        : "";
+    return {
+      ca: `**Els llums de Nadal de Barcelona es van encendre ${at(a.date, a.lightsOn ? undefined : a.time, "ca")}${place}**, segons l'[anunci de l'Ajuntament](${a.url}).${on} Els tres anys anteriors l'encesa també va ser al passeig de Gràcia a les 18:00.`,
+      es: `**Las luces de Navidad de Barcelona se encendieron ${at(a.date, a.lightsOn ? undefined : a.time, "es")}${place}**, según el [anuncio del Ayuntamiento](${a.url}).${on} Los tres años anteriores el encendido también fue en el paseo de Gràcia a las 18:00.`,
+      en: `**Barcelona's Christmas lights were switched on ${at(a.date, a.lightsOn ? undefined : a.time, "en")}${place}**, according to the [City Council's announcement](${a.url}).${on} In the three years before, the switch-on was also on Passeig de Gràcia at 18:00.`,
+    }[locale];
+  }
   if (a) {
     const where = placePhrase(a, locale);
     const place = where ? `, ${where}` : "";
@@ -327,10 +364,19 @@ function historyTable(locale: Locale): Block {
   return table(caption, headers, rows, note);
 }
 
-function switchOnSection(locale: Locale, facts: Announcements): string[] {
+function switchOnSection(locale: Locale, facts: Announcements, past = false): string[] {
   const a = facts.lightsSwitchOn;
   const p24 = PAST.lights2024;
   const p25 = PAST.lights2025;
+  if (a && past) {
+    return [
+      {
+        ca: `L'encesa va ser ${at(a.date, a.time, "ca")}${placePhrase(a, "ca") ? `, ${placePhrase(a, "ca")}` : ""}, segons l'[anunci de l'Ajuntament](${a.url}). Les tres anteriors van ser aquestes:`,
+        es: `El encendido fue ${at(a.date, a.time, "es")}${placePhrase(a, "es") ? `, ${placePhrase(a, "es")}` : ""}, según el [anuncio del Ayuntamiento](${a.url}). Los tres anteriores fueron estos:`,
+        en: `The switch-on was on ${at(a.date, a.time, "en")}${placePhrase(a, "en") ? `, ${placePhrase(a, "en")}` : ""}, according to the [City Council's announcement](${a.url}). The three before were these:`,
+      }[locale],
+    ];
+  }
   if (a) {
     return [
       {
@@ -354,10 +400,10 @@ function switchOnSection(locale: Locale, facts: Announcements): string[] {
   ];
 }
 
-function showParagraphs(locale: Locale): string[] {
+function showParagraphs(locale: Locale, past = false): string[] {
   return [
-    // The 2026 mobility note (festive.ts MOBILITY_2026, 20 Nov 2026): closures, metro and buses on the day.
-    MOBILITY_2026.text[locale].replace("(URL)", `(${MOBILITY_2026.url})`),
+    // The 2026 mobility note (festive.ts MOBILITY_2026, 20 Nov 2026): closures, metro and buses on the day. Gone once the day has passed (LIGHTS_PAST_FROM).
+    ...(past ? [] : [MOBILITY_2026.text[locale].replace("(URL)", `(${MOBILITY_2026.url})`)]),
     {
       ca: `El 2025 l'acte va durar uns vint minuts i va acabar amb un compte enrere que va encendre alhora els llums de tots els barris. El passeig de Gràcia es va tancar al trànsit entre la Gran Via i el carrer d'Aragó des de les 17:30, segons l'[avís de mobilitat de l'Ajuntament](${MOBILITY_2025.url}).`,
       es: `En 2025 el acto duró unos veinte minutos y acabó con una cuenta atrás que encendió a la vez las luces de todos los barrios. El paseo de Gràcia se cerró al tráfico entre la Gran Via y la calle Aragó desde las 17:30, según el [aviso de movilidad del Ayuntamiento](${MOBILITY_2025.url}).`,
@@ -366,13 +412,13 @@ function showParagraphs(locale: Locale): string[] {
   ];
 }
 
-function hoursParagraph(locale: Locale, facts: Announcements): string {
+function hoursParagraph(locale: Locale, facts: Announcements, past = false): string {
   const a = facts.lightsSwitchOn;
   if (a?.hours) {
     const until = a.until ? { ca: ` fins al ${dateYear(a.until, "ca")}`, es: ` hasta el ${dateYear(a.until, "es")}`, en: ` until ${dateYear(a.until, "en")}` }[locale] : "";
     return {
-      ca: `El 2026 els llums estaran encesos${until}, ${a.hours.ca}, segons l'Ajuntament.`,
-      es: `En 2026 las luces estarán encendidas${until}, ${a.hours.es}, según el Ayuntamiento.`,
+      ca: `El 2026 els llums ${past ? "són encesos" : "estaran encesos"}${until}, ${a.hours.ca}, segons l'Ajuntament.`,
+      es: `En 2026 las luces ${past ? "están encendidas" : "estarán encendidas"}${until}, ${a.hours.es}, según el Ayuntamiento.`,
       en: `In 2026 the lights are on${until}, ${a.hours.en}, according to the City Council.`,
     }[locale];
   }
@@ -527,13 +573,17 @@ export function of(name: string, locale: Locale): string {
 
 const shown = (t: LightsTown): string => FAQ_NAME[t.key] ?? t.name;
 
-/** A switch-on whose day is before the day the table was read has happened. */
-export function isHeld(slot: { date: string }): boolean {
-  return slot.date < LIGHTS_TOWNS_AS_OF;
+/**
+ * A switch-on whose day is before today (Madrid) or before the day the table was read has happened.
+ * Date-driven since 25 Nov: on 27 Nov L'Hospitalet and Reus (26 Nov) read in the past tense when the page is published.
+ */
+export function isHeld(slot: { date: string }, now: Date = new Date()): boolean {
+  return slot.date < LIGHTS_TOWNS_AS_OF || slot.date < madridDay(now);
 }
 
-function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTown[]): { question: string; answer: string }[] {
+function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTown[], now: Date = new Date()): { question: string; answer: string }[] {
   const a = facts.lightsSwitchOn;
+  const done = Boolean(a) && lightsPast(now);
   const [y25, y24, y23] = SWITCH_ON_HISTORY;
   const lower = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
   const dated = announcedTowns(towns);
@@ -566,21 +616,35 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
       town: (name: string) => `When is the Christmas lights switch-on in ${name} in 2026?`,
     },
   }[locale];
+  // After the day (LIGHTS_PAST_FROM) the questions are in the past tense too: the searchers' words stay in the question.
+  const qDone = {
+    ca: { when: "Quan va ser l'encesa de llums de Nadal de Barcelona 2026?", time: "A quina hora es van encendre els llums de Nadal a Barcelona?", place: "On es va fer l'encesa de llums de Barcelona?", who: "Qui va encendre els llums de Nadal de Barcelona?", town: (name: string) => `Quan va ser l'encesa de llums de Nadal ${of(name, "ca")} 2026?` },
+    es: { when: "¿Cuándo fue el encendido de luces de Navidad de Barcelona 2026?", time: "¿A qué hora se encendieron las luces de Navidad en Barcelona?", place: "¿Dónde fue el encendido de luces de Barcelona?", who: "¿Quién encendió las luces de Navidad de Barcelona?", town: (name: string) => `¿Cuándo fue el encendido de luces de Navidad ${of(name, "es")} 2026?` },
+    en: { when: "When were Barcelona's Christmas lights switched on in 2026?", time: "What time was the Barcelona Christmas lights switch-on?", place: "Where was the Barcelona Christmas lights switch-on?", who: "Who switched on Barcelona's Christmas lights?", town: (name: string) => `When was the Christmas lights switch-on in ${name} in 2026?` },
+  }[locale];
 
   const when = a
-    ? plain(barcelonaLead(locale, facts))
+    ? plain(barcelonaLead(locale, facts, now))
     : {
         ca: `Encara no s'ha anunciat (${CHECKED.ca}). El 2025 l'Ajuntament va anunciar la data el ${dateYear(PAST.lights2025.announced, "ca")} i va encendre els llums ${at(LAST.date, LAST.time, "ca")} al passeig de Gràcia; el 2024, ${at(y24!.date, undefined, "ca")}, i el 2023, ${at(y23!.date, undefined, "ca")}, també a les 18:00.`,
         es: `Aún no se ha anunciado (${CHECKED.es}). En 2025 el Ayuntamiento anunció la fecha el ${dateYear(PAST.lights2025.announced, "es")} y encendió las luces ${at(LAST.date, LAST.time, "es")} en el paseo de Gràcia; en 2024, ${at(y24!.date, undefined, "es")}, y en 2023, ${at(y23!.date, undefined, "es")}, también a las 18:00.`,
         en: `It has not been announced yet (${CHECKED.en}). In 2025 the City Council announced the date on ${dateYear(PAST.lights2025.announced, "en")} and switched the lights on on ${at(LAST.date, LAST.time, "en")} on Passeig de Gràcia; in 2024 on ${at(y24!.date, undefined, "en")} and in 2023 on ${at(y23!.date, undefined, "en")}, also at 18:00.`,
       }[locale];
 
-  const time = a?.time && a.lightsOn && a.lightsOn !== a.time
+  const time = a?.time && a.lightsOn && a.lightsOn !== a.time && done
+    ? {
+        ca: `El 2026 l'acte va començar a les ${a.time} i els llums es van encendre a les ${a.lightsOn}, segons l'Ajuntament. Els tres anys anteriors l'acte va començar a les 18:00.`,
+        es: `En 2026 el acto empezó a las ${a.time} y las luces se encendieron a las ${a.lightsOn}, según el Ayuntamiento. Los tres años anteriores el acto empezó a las 18:00.`,
+        en: `In 2026 the show started at ${a.time} and the lights came on at ${a.lightsOn}, according to the City Council. In the three years before, the ceremony started at 18:00.`,
+      }[locale]
+    : a?.time && a.lightsOn && a.lightsOn !== a.time
     ? {
         ca: `El 2026 l'acte comença a les ${a.time} i els llums s'encenen a les ${a.lightsOn}, segons l'Ajuntament. Els tres últims anys l'acte va començar a les 18:00.`,
         es: `En 2026 el acto empieza a las ${a.time} y las luces se encienden a las ${a.lightsOn}, según el Ayuntamiento. Los tres últimos años el acto empezó a las 18:00.`,
         en: `In 2026 the show starts at ${a.time} and the lights come on at ${a.lightsOn}, according to the City Council. For the last three years the ceremony started at 18:00.`,
       }[locale]
+    : a?.time && done
+    ? { ca: `El 2026, a les ${a.time}, segons l'Ajuntament. Els tres anys anteriors va començar a les 18:00.`, es: `En 2026, a las ${a.time}, según el Ayuntamiento. Los tres años anteriores empezó a las 18:00.`, en: `In 2026 at ${a.time}, according to the City Council. In the three years before it started at 18:00.` }[locale]
     : a?.time
     ? { ca: `El 2026, a les ${a.time}, segons l'Ajuntament. Els tres últims anys va començar a les 18:00.`, es: `En 2026, a las ${a.time}, según el Ayuntamiento. Los tres últimos años empezó a las 18:00.`, en: `In 2026 at ${a.time}, according to the City Council. For the last three years it started at 18:00.` }[locale]
     : {
@@ -602,11 +666,13 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
     es: `En 2025, ${lower(y25!.who.es)}; en 2024 las encendieron ${lower(y24!.who.es)}; y en 2023, ${lower(y23!.who.es)}.`,
     en: `In 2025, ${lower(y25!.who.en)}; in 2024 they were switched on by ${lower(y24!.who.en)}; and in 2023, ${lower(y23!.who.en)}.`,
   }[locale];
-  const who = a?.who
+  const who = a?.who && done
+    ? { ca: `Segons l'Ajuntament, el 2026 l'encesa va anar a càrrec de ${a.who.ca}. ${past}`, es: `Según el Ayuntamiento, en 2026 el encendido corrió a cargo de ${a.who.es}. ${past}`, en: `According to the City Council, in 2026 the lights were switched on by ${a.who.en}. ${past}` }[locale]
+    : a?.who
     ? { ca: `Segons l'Ajuntament, el 2026 l'encesa anirà a càrrec de ${a.who.ca}. ${past}`, es: `Según el Ayuntamiento, en 2026 el encendido correrá a cargo de ${a.who.es}. ${past}`, en: `According to the City Council, in 2026 the lights will be switched on by ${a.who.en}. ${past}` }[locale]
     : { ca: `Per al 2026 no s'ha anunciat. ${past}`, es: `Para 2026 no se ha anunciado. ${past}`, en: `It has not been announced for 2026. ${past}` }[locale];
 
-  const until = plain(hoursParagraph(locale, facts));
+  const until = plain(hoursParagraph(locale, facts, done));
 
   const townsAnswer = dated.length
     ? {
@@ -630,7 +696,7 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
     if (t.y2026) {
       const s = slotPhrase(t.y2026);
       // A day before the reading date has happened: past tense (the guard test fails the day after a date if the reading has not moved).
-      if (isHeld(t.y2026)) {
+      if (isHeld(t.y2026, now)) {
         return {
           ca: `L'Ajuntament ${of(shown(t), "ca")} va encendre els llums de Nadal el ${s}.`,
           es: `El Ayuntamiento ${of(shown(t), "es")} encendió las luces de Navidad el ${s}.`,
@@ -657,13 +723,13 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
   const capitals = FAQ_TOWNS.map((key) => towns.find((t) => t.key === key)).filter((t): t is LightsTown => Boolean(t));
 
   return [
-    { question: q.when, answer: when },
-    { question: q.time, answer: time },
-    { question: q.place, answer: place },
-    { question: q.who, answer: who },
+    { question: done ? qDone.when : q.when, answer: when },
+    { question: done ? qDone.time : q.time, answer: time },
+    { question: done ? qDone.place : q.place, answer: place },
+    { question: done ? qDone.who : q.who, answer: who },
     { question: q.until, answer: until },
     { question: q.towns, answer: townsAnswer },
-    ...capitals.map((t) => ({ question: q.town(shown(t)), answer: townAnswer(t) })),
+    ...capitals.map((t) => ({ question: t.y2026 && isHeld(t.y2026, now) ? qDone.town(shown(t)) : q.town(shown(t)), answer: townAnswer(t) })),
   ];
 }
 
@@ -708,7 +774,8 @@ function afterSection(locale: Locale): Block[] {
   return h2(copy.heading, ...copy.texts);
 }
 
-export function buildChristmasLightsBody(locale: Locale, facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS): Block[] {
+export function buildChristmasLightsBody(locale: Locale, facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS, now: Date = new Date()): Block[] {
+  const past = Boolean(facts.lightsSwitchOn) && lightsPast(now);
   const t = {
     ca: {
       method: ["Com tractem les dates", `Només hi posem una data del 2026 quan l'ajuntament l'ha publicada a la seva web o a la seva sala de premsa. Si encara no hi és, hi diem «per confirmar» i hi donem la del 2025, sempre amb l'any al costat. Revisem les webs municipals i hi afegim cada data el dia que és oficial; última revisió: ${dateYear(CHRISTMAS_LIGHTS_AS_OF, "ca")}.`],
@@ -734,20 +801,20 @@ export function buildChristmasLightsBody(locale: Locale, facts: Announcements = 
   }[locale];
   const trips = tripsSentence(locale, towns);
   return [
-    lead(`${barcelonaLead(locale, facts)} ${townsLead(locale, towns)}`),
+    lead(`${barcelonaLead(locale, facts, now)} ${townsLead(locale, towns)}`),
     keyFactsBlock(locale, facts),
     languageLinks(),
     callout("info", t.method[0]!, t.method[1]!),
-    ...h2(t.bcnHeading, ...switchOnSection(locale, facts)),
+    ...h2(t.bcnHeading, ...switchOnSection(locale, facts, past)),
     historyTable(locale),
-    ...paras(...showParagraphs(locale)),
+    ...paras(...showParagraphs(locale, past)),
     ...streetsSection(locale, facts),
-    ...h2(t.hoursHeading, hoursParagraph(locale, facts)),
+    ...h2(t.hoursHeading, hoursParagraph(locale, facts, past)),
     ...h2(t.townsHeading, t.townsIntro),
     townTable(locale, towns, facts),
     ...(trips ? paras(trips) : []),
     ...afterSection(locale),
-    faq(faqItems(locale, facts, towns)),
+    faq(faqItems(locale, facts, towns, now)),
     ...paras(verifiedLine(locale, CHRISTMAS_LIGHTS_AS_OF)),
     ...b2Related(RELATED, locale),
   ];
@@ -757,7 +824,7 @@ export function buildChristmasLightsBody(locale: Locale, facts: Announcements = 
 /* Sources and article                                                        */
 /* -------------------------------------------------------------------------- */
 
-export function lightsSources(facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS): B2Source[] {
+export function lightsSources(facts: Announcements = ANNOUNCED_2026, towns: readonly LightsTown[] = LIGHTS_TOWNS, now: Date = new Date()): B2Source[] {
   const list: B2Source[] = [];
   const add = (name: string, url: string, publisher: string) => {
     if (!list.some((s) => s.url === url)) list.push({ name, url, publisher });
@@ -773,7 +840,8 @@ export function lightsSources(facts: Announcements = ANNOUNCED_2026, towns: read
     add(`Encesa de llums de Nadal ${year}: convocatòria`, s.callUrl, "Ajuntament de Barcelona");
     add(`Encesa de llums de Nadal ${year}: crònica`, s.reportUrl, "Ajuntament de Barcelona");
   }
-  add("Afectacions a la mobilitat per l'acte d'encesa de llums de Nadal del dijous 26 de novembre (2026)", MOBILITY_2026.url, "Ajuntament de Barcelona");
+  // The mobility paragraph is gone once the day has passed, so is its source.
+  if (!lightsPast(now)) add("Afectacions a la mobilitat per l'acte d'encesa de llums de Nadal del dijous 26 de novembre (2026)", MOBILITY_2026.url, "Ajuntament de Barcelona");
   add("Afectacions de la mobilitat per l'encesa de llums de Nadal 2025", MOBILITY_2025.url, "Ajuntament de Barcelona");
   add("Barcelona prepara un Nadal amb més llums (2024)", PAST.lights2024.url, "Ajuntament de Barcelona");
   add("Fira de Santa Llúcia 2026", SANTA_LLUCIA_2026.url, "Generalitat de Catalunya");
@@ -787,26 +855,42 @@ export function lightsSources(facts: Announcements = ANNOUNCED_2026, towns: read
   return list;
 }
 
+const memo = new Map<string, B2Article["editions"][Locale]>();
+/** One edition of the page as it reads at `now` (title and snippet included); memoised per phase for the real data. */
+export function lightsEdition(locale: Locale, now: Date = new Date()): B2Article["editions"][Locale] {
+  const key = `${locale}|${lightsPast(now)}`;
+  const hit = memo.get(key);
+  if (hit) return hit;
+  const edition = {
+    ...CHRISTMAS_LIGHTS_META[locale],
+    seoTitle: lightsTitle(locale),
+    seoDescription: lightsDescription(locale, ANNOUNCED_2026, LIGHTS_TOWNS, now),
+    blocks: buildChristmasLightsBody(locale, ANNOUNCED_2026, LIGHTS_TOWNS, now),
+  };
+  memo.set(key, edition);
+  return edition;
+}
+
+/**
+ * `editions` and `sources` are getters: the publisher reads them when it
+ * publishes, so the phase (LIGHTS_PAST_FROM) is the publish moment's, not the
+ * server start's.
+ */
 export const CHRISTMAS_LIGHTS: B2Article = {
   key: "christmasLights",
   entryKey: "guide-christmas-lights-switch-on",
   categoryKey: "festivals",
-  sources: lightsSources(),
+  get sources() {
+    return lightsSources(ANNOUNCED_2026, LIGHTS_TOWNS, new Date());
+  },
   // Reused from the manifest, not a new photograph (see the header comment).
   heroKey: SHOPS.heroKey,
   heroAlt: SHOPS.heroAlt,
   heroCaption: SHOPS.heroCaption,
   verifiedAt: CHRISTMAS_LIGHTS_AS_OF,
   publishedAt: "2026-11-04T12:00:00+01:00",
-  editions: Object.fromEntries(
-    (["ca", "es", "en"] as Locale[]).map((locale) => [
-      locale,
-      {
-        ...CHRISTMAS_LIGHTS_META[locale],
-        seoTitle: lightsTitle(locale),
-        seoDescription: lightsDescription(locale),
-        blocks: buildChristmasLightsBody(locale),
-      },
-    ]),
-  ) as B2Article["editions"],
+  get editions() {
+    const now = new Date();
+    return Object.fromEntries((["ca", "es", "en"] as Locale[]).map((locale) => [locale, lightsEdition(locale, now)])) as B2Article["editions"];
+  },
 };

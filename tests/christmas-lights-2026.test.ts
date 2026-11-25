@@ -3,10 +3,10 @@ import { test } from "node:test";
 
 import { bodyToPlainText, type Block } from "../src/lib/content/blocks.ts";
 import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcelona.ts";
-import { CHRISTMAS_LIGHTS, isHeld, of } from "../src/lib/content/batch02/christmas-lights.ts";
+import { CHRISTMAS_LIGHTS, LIGHTS_PAST_FROM, lightsDescription, lightsEdition, lightsPast, lightsSources, barcelonaLead, isHeld, of } from "../src/lib/content/batch02/christmas-lights.ts";
 import { LIGHTS_TOWNS, LIGHTS_TOWNS_AS_OF, LIGHTS_TOWNS_NOT_REREAD, announcedTowns, switchOnProblems } from "../src/lib/content/batch02/christmas-lights-towns.ts";
 import { B2_TITLES } from "../src/lib/content/batch02/shared.ts";
-import { ANNOUNCED_2026, LIGHTS_SWITCH_ON_CHECKED, MOBILITY_2026, announcementProblems, dayDate, placePhrase } from "../src/lib/content/batch02/festive.ts";
+import { ANNOUNCED_2026, LIGHTS_SWITCH_ON_CHECKED, MOBILITY_2025, MOBILITY_2026, announcementProblems, dayDate, placePhrase } from "../src/lib/content/batch02/festive.ts";
 import type { Locale } from "../src/lib/i18n/config.ts";
 
 /**
@@ -16,6 +16,8 @@ import type { Locale } from "../src/lib/i18n/config.ts";
  */
 
 const LOCALES: Locale[] = ["ca", "es", "en"];
+/** The day itself, 18:30 Madrid: the page still reads in the future tense. */
+const PRE = new Date("2026-11-26T18:30:00+01:00");
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
 
 test("Barcelona 2026: Thursday 26 November, show 18:00, lights 18:30, Passeig de Gràcia, until 6 January, from the 9 Nov note", () => {
@@ -104,7 +106,7 @@ test("twenty of the 27 towns published their 2026 switch-on on their own sites (
     es: /Santa Coloma de Gramenet \(4 de noviembre\)/,
     en: /Santa Coloma de Gramenet \(4 November\)/,
   };
-  for (const locale of LOCALES) assert.match(JSON.stringify(CHRISTMAS_LIGHTS.editions[locale].blocks), note[locale], locale);
+  for (const locale of LOCALES) assert.match(JSON.stringify(lightsEdition(locale, PRE).blocks), note[locale], locale);
 });
 
 test("Sant Boi and Cerdanyola (two of the 30 largest towns) are in the table with their council's date, time and place; the count follows the data", () => {
@@ -118,7 +120,7 @@ test("Sant Boi and Cerdanyola (two of the 30 largest towns) are in the table wit
   // 25 Nov: Gavà (home page: 27 Nov, nothing else), Viladecans (403), Sant Feliu (no answer), Esplugues and Mollet (no 2026 page) have no council page with date, time and place.
   for (const name of ["Gavà", "Viladecans", "Sant Feliu de Llobregat", "Esplugues de Llobregat", "Mollet del Vallès"]) assert.ok(!LIGHTS_TOWNS.some((t) => t.name === name), name);
   for (const locale of LOCALES) assert.match(B2_TITLES.christmasLights[locale], new RegExp(`\\b${LIGHTS_TOWNS.length}\\b`), `${locale}: the rail title counts the towns`);
-  for (const locale of LOCALES) assert.match(CHRISTMAS_LIGHTS.editions[locale].excerpt, new RegExp(`\\b${LIGHTS_TOWNS.length}\\b`), `${locale}: the excerpt counts the towns`);
+  for (const locale of LOCALES) assert.match(lightsEdition(locale, PRE).excerpt, new RegExp(`\\b${LIGHTS_TOWNS.length}\\b`), `${locale}: the excerpt counts the towns`);
 });
 
 test("the lead gives the count and the span of dates, not twenty names; the table keeps every town", () => {
@@ -133,7 +135,7 @@ test("the lead gives the count and the span of dates, not twenty names; the tabl
     en: /20 of the 27 towns in this guide have already published their 2026 date: from Badalona \(20 November\) to Tortosa \(4 December\)/,
   };
   for (const locale of LOCALES) {
-    const blocks = CHRISTMAS_LIGHTS.editions[locale].blocks as Block[];
+    const blocks = lightsEdition(locale, PRE).blocks as Block[];
     assert.match((blocks[0] as { text: string }).text, lead[locale], locale);
     assert.ok((blocks[0] as { text: string }).text.length < 1100, `${locale}: the lead stays short`);
     const table = blocks.filter((b) => b.type === "table").pop() as unknown as { rows: string[][] };
@@ -150,7 +152,7 @@ test("FAQ: the towns people search have their own question; a day before the rea
     en: [/in L'Hospitalet in 2026\?$/, /in Terrassa in 2026\?$/, /in El Prat in 2026\?$/, /in Cornellà de Llobregat in 2026\?$/, /in Santa Coloma in 2026\?$/, /in Manresa in 2026\?$/],
   };
   for (const locale of LOCALES) {
-    const faq = (CHRISTMAS_LIGHTS.editions[locale].blocks as Block[]).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    const faq = (lightsEdition(locale, PRE).blocks as Block[]).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
     for (const pattern of asked[locale]) assert.ok(faq.items.some((i) => pattern.test(i.question)), `${locale}: ${pattern}`);
     // El Prat switched on on 21 Nov, before the reading date of 25 Nov; L'Hospitalet is on the 26th.
     const prat = faq.items.find((i) => /Prat/.test(i.question))!;
@@ -166,28 +168,100 @@ test("FAQ: the towns people search have their own question; a day before the rea
   assert.equal(of("Olot", "ca"), "d'Olot");
   assert.equal(of("Girona", "ca"), "de Girona");
   assert.equal(of("Girona", "en"), "Girona");
-  assert.equal(isHeld({ date: "2026-11-24" }), true);
-  assert.equal(isHeld({ date: LIGHTS_TOWNS_AS_OF }), false, "the day of the reading is not yet past");
+  assert.equal(isHeld({ date: "2026-11-24" }, PRE), true);
+  assert.equal(isHeld({ date: "2026-11-26" }, PRE), false, "the day itself is not yet past");
 });
 
 /**
- * Date guard (25 Nov 2026): the day after a town's switch-on the page must read in the past tense. The FAQ turns past
- * on its own once LIGHTS_TOWNS_AS_OF is after the date (`isHeld`), so the guard is: no 2026 date may be before today
- * unless the towns were read after it. It fails on 27 Nov (L'Hospitalet and Reus, 26 Nov) until the councils are read
- * again, LIGHTS_TOWNS_AS_OF moves, the page is deployed and `llums-nadal` is published.
+ * The phase switch (LIGHTS_PAST_FROM, 00:00 Madrid on 27 Nov): everything below is date-driven, so none of it needs a
+ * flip on 27 Nov; the page just has to be published (`publish.sh llums-nadal`) on or after that instant.
  */
-test("date guard: a town's switch-on day has passed, so the councils must have been read after it (the page then reads in the past tense)", () => {
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
-  const stale = LIGHTS_TOWNS.filter((t) => t.y2026 && t.y2026.date < today && t.y2026.date >= LIGHTS_TOWNS_AS_OF).map((t) => `${t.name} ${t.y2026!.date}`);
-  assert.deepEqual(stale, [], `re-read the councils, move LIGHTS_TOWNS_AS_OF (${LIGHTS_TOWNS_AS_OF}) past these days, deploy and publish llums-nadal so the FAQ and the table read in the past tense: ${stale.join(", ")}`);
-  // Barcelona's own day (26 Nov): after it the lead, description and key facts (festive.ts) must be rewritten in the past tense and the check date moved past it.
-  const a = ANNOUNCED_2026.lightsSwitchOn!;
-  assert.ok(!(a.date < today && LIGHTS_SWITCH_ON_CHECKED <= a.date), `${a.date} has passed: rewrite Barcelona's lead, snippet and key facts in the past tense (christmas-lights.ts), move LIGHTS_SWITCH_ON_CHECKED, deploy, publish llums-nadal`);
+const BEFORE_EVE = new Date("2026-11-26T23:59:59+01:00");
+const POST = new Date("2026-11-27T00:00:00+01:00");
+const LATER = new Date("2026-11-28T10:00:00+01:00");
+
+test("phase switch: 26 Nov 18:00 and 23:59:59 are still the future tense; 27 Nov 00:00 and 28 Nov are past", () => {
+  assert.equal(LIGHTS_PAST_FROM, "2026-11-27T00:00:00+01:00");
+  assert.equal(lightsPast(PRE), false);
+  assert.equal(lightsPast(BEFORE_EVE), false);
+  assert.equal(lightsPast(POST), true);
+  assert.equal(lightsPast(LATER), true);
+  // The default (real clock) agrees with whichever side today is on.
+  assert.equal(lightsPast(), Date.now() >= Date.parse(LIGHTS_PAST_FROM));
 });
 
-/** Date guard: the 2026 mobility paragraph speaks of the days before and on 26 Nov; after the switch-on it must go or turn past. */
-test("date guard: Barcelona's 2026 mobility paragraph is removed or rewritten after the switch-on", () => {
+test("before the switch: lead and snippet in the future tense, the mobility paragraph and its source in", () => {
+  const lead: Record<Locale, RegExp> = {
+    ca: /^\*\*Barcelona encén els llums de Nadal el dijous 26 de novembre de 2026/,
+    es: /^\*\*Barcelona enciende las luces de Navidad el jueves 26 de noviembre de 2026/,
+    en: /^\*\*Barcelona switches on its Christmas lights on Thursday 26 November 2026/,
+  };
+  for (const locale of LOCALES) {
+    assert.match(barcelonaLead(locale, ANNOUNCED_2026, BEFORE_EVE), lead[locale], locale);
+    assert.ok(JSON.stringify(lightsEdition(locale, BEFORE_EVE).blocks).includes(MOBILITY_2026.url), `${locale}: mobility paragraph`);
+    assert.match(lightsDescription(locale, ANNOUNCED_2026, LIGHTS_TOWNS, BEFORE_EVE), /^Barcelona (encén|enciende|switches on)/, locale);
+  }
+  assert.ok(lightsSources(ANNOUNCED_2026, LIGHTS_TOWNS, BEFORE_EVE).some((s) => s.url === MOBILITY_2026.url));
+});
+
+test("after the switch: Barcelona's lead, snippet, switch-on section and FAQ are in the past tense; the mobility paragraph and its source are gone", () => {
+  const lead: Record<Locale, RegExp> = {
+    ca: /^\*\*Els llums de Nadal de Barcelona es van encendre el dijous 26 de novembre de 2026, al passeig de Gràcia/,
+    es: /^\*\*Las luces de Navidad de Barcelona se encendieron el jueves 26 de noviembre de 2026, en el paseo de Gràcia/,
+    en: /^\*\*Barcelona's Christmas lights were switched on Thursday 26 November 2026, on Passeig de Gràcia/,
+  };
+  const futureWords: Record<Locale, RegExp> = {
+    ca: /\bencén\b|\bs'encén|és l'encesa|\bcomença\b|\bse celebrarà/,
+    es: /\benciende\b|\bse encienden\b|\bempieza\b/,
+    en: /\bswitches on\b|\bwill be\b|\bcome on at\b|\bstarts at\b/,
+  };
+  const pastQ: Record<Locale, RegExp> = {
+    ca: /^Quan va ser l'encesa de llums de Nadal de Barcelona 2026\?/,
+    es: /^¿Cuándo fue el encendido de luces de Navidad de Barcelona 2026\?/,
+    en: /^When were Barcelona's Christmas lights switched on in 2026\?/,
+  };
+  const wentOn: Record<Locale, RegExp> = { ca: /va encendre els llums de Nadal el/, es: /encendió las luces de Navidad el/, en: /switched the Christmas lights on on/ };
+  for (const now of [POST, LATER]) {
+    for (const locale of LOCALES) {
+      const e = lightsEdition(locale, now);
+      assert.match((e.blocks[0] as { text: string }).text, lead[locale], locale);
+      assert.match(lightsDescription(locale, ANNOUNCED_2026, LIGHTS_TOWNS, now), /^Barcelona (va encendre|encendió|switched on)/, locale);
+      const json = JSON.stringify(e.blocks);
+      assert.ok(!json.includes(MOBILITY_2026.url), `${locale}: no mobility paragraph`);
+      assert.ok(json.includes(MOBILITY_2025.url), `${locale}: the 2025 closure stays as history`);
+      assert.ok(!lightsSources(ANNOUNCED_2026, LIGHTS_TOWNS, now).some((s) => s.url === MOBILITY_2026.url));
+      const faq = (e.blocks as Block[]).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+      assert.ok(faq.items.some((i) => pastQ[locale].test(i.question)), `${locale}: past question`);
+      for (const item of faq.items.slice(0, 4)) assert.doesNotMatch(item.answer, futureWords[locale], `${locale}: ${item.question}`);
+      const hospitalet = faq.items.find((i) => /Hospitalet/.test(i.question))!;
+      assert.match(hospitalet.answer, wentOn[locale], `${locale}: L'Hospitalet went on 26 Nov`);
+      assert.match(hospitalet.question, /^(Quan va ser|¿Cuándo fue|When was)/, locale);
+    }
+  }
+});
+
+test("towns: a 26 Nov row (L'Hospitalet, Reus) is past on 27 Nov; a 27 Nov row only from 28 Nov", () => {
+  assert.equal(isHeld({ date: "2026-11-26" }, POST), true);
+  assert.equal(isHeld({ date: "2026-11-27" }, POST), false);
+  assert.equal(isHeld({ date: "2026-11-27" }, LATER), true);
+});
+
+/**
+ * Date guard (kept on purpose): the page turns past by itself at 00:00 on 27 Nov, but the councils and the City
+ * Council's own wrap-up note must be read again after the day, so "went on" is a fact and not an assumption (a
+ * postponed switch-on would be wrong). It fails on 27 Nov (L'Hospitalet and Reus, 26 Nov; Barcelona, 26 Nov) until
+ * LIGHTS_TOWNS_AS_OF and LIGHTS_SWITCH_ON_CHECKED are moved to the day of that re-read.
+ */
+test("date guard: a switch-on day has passed, so the councils must have been read after it", () => {
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
-  assert.ok(today <= "2026-11-26", "26 Nov is past: drop MOBILITY_2026 from showParagraphs (christmas-lights.ts) or rewrite it in the past tense, deploy, publish llums-nadal");
-  for (const locale of LOCALES) assert.ok(JSON.stringify(CHRISTMAS_LIGHTS.editions[locale].blocks).includes(MOBILITY_2026.url), locale);
+  const stale = LIGHTS_TOWNS.filter((t) => t.y2026 && t.y2026.date < today && t.y2026.date >= LIGHTS_TOWNS_AS_OF).map((t) => `${t.name} ${t.y2026!.date}`);
+  assert.deepEqual(stale, [], `re-read the councils (${stale.join(", ")}), move LIGHTS_TOWNS_AS_OF (${LIGHTS_TOWNS_AS_OF}) to the day of the re-read, publish llums-nadal`);
+  const a = ANNOUNCED_2026.lightsSwitchOn!;
+  assert.ok(!(a.date < today && LIGHTS_SWITCH_ON_CHECKED <= a.date), `${a.date} has passed: re-read the City Council's note of the day and move LIGHTS_SWITCH_ON_CHECKED past it, then publish llums-nadal (the past-tense text is already in place)`);
+});
+
+/** The 2026 mobility paragraph is date-driven: present until LIGHTS_PAST_FROM, never published after it (festive.ts keeps the constant). */
+test("the 2026 mobility paragraph goes with the phase switch, whatever today is", () => {
+  const live = JSON.stringify(CHRISTMAS_LIGHTS.editions.ca.blocks).includes(MOBILITY_2026.url);
+  assert.equal(live, !lightsPast());
 });

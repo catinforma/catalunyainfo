@@ -9,6 +9,7 @@ import { CHRISTMAS_BARCELONA, christmasBarcelonaDescription, christmasBarcelonaT
 import {
   CHRISTMAS_LIGHTS,
   CHRISTMAS_LIGHTS_AS_OF,
+  lightsEdition,
   CHRISTMAS_LIGHTS_META,
   buildChristmasLightsBody,
   lightsDescription,
@@ -57,9 +58,12 @@ import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sit
  * two pages that link to it (they are inside the 3 Nov measurement window).
  */
 
+/** The page as it reads on the day itself (before LIGHTS_PAST_FROM): the tests below pin that phase whatever today is. */
+const PRE = new Date("2026-11-26T18:00:00+01:00");
+
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
-const body = (locale: Locale) => text(CHRISTMAS_LIGHTS.editions[locale].blocks);
-const json = (locale: Locale) => JSON.stringify(CHRISTMAS_LIGHTS.editions[locale].blocks);
+const body = (locale: Locale) => text(lightsEdition(locale, PRE).blocks);
+const json = (locale: Locale) => JSON.stringify(lightsEdition(locale, PRE).blocks);
 const ROOT = new URL("..", import.meta.url);
 const NONE: Announcements = { lightsSwitchOn: null, pessebre: null, santJaume: null, newYearShow: null, cavalcada: null };
 /** A plausible announcement (never real data), to see the page switch. */
@@ -93,7 +97,7 @@ const TOWNS = [
 test("three valid, substantial editions on year-free registry paths, with and without Barcelona's date", () => {
   const expected: Record<Locale, string> = { ca: "guies/encesa-llums-nadal-barcelona", es: "guias/encendido-luces-navidad-barcelona", en: "guides/barcelona-christmas-lights" };
   for (const locale of LOCALES) {
-    const edition = CHRISTMAS_LIGHTS.editions[locale];
+    const edition = lightsEdition(locale, PRE);
     const parsed = bodySchema.safeParse(edition.blocks);
     assert.ok(parsed.success, `${locale}: ${JSON.stringify(parsed.error?.issues?.slice(0, 2))}`);
     assert.ok(wordCount(text(edition.blocks)) > 1200, `${locale} is thin`);
@@ -102,7 +106,7 @@ test("three valid, substantial editions on year-free registry paths, with and wi
     assert.equal(edition.path, CHRISTMAS_LIGHTS_META[locale].path);
     assert.ok(!/\d{4}/.test(edition.path), `${edition.path} carries a year`);
     assert.match(edition.path, /^[a-z0-9-]+\/[a-z0-9-]+$/);
-    assert.ok(bodySchema.safeParse(buildChristmasLightsBody(locale, GOOD)).success, `${locale}: announced body`);
+    assert.ok(bodySchema.safeParse(buildChristmasLightsBody(locale, GOOD, LIGHTS_TOWNS, PRE)).success, `${locale}: announced body`);
   }
   assert.equal(CHRISTMAS_LIGHTS.key, "christmasLights");
   assert.ok(B2_TITLES.christmasLights, "a related-rail title");
@@ -133,20 +137,20 @@ test("titles fit in 60 and descriptions in 155, Barcelona and the searched words
     en: /^Barcelona's 2026 lights switch-on has no date yet \(2025: 22 November, 18:00, Passeig de Gràcia\)\./,
   };
   for (const locale of LOCALES) {
-    const { seoTitle, seoDescription, title, excerpt } = CHRISTMAS_LIGHTS.editions[locale];
+    const { seoTitle, seoDescription, title, excerpt } = lightsEdition(locale, PRE);
     for (const facts of [NONE, GOOD]) {
       const t = lightsTitle(locale, facts);
-      const d = lightsDescription(locale, facts);
+      const d = lightsDescription(locale, facts, LIGHTS_TOWNS, PRE);
       assert.ok(t.length > 30 && t.length <= 60, `${locale} title ${t.length}: ${t}`);
       assert.ok(d.length > 90 && d.length <= 155, `${locale} description ${d.length}: ${d}`);
       assert.match(t, words[locale]);
     }
     assert.equal(seoTitle, lightsTitle(locale, ANNOUNCED_2026));
-    assert.equal(seoDescription, lightsDescription(locale, ANNOUNCED_2026));
+    assert.equal(seoDescription, lightsDescription(locale, ANNOUNCED_2026, LIGHTS_TOWNS, PRE));
     if (!ANNOUNCED_2026.lightsSwitchOn) assert.match(seoDescription, answer[locale]);
     // Announced: the day goes into the title and the weekday into the snippet.
     assert.ok(lightsTitle(locale, GOOD).includes(shortDate("2026-11-21", locale)), `${locale}: the date in the title`);
-    assert.ok(lightsDescription(locale, GOOD).includes(dayDate("2026-11-21", locale)), `${locale}: the date in the description`);
+    assert.ok(lightsDescription(locale, GOOD, LIGHTS_TOWNS, PRE).includes(dayDate("2026-11-21", locale)), `${locale}: the date in the description`);
     assert.ok(title.length > seoTitle.length, `${locale}: the H1 says more than the title`);
     assert.ok(excerpt.length <= 200);
   }
@@ -156,11 +160,11 @@ test("the page is honest about the towns: 'dates' in the title only when a town 
   const empty = LIGHTS_TOWNS.map((t) => ({ ...t, y2026: null }));
   assert.doesNotMatch(lightsTitle("ca", NONE, empty), /dates/);
   assert.doesNotMatch(lightsTitle("es", NONE, empty), /fechas/);
-  assert.match(lightsDescription("ca", NONE, empty), /Girona/);
+  assert.match(lightsDescription("ca", NONE, empty, PRE), /Girona/);
   const dated = announcedTowns();
   if (dated.length) {
     assert.match(lightsTitle("ca", NONE), /: dates$/);
-    assert.ok(lightsDescription("ca", NONE).includes(dated[0]!.name), "the first dated town in the snippet");
+    assert.ok(lightsDescription("ca", NONE, LIGHTS_TOWNS, PRE).includes(dated[0]!.name), "the first dated town in the snippet");
   }
 });
 
@@ -173,7 +177,7 @@ test("with no 2026 date, the lead says so with the check date and gives 2025 and
   const checked: Record<Locale, string> = { ca: "comprovat el 25 de novembre de 2026", es: "comprobado el 25 de noviembre de 2026", en: "checked on 25 November 2026" };
   assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-25");
   for (const locale of LOCALES) {
-    const first = (buildChristmasLightsBody(locale, NONE)[0] as { text: string }).text;
+    const first = (buildChristmasLightsBody(locale, NONE, LIGHTS_TOWNS, PRE)[0] as { text: string }).text;
     assert.ok(first.includes(checked[locale]), `${locale}: ${first}`);
     assert.ok(first.includes(dayDate(PAST.lights2025.switchOn, locale)), `${locale}: 2025's day with its year`);
     assert.ok(first.includes(dayDate(PAST.lights2024.switchOn, locale)), `${locale}: 2024's day with its year`);
@@ -184,7 +188,7 @@ test("with no 2026 date, the lead says so with the check date and gives 2025 and
 test("an announced date replaces the 'not announced' lead, the key facts and the Barcelona row", () => {
   const notYet: Record<Locale, RegExp> = { ca: /encara no ha anunciat/, es: /aún no ha anunciado/, en: /has not announced/ };
   for (const locale of LOCALES) {
-    const blocks = buildChristmasLightsBody(locale, GOOD);
+    const blocks = buildChristmasLightsBody(locale, GOOD, LIGHTS_TOWNS, PRE);
     const first = (blocks[0] as { text: string }).text;
     assert.doesNotMatch(first.split(".")[0]!, notYet[locale], locale);
     assert.ok(first.includes(dayDate("2026-11-21", locale)), `${locale}: ${first}`);
@@ -200,7 +204,7 @@ test("an announced date replaces the 'not announced' lead, the key facts and the
 });
 
 test("Barcelona's facts are festive.ts's: history, plan, hours, mobility, every URL a source", () => {
-  const sources = new Set(CHRISTMAS_LIGHTS.sources.map((s) => s.url));
+  const sources = new Set(lightsSources(ANNOUNCED_2026, LIGHTS_TOWNS, PRE).map((s) => s.url));
   for (const url of [PAST.lights2025.url, PAST.lights2024.url, LIGHTS_PLAN_2026.url, MOBILITY_2025.url, ...SWITCH_ON_HISTORY.flatMap((s) => [s.callUrl, s.reportUrl])]) {
     assert.ok(sources.has(url), `${url} is a source`);
   }
@@ -327,7 +331,7 @@ test("no 2026 date is printed that no official page gave: only the towns' own, t
   };
   let seen = 0;
   for (const locale of LOCALES) {
-    const raw = `${body(locale)} ${CHRISTMAS_LIGHTS.editions[locale].seoTitle} ${CHRISTMAS_LIGHTS.editions[locale].seoDescription}`;
+    const raw = `${body(locale)} ${lightsEdition(locale, PRE).seoTitle} ${lightsEdition(locale, PRE).seoDescription}`;
     const pattern = locale === "en" ? /\b(\d{1,2}) ([A-Z][a-z]+) 2026\b/g : /\b(\d{1,2}) (?:de |d')([a-zç]+) de 2026\b/g;
     for (const [whole, day, month] of raw.matchAll(pattern)) {
       const m = months[locale].indexOf(month!);
@@ -355,7 +359,7 @@ test("every Barcelona or town 2024/2025 date in the prose sits in a sentence tha
   let checked = 0;
   for (const locale of LOCALES) {
     // Prose only: the table is checked cell by cell above.
-    const prose = text(CHRISTMAS_LIGHTS.editions[locale].blocks.filter((b) => b.type !== "table"));
+    const prose = text(lightsEdition(locale, PRE).blocks.filter((b) => b.type !== "table"));
     for (const iso of past) {
       const day = shortDate(iso, locale);
       // A past day that is also an official 2026 date of this page (Girona 27 Nov 2026, L'Hospitalet 27 Nov 2025) may be printed with 2026.
@@ -379,7 +383,7 @@ test("every Barcelona or town 2024/2025 date in the prose sits in a sentence tha
 
 test("sources are https, untracked, listed once; every town row and every external link is one; no aerobusbcn", () => {
   const urls = new Set<string>();
-  for (const source of CHRISTMAS_LIGHTS.sources) {
+  for (const source of lightsSources(ANNOUNCED_2026, LIGHTS_TOWNS, PRE)) {
     assert.match(source.url, /^https:\/\//, source.url);
     assert.ok(!/[?&]utm_|aerobusbcn/i.test(source.url), source.url);
     assert.ok(!urls.has(source.url), `duplicate source ${source.url}`);
@@ -402,7 +406,7 @@ test("sources are https, untracked, listed once; every town row and every extern
 
 test("internal links stay in their language, end in a slash, point at a published path, and reach the markets, Christmas in Barcelona and nativity pages", () => {
   for (const locale of LOCALES) {
-    for (const blocks of [CHRISTMAS_LIGHTS.editions[locale].blocks, buildChristmasLightsBody(locale, GOOD)]) {
+    for (const blocks of [lightsEdition(locale, PRE).blocks, buildChristmasLightsBody(locale, GOOD, LIGHTS_TOWNS, PRE)]) {
       const raw = JSON.stringify(blocks);
       for (const [, href] of raw.matchAll(/\]\((\/[^)]*)\)/g)) {
         assert.ok(href!.startsWith(`/${locale}/`), `${locale} links to ${href}`);
@@ -438,7 +442,7 @@ test("the Christmas in Barcelona page and the markets guide link here in the bod
 
 test("the read-next box only repeats links from the related rail; the language line sits under the key facts", () => {
   for (const locale of LOCALES) {
-    const before = CHRISTMAS_LIGHTS.editions[locale].blocks;
+    const before = lightsEdition(locale, PRE).blocks;
     const after = withReadNext([...before], locale);
     assert.equal(after.length - before.length, 1, `${locale}: long enough for a box`);
     const related = before[before.length - 1] as { items?: string[] };
@@ -457,7 +461,7 @@ test("no new photograph: the hero is the shops guide's CC BY-SA file with its ex
   assert.deepEqual(CHRISTMAS_LIGHTS.heroAlt, SHOPS.heroAlt);
   assert.deepEqual(CHRISTMAS_LIGHTS.heroCaption, SHOPS.heroCaption);
   assert.equal(CHRISTMAS_LIGHTS.secondaryKey, undefined);
-  for (const locale of LOCALES) assert.ok(!CHRISTMAS_LIGHTS.editions[locale].blocks.some((b) => b.type === "image" || b.type === "gallery"));
+  for (const locale of LOCALES) assert.ok(!lightsEdition(locale, PRE).blocks.some((b) => b.type === "image" || b.type === "gallery"));
 });
 
 test("an FAQ in the searchers' words, answered in plain text, including the provincial capitals", () => {
@@ -467,7 +471,7 @@ test("an FAQ in the searchers' words, answered in plain text, including the prov
     en: ["When are Barcelona's Christmas lights switched on in 2026?", "What time is the Barcelona Christmas lights switch-on?", "Where is the Barcelona Christmas lights switch-on?", "Who switches on Barcelona's Christmas lights?", "Until when are Barcelona's Christmas lights on?", "When is the Christmas lights switch-on in Lleida in 2026?"],
   };
   for (const locale of LOCALES) {
-    for (const blocks of [CHRISTMAS_LIGHTS.editions[locale].blocks, buildChristmasLightsBody(locale, GOOD)]) {
+    for (const blocks of [lightsEdition(locale, PRE).blocks, buildChristmasLightsBody(locale, GOOD, LIGHTS_TOWNS, PRE)]) {
       const block = blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
       for (const question of questions[locale]) assert.ok(block.items.some((item) => item.question === question), `${locale}: ${question}`);
       for (const item of block.items) {
