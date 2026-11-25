@@ -2298,6 +2298,13 @@
 .ci-local-table th { text-align: left; font-size: 0.78rem; color: var(--color-muted); border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; }
 .ci-local-table td { border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; vertical-align: top; }
 .ci-local-table small { color: var(--color-muted); }
+/* Fact table of a Christmas fair page (25 Nov 2026): label column + value, readable at 390 px without stacking. */
+.ci-fair-facts { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.ci-fair-facts caption { caption-side: top; text-align: left; padding: 0.6rem 0.75rem 0; font-size: 0.85rem; color: var(--color-muted); }
+.ci-fair-facts th, .ci-fair-facts td { text-align: left; vertical-align: top; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-rule); }
+.ci-fair-facts td { overflow-wrap: anywhere; }
+.ci-fair-facts th { width: 7.5rem; font-weight: 600; color: var(--color-ink); }
+.ci-fair-facts tr:last-child th, .ci-fair-facts tr:last-child td { border-bottom: 0; }
 /* Spanish town pages (19 Nov 2026, holidays/first-screen.ts): this year's past
    days, collapsed under the ones still ahead and shown in muted ink. */
 .ci-past-holidays { margin-top: 0.75rem; }

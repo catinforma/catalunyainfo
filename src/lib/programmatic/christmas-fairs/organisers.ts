@@ -1387,7 +1387,8 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     // The same page gives two end dates for the craft fair: its text and date field say 6 January, its "Durada" line 23 December.
-    // The earlier one is printed (the safer one for someone planning a trip) and the quote shows both.
+    // The earlier one is printed (the safer one for someone planning a trip) and the quote shows both; the conflict is
+    // not repeated in `hours` (26 Nov 2026 review: an editorial note does not belong in an hours answer).
     id: "org:tarragona-fira-d-artesania",
     ine: "43148",
     name: "Fira d'Artesania",
@@ -1400,9 +1401,9 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     quote:
       "La Rambla Nova acull la Fira d’Artesania, del 4 de desembre al 6 de gener. … Inauguració: Divendres, 4 de desembre a les 17 h Durada: Del 4 de desembre al 23 de desembre de 2026 Horari d’obertura: 10 - 21 h (menys el dia 4 de desembre)",
     hours: {
-      ca: "de 10 a 21 h; el 4 de desembre, inauguració a les 17 h; la pàgina també diu «fins al 6 de gener» i la seva línia de durada, fins al 23 de desembre",
-      es: "de 10 a 21 h; el 4 de diciembre, inauguración a las 17 h; la página también dice «hasta el 6 de enero» y su línea de duración, hasta el 23 de diciembre",
-      en: "10:00 to 21:00; on 4 December the opening is at 17:00; the page also says \"until 6 January\" while its duration line says 23 December",
+      ca: "de 10 a 21 h; el 4 de desembre, inauguració a les 17 h",
+      es: "de 10 a 21 h; el 4 de diciembre, inauguración a las 17 h",
+      en: "10:00 to 21:00; on 4 December the opening is at 17:00",
     },
   },
   // --- Confirmed on 24 Nov 2026 (they were in UNCONFIRMED_FAIRS or PENDING_MARKETS until then) ---

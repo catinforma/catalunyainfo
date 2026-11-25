@@ -33,8 +33,10 @@ import {
 import { BODY_HOLDS } from "@/lib/programmatic/christmas-fairs/organisers";
 import { shortRange } from "@/lib/programmatic/christmas-fairs/format";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "@/lib/programmatic/christmas-fairs/guide";
+import { factsContextFor, townFaqFor } from "@/lib/programmatic/christmas-fairs/page-facts";
 import { fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 
+import { FactsTable, FairFaq } from "./facts-parts";
 import { FairAccess, FairCard, FairProgramme, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
 import { FairStatus } from "./FairStatus";
 
@@ -120,6 +122,9 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
         <div className="ci-prose">
           <FairStatus fairs={datedFairs(town.fairs, locale)} locale={locale} labels={statusLabels(locale, "town", town.name)} showTown={false} />
 
+          {/* Key facts (lib/programmatic/christmas-fairs/facts.ts, 25 Nov 2026): only the rows the data has. */}
+          <FactsTable fairs={town.fairs} ctx={factsContextFor(town)} locale={locale} />
+
           <h2 id="fira">{town.fairs.length > 1 ? t.fairsMany : t.fairs}</h2>
           {town.fairs.map((f) => (
             <FairCard key={f.id} fair={f} locale={locale} />
@@ -172,6 +177,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
               <p>{renderInline(weekendSentence(zone, locale))}</p>
             </>
           ) : null}
+
+          <FairFaq items={townFaqFor(town, locale)} locale={locale} />
 
           <GuidanceShort locale={locale} />
 

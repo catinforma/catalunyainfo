@@ -200,6 +200,11 @@ export interface Fair {
   start: string;
   end: string;
   place: string | null;
+  /**
+   * True when `place` is the calendar's (or agenda's) because the organiser's own
+   * page names none: its source is the dataset, not `checked`.
+   */
+  placeFromDataset?: boolean;
   web: string | null;
   webReplaced: boolean;
   organiser: string | null;

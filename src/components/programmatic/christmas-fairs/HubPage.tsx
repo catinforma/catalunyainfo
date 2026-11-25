@@ -12,9 +12,11 @@ import { getMessages } from "@/lib/i18n";
 import { hubLead, hubMeta, labels, statusLabels, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import { FAIRS, comarcaOf, familyLastChecked, hasEnglish, pendingMarkets, towns, townsByProvince } from "@/lib/programmatic/christmas-fairs/data";
 import { shortRange } from "@/lib/programmatic/christmas-fairs/format";
+import { hubFaqItems, hubTopRows } from "@/lib/programmatic/christmas-fairs/page-facts";
 import { fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
+import { FairFaq, TopFairsTable } from "./facts-parts";
 import { FairRows, Guidance, PendingList, Sources, datedFairs } from "./parts";
 import { FairStatus } from "./FairStatus";
 
@@ -70,6 +72,9 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
               dated by the day the fairs were last read (the server render stays clock-free). */}
           <NextStep step={christmasNextStep(locale, fairsHubPath(locale), checked)} locale={locale} />
 
+          {/* The most searched fairs at a glance (facts.ts, 25 Nov 2026): dates, hours and place from the same data as their pages. */}
+          <TopFairsTable rows={hubTopRows(locale)} locale={locale} />
+
           <h2 id="pendents">{t.pending}</h2>
           <p>{t.pendingIntro}</p>
           <PendingList markets={pendingMarkets()} locale={locale} />
@@ -79,6 +84,8 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
 
           <h2 id="per-data">{t.byDate}</h2>
           <FairRows fairs={FAIRS} locale={locale} />
+
+          <FairFaq items={hubFaqItems(locale)} locale={locale} />
 
           {/* A licensed photograph of a Catalan Christmas fair (lib/content/place-photos.ts), after the dated list; lazy-loaded. */}
           <PlacePhoto photo={hubPhoto("fairs", locale)} locale={locale} />

@@ -49,6 +49,7 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
       start: o.start,
       end: o.end,
       place: o.place ?? f.place,
+      placeFromDataset: o.place == null && f.place != null,
       checked: { url: o.url, publisher: o.publisher, readOn: o.readOn, quote: o.quote },
       datasetDates: changed ? { start: f.start, end: f.end } : null,
       hours: o.hours ?? null,

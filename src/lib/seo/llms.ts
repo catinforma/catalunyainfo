@@ -94,7 +94,15 @@ import { lineIds } from "@/lib/programmatic/rodalies/pages";
 import { todayPath } from "@/lib/programmatic/today/paths";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 import { shippedZones } from "@/lib/programmatic/weekend/data";
-import { englishHubPath, weekendHubPath } from "@/lib/programmatic/weekend/paths";
+import { englishHubPath, englishZonePath, weekendHubPath, zonePath } from "@/lib/programmatic/weekend/paths";
+import { fairShortName } from "@/lib/programmatic/christmas-fairs/copy";
+import { townBySlug as christmasTownBySlug } from "@/lib/programmatic/christmas-fairs/data";
+import { townPath as christmasTownPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { pollsTranslations } from "@/lib/programmatic/polls/paths";
+import { ZBE_CITIES } from "@/lib/programmatic/zbe/cities";
+import { zbeHubTranslations } from "@/lib/programmatic/zbe/paths";
+import { CITIES as ZONA_AZUL_CITIES } from "@/lib/programmatic/zona-azul/data";
+import { zaHubTranslations } from "@/lib/programmatic/zona-azul/paths";
 
 export interface LlmsEntry {
   title: string;
@@ -175,6 +183,65 @@ export interface LiveTool {
  */
 export function firstIndexableDatePage(today?: string): string {
   return DATE_PAGES.find((iso) => LOCALES.every((l) => !isLowDemandPath(datePath(l, iso), today))) ?? DATE_PAGE_RANGE.last;
+}
+
+/** English names of the weekend zones listed below (the zone pages have Catalan and Spanish names only). */
+const WEEKEND_ZONES_LISTED: readonly { slug: string; english: string }[] = [
+  { slug: "provincia-de-barcelona", english: "the province of Barcelona" },
+  { slug: "barcelona", english: "Barcelona city" },
+  { slug: "girona", english: "Girona and its comarques" },
+  { slug: "costa-brava", english: "the Costa Brava" },
+];
+
+/**
+ * Pages assistants send readers to (GA4 "AI Assistant" channel, 28 days to 25
+ * Nov 2026: docs/SEO_EXPERIMENTS.md, 25 Nov) that the file did not name, and
+ * the family hubs it lacked: the Barcelona Christmas markets page in English,
+ * the four weekend zone pages with most AI visits, the official polls page,
+ * the low-emission zones and the blue-zone parking hubs. Each exists only
+ * while its family ships it. Only indexable pages (tests/llms-and-metadata.test.ts
+ * checks none is on the low-demand list): the 11N Sevilla and Madrid strike
+ * pages that also drew visits are noindex since the strike ended, so they are
+ * not listed.
+ */
+function topLandingTools(): LiveTool[] {
+  const out: LiveTool[] = [];
+  const barcelona = christmasTownBySlug("barcelona");
+  if (barcelona) {
+    const names = barcelona.fairs.map((f) => fairShortName(f, "en"));
+    out.push({
+      name: "Christmas markets in Barcelona",
+      hubs: { ca: christmasTownPath("ca", barcelona.slug), es: christmasTownPath("es", barcelona.slug), en: christmasTownPath("en", barcelona.slug) },
+      description: `the ${barcelona.fairs.length} Christmas markets of Barcelona this season (${names.join(", ")}) with their dates, hours and place in a table, how to get there and a short FAQ, read on the organisers' own pages and the Generalitat's fairs calendar with the reading date.`,
+    });
+  }
+  const zones = shippedZones();
+  for (const listed of WEEKEND_ZONES_LISTED) {
+    const zone = zones.find((z) => z.slug.ca === listed.slug);
+    if (!zone) continue;
+    const english = englishZonePath(zone);
+    out.push({
+      name: `What to do this weekend in ${listed.english}`,
+      hubs: { ca: zonePath("ca", zone), es: zonePath("es", zone), ...(english ? { en: english } : {}) },
+      description: `this weekend's cultural agenda, fairs and markets in ${listed.english}, by day, from the Generalitat's official agenda and fairs calendar, with the weekend's train and weather notes.`,
+    });
+  }
+  out.push({
+    name: "Official polls for Spain's 29 November general election in Catalonia (CIS and CEO)",
+    hubs: pollsTranslations(),
+    description: "the vote and Congress seat estimates for Catalonia from the two public pollsters, the CIS and the CEO, with each poll's technical sheet and no private or media polls; during the legal ban on publishing polls around polling day (LOREG art. 69.7) the page shows no figures.",
+  });
+  out.push({
+    name: "Low-emission zones (ZBE) in Spain by city",
+    hubs: zbeHubTranslations(),
+    description: `the low-emission zones of ${ZBE_CITIES.map((c) => c.name.en).join(", ")}: which DGT environmental labels are restricted, on which days and hours, and whether fines apply, with the official source of each.`,
+  });
+  out.push({
+    name: "Blue-zone street parking in Spain by city (zona azul)",
+    hubs: zaHubTranslations(),
+    description: `the hours and prices of regulated street parking in ${ZONA_AZUL_CITIES.map((c) => c.name.en).join(", ")}: weekdays, Saturdays, Sundays and holidays, price per hour and maximum stay, read in each council's own rules.`,
+  });
+  return out;
 }
 
 /** The live tools and data hubs, in a fixed order. `today` only picks the first date page still indexed. */
@@ -494,6 +561,7 @@ export function liveTools(today?: string): LiveTool[] {
       hubs: { ca: fairsHubPath("ca"), es: fairsHubPath("es"), en: fairsHubPath("en") },
       description: `the ${CHRISTMAS_FAIRS.length} Christmas fairs and markets of the ${SEASON_YEAR} season with official dates, one page per town (${christmasTowns().length} towns in Catalan and Spanish, ${christmasEnglishTowns().length} in English), from the Generalitat's fairs calendar and the organisers' own announcements.`,
     },
+    ...topLandingTools(),
     {
       name: "This weekend in Catalonia (guide)",
       hubs: { ca: `/ca/${TOOL_PATHS.weekend.ca}/`, es: `/es/${TOOL_PATHS.weekend.es}/`, en: `/en/${TOOL_PATHS.weekend.en}/` },

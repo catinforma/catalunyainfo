@@ -11,6 +11,8 @@ import { christmasFairEvents } from "@/lib/programmatic/christmas-fairs/structur
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+import { faqNode, hubFaqItems, townFaqFor } from "@/lib/programmatic/christmas-fairs/page-facts";
+
 import { HubPage, hubCounts, hubCrumbs } from "./HubPage";
 import { TownPage, townCrumbs } from "./TownPage";
 
@@ -44,7 +46,7 @@ export function HubRoute({ locale }: { locale: FairsLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), photoImageObject(hubPhoto("fairs", locale), fairsHubPath(locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), faqNode(hubFaqItems(locale)), photoImageObject(hubPhoto("fairs", locale), fairsHubPath(locale))])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -75,6 +77,7 @@ export function TownRoute({ locale, town }: { locale: FairsLocale; town: Town })
           // `image` only when the photograph shows the fair itself, never a picture of the town.
           ...christmasFairEvents(town.fairs, townPath(locale, town.slug), locale, fairEventImages(town.slug)),
           photoImageObject(fairPagePhoto(town.slug, locale), townPath(locale, town.slug)),
+          faqNode(townFaqFor(town, locale)),
         ])}
       />
       <SiteFooter locale={locale} />

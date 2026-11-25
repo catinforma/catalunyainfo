@@ -66,6 +66,9 @@ const { ncEditions } = await import("../src/lib/programmatic/non-contributory-pe
 const { ztEditions } = await import("../src/lib/programmatic/zona-tensionada/copy.ts");
 const { reportEditions } = await import("../src/lib/programmatic/holidays/report-copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
+const { zbeFamilyPaths } = await import("../src/lib/programmatic/zbe/sitemap.ts");
+const { zonaAzulPaths } = await import("../src/lib/programmatic/zona-azul/sitemap.ts");
+const { pollsTranslations } = await import("../src/lib/programmatic/polls/paths.ts");
 
 // Titles and descriptions of every programmatic page.
 const holidayCopy = await import("../src/lib/programmatic/holidays/copy.ts");
@@ -130,6 +133,9 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...electionsSitemapPaths().map((p) => p.path),
     ...weekendFamilyPaths().map((p) => p.path),
     ...christmasFairsPaths().map((p) => p.path),
+    ...zbeFamilyPaths().map((p) => p.path),
+    ...zonaAzulPaths().map((p) => p.path),
+    ...Object.values(pollsTranslations()),
     ...Object.values(GUIDES.strikes),
     ...LOCALES.map((l) => `/${l}/${TOOL_PATHS.weekend[l]}/`),
     ...LOCALES.map((l) => todayPath(l)),
@@ -343,4 +349,37 @@ test("llms.txt leaves out noindex pages: low-demand guides, and date pages past 
   assert.ok(!text.includes(`(${ORIGIN}${datePath("en", "2026-11-01")})`));
   // Before the range starts, the first date is the range's first.
   assert.equal(firstIndexableDatePage("2026-10-01"), "2026-11-01");
+});
+
+/** ai-traffic analysis, 25 Nov 2026: the pages assistants send readers to that llms.txt did not name, and the hubs it lacked. */
+test("llms.txt names the top AI-landing pages and the family hubs it lacked, and only indexable ones", async () => {
+  const { isLowDemandPath } = await import("../src/lib/seo/low-demand.ts");
+  const text = buildLlmsTxt(ORIGIN, "CatalunyaInfo", {});
+  const wanted = [
+    "/en/christmas-markets/barcelona/", "/es/mercados-navidad/barcelona/", "/ca/fires-de-nadal/barcelona/",
+    "/es/fin-de-semana/provincia-de-barcelona/", "/es/fin-de-semana/barcelona/", "/es/fin-de-semana/girona/", "/es/fin-de-semana/costa-brava/",
+    "/es/guias/encuestas-elecciones-generales-cataluna/", "/en/guides/spain-general-election-polls-catalonia/",
+    "/es/zbe/", "/ca/zbe/", "/en/low-emission-zones/", "/es/zona-azul/", "/ca/zona-blava/", "/en/blue-zone-parking/",
+  ];
+  for (const href of wanted) {
+    assert.ok(text.includes(`(${ORIGIN}${href})`) || text.includes(`](${ORIGIN}${href})`), `llms.txt does not link ${href}`);
+    assert.ok(!isLowDemandPath(href), `${href} is low-demand (noindex)`);
+  }
+  // Every tool page, new or old, is indexable today.
+  for (const tool of liveTools()) for (const href of Object.values(tool.hubs)) assert.ok(!isLowDemandPath(href!), `${tool.name}: ${href} is noindex`);
+  // The two 11N city pages that drew AI visits are noindex since the strike: not listed.
+  for (const href of ["/es/guias/huelga-general-11-noviembre-sevilla/", "/es/guias/huelga-general-11-noviembre-madrid/"]) {
+    assert.ok(isLowDemandPath(href));
+    assert.ok(!text.includes(href));
+  }
+});
+
+/**
+ * The polls line names the 29 November 2026 general election and the LOREG art. 69.7 ban on publishing polls (src/lib/seo/llms.ts,
+ * `topLandingTools`). It is true until the election: after 30 Nov 2026 re-read what the polls page says and reword the line
+ * (and the name), then move this date.
+ */
+test("date guard: the polls line in llms.txt is re-read after the 29 November 2026 election", () => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  assert.ok(today <= "2026-11-30", `${today}: re-read the polls page and reword its llms.txt line (29 November election, LOREG art. 69.7)`);
 });
