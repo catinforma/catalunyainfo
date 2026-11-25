@@ -13626,3 +13626,36 @@ Tests: `christmas-facts` 15, `llms-and-metadata`, `christmas-fairs`, `christmas-
 **Go-live.** Deploy (the weekend pages and the guides are code), then publish `batch02-a` (Girona; also Transport and ZBE, unchanged), `portaventura`, `nuria`, `figueres`, `andorra`, `coast-trips` (Tarragona; republishes Sitges from the same code, which another worker is editing: publish after that is merged), `features` (trains guide; republishes all features). Weekend pages: deploy only (ISR hourly, nightly cron rebuild). IndexNow: `/ca/escapades/girona-des-de-barcelona-tren/ /es/escapadas/girona-desde-barcelona-tren/ /en/day-trips/girona-from-barcelona-by-train/ /ca/escapades/portaventura-des-de-barcelona/ /es/escapadas/portaventura-desde-barcelona/ /en/day-trips/portaventura-from-barcelona/ /ca/escapades/vall-de-nuria-cremallera/ /es/escapadas/vall-de-nuria-cremallera/ /en/day-trips/vall-de-nuria-rack-railway/ /ca/escapades/figueres-museu-dali-des-de-barcelona/ /es/escapadas/figueres-museo-dali-desde-barcelona/ /en/day-trips/figueres-dali-museum-from-barcelona/ /ca/escapades/andorra-des-de-barcelona-autobus/ /es/escapadas/andorra-desde-barcelona-autobus/ /en/day-trips/andorra-from-barcelona-by-bus/ /ca/escapades/tarragona-des-de-barcelona-tren/ /es/escapadas/tarragona-desde-barcelona-tren/ /en/day-trips/tarragona-from-barcelona-by-train/ /ca/escapades/catalunya-sense-cotxe-tren/ /es/escapadas/cataluna-sin-coche-tren/ /en/day-trips/barcelona-day-trips-by-train/ /ca/cap-de-setmana/ /es/fin-de-semana/ /en/weekend/ /en/weekend/barcelona/` (the weekend zones: prefixes `/ca/cap-de-setmana/` and `/es/fin-de-semana/`).
 
 **Outcome:** _pending_
+
+
+## 2026-11-25 - English editions of Christmas-market towns and weekend zones: evidence, decision NOT to open more (ci-demanda + ci-enginyeria)
+
+**Question.** `scratchpad/night/ai-traffic.md`: ChatGPT sends 29 % of its sessions (304 of 1,041) to English pages, and only 6 towns (EN_TOWNS: Barcelona, Girona, Tarragona, Sitges, Vic, Figueres; Sitges has no dated fair, so no page) and 2 weekend pages (hub, Barcelona) exist in English. Which further English editions have demonstrated English demand?
+
+**Threshold.** Open an English edition only if, on the ca/es/en pages of that town or zone in 28 days, at least one holds: >= 50 impressions of English-language queries (GSC), or >= 10 AI-assistant sessions with English browser language (GA4), or >= 10 sessions of any channel with English browser language landing on the ca/es pages. Reproducible: `$PY -I scripts/en-edition-demand.py 28` (new, read-only). Query language is a word-list heuristic; GSC hides rare queries, so impressions are a lower bound.
+
+**Evidence (GSC 27 Oct-23 Nov, GA4 28 Oct-24 Nov; /en/ = impressions of the existing English page).**
+| Candidate | EN-query impr | /en/ page impr | AI sessions (ca/es/en) | AI, English browser | English browser on ca/es pages | Verdict |
+|---|---|---|---|---|---|---|
+| Barcelona (market) | 86 | 103 | 29 | 7 | 0 | already open |
+| Vic | 35 | 37 | 0 | 0 | 0 | already open; best of the rest ("vic christmas market" 28 impr, pos 7.6) |
+| Girona (market) | 10 | 17 | 3 | 0 | 2 | already open; below threshold |
+| Figueres (market) | 4 | 5 | 0 | 0 | 0 | already open; below |
+| Tarragona (market) | 0 | 0 | 0 | 0 | 0 | already open (2 fairs); no demand seen |
+| Sitges, Terrassa, Reus, Lleida (market) | 0 | - | 0 | 0 | 0-4 | cannot open: no dated fair in the snapshot (Sitges /en/ returns 404) |
+| Sabadell, Granollers, Olot, Mataro, Badalona, Manresa (market) | 0 | - | 0-1 | 0 | 0-1 | rejected: zero English queries, zero English sessions |
+| Weekend Barcelona | 5 | 5 | 12 | 2 | 2 | already open; 5 impr in 90 d |
+| Weekend Girona | 0 | - | 9 | 1 | 1 | rejected |
+| Weekend Costa Brava | 0 | - | 8 | 2 | 2 | rejected |
+| Weekend Costa Daurada / Tarragona | 0 | - | 2 / 2 | 2 / 0 | 2 / 0 | rejected (2 sessions) |
+| Weekend Pirineu | 0 | - | 1 | 0 | 0 | rejected |
+| Weekend Sitges/Garraf, Montserrat area | - | - | - | - | - | no such zone (zones are Idescat/INE units; Sitges and Montserrat are day-trip guides, already in English) |
+Context: all English pages together: 136k impressions in 90 d, but only 173 impressions for "christmas market" queries in 90 d site-wide, 120 of them on Barcelona/hub/Vic/Girona pages; ca/es fair and weekend pages got 0 English-query impressions in 90 d. English-language sessions on the ca/es fair+weekend pages: 43 in 28 d out of 692 (6 %), spread over 30 pages (max 2 per page).
+
+**Decision.** No new English page. Nothing outside Barcelona reaches the threshold; the English AI traffic on Girona/Sitges/Tarragona/Montserrat (18 / 6 / 5 / 26 in 28 d) lands on the English day-trip guides, which already exist. The AI traffic to the weekend zone pages is Spanish-browser (67 of 77). The ai-traffic note's guess (+50-100 AI sessions/month from translating) is not supported by the numbers; a page opened without demand is a thin page. EN_TOWNS and ENGLISH_ZONES unchanged; nothing to publish, no sitemap/hreflang/llms.txt change.
+
+**Not decided here (head).** Tarragona (0 impressions in 28 d) and Figueres (5) already have English pages without demand; they are not a noindex candidate yet (the season only started: Barcelona's English impressions went 0 to 93 per week in week 47, Girona 0 to 14), re-judge on the review date. Possible cheap link: the English Girona day-trip guide (18 AI sessions) links only the English market hub, not `/en/christmas-markets/girona/`.
+
+**Review.** 2026-12-23: re-run `scripts/en-edition-demand.py 28` (window then covers the peak of the season, 25 Nov-22 Dec). Open an English edition for any town that passes; remove nothing before then. Candidates to watch: Girona (10 now), Vic (35), Figueres, weekend Costa Brava.
+
+**Outcome:** _pending (2026-12-23)_
