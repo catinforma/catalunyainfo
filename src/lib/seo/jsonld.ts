@@ -212,6 +212,10 @@ export function articleImage(entry: EntryDetail): Json | Json[] | undefined {
     width: crop.width,
     height: crop.height,
     ...(source.credit ? { creditText: source.credit } : {}),
+    // Google image metadata (optional fields Search Console flags when missing):
+    // the author as creator, and a copyright line built from the same credit and licence.
+    ...(source.credit ? { creator: { "@type": "Person", name: source.credit } } : {}),
+    ...(source.credit ? { copyrightNotice: source.license ? `${source.credit}, ${source.license}` : source.credit } : {}),
     ...(licence ? { license: licence } : {}),
     ...(source.creditUrl ? { acquireLicensePage: source.creditUrl } : {}),
   }));

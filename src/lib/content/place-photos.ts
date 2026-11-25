@@ -562,6 +562,7 @@ export function photoImageObject(photo: PlacePhoto | null, path: string): Record
     description: photo.alt,
     creditText: photo.credit,
     creator: { "@type": "Person", name: photo.credit },
+    copyrightNotice: photo.licence ? `${photo.credit}, ${photo.licence}` : photo.credit,
     ...(photo.licenceUrl ? { license: photo.licenceUrl } : {}),
     acquireLicensePage: photo.creditUrl,
     representativeOfPage: true,
