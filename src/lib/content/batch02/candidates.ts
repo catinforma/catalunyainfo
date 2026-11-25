@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { ELECTORS, PROVINCES, PROVINCE_NAMES, SEATS } from "@/lib/content/candidates/boe";
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath } from "@/lib/programmatic/elections/paths";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
 
 import {
@@ -16,6 +17,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { LOREG_AFTER, phased } from "./election-after";
 import { VOTING } from "./voting";
 
 /**
@@ -172,6 +174,33 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
 
 const LIVE: Block = { type: "candidateLists" } as Block;
 
+/**
+ * From Mon 30 Nov 2026 (24 Nov 2026 pattern, election-after.ts): the vote is past, so a callout under the lead says
+ * so, in the past tense, and points to the night guide, the results guide and the results by municipality. The
+ * lists stay as what they were: the candidacies that stood. Same facts and sources as `NIGHT_AFTER`, read on the
+ * BOE consolidated text of LOREG (25 Nov 2026): art. 98.2 (provisional information from the Government), art.
+ * 103.1 (general count "el quinto día siguiente", Fri 4 Dec), art. 107.2 (ends by the eighth day, Mon 7 Dec),
+ * art. 108 (proclamation; results in the BOE "en el periodo de cuarenta días"). Written as the law's rule, never
+ * as something this site saw happen. `pre` is empty: before 30 Nov the page reads exactly as it did.
+ */
+const AFTER_CALLOUT: Record<Locale, { title: string; text: string }> = {
+  ca: {
+    title: "Les eleccions del 29 de novembre ja s'han celebrat",
+    text: `La votació va ser el diumenge 29 de novembre; les llistes d'aquesta pàgina són les candidatures que s'hi van presentar. Les xifres de la nit electoral són l'**escrutini provisional** que dona el Govern (${a("LOREG, article 98.2", LOREG_AFTER.provisional)}); el resultat oficial surt de l'escrutini general de les juntes electorals provincials, que segons la llei comença el divendres 4 de desembre i acaba, com a molt tard, el dilluns 7 (${a("articles 103", LOREG_AFTER.general)} i ${a("107", LOREG_AFTER.end)}), i el BOE el publica en quaranta dies (${a("article 108", LOREG_AFTER.proclamation)}). Més: ${b2link("electionNight", "ca", "nit electoral: escrutini provisional i resultat oficial")}, ${b2link("congressResults", "ca", "resultats de les eleccions generals a Catalunya")} i ${a("resultats electorals per municipi", hubPath("ca"))}.`,
+  },
+  es: {
+    title: "Las elecciones del 29 de noviembre ya se han celebrado",
+    text: `La votación fue el domingo 29 de noviembre; las listas de esta página son las candidaturas que concurrieron. Las cifras de la noche electoral son el **escrutinio provisional** que facilita el Gobierno (${a("LOREG, artículo 98.2", LOREG_AFTER.provisional)}); el resultado oficial sale del escrutinio general de las juntas electorales provinciales, que según la ley empieza el viernes 4 de diciembre y termina, a más tardar, el lunes 7 (${a("artículos 103", LOREG_AFTER.general)} y ${a("107", LOREG_AFTER.end)}), y el BOE lo publica en cuarenta días (${a("artículo 108", LOREG_AFTER.proclamation)}). Más: ${b2link("electionNight", "es", "noche electoral: escrutinio provisional y resultado oficial")}, ${b2link("congressResults", "es", "resultados de las elecciones generales en Cataluña")} y ${a("resultados electorales por municipio", hubPath("es"))}.`,
+  },
+  en: {
+    title: "The 29 November election has been held",
+    text: `Voting took place on Sunday 29 November; the lists on this page are the candidacies that stood. The figures of election night are the **provisional count** the Government provides (${a("LOREG article 98.2", LOREG_AFTER.provisional)}); the official result comes from the general count of the provincial electoral boards, which by law starts on Friday 4 December and ends by Monday 7 December at the latest (${a("articles 103", LOREG_AFTER.general)} and ${a("107", LOREG_AFTER.end)}), and the BOE publishes it within forty days (${a("article 108", LOREG_AFTER.proclamation)}). More: ${b2link("electionNight", "en", "election night: provisional count and official result")}, ${b2link("congressResults", "en", "general election results in Catalonia")} and ${a("election results by municipality", hubPath("en"))}.`,
+  },
+};
+
+const AFTER = (locale: Locale): Block =>
+  phased([], [callout("info", AFTER_CALLOUT[locale].title, AFTER_CALLOUT[locale].text)]);
+
 function seatsTable(locale: Locale): Block {
   const format = new Intl.NumberFormat(locale === "en" ? "en-GB" : locale === "ca" ? "ca-ES" : "es-ES");
   const caption: Record<Locale, string> = {
@@ -266,6 +295,7 @@ function body(locale: Locale): Block[] {
       lead(
         `Els candidats de les **eleccions generals del 29 de novembre de 2026** a Barcelona, Girona, Lleida i Tarragona són els de les llistes que les juntes electorals provincials publiquen al BOE: les **presentades, el 28 d'octubre**, i les **proclamades, el 3 de novembre**. Les presentades ja hi són: ${a("BOE del 28 d'octubre de 2026", URL.presented)}. I les definitives, les proclamades, també: ${a("BOE del 3 de novembre de 2026", URL.proclaimed)}, amb la ${a("correcció d'errors del 7 de novembre", URL.correction)} ja aplicada; el termini per resoldre'n els recursos es va acabar el 12 de novembre. Les candidatures apareixen aquí sota, província per província, llegides directament del BOE a mesura que s'hi publiquen. Al Congrés es vota una llista tancada i al Senat es poden marcar fins a tres noms.`,
       ),
+      AFTER(locale),
       LIVE,
       callout(
         "info",
@@ -377,6 +407,7 @@ function body(locale: Locale): Block[] {
       lead(
         `Los candidatos de las **elecciones generales del 29 de noviembre de 2026** en Barcelona, Girona, Lleida y Tarragona son los de las listas que las juntas electorales provinciales publican en el BOE: las **presentadas, el 28 de octubre**, y las **proclamadas, el 3 de noviembre**. Las presentadas ya están publicadas: ${a("BOE del 28 de octubre de 2026", URL.presented)}. Y las definitivas, las proclamadas, también: ${a("BOE del 3 de noviembre de 2026", URL.proclaimed)}, con la ${a("corrección de errores del 7 de noviembre", URL.correction)} ya aplicada; el plazo para resolver sus recursos terminó el 12 de noviembre. Las candidaturas aparecen aquí abajo, provincia por provincia, leídas directamente del BOE a medida que se publican. Al Congreso se vota una lista cerrada y en el Senado se puede marcar hasta a tres candidatos.`,
       ),
+      AFTER(locale),
       LIVE,
       callout(
         "info",
@@ -487,6 +518,7 @@ function body(locale: Locale): Block[] {
     lead(
       `The candidates in **Spain's general election of 29 November 2026** in Barcelona, Girona, Lleida and Tarragona are those on the lists that the provincial electoral boards publish in the BOE, Spain's official gazette: the lists **as filed on 28 October** and the **proclaimed lists on 3 November**. The lists as filed are already out: ${a("BOE of 28 October 2026", URL.presented)}. So are the final, proclaimed lists: ${a("BOE of 3 November 2026", URL.proclaimed)}, with the ${a("correction of 7 November", URL.correction)} already applied; the deadline for settling appeals passed on 12 November. The lists appear below, province by province, read straight from the BOE as they are published. For Congress you vote for one closed list; for the Senate you can mark up to three names.`,
     ),
+    AFTER(locale),
     LIVE,
     callout(
       "info",

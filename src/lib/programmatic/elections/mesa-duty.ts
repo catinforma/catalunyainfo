@@ -281,8 +281,196 @@ const WORDS: Record<Locale, Words> = {
   },
 };
 
+/**
+ * What the section says once the ordinary excuse window is shut (25 Nov 2026,
+ * docs/SEO_EXPERIMENTS.md, "25 Nov 2026 - 29N readiness"). The seven days run
+ * from the notice, which arrived by 7 Nov, so nobody notified on time can still
+ * file an ordinary excuse after 14 Nov (`F.lastExcuseDay`); what is left is
+ * LOREG art. 27.4, read on the BOE consolidated text on 25 Nov 2026 (03:35 UTC):
+ * "Si posteriormente cualquiera de los designados estuviera en imposibilidad de
+ * acudir al desempeño de su cargo, debe comunicarlo a la Junta de Zona, al
+ * menos setenta y dos horas antes del acto al que debiera concurrir, aportando
+ * las justificaciones pertinentes. Si el impedimento sobreviene después de ese
+ * plazo, el aviso a la Junta habrá de realizarse de manera inmediata y, en todo
+ * caso, antes de la hora de constitución de la mesa." The mesa guide (mesa.ts)
+ * prints the same rule with the same instant: 72 hours before 08:00 on Sunday
+ * 29 Nov is Thursday 26 Nov, 08:00 Madrid.
+ *
+ *   early  before 15 Nov (and any caller that passes no clock): the original copy
+ *   late   15 Nov to Thu 26 Nov 07:59: the 72-hour notice is still open
+ *   last   from Thu 26 Nov 08:00: "immediately, and before the table is set up"
+ *   held   from Sun 29 Nov 08:00 (Madrid) until the section goes (`MESA_DUTY_UNTIL`): past tense, the tables
+ *          were set up; no instruction to anyone. LOREG art. 80.1, BOE consolidated text, read 25 Nov 2026:
+ *          "El Presidente, los dos Vocales de cada Mesa Electoral y los respectivos suplentes ... se reúnen a las
+ *          ocho horas del día fijado para la votación en el local correspondiente."
+ */
+export type MesaStage = "early" | "late" | "last" | "held";
+type LateStage = "late" | "last";
+
+/** First instant of the "late" stage: the end of the last ordinary excuse day (Madrid, CET). */
+const LATE_FROM = new Date(`${F.lastExcuseDay}T23:59:59+01:00`);
+/** 72 hours before 08:00 on polling day (Sun 29 Nov): Thu 26 Nov 08:00 Madrid (CET, UTC+1). */
+export const MESA_72H = new Date("2026-11-26T08:00:00+01:00");
+/** Sun 29 Nov 2026, 08:00 Madrid (CET, UTC+1): the members meet and the tables are set up (LOREG art. 80.1). */
+export const MESA_HELD_FROM = new Date("2026-11-29T08:00:00+01:00");
+
+export function mesaStage(now?: Date): MesaStage {
+  if (!now) return "early";
+  const t = now.getTime();
+  if (Number.isNaN(t) || t <= LATE_FROM.getTime()) return "early";
+  if (t >= MESA_HELD_FROM.getTime()) return "held";
+  return t < MESA_72H.getTime() ? "late" : "last";
+}
+
+interface LateWords {
+  intro: (place: string, board: string, stage: LateStage) => string;
+  rows: (stage: LateStage) => { label: string; value: string }[];
+  faqAnswer: (board: string, address: string, stage: LateStage) => string;
+}
+
+const LATE: Record<Locale, LateWords> = {
+  ca: {
+    intro: (place, board, stage) =>
+      `L'Ajuntament ${ofCa(place)} ja ha sortejat els membres de les meses del 29N, i la notificació havia d'arribar com a molt tard el **${d(F.noticeBy, "ca")}**. El termini ordinari per excusar-se, **${F.excuseDays} dies** des de la notificació, va acabar com a molt tard el ${d(F.lastExcuseDay, "ca")}. ${
+        stage === "late"
+          ? `Si ara t'ho impedeix alguna cosa sobrevinguda, comunica-ho a la **Junta Electoral de Zona ${ofCa(board)}** almenys 72 hores abans de les 8.00 del diumenge, és a dir, **fins al dijous 26 de novembre a les 8.00**, amb justificants (LOREG, article 27.4).`
+          : `El termini de 72 hores per comunicar un impediment sobrevingut va acabar el dijous 26 de novembre a les 8.00: ara cal avisar **de seguida** la **Junta Electoral de Zona ${ofCa(board)}** i, en tot cas, abans de l'hora de constitució de la mesa, les 8.00 del diumenge (LOREG, article 27.4).`
+      }`,
+    rows: (stage) => [
+      {
+        label: "Notificació",
+        value: `És l'única manera de saber-ho: no es publica cap llista. Havia d'arribar com a molt tard el **${d(F.noticeBy, "ca")}**, amb el manual d'instruccions, i si arriba més tard el nomenament continua sent vàlid.`,
+      },
+      {
+        label: stage === "late" ? "Impediment sobrevingut" : "Impediment d'última hora",
+        value:
+          (stage === "late"
+            ? "Almenys **72 hores abans** de les 8.00 del dia de la votació (fins al **dijous 26 de novembre a les 8.00**), amb justificants."
+            : "El termini de 72 hores va acabar el **dijous 26 de novembre a les 8.00**: ara, **de seguida** i **abans de l'hora de constitució de la mesa**.") +
+          ` Si te'n van notificar més tard, els ${F.excuseDays} dies d'excusa es compten des de la notificació: en línia amb Cl@ve a la [plataforma d'excuses](${F.excuseApp}) o en paper a la Junta.`,
+      },
+    ],
+    faqAnswer: (board, address, stage) =>
+      `A la Junta Electoral de Zona ${ofCa(board)}. El termini ordinari d'excusa, ${F.excuseDays} dies des de la notificació, va acabar com a molt tard el ${d(F.lastExcuseDay, "ca")}; si ara et surt un impediment, ${
+        stage === "late"
+          ? "comunica-ho almenys 72 hores abans de les 8.00 del diumenge (fins al dijous 26 de novembre a les 8.00)"
+          : "avisa de seguida i abans que es constitueixi la mesa, perquè el termini de 72 hores va acabar el dijous 26 a les 8.00"
+      }, amb justificants. L'adreça de la Junta és ${address}. La dieta és de ${F.allowanceEur} € i el dilluns ${d(F.dayAfter, "ca")} tens ${F.dayAfterHoursOff} hores menys de feina.`,
+  },
+  es: {
+    intro: (place, board, stage) =>
+      `El Ayuntamiento de ${place} ya ha sorteado a los miembros de las mesas del 29N, y la notificación tenía que llegar como muy tarde el **${d(F.noticeBy, "es")}**. El plazo ordinario para excusarse, **${F.excuseDays} días** desde la notificación, terminó como muy tarde el ${d(F.lastExcuseDay, "es")}. ${
+        stage === "late"
+          ? `Si ahora te lo impide algo sobrevenido, comunícalo a la **Junta Electoral de Zona de ${board}** al menos 72 horas antes de las 8:00 del domingo, es decir, **hasta el jueves 26 de noviembre a las 8:00**, con justificantes (LOREG, artículo 27.4).`
+          : `El plazo de 72 horas para comunicar un impedimento sobrevenido terminó el jueves 26 de noviembre a las 8:00: ahora hay que avisar **de inmediato** a la **Junta Electoral de Zona de ${board}** y, en todo caso, antes de la hora de constitución de la mesa, las 8:00 del domingo (LOREG, artículo 27.4).`
+      }`,
+    rows: (stage) => [
+      {
+        label: "Notificación",
+        value: `Es la única forma de saberlo: no se publica ninguna lista. Tenía que llegar como muy tarde el **${d(F.noticeBy, "es")}**, con el manual de instrucciones, y si llega más tarde el nombramiento sigue siendo válido.`,
+      },
+      {
+        label: stage === "late" ? "Impedimento sobrevenido" : "Impedimento de última hora",
+        value:
+          (stage === "late"
+            ? "Al menos **72 horas antes** de las 8:00 del día de la votación (hasta el **jueves 26 de noviembre a las 8:00**), con justificantes."
+            : "El plazo de 72 horas terminó el **jueves 26 de noviembre a las 8:00**: ahora, **de inmediato** y **antes de la hora de constitución de la mesa**.") +
+          ` Si te la notificaron más tarde, los ${F.excuseDays} días de excusa cuentan desde la notificación: en línea con Cl@ve en la [plataforma de excusas](${F.excuseApp}) o en papel en la Junta.`,
+      },
+    ],
+    faqAnswer: (board, address, stage) =>
+      `Ante la Junta Electoral de Zona de ${board}. El plazo ordinario de excusa, ${F.excuseDays} días desde la notificación, terminó como muy tarde el ${d(F.lastExcuseDay, "es")}; si ahora te surge un impedimento, ${
+        stage === "late"
+          ? "comunícalo al menos 72 horas antes de las 8:00 del domingo (hasta el jueves 26 de noviembre a las 8:00)"
+          : "avisa de inmediato y antes de que se constituya la mesa, porque el plazo de 72 horas terminó el jueves 26 a las 8:00"
+      }, con justificantes. La dirección de la Junta es ${address}. La dieta es de ${F.allowanceEur} € y el lunes ${d(F.dayAfter, "es")} tienes ${F.dayAfterHoursOff} horas menos de trabajo.`,
+  },
+  en: {
+    intro: (place, board, stage) =>
+      `The town council of ${place} has already drawn the members of the 29 November polling tables, and the notice had to arrive by **${d(F.noticeBy, "en")}** at the latest. The ordinary window to ask for an excuse, **${F.excuseDays} days** from the notice, ended by ${d(F.lastExcuseDay, "en")} at the latest. ${
+        stage === "late"
+          ? `If something unforeseen now stops you, tell the **Junta Electoral de Zona de ${board}** at least 72 hours before 08:00 on Sunday, that is, **by Thursday 26 November at 08:00**, with proof (LOREG art. 27.4).`
+          : `The 72-hour window to report an unforeseen impediment ended on Thursday 26 November at 08:00: now you must tell the **Junta Electoral de Zona de ${board}** **immediately** and, in any case, before the table is due to be set up, at 08:00 on Sunday (LOREG art. 27.4).`
+      }`,
+    rows: (stage) => [
+      {
+        label: "Notice",
+        value: `It is the only way to find out: no list is published. It had to arrive by **${d(F.noticeBy, "en")}** at the latest, with the instruction manual, and a notice that arrives later is still valid.`,
+      },
+      {
+        label: stage === "late" ? "Unforeseen impediment" : "Last-minute impediment",
+        value:
+          (stage === "late"
+            ? "At least **72 hours before** 08:00 on polling day (by **Thursday 26 November, 08:00**), with proof."
+            : "The 72-hour window ended on **Thursday 26 November at 08:00**: now, **immediately** and **before the table is set up**.") +
+          ` If your notice came later, the ${F.excuseDays} days to ask for an excuse run from the notice: online with Cl@ve through the [excuse platform](${F.excuseApp}) (in Spanish) or on paper at the board.`,
+      },
+    ],
+    faqAnswer: (board, address, stage) =>
+      `With the Junta Electoral de Zona de ${board}. The ordinary excuse window, ${F.excuseDays} days from the notice, ended by ${d(F.lastExcuseDay, "en")} at the latest; if something stops you now, ${
+        stage === "late"
+          ? "tell the board at least 72 hours before 08:00 on Sunday (by Thursday 26 November, 08:00)"
+          : "tell the board immediately and before the table is set up, because the 72-hour window ended on Thursday 26 November at 08:00"
+      }, with proof. The board's address is ${address}. The allowance is €${F.allowanceEur}, and you get ${F.dayAfterHoursOff} hours off work on Monday ${d(F.dayAfter, "en")}.`,
+  },
+};
+
+
+/** From polling day 08:00: nobody can still be told to file anything, so the section reports. */
+const HELD: Record<Locale, LateWords> = {
+  ca: {
+    intro: (place, board) =>
+      `L'Ajuntament ${ofCa(place)} va sortejar els membres de les meses del 29N, que es van reunir a les **8.00 del diumenge 29 de novembre** al seu local (LOREG, article 80.1). El termini per comunicar un impediment va acabar amb la constitució de la mesa (LOREG, article 27.4). La **Junta Electoral de Zona ${ofCa(board)}** és la que va rebre les excuses; la dieta i el descans del dilluns són més avall.`,
+    rows: () => [
+      {
+        label: "Notificació",
+        value: `Era l'única manera de saber-ho: no es publicava cap llista. Havia d'arribar com a molt tard el **${d(F.noticeBy, "ca")}**, amb el manual d'instruccions.`,
+      },
+      {
+        label: "Constitució de la mesa",
+        value: "Els membres titulars i els suplents es van reunir a les **8.00 del diumenge 29 de novembre** al local de la seva mesa (LOREG, article 80.1).",
+      },
+    ],
+    faqAnswer: (board, address) =>
+      `A la Junta Electoral de Zona ${ofCa(board)}, que és la que va rebre les excuses: el termini ordinari va acabar com a molt tard el ${d(F.lastExcuseDay, "ca")} i les meses es van constituir a les 8.00 del diumenge 29 de novembre. L'adreça de la Junta és ${address}. La dieta és de ${F.allowanceEur} € i el dilluns ${d(F.dayAfter, "ca")} tens ${F.dayAfterHoursOff} hores menys de feina.`,
+  },
+  es: {
+    intro: (place, board) =>
+      `El Ayuntamiento de ${place} sorteó a los miembros de las mesas del 29N, que se reunieron a las **8:00 del domingo 29 de noviembre** en su local (LOREG, artículo 80.1). El plazo para comunicar un impedimento terminó con la constitución de la mesa (LOREG, artículo 27.4). La **Junta Electoral de Zona de ${board}** es la que recibió las excusas; la dieta y el descanso del lunes están más abajo.`,
+    rows: () => [
+      {
+        label: "Notificación",
+        value: `Era la única forma de saberlo: no se publicaba ninguna lista. Tenía que llegar como muy tarde el **${d(F.noticeBy, "es")}**, con el manual de instrucciones.`,
+      },
+      {
+        label: "Constitución de la mesa",
+        value: "Los miembros titulares y los suplentes se reunieron a las **8:00 del domingo 29 de noviembre** en el local de su mesa (LOREG, artículo 80.1).",
+      },
+    ],
+    faqAnswer: (board, address) =>
+      `Ante la Junta Electoral de Zona de ${board}, que es la que recibió las excusas: el plazo ordinario terminó como muy tarde el ${d(F.lastExcuseDay, "es")} y las mesas se constituyeron a las 8:00 del domingo 29 de noviembre. La dirección de la Junta es ${address}. La dieta es de ${F.allowanceEur} € y el lunes ${d(F.dayAfter, "es")} tienes ${F.dayAfterHoursOff} horas menos de trabajo.`,
+  },
+  en: {
+    intro: (place, board) =>
+      `The town council of ${place} drew the members of the 29 November polling tables, who met at their polling place at **08:00 on Sunday 29 November** (LOREG art. 80.1). The window to report an impediment closed when the table was set up (LOREG art. 27.4). The **Junta Electoral de Zona de ${board}** is the board that received the excuses; the allowance and Monday's time off are below.`,
+    rows: () => [
+      {
+        label: "Notice",
+        value: `It was the only way to find out: no list was published. It had to arrive by **${d(F.noticeBy, "en")}** at the latest, with the instruction manual.`,
+      },
+      {
+        label: "Setting up the table",
+        value: "The titular members and the substitutes met at their table's polling place at **08:00 on Sunday 29 November** (LOREG art. 80.1).",
+      },
+    ],
+    faqAnswer: (board, address) =>
+      `With the Junta Electoral de Zona de ${board}, the board that received the excuses: the ordinary window ended by ${d(F.lastExcuseDay, "en")} at the latest and the tables were set up at 08:00 on Sunday 29 November. The board's address is ${address}. The allowance is €${F.allowanceEur}, and you get ${F.dayAfterHoursOff} hours off work on Monday ${d(F.dayAfter, "en")}.`,
+  },
+};
+
 /** Null only for a code missing from `jez.json`; every one of the 947 maps (tested). */
-export function buildMesaDuty(m: Municipality, locale: Locale, date: (iso: string) => string): MesaDutyModel | null {
+/** `now` is the render instant: without it the section reads as in the first days (`early`). */
+export function buildMesaDuty(m: Municipality, locale: Locale, date: (iso: string) => string, now?: Date): MesaDutyModel | null {
   const jez = jezFor(m.code);
   if (!jez) return null;
   const w = WORDS[locale];
@@ -291,10 +479,12 @@ export function buildMesaDuty(m: Municipality, locale: Locale, date: (iso: strin
   const district = placeName(jez.districtSeat, locale);
   const c: Case = jez.boardSeat.code !== jez.districtSeat.code ? "elsewhere" : m.code === jez.boardSeat.code ? "seat" : "same";
   const { towns, jec, directory } = JEZ.sources;
+  const stage = mesaStage(now);
+  const late = stage === "early" ? null : stage === "held" ? { stage: "late" as LateStage, words: HELD[locale] } : { stage, words: LATE[locale] };
   return {
     title: w.title(place),
-    intro: w.intro(place, board),
-    rows: w.rows,
+    intro: late ? late.words.intro(place, board, late.stage) : w.intro(place, board),
+    rows: late ? late.words.rows(late.stage) : w.rows,
     pay: w.pay,
     board: {
       label: w.boardLabel,
@@ -308,6 +498,9 @@ export function buildMesaDuty(m: Municipality, locale: Locale, date: (iso: strin
     guide: w.guide(b2href("mesa", locale), B2_TITLES.mesa[locale]),
     source: w.source(date(MESA_DUTY_CHECKED), { interior: EXCUSES_URL, loreg: LOREG_URL, jec: jec.url, directory: directory.url, towns: towns.url }),
     fact: { label: w.factLabel, value: w.boardName(board) },
-    faq: { question: w.faqQuestion(place), answer: w.faqAnswer(board, jez.board.address) },
+    faq: {
+      question: w.faqQuestion(place),
+      answer: late ? late.words.faqAnswer(board, jez.board.address, late.stage) : w.faqAnswer(board, jez.board.address),
+    },
   };
 }

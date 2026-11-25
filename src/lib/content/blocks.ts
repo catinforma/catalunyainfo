@@ -574,6 +574,8 @@ export const electionPhasedBlock = z.object({
   pre: rawBlocks,
   after: rawBlocks,
   over: rawBlocks.optional(),
+  /** Optional: read from Thu 26 Nov 14:00 Madrid (postal-vote hand-in closed) until `after` starts; else `pre`. */
+  handin: rawBlocks.optional(),
 });
 
 export const blockSchema = z.discriminatedUnion("type", [

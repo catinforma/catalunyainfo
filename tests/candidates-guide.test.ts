@@ -12,6 +12,7 @@ import { ELECTORS, PROVINCES, SEATS } from "../src/lib/content/candidates/boe.ts
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { hubPath } from "../src/lib/programmatic/elections/paths.ts";
 import { pollsPath } from "../src/lib/programmatic/polls/paths.ts";
 
 /**
@@ -26,6 +27,8 @@ const PUBLISHED = new Set([
   ...LOCALES.map((locale) => `/${locale}/${EVERGREEN[locale].path}/`),
   // The 29N official-polls page (code-rendered route, not a DB entry).
   ...LOCALES.map((locale) => pollsPath(locale)),
+  // The elections hub (code route), linked from the after-the-vote callout (25 Nov 2026).
+  ...LOCALES.map((locale) => hubPath(locale)),
 ]);
 
 const text = (locale: (typeof LOCALES)[number]) => bodyToPlainText(CANDIDATES.editions[locale].blocks);
@@ -75,9 +78,11 @@ test("the live lists come right after the lead, once, in every language", () => 
   for (const locale of LOCALES) {
     const blocks = CANDIDATES.editions[locale].blocks;
     assert.equal(blocks.filter((block) => block.type === "candidateLists").length, 1, locale);
-    assert.equal(blocks.findIndex((block) => block.type === "candidateLists"), 1, locale);
+    // The `electionPhased` after-the-vote callout (empty before 30 Nov) may sit between the lead and the lists.
+    const flat = blocks.filter((block) => block.type !== "electionPhased");
+    assert.equal(flat.findIndex((block) => block.type === "candidateLists"), 1, locale);
     const published = withReadNext([...blocks], locale);
-    assert.equal(published.findIndex((block) => block.type === "candidateLists"), 1, locale);
+    assert.equal(published.filter((block) => block.type !== "electionPhased").findIndex((block) => block.type === "candidateLists"), 1, locale);
   }
 });
 

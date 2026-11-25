@@ -721,11 +721,49 @@ const ABROAD_LINK: Record<Locale, string> = {
   en: `Every deadline for voters abroad is on the ${a("INE's page for 29 November", POSTAL_URL.ine)} (in Spanish).`,
 };
 
+/**
+ * From Thu 26 Nov 2026, 14:00 Madrid until polling day: the hand-in deadline is past (26 Nov 2026, 25 Nov 08:16 UTC,
+ * read the same day). Sources, all re-read on 25 Nov:
+ *  - Correos' postal-vote page: "El solicitante tiene de plazo para depositar el sobre con su voto hasta el 26 de
+ *    noviembre de 2026 a las 14:00h, en los horarios habituales de apertura de las oficinas postales" and "si es
+ *    aceptada por la Oficina del Censo Electoral, no podrá votar en la mesa electoral el día de la votación";
+ *  - Interior's 29N postal page: "la persona que solicita el voto por correo, una vez ha sido admitida su solicitud,
+ *    ya no puede votar de forma presencial"; Correos takes the mail to the tables "a las nueve de la mañana" and the
+ *    table puts the postal votes into the urn at 20:00;
+ *  - INE cid=1700: "Los electores que soliciten el voto por correo no podrán votar personalmente en la mesa
+ *    electoral"; free census line 900 343 232, "El día 29 de noviembre, día de la votación, el horario será de 8:00
+ *    a 20:00 horas";
+ *  - LOREG art. 73.1: the census is annotated "a fin de que el día de las elecciones no se realice el voto
+ *    personalmente".
+ * No official source read says what happens to someone who asked for the postal vote and did not hand it in, and
+ * none gives an exception that lets them vote in person: the callout says exactly that and promises nothing.
+ * Shown by `resolveElectionPhased` (content/election-phased.ts, `handin` variant), only in the "closed" phase;
+ * POSTAL_AS_OF is not involved.
+ */
+const HANDIN_PAST: Record<Locale, { title: string; text: string }> = {
+  ca: {
+    title: "El termini per lliurar el vot per correu ja ha acabat: va ser el dijous 26 de novembre a les 14.00",
+    text: `El termini per lliurar el vot a Correus va acabar el **dijous 26 de novembre a les 14.00** (${a("Acord 418/2026 de la Junta Electoral Central", POSTAL_URL.jecExtension)}). **Si el vas demanar i no l'has lliurat:** les fonts oficials que citem aquí (LOREG, Ministeri de l'Interior, INE, Correus) no donen cap altra via per votar. La llei fa anotar al cens qui demana el vot per correu «a fin de que el día de las elecciones no se realice el voto personalmente» (${a("LOREG, article 73.1", POSTAL_URL.loreg)}) i Interior ho diu així: «una vez ha sido admitida su solicitud, ya no puede votar de forma presencial» (${a("Interior", POSTAL_URL.interior)}). Si no t'han arribat les paperetes, truca a l'Oficina del Cens Electoral, 900 343 232 (el diumenge 29, de 8:00 a 20:00). **Si el vas lliurar a temps:** Correus el porta a la mesa el diumenge 29 a les 9.00 i la mesa el posa a l'urna a les 20.00. **Si no el vas demanar:** vota en persona a la teva mesa, de 9:00 a 20:00 (${b2link("voting", "ca", VOTING_LABEL.ca)}).`,
+  },
+  es: {
+    title: "El plazo para entregar el voto por correo ya ha terminado: fue el jueves 26 de noviembre a las 14:00",
+    text: `El plazo para entregar el voto en Correos terminó el **jueves 26 de noviembre a las 14:00** (${a("Acuerdo 418/2026 de la Junta Electoral Central", POSTAL_URL.jecExtension)}). **Si lo pediste y no lo has entregado:** las fuentes oficiales que citamos aquí (LOREG, Ministerio del Interior, INE, Correos) no dan ninguna otra vía para votar. La ley hace anotar en el censo a quien pide el voto por correo «a fin de que el día de las elecciones no se realice el voto personalmente» (${a("LOREG, artículo 73.1", POSTAL_URL.loreg)}) e Interior lo dice así: «una vez ha sido admitida su solicitud, ya no puede votar de forma presencial» (${a("Interior", POSTAL_URL.interior)}). Si no te llegaron las papeletas, llama a la Oficina del Censo Electoral, 900 343 232 (el domingo 29, de 8:00 a 20:00). **Si lo entregaste a tiempo:** Correos lo lleva a tu mesa el domingo 29 a las 9:00 y la mesa lo mete en la urna a las 20:00. **Si no lo pediste:** vota en persona en tu mesa, de 9:00 a 20:00 (${b2link("voting", "es", VOTING_LABEL.es)}).`,
+  },
+  en: {
+    title: "The deadline to hand in the postal vote has passed: it was Thursday 26 November at 14:00",
+    text: `The deadline to hand the vote in at Correos ended on **Thursday 26 November at 14:00** (${a("Central Electoral Board Agreement 418/2026", POSTAL_URL.jecExtension)}). **If you asked for a postal vote and have not handed it in:** the official sources we cite here (the electoral law, the Interior Ministry, the INE and Correos) give no other way to vote. The law has the census marked for anyone who asks for a postal vote "so that personal voting does not take place on election day" (${a("LOREG article 73.1", POSTAL_URL.loreg)}), and the Interior Ministry says: "once the request has been accepted, the person can no longer vote in person" (${a("Interior", POSTAL_URL.interior)}; both quotes are our translation of the Spanish). If your ballot papers never arrived, call the census office, 900 343 232 (Sunday 29 November, 8:00 to 20:00). **If you handed it in on time:** Correos takes it to your table on Sunday 29 at 9:00 and the table puts it in the ballot box at 20:00. **If you did not ask for one:** vote in person at your table, 9:00 to 20:00 (${b2link("voting", "en", VOTING_LABEL.en)}).`,
+  },
+};
+
 function body(locale: Locale, phase: PostalPhase): Block[] {
   const t = COPY[locale];
   const p = t.phases[phase];
   return [
     lead(p.lead),
+    // Closed phase only: from Thu 26 Nov 14:00 the callout appears (nothing before, nothing after 29 Nov).
+    ...(phase === "closed"
+      ? [{ type: "electionPhased", pre: [], handin: [callout("warning", HANDIN_PAST[locale].title, HANDIN_PAST[locale].text)], after: [] } as Block]
+      : []),
     steps(p.stepsTitle, [p.firstStep, ...t.steps]),
     languageLinks(),
     callout("official", verifiedLine(locale, POSTAL_AS_OF), t.note),

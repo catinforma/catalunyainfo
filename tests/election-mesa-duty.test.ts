@@ -8,7 +8,7 @@ import { b2href } from "../src/lib/content/batch02/shared.ts";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
 import { shortDate } from "../src/lib/content/holidays/calendar.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
-import { JEZ, MESA_DUTY_CHECKED, MESA_DUTY_UNTIL, buildMesaDuty, jezFor } from "../src/lib/programmatic/elections/mesa-duty.ts";
+import { JEZ, MESA_72H, MESA_HELD_FROM, MESA_DUTY_CHECKED, MESA_DUTY_UNTIL, buildMesaDuty, jezFor, mesaStage } from "../src/lib/programmatic/elections/mesa-duty.ts";
 import { buildElectionPage } from "../src/lib/programmatic/elections/model.ts";
 import { municipalitiesFor } from "../src/lib/programmatic/elections/pages.ts";
 import { POLLING } from "../src/lib/programmatic/elections/polling.ts";
@@ -209,5 +209,109 @@ test("es mesa guide: national lead, a Catalonia section whose JEZ counts match t
   assert.doesNotMatch(bodyToPlainText(blocks.slice(0, at) as never), /DOGC|EMT\/178\/2023/);
   for (const locale of ["ca", "en"] as const) {
     assert.ok(!JSON.stringify(MESA.editions[locale].blocks).includes("Si te ha tocado mesa en Cataluña"), locale);
+  }
+});
+
+/**
+ * 25 Nov 2026 (docs/SEO_EXPERIMENTS.md, "25 Nov 2026 - 29N readiness"): from 15 Nov the seven
+ * days to excuse yourself are over for anyone notified by 7 Nov, so the section stops
+ * promising them and says what LOREG art. 27.4 leaves: 72 hours before 08:00 on polling day
+ * (Thu 26 Nov 08:00), then "immediately and before the table is set up".
+ */
+test("mesa stage follows the clock: early before 15 Nov, late to Thu 26 Nov 07:59, last from 08:00", () => {
+  assert.equal(mesaStage(undefined), "early");
+  assert.equal(mesaStage(new Date("2026-11-14T23:30:00+01:00")), "early");
+  assert.equal(mesaStage(new Date("2026-11-15T00:00:00+01:00")), "late");
+  assert.equal(mesaStage(new Date("2026-11-25T10:00:00+01:00")), "late");
+  assert.equal(mesaStage(new Date("2026-11-26T07:59:59+01:00")), "late");
+  assert.equal(mesaStage(new Date("2026-11-26T08:00:00+01:00")), "last");
+  assert.equal(mesaStage(new Date("2026-11-28T10:00:00+01:00")), "last");
+  assert.equal(new Date("2026-11-29T08:00:00+01:00").getTime() - MESA_72H.getTime(), 72 * 3600 * 1000, "72 hours before 08:00 on polling day");
+  assert.equal(mesaStage(new Date(Number.NaN)), "early");
+});
+
+test("after 14 Nov no town section promises the seven-day excuse; it names the 72-hour rule, in ca, es and en", () => {
+  const stale: Record<Locale, RegExp> = {
+    ca: /des d'aquell dia tens|si te la lliuren el dia/,
+    es: /desde ese día tienes|si te la entregan el día/,
+    en: /from that day you have|if it reaches you on/,
+  };
+  for (const [when, stage] of [["2026-11-25T10:00:00+01:00", "late"], ["2026-11-27T10:00:00+01:00", "last"]] as const) {
+    const now = new Date(when);
+    for (const locale of LOCALES) {
+      for (const slug of ["sabadell", "terrassa", "bossost"]) {
+        const mesa = buildMesaDuty(bySlug(slug), locale, iso, now)!;
+        const all = [mesa.intro, ...mesa.rows.map((r) => `${r.label} ${r.value}`), mesa.faq.answer].join(" ");
+        assert.doesNotMatch(all, stale[locale], `${locale}/${slug}/${stage}`);
+        assert.match(all, /72/, `${locale}/${slug}/${stage}: the 72-hour rule`);
+        assert.match(all, /27\.4/, `${locale}/${slug}/${stage}: LOREG art. 27.4`);
+        assert.ok(all.includes(MESA_29N.excuseApp), `${locale}/${slug}/${stage}: platform for late notices`);
+        assert.ok(all.includes(shortDate(MESA_29N.lastExcuseDay, locale)), `${locale}/${slug}/${stage}: 14 Nov in the past tense`);
+        assert.doesNotMatch(mesa.faq.answer, /\*\*|\]\(/, "plain-text FAQ");
+        if (stage === "late") assert.match(all, /26/, `${locale}/${slug}: Thursday 26 Nov`);
+        else assert.match(all, /(de seguida|de inmediato|immediately)/, `${locale}/${slug}: immediately`);
+      }
+    }
+  }
+});
+
+test("every town in every language builds the late and last sections, FAQ without markup", () => {
+  for (const when of ["2026-11-25T10:00:00+01:00", "2026-11-26T09:00:00+01:00"]) {
+    for (const locale of LOCALES) {
+      for (const m of municipalitiesFor(locale)) {
+        const page = buildElectionPage(m, locale, undefined, "before", new Date(when));
+        assert.ok(page.mesa, `${locale}/${m.slug}`);
+        assert.deepEqual(page.faq.at(-1), page.mesa!.faq, `${locale}/${m.slug}: FAQ is the mesa FAQ`);
+        assert.doesNotMatch(page.mesa!.faq.answer, /\*\*|\]\(/, `${locale}/${m.slug}`);
+        assert.ok(page.mesa!.intro.includes("27.4"), `${locale}/${m.slug}`);
+      }
+    }
+  }
+});
+
+/**
+ * 25 Nov 2026, round 2: from Sun 29 Nov 08:00 Madrid the tables are set up (LOREG art. 80.1), so the section
+ * stops giving instructions and reports in the past tense until it is removed (`MESA_DUTY_UNTIL`).
+ */
+test("mesa stage held: from Sun 29 Nov 08:00 Madrid, to the second, and through 30 Nov", () => {
+  assert.equal(MESA_HELD_FROM.getTime(), new Date("2026-11-29T07:00:00Z").getTime(), "08:00 CET is 07:00 UTC");
+  assert.equal(mesaStage(new Date("2026-11-29T07:59:59+01:00")), "last");
+  assert.equal(mesaStage(new Date("2026-11-29T08:00:00+01:00")), "held");
+  assert.equal(mesaStage(new Date("2026-11-29T23:59:59+01:00")), "held");
+  assert.equal(mesaStage(new Date("2026-11-30T10:00:00+01:00")), "held");
+  assert.ok(MESA_DUTY_UNTIL >= "2026-11-30", "the held stage must cover the days the section still renders");
+});
+
+test("held stage: past tense, no instruction to file or to tell the board, keeps the board, the allowance and Monday", () => {
+  const instruction: Record<Locale, RegExp> = {
+    ca: /comunica-ho|avisa|de seguida|almenys 72|fins al dijous/i,
+    es: /comunícalo|avisa|de inmediato|al menos 72|hasta el jueves/i,
+    en: /tell the (board|\*\*Junta)|immediately|at least 72|by Thursday/i,
+  };
+  const past: Record<Locale, RegExp> = { ca: /es van reunir a les \*\*8\.00 del diumenge 29 de novembre\*\*/, es: /se reunieron a las \*\*8:00 del domingo 29 de noviembre\*\*/, en: /met at their polling place at \*\*08:00 on Sunday 29 November\*\*/ };
+  for (const when of ["2026-11-29T08:00:00+01:00", "2026-11-29T15:00:00+01:00", "2026-11-30T10:00:00+01:00"]) {
+    for (const locale of LOCALES) {
+      for (const slug of ["sabadell", "terrassa", "bossost"]) {
+        const mesa = buildMesaDuty(bySlug(slug), locale, iso, new Date(when))!;
+        const all = [mesa.intro, ...mesa.rows.map((r) => `${r.label} ${r.value}`), mesa.faq.answer].join(" ");
+        assert.match(mesa.intro, past[locale], `${locale}/${slug}/${when}`);
+        assert.doesNotMatch(all, instruction[locale], `${locale}/${slug}/${when}: no instruction left`);
+        assert.match(all, /80\.1/, `${locale}/${slug}: art. 80.1`);
+        assert.ok(mesa.intro.includes("27.4"), `${locale}/${slug}: art. 27.4`);
+        assert.ok(mesa.faq.answer.includes(mesa.board.address), `${locale}/${slug}: board address stays`);
+        assert.ok(mesa.pay.value.includes(shortDate(MESA_29N.dayAfter, locale)), `${locale}/${slug}: Monday stays`);
+        assert.doesNotMatch(mesa.faq.answer, /\*\*|\]\(/, "plain-text FAQ");
+      }
+    }
+  }
+});
+
+test("every town in every language builds the held section", () => {
+  for (const locale of LOCALES) {
+    for (const m of municipalitiesFor(locale)) {
+      const page = buildElectionPage(m, locale, undefined, "polling", new Date("2026-11-29T10:00:00+01:00"));
+      assert.ok(page.mesa?.intro.includes("80.1"), `${locale}/${m.slug}`);
+      assert.deepEqual(page.faq.at(-1), page.mesa!.faq, `${locale}/${m.slug}`);
+    }
   }
 });

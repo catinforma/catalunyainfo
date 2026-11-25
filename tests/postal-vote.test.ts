@@ -4,7 +4,8 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
+import { bodySchema, bodyToPlainText, parseBody, wordCount, type Block } from "../src/lib/content/blocks.ts";
+import { HANDIN_CLOSES, resolveElectionPhased } from "../src/lib/content/election-phased.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import {
   POSTAL_29N,
@@ -173,7 +174,7 @@ test("answer first: the lead gives the request deadline and the hand-in deadline
     assert.ok(lead.slice(0, 80).includes(request[locale]), `${locale}: ${lead.slice(0, 100)}`);
     assert.match(lead, handIn[locale], `${locale}: hand-in deadline in the lead`);
     assert.match(lead, /Corre[uo]s/, `${locale}: where`);
-    const blocks = POSTAL_VOTE.editions[locale].blocks as unknown as { type: string; items?: unknown[] }[];
+    const blocks = (POSTAL_VOTE.editions[locale].blocks as unknown as { type: string; items?: unknown[] }[]).filter((b) => b.type !== "electionPhased"); // the 26 Nov 14:00 callout sits between the lead and the steps
     assert.equal(blocks[0]?.type, "paragraph");
     assert.equal(blocks[1]?.type, "steps", `${locale}: the steps right under the lead`);
     assert.ok((blocks[1]?.items?.length ?? 0) >= 5, `${locale}: five steps`);
@@ -404,4 +405,62 @@ test("from 20 Nov the page must say requests are closed, and from 30 Nov that th
       `POSTAL_AS_OF is ${POSTAL_AS_OF}: polling day is past. Move it to today (the copy switches to "over"), check whether the next election has been called, test and publish \`vot-correu\``,
     );
   }
+});
+
+/**
+ * 25 Nov 2026 (docs/SEO_EXPERIMENTS.md, "25 Nov 2026 - 29N readiness, round 2"): from Thu 26 Nov 14:00 Madrid
+ * the closed-phase guide carries a callout saying the hand-in deadline is past, with what the official
+ * sources say to someone who asked for a postal vote and did not hand it in. POSTAL_AS_OF is untouched.
+ */
+test("hand-in callout: nothing before Thu 26 Nov 14:00, the callout from 14:00 to 29 Nov 23:59, nothing from 30 Nov", () => {
+  const AT_HANDIN = new Date("2026-11-26T14:00:00+01:00");
+  assert.equal(HANDIN_CLOSES.getTime(), AT_HANDIN.getTime());
+  for (const locale of LOCALES) {
+    const stored = parseBody(POSTAL_VOTE.editions[locale].blocks);
+    assert.ok(bodySchema.safeParse(stored).success, `${locale}: stored body parses`);
+    const phased = stored.filter((b) => b.type === "electionPhased");
+    assert.equal(phased.length, 1, `${locale}: one phased block`);
+    assert.equal(stored[1]?.type, "electionPhased", `${locale}: right under the lead`);
+    const read = (iso: string) => resolveElectionPhased(stored, new Date(iso)).filter((b) => b.type === "callout" && b.tone === "warning");
+    assert.equal(read("2026-11-25T10:00:00+01:00").length, 0, `${locale}: before`);
+    assert.equal(read("2026-11-26T13:59:59+01:00").length, 0, `${locale}: 13:59:59`);
+    assert.equal(read("2026-11-26T14:00:00+01:00").length, 1, `${locale}: 14:00`);
+    assert.equal(read("2026-11-27T10:00:00+01:00").length, 1, `${locale}: 27 Nov`);
+    assert.equal(read("2026-11-29T10:00:00+01:00").length, 1, `${locale}: polling day`);
+    assert.equal(read("2026-11-29T23:59:59+01:00").length, 1, `${locale}: 23:59:59`);
+    assert.equal(read("2026-11-30T00:00:00+01:00").length, 0, `${locale}: 30 Nov`);
+    assert.ok(!resolveElectionPhased(stored, new Date("2026-11-27T10:00:00+01:00")).some((b) => b.type === "electionPhased"));
+  }
+});
+
+test("hand-in callout: past tense, the deadline, the official quotes and no promise of an in-person exception", () => {
+  const must: Record<Locale, RegExp[]> = {
+    ca: [/va acabar el \*\*dijous 26 de novembre a les 14\.00\*\*/, /ya no puede votar de forma presencial/, /900 343 232/, /73\.1/],
+    es: [/terminó el \*\*jueves 26 de noviembre a las 14:00\*\*/, /ya no puede votar de forma presencial/, /900 343 232/, /73\.1/],
+    en: [/ended on \*\*Thursday 26 November at 14:00\*\*/, /can no longer vote in person/, /900 343 232/, /73\.1/],
+  };
+  const never: Record<Locale, RegExp> = {
+    ca: /pots votar en persona (si|encara)|encara (hi ets a temps|pots lliurar)/i,
+    es: /puedes votar en persona (si|aún)|todavía (estás a tiempo|puedes entregar)/i,
+    en: /you can still vote in person if|still time to hand/i,
+  };
+  for (const locale of LOCALES) {
+    const stored = parseBody(POSTAL_VOTE.editions[locale].blocks);
+    const callout = resolveElectionPhased(stored, new Date("2026-11-27T10:00:00+01:00")).find((b) => b.type === "callout" && b.tone === "warning");
+    assert.ok(callout && callout.type === "callout", locale);
+    const all = `${callout.title} ${callout.text}`;
+    for (const re of must[locale]) assert.match(all, re, `${locale}: ${re}`);
+    assert.doesNotMatch(all, never[locale], `${locale}: no invented exception`);
+    for (const url of [POSTAL_URL.jecExtension, POSTAL_URL.interior, POSTAL_URL.loreg]) assert.ok(all.includes(url), `${locale}: ${url}`);
+    assert.ok(all.includes(b2href("voting", locale)), `${locale}: links how to vote`);
+  }
+});
+
+test("hand-in callout exists only in the closed copy; the open and over copies are unchanged", () => {
+  for (const locale of LOCALES) {
+    assert.ok(!buildPostalVote(AT.open).editions[locale].blocks.some((b) => b.type === "electionPhased"), `${locale}: open`);
+    assert.ok(!buildPostalVote(AT.over).editions[locale].blocks.some((b) => b.type === "electionPhased"), `${locale}: over`);
+    assert.ok(buildPostalVote(AT.closed).editions[locale].blocks.some((b) => b.type === "electionPhased"), `${locale}: closed`);
+  }
+  assert.ok(POSTAL_AS_OF >= "2026-11-20" && POSTAL_AS_OF <= "2026-11-29", "POSTAL_AS_OF is the closed phase and was not moved by this change");
 });

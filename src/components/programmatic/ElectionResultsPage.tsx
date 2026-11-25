@@ -51,7 +51,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
   // Server clock at render time, never the reader's: the cached HTML carries the phase (election-day.ts).
   const now = new Date();
   const phase = electionPhase(now);
-  const model = buildElectionPage(municipality, locale, undefined, phase);
+  const model = buildElectionPage(municipality, locale, undefined, phase, now);
   const day = townElectionDay(municipality, locale, phase, model.polling, undefined, now);
   const crumbs = electionCrumbs(locale, municipality);
   const faqBlock = { type: "faq", items: model.faq } as Block;

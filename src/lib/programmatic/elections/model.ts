@@ -461,11 +461,11 @@ export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHO
 }
 
 
-export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT, phase: ElectionDayPhase = "before"): ElectionPageModel {
+export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT, phase: ElectionDayPhase = "before", now?: Date): ElectionPageModel {
   const base = buildResults(m, locale, snapshot, phase);
   const date = (iso: string) => longDate(iso, locale);
   const polling = buildPolling(m, locale, date);
-  const mesa = buildMesaDuty(m, locale, date);
+  const mesa = buildMesaDuty(m, locale, date, now);
   const fact = polling.fact ? [{ label: POLLING_FACT_LABEL[locale], value: polling.fact }] : [];
   // The polling and mesa facts go after the town's size facts; their FAQ items close the questions.
   return {
