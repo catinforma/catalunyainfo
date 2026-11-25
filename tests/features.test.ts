@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { railLineHrefs } from "../src/lib/content/audit-links.ts";
 import { sitgesHolidaysHref, sitgesR2Href } from "../src/lib/content/sitges-links.ts";
 import { test } from "node:test";
 
@@ -55,6 +56,8 @@ const PUBLISHED_HREFS = new Set([
   ...LOCALES.map((locale) => warningsPath(locale)),
   // Code routes the Sitges festival guide links (25 Nov 2026): the Sitges holidays page and the R2 Sud line page.
   ...LOCALES.flatMap((locale) => [sitgesHolidaysHref(locale), sitgesR2Href(locale)]),
+  // Code routes the 12 day trips guide links (25 Nov 2026 audit, round 2): the R1, R2 and R4 line pages.
+  ...LOCALES.flatMap((locale) => railLineHrefs(locale)),
 ]);
 
 test("there are ten features, thirty editions, thirty distinct paths", () => {

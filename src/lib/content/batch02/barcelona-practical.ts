@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
+import { relatedItem, workingDaysLink } from "@/lib/content/audit-links";
 import { link } from "@/lib/content/features/shared";
 import {
   CURRENT_FARES,
@@ -915,7 +916,7 @@ export const ZBE: B2Article = {
           { question: "Quina multa hi ha si entro sense registrar?", answer: "Segons l'AMB, un vehicle que compleix els requisits però no s'ha registrat pot rebre una multa a partir de 200 euros." },
         ]),
         ...paras(verifiedLine("ca", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "ca", zbeFamilyLinks("ca")),
+        ...b2Related(["parking", "transport"], "ca", [...zbeFamilyLinks("ca"), relatedItem(workingDaysLink("ca"))]),
       ],
     },
 
@@ -1021,7 +1022,7 @@ export const ZBE: B2Article = {
           { question: "¿Qué multa hay si entro sin registrar?", answer: "Según la AMB, un vehículo que cumple los requisitos pero no se ha registrado puede recibir una multa a partir de 200 euros." },
         ]),
         ...paras(verifiedLine("es", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "es", zbeFamilyLinks("es")),
+        ...b2Related(["parking", "transport"], "es", [...zbeFamilyLinks("es"), relatedItem(workingDaysLink("es"))]),
       ],
     },
 
@@ -1129,7 +1130,7 @@ export const ZBE: B2Article = {
           { question: "What is the fine for driving in without registering?", answer: "According to the AMB, a qualifying vehicle that was not registered can be fined from €200." },
         ]),
         ...paras(verifiedLine("en", ZBE_VERIFIED)),
-        ...b2Related(["parking", "transport"], "en", zbeFamilyLinks("en")),
+        ...b2Related(["parking", "transport"], "en", [...zbeFamilyLinks("en"), relatedItem(workingDaysLink("en"))]),
       ],
     },
   },

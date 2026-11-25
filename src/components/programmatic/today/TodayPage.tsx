@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import type { Locale } from "@/lib/i18n/config";
+import { butaneLink, reservoirLinks } from "@/lib/content/audit-links";
 import {
   aboutParagraphs,
   electricityFallback,
@@ -155,6 +156,7 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
     reservoirs: [
       { label: w.reservoirsHub!, href: l.reservoirs.hub },
       { label: w.reservoirsGuide!, href: l.reservoirs.guide },
+      ...reservoirLinks(locale).slice(0, 2),
     ],
     fuel: [
       { label: w.fuelHub!, href: l.fuel.hub },
@@ -163,6 +165,7 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
     electricity: [
       { label: w.electricityToday!, href: pvpcPath(locale, "today") },
       { label: w.electricityTomorrow!, href: pvpcPath(locale, "tomorrow") },
+      butaneLink(locale),
     ],
     weekend: some([
       { label: w.weekendAgenda!, href: l.weekend.agenda },

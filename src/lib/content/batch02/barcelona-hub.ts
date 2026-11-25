@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { barcelonaHolidaysSentence } from "@/lib/content/audit-links";
 
 import { b2link, h2, lead, list, paras, verifiedLine, type B2Article, type B2Key } from "./shared";
 
@@ -249,7 +250,7 @@ function body(locale: Locale) {
       ...h2(group.title),
       list(...group.items.map(([key, label, summary]) => `${b2link(key, locale, label)}: ${summary}`)),
     ]),
-    ...paras(g.outro, verifiedLine(locale, VERIFIED)),
+    ...paras(barcelonaHolidaysSentence(locale), g.outro, verifiedLine(locale, VERIFIED)),
   ];
 }
 

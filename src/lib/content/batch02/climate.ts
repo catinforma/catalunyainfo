@@ -1,6 +1,7 @@
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { link as featureLink } from "@/lib/content/features/shared";
 import type { Locale } from "@/lib/i18n/config";
+import { reservoirsSentence } from "@/lib/content/audit-links";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 
 import {
@@ -492,6 +493,7 @@ function body(locale: Locale) {
     list(...t.seasons),
     ...h2(t.recordsTitle, ...t.records),
     ...h2(t.seaTitle, t.sea),
+    ...paras(reservoirsSentence(locale)),
     faq(t.faq),
     ...b2Related(["barcelonaHub", "beaches", "museums", "snow"], locale),
   ];

@@ -13937,3 +13937,33 @@ Skipped tonight as briefed (listed so nobody re-runs them): strikes (26 Nov vs e
 **Tests.** `tests/working-days.test.ts` (+1: 30-day ends 18 Jan 2027 Madrid / 15 Jan Barcelona by hand, the 10 Feb–10 Apr count 42 with the Easter days, November 19/21 and December 20/21/24, the FAQ in three languages, one FAQPage; 22 pass), `tests/lottery-tax.test.ts` (+1: 6.000, 20.000, 30.000, 40.000 pay nothing, 50.000 leaves 48.000, 100.000 = the AEAT's 12.000 / 88.000, the lead in three languages; 15 pass). Also green: `calculators-hub`, `calculators-2027`, `calculators-jsonld`, `embed-widgets`, `llms-and-metadata`, `next-step`, `answer-first`, `seo`, `gordo-navidad`, `ads-live` (107). `npx tsc --noEmit -p .` clean (exit 0), eslint clean on the touched files; `npm run seo:body-dates` run, `body-dates.json` moves only the `working-days` and `lottery-tax` families.
 
 **Go-live.** Deploy only (static routes, no publish group). IndexNow prefixes: `/es/calculadoras/premios-loteria/ /ca/calculadores/premis-loteria/ /en/calculators/spain-lottery-prize-tax/ /es/calculadoras/dias-habiles/ /ca/calculadores/dies-habils/ /en/calculators/working-days-spain/`.
+
+## 2026-11-25 — Internal-link audit, round 2: pages at position 8-20 with few contextual inlinks get links from the guide or hub their readers are on (body links only, ca/es/en; no title, description, H1 or lead touched; groups `climate`, `barcelona-hub`, `coast-trips`, `zbe`, `features-a`; the Today page needs a deploy)
+
+**Method.** Full crawl of the sitemap, www, UA `curl/8.5.0`, 3,325 URLs at under 3 requests per second (25 Nov 2026 09:20-09:55 CET; the sitemap is that small, so a full crawl was cheaper and more accurate than sampling). Links counted inside `<main>` only (menu and footer left out), same language only. GSC: `snapshot.py pages 28 4000` (29 Oct-25 Nov). Two readings: (1) **all** `<main>` links: only 12 sitemap pages have 0-1 inlinks and none matters (the `/legal/` pages, two election towns, `/en/weekend/barcelona/`, the Catalan farmers-market guide, two 2027 holiday towns with 23 impressions); no page at position 8-20 with 300+ impressions has fewer than 3. (2) **Editorial** links, the useful reading: the same count without the bulk-template families (holidays, elections, Rodalies, fuel, Christmas fairs, reservoirs, ZBE, zona azul, calculators rails, warnings), because a calculator or a reservoir page linked from 40 sibling templates and one guide is still weakly linked in the sense that matters. The table uses reading 2.
+
+**Not touched (instruction or already done today).** Strikes, 29N, Christmas lights and fairs (Espinelves, Canyelles, Cardedeu), shops, weekend, school calendars, Easter 2027, IRPF, Beckham, death, farmers-market pages; the 2027 holiday city and day pages (ed 0 but 11-157 template inlinks, fixed at template level in `internal-link-weak-pages`); holiday towns Sant Cugat, Cornella, Sabadell (22-30 inlinks from neighbours, same work). **Left undone:** `/es/calculadoras/subida-pensiones-2027/` (472 impr, pos 8.9) and `/es/calculadoras/subsidio-desempleo/` (326, 8.0): 40 inlinks each, all calculators plus one guide (`cuando-se-cobra-paro-pension`); no other guide has a natural reason to link them without a new page.
+
+**Table (es unless stated; the ca and en edition of each gets the same link; editorial inlinks before → after).**
+
+| Page | Impr 28 d | Pos | Before → after | Linked from |
+|---|---|---|---|---|
+| `/es/festivos/barcelona/` | 10,483 | 11.1 | 9 → 10 | Barcelona practical guide |
+| `/es/festivos/tarragona/` | 3,624 | 9.0 | 3 → 4 | Tarragona by train guide |
+| `/es/festivos/` (hub; `/en/holidays/` 912 impr, 8.8, 4 → 5) | 1,512 | 9.6 | 10 → 11 | Barcelona practical guide |
+| `/es/calculadoras/dias-habiles/` | 864 | 8.5 | 4 → 5 | ZBE foreign vehicles guide (15 días hábiles) |
+| `/es/embalses/sau/` | 674 | 14.3 | 1 → 3 | weather by month guide, Today page |
+| `/es/rodalies/r1/` | 597 | 12.9 | 7 → 8 | 12 day trips by train |
+| `/es/rodalies/r2/` | 544 | 15.3 | 4 → 5 | 12 day trips by train |
+| `/es/rodalies/r4/` | 539 | 15.0 | 6 → 7 | 12 day trips by train |
+| `/es/precio-butano/` | 517 | 9.5 | 2 → 3 | Today page |
+| `/ca/embassaments/` (hub; `/es/embalses/` 328 impr, 12.8, 4 → 5) | 463 | 11.5 | 4 → 5 | weather by month guide |
+| `/es/embalses/susqueda/` | 315 | 12.1 | 1 → 3 | weather by month guide, Today page |
+
+The English line pages had 0 editorial inlinks (`/en/rodalies/r2/`, `r4/`, `r1/`): now 1 each. Twelve rows, not fifteen: after the exclusions no more pages are weak by reading 2.
+
+**What changed.** New `src/lib/content/audit-links.ts` (labels in the searched words, ca/es/en; paths from the family path builders). (1) `climate.ts`: one sentence before the FAQ ("tras un verano seco... mira el nivel del embalse de Sau, del embalse de Susqueda y de los embalses de Cataluña uno a uno"). (2) `barcelona-hub.ts`: one sentence before the closing note (Barcelona holidays page and holidays hub). (3) `coast-trips.ts`: one related-list item on the Tarragona guide (Tarragona holidays). (4) `barcelona-practical.ts`: one related-list item on the ZBE guide (working-days calculator). (5) `features/trains.ts`: one sentence before the related rail (R1, R2, R4 line pages). (6) `TodayPage.tsx`: Sau and Susqueda in the reservoirs item, the butane price in the electricity item. No fact, date or figure added; every link is to a page of the same language in the sitemap.
+
+**Tests.** `tests/internal-link-audit-round2.test.ts` (new, 8): targets, language and path, none on the low-demand list, each link present at its builder in ca/es/en, Tarragona link once, Today page order. `tests/features.test.ts`: the three line pages join its published-routes list. Also green: batch02, today-page, zbe, day-trip-glance, day-trips-21nov, internal-link-day-row-sitges, internal-link-weak-pages; `tsc --noEmit`; `seo:body-dates` run.
+
+**Baseline for review** (28 d to 25 Nov): the table above. **Prediction (weak):** no ranking claim; the inlink counts rise as listed after deploy and publish. Right if a re-crawl shows the new counts and none of the five guides loses position on its head query (the links sit after the answer); wrong if the weather guide (`/en/guides/barcelona-weather-by-month/`, 11,471 impr, pos 8.0) falls. **Review 2026-12-23:** `snapshot.py page embalses/sau 28`, `page festivos/tarragona 28`, `page rodalies/r4 28`, `page precio-butano 28`, `page dias-habiles 28`, `page barcelona-weather-by-month 28`; re-run the crawl (script in the worker scratch, `curl/8.5.0`, 3 req/s) and compare the table. **Publish groups:** `climate`, `barcelona-hub`, `coast-trips`, `zbe`, `features-a` (the Today page is static: deploy only).

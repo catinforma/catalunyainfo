@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { railLinesSentence } from "@/lib/content/audit-links";
 import { b2link } from "@/lib/content/batch02/shared";
 import {
   ARTICLE_PATHS,
@@ -180,6 +181,7 @@ function ca(): Block[] {
       `Horaris oficials: [rodalies.gencat.cat](${RODALIES}).`,
       `Si l'escapada és de cap de setmana, ${link("weekend", "ca", "la nostra agenda setmanal")} recull què hi ha programat aquests dies. I si busques destinacions que no sempre tenen estació, ${link("montserrat", "ca", "aquí n'hi ha deu més enllà de Montserrat")}.`,
     ),
+    ...paras(railLinesSentence("ca")),
     ...relatedBlocks(["montserrat", "medieval", "gaudi", "traps", "weekend"], "ca"),
   ];
 }
@@ -296,6 +298,7 @@ function es(): Block[] {
       `Horarios oficiales: [rodalies.gencat.cat](${RODALIES}).`,
       `Si la escapada es de fin de semana, ${link("weekend", "es", "nuestra agenda semanal")} recoge qué hay programado. Y si buscas destinos más allá de los clásicos, ${link("montserrat", "es", "aquí hay diez que no son Montserrat")}.`,
     ),
+    ...paras(railLinesSentence("es")),
     ...relatedBlocks(["montserrat", "medieval", "gaudi", "traps", "weekend"], "es"),
   ];
 }
@@ -411,6 +414,7 @@ function en(): Block[] {
       `Official timetables: [rodalies.gencat.cat](${RODALIES}).`,
       `If you are travelling at the weekend, ${link("weekend", "en", "our weekly listing")} covers what is on. For destinations beyond the obvious, ${link("montserrat", "en", "here are ten that are not Montserrat")}.`,
     ),
+    ...paras(railLinesSentence("en")),
     ...relatedBlocks(["montserrat", "medieval", "gaudi", "traps", "weekend"], "en"),
   ];
 }

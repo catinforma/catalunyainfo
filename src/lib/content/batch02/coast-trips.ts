@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { ARTICLE_TITLES, href, link } from "@/lib/content/features/shared";
 import { trainGuideNextSentence } from "@/lib/content/sitges-links";
+import { relatedItem, tarragonaHolidayLink } from "@/lib/content/audit-links";
 import { townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import {
@@ -700,7 +701,7 @@ function tarragonaBody(locale: Locale) {
       ? paras(`Going in December? Tarragona has a Christmas fair and a craft fair on the Rambla Nova: the dates and the place are on our [Tarragona Christmas market page](${fairsTownPath("en", "tarragona")}).`)
       : []),
     faq(t.faq),
-    ...b2Related(["portaventura", "sitges", "figueres", "girona", "montserratFree"], locale),
+    ...b2Related(["portaventura", "sitges", "figueres", "girona", "montserratFree"], locale, [relatedItem(tarragonaHolidayLink(locale))]),
   ];
 }
 
