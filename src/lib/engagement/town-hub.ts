@@ -11,6 +11,8 @@ import { caA, caDe, caStart, esName } from "@/lib/programmatic/holidays/names";
 import { municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { slugify } from "@/lib/programmatic/holidays/slug";
 import { unlistedCopy } from "@/lib/programmatic/holidays/unlisted-copy";
+import { marketsTownH1 } from "@/lib/programmatic/weekly-markets/copy";
+import { hasMarketsPage, marketsTownPath } from "@/lib/programmatic/weekly-markets/paths";
 import { workingDaysLinkFor, workingDaysPath } from "@/lib/programmatic/working-days/copy";
 import { isLowDemandPath } from "@/lib/seo/low-demand";
 
@@ -44,7 +46,7 @@ import { isLowDemandPath } from "@/lib/seo/low-demand";
  *    test holds that against the elections family).
  */
 
-export type TownFamily = "holidays" | "fair" | "elections";
+export type TownFamily = "holidays" | "fair" | "elections" | "markets";
 
 export interface TownHubLink {
   href: string;
@@ -139,6 +141,12 @@ export function townHub(slug: string, locale: Locale, current: TownFamily, today
   if (fair && current !== "fair" && (locale !== "en" || hasEnglish(fair)) && fair.fairs.some((f) => f.end && f.end >= today)) {
     const path = townPath(locale, slug);
     if (linkable(path)) links.push({ href: path, label: townH1(fair, locale), family: "fair" });
+  }
+
+  // 25 Nov 2026: the weekly street markets of Vic and Mataró (/ca/mercats-setmanals/<town>/): "when is the next one, and does the holiday change it?".
+  if (current !== "markets" && hasMarketsPage(slug)) {
+    const path = marketsTownPath(locale, slug);
+    if (linkable(path)) links.push({ href: path, label: marketsTownH1(slug, locale), family: "markets" });
   }
 
   if (current !== "elections" && hasElectionPage(slug, locale)) {

@@ -68,6 +68,7 @@ const { reportEditions } = await import("../src/lib/programmatic/holidays/report
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 const { zbeFamilyPaths } = await import("../src/lib/programmatic/zbe/sitemap.ts");
 const { zonaAzulPaths } = await import("../src/lib/programmatic/zona-azul/sitemap.ts");
+const { weeklyMarketsPaths } = await import("../src/lib/programmatic/weekly-markets/sitemap.ts");
 const { pollsTranslations } = await import("../src/lib/programmatic/polls/paths.ts");
 
 // Titles and descriptions of every programmatic page.
@@ -135,6 +136,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...christmasFairsPaths().map((p) => p.path),
     ...zbeFamilyPaths().map((p) => p.path),
     ...zonaAzulPaths().map((p) => p.path),
+    ...weeklyMarketsPaths().map((p) => p.path),
     ...Object.values(pollsTranslations()),
     ...Object.values(GUIDES.strikes),
     ...LOCALES.map((l) => `/${l}/${TOOL_PATHS.weekend[l]}/`),

@@ -9,6 +9,7 @@ import { REVALIDATE_NIGHTLY_PATTERN } from "@/lib/content/day-dependent";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
+import { weeklyMarketsRefreshPaths } from "@/lib/programmatic/weekly-markets/routing";
 import { purgeCdnPaths, type PurgeResult } from "@/lib/cdn/purge";
 import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 
@@ -53,6 +54,11 @@ export async function GET(request: Request) {
   // name their next holiday: rebuilt the night after each of their holidays.
   const holidayPaths = holidayRefreshPaths(todayInCatalonia());
   for (const path of holidayPaths) revalidate(path);
+  // The weekly market pages (/ca/mercats-setmanals/, /es/mercados-semanales/,
+  // /en/weekly-markets/ and the town pages) print the next session of the
+  // Madrid day: rebuilt every night, ahead of the first visitors of the day.
+  const marketPaths = weeklyMarketsRefreshPaths();
+  for (const path of marketPaths) revalidate(path);
 
   const db = getDb();
   if (!db) {
@@ -114,6 +120,7 @@ export async function GET(request: Request) {
     refreshedForToday: dayDependent.length,
     weekendPagesRefreshed: weekendPaths.length,
     holidayPagesRefreshed: holidayPaths.length,
+    weeklyMarketPagesRefreshed: marketPaths.length,
     flaggedForUpdate: stale.length,
     sessionsPruned,
     cdnPurge,

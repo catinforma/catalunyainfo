@@ -69,7 +69,7 @@ export type AnalyticsEvent =
   | { name: "search_no_results"; params: { locale: string } };
 
 /** The selectors that report `town_select`. */
-export const TOWN_SELECT_TOOLS = ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days"] as const;
+export const TOWN_SELECT_TOOLS = ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days", "market_square"] as const;
 export type TownSelectTool = (typeof TOWN_SELECT_TOOLS)[number];
 
 /** Where an official link sits: a page's source list, inside a calculator, or anywhere else in the content. */

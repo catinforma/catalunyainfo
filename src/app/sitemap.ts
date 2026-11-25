@@ -54,6 +54,7 @@ import { euriborSitemapEntries } from "@/lib/programmatic/euribor/page";
 import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
 import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
+import { weeklyMarketsSitemapEntries } from "@/lib/programmatic/weekly-markets/sitemap";
 import { zonaAzulSitemapEntries } from "@/lib/programmatic/zona-azul/sitemap";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { pcSitemapEntries } from "@/lib/programmatic/purchase-costs/page";
@@ -265,6 +266,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...dated("itv", [...itvSitemapEntries()]),
     // Regulated street parking ("zona azul", SER, ORA) city by city (ordinances and council pages), in es, ca and en.
     ...dated("zona-azul", [...zonaAzulSitemapEntries()]),
+    // Weekly street markets of Vic and Mataró (council pages, 25 Nov 2026 pilot), in ca, es and en.
+    ...dated("mercats-setmanals", [...weeklyMarketsSitemapEntries()]),
     // Taxes on buying a home: ITP or IVA + AJD by community (calculators family, group "housing"), in es, ca and en.
     ...dated("home-purchase-tax", [...htSitemapEntries()]),
     // Home buying costs: notary and Land Registry fees on their official scales plus the taxes above (calculators family, group "housing"), in es, ca and en.

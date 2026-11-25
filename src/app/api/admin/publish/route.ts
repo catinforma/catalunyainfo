@@ -101,6 +101,7 @@ import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
 import { zbeFamilyPaths } from "@/lib/programmatic/zbe/sitemap";
 import { grossaCheckPublishPaths } from "@/lib/programmatic/grossa-check/sitemap";
 import { ninoCheckPublishPaths } from "@/lib/programmatic/nino-check/sitemap";
+import { weeklyMarketsPaths } from "@/lib/programmatic/weekly-markets/sitemap";
 import { zonaAzulPaths } from "@/lib/programmatic/zona-azul/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
@@ -592,6 +593,16 @@ export async function POST(request: Request) {
     // city page. Re-run it after a deploy that adds or re-reads a city. The
     // Barcelona guide that links the hub goes out with `parking`.
     if (wants("zona-azul")) codePaths.push(...zonaAzulPaths().map((entry) => entry.path));
+    // Weekly street markets of Vic and Mataró (/ca/mercats-setmanals/…,
+    // /es/mercados-semanales/…, /en/weekly-markets/…): ISR code routes
+    // (dynamicParams = true, revalidate 3600) from
+    // lib/programmatic/weekly-markets/data.ts, shipped by the deploy; this
+    // group revalidates, purges and IndexNow-pings the three hubs and the six
+    // town pages. The nightly cron refreshes the same paths after midnight
+    // (Madrid), so the next session stays right every day. Re-run it after a
+    // deploy that re-reads a source or adds an exception. The town pages that
+    // link it (holiday and fair pages of Vic and Mataró) go out with their groups.
+    if (wants("mercats-setmanals")) codePaths.push(...weeklyMarketsPaths().map((entry) => entry.path));
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

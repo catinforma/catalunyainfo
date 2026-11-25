@@ -49,6 +49,7 @@ import { euriborSitemapEntries } from "@/lib/programmatic/euribor/page";
 import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
 import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
+import { weeklyMarketsSitemapEntries } from "@/lib/programmatic/weekly-markets/sitemap";
 import { zonaAzulSitemapEntries } from "@/lib/programmatic/zona-azul/sitemap";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { pcSitemapEntries } from "@/lib/programmatic/purchase-costs/page";
@@ -133,6 +134,7 @@ export const BODY_FAMILIES: Record<string, FamilySource> = {
   mortgage: urls(() => mortgageSitemapEntries(EURIBOR_SNAPSHOT.series)),
   itv: urls(() => itvSitemapEntries()),
   "zona-azul": urls(() => zonaAzulSitemapEntries()),
+  "mercats-setmanals": urls(() => weeklyMarketsSitemapEntries()),
   "home-purchase-tax": urls(() => htSitemapEntries()),
   "purchase-costs": urls(() => pcSitemapEntries()),
   plusvalia: urls(() => pvSitemapEntries()),

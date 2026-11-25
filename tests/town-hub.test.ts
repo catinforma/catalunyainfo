@@ -20,6 +20,7 @@ import { enName } from "../src/lib/programmatic/holidays/english-copy.ts";
 import { municipalityPath } from "../src/lib/programmatic/holidays/paths.ts";
 import { resolveMunicipality, townRouteExists } from "../src/lib/programmatic/holidays/routing.ts";
 import { englishTownDataset, municipalityDataset } from "../src/lib/programmatic/holidays/structured.ts";
+import { MARKET_TOWN_SLUGS, marketsTownPath } from "../src/lib/programmatic/weekly-markets/paths.ts";
 import { workingDaysPath } from "../src/lib/programmatic/working-days/copy.ts";
 import { townPlaceId } from "../src/lib/seo/jsonld.ts";
 import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
@@ -49,6 +50,8 @@ function allPages(): Page[] {
   for (const m of englishTowns()) out.push({ family: "holidays", locale: "en", slug: m.slug, path: municipalityPath("en", m.slug) });
   for (const t of englishFairTowns()) out.push({ family: "fair", locale: "en", slug: t.slug, path: townPath("en", t.slug) });
   for (const m of municipalitiesFor("en")) out.push({ family: "elections", locale: "en", slug: m.slug, path: electionPath("en", m.slug) });
+  // 25 Nov 2026: the weekly street markets pilot (Vic, Mataró), every language.
+  for (const locale of ["ca", "es", "en"] as const) for (const slug of MARKET_TOWN_SLUGS) out.push({ family: "markets", locale, slug, path: marketsTownPath(locale, slug) });
   return out;
 }
 const PAGES = allPages();
@@ -62,6 +65,7 @@ function targetExists(path: string, locale: Locale, slug: string): TownFamily | 
   }
   if (path === townPath(locale, slug)) return resolveTown(locale, locale, slug) ? "fair" : null;
   if (path === electionPath(locale, slug)) return resolveElectionPage(locale, locale, slug) ? "elections" : null;
+  if (path === marketsTownPath(locale, slug)) return (MARKET_TOWN_SLUGS as readonly string[]).includes(slug) ? "markets" : null;
   return null;
 }
 
@@ -128,7 +132,7 @@ test("the holiday page's own sections are reached through it, and the .ics feed 
   assert.equal(ca.title, "Mataró: tot el que hi ha a CatalunyaInfo");
   assert.deepEqual(
     ca.links.flatMap((l) => [l.href, ...(l.more ?? []).map((m) => m.href)]),
-    ["/ca/festius/mataro/", "/ca/festius/mataro/#festius-2027", "/ca/festius/mataro/#avui", "/ca/fires-de-nadal/mataro/", "/ca/calculadores/dies-habils/#p=mataro", "/ca/festius/mataro/#afegeix-calendari"],
+    ["/ca/festius/mataro/", "/ca/festius/mataro/#festius-2027", "/ca/festius/mataro/#avui", "/ca/fires-de-nadal/mataro/", "/ca/mercats-setmanals/mataro/", "/ca/calculadores/dies-habils/#p=mataro", "/ca/festius/mataro/#afegeix-calendari"],
   );
   const en = townHub("barcelona", "en", "elections", TODAY)!;
   assert.ok(en.links.some((l) => l.more?.some((m) => m.href === "/en/holidays/barcelona/#holidays-2027")));

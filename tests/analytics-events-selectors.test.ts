@@ -12,7 +12,7 @@ const read = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
 test("town_select and search_no_results are in the contract with closed parameter lists", () => {
   assert.ok(ANALYTICS_EVENTS.includes("town_select"));
   assert.ok(ANALYTICS_EVENTS.includes("search_no_results"));
-  assert.deepEqual([...TOWN_SELECT_TOOLS], ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days"]);
+  assert.deepEqual([...TOWN_SELECT_TOOLS], ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days", "market_square"]);
   const src = read("src/lib/analytics/events.ts");
   assert.match(src, /name: "town_select"; params: \{ tool: TownSelectTool; locale: string \}/);
   assert.match(src, /name: "search_no_results"; params: \{ locale: string \}/);
@@ -23,6 +23,7 @@ test("the selectors send the tool and the locale, never a town name, and go thro
     "src/components/blocks/MunicipalResults.tsx": "municipal_results",
     "src/components/programmatic/embed-2027/EmbedBuilder.tsx": "embed_builder_town",
     "src/components/programmatic/embed-calc/WorkingDaysEmbedPicker.tsx": "embed_working_days",
+    "src/components/programmatic/weekly-markets/NextMarket.tsx": "market_square",
   };
   for (const [file, tool] of Object.entries(files)) {
     const src = read(file);

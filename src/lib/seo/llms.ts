@@ -104,6 +104,7 @@ import { pollsTranslations } from "@/lib/programmatic/polls/paths";
 import { ZBE_CITIES } from "@/lib/programmatic/zbe/cities";
 import { zbeHubTranslations } from "@/lib/programmatic/zbe/paths";
 import { CITIES as ZONA_AZUL_CITIES } from "@/lib/programmatic/zona-azul/data";
+import { marketsHubTranslations } from "@/lib/programmatic/weekly-markets/paths";
 import { zaHubTranslations } from "@/lib/programmatic/zona-azul/paths";
 
 export interface LlmsEntry {
@@ -268,6 +269,11 @@ function topLandingTools(): LiveTool[] {
     name: "Blue-zone street parking in Spain by city (zona azul)",
     hubs: zaHubTranslations(),
     description: `the hours and prices of regulated street parking in ${ZONA_AZUL_CITIES.map((c) => c.name.en).join(", ")}: weekdays, Saturdays, Sundays and holidays, price per hour and maximum stay, read in each council's own rules.`,
+  });
+  out.push({
+    name: "Weekly street markets in Vic and Mataró",
+    hubs: marketsHubTranslations(),
+    description: "when and where the next weekly market is in Vic (Tuesday, Saturday, Sunday) and Mataró (six Saturday markets, Plaça Gran Monday to Saturday, Thursday at Plaça de Cuba), with hours per square, the holiday changes the councils publish and the Generalitat census as cross-check.",
   });
   return out;
 }
