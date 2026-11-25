@@ -53,11 +53,22 @@ const today = () => madridDay(new Date());
 
 /* ------------------------------------------------------------ Freshness --- */
 
+/**
+ * INE published the EPA 2025 press release (dsEPA2025.htm) and table 66252
+ * (decile limits) on 25 Nov 2026 at 11:00 Madrid, but table 66237 (means by
+ * working time) was still on 2024 at 16:02 that day, and the snapshot script
+ * refuses to build while the two disagree (it will not mix years). Re-read the
+ * API on this day: when 66237 shows 2025, run the build; if it is still on 2024,
+ * move this date again and say so in docs/SEO_EXPERIMENTS.md.
+ */
+const EPA_TABLE_66237_REREAD_BY = "2026-12-02";
+
 test("freshness: the EPA wage deciles are refreshed the day after the INE's scheduled release", () => {
   const next = S.epa.next;
   if (!next) return;
+  const deadline = next.day < EPA_TABLE_66237_REREAD_BY ? EPA_TABLE_66237_REREAD_BY : next.day;
   assert.ok(
-    today() <= next.day,
+    today() <= deadline,
     `The INE calendar (publication 348) scheduled the EPA wage deciles for ${next.year} on ${next.day}; the snapshot still holds ${S.epa.year}. Run \`npm run salary:snapshot -- build\`, check the page (deciles table, finder, FAQ, llms.txt) and commit the snapshot and public/datos/salario-medio-ine.csv.`,
   );
 });
