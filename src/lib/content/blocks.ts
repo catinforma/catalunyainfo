@@ -457,6 +457,17 @@ export const shopsTodayBlock = z.object({
 });
 
 /**
+ * "When do shops start opening on Sundays for Christmas?" (25 Nov 2026): the
+ * answer under that H2 in the shops guides, said in the tense of today
+ * (`batch02/shops-sundays.ts`). Day-dependent. `scope`: Barcelona and Catalonia,
+ * the rest of Spain (Catalan guide) or all Spain (Spain guide).
+ */
+export const shopsSundaysBlock = z.object({
+  type: z.literal("shopsSundays"),
+  scope: z.enum(["catalonia", "spainRest", "spain"]),
+});
+
+/**
  * "Do I pay for the blue or green zone in Barcelona today?" (24 Nov 2026),
  * worked out from AREA's published hours in `batch02/parking-today.ts`.
  * Configuration-free and day-dependent, like `shopsToday`.
@@ -612,6 +623,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   localHolidaysBlock,
   shopsChristmasBlock,
   shopsTodayBlock,
+  shopsSundaysBlock,
   parkingTodayBlock,
   railStrikeNextBlock,
   reservoirLevelsBlock,

@@ -15,6 +15,8 @@ import { ShopsChristmas } from "@/components/blocks/ShopsChristmas";
 import { ParkingToday } from "@/components/blocks/ParkingToday";
 import { RailStrikeNext } from "@/components/blocks/RailStrikeNext";
 import { ShopsToday } from "@/components/blocks/ShopsToday";
+import { shopsSundaysBlocks } from "@/lib/content/batch02/shops-sundays";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
 import { ClockChange } from "@/components/blocks/ClockChange";
@@ -438,6 +440,16 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "shopsToday":
       // Server-rendered for the same reason as holidayToday; the nightly cron keeps the date.
       return <ShopsToday locale={context.locale} />;
+
+    case "shopsSundays":
+      // The Sundays answer in the tense of today; the nightly cron keeps the date.
+      return (
+        <>
+          {shopsSundaysBlocks(todayInCatalonia(), context.locale, block.scope).map((inner, index) => (
+            <BlockView key={index} block={inner} context={context} />
+          ))}
+        </>
+      );
 
     case "parkingToday":
       // Server-rendered for the same reason; the nightly cron keeps the date.

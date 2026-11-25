@@ -11,7 +11,7 @@
  * daily, and a `lastmod` frozen at the last republish told Google there was
  * nothing to recrawl while its copy said the wrong day.
  */
-export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels", "metroTonight", "livingNativities", "snowDepth", "candidateLists", "spainSchoolCalendar", "shopsToday", "parkingToday", "railStrikeNext"];
+export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels", "metroTonight", "livingNativities", "snowDepth", "candidateLists", "spainSchoolCalendar", "shopsToday", "shopsSundays", "parkingToday", "railStrikeNext"];
 
 /**
  * Blocks that change on a few known dates rather than every day: an

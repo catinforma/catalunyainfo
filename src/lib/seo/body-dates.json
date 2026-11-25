@@ -18,14 +18,14 @@
    "files": 6
   },
   "block:municipalElections": {
-   "date": "2026-10-17T08:42:51.000Z",
-   "fingerprint": "v1:a95d2905c504da95a8017362ddbf93d4",
+   "date": "2026-11-25T14:30:11.000Z",
+   "fingerprint": "v1:85b2481ef84d887385e5ae6cb21860d2",
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-25T14:19:49.335Z",
-   "fingerprint": "v1:1f055fc288d5a051d256980134279156",
-   "files": 17
+   "date": "2026-11-25T14:43:24.595Z",
+   "fingerprint": "v1:57bd653ae43edd63ac2ed4fa51742065",
+   "files": 18
   },
   "block:touristTax": {
    "date": "2026-11-20T15:57:29.000Z",
@@ -63,8 +63,8 @@
    "files": 35
   },
   "embed-2027": {
-   "date": "2026-11-18T15:12:20.000Z",
-   "fingerprint": "v1:3282d5959545c6df52f8336734eab5cd",
+   "date": "2026-11-25T14:30:11.000Z",
+   "fingerprint": "v1:dd8f22ad4f6e26f030c68340fafda36a",
    "files": 9
   },
   "employment": {
@@ -98,8 +98,8 @@
    "files": 29
   },
   "gordo": {
-   "date": "2026-11-25T13:34:00.000Z",
-   "fingerprint": "v1:59412eb18b3f6f4f03a39bd9f90bcd07",
+   "date": "2026-11-25T14:43:24.595Z",
+   "fingerprint": "v1:75c5da01d34fc6006096f18fd8a82625",
    "files": 39
   },
   "grossa-check": {

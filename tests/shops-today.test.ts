@@ -18,6 +18,7 @@ import {
   christmasSundaysParagraph,
 } from "../src/lib/content/batch02/shops-spain-december.ts";
 import { SHOPS_TODAY_AFTER, barcelonaShopsDay, cataloniaDiff, decemberLine, nextOpeningAfter, shopsTodayLines } from "../src/lib/content/batch02/shops-today.ts";
+import { shopsSundaysBlocks } from "../src/lib/content/batch02/shops-sundays.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
 import { b2href } from "../src/lib/content/batch02/shared.ts";
 
@@ -117,9 +118,11 @@ test("guide: Sundays first (16 Nov H2 kept), then today, then the date table; ti
     assert.ok(today > 0 && today < firstTable, `${locale}: the today block sits before the date table`);
     assert.equal(blocks.filter((b) => b.type === "shopsToday").length, 1);
     // The Spain-wide answer, in the Sundays section, with the Spain page link.
+    // 25 Nov 2026: the Sundays answer is the day-dependent `shopsSundays` block (shops-sundays.ts), drawn on render.
     const text = bodyToPlainText(blocks);
-    assert.match(text, /Castilla y León|Castella i Lleó|Castile and León/, `${locale}: rest of Spain answered`);
-    assert.ok(JSON.stringify(blocks).includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: links the Spain page`);
+    const spain = (shopsSundaysBlocks("2026-11-26", locale, "spainRest")[0] as { text: string }).text;
+    assert.match(spain, /Castilla y León|Castella i Lleó|Castile and León/, `${locale}: rest of Spain answered`);
+    assert.ok(spain.includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: links the Spain page`);
     // The DOGC 2027 list and Barcelona's 2027 days, re-checked on 25 Nov 2026.
     assert.doesNotMatch(text, /(a|As of) 5 (de )?(novembre|noviembre|November)/, `${locale}: stale "as of 5 Nov"`);
     assert.match(text, /25 (de )?(novembre|noviembre|November)/, locale);

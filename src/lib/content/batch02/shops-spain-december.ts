@@ -211,7 +211,7 @@ export function bridgeShopsParagraph(L: Locale): string {
  * Catalan guide, with no city in the query. `withCatalonia: false` for the
  * Catalan guide, which answers Catalonia itself just before.
  */
-export function christmasSundaysParagraph(L: Locale, withCatalonia = true): string {
+export function christmasSundaysParagraph(L: Locale, withCatalonia = true, today?: string): string {
   const regions = DECEMBER_2026.filter((r) => withCatalonia || r.name !== "Cataluña");
   const first = (r: Row) => christmasSundays(r)[0];
   const at29 = regions.filter((r) => first(r) === 29).map((r) => proseName(r, L));
@@ -229,19 +229,28 @@ export function christmasSundaysParagraph(L: Locale, withCatalonia = true): stri
   const j = (names: string[]) => joinList(names, L);
   const groups = [...later.entries()].sort(([a], [b]) => a - b);
   const islandGroups = [...laterIslands.entries()].sort(([a], [b]) => a - b);
+  // 25 Nov 2026: with `today`, a first Sunday already gone is said in the past tense ("fue"), today's and later ones in the
+  // present. Without it (the FAQ answer, the tests) the wording is the year-long present.
+  const VERB = { es: { is: "es", was: "fue" }, ca: { is: "és", was: "va ser" }, en: { is: "is", was: "was" } }[L];
+  const v = (d: number) => (today !== undefined && (d === 29 ? "2026-11-29" : `2026-12-${String(d).padStart(2, "0")}`) < today ? VERB.was : VERB.is);
+  const sameVerb = (list: [number, string[]][]) => list.every(([d]) => v(d) === v(list[0]![0]));
+  const verbChange = (i: number, d: number) => (v(d) === v(groups[i - 1]![0]) ? "" : `${v(d)} `);
   if (L === "es") {
-    const rest = groups.map(([d, names], i) => (i === 0 ? `En ${j(names)}, el primero es el domingo ${d} de diciembre` : `en ${j(names)}, el ${d}`)).join("; ");
+    const rest = groups.map(([d, names], i) => (i === 0 ? `En ${j(names)}, el primero ${v(d)} el domingo ${d} de diciembre` : `en ${j(names)}, ${verbChange(i, d)}el ${d}`)).join("; ");
     const isl = islandGroups.map(([d, names], i) => (i === 0 ? `el ${d} de diciembre en ${j(names)}` : `el ${d} en ${j(names)}`)).join(", y ");
-    return `El **domingo 29 de noviembre** es el primer domingo de apertura de la Navidad en ${j(at29)}, y en ${j(islands29)}. ${rest}. En las demás islas de Canarias, el primero es ${isl}. En Madrid cada comercio decide qué días abre, y el País Vasco no tiene calendario autonómico de apertura.`;
+    const islText = sameVerb(islandGroups) ? `el primero ${v(islandGroups[0]![0])} ${isl}` : islandGroups.map(([d, names], i) => `${i === 0 ? "el primero " : ""}${v(d)} el ${d} de diciembre en ${j(names)}`).join(", y ");
+    return `El **domingo 29 de noviembre** ${v(29)} el primer domingo de apertura de la Navidad en ${j(at29)}, y en ${j(islands29)}. ${rest}. En las demás islas de Canarias, ${islText}. En Madrid cada comercio decide qué días abre, y el País Vasco no tiene calendario autonómico de apertura.`;
   }
   if (L === "ca") {
-    const rest = groups.map(([d, names], i) => (i === 0 ? `A ${j(names)}, el primer és el diumenge ${d} de desembre` : `a ${j(names)}, el ${d}`)).join("; ");
+    const rest = groups.map(([d, names], i) => (i === 0 ? `A ${j(names)}, el primer ${v(d)} el diumenge ${d} de desembre` : `a ${j(names)}, ${verbChange(i, d)}el ${d}`)).join("; ");
     const isl = islandGroups.map(([d, names], i) => (i === 0 ? `el ${d} de desembre a ${j(names)}` : `el ${d} a ${j(names)}`)).join(", i ");
-    return `El **diumenge 29 de novembre** és el primer diumenge d'obertura de Nadal a ${j(at29)}, i a ${j(islands29)}. ${rest}. A les altres illes de Canàries, el primer és ${isl}. A Madrid cada comerç decideix quins dies obre, i el País Basc no té calendari autonòmic d'obertura.`;
+    const islText = sameVerb(islandGroups) ? `el primer ${v(islandGroups[0]![0])} ${isl}` : islandGroups.map(([d, names], i) => `${i === 0 ? "el primer " : ""}${v(d)} el ${d} de desembre a ${j(names)}`).join(", i ");
+    return `El **diumenge 29 de novembre** ${v(29)} el primer diumenge d'obertura de Nadal a ${j(at29)}, i a ${j(islands29)}. ${rest}. A les altres illes de Canàries, ${islText}. A Madrid cada comerç decideix quins dies obre, i el País Basc no té calendari autonòmic d'obertura.`;
   }
-  const rest = groups.map(([d, names], i) => (i === 0 ? `In ${j(names)} the first is Sunday ${d} December` : `in ${j(names)}, Sunday ${d} December`)).join("; ");
+  const rest = groups.map(([d, names], i) => (i === 0 ? `In ${j(names)} the first ${v(d)} Sunday ${d} December` : `in ${j(names)}, ${verbChange(i, d)}Sunday ${d} December`)).join("; ");
   const isl = islandGroups.map(([d, names]) => `${d} December on ${j(names)}`).join(", and ");
-  return `**Sunday 29 November** is the first Christmas Sunday opening in ${j(at29)}, and on ${j(islands29)}. ${rest}. On the other Canary Islands the first is ${isl}. In Madrid each shop decides which days it opens, and the Basque Country has no regional opening calendar.`;
+  const islText = sameVerb(islandGroups) ? `the first ${v(islandGroups[0]![0])} ${isl}` : islandGroups.map(([d, names], i) => `${i === 0 ? "the first " : ""}${v(d)} ${d} December on ${j(names)}`).join(", and ");
+  return `**Sunday 29 November** ${v(29)} the first Christmas Sunday opening in ${j(at29)}, and on ${j(islands29)}. ${rest}. On the other Canary Islands ${islText}. In Madrid each shop decides which days it opens, and the Basque Country has no regional opening calendar.`;
 }
 
 interface ShopsCopy {
@@ -423,7 +432,8 @@ export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   return [
     lead(t.lead(on)),
     table(t.table.caption, t.table.headers, rows, t.table.note),
-    ...h2(t.sundays.heading, christmasSundaysParagraph(L)),
+    ...h2(t.sundays.heading),
+    { type: "shopsSundays", scope: "spain" } as Block,
     ...h2(t.islands.heading),
     table(t.islands.caption, t.islands.headers, islands, t.islands.note),
     ...h2(t.christmas.heading, t.christmas.text),
