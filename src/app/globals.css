@@ -2291,7 +2291,7 @@
 .ci-local-filter { display: grid; gap: 0.35rem; margin: 0 0 1rem; max-width: 24rem; }
 .ci-local-filter label { font-size: 0.85rem; color: var(--color-ink-soft); }
 .ci-local-nucleus { font-size: 0.75rem; color: var(--color-muted); }
-/* One glance under the answer of a Spain 2027 city page (26 Nov 2026): two lines on a phone. */
+/* One glance under the answer of a Spain 2027 city page (25 Nov 2026): two lines on a phone. */
 .ci-glance { margin: 0.6rem 0 0; font-size: 0.95rem; line-height: 1.4; color: var(--color-ink-soft); }
 .ci-glance strong { color: var(--color-ink); }
 .ci-local-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }

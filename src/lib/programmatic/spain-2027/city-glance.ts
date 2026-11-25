@@ -5,7 +5,7 @@ import { SOURCES } from "./sources";
 import { SOURCE_PROSE } from "./sources-intl";
 
 /**
- * The one-glance line of a Spain 2027 city page (26 Nov 2026), above the
+ * The one-glance line of a Spain 2027 city page (25 Nov 2026), above the
  * layers and the table: how many holidays the city has in 2027, how many of
  * them are its local days and which (or, while the community's bulletin has
  * not printed them, how many are pending and in which bulletin), and the link

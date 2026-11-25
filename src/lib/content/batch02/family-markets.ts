@@ -517,7 +517,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     boqTitle: "Horari de la Boqueria: diumenges i festius",
     boq: [
       "El Mercat de Sant Josep, la Boqueria, és a la Rambla, 91, i obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Telèfon: 93 413 23 03. El punt d'informació del mercat obre de dilluns a dissabte de 9:00 a 15:00 (telèfon 93 318 20 17).",
-      "**Diumenges i festius:** el mercat només obre els dies que anuncia. El Nadal de 2025-26 va obrir el dissabte 6 de desembre i els diumenges 21 i 28 de desembre i 4 de gener; les dates del 2026-27 no eren publicades al web del mercat el 25 de novembre de 2026.",
+      "**Diumenges i festius:** el mercat només obre els dies que anuncia. El Nadal de 2025-26 va obrir el dissabte 6 de desembre i els diumenges 21 i 28 de desembre i 4 de gener; les dates del 2026-27 no estaven publicades al web del mercat el 25 de novembre de 2026.",
       "Hi ha una reforma en marxa: les obres menors comencen després de l'estiu del 2026, està previst que les parades centrals de peix es traslladin temporalment a la plaça de la Gardunya, i les obres grans de coberta i estructura van del 2027 al 2029, mantenint l'activitat on sigui possible.",
     ],
     rulesTitle: "Normes per als visitants",
