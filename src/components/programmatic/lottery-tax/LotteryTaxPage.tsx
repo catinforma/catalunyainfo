@@ -20,7 +20,7 @@ import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { DRAW_SHORT, PRESET_LABEL, elDay, lotteryTaxEditions, lotteryTaxPath, money, type LtLocale } from "@/lib/programmatic/lottery-tax/copy";
 import { calculateOk, type Breakdown } from "@/lib/programmatic/lottery-tax/engine";
-import { DEFAULT_PRESET, examples, headline, lotteryTaxFaq, lotteryTaxMeta, presetInput, prizeTable, type ExampleId } from "@/lib/programmatic/lottery-tax/page";
+import { DEFAULT_PRESET, amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, presetInput, prizeTable, type ExampleId } from "@/lib/programmatic/lottery-tax/page";
 import { DRAWS, EXEMPT_PER_TICKET, QUOTE, RULES_AS_OF, SELAE_READ, SOURCES } from "@/lib/programmatic/lottery-tax/rules";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
@@ -129,9 +129,9 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
   });
 
   const hd = L(locale, {
-    es: { table: "Cuánto se queda Hacienda de cada premio", how: "Cómo se calcula", shared: "Décimos compartidos y participaciones", examples: "Ejemplos", renta: "¿Hay que declararlo en la Renta?", nonRes: "Si no vives en España", grossa: "La Grossa de Cap d'Any y otras loterías", faq: "Preguntas frecuentes", sources: "Fuentes oficiales", limits: "Qué no calcula" },
-    ca: { table: "Quant se'n queda Hisenda de cada premi", how: "Com es calcula", shared: "Dècims compartits i participacions", examples: "Exemples", renta: "S'ha de declarar a la Renda?", nonRes: "Si no vius a Espanya", grossa: "La Grossa de Cap d'Any i altres loteries", faq: "Preguntes freqüents", sources: "Fonts oficials", limits: "Què no calcula" },
-    en: { table: "How much tax each prize pays", how: "How it is worked out", shared: "Shared décimos and participaciones", examples: "Worked examples", renta: "Do you declare it on your tax return?", nonRes: "If you do not live in Spain", grossa: "La Grossa de Cap d'Any and other lotteries", faq: "Questions", sources: "Official sources", limits: "What it does not cover" },
+    es: { amounts: "Cuánto se queda Hacienda según el premio", table: "Cuánto se queda Hacienda de cada premio", how: "Cómo se calcula", shared: "Décimos compartidos y participaciones", examples: "Ejemplos", renta: "¿Hay que declararlo en la Renta?", nonRes: "Si no vives en España", grossa: "La Grossa de Cap d'Any y otras loterías", faq: "Preguntas frecuentes", sources: "Fuentes oficiales", limits: "Qué no calcula" },
+    ca: { amounts: "Quant se'n queda Hisenda segons el premi", table: "Quant se'n queda Hisenda de cada premi", how: "Com es calcula", shared: "Dècims compartits i participacions", examples: "Exemples", renta: "S'ha de declarar a la Renda?", nonRes: "Si no vius a Espanya", grossa: "La Grossa de Cap d'Any i altres loteries", faq: "Preguntes freqüents", sources: "Fonts oficials", limits: "Què no calcula" },
+    en: { amounts: "How much tax a prize of any size pays", table: "How much tax each prize pays", how: "How it is worked out", shared: "Shared décimos and participaciones", examples: "Worked examples", renta: "Do you declare it on your tax return?", nonRes: "If you do not live in Spain", grossa: "La Grossa de Cap d'Any and other lotteries", faq: "Questions", sources: "Official sources", limits: "What it does not cover" },
   });
   const cols = L(locale, {
     es: ["Premio", "Bruto", "Exento", "Hacienda (20 %)", "Cobras"],
@@ -327,6 +327,32 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
                 </table>
               </div>
               <p className="text-sm">{ninoNote}</p>
+
+              <h2 id="por-importe">{hd.amounts}</h2>
+              <p>{amountsLead(locale)}</p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table ci-stack-table">
+                  <thead>
+                    <tr>
+                      {cols.map((c, i) => (
+                        <th key={c} scope="col">
+                          {i === 0 ? L(locale, { es: "Premio por décimo", ca: "Premi per dècim", en: "Prize per décimo" }) : c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {amountsTable().map(({ prize, result }) => (
+                      <tr key={prize}>
+                        <th scope="row" className="font-normal">
+                          {M(prize)}
+                        </th>
+                        <BreakdownCells b={result.total} locale={locale} cols={cols} />
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <h2 id="como-se-calcula">{hd.how}</h2>
               <ul>

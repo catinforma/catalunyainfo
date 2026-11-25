@@ -9,7 +9,7 @@ import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { hubBlocks, hubFaq } from "../src/lib/programmatic/gordo/copy.ts";
 import { CALC_COPY, LT_LOCALES, PRESET_LABEL, lotteryTaxEditions, money } from "../src/lib/programmatic/lottery-tax/copy.ts";
 import { MAX_TICKETS, breakdown, calculate, calculateOk, exemptForStake } from "../src/lib/programmatic/lottery-tax/engine.ts";
-import { examples, headline, lotteryTaxFaq, lotteryTaxMeta, lotteryTaxSitemapEntries, presetInput, prizeTable } from "../src/lib/programmatic/lottery-tax/page.ts";
+import { amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, lotteryTaxSitemapEntries, presetInput, prizeTable } from "../src/lib/programmatic/lottery-tax/page.ts";
 import { DRAWS, EXEMPT_PER_TICKET, MIN_STAKE_FULL_EXEMPTION, PRESETS, QUOTE, RATE, RULES_AS_OF, RULES_UNTIL, SELAE_READ, SOURCES } from "../src/lib/programmatic/lottery-tax/rules.ts";
 
 /**
@@ -218,6 +218,26 @@ test("FAQ: eight questions per language, the real queries, every figure from the
     for (const n of [72_000, 328_000, 82_000, 3_280_000, 656_000, 168_000]) assert.ok(all.includes(money(n, l)), `${l}: ${n}`);
     assert.doesNotMatch(all, /undefined|NaN/, l);
   }
+});
+
+test("by amount: 6,000 / 20,000 / 30,000 pay nothing, 50,000 leaves 48,000, 100,000 is the AEAT's 12,000 / 88,000; the lead says it in ca/es/en (25 Nov 2026)", () => {
+  const by = Object.fromEntries(amountsTable().map((a) => [a.prize, a.result.total]));
+  // By hand: 20 % of what passes 40,000 €.
+  assert.deepEqual([by[6_000]!.withholding, by[6_000]!.net], [0, 6_000]);
+  assert.deepEqual([by[20_000]!.withholding, by[20_000]!.net], [0, 20_000]);
+  assert.deepEqual([by[30_000]!.withholding, by[30_000]!.net], [0, 30_000]);
+  assert.deepEqual([by[40_000]!.withholding, by[40_000]!.net], [0, 40_000]);
+  assert.deepEqual([by[50_000]!.withholding, by[50_000]!.net], [2_000, 48_000]);
+  assert.deepEqual([by[100_000]!.withholding, by[100_000]!.net], [12_000, 88_000]);
+  assert.deepEqual([by[200_000]!.withholding, by[200_000]!.net], [32_000, 168_000]);
+  for (const l of LT_LOCALES) {
+    const lead = amountsLead(l);
+    for (const n of [50_000, 2_000, 48_000, 30_000, 6_000]) assert.ok(lead.includes(money(n, l)), `${l}: ${n}`);
+  }
+  const page = read("src/components/programmatic/lottery-tax/LotteryTaxPage.tsx");
+  assert.match(page, /amountsLead\(locale\)/);
+  assert.match(page, /amountsTable\(\)\.map/);
+  assert.equal((page.match(/"@type": "FAQPage"/g) ?? []).length, 1);
 });
 
 test("the Christmas lottery hub links the calculator in ca, es and en, with the net Gordo figure", () => {

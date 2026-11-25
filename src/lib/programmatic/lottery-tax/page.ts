@@ -72,6 +72,32 @@ export function prizeTable() {
   return PRESETS.map((p) => ({ preset: p, result: calculateOk(presetInput(p.id)) }));
 }
 
+/**
+ * Round prizes per décimo of 20 €, for the searchers who type the amount
+ * ("cuánto se lleva Hacienda de un premio de 50.000 euros", 6.000, 20.000,
+ * 30.000: GSC, 28 Oct-24 Nov 2026). Computed by the engine like every table.
+ */
+export const AMOUNTS_PER_TICKET = [6_000, 20_000, 30_000, 40_000, 50_000, 100_000, 200_000] as const;
+
+export function amountsTable() {
+  return AMOUNTS_PER_TICKET.map((prize) => ({ prize, result: calculateOk({ prize, price: 20, played: 20, tickets: 1 }) }));
+}
+
+/** The sentence above the table: the amounts people ask about, said in their words. */
+export function amountsLead(locale: LtLocale): string {
+  const M = (n: number) => money(n, locale);
+  const by = (prize: number) => amountsTable().find((a) => a.prize === prize)!.result.total;
+  const p6 = by(6_000);
+  const p30 = by(30_000);
+  const p50 = by(50_000);
+  const ex = M(EXEMPT_PER_TICKET);
+  return {
+    es: `Si te toca un premio de ${M(p50.gross)} en un décimo, Hacienda se queda ${M(p50.withholding)} y cobras ${M(p50.net)}. Con ${M(p30.gross)} o ${M(p6.gross)} por décimo no se queda nada: están por debajo de los ${ex} exentos. Es lo que paga cada décimo de 20 €; si lo compartes, mira «Décimos compartidos».`,
+    ca: `Si et toca un premi de ${M(p50.gross)} en un dècim, Hisenda se'n queda ${M(p50.withholding)} i en cobres ${M(p50.net)}. Amb ${M(p30.gross)} o ${M(p6.gross)} per dècim no se'n queda res: són per sota dels ${ex} exempts. És el que paga cada dècim de 20 €; si el comparteixes, mira «Dècims compartits».`,
+    en: `If a décimo wins ${M(p50.gross)}, the tax office keeps ${M(p50.withholding)} and you collect ${M(p50.net)}. A prize of ${M(p30.gross)} or ${M(p6.gross)} per décimo pays nothing: it is under the ${ex} tax-free amount. These are the figures for each €20 décimo; if you share it, see "Shared décimos".`,
+  }[locale];
+}
+
 export type ExampleId = "one-gordo" | "share-5" | "half-second" | "two-gordo" | "third" | "grossa" | "aeat";
 
 /** The worked examples, in the page's order. */

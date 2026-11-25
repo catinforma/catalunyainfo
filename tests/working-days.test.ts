@@ -23,7 +23,7 @@ import {
   type Calendar,
 } from "../src/lib/programmatic/working-days/engine.ts";
 import { CALC_COPY, DEFAULT_EXAMPLE, NATIONAL_ID, communityPlaceId, WD_LOCALES, itemHolidays, itemInfo, packDates, unpackDates, workingDaysEditions } from "../src/lib/programmatic/working-days/copy.ts";
-import { WD_META, calendarFor, findItem, pageFigures } from "../src/lib/programmatic/working-days/page.ts";
+import { WD_META, calendarFor, findItem, pageFigures, workingDaysFaq } from "../src/lib/programmatic/working-days/page.ts";
 import { nationalDates, region2026, workingDaysData, workingDaysSitemapEntries } from "../src/lib/programmatic/working-days/places.ts";
 import {
   AGE_2026_ANNEX,
@@ -291,6 +291,36 @@ test("page: figures, titles and the registry", () => {
   assert.match(read("src/lib/seo/llms.ts"), /hubs: workingDaysEditions\(\)/);
   assert.match(read("src/components/programmatic/working-days/WorkingDaysPage.tsx"), /<MoreCalculators current="working-days" locale=\{locale\} \/>/);
   assert.match(read("src/components/programmatic/working-days/WorkingDaysPage.tsx"), /hubCrumb\(locale\),/);
+});
+
+test("page: the 30-day, date-span and month answers come from the engine, and the FAQ repeats them in ca/es/en (25 Nov 2026)", () => {
+  // By hand. 30 días hábiles from Monday 30 Nov 2026: Barcelona has 21 in December (23 weekdays, minus 8 and 25 Dec), then 4, 5, 7, 8 Jan and 11-15 Jan make 9: Friday 15 Jan 2027.
+  // Madrid has 20 in December (7 Dec too), so the 10th of January is Monday 18 Jan 2027.
+  // 10 Feb to 10 Apr 2026: 14 weekdays in February, 22 in March, 8 in April = 44, minus two Easter holidays in each place (Madrid 2 and 3 April, Barcelona 3 and 6 April) = 42.
+  const es = pageFigures(DATA, "es");
+  assert.deepEqual([es.thirty.last, es.thirtyOther.last], ["2027-01-18", "2027-01-15"]);
+  assert.deepEqual([es.span.place.working, es.span.other.working], [42, 42]);
+  assert.deepEqual(es.span.place.skipped.filter((s) => s.reason === "holiday").map((s) => s.date), ["2026-04-02", "2026-04-03"]);
+  assert.deepEqual(es.span.other.skipped.filter((s) => s.reason === "holiday").map((s) => s.date), ["2026-04-03", "2026-04-06"]);
+  // November 2026 has 21 weekdays; Madrid also takes 2 and 9 Nov. December: 23 weekdays, Madrid skips 7, 8 and 25 Dec (20), Barcelona 8 and 25 (21), plus the four Saturdays (24).
+  assert.deepEqual(es.months2026, { november: { place: 19, other: 21 }, december: { place: 20, other: 21, placeSaturdays: 24 } });
+  const ca = pageFigures(workingDaysData("ca"), "ca");
+  assert.deepEqual([ca.thirty.last, ca.thirtyOther.last], ["2027-01-15", "2027-01-18"]);
+  for (const locale of WD_LOCALES) {
+    const f = pageFigures(workingDaysData(locale), locale);
+    const faq = workingDaysFaq(f, locale);
+    assert.equal(faq.length, 4);
+    const text = faq.map((x) => x.a).join("\n");
+    assert.match(text, /39\/2015/);
+    assert.match(text, new RegExp(String(f.months2026.december.placeSaturdays)));
+    assert.match(text, new RegExp(`\\b${f.months2026.november.place}\\b`));
+    for (const x of faq) assert.ok(x.q.endsWith("?") && x.a.length > 80, `${locale} ${x.q}`);
+  }
+  const page = read("src/components/programmatic/working-days/WorkingDaysPage.tsx");
+  assert.match(page, /workingDaysFaq\(f, locale\)/);
+  assert.equal((page.match(/"@type": "FAQPage"/g) ?? []).length, 1);
+  assert.match(page, /f\.thirty\.last/);
+  assert.match(page, /f\.span\.place\.working/);
 });
 
 test("links: the work calendar guide, the Spain 2027 hubs and the leave planner link the calculator", () => {

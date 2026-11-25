@@ -24,7 +24,7 @@ import { CITIES } from "@/lib/programmatic/spain-2027/cities";
 import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
 import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { DEFAULT_EXAMPLE, DEFAULT_PLACE, DEFAULT_SPAN, dateText, shortDate, workingDaysEditions, workingDaysPath, type WdLocale } from "@/lib/programmatic/working-days/copy";
-import { WD_META, pageFigures } from "@/lib/programmatic/working-days/page";
+import { SPAN_FROM, SPAN_TO, WD_META, pageFigures, workingDaysFaq } from "@/lib/programmatic/working-days/page";
 import { workingDaysData } from "@/lib/programmatic/working-days/places";
 import { AGE_2026, AGE_2027, AGE_2027_CHECKED_ON, LEGAL_TEXTS, RULES_AS_OF, type LegalText } from "@/lib/programmatic/working-days/rules";
 import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
@@ -108,6 +108,13 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
   };
   const d = (iso: string) => shortDate(iso, locale);
   const long = (iso: string) => dateText(iso, locale);
+  const and = L(locale, { es: " y ", ca: " i ", en: " and " });
+  const holidayList = (skipped: { date: string; reason: string }[]) =>
+    skipped
+      .filter((s) => s.reason === "holiday")
+      .map((s) => d(s.date))
+      .join(and);
+  const faq = workingDaysFaq(f, locale);
   const checked = locale === "ca" ? `${caDayArticle(RULES_AS_OF)}${dayMonthYear(RULES_AS_OF, "ca")}` : dayMonthYear(RULES_AS_OF, locale);
   const dogc = nextYearPublished();
   const council = councilApprovedTowns().length;
@@ -132,27 +139,33 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
   });
 
   const h = L(locale, {
-    es: { examples: "Ejemplos", admin: "Cómo se cuenta un plazo administrativo", judicial: "Plazos judiciales: agosto y del 24 de diciembre al 6 de enero", table: "Días hábiles por mes en 2026 y 2027", which: "Qué festivos contamos", more: "Más sobre festivos y calendarios" },
-    ca: { examples: "Exemples", admin: "Com es compta un termini administratiu", judicial: "Terminis judicials: l'agost i del 24 de desembre al 6 de gener", table: "Dies hàbils per mes el 2026 i el 2027", which: "Quins festius comptem", more: "Més sobre festius i calendaris" },
-    en: { examples: "Examples", admin: "How an administrative deadline is counted", judicial: "Court deadlines: August and 24 December to 6 January", table: "Working days per month in 2026 and 2027", which: "Which holidays count", more: "More on holidays and calendars" },
+    es: { faq: "Preguntas frecuentes", examples: "Ejemplos", admin: "Cómo se cuenta un plazo administrativo", judicial: "Plazos judiciales: agosto y del 24 de diciembre al 6 de enero", table: "Días hábiles por mes en 2026 y 2027", which: "Qué festivos contamos", more: "Más sobre festivos y calendarios" },
+    ca: { faq: "Preguntes freqüents", examples: "Exemples", admin: "Com es compta un termini administratiu", judicial: "Terminis judicials: l'agost i del 24 de desembre al 6 de gener", table: "Dies hàbils per mes el 2026 i el 2027", which: "Quins festius comptem", more: "Més sobre festius i calendaris" },
+    en: { faq: "Questions", examples: "Examples", admin: "How an administrative deadline is counted", judicial: "Court deadlines: August and 24 December to 6 January", table: "Working days per month in 2026 and 2027", which: "Which holidays count", more: "More on holidays and calendars" },
   });
 
   const examples = L(locale, {
     es: [
       `Diez días hábiles notificados el lunes ${d(ex.notified)}: el plazo empieza el ${d(f.example.first)} y acaba el ${long(f.example.last)} en ${f.placeLabel}, y el ${long(f.other.result.last)} en ${f.other.label}. La diferencia es el 7 de diciembre: festivo en la Comunidad de Madrid y laborable en Cataluña.`,
       `Quince días hábiles notificados el mismo ${d(ex.notified)}: acaban el ${long(f.fifteen.last)} en ${f.placeLabel} y el ${long(f.fifteenOther.last)} en ${f.other.label}. Si fueran quince días naturales, el plazo acabaría el ${long(f.fifteenCalendar.last)}.`,
+      `Treinta días hábiles notificados el mismo ${d(ex.notified)}: acaban el ${long(f.thirty.last)} en ${f.placeLabel} y el ${long(f.thirtyOther.last)} en ${f.other.label}.`,
+      `Días hábiles entre el ${d(SPAN_FROM)} y el ${d(SPAN_TO)}, ambos incluidos, con reglas administrativas: ${f.span.place.working} en ${f.placeLabel} (no cuentan ${holidayList(f.span.place.skipped)}) y ${f.span.other.working} en ${f.other.label} (no cuentan ${holidayList(f.span.other.skipped)}).`,
       `Un mes desde el 31 de enero de 2026: no hay 31 de febrero, así que acaba el último día del mes, el ${d(f.months.nominal)}. Es sábado, inhábil, y el plazo pasa al ${long(f.months.last)}.`,
       `Cinco días hábiles notificados el ${d("2026-12-22")} en ${f.placeLabel}: si el plazo es administrativo, acaba el ${long(f.christmasAdmin.last)}; si es judicial, del 24 de diciembre al 6 de enero no cuenta nada y acaba el ${long(f.christmasJudicial.last)}.`,
     ],
     ca: [
       `Deu dies hàbils notificats el dilluns ${d(ex.notified)}: el termini comença el ${d(f.example.first)} i acaba el ${long(f.example.last)} a ${f.placeLabel}, i el ${long(f.other.result.last)} a ${f.other.label}. La diferència és el 7 de desembre: festiu a la Comunitat de Madrid i laborable a Catalunya.`,
       `Quinze dies hàbils notificats el mateix ${d(ex.notified)}: acaben el ${long(f.fifteen.last)} a ${f.placeLabel} i el ${long(f.fifteenOther.last)} a ${f.other.label}. Si fossin quinze dies naturals, el termini acabaria el ${long(f.fifteenCalendar.last)}.`,
+      `Trenta dies hàbils notificats el mateix ${d(ex.notified)}: acaben el ${long(f.thirty.last)} a ${f.placeLabel} i el ${long(f.thirtyOther.last)} a ${f.other.label}.`,
+      `Dies hàbils entre el ${d(SPAN_FROM)} i el ${d(SPAN_TO)}, tots dos inclosos, amb regles administratives: ${f.span.place.working} a ${f.placeLabel} (no compten ${holidayList(f.span.place.skipped)}) i ${f.span.other.working} a ${f.other.label} (no compten ${holidayList(f.span.other.skipped)}).`,
       `Un mes des del 31 de gener de 2026: no hi ha 31 de febrer, així que acaba l'últim dia del mes, el ${d(f.months.nominal)}. És dissabte, inhàbil, i el termini passa al ${long(f.months.last)}.`,
       `Cinc dies hàbils notificats el ${d("2026-12-22")} a ${f.placeLabel}: si el termini és administratiu, acaba el ${long(f.christmasAdmin.last)}; si és judicial, del 24 de desembre al 6 de gener no compta res i acaba el ${long(f.christmasJudicial.last)}.`,
     ],
     en: [
       `Ten working days notified on Monday ${d(ex.notified)}: the count starts on ${d(f.example.first)} and ends on ${long(f.example.last)} in ${f.placeLabel}, and on ${long(f.other.result.last)} in ${f.other.label}. The difference is 7 December: a holiday in the Madrid region and a working day in Catalonia.`,
       `Fifteen working days notified on the same ${d(ex.notified)}: they end on ${long(f.fifteen.last)} in ${f.placeLabel} and on ${long(f.fifteenOther.last)} in ${f.other.label}. Fifteen calendar days would end on ${long(f.fifteenCalendar.last)}.`,
+      `Thirty working days notified on the same ${d(ex.notified)}: they end on ${long(f.thirty.last)} in ${f.placeLabel} and on ${long(f.thirtyOther.last)} in ${f.other.label}.`,
+      `Working days between ${d(SPAN_FROM)} and ${d(SPAN_TO)}, both included, under administrative rules: ${f.span.place.working} in ${f.placeLabel} (${holidayList(f.span.place.skipped)} do not count) and ${f.span.other.working} in ${f.other.label} (${holidayList(f.span.other.skipped)} do not count).`,
       `One month from 31 January 2026: there is no 31 February, so it ends on the month's last day, ${d(f.months.nominal)}. That is a Saturday, a non-working day, so the deadline moves to ${long(f.months.last)}.`,
       `Five working days notified on ${d("2026-12-22")} in ${f.placeLabel}: an administrative deadline ends on ${long(f.christmasAdmin.last)}; a court deadline skips 24 December to 6 January and ends on ${long(f.christmasJudicial.last)}.`,
     ],
@@ -335,6 +348,14 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
                 </table>
               </div>
 
+              <h2 id="preguntas">{h.faq}</h2>
+              {faq.map((x) => (
+                <section key={x.q}>
+                  <h3>{x.q}</h3>
+                  <p>{x.a}</p>
+                </section>
+              ))}
+
               <h2 id="festivos">{h.which}</h2>
               {sources.map((s) => (
                 <p key={s}>{s}</p>
@@ -374,7 +395,7 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: workingDaysPath(locale), description: meta.description, locale, category: "UtilitiesApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: workingDaysPath(locale), description: meta.description, locale, category: "UtilitiesApplication" }), { "@type": "FAQPage", mainEntity: faq.map((x) => ({ "@type": "Question", name: x.q, acceptedAnswer: { "@type": "Answer", text: x.a } })) }])} />
       <SiteFooter locale={locale} />
     </>
   );
