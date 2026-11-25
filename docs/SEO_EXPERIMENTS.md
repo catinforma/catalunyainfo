@@ -13887,3 +13887,18 @@ Skipped tonight as briefed (listed so nobody re-runs them): strikes (26 Nov vs e
 **Go-live.** Deploy, publish group `christmas`. IndexNow `/ca/fires-de-nadal/macanet-de-la-selva/ /es/mercados-navidad/macanet-de-la-selva/`.
 
 **Baseline** (14 d to 25 Nov): `/ca/fires-de-nadal/` 175 clicks / 6,745 impressions / position 6.6; `/es/mercados-navidad/` 239 / 11,374 / 7.5; `/en/christmas-markets/` 17 / 536 / 10.6. **Review 2026-12-09** (after the 8 Dec bridge): `snapshot.py page mercat 14`, `page fira 14`, `page mercados-navidad 14`, `page christmas-markets 14`; then move every fair that has ended out of the re-read list.
+
+
+## 25 Nov 2026 — Reis 2027 early pass, 10 big towns re-read (second pass of the day): Lleida's council news added; the other nine unchanged (body only; publish group `reis-2027`) (review 2026-12-15)
+
+**Brief.** Ticket: Reis 2027 cavalcades (Tue 5 Jan 2027), early pass; the 1/15/22 Dec and 2 Jan re-read guards (`REIS_REREAD_BY`) stay. Towns picked by size and by what GSC shows: `snapshot.py page cavalcada|cabalgata|reis 28` is Barcelona-only (cavalcada de reis 2027, cabalgata de reyes 2027, "la factoria dels reixos 2027" 7 impr. at 5.0 = Lleida), no per-town query yet, so the ten are Barcelona, L'Hospitalet, Terrassa, Badalona, Sabadell, Lleida, Tarragona, Mataró, Girona, Reus. Read today with curl (HTTP 200 each), text grep.
+
+**Result.** Time, route or start point for 2027 published: Sabadell (Tue 5 Jan 2027, 18-21 h, already on the page) and Reus (16:30 arrival, 18:30 start, already on the page); both re-read, unchanged. New today: **Lleida**, La Paeria news "18 de novembre de 2026" (La Factoria dels Reixos programme): "la Cavalcada del 5 de gener", draw to be a page 5-22 Dec, floats at the Cucalòcum 27 Dec-4 Jan (tours 10:30, 12:30, 16:30, 18:30), Factoria shows 30 Dec and 2, 3, 4 Jan. No time, no route, no start: Lleida stays "per confirmar (dia confirmat, 5 de gener)". Not announced: Barcelona (page still "Cavalcada de Reis 2026", `/nadal/ca/els-reis-dorient` "El 5 de gener de 2026", press room newest Reis item 2 Jan 2026), Girona ("Aquest any 2026 ... dilluns 5 de gener"), Tarragona (agenda 2027/gener lists no Reis; Dec agenda neither), Terrassa (page without year, 16:45 helicopter / 18 h as last year; not printed as 2027), L'Hospitalet (no Reis page), Mataró and Badalona (19 Nov and draw acta already on the page; nothing new).
+
+**What changed.** `reis.ts` Lleida `news2027` (ca/es/en, same facts, council news as a listed source, quote and read date in the code comment); header note. Title, description, H1, lead untouched (Reis window to 28 Nov). `REIS_AS_OF` unchanged (25 Nov). `seo:body-dates`: no family covers the Reis page, nothing to commit.
+
+**Tests.** `tests/reis.test.ts` +1 (Lleida news in ca/es/en, no 2027 time, weekdays 30 Dec 2026 / 2 Jan 2027, source listed, council host); reis, festive-pages, dec-events-21nov 67/67; `npx tsc --noEmit -p .` clean. The existing date guards (`rereadDue`, checkpoints 1, 15, 22 Dec, 2 Jan) are unchanged and cover any 2027 time through `paradeProblems()`.
+
+**Baseline.** `snapshot.py page reis 28` (29 Oct-25 Nov): about 750 impressions, position about 5.8; "cavalcada de reis 2027" 46 impr. at 8.2, "cabalgata de reyes 2027" 365 at 5.9, "la factoria dels reixos 2027" 7 at 5.0. **Review 2026-12-15** (does "cavalcada reis lleida 2027" / "factoria dels reixos 2027" show up; Barcelona's programme, expected from 1 Dec).
+
+**Go-live.** Publish group `reis-2027`. IndexNow `/ca/guies/cavalcada-de-reis-barcelona/`, `/es/guias/cabalgata-de-reyes-barcelona/`, `/en/guides/three-kings-parade-barcelona/`.

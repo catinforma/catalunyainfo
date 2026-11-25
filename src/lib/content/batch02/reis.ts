@@ -120,7 +120,9 @@ import { OPENING_2027, SHOPS } from "./shops";
  * Granollers unchanged. Barcelona: still nothing (press room tag "reis",
  * searches "cavalcada reis" and "nadal", barcelona.cat/nadal still "Nadal
  * 2025"); the sign-up form is now paused, so SIGNUPS_CLOSED reads "closed".
- * Mataró (19 Nov) and Badalona (draw held) news2027 updated. Title,
+ * Mataró (19 Nov) and Badalona (draw held) news2027 updated. Lleida (second
+ * pass, same day): La Paeria's 18 Nov news gives the 5 January parade, the
+ * page draw (5-22 Dec) and the floats at the Cucalòcum; no time or route. Title,
  * description, H1 and lead wording untouched (window to 28 Nov); only the
  * check dates move.
  *
@@ -520,6 +522,23 @@ export const TOWNS: readonly Town[] = [
     name: "Lleida",
     hosts: /(^|\.)paeria\.cat$/,
     watch: "https://www.paeria.cat/ca/actualitat/agenda/",
+    // Council news "18 de novembre de 2026" (read 25 Nov 2026), "La Factoria dels Reixos obre la venda d'entrades i
+    // dona el tret de sortida a la programació de Nadal": "la programació de Nadal a Lleida inclou les visites a les
+    // carrosses al Cucalòcum, el sorteig per participar com a patge, la Ruta del Camarlenc i la Cavalcada del 5 de
+    // gener"; "La programació culminarà el 5 de gener amb la tradicional Cavalcada dels Reis d'Orient"; "Del 5 al 22 de
+    // desembre es durà a terme el sorteig per participar com a patge de la Cavalcada"; "Del 27 de desembre al 4 de
+    // gener, el Cucalòcum oferirà [...] l'oportunitat de descobrir de prop les carrosses dels Reis d'Orient"; Factoria
+    // sessions "30 de desembre i 2, 3 i 4 de gener". No year on the 5 January line itself: the article is dated
+    // 18 Nov 2026 and its weekdays (dimecres 30 de desembre, dissabte 2 de gener) are those of 2026-27. No time, no route.
+    news2027: {
+      published: "2026-11-18",
+      url: "https://www.paeria.cat/ca/actualitat/noticies/la-factoria-dels-reixos-obre-la-venda-d2019entrades-i-dona-el-tret-de-sortida-a-la-programacio-de-nadal",
+      text: {
+        ca: "La Paeria ho va anunciar el 18 de novembre de 2026 amb la programació de Nadal: la cavalcada és el 5 de gener de 2027 i s'obre abans el sorteig per ser patge (del 5 al 22 de desembre). Les carrosses es poden veure al Cucalòcum del 27 de desembre al 4 de gener (visites a les 10:30, 12:30, 16:30 i 18:30; tancat l'1 de gener) i la Factoria dels Reixos fa funcions el 30 de desembre i el 2, 3 i 4 de gener.",
+        es: "La Paeria lo anunció el 18 de noviembre de 2026 con la programación de Navidad: la cabalgata es el 5 de enero de 2027 y antes se abre el sorteo para ser paje (del 5 al 22 de diciembre). Las carrozas se pueden ver en el Cucalòcum del 27 de diciembre al 4 de enero (visitas a las 10:30, 12:30, 16:30 y 18:30; cerrado el 1 de enero) y la Factoria dels Reixos programa funciones el 30 de diciembre y el 2, 3 y 4 de enero.",
+        en: "La Paeria announced it on 18 November 2026 with its Christmas programme: the parade is on 5 January 2027, and the draw to be a page opens first (5 to 22 December). The floats can be seen at the Cucalòcum from 27 December to 4 January (tours at 10:30, 12:30, 16:30 and 18:30; closed on 1 January) and the Factoria dels Reixos stages shows on 30 December and 2, 3 and 4 January.",
+      },
+    },
     past: {
       date: "2026-01-05",
       time: "18:00",
@@ -543,6 +562,7 @@ export const TOWNS: readonly Town[] = [
       sources: [
         { name: "Cavalcada de Reis 2026", url: "https://www.paeria.cat/ca/actualitat/agenda/cavalcada-de-reis-2026", publisher: "La Paeria, Ajuntament de Lleida" },
         { name: "La Factoria dels Reixos incorpora nous oficis i l'espai de la plaça de la Llotja (30/12/2025)", url: "https://www.paeria.cat/ca/actualitat/noticies/la-factoria-dels-reixos-incorpora-nous-oficis-i-l2019espai-de-la-placa-de-la-llotja", publisher: "La Paeria, Ajuntament de Lleida" },
+        { name: "La Factoria dels Reixos obre la venda d'entrades i dona el tret de sortida a la programació de Nadal (18/11/2026)", url: "https://www.paeria.cat/ca/actualitat/noticies/la-factoria-dels-reixos-obre-la-venda-d2019entrades-i-dona-el-tret-de-sortida-a-la-programacio-de-nadal", publisher: "La Paeria, Ajuntament de Lleida" },
       ],
     },
   },

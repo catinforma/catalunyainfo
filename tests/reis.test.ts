@@ -721,3 +721,21 @@ test("council news of 18-19 Nov 2026 (Rubí, Mataró) and the Castelldefels prog
   // 28 December 2026 is a Monday, as the Catalan page says.
   assert.equal(new Date("2026-12-28T12:00:00Z").getUTCDay(), 1);
 });
+
+test("Lleida: La Paeria's 18 Nov 2026 news (5 January parade, page draw, floats at the Cucalòcum) is on the page in ca, es and en without a 2027 time", () => {
+  const lleida = TOWNS.find((t) => t.key === "lleida")!;
+  assert.equal(lleida.news2027?.published, "2026-11-18");
+  assert.match(lleida.news2027!.url, /^https:\/\/www\.paeria\.cat\/ca\/actualitat\/noticies\//);
+  assert.equal(ANNOUNCED_2027.towns.lleida, null, "Lleida has published no time or route: only news");
+  const expected: Record<string, RegExp[]> = {
+    ca: [/La Paeria ho va anunciar el 18 de novembre de 2026/, /sorteig per ser patge \(del 5 al 22 de desembre\)/, /Cucalòcum del 27 de desembre al 4 de gener/],
+    es: [/La Paeria lo anunció el 18 de noviembre de 2026/, /sorteo para ser paje \(del 5 al 22 de diciembre\)/, /Cucalòcum del 27 de diciembre al 4 de enero/],
+    en: [/La Paeria announced it on 18 November 2026/, /draw to be a page opens first \(5 to 22 December\)/, /Cucalòcum from 27 December to 4 January/],
+  };
+  for (const locale of LOCALES) for (const re of expected[locale]!) assert.match(body(locale), re, `${locale}: ${re}`);
+  // The weekdays the council prints are those of 2026-27: Wednesday 30 December, Saturday 2 January.
+  assert.equal(new Date("2026-12-30T12:00:00Z").getUTCDay(), 3);
+  assert.equal(new Date("2027-01-02T12:00:00Z").getUTCDay(), 6);
+  // Date guard: the page prints no 2027 time for a town whose slot is empty, and the re-read checkpoints still apply.
+  assert.ok(REIS_REREAD_BY.length === 4);
+});
