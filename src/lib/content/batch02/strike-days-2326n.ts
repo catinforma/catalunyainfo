@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { DAY_URLS, MADRID_SOURCES, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
+import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKE_GUIDE_SPECS } from "./strike-guides";
 import { STRIKES, STRIKES_AS_OF, STRIKE_DAY_PAGES, STRIKE_URLS, isOnDay, type Strike } from "./strikes";
 import { SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF } from "./strikes-spain-data";
@@ -694,6 +695,61 @@ function educationSection(locale: Locale): Block[] {
   ];
 }
 
+/**
+ * 25 Nov 2026: the FAQ once the day has passed (phase "after"), in the past tense. Before, the page dropped its FAQ the day after
+ * ("no present-tense FAQ") and a reader who asks an assistant "¿hubo huelga el 23?" got a page with no question and answer to quote.
+ * The facts are the ones the body prints (the entries and the call-off); only the tense and the questions change.
+ */
+type FaqItem = { question: string; answer: string };
+
+const PAST_FAQ: Record<Locale, Record<StrikeDay2326Key, FaqItem[]>> = {
+  es: {
+    strike23n: [
+      { question: "¿Hubo huelga el lunes 23 de noviembre de 2026?", answer: "No de trenes ni general: SEMAF desconvocó el 20 de noviembre la huelga de maquinistas de Renfe. Ese día empezó la huelga de Correos en la Comunidad de Madrid y en cinco provincias andaluzas, y siguió la de médicos del Sindicato Médicos Unidos." },
+      { question: "¿Hubo huelga de Renfe el 23 de noviembre?", answer: "No. El sindicato de maquinistas SEMAF la desconvocó el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», según su comunicado 2026-38." },
+      { question: "¿Hubo servicios mínimos en Rodalies el 23 de noviembre?", answer: "No: sin huelga no los hubo, y el 66% en hora punta y el 33% que había fijado la Generalitat eran para la huelga de SEMAF, desconvocada." },
+      { question: "¿Afectó la huelga de Correos al voto por correo?", answer: "La orden del Ministerio del Interior obligaba a abrir las oficinas de Correos en su horario habitual para el voto por correo, con 1, 2 o 3 empleados por turno según su plantilla, y fijaba el reparto de los envíos electorales con hasta el 50% de la plantilla del 23 al 25 de noviembre, «coincidiendo con la admisión del voto por correo»." },
+    ],
+    strike26n: [
+      { question: "¿Hubo huelga el jueves 26 de noviembre de 2026?", answer: "Sí, pero no general: huelga en la educación en Cataluña, toda la jornada; siguieron la huelga de médicos del Sindicato Médicos Unidos y la de Correos en la Comunidad de Madrid, y en Madrid CSIF convocó paros en la enseñanza pública. No hubo huelga de trenes." },
+      { question: "¿Hubo huelga de educación el 26 de noviembre?", answer: "Sí, en Cataluña, de 0.00 a 24.00 h y cada trabajador durante su jornada, convocada por USTEC·STEs, la CGT, la COS y la Intersindical, según la orden de servicios mínimos del 23 de noviembre. Estaban llamados el personal docente y no docente, las escoles bressol y el personal de comedor, ocio y transporte escolar." },
+      { question: "¿Hubo clase el jueves 26 de noviembre en Cataluña?", answer: "Sí: los centros abrieron, porque era una huelga del personal, no un cierre, pero parte del profesorado y del personal de comedor y de transporte escolar pudo hacer huelga. Los servicios mínimos garantizaban en cada centro una persona del equipo directivo y un docente por cada 3 aulas." },
+      { question: "¿Qué servicios mínimos hubo en los colegios el 26 de noviembre?", answer: "Los fijó el Departament d'Empresa i Treball por una orden del 23 de noviembre: una persona del equipo directivo en cada centro y, además, un docente por cada 3 aulas en infantil, primaria y secundaria; el 50% de la plantilla en educación especial y el 33% en las escuelas infantiles; y el 50% del personal de comedor, cocina, acogida y extraescolares." },
+      { question: "¿Hubo huelga de profesores en Madrid el 26 de noviembre?", answer: "Sí: la enseñanza pública madrileña seguía en huelga indefinida (CCOO, UGT y CSIF) y el jueves 26 CSIF convocó paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h." },
+    ],
+  },
+  ca: {
+    strike23n: [
+      { question: "Hi va haver vaga el dilluns 23 de novembre de 2026?", answer: "No de trens ni general: SEMAF va desconvocar el 20 de novembre la vaga de maquinistes de Renfe. Aquell dia va començar la vaga de Correus a la Comunitat de Madrid i a cinc províncies andaluses, i va continuar la de metges del Sindicato Médicos Unidos." },
+      { question: "Hi va haver vaga de Rodalies el 23 de novembre?", answer: "No. El sindicat de maquinistes SEMAF la va desconvocar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo», segons el seu comunicat 2026-38. Rodalies, que opera el Grup Renfe, no va tenir vaga." },
+      { question: "Hi va haver serveis mínims a Rodalies el 23 de novembre?", answer: "No: sense vaga no n'hi va haver, i el 66% en hora punta i el 33% que havia fixat la Generalitat eren per a la vaga de SEMAF, desconvocada." },
+      { question: "La vaga de Correus va afectar el vot per correu?", answer: "L'ordre del Ministeri de l'Interior obligava a obrir les oficines de Correus en el seu horari habitual per al vot per correu, amb 1, 2 o 3 treballadors per torn segons la plantilla, i fixava el repartiment dels enviaments electorals amb fins al 50% de la plantilla del 23 al 25 de novembre, «coincidiendo con la admisión del voto por correo». Aquesta vaga no era a Catalunya: era a Madrid i a cinc províncies andaluses." },
+    ],
+    strike26n: [
+      { question: "Hi va haver vaga el dijous 26 de novembre de 2026?", answer: "Sí, però no general: vaga a l'educació a Catalunya, tota la jornada; van continuar la vaga de metges del Sindicato Médicos Unidos i la de Correus a la Comunitat de Madrid, i a Madrid CSIF va convocar aturades a l'ensenyament públic. No hi va haver vaga de trens." },
+      { question: "Va haver-hi vaga d'educació el 26 de novembre?", answer: "Sí, a Catalunya, de 0.00 a 24.00 h i cada treballador durant la seva jornada, convocada per USTEC·STEs, la CGT, la COS i La Intersindical, segons l'ordre de serveis mínims del 23 de novembre. Hi estaven cridats el personal docent i no docent, les escoles bressol i el personal de menjador, lleure i transport escolar." },
+      { question: "Hi va haver classe el dijous 26 de novembre a Catalunya?", answer: "Sí: els centres van obrir, perquè era una vaga del personal, no un tancament, però part del professorat i del personal de menjador i de transport escolar va poder fer vaga. Els serveis mínims garantien a cada centre una persona de l'equip directiu i un docent per cada 3 aules." },
+      { question: "Quins serveis mínims hi va haver a les escoles el 26 de novembre?", answer: "Els va fixar el Departament d'Empresa i Treball per una ordre del 23 de novembre: una persona de l'equip directiu a cada centre i, a més, un docent per cada 3 aules a infantil, primària i secundària; el 50% de la plantilla a l'educació especial i el 33% a les llars d'infants; i el 50% del personal de menjador, cuina, acollida i extraescolars." },
+      { question: "Hi va haver vaga de professors a Madrid el 26 de novembre?", answer: "Sí: l'ensenyament públic madrileny seguia en vaga indefinida (CCOO, UGT i CSIF) i el dijous 26 CSIF va convocar aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h." },
+    ],
+  },
+  en: {
+    strike23n: [
+      { question: "Was there a strike in Spain on Monday 23 November 2026?", answer: "Not a rail strike and not a general strike: SEMAF called off the Renfe train drivers' strike on 20 November. That day Correos' strike began in the Community of Madrid and five Andalusian provinces, and the Sindicato Médicos Unidos doctors' strike went on." },
+      { question: "Was there a Renfe strike on 23 November?", answer: "No. The train drivers' union SEMAF called it off on 20 November: \"SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo\" (SEMAF has called off the strike day planned for 23 November after reaching an agreement), according to its notice 2026-38. Rodalies, which Renfe Group runs, had no strike." },
+      { question: "Were there minimum services on Rodalies on 23 November?", answer: "No: with no strike there were none, and the 66% at peak and 33% the Generalitat had set were for SEMAF's strike, which was called off." },
+      { question: "Did the Correos strike affect postal voting?", answer: "The Interior Ministry's order made Correos open its post offices at their usual hours for postal votes, with 1, 2 or 3 staff per shift depending on the office's size, and set delivery of election mail with up to 50% of staff from 23 to 25 November, \"coincidiendo con la admisión del voto por correo\" (while postal votes were being accepted). That strike was not in Catalonia: it was in Madrid and five Andalusian provinces." },
+    ],
+    strike26n: [
+      { question: "Was there a strike in Spain on Thursday 26 November 2026?", answer: "Yes, but not a general strike: an education strike in Catalonia for the whole day; the Sindicato Médicos Unidos doctors' strike and Correos' strike in the Community of Madrid went on, and in Madrid CSIF called stoppages in state schools. There was no rail strike." },
+      { question: "Was there an education strike on 26 November?", answer: "Yes, in Catalonia, from 00:00 to 24:00 and each worker during their own working day, called by USTEC·STEs, CGT, COS and La Intersindical, according to the minimum-services order of 23 November. It called out teaching and non-teaching staff, nursery schools and lunchtime, leisure and school-transport staff." },
+      { question: "Was there school in Catalonia on Thursday 26 November?", answer: "Yes: schools opened, because it was a strike by staff, not a closure, but some teachers and lunchtime and school-transport staff could strike. The minimum services kept one member of the head team and one teacher per 3 classes at each school." },
+      { question: "What minimum services were there in schools on 26 November?", answer: "The Department of Business and Labour set them by an order of 23 November: one member of the head team at each school plus one teacher per 3 classes in infant, primary and secondary schools; 50% of staff at special-needs schools and 33% at nursery schools; and 50% of lunchtime, kitchen, before-school care and after-school activity staff." },
+      { question: "Were Madrid's teachers on strike on 26 November?", answer: "Yes: Madrid's state schools stayed on an open-ended strike (CCOO, UGT and CSIF), and on Thursday 26 CSIF called partial stoppages from 09:00 to 11:00 and 17:00 to 19:00." },
+    ],
+  },
+};
+
 export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF): Block[] {
   const t = COPY[locale];
   const d = t.days[key];
@@ -717,11 +773,17 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
   ];
 
   const first = d.firstQuestion[phase];
-  const faqItems = d.faq(checked).map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
+  // 25 Nov 2026: once the day has passed, the FAQ stays, in the past tense (PAST_FAQ), instead of being dropped.
+  const faqItems =
+    phase === "after"
+      ? PAST_FAQ[locale][key].map((item) => ({ question: item.question, answer: strip(item.answer) }))
+      : d.faq(checked).map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
   const other: StrikeDay2326Key = key === "strike23n" ? "strike26n" : "strike23n";
 
   return [
     lead(d.lead(phase, checkedDay)),
+    // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
+    sourcesCheckedLine(locale, checkedOn, key),
     keyFacts(t.factsTitle(dayName), facts),
     heading(2, d.extraHeading, d.extraId),
     ...d.extra(checked),
@@ -746,7 +808,7 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
       ...(dayPageOver(other, asOf) ? [] : [b2link(other, locale, B2_TITLES[other][locale])]),
       ...(key === "strike23n" ? [b2link("postalVote", locale, B2_TITLES.postalVote[locale])] : []),
     ),
-    ...(phase === "after" ? [] : [faq(faqItems)]),
+    faq(faqItems),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
     ...b2Related(key === "strike23n" ? ["strikesSpain", "strikeRenfe", "strikes"] : ["strikesSpain", "strikeEducation", "strikes"], locale),
   ];

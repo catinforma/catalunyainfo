@@ -16,7 +16,8 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
-import { RENFE_STANDING_ANCHOR, STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, type Strike } from "./strikes";
+import { sourcesCheckedLine } from "./strike-citable";
+import { RENFE_STANDING_ANCHOR, STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, checkedOn, type Strike } from "./strikes";
 import { SPAIN_NOT_HAPPENING, STRIKES_SPAIN_VERIFIED, SPAIN_STRIKES } from "./strikes-spain-data";
 import { fillChecked, spainCheckedOn } from "./strikes-spain";
 import type { SpainStrike } from "./strikes-spain-model";
@@ -422,6 +423,53 @@ const COPY: Record<Locale, Copy> = {
 
 const RENFE_PRECEDENT = U.renfeSemaf1012;
 
+/**
+ * 25 Nov 2026: the FAQ once the strike has passed (phase "after"), in the past tense; the present-tense one still answered "Sí. El martes 17
+ * ... está convocada" a week later. The minimum-services answers are the entries' own texts (`msState`, `rodalies`), as before.
+ */
+function pastFaq(locale: Locale, msState: string, rodalies: string, msPending: boolean): { question: string; answer: string }[] {
+  if (locale === "ca") {
+    return [
+      {
+        question: "Va haver-hi vaga de trens el dimarts 17 de novembre?",
+        answer: `Sí. El dimarts 17 de novembre de 2026, de 0.00 a 23.59 h, hi estava convocat tot el personal del Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif, i SEMAF també va cridar els maquinistes d'Iryo, Ouigo i altres operadores.${
+          msPending ? "" : " Serveis mínims: Rodalies, 66 % en hora punta i 33 % la resta del dia; Cercanías, 75 % i 50 %; Mitja Distància, 65 %; AVE i Llarga Distància, 72 %; Iryo, 70 %; Ouigo, 65,38 %."
+        }`,
+      },
+      { question: "Quins serveis mínims hi va haver a Renfe el 17 de novembre?", answer: msState },
+      { question: "I a Rodalies?", answer: rodalies },
+      { question: "Va haver-hi vaga de trens el 19 de novembre?", answer: "No. El sindicat SCF va desconvocar el 17 de novembre l'aturada de 24 hores del personal de circulació d'Adif, l'única convocatòria ferroviària d'aquell dia; Renfe, Iryo i Ouigo no hi estaven convocats." },
+      { question: "La vaga de trens va afectar el metro?", answer: "No: el metro, els autobusos i els tramvies no formaven part de les convocatòries publicades per al 17, ni els trens autonòmics que no són de Renfe, com FGC, Euskotren o Metrovalencia." },
+    ];
+  }
+  if (locale === "en") {
+    return [
+      {
+        question: "Was there a rail strike in Spain on Tuesday 17 November?",
+        answer: `Yes. On Tuesday 17 November 2026, 00:00 to 23:59, all Renfe Group staff (Cercanías, Rodalies, Media Distancia, AVE and long distance) and Adif were called out, and SEMAF also called out drivers at Iryo, Ouigo and other operators.${
+          msPending ? "" : " Minimum services: Cercanías 75% at peak times and 50% the rest of the day; Media Distancia 65%; AVE and long distance 72%; Iryo 70%; Ouigo 65.38%; Rodalies 66% and 33%."
+        }`,
+      },
+      { question: "What minimum services were there on Renfe on 17 November?", answer: msState },
+      { question: "And on Rodalies?", answer: rodalies },
+      { question: "Was there a rail strike on 19 November?", answer: "No. On 17 November the SCF union called off the 24-hour stoppage by Adif's traffic-control staff, the only rail call that day; Renfe, Iryo and Ouigo were not called out." },
+      { question: "Did the rail strike affect the metro?", answer: "No: metros, buses and trams were not part of the calls published for the 17th, nor were regional railways not run by Renfe, such as FGC, Euskotren or Metrovalencia." },
+    ];
+  }
+  return [
+    {
+      question: "¿Hubo huelga de trenes el martes 17 de noviembre?",
+      answer: `Sí. El martes 17 de noviembre de 2026, de 0.00 a 23.59 h, estaba convocada toda la plantilla del Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif, y SEMAF llamó también a los maquinistas de Iryo, Ouigo y otras operadoras.${
+        msPending ? "" : " Servicios mínimos: Cercanías, 75 % en hora punta y 50 % el resto del día; Media Distancia, 65 %; AVE y Larga Distancia, 72 %; Iryo, 70 %; Ouigo, 65,38 %; Rodalies, 66 % y 33 %."
+      }`,
+    },
+    { question: "¿Qué servicios mínimos hubo en Renfe el 17 de noviembre?", answer: msState },
+    { question: "¿Y en Rodalies?", answer: rodalies },
+    { question: "¿Hubo huelga de trenes el 19 de noviembre?", answer: "No. El sindicato SCF desconvocó el 17 de noviembre el paro de 24 horas del personal de circulación de Adif, la única convocatoria ferroviaria de ese día; Renfe, Iryo y Ouigo no estaban convocados." },
+    { question: "¿Afectó la huelga de trenes al metro?", answer: "No: el metro, los autobuses y los tranvías no formaban parte de las convocatorias publicadas para el 17, ni los trenes autonómicos que no son de Renfe, como FGC, Euskotren o Metrovalencia." },
+  ];
+}
+
 export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): Block[] {
   const t = COPY[locale];
   const spain = spainEntry();
@@ -447,6 +495,8 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
 
   return [
     lead(t.lead(phase, msPending, today)),
+    // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
+    sourcesCheckedLine(locale, checkedOn(asOf, RAIL_17N_VERIFIED), "railStrike17n"),
     keyFacts(t.factsTitle, [
       { label: t.labels.when, value: t.when },
       { label: t.labels.who, value: t.who },
@@ -477,7 +527,7 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
       ...t.nextLinks(locale),
       b2link("strike20n", locale, B2_TITLES.strike20n[locale]),
     ),
-    faq([...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23 }] : [])]),
+    faq(phase === "after" ? pastFaq(locale, stateText, rodaliesText, msPending) : [...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23 }] : [])]),
     ...paras(verifiedLine(locale, RAIL_17N_VERIFIED)),
     ...b2Related(["strikeRenfe", "strikesSpain", "strikes"], locale),
   ];

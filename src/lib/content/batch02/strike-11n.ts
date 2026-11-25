@@ -26,7 +26,8 @@ import {
   type B2Source,
 } from "./shared";
 import { strike11nCityLinks } from "./strike-11n-city-paths";
-import { STRIKES, STRIKE_URLS, isUpcoming } from "./strikes";
+import { sourcesCheckedLine } from "./strike-citable";
+import { STRIKES, STRIKE_URLS, checkedOn, isUpcoming } from "./strikes";
 
 /**
  * "Vaga general 11 de novembre": a page of its own for the 11 November 2026
@@ -1276,6 +1277,58 @@ export function otherCitiesLine(): string {
 const SECTOR_ORDER: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
 const TRANSPORT: ("rodalies" | "tmb" | "fgcTram" | "longDistance" | "airports")[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports"];
 
+/**
+ * 25 Nov 2026: the FAQ once the strike is past (phase "past"), in the past tense. The present-tense one still said "¿Hay metro el 11?",
+ * "la manifestación sale a las 17.30" and "el 12 de noviembre aún no había publicado la hora" two weeks later, and its Rodalies answer
+ * added a SEMAF strike "on 10 and 12 November" that SEMAF had moved to the 23rd and then called off (strikes.ts); that sentence is
+ * not repeated. The sector answers are the published minimum-services texts of the table (`sectorAnswer`), the rest the same facts as before;
+ * the two questions about notice and pay are standing rules and stay as they were.
+ */
+function pastFaq11n(c: Ctx): { question: string; answer: string }[] {
+  const tmb = sectorAnswer(c, "tmb", "");
+  const rodalies = sectorAnswer(c, "rodalies", "");
+  if (c.locale === "ca") {
+    return [
+      { question: "Va haver-hi vaga general l'11 de novembre de 2026?", answer: "Sí: va ser una vaga general de 24 hores a tot Espanya, també a Catalunya, convocada per CCOO i UGT amb CGT, CNT i altres organitzacions. La taula d'aquesta pàgina recull els serveis mínims que es van fixar per a cada sector." },
+      { question: "Què va funcionar l'11 de novembre?", answer: "Els serveis essencials van funcionar amb els serveis mínims publicats, que són a la taula d'aquesta pàgina sector per sector: Rodalies, metro i bus, FGC i tramvia, trens de llarga distància, vols, escoles i sanitat." },
+      { question: "Va haver-hi escola l'11N?", answer: "Sí. L'11 de novembre va ser dia lectiu al calendari escolar 2026-2027 i una vaga no el canvia: les escoles van obrir amb el personal mínim que fixa l'ordre de serveis mínims. Alguns docents van poder fer vaga: USTEC·STEs va cridar tot el personal educatiu a fer-ne." },
+      { question: "Va haver-hi metro l'11 de novembre?", answer: tmb || "Sí, amb serveis mínims: són a la taula d'aquesta pàgina, amb l'enllaç a l'ordre oficial." },
+      { question: "Va haver-hi Rodalies l'11 de novembre?", answer: rodalies || "Sí, amb serveis mínims: són a la taula d'aquesta pàgina, amb l'enllaç a l'ordre oficial." },
+      { question: "A quina hora va començar la vaga general?", answer: "A les 0 h de l'11 de novembre, i va durar 24 hores. On es treballa per torns, començava amb el primer torn encara que comencés abans de mitjanit i acabava amb l'últim encara que acabés després, segons CCOO de Catalunya." },
+      { question: "On i a quina hora va ser la manifestació de l'11N a Barcelona?", answer: "La manifestació central estava convocada a les 17.30 h als Jardinets de Gràcia, segons el Sindicat de Llogateres de Catalunya, que la va anunciar el 20 d'octubre amb la campanya Viure Ens Costa la Vida i la Taula Sindical de Catalunya." },
+      { question: "He d'avisar l'empresa si faig vaga?", answer: "No. Segons el Departament d'Empresa i Treball, la normativa no obliga la persona treballadora a avisar abans. Si l'empresa et designa formalment per als serveis mínims, sí que has d'anar a treballar." },
+      { question: "Em descompten el sou si faig vaga?", answer: "Sí. Durant la vaga el contracte queda suspès i no tens dret al salari (article 6.2 del Reial decret llei 17/1977). L'empresa descompta les hores no treballades de la nòmina següent, amb la part proporcional de les pagues extraordinàries, i aquell dia ni tu ni l'empresa no cotitzeu a la Seguretat Social." },
+      { question: "Quan es van publicar els serveis mínims de l'11N?", answer: "Abans de la vaga: l'ordre del Departament d'Empresa i Treball amb els de Catalunya és del 5 de novembre de 2026; els altres són a la taula d'aquesta pàgina, amb l'enllaç a l'ordre o a l'avís oficial de cada sector." },
+    ];
+  }
+  if (c.locale === "en") {
+    return [
+      { question: "Was there a general strike on 11 November 2026?", answer: "Yes: a 24-hour general strike across Spain, Catalonia included, called by CCOO and UGT with CGT, CNT and other organisations. The table on this page shows the minimum services that were set for each sector." },
+      { question: "What ran on 11 November?", answer: "Essential services ran on the published minimum services, listed sector by sector in the table on this page: Rodalies, metro and buses, FGC and tram, long-distance trains, flights, schools and health." },
+      { question: "Was there school on 11 November?", answer: "Yes. 11 November was a school day in the 2026-2027 calendar and a strike does not change that: schools opened with the minimum staff the minimum-services order sets. Some teachers could strike: the teachers' union USTEC·STEs called all education staff out." },
+      { question: "Was the Barcelona metro running on 11 November?", answer: tmb || "Yes, on minimum services: they are in the table on this page, with a link to the official order." },
+      { question: "Were Rodalies trains running on 11 November?", answer: rodalies || "Yes, on minimum services: they are in the table on this page, with a link to the official order." },
+      { question: "What time did the general strike start?", answer: "At 00:00 on 11 November, for 24 hours. Where people work shifts, it started with the first shift even if that began before midnight, and ended with the last one even if that ended after, according to CCOO de Catalunya." },
+      { question: "Where and when was the 11 November demonstration in Barcelona?", answer: "The central march was called for 17:30 at the Jardinets de Gràcia, according to the Catalan tenants' union Sindicat de Llogateres, which announced it on 20 October with the joint campaign Viure Ens Costa la Vida and the Taula Sindical de Catalunya." },
+      { question: "Do I have to tell my employer if I strike?", answer: "No. According to the Generalitat's Department of Business and Labour, the rules do not require individual workers to give notice. If your employer formally assigns you to minimum services, you do have to work." },
+      { question: "Will my pay be docked if I strike?", answer: "Yes. During the strike the contract is suspended and you are not entitled to pay (Article 6.2 of Royal Decree-Law 17/1977). The employer deducts the hours not worked from the next payslip, including the proportional part of the extra payments, and neither you nor your employer pays Social Security contributions for that day." },
+      { question: "When were the 11 November minimum services published?", answer: "Before the strike: the Department of Business and Labour's order with Catalonia's is dated 5 November 2026; the others are in the table on this page, with a link to the official order or notice for each sector." },
+    ];
+  }
+  return [
+    { question: "¿Hubo huelga general el 11 de noviembre de 2026?", answer: "Sí: fue una huelga general de 24 horas en toda España, también en Cataluña, convocada por CCOO y UGT con CGT, CNT y otras organizaciones. La tabla de esta página recoge los servicios mínimos que se fijaron para cada sector." },
+    { question: "¿Qué funcionó el 11 de noviembre?", answer: "Los servicios esenciales funcionaron con los servicios mínimos publicados, que están en la tabla de esta página sector por sector: Rodalies, metro y bus, FGC y tranvía, trenes de larga distancia, vuelos, colegios y sanidad." },
+    { question: "¿Hubo colegio el 11N?", answer: "Sí. El 11 de noviembre fue día lectivo en el calendario escolar 2026-2027 y una huelga no lo cambia: los colegios abrieron con el personal mínimo que fija la orden de servicios mínimos. Algunos docentes pudieron hacer huelga: USTEC·STEs llamó a todo el personal educativo a hacerla." },
+    { question: "¿Hubo metro el 11 de noviembre?", answer: tmb || "Sí, con servicios mínimos: están en la tabla de esta página, con el enlace a la orden oficial." },
+    { question: "¿Hubo Rodalies el 11 de noviembre?", answer: rodalies || "Sí, con servicios mínimos: están en la tabla de esta página, con el enlace a la orden oficial." },
+    { question: "¿A qué hora empezó la huelga general?", answer: "A las 0 h del 11 de noviembre, y duró 24 horas. Donde se trabajaba por turnos, empezaba con el primer turno aunque comenzara antes de medianoche y acababa con el último aunque terminara después, según CCOO de Catalunya." },
+    { question: "¿Dónde y a qué hora fue la manifestación del 11 de noviembre en Barcelona?", answer: "La manifestación central estaba convocada a las 17.30 h en los Jardinets de Gràcia, según el Sindicat de Llogateres de Catalunya, que la anunció el 20 de octubre con la campaña Viure Ens Costa la Vida y la Taula Sindical de Catalunya." },
+    { question: "¿Tengo que avisar a la empresa si hago huelga?", answer: "No. Según el Departament d'Empresa i Treball, la normativa no obliga a la persona trabajadora a avisar antes. Si la empresa te designa formalmente para los servicios mínimos, sí tienes que ir a trabajar." },
+    { question: "¿Me descuentan el sueldo si hago huelga?", answer: "Sí. Durante la huelga el contrato queda suspendido y no tienes derecho al salario (artículo 6.2 del Real Decreto-ley 17/1977). La empresa descuenta las horas no trabajadas de la nómina siguiente, con la parte proporcional de las pagas extraordinarias, y ese día ni tú ni la empresa cotizáis a la Seguridad Social." },
+    { question: "¿Cuándo se publicaron los servicios mínimos del 11N?", answer: "Antes de la huelga: la orden del Departament d'Empresa i Treball con los de Cataluña es del 5 de noviembre de 2026; los demás están en la tabla de esta página, con el enlace a la orden o al aviso oficial de cada sector." },
+  ];
+}
+
 export function buildStrike11nBody(
   locale: Locale,
   asOf: string = STRIKE_11N_AS_OF,
@@ -1294,12 +1347,16 @@ export function buildStrike11nBody(
 
   const blocks: Block[] = [];
   blocks.push(lead(t.lead(c)));
+  // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
+  blocks.push(sourcesCheckedLine(locale, checkedOn(asOf, STRIKE_11N_VERIFIED), "strike11n"));
   blocks.push(keyFacts(t.keyFactsTitle, t.keyFacts(c)));
   // 3 Nov 2026: "En català · En castellano · In English", under the answer.
   // Catalan queries land on the Spanish edition (hreflang follows the Google
   // interface language); this line takes the reader to theirs.
   blocks.push(languageLinks());
-  blocks.push(callout("official", verifiedLine(locale, asOf), t.data(c)));
+  // 25 Nov 2026: the callout's date is the page's VERIFIED day (it printed the as-of day, 12 Nov, above a "10 Nov" line at the bottom and the
+  // new "sources checked" line under the answer).
+  blocks.push(callout("official", verifiedLine(locale, checkedOn(asOf, STRIKE_11N_VERIFIED)), t.data(c)));
   // 6 Nov 2026: Spanish readers from the rest of Spain (about five times the
   // demand for Catalonia) get their city's page under the answer. The title
   // and the lead stay as they are: this page is the winner of the 11N cluster.
@@ -1352,7 +1409,8 @@ export function buildStrike11nBody(
   blocks.push(...h2(t.rightsHeading, t.rightsIntro));
   blocks.push(list(...t.rights));
 
-  blocks.push(faq(t.faq(c).map((item) => ({ question: item.question, answer: strip(item.answer) }))));
+  // 25 Nov 2026: past the strike day, the FAQ in the past tense (pastFaq11n).
+  blocks.push(faq((c.phase === "past" ? pastFaq11n(c) : t.faq(c)).map((item) => ({ question: item.question, answer: strip(item.answer) }))));
   blocks.push(...paras(verifiedLine(locale, STRIKE_11N_VERIFIED)));
   blocks.push(...b2Related([...RELATED], locale));
   return blocks;

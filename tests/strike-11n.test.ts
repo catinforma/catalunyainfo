@@ -257,7 +257,8 @@ test("known answers: the date, the hours, who calls it and who is called out", (
     const blocks = STRIKE_11N.editions[locale].blocks;
     assert.equal(blocks[0]?.type, "paragraph");
     assert.equal((blocks[0] as { lead?: boolean }).lead, true);
-    assert.equal(blocks[1]?.type, "keyFacts");
+    assert.equal(blocks[1]?.type, "paragraph", locale); // 25 Nov 2026: the "Fonts revisades" line (strike-citable.ts)
+    assert.equal(blocks[2]?.type, "keyFacts");
     const leadText = text(blocks.slice(0, 1));
     for (const pattern of leadWords[locale]) assert.match(leadText, pattern, `${locale} lead`);
     const all = body(locale);
@@ -374,7 +375,7 @@ test("the FAQ asks in the searched words and answers in plain text", () => {
     en: ["What runs on 11 November?", "Is there school on 11 November?", "Is the Barcelona metro running on 11 November?", "Are Rodalies trains running on 11 November?"],
   };
   for (const locale of LOCALES) {
-    const block = STRIKE_11N.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
+    const block = buildStrike11nBody(locale, "2026-11-09", filled()).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
     assert.ok(block, locale);
     const asked = block.items.map((item) => item.question);
     for (const question of questions[locale]) assert.ok(asked.includes(question), `${locale}: missing "${question}"`);
@@ -468,11 +469,11 @@ test("known answers read on 3 November 2026: the central Barcelona march, from t
     // Linked once in the body, in the "who calls it" section.
     assert.equal(json(locale).split(`](${notice})`).length - 1, 1, locale);
     // On the first screen: in the key facts, with the hour, the place and whose announcement it is.
-    const facts = text(blocks.slice(1, 2));
+    const facts = text(blocks.slice(2, 3));
     assert.match(facts, /17[.:]30[^.]*Jardinets de Gràcia[^.]*Sindicat de Llogateres/, locale);
     // CCOO's own line stays: it has published no time or place.
     assert.match(body(locale), /principals capitals de província/, locale);
-    const item = (blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items.find((i) => i.question === faq[locale]);
+    const item = (buildStrike11nBody(locale, "2026-11-09", filled()).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items.find((i) => i.question === faq[locale]);
     assert.ok(item, `${locale}: no FAQ for the march`);
     assert.match(item.answer, /17[.:]30[^.]*Jardinets de Gràcia[^.]*Sindicat de Llogateres/, locale);
     // Announced with the joint campaign Viure Ens Costa la Vida and the Taula Sindical de Catalunya.
@@ -486,8 +487,8 @@ test("a language line (En català · En castellano · In English) sits right und
   for (const locale of LOCALES) {
     const blocks = STRIKE_11N.editions[locale].blocks;
     assert.equal(blocks.filter((b) => b.type === "languageLinks").length, 1, locale);
-    assert.equal(blocks[2]?.type, "languageLinks", locale);
-    assert.equal(buildStrike11nBody(locale, "2026-11-12", filled())[2]?.type, "languageLinks", locale);
+    assert.equal(blocks[3]?.type, "languageLinks", locale); // lead, sources line, key facts, language line
+    assert.equal(buildStrike11nBody(locale, "2026-11-12", filled())[3]?.type, "languageLinks", locale);
   }
 });
 

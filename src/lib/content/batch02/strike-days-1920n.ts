@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
+import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, isOnDay, type Strike } from "./strikes";
 import type { StrikeDay2326Key } from "./strike-days-2326n";
 import { SPAIN_NOT_HAPPENING, SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF, STRIKES_SPAIN_VERIFIED } from "./strikes-spain-data";
@@ -618,6 +619,83 @@ function strikeSection(strike: SpainStrike, locale: Locale, page: StrikeDayKey):
   ];
 }
 
+/**
+ * 25 Nov 2026: the FAQ once the day has passed (phase "after"), in the past tense; before, the page dropped its FAQ the day after
+ * ("no present-tense FAQ"), so "¿hubo huelga el 20 de noviembre?" found a page with no question and answer to quote. The places in
+ * the marches and demonstrations answers come from SMU_MARCHES_19N and STUDENT_DEMOS_20N, the same rows as the body's tables.
+ */
+type FaqItem = { question: string; answer: string };
+
+const marchOf = (city: string) => SMU_MARCHES_19N.find((m) => m.city === city);
+const demoOf = (city: string) => STUDENT_DEMOS_20N.find((d) => d.city === city)?.place ?? "";
+
+function marchesAnswer(locale: Locale): string {
+  const madrid = marchOf("Madrid");
+  const barcelona = marchOf("Barcelona");
+  const seville = marchOf("Sevilla");
+  const n = SMU_MARCHES_19N.length;
+  const route = (m: { start: string; end: string } | undefined) => (m ? `${locale === "en" ? "from" : "de"} ${m.start} ${locale === "en" ? "to" : "a"} ${m.end}` : "");
+  if (locale === "ca") return `A ${n} ciutats a les 18.00 h. A Madrid, ${route(madrid)}; a Barcelona, ${route(barcelona)}; a Sevilla, ${route(seville)}.`;
+  if (locale === "en") return `In ${n} cities at 18:00. In Madrid, ${route(madrid)}; in Barcelona, ${route(barcelona)}; in Seville, ${route(seville)}.`;
+  return `En ${n} ciudades a las 18.00 h. En Madrid, ${route(madrid)}; en Barcelona, ${route(barcelona)}; en Sevilla, ${route(seville)}.`;
+}
+
+function demosAnswer(locale: Locale): string {
+  const n = STUDENT_DEMOS_20N.length;
+  const [madrid, barcelona, seville, valencia, bilbao] = [demoOf("Madrid"), demoOf("Barcelona"), demoOf("Sevilla"), demoOf("València"), demoOf("Bilbao")];
+  if (locale === "ca") return `A les 12 h, a ${n} ciutats. A Madrid, a ${madrid}; a Barcelona, a ${barcelona}; a Sevilla, a ${seville}; a València, a ${valencia}; a Bilbao, a ${bilbao}.`;
+  if (locale === "en") return `At 12:00, in ${n} cities. In Madrid, at ${madrid}; in Barcelona, at ${barcelona}; in Seville, at ${seville}; in Valencia, at ${valencia}; in Bilbao, at ${bilbao}.`;
+  return `A las 12 h, en ${n} ciudades. En Madrid, en ${madrid}; en Barcelona, en ${barcelona}; en Sevilla, en ${seville}; en València, en ${valencia}; en Bilbao, en ${bilbao}.`;
+}
+
+const PAST_FAQ: Record<Locale, Record<StrikeDayKey, () => FaqItem[]>> = {
+  es: {
+    strike19n: () => [
+      { question: "¿Hubo huelga el jueves 19 de noviembre de 2026?", answer: "Sí, pero no general: siguió la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública, con manifestaciones a las 18.00 h, y la de la limpieza en Bizkaia, donde también hubo huelga en las residencias de mayores. En Madrid siguió la huelga indefinida de la enseñanza pública. La huelga de Adif (SCF) se desconvocó." },
+      { question: "¿Hubo huelga de Renfe el 19 de noviembre?", answer: "No: el 19 no había ninguna convocatoria en Renfe, Iryo ni Ouigo, y el sindicato SCF desconvocó el 17 de noviembre el paro de 24 horas del personal de circulación de Adif, después de que la empresa aceptara sus reivindicaciones. Ese día no quedó ninguna huelga ferroviaria convocada." },
+      { question: "¿Hubo huelga de médicos el 19 de noviembre?", answer: "Sí: el 19 estaba en marcha la huelga del Sindicato Médicos Unidos en la sanidad pública de todas las comunidades, convocada desde las 8.00 h del 16 hasta las 8.00 h del 28 de noviembre, con manifestaciones el 19 a las 18.00 h. Las urgencias estaban garantizadas: cada comunidad fijó sus servicios mínimos." },
+      { question: "¿Dónde fueron las manifestaciones de médicos del 19 de noviembre?", answer: marchesAnswer("es") },
+    ],
+    strike20n: () => [
+      { question: "¿Hubo huelga el viernes 20 de noviembre de 2026?", answer: "Sí, pero no general: huelga de estudiantes en toda España convocada por el Sindicato de Estudiantes; siguieron la huelga de médicos del Sindicato Médicos Unidos, la de la limpieza en Bizkaia y la de las residencias privadas de mayores de Gipuzkoa. En Madrid hubo paros en la enseñanza pública. No hubo huelga de trenes." },
+      { question: "¿Hubo huelga de estudiantes el 20 de noviembre?", answer: "Sí: el Sindicato de Estudiantes la convocó toda la jornada lectiva del viernes 20, desde 3.º de ESO, con movilizaciones a las 12 h, dentro de una jornada estudiantil europea contra las guerras y el militarismo. No fue una huelga laboral." },
+      { question: "¿Dónde fueron las manifestaciones de estudiantes del 20 de noviembre?", answer: demosAnswer("es") },
+      { question: "¿Hubo clase el viernes 20 de noviembre?", answer: "Sí: los centros abrieron y el profesorado no estaba convocado, salvo en Madrid, donde la enseñanza pública estaba en huelga indefinida y CSIF convocó paros de 9.00 a 11.00 y de 17.00 a 19.00 h." },
+      { question: "¿Hubo huelga de trenes el viernes 20?", answer: "No: el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos ferroviarios para el 20 y ningún sindicato ferroviario había convocado ese día. Tampoco el lunes 23: SEMAF desconvocó el 20 de noviembre la huelga de maquinistas del Grupo Renfe de ese día." },
+    ],
+  },
+  ca: {
+    strike19n: () => [
+      { question: "Hi va haver vaga el dijous 19 de novembre de 2026?", answer: "Sí, però no general: va continuar la vaga de metges del Sindicato Médicos Unidos a la sanitat pública, amb manifestacions a les 18.00 h, i la de la neteja a Biscaia, on també hi va haver vaga a les residències de gent gran. A Madrid va continuar la vaga indefinida de l'ensenyament públic. La vaga d'Adif (SCF) es va desconvocar." },
+      { question: "Hi va haver vaga de Renfe el 19 de novembre?", answer: "No: el 19 no hi havia cap convocatòria a Renfe, Iryo ni Ouigo, i el sindicat SCF va desconvocar el 17 de novembre l'aturada de 24 hores del personal de circulació d'Adif, després que l'empresa acceptés les seves reivindicacions. Aquell dia no va quedar cap vaga ferroviària convocada." },
+      { question: "Hi va haver vaga de metges el 19 de novembre?", answer: "Sí: el 19 era en marxa la vaga del Sindicato Médicos Unidos a la sanitat pública de totes les comunitats, convocada des de les 8.00 h del 16 fins a les 8.00 h del 28 de novembre, amb manifestacions el 19 a les 18.00 h. A Catalunya també continuava la vaga indefinida de Metges de Catalunya. Les urgències estaven garantides." },
+      { question: "On van ser les manifestacions de metges del 19 de novembre?", answer: marchesAnswer("ca") },
+    ],
+    strike20n: () => [
+      { question: "Hi va haver vaga el divendres 20 de novembre de 2026?", answer: "Sí, però no general: vaga d'estudiants a tot Espanya convocada pel Sindicato de Estudiantes; van continuar la vaga de metges del Sindicato Médicos Unidos, la de la neteja a Biscaia i la de les residències privades de gent gran de Guipúscoa. A Madrid hi va haver aturades a l'ensenyament públic. No hi va haver vaga de trens." },
+      { question: "Hi va haver vaga d'estudiants el 20 de novembre?", answer: "Sí: el Sindicato de Estudiantes la va convocar tota la jornada lectiva del divendres 20, des de 3r d'ESO, amb mobilitzacions a les 12 h, dins una jornada estudiantil europea contra les guerres i el militarisme. No va ser una vaga laboral." },
+      { question: "On van ser les manifestacions d'estudiants del 20 de novembre?", answer: demosAnswer("ca") },
+      { question: "Hi va haver classe el divendres 20 de novembre?", answer: "Sí: els centres van obrir i el professorat no hi estava convocat, llevat de Madrid, on l'ensenyament públic era en vaga indefinida i CSIF hi va convocar aturades de 9.00 a 11.00 i de 17.00 a 19.00 h." },
+      { question: "Hi va haver vaga de trens el divendres 20?", answer: "No: el Ministeri de Transports no tenia cap resolució de serveis mínims ferroviaris per al 20 i cap sindicat ferroviari hi havia convocat. Tampoc el dilluns 23: SEMAF va desconvocar el 20 de novembre la vaga de maquinistes del Grup Renfe d'aquell dia." },
+    ],
+  },
+  en: {
+    strike19n: () => [
+      { question: "Was there a strike in Spain on Thursday 19 November 2026?", answer: "Yes, but not a general strike: the Sindicato Médicos Unidos doctors' strike in public healthcare went on, with marches at 18:00, and so did Bizkaia's cleaning strike; Bizkaia's care homes were on strike too. In Madrid the open-ended strike in state schools went on. Adif's strike (SCF) was called off." },
+      { question: "Was there a Renfe strike on 19 November?", answer: "No: there was no call at Renfe, Iryo or Ouigo on the 19th, and on 17 November the SCF union called off the 24-hour stoppage by Adif's traffic controllers, after Adif accepted its demands. No rail strike was left on that day." },
+      { question: "Was there a doctors' strike on 19 November?", answer: "Yes: Sindicato Médicos Unidos' strike in every region's public healthcare was under way, called from 08:00 on the 16th to 08:00 on 28 November, with marches on the 19th at 18:00. A&E was covered: each region set its minimum services." },
+      { question: "Where were the doctors' marches on 19 November?", answer: marchesAnswer("en") },
+    ],
+    strike20n: () => [
+      { question: "Was there a strike in Spain on Friday 20 November 2026?", answer: "Yes, but not a general strike: a nationwide students' strike called by Sindicato de Estudiantes; the Sindicato Médicos Unidos doctors' strike, Bizkaia's cleaning strike and a strike at Gipuzkoa's private care homes went on. In Madrid, stoppages in state schools. There was no rail strike." },
+      { question: "Was there a student strike on 20 November?", answer: "Yes: Sindicato de Estudiantes called it for the whole school day on Friday 20, from the third year of secondary school, with demonstrations at 12:00, as part of a European student day against war and militarism. It was not a labour strike." },
+      { question: "Where were the students' demonstrations on 20 November?", answer: demosAnswer("en") },
+      { question: "Was there school on Friday 20 November?", answer: "Yes: schools opened and teachers were not called out, except in Madrid, where state schools were on an open-ended strike and CSIF called stoppages from 09:00 to 11:00 and 17:00 to 19:00." },
+      { question: "Was there a rail strike on Friday 20?", answer: "No: the Ministry of Transport had no rail minimum-services resolution for the 20th and no rail union had called that day. Nor on Monday 23: on 20 November SEMAF called off that day's Renfe Group train drivers' strike." },
+    ],
+  },
+};
+
 export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF): Block[] {
   const t = COPY[locale];
   const d = t.days[key];
@@ -637,10 +715,16 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
   ];
 
   const first = d.firstQuestion[phase];
-  const faqItems = d.faq.map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
+  // 25 Nov 2026: once the day has passed, the FAQ stays, in the past tense (PAST_FAQ), instead of being dropped.
+  const faqItems =
+    phase === "after"
+      ? PAST_FAQ[locale][key]().map((item) => ({ question: item.question, answer: strip(item.answer) }))
+      : d.faq.map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
 
   return [
     lead(d.lead(phase, dayDate(strikeDaysCheckedOn(asOf), locale))),
+    // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
+    sourcesCheckedLine(locale, strikeDaysCheckedOn(asOf), key),
     keyFacts(t.factsTitle(dayName), facts),
     heading(2, d.extraHeading, d.extraId),
     ...d.extra(),
@@ -660,7 +744,7 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
     // 19 Nov 2026: and the next strike day with a page of its own, the 23rd (strike-days-2326n.ts; SEMAF's strike there called off on 20 Nov).
     list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale]), b2link("strike23n", locale, B2_TITLES.strike23n[locale])),
-    ...(phase === "after" ? [] : [faq(faqItems)]),
+    faq(faqItems),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
     ...b2Related(["strikesSpain", "strikes", "strikeRenfe"], locale),
   ];

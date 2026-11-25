@@ -131,8 +131,14 @@ test("the first line answers the question, in the tense of the as-of date", () =
   for (const key of KEYS) for (const locale of LOCALES) assert.match(strikeDay2326Description(key, locale, iso(dayOf(key) - 1)), /^(Mañana|Demà|Tomorrow)/, `${key}/${locale}`);
   // No relative day that goes wrong overnight: two days before, none.
   for (const key of KEYS) for (const locale of LOCALES) assert.doesNotMatch(first(key, locale, iso(dayOf(key) - 2)), /\b(mañana|demà|tomorrow|ayer|ahir|yesterday)\b/i, `${key}/${locale}`);
-  // Once past, no present-tense FAQ.
-  for (const key of KEYS) for (const locale of LOCALES) assert.ok(!buildStrikeDay2326Body(key, locale, iso(dayOf(key) + 1)).some((b) => b.type === "faq"), `${key}/${locale}`);
+  // Once past, the FAQ stays, in the past tense (25 Nov 2026; tests/strike-citable.test.ts has the full check).
+  for (const key of KEYS) {
+    for (const locale of LOCALES) {
+      const faqs = buildStrikeDay2326Body(key, locale, iso(dayOf(key) + 1)).filter((b) => b.type === "faq") as unknown as { items: { question: string }[] }[];
+      assert.equal(faqs.length, 1, `${key}/${locale}`);
+      assert.match(faqs[0]!.items[0]!.question, /^(¿Hubo |Hi va haver |Va haver-hi |Was there )/, `${key}/${locale}`);
+    }
+  }
 });
 
 test("the day's strikes come from the entries and every one is named and has its section", () => {
@@ -249,7 +255,7 @@ test("links in: both hubs, the Renfe and education guides and the 19N/20N pages,
       assert.ok(!json(buildStrikesSpainBody(locale, after)).includes(target), `${locale}: Spain hub still links ${key} after the day`);
       assert.ok(!json(buildStrikesBody(locale, after)).includes(target), `${locale}: Catalan hub still links ${key} after the day`);
       // On the Spain hub, in the "Día a día" line right under the week summary (as the 19N/20N pages).
-      assert.ok(json([buildStrikesSpainBody(locale, "2026-11-19")[2]!]).includes(target), `${locale}: ${key} under the week summary`);
+      assert.ok(json([buildStrikesSpainBody(locale, "2026-11-19")[3]!]).includes(target), `${locale}: ${key} under the week summary`);
     }
     // The 19N and 20N pages (which rank for "huelga 20 noviembre") hand on to the 23rd.
     for (const guide of [STRIKE_19N_GUIDE, STRIKE_20N_GUIDE]) assert.ok(json(guide.editions[locale].blocks).includes(`](/${locale}/${B2_PATHS.strike23n[locale]}/)`), `${guide.key}/${locale} → 23N`);
@@ -259,10 +265,10 @@ test("links in: both hubs, the Renfe and education guides and the 19N/20N pages,
     // The Renfe guide (its 23 Nov strike called off) links the day page right under the answer, with "Renfe" and "23" in the anchor; the education guide the 26th's.
     assert.equal(guideStrikeId("strikeRenfe", "2026-11-20"), "vaga-ferroviaria-2026-11-17");
     const renfe = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-20");
-    assert.match(json([renfe[4]!]), new RegExp(`\\[[^\\]]*Renfe[^\\]]*23[^\\]]*\\]\\(/${locale}/${B2_PATHS.strike23n[locale]}/\\)`), `${locale}: Renfe guide → 23N`);
+    assert.match(json([renfe[5]!]), new RegExp(`\\[[^\\]]*Renfe[^\\]]*23[^\\]]*\\]\\(/${locale}/${B2_PATHS.strike23n[locale]}/\\)`), `${locale}: Renfe guide → 23N`);
     assert.equal(guideStrikeId("strikeEducation", "2026-11-19"), STRIKE_DAY_2326_IDS.education);
     const education = buildStrikeGuideBody("strikeEducation", locale, "2026-11-19");
-    assert.match(json([education[4]!]), new RegExp(`\\[[^\\]]*26[^\\]]*\\]\\(/${locale}/${B2_PATHS.strike26n[locale]}/\\)`), `${locale}: education guide → 26N`);
+    assert.match(json([education[5]!]), new RegExp(`\\[[^\\]]*26[^\\]]*\\]\\(/${locale}/${B2_PATHS.strike26n[locale]}/\\)`), `${locale}: education guide → 26N`);
     assert.ok(!json(buildStrikeGuideBody("strikeRenfe", locale, "2026-11-24")).includes(`](/${locale}/${B2_PATHS.strike23n[locale]}/)`), `${locale}: Renfe guide after the 23rd`);
     assert.ok(!json(buildStrikeGuideBody("strikeEducation", locale, "2026-11-27")).includes(`](/${locale}/${B2_PATHS.strike26n[locale]}/)`), `${locale}: education guide after the 26th`);
     // Anchors in the searched words.

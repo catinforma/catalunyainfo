@@ -120,8 +120,12 @@ test("the first line answers the question, in the tense of the as-of date", () =
   for (const key of KEYS) for (const locale of LOCALES) assert.match(strikeDayDescription(key, locale, `2026-11-${Number(STRIKE_DAY[key].slice(-2)) - 1}`), /^(Mañana|Demà|Tomorrow)/, `${key}/${locale}`);
   // No relative day that goes wrong overnight: two days before, none.
   for (const key of KEYS) for (const locale of LOCALES) assert.doesNotMatch(first(key, locale, "2026-11-17"), /\b(mañana|demà|tomorrow|ayer|ahir|yesterday)\b/i, `${key}/${locale}`);
-  // Once past, no present-tense FAQ.
-  for (const locale of LOCALES) assert.ok(!buildStrikeDayBody("strike19n", locale, "2026-11-21").some((b) => b.type === "faq"), locale);
+  // Once past, the FAQ stays, in the past tense (25 Nov 2026; tests/strike-citable.test.ts has the full check).
+  for (const locale of LOCALES) {
+    const faqs = buildStrikeDayBody("strike19n", locale, "2026-11-21").filter((b) => b.type === "faq") as unknown as { items: { question: string }[] }[];
+    assert.equal(faqs.length, 1, locale);
+    assert.match(faqs[0]!.items[0]!.question, /^(¿Hubo |Hi va haver |Va haver-hi |Was there )/, locale);
+  }
 });
 
 test("the day's strikes come from the Spain entries and every one is named and has its section", () => {
@@ -237,7 +241,7 @@ test("links in: both hubs and the 17N page, while the day is to come", () => {
     // 17 Nov 2026: on the Spain hub, the day pages sit right under the week summary (second paragraph), and each day's
     // entries link their page from their own section.
     const spain = buildStrikesSpainBody(locale, "2026-11-17");
-    const dayLine = json([spain[2]!]);
+    const dayLine = json([spain[3]!]); // lead, sources line (25 Nov 2026), week summary, then the day line
     for (const key of KEYS) assert.ok(dayLine.includes(`](/${locale}/${B2_PATHS[key][locale]}/)`), `${locale}: day pages under the week summary`);
     const section = (id: string) => json([spain[spain.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === id) + 1]!]);
     assert.ok(section(STRIKE_DAY_IDS.rail).includes(`](/${locale}/${B2_PATHS.strike19n[locale]}/)`), `${locale}: rail section → 19N`);

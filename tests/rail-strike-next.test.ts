@@ -173,7 +173,7 @@ test("guide: while no rail strike is to come, the lead of the last strike stays,
     assert.equal(h.type, "heading");
     assert.equal(h.level, 2);
     assert.equal(h.text, RAIL_NEXT_HEADING[locale]);
-    assert.equal(at, 2, `${locale}: right under the lead`);
+    assert.equal(at, 3, `${locale}: right under the lead and its sources line`);
     const headings = blocks.filter((b) => b.type === "heading").map((b) => (b as { id?: string }).id);
     assert.ok(headings.includes("serveis-minims") && headings.includes("vagues-anteriors"), locale);
     assert.ok(!headings.includes("que-afecta"), `${locale}: the past strike's service table is not the standing page's`);
@@ -228,7 +228,7 @@ test("guide: when a rail strike is called, the guide is that strike's page again
   for (const locale of LOCALES) {
     const blocks = buildStrikeGuideBody("strikeRenfe", locale, "2026-12-19", called);
     assert.ok(blocks.every((b) => b.type !== "railStrikeNext"), locale);
-    assert.equal(blocks[1]?.type, "keyFacts", locale);
+    assert.equal(blocks[2]?.type, "keyFacts", locale); // lead, sources line (25 Nov 2026), key facts
     assert.doesNotMatch(strikeGuideMeta("strikeRenfe", locale, called, "2026-12-19").seoTitle, /hoy|avui|today/i);
   }
 });

@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { dateYear, dayDate, range, span } from "./festive";
 import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
+import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
 import { RENFE_STANDING_ANCHOR, STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, spanStart, strikeDayNote, strikeDayPagesLine, strikeDays as catalanDays, strikesOnDay, type Strike } from "./strikes";
 import {
@@ -802,6 +803,8 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
 
   /* Lead: the week in one paragraph. */
   blocks.push(lead(t.lead(checked)));
+  // 25 Nov 2026: the sources the page stands on, with the day they were re-read (strike-citable.ts).
+  blocks.push(sourcesCheckedLine(locale, reviewed, "strikesSpain"));
   const weekLine =
     thisWeek.length > 0
       ? andList(thisWeek.map((strike) => `${strike.label[locale]} (${daysInWeek(strike, week.days, locale)})`), locale)

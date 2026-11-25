@@ -371,17 +371,18 @@ test("answer first: the lead gives the days, the strike, what it touches and whe
       assert.ok(leadText.includes(strike.minimumServices.msShort[locale]), `${key}/${locale}: lead misses msShort`);
       if (strike.minimumServices.status === "pending") for (const pattern of authorities[key][locale]) assert.match(leadText, pattern, `${key}/${locale}`);
       // Key facts: who calls it and its days and hours, from the entry's own facts.
-      assert.equal(blocks[1]?.type, "keyFacts");
-      const facts = (blocks[1] as { items: { label: string; value: string }[] }).items;
+      assert.equal(blocks[1]?.type, "paragraph", `${key}/${locale}: the sources line`); // 25 Nov 2026 (strike-citable.ts)
+      assert.equal(blocks[2]?.type, "keyFacts");
+      const facts = (blocks[2] as { items: { label: string; value: string }[] }).items;
       const { who, when } = strikeWhoWhen(strike, locale);
       assert.ok(who && when, `${key}/${locale}: the entry's facts lost their "Convocatòria"/"Dies" labels`);
       assert.equal(facts[0]?.value, who, `${key}/${locale}`);
       assert.equal(facts[1]?.value, when, `${key}/${locale}`);
       assert.ok(facts.some((f) => f.value.startsWith(strike.minimumServices.msShort[locale])), `${key}/${locale}: key facts miss minimum services`);
       // Then the language line and the sources note, as on the hub and the 11N page.
-      assert.equal(blocks[2]?.type, "languageLinks", `${key}/${locale}`);
-      assert.equal((blocks[3] as { tone?: string }).tone, "official", `${key}/${locale}`);
-      assert.match(text(blocks.slice(3, 4)), new RegExp(STRIKES_VERIFIED.slice(0, 4)), `${key}/${locale}`);
+      assert.equal(blocks[3]?.type, "languageLinks", `${key}/${locale}`);
+      assert.equal((blocks[4] as { tone?: string }).tone, "official", `${key}/${locale}`);
+      assert.match(text(blocks.slice(4, 5)), new RegExp(STRIKES_VERIFIED.slice(0, 4)), `${key}/${locale}`);
     }
   }
 });

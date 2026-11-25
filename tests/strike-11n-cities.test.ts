@@ -420,7 +420,7 @@ test("the Spanish 11N page links every city page once, under the answer; its tit
   assert.equal(es.title, STRIKE_11N_META.es.title);
   assert.equal(es.blocks[0]?.type, "paragraph");
   assert.doesNotMatch(text(es.blocks.slice(0, 1)), /Madrid|otras ciudades/, "the lead changed");
-  const box = es.blocks[4] as { type: string; tone?: string; title?: string; text?: string };
+  const box = es.blocks[5] as { type: string; tone?: string; title?: string; text?: string };
   assert.equal(box.type, "callout");
   assert.equal(box.title, "En otras ciudades");
   const all = JSON.stringify(es.blocks);

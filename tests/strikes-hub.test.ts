@@ -217,10 +217,10 @@ test("a language line (En català · En castellano · In English) sits right und
   for (const locale of LOCALES) {
     const blocks = STRIKES_GUIDE.editions[locale].blocks;
     assert.equal(blocks.filter((b) => b.type === "languageLinks").length, 1, locale);
-    assert.equal(blocks[2]?.type, "languageLinks", `${locale}: after the lead and the key facts`);
+    assert.equal(blocks[3]?.type, "languageLinks", `${locale}: after the lead, its sources line and the key facts`);
     // With nothing announced (no key facts), right under the lead.
     const quiet = buildStrikesBody(locale, "2026-12-09", allEnded());
-    assert.equal(quiet[1]?.type, "languageLinks", locale);
+    assert.equal(quiet[2]?.type, "languageLinks", locale);
   }
 });
 
@@ -415,7 +415,8 @@ test("upcoming strikes come first, answer first: the lead names each one and eac
     const blocks = STRIKES_GUIDE.editions[locale].blocks;
     assert.equal(blocks[0]?.type, "paragraph");
     assert.equal((blocks[0] as { lead?: boolean }).lead, true);
-    assert.equal(blocks[1]?.type, "keyFacts");
+    assert.equal(blocks[1]?.type, "paragraph", locale); // 25 Nov 2026: the sources line (strike-citable.ts)
+    assert.equal(blocks[2]?.type, "keyFacts");
     const leadText = text(blocks.slice(0, 1));
     const h2 = headings(blocks).filter((h) => h.level === 2);
     for (const strike of upcomingStrikes(STRIKES_AS_OF)) {

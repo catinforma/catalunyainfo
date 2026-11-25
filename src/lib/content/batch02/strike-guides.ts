@@ -30,6 +30,7 @@ import {
 } from "./shared";
 import { STRIKE_11N_DATE, STRIKE_11N_URLS } from "./strike-11n";
 import { entryDayPageLine } from "./strike-day-links";
+import { sourcesCheckedLine } from "./strike-citable";
 import {
   SERVICE_KEYS,
   STRIKES,
@@ -802,11 +803,50 @@ function schoolDayLine(c: Ctx, withLink: boolean): string | null {
   const year = schoolYearLabel(c.strike.dates[0] ?? "");
   const order = withLink ? link(SCHOOL_SOURCE.url, c.locale === "en" ? "Order EDF/66/2026" : "Ordre EDF/66/2026") : c.locale === "en" ? "Order EDF/66/2026" : "Ordre EDF/66/2026";
   const plural = c.strike.dates.length > 1;
+  // 25 Nov 2026: once the strike has passed, the same fact in the past tense ("fue día lectivo").
+  const past = !c.upcoming;
   return {
-    ca: `${cap(day)} ${plural ? "són dies lectius" : "és dia lectiu"} al calendari escolar ${year} (${order}).`,
-    es: `${cap(day)} ${plural ? "son días lectivos" : "es día lectivo"} en el calendario escolar ${year} (${order}).`,
-    en: `${cap(day)} ${plural ? "are school days" : "is a school day"} in the ${year} school calendar (${order}).`,
+    ca: `${cap(day)} ${plural ? (past ? "van ser dies lectius" : "són dies lectius") : past ? "va ser dia lectiu" : "és dia lectiu"} al calendari escolar ${year} (${order}).`,
+    es: `${cap(day)} ${plural ? (past ? "fueron días lectivos" : "son días lectivos") : past ? "fue día lectivo" : "es día lectivo"} en el calendario escolar ${year} (${order}).`,
+    en: `${cap(day)} ${plural ? (past ? "were school days" : "are school days") : past ? "was a school day" : "is a school day"} in the ${year} school calendar (${order}).`,
   }[c.locale];
+}
+
+/**
+ * 25 Nov 2026: the education guide's FAQ once its strike has passed, in the past tense (the present-tense one asked "¿Hay colegio el 26?"
+ * the day after). The answers are the entry's own: its days and hours, its minimum-services text and its organisers, and the school-day line.
+ * The notice question is a standing rule, not about the date, and stays as it was.
+ */
+function pastEducationFaq(c: Ctx): { question: string; answer: string }[] {
+  const day = shortDate(c.strike.dates[0] ?? "", c.locale);
+  const school = schoolDayLine(c, false);
+  const notice = {
+    ca: { question: "He d'avisar si faig vaga?", answer: "No. Segons el Departament d'Empresa i Treball, la normativa no obliga la persona treballadora a avisar abans. Aquell dia no cobres: durant la vaga el contracte queda suspès (article 6.2 del Reial decret llei 17/1977)." },
+    es: { question: "¿Tengo que avisar si hago huelga?", answer: "No. Según el Departament d'Empresa i Treball, la normativa no obliga a la persona trabajadora a avisar antes. Ese día no cobras: durante la huelga el contrato queda suspendido (artículo 6.2 del Real Decreto-ley 17/1977)." },
+    en: { question: "Do I have to give notice if I strike?", answer: "No. According to the Generalitat's Department of Business and Labour, individual workers do not have to give notice. You are not paid for the day: the contract is suspended during the strike (Article 6.2 of Royal Decree-Law 17/1977)." },
+  }[c.locale];
+  const q = {
+    ca: { when: "Quan va ser la vaga a l'educació?", school: `Va haver-hi escola el ${day}?`, ms: "Quins serveis mínims hi va haver a les escoles?", who: "Qui va convocar la vaga a l'educació?" },
+    es: { when: "¿Cuándo fue la huelga en la educación?", school: `¿Hubo colegio el ${day}?`, ms: "¿Qué servicios mínimos hubo en los colegios?", who: "¿Quién convocó la huelga en la educación?" },
+    en: { when: "When was the education strike in Catalonia?", school: `Was there school on ${day}?`, ms: "What minimum services were there in schools?", who: "Who called the education strike?" },
+  }[c.locale];
+  const open = {
+    ca: "Sí. ",
+    es: "Sí. ",
+    en: "Yes. ",
+  }[c.locale];
+  const notClosure = {
+    ca: " La vaga era del personal, no un tancament de centres.",
+    es: " La huelga era del personal, no un cierre de centros.",
+    en: " It was a strike by staff, not a closure of schools.",
+  }[c.locale];
+  return [
+    { question: q.when, answer: c.when ?? cap(c.days) },
+    ...(school ? [{ question: q.school, answer: `${open}${school}${notClosure}` }] : []),
+    { question: q.ms, answer: c.strike.minimumServices.text[c.locale] },
+    ...(c.who ? [{ question: q.who, answer: c.who }] : []),
+    notice,
+  ];
 }
 
 const EDUCATION: GuideSpec = {
@@ -840,7 +880,7 @@ const EDUCATION: GuideSpec = {
       todo: () => [
         `**Si treballes a l'escola i vols fer vaga**, no cal que ho avisis abans: «La normativa reguladora del dret de vaga no contempla l'obligació de preavís per part de la persona treballadora», segons el ${link(STRIKE_11N_URLS.treballFaq, "Departament d'Empresa i Treball")}. Aquell dia no cobres: durant la vaga el contracte queda suspès (article 6.2 del ${link(U.rdl17, "Reial decret llei 17/1977")}).`,
       ],
-      faq: (c) => [
+      faq: (c) => !c.upcoming ? pastEducationFaq(c) : [
         { question: "Quan és la vaga a l'educació?", answer: c.when ?? cap(c.days) },
         { question: `Hi ha escola el ${shortDate(c.strike.dates[0] ?? "", "ca")}?`, answer: [schoolDayLine(c, false) ? `Sí. ${schoolDayLine(c, false)}` : "", ...c.strike.advice.ca].filter(Boolean).join(" ") },
         { question: "Quins serveis mínims hi ha a les escoles?", answer: c.strike.minimumServices.text.ca },
@@ -861,7 +901,7 @@ const EDUCATION: GuideSpec = {
       todo: () => [
         `**Si trabajas en el colegio y quieres hacer huelga**, no hace falta avisar antes: la normativa del derecho de huelga no obliga a la persona trabajadora a avisar, según el ${link(STRIKE_11N_URLS.treballFaq, "Departament d'Empresa i Treball")}. Ese día no cobras: durante la huelga el contrato queda suspendido (artículo 6.2 del ${link(U.rdl17, "Real Decreto-ley 17/1977")}).`,
       ],
-      faq: (c) => [
+      faq: (c) => !c.upcoming ? pastEducationFaq(c) : [
         { question: "¿Cuándo es la huelga en la educación?", answer: c.when ?? cap(c.days) },
         { question: `¿Hay colegio el ${shortDate(c.strike.dates[0] ?? "", "es")}?`, answer: [schoolDayLine(c, false) ? `Sí. ${schoolDayLine(c, false)}` : "", ...c.strike.advice.es].filter(Boolean).join(" ") },
         { question: "¿Qué servicios mínimos hay en los colegios?", answer: c.strike.minimumServices.text.es },
@@ -882,7 +922,7 @@ const EDUCATION: GuideSpec = {
       todo: () => [
         `**Working at a school and want to strike?** You do not have to tell anyone beforehand: the rules on strikes do not require individual workers to give notice, according to the Generalitat's ${link(STRIKE_11N_URLS.treballFaq, "Department of Business and Labour")}. You are not paid for the day: the contract is suspended during the strike (Article 6.2 of ${link(U.rdl17, "Royal Decree-Law 17/1977")}).`,
       ],
-      faq: (c) => [
+      faq: (c) => !c.upcoming ? pastEducationFaq(c) : [
         { question: "When is the education strike in Catalonia?", answer: c.when ?? cap(c.days) },
         { question: `Is there school on ${shortDate(c.strike.dates[0] ?? "", "en")}?`, answer: [schoolDayLine(c, false) ? `Yes. ${schoolDayLine(c, false)}` : "", ...c.strike.advice.en].filter(Boolean).join(" ") },
         { question: "What minimum services are there in schools?", answer: c.strike.minimumServices.text.en },
@@ -1215,6 +1255,7 @@ export function buildStrikeGuideBody(
   // 22 Dec 2026 on: the standing page's own lead (RENFE_STANDING_META_FROM); until then the lead of the last strike stays.
   if (standing && standingMeta(spec, strike, asOf, rail)) {
     blocks.push(lead(`**${railStandingBrief(asOf, locale, rail)}** ${STANDING[locale].leadTail(hub)}`));
+    blocks.push(sourcesCheckedLine(locale, checkedOn(asOf), spec.key));
     blocks.push(...standingBlocks(spec, c, hub, rail));
     return blocks;
   }
@@ -1233,6 +1274,8 @@ export function buildStrikeGuideBody(
         .join(" "),
     ),
   );
+  // 25 Nov 2026: the sources the guide stands on, with the day they were re-read, right under the answer (strike-citable.ts).
+  blocks.push(sourcesCheckedLine(locale, checkedOn(asOf), spec.key));
 
   // 24 Nov 2026: with no rail strike still to come, the Renfe guide is the standing "is there a train strike?" page (the lead above is the last strike's until 22 Dec).
   if (standing) {
