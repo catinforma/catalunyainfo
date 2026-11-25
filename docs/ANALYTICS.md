@@ -123,6 +123,7 @@ registration is not retroactive.
 | `useful_feedback` | "Was this useful?" yes/no (`PageFeedback.tsx`). This is the plan's *page_feedback*; the name is kept so the history since September stays in one series. | `is_useful`, `content_type`, `locale` | registered | The quality signal that is not a pageview | Live |
 | `related_content_click` | Click on one of our own pages inside the "next useful step" box (`components/NextStep.tsx`, `data-ci-placement="next_step"`), the box right after a page's answer on six families (`lib/engagement/next-step.ts`), or inside a town's list of its other pages (`components/TownHub.tsx`, `data-ci-placement="town_hub"`, low on the holiday, Christmas fair and election town pages, since 18 Nov 2026: `lib/engagement/town-hub.ts`), or inside the strike pages' "Útil ahora" list (`components/UsefulNow.tsx`, `data-ci-placement="useful_now"`, after the body, since 23 Nov 2026: `lib/engagement/useful-now.ts`). Other internal links are not measured. | `link_context` = `next_step` \| `town_hub` \| `useful_now` (closed list `RELATED_LINK_CONTEXTS`), `link_url` (target path, no origin, query or hash), `locale` | registered (`link_context`, `locale`); built-in (`link_url` → "Link URL"); the page clicked on is GA4's own "Page path" | Does the box take readers to a second page, from which family, to which target. Read with `snapshot.py landing [start end]` (clicks per 100 page views per family) | New, 18 Nov 2026 (wired; was declared with `from_type`/`to_type`/`position`, never sent) |
 | `next_step_click` | Click on any link of the "keep it" block of the strike and election pages (`components/ReturnStep.tsx`, `data-ci-placement="return_step"`, since 25 Nov 2026: `lib/engagement/return-step.ts`). One event per click, on top of the link's own (the WhatsApp link also sends `whatsapp_channel_click` with `link_context` = `return_step`). Attributes are read from `data-ci-position`, `data-ci-family` (the block) and `data-ci-target` (the link) and checked against closed lists (`RETURN_POSITIONS`, `RETURN_FAMILIES`, `RETURN_TARGETS`). | `block_position` = `after_answer` \| `after_intro`, `target_type` = `whatsapp_channel` \| `town_calendar` \| `holiday_today` \| `strikes_hub` \| `strikes_spain_hub` \| `spain_holidays`, `step_family` = `strikes` \| `elections`, `link_url` (our own pages only), `locale` | **register `block_position`, `target_type`, `step_family`** (event-scoped custom dimensions; not retroactive); `link_url` built-in; `locale` registered | Does an event reader take something they can reuse (alert, calendar, holiday check, hub), which one, from which family. Clicks per 100 sessions of strike/election landings; the old box's baseline was 0.4 per 100 (`related_content_click`, `link_context` = `next_step`) | New, 25 Nov 2026 |
+| `next_step_view` | The "keep it" block (`components/ReturnStep.tsx`) was at least half on screen: once per page view (`components/NextStepView.tsx`, `lib/analytics/step-view.ts`), consent-gated by `track()`. The denominator of `next_step_click` (see "Next-step metric"). | `block_position`, `step_family` (closed lists), `locale` | `block_position`, `step_family`, `locale` registered (see list) | Sessions that saw the block, per family; with `next_step_click`, the click rate | New, 25 Nov 2026 |
 | `town_select` | The visitor picks a municipality or a year in a selector that had no event: the municipal election results (`MunicipalResults.tsx`, once per municipality, at the full name matched, not per keystroke) and the pickers of the widget builder (`EmbedBuilder.tsx`) and of the working-days embed box (`WorkingDaysEmbedPicker.tsx`). The server-rendered default and a `#town` hash link do not count. | `tool` = `municipal_results` \| `embed_builder_town` \| `embed_builder_year` \| `embed_working_days` \| `market_square` (closed list `TOWN_SELECT_TOOLS`; `market_square` = the square or neighbourhood picker of the weekly-market pages, `NextMarket.tsx`, 25 Nov 2026), `locale`. The town is never sent. | **register `tool`**; `locale` registered | Is the municipal search used at all (audit Annex B §C: "no hi ha cap esdeveniment propi"); do webmasters who open the widget builder choose a town, which one tool | New, 25 Nov 2026 |
 | `search_no_results` | The search results page (`SearchAnalytics.tsx`) rendered a query of 2+ characters and found 0 results and 0 direct pages. Sent next to `internal_search` (which carries `results_count` 0 and the term length). | `locale` only: no text, no length | `locale` registered | Searches that find nothing, as an event that can be marked or counted without a filter; read the text of the terms in `view_search_results` | New, 25 Nov 2026 |
 | `school_region_jump` | A tap on a link of the "Ve a tu comunidad" list above the Spain school calendar's Christmas table (`BlockRenderer.tsx` `TableJumpList`, a same-page anchor; recognised by `data-ci-placement="school_jump"` and the `#ccaa-<slug>` hash in `AnalyticsClicks.tsx`). | `region` = community slug from the closed list `SCHOOL_JUMP_REGIONS`, `locale`. | **register `region`**; `locale` registered | Do families use the jump list on the hub, and which communities do they look for (to decide which regional pages to strengthen) | New, 25 Nov 2026 |
@@ -218,9 +219,9 @@ dimension, so register before the first week of data you want.
 
 | Parameter | Events that send it | Suggested display name | Status |
 | --- | --- | --- | --- |
-| `block_position` | `next_step_click` | Posició del bloc | **register** |
+| `block_position` | `next_step_click`, `next_step_view` | Posició del bloc | **register** |
 | `target_type` | `next_step_click` | Destí del bloc | **register** |
-| `step_family` | `next_step_click` | Família del bloc | **register** |
+| `step_family` | `next_step_click`, `next_step_view` | Família del bloc | **register** |
 | `tool` | `town_select` | Eina de selecció | **register** |
 | `calculator_id` | `calculator_use` | Calculadora | **register** (also in the table above) |
 | `link_context` | link events | (already registered) | done |
@@ -279,6 +280,107 @@ Also: **portada** = path is exactly `/ca/`, `/es/`, `/en/` or `/`; **hubs** =
 `/<locale>/(guies|guias|guides)/` or at most two path segments; anything else
 is **sense-classificar**. The `\|` above is the table's escape: type a plain
 `|` in GA4.
+
+### Next-step metric (25 Nov 2026): does the "keep it" block get used?
+
+Plan item 4 of the 90-day plan. The module is the "keep it" block of the
+strike and election pages (`components/ReturnStep.tsx`,
+`lib/engagement/return-step.ts`).
+
+**Definition (one, used for the block and for the comparable group).**
+Only sessions with measurement consent exist in GA4, so every number below is
+of *measurable* sessions; the share of visitors who denied consent is not
+counted and must be said when quoting a rate.
+
+- Denominator: measurable sessions with at least one `next_step_view`.
+- Numerator: measurable sessions with at least one `next_step_click`.
+- Rate = numerator / denominator, in sessions (never events). One interaction
+  counts once: the view is sent once per page view (IntersectionObserver,
+  half the block on screen, observer disconnected after the first send,
+  `lib/analytics/step-view.ts`, test `tests/next-step-view.test.ts`), and a
+  click is one event per click, so several clicks in one session are one
+  numerator session. Use **Sessions** or **Users** (never Event count) as
+  the metric.
+
+**`next_step_view`** (new, 25 Nov 2026): the block was on screen. Params
+`block_position` (`after_answer` | `after_intro`), `step_family` (`strikes` |
+`elections`), `locale`; no URL, no text, no identifier. Consent-gated by
+`track()` like every event.
+
+**Outcomes, kept apart (never sum them into one "conversion").**
+
+| Outcome | Event / source | How to read |
+| --- | --- | --- |
+| Any use of the block | `next_step_click` | numerator above |
+| Town query | `town_select` (`tool`) | a different tool on a different page; count it per session that also had a view of the block only if it is the same session: segment "Sessions with `next_step_view`" and look at `town_select` |
+| ICS click | `ics_subscribe_click` (`method`) | same segment; the block has no ICS link itself, so this is the reader going on to the calendar page |
+| WhatsApp exit | `whatsapp_channel_click` with `link_context` = `return_step` | the block's own button; also arrives as `next_step_click` with `target_type` = `whatsapp_channel` |
+| Return session | GA4 returning users, by **first landing family** | cohort, below; 7 and 28 days, only cohorts that completed the window |
+| Confirmed subscription | **not measurable** | WhatsApp does not tell us who joined from where; the channel's member count is the only (aggregate) number and it cannot be attributed to the block. Do not report it as an outcome |
+
+**Internal links carry no utm.** The block's links are built from the site's
+own paths (`b2href`, `townCalendarLink`); `tests/next-step-view.test.ts`
+checks that none has a query string and `tests/return-step.test.ts` that the
+utm rules apply only to the channel's posts and share buttons. The WhatsApp
+link leaves the site and keeps the channel URL as it is.
+
+**Custom dimensions to register** (Admin → Custom definitions, scope Event;
+not retroactive): `block_position`, `step_family` (already in the list above
+for `next_step_click`; they now also arrive on `next_step_view`, no new
+registration), `target_type`, `tool`. Nothing else is new.
+
+**GA4 Explore steps (owner).**
+
+1. Explore → Free form. Dimensions: `Event name`, `Step family`, `Block
+   position`, `Page path and screen class`. Metric: `Sessions`, `Event count`.
+   Filter: Event name exactly matches `next_step_view`. Rows: `Step family`.
+   This is the denominator (sessions that saw the block) per family.
+2. Same, filter Event name exactly `next_step_click`: the numerator. Add the
+   dimension `Destí del bloc` (`target_type`) to see which link.
+3. Rate: divide step 2 by step 1 per family. For the exact session-level
+   version use Explore → Segment overlap, segments "Session: event
+   `next_step_view`" and "Session: event `next_step_click`"; the overlap of
+   the two over the first is the numerator.
+4. Outcomes: add the segment "Session: event `next_step_view`" to a Free form
+   with rows `Event name`, filter Event name in (`town_select`,
+   `ics_subscribe_click`, `whatsapp_channel_click`), metric `Sessions`.
+5. Return: Explore → Cohort exploration, inclusion First touch, return
+   criteria Any event, daily/weekly, Standard; Breakdown by `Landing page`
+   (or the family regexes of "How to read retention" above). Read only
+   cohorts whose 7 or 28 days are complete. Compare cohorts that landed on
+   strike/election pages after 25 Nov with those of 28 Oct - 24 Nov (baseline
+   in `docs/SEO_EXPERIMENTS.md`: 8.5 % returning sessions).
+
+**Comparable group (same denominator definition).** Pages without the new
+block: the guides that keep the old "next useful step" box
+(`components/NextStep.tsx`, `data-ci-placement="next_step"`, event
+`related_content_click` with `link_context` = `next_step`). The old box has
+no view event, so until it has one its denominator is the approximation
+below (sessions landing on those families). If the comparison is wanted
+properly, add the same observer to `NextStep.tsx` first (not done here: it
+would change the old group's definition during the test).
+
+**Baseline, 25 Nov 2026 (approximate, read-only GA4 Data API, property
+554310792, 25 Nov since deploy to the time of reading).** Landings
+containing `vaga`, `huelga`, `strike`, `eleccion`, `election`: 41 + 328 + 5 +
+72 + 9 = 455 sessions (all consent states that GA4 reports; the
+`huelga-educacion` page is among them and is not a block page, so the
+denominator is an upper bound). `next_step_click`: 0 events, `next_step_view`:
+0, `whatsapp_channel_click`: 0, `town_select`: 0, `ics_subscribe_click`: 0;
+`related_content_click`: 6 events, 3 users (old box). Zero clicks is
+expected before the block is live and the dimensions are registered; it is
+**not** a result. The earlier baseline stays 0.4 clicks per 100 sessions
+(old box, 28 Oct - 24 Nov). Replace this paragraph with the first real
+numbers when `next_step_view` has data.
+
+**Review dates.** 9 Dec 2026: first read (about two weeks): views, click
+rate per family and target, outcomes; check the view count is below the
+landing sessions (a view above them means double counting) and that the rate
+is not driven by one page. 23 Dec 2026: second read, with the 7-day return
+cohort of the first week complete; the 28-day cohort of the 25 Nov entrants
+completes on 23 Dec, read it then. Decision rule: keep the block if the click
+rate beats the old box's baseline (0.4 per 100 sessions) with the same
+definition; otherwise change the links, not the size.
 
 ### Search terms (owner decision)
 

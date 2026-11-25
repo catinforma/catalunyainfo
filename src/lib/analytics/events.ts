@@ -39,6 +39,10 @@ export type AnalyticsEvent =
   // the WhatsApp link also sends whatsapp_channel_click (link_context
   // "return_step").
   | { name: "next_step_click"; params: { block_position: ReturnPosition; target_type: ReturnTarget; step_family: ReturnFamily; link_url?: string; locale: string } }
+  // 25 Nov 2026: the "keep it" block was on screen (at least half of it, once
+  // per page view; components/NextStepView.tsx). The denominator of the
+  // block's click rate. Same closed lists as next_step_click, no link data.
+  | { name: "next_step_view"; params: { block_position: ReturnPosition; step_family: ReturnFamily; locale: string } }
   | { name: "language_change"; params: { from_locale: string; to_locale: string } }
   // A click to an official or primary source (clicks.ts decides which links
   // count). Domain only, never the URL: a BOE or SEPE link can carry a query.
@@ -183,6 +187,7 @@ export const ANALYTICS_EVENTS: AnalyticsEventName[] = [
   "internal_search",
   "related_content_click",
   "next_step_click",
+  "next_step_view",
   "language_change",
   "outbound_official_source_click",
   "map_interaction",

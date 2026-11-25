@@ -1,4 +1,5 @@
 import { IntentLink } from "@/components/nav/IntentLink";
+import { NextStepView } from "@/components/NextStepView";
 import { WhatsAppIcon } from "@/components/share/FollowChannel";
 
 import { RETURN_STEP_PLACEMENT } from "@/lib/analytics/events";
@@ -28,6 +29,8 @@ export function ReturnStep({ step, locale, className }: { step: ReturnStepData |
       data-ci-position={step.position}
       data-ci-family={step.family}
     >
+      {/* next_step_view, once per page view: the denominator of the click rate */}
+      <NextStepView locale={locale} />
       <a href={step.whatsapp.href} rel="noopener" target="_blank" className="ci-return-wa" data-ci-target="whatsapp_channel">
         <WhatsAppIcon size={22} />
         <span className="ci-return-wa-text">
