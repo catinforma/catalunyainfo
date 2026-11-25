@@ -17,7 +17,7 @@ import {
   christmasSundays,
   christmasSundaysParagraph,
 } from "../src/lib/content/batch02/shops-spain-december.ts";
-import { SHOPS_TODAY_AFTER, barcelonaShopsDay, cataloniaDiff, nextOpeningAfter, shopsTodayLines } from "../src/lib/content/batch02/shops-today.ts";
+import { SHOPS_TODAY_AFTER, barcelonaShopsDay, cataloniaDiff, decemberLine, nextOpeningAfter, shopsTodayLines } from "../src/lib/content/batch02/shops-today.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
 import { b2href } from "../src/lib/content/batch02/shared.ts";
 
@@ -93,7 +93,7 @@ test("the lines name the date, answer in each language, and the Sunday carries i
     // After Reis the 2027 municipal list is needed: no verdict.
     assert.equal(shopsTodayLines("2027-01-07", locale), null);
     assert.equal(shopsTodayLines("2026-10-31", locale), null);
-    assert.match(SHOPS_TODAY_AFTER[locale], /23 (de )?(novembre|noviembre|November) (de )?2026/);
+    assert.match(SHOPS_TODAY_AFTER[locale], /25 (de )?(novembre|noviembre|November) (de )?2026/);
   }
 });
 
@@ -120,9 +120,9 @@ test("guide: Sundays first (16 Nov H2 kept), then today, then the date table; ti
     const text = bodyToPlainText(blocks);
     assert.match(text, /Castilla y León|Castella i Lleó|Castile and León/, `${locale}: rest of Spain answered`);
     assert.ok(JSON.stringify(blocks).includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: links the Spain page`);
-    // The DOGC 2027 list and Barcelona's 2027 days, re-checked on 23 Nov 2026.
+    // The DOGC 2027 list and Barcelona's 2027 days, re-checked on 25 Nov 2026.
     assert.doesNotMatch(text, /(a|As of) 5 (de )?(novembre|noviembre|November)/, `${locale}: stale "as of 5 Nov"`);
-    assert.match(text, /23 (de )?(novembre|noviembre|November)/, locale);
+    assert.match(text, /25 (de )?(novembre|noviembre|November)/, locale);
   }
 });
 
@@ -182,4 +182,48 @@ test("the 7 and 8 December date pages link the Spain-wide shops page", () => {
   for (const locale of LOCALES) assert.equal(GUIDES.shopsSpainDecember[locale], b2href("shopsSpainDecember", locale));
   const dates = readFileSync(join(import.meta.dirname, "../src/lib/programmatic/holidays/dates.ts"), "utf8");
   assert.equal(dates.match(/"shops", "shopsSpainDecember"/g)?.length, 2);
+});
+
+test("25 Nov 2026: 'mañana' and the December line, with the dates already gone in the past tense", () => {
+  // "tiendas abiertas mañana en barcelona 2026" (96 impressions at 7.7, 27 Oct-23 Nov).
+  const wed = shopsTodayLines("2026-11-25", "es")!;
+  assert.equal(wed.tomorrowLabel, "Mañana, jueves, 26 de noviembre de 2026");
+  assert.equal(wed.tomorrowValue, "Es laborable: cada tienda abre con su horario.");
+  // Tomorrow is the Sunday: the Sunday row says so and there is no duplicate row.
+  const sat = shopsTodayLines("2026-11-28", "es")!;
+  assert.equal(sat.tomorrowLabel, null);
+  assert.equal(sat.sundayLabel, "Mañana, domingo, 29 de noviembre");
+  assert.equal(shopsTodayLines("2026-11-28", "ca")!.sundayLabel, "Demà, diumenge, 29 de novembre");
+  assert.equal(shopsTodayLines("2026-11-28", "en")!.sundayLabel, "Tomorrow, Sunday, 29 November");
+  // Reis: tomorrow is outside the window, no verdict.
+  assert.equal(shopsTodayLines("2027-01-06", "es")!.tomorrowLabel, null);
+  // Barcelona's days are Resolució EMT/4342/2025 (6, 8, 13, 20, 27 Dec); 25 and 26 Dec are Llei 18/2017, art. 36.2.d.
+  assert.equal(
+    decemberLine("2026-11-25", "es"),
+    "Diciembre de 2026 en Barcelona: las tiendas pueden abrir el domingo 6, el martes 8, el domingo 13, el domingo 20 y el domingo 27 de diciembre; deben cerrar el viernes 25 y el sábado 26 de diciembre. En el resto de Cataluña, los mismos días, con las excepciones de la tabla de más abajo.",
+  );
+  // DATE GUARD: after each date the verb is past ("pudieron", "van poder", "could"), before it present.
+  const PAST = { es: /pudieron abrir el domingo 6 y el martes 8 de diciembre; pueden abrir el domingo 13/, ca: /van poder obrir el diumenge 6 i el dimarts 8 de desembre; poden obrir el diumenge 13/, en: /could open on Sunday 6 and Tuesday 8 December; may open on Sunday 13/ };
+  for (const locale of LOCALES) {
+    assert.match(decemberLine("2026-12-09", locale), PAST[locale], locale);
+    assert.doesNotMatch(decemberLine("2026-12-28", locale), /(pueden|poden|may) (abrir|obrir|open)/, `${locale}: nothing is "may open" after 27 Dec`);
+    assert.doesNotMatch(decemberLine("2026-12-28", locale), /(deben cerrar|han de tancar|must close)/, `${locale}: closings are past after 26 Dec`);
+    assert.match(decemberLine("2026-12-26", locale), /(deben cerrar|han de tancar|must close)/, locale);
+    assert.match(decemberLine("2026-12-27", locale), /(tuvieron que cerrar|van haver de tancar|had to close)/, locale);
+    // The block carries the line until 31 Dec and no longer after.
+    assert.ok(shopsTodayLines("2026-12-31", locale)!.decemberValue);
+    assert.equal(shopsTodayLines("2027-01-02", locale)!.decemberValue, null);
+  }
+});
+
+test("the shops guide names Barcelona's 2026 mall days and the eight 2027 general days in plain sentences", () => {
+  const sentences = {
+    ca: [/centres comercials poden obrir els deu diumenges i festius del 2026[^"]*29 de novembre i 6, 8, 13, 20 i 27 de desembre/, /El 2027, les botigues poden obrir el 3 de gener, el 27 de juny, l'1 de novembre, el 28 de novembre i el 6, 8, 12 i 19 de desembre/],
+    es: [/centros comerciales pueden abrir los diez domingos y festivos de 2026[^"]*29 de noviembre y 6, 8, 13, 20 y 27 de diciembre/, /En 2027, las tiendas pueden abrir el 3 de enero, el 27 de junio, el 1 de noviembre, el 28 de noviembre y el 6, 8, 12 y 19 de diciembre/],
+    en: [/shopping centres may open on the city's ten Sundays and holidays of 2026[^"]*29 November and 6, 8, 13, 20 and 27 December/, /In 2027, shops may open on 3 January, 27 June, 1 November, 28 November and 6, 8, 12 and 19 December/],
+  } as const;
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(SHOPS.editions[locale].blocks);
+    for (const re of sentences[locale]) assert.match(text, re, locale);
+  }
 });

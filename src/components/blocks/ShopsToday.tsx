@@ -27,6 +27,12 @@ export function ShopsToday({ locale, now }: { locale: Locale; now?: Date }) {
       <p className={`ci-today-answer ${open ? "is-holiday" : "is-not"}`}>{lines.today}</p>
       {lines.catalonia ? <p className="ci-today-date">{lines.catalonia}</p> : null}
       <dl className="ci-today-facts">
+        {lines.tomorrowLabel ? (
+          <div>
+            <dt>{lines.tomorrowLabel}</dt>
+            <dd>{lines.tomorrowValue}</dd>
+          </div>
+        ) : null}
         <div>
           <dt>{lines.sundayLabel}</dt>
           <dd>{lines.sundayValue}</dd>
@@ -35,6 +41,12 @@ export function ShopsToday({ locale, now }: { locale: Locale; now?: Date }) {
           <dt>{lines.nextLabel}</dt>
           <dd>{lines.nextValue}</dd>
         </div>
+        {lines.decemberLabel ? (
+          <div>
+            <dt>{lines.decemberLabel}</dt>
+            <dd>{lines.decemberValue}</dd>
+          </div>
+        ) : null}
       </dl>
       <p className="ci-today-note">{lines.note}</p>
     </section>

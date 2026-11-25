@@ -556,6 +556,7 @@ const COPY: Record<Locale, T> = {
     townsSame: "Barcelona, l'Hospitalet de Llobregat, Girona, Tarragona, Lleida, Reus, Sabadell, Mataró, Granollers, Figueres i Sant Cugat obren tots aquests dies. Qualsevol altre municipi és a la taula de Nadal de dalt, i a la seva pàgina a [festius locals per municipi](/ca/festius/), amb els seus dies d'obertura de tot l'any.",
     mallsTitle: "Obren els centres comercials els festius?",
     malls: [
+      "A Barcelona, els centres comercials poden obrir els deu diumenges i festius del 2026 de la ciutat: 4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre (Resolució EMT/4342/2025). Poder obrir no vol dir que ho facin tots: cada centre fixa el seu horari.",
       "Els mateixos dies que la resta de botigues del municipi: la llei de comerç i l'ordre del calendari no els en donen un de propi. Un centre comercial de Badalona, per exemple, no pot obrir el 8 de desembre, i un de Barcelona o de l'Hospitalet, sí. Dins dels centres, els establiments exclosos de l'horari general (per exemple, una farmàcia) poden obrir qualsevol dia.",
     ],
     mallsAreaLead: "Els grans centres comercials de l'àrea de Barcelona són en municipis diferents, i cada un obre els dies del seu. Del 29 de novembre al 31 de desembre:",
@@ -577,7 +578,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Dia", "Per què"],
     nextNote: "Ordre EMT/89/2026 (DOGC 28.5.2026). Els dies municipals per defecte s'apliquen on l'ajuntament no n'hagi triat d'altres.",
     next: [
-      "Els vuit dies generals del 2027 ja són oficials. Els dos de cada municipi, i els dies que hagin canviat els ajuntaments, encara no: s'havien de comunicar abans de l'1 de novembre del 2026 i, a 23 de novembre, el DOGC encara no n'ha publicat la llista. L'any passat va sortir el 27 de novembre (Resolució EMT/4342/2025). Barcelona tampoc no ha publicat encara els seus. Si un ajuntament no en va triar cap, s'apliquen el 10 de gener i el 5 de desembre.",
+      "El 2027, les botigues poden obrir el 3 de gener, el 27 de juny, l'1 de novembre, el 28 de novembre i el 6, 8, 12 i 19 de desembre (Ordre EMT/89/2026, article 1), més els dos dies de cada municipi: el 10 de gener i el 5 de desembre si l'ajuntament no n'ha triat d'altres (article 5).",
+      "Els vuit dies generals del 2027 ja són oficials. Els dos de cada municipi, i els dies que hagin canviat els ajuntaments, encara no: s'havien de comunicar abans de l'1 de novembre del 2026 i, a 25 de novembre, el DOGC encara no n'ha publicat la llista. L'any passat va sortir el 27 de novembre (Resolució EMT/4342/2025). Barcelona tampoc no ha publicat encara els seus. Si un ajuntament no en va triar cap, s'apliquen el 10 de gener i el 5 de desembre.",
       "Dues novetats de l'ordre del 2027: els ajuntaments han de fixar l'obertura en un festiu quan coincideixin dos o més festius seguits, i les empreses de botigues d'alimentació i compra diària poden canviar fins a tres dates del calendari general. Ni els ajuntaments ni aquestes empreses poden moure l'1 de novembre ni el 6 de desembre. La llista d'empreses i de dates canviades també s'ha de publicar al DOGC, i encara no hi és.",
     ],
     rulesTitle: "Horaris comercials a Catalunya: les normes",
@@ -589,7 +591,7 @@ const COPY: Record<Locale, T> = {
     calendar: "Per als festius en què no es treballa, consulta el [calendari laboral](/ca/guies/calendari-laboral-catalunya/) i els [festius locals de cada municipi](/ca/guies/festius-locals-catalunya/).",
     bcnTitle: "A Barcelona",
     bcn: [
-      "Barcelona fa servir el 2026 els mateixos deu dies que la llista general (4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre). A 23 de novembre encara no ha publicat els seus dos dies del 2027, ni a la seva pàgina d'horaris comercials ni al DOGC.",
+      "Barcelona fa servir el 2026 els mateixos deu dies que la llista general (4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre). A 25 de novembre encara no ha publicat els seus dos dies del 2027, ni a la seva pàgina d'horaris comercials ni al DOGC.",
       "A més, a la **zona turística** (ZGAT), les botigues poden obrir els diumenges i festius **del 15 de maig al 15 de setembre, de 12 a 20 hores**. La zona inclou tots els barris de Ciutat Vella i de l'Eixample, i parts de Sants-Montjuïc, les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó i Sant Martí (Poblenou, Vila Olímpica i Diagonal Mar). Aquesta excepció no s'aplica entre el 16 de setembre i el 14 de maig: al novembre i al desembre, a la zona turística valen els mateixos dies que a la resta de la ciutat.",
       `Què obre a la ciutat cada festiu del desembre, amb els museus i el metro, i l'agenda del mes són a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
     ],
@@ -643,6 +645,7 @@ const COPY: Record<Locale, T> = {
     townsSame: "Barcelona, L'Hospitalet de Llobregat, Girona, Tarragona, Lleida, Reus, Sabadell, Mataró, Granollers, Figueres y Sant Cugat abren todos esos días. Cualquier otro municipio está en la tabla de Navidad de arriba, y en su página en [festivos locales por municipio](/es/festivos/), con sus días de apertura de todo el año.",
     mallsTitle: "¿Abren los centros comerciales los festivos?",
     malls: [
+      "En Barcelona, los centros comerciales pueden abrir los diez domingos y festivos de 2026 de la ciudad: 4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre (Resolución EMT/4342/2025). Poder abrir no quiere decir que abran todos: cada centro fija su horario.",
       "Los mismos días que el resto de tiendas del municipio: la ley de comercio y la orden del calendario no les dan uno propio. Un centro comercial de Badalona, por ejemplo, no puede abrir el 8 de diciembre, y uno de Barcelona o de L'Hospitalet, sí. Dentro de los centros, los establecimientos excluidos del horario general (por ejemplo, una farmacia) pueden abrir cualquier día.",
     ],
     mallsAreaLead: "Los grandes centros comerciales del área de Barcelona están en municipios distintos, y cada uno abre los días del suyo. Del 29 de noviembre al 31 de diciembre:",
@@ -664,7 +667,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Día", "Por qué"],
     nextNote: "Orden EMT/89/2026 (DOGC 28.5.2026). Los días municipales por defecto se aplican donde el ayuntamiento no haya elegido otros.",
     next: [
-      "Los ocho días generales de 2027 ya son oficiales. Los dos de cada municipio, y los días que hayan cambiado los ayuntamientos, todavía no: debían comunicarse antes del 1 de noviembre de 2026 y, a 23 de noviembre, el DOGC aún no ha publicado la lista. El año pasado salió el 27 de noviembre (Resolución EMT/4342/2025). Barcelona tampoco ha publicado todavía los suyos. Si un ayuntamiento no eligió ninguno, se aplican el 10 de enero y el 5 de diciembre.",
+      "En 2027, las tiendas pueden abrir el 3 de enero, el 27 de junio, el 1 de noviembre, el 28 de noviembre y el 6, 8, 12 y 19 de diciembre (Orden EMT/89/2026, artículo 1), más los dos días de cada municipio: el 10 de enero y el 5 de diciembre si el ayuntamiento no ha elegido otros (artículo 5).",
+      "Los ocho días generales de 2027 ya son oficiales. Los dos de cada municipio, y los días que hayan cambiado los ayuntamientos, todavía no: debían comunicarse antes del 1 de noviembre de 2026 y, a 25 de noviembre, el DOGC aún no ha publicado la lista. El año pasado salió el 27 de noviembre (Resolución EMT/4342/2025). Barcelona tampoco ha publicado todavía los suyos. Si un ayuntamiento no eligió ninguno, se aplican el 10 de enero y el 5 de diciembre.",
       "Dos novedades de la orden de 2027: los ayuntamientos deben fijar la apertura en un festivo cuando coincidan dos o más festivos seguidos, y las empresas de tiendas de alimentación y compra diaria pueden cambiar hasta tres fechas del calendario general. Ni los ayuntamientos ni esas empresas pueden mover el 1 de noviembre ni el 6 de diciembre. La lista de empresas y de fechas cambiadas también debe publicarse en el DOGC, y aún no está.",
     ],
     rulesTitle: "Horarios comerciales en Cataluña: las normas",
@@ -676,7 +680,7 @@ const COPY: Record<Locale, T> = {
     calendar: "Para los festivos en que no se trabaja, consulta el [calendario laboral](/es/guias/calendario-laboral-cataluna/) y los [festivos locales de cada municipio](/es/guias/festivos-locales-cataluna/).",
     bcnTitle: "En Barcelona",
     bcn: [
-      "Barcelona usa en 2026 los mismos diez días que la lista general (4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre). A 23 de noviembre aún no ha publicado sus dos días de 2027, ni en su página de horarios comerciales ni en el DOGC.",
+      "Barcelona usa en 2026 los mismos diez días que la lista general (4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre). A 25 de noviembre aún no ha publicado sus dos días de 2027, ni en su página de horarios comerciales ni en el DOGC.",
       "Además, en la **zona turística** (ZGAT), las tiendas pueden abrir los domingos y festivos **del 15 de mayo al 15 de septiembre, de 12 a 20 horas**. La zona incluye todos los barrios de Ciutat Vella y del Eixample, y partes de Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó y Sant Martí (Poblenou, Vila Olímpica y Diagonal Mar). Esta excepción no se aplica entre el 16 de septiembre y el 14 de mayo: en noviembre y diciembre, en la zona turística valen los mismos días que en el resto de la ciudad.",
       `Qué abre en la ciudad cada festivo de diciembre, con los museos y el metro, y la agenda del mes están en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
     ],
@@ -729,6 +733,7 @@ const COPY: Record<Locale, T> = {
     townsSame: "Barcelona, L'Hospitalet de Llobregat, Girona, Tarragona, Lleida, Reus, Sabadell, Mataró, Granollers, Figueres and Sant Cugat open on all of these days. Any other town is in the Christmas table above.",
     mallsTitle: "Are shopping centres open on public holidays?",
     malls: [
+      "In Barcelona, shopping centres may open on the city's ten Sundays and holidays of 2026: 4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December (Resolució EMT/4342/2025). Being allowed to open does not mean every centre will: each one sets its own hours.",
       "On the same days as every other shop in their town: retail law and the calendar order give them no calendar of their own. A shopping centre in Badalona, for example, may not open on 8 December; one in Barcelona or L'Hospitalet may. Inside a centre, businesses outside the general timetable (a pharmacy, for instance) may open on any day.",
     ],
     mallsAreaLead: "The large shopping centres around Barcelona sit in different towns, and each opens on its own town's days. From 29 November to 31 December:",
@@ -750,7 +755,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Date", "Why"],
     nextNote: "Ordre EMT/89/2026 (DOGC 28 May 2026). The default municipal days apply where the council has chosen none.",
     next: [
-      "The eight general days for 2027 are official. Each town's two extra days, and the days councils have swapped, are not out yet: they had to be reported before 1 November 2026 and, as of 23 November, the DOGC has not published the list. Last year it came out on 27 November (Resolució EMT/4342/2025). Barcelona has not published its days either. A council that chose none gets 10 January and 5 December.",
+      "In 2027, shops may open on 3 January, 27 June, 1 November, 28 November and 6, 8, 12 and 19 December (Ordre EMT/89/2026, article 1), plus each town's two days: 10 January and 5 December where the council chose none (article 5).",
+      "The eight general days for 2027 are official. Each town's two extra days, and the days councils have swapped, are not out yet: they had to be reported before 1 November 2026 and, as of 25 November, the DOGC has not published the list. Last year it came out on 27 November (Resolució EMT/4342/2025). Barcelona has not published its days either. A council that chose none gets 10 January and 5 December.",
       "Two changes in the 2027 order: councils must set an opening day when two or more public holidays fall in a row, and companies running everyday food shops may swap up to three dates of the general calendar. Neither councils nor those companies may move 1 November or 6 December. The list of those companies and their swapped dates must also appear in the DOGC, and it has not yet.",
     ],
     rulesTitle: "Shop opening hours in Catalonia: the rules",
@@ -762,7 +768,7 @@ const COPY: Record<Locale, T> = {
     calendar: "For the days off work, see the [Catalonia public holidays calendar](/en/guides/catalonia-public-holidays/) and the [local holidays in each town](/en/guides/local-holidays-catalonia/).",
     bcnTitle: "In Barcelona",
     bcn: [
-      "In 2026 Barcelona uses the same ten days as the general list (4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December). As of 23 November it has not published its two days for 2027, on its retail hours page or in the DOGC.",
+      "In 2026 Barcelona uses the same ten days as the general list (4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December). As of 25 November it has not published its two days for 2027, on its retail hours page or in the DOGC.",
       "On top of that, in the **tourist zone** (ZGAT), shops may open on Sundays and holidays **from 15 May to 15 September, 12:00 to 20:00**. The zone covers every neighbourhood of Ciutat Vella and the Eixample, and parts of Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó and Sant Martí (Poblenou, Vila Olímpica and Diagonal Mar). The exception does not apply from 16 September to 14 May: in November and December the tourist zone follows the same days as the rest of the city.",
       `What's open in the city on each December holiday, museums and the metro included, and the month's events are in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ],

@@ -192,7 +192,7 @@ test("town section words: Obertura comercial a Nadal, the swapped days, Aran and
   for (const locale of ["ca", "es"] as const) {
     const t = christmasShopsCopy(municipalityBySlug("girona")!, locale);
     // 23 Nov 2026 re-read (CHRISTMAS_SHOPS_CHECKED).
-    assert.match(t.source, /23 de (novembre|noviembre) de 2026/);
+    assert.match(t.source, /25 de (novembre|noviembre) de 2026/);
     assert.ok(t.rows.every((r) => r.verdict === "Sí" || r.verdict === "No"));
   }
   assert.ok(showChristmasShops("2027-01-06"));
@@ -216,7 +216,7 @@ test("English town pages: the same Christmas answers, day by day (24 Nov 2026)",
     const ca = christmasShopsCopy(m, "ca");
     // Same days and the same yes/no as the Catalan section.
     assert.deepEqual(en.rows.map((r) => [r.iso, r.verdict === "Yes" ? "Sí" : "No"]), ca.rows.map((r) => [r.iso, r.verdict]), m.slug);
-    assert.match(en.source, /Checked on 23 November 2026/);
+    assert.match(en.source, /Checked on 25 November 2026/);
     assert.doesNotMatch(en.lead + en.after, /undefined|NaN/);
   }
   const terrassa = christmasShopsCopyEn(towns.find((m) => m.slug === "terrassa")!);

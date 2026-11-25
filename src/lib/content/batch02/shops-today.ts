@@ -229,7 +229,47 @@ export interface ShopsTodayLines {
   catalonia: string | null;
   nextLabel: string;
   nextValue: string;
+  /** "Mañana, jueves 26 de noviembre" and its answer; null when tomorrow is the Sunday row or outside the window. */
+  tomorrowLabel: string | null;
+  tomorrowValue: string | null;
+  /** The December 2026 opening days of Barcelona, in the past tense for the dates already gone (25 Nov 2026). */
+  decemberLabel: string | null;
+  decemberValue: string | null;
   note: string;
+}
+
+/** "el domingo 6, el martes 8 y el domingo 13 de diciembre" (every date is a December 2026 date). */
+function decemberDays(isos: string[], locale: Locale): string {
+  const items = isos.map((iso) => `${locale === "en" ? "" : "el "}${WEEKDAY_NAMES[locale][weekdayIndex(iso)]} ${Number(iso.slice(8, 10))}`);
+  const month = { ca: "de desembre", es: "de diciembre", en: "December" }[locale];
+  return `${joinList(items, locale)} ${month}`;
+}
+
+const DECEMBER_CLOSING = ["2026-12-25", "2026-12-26"];
+
+/**
+ * Barcelona's December 2026 in one sentence (25 Nov 2026): the dates before
+ * today go in the past tense ("pudieron abrir"), today and later in the
+ * present. Barcelona's days come from the snapshot (Resolució EMT/4342/2025),
+ * the closing days from Llei 18/2017, art. 36.2.d. The rest of Catalonia opens
+ * the same days except the towns of the table below.
+ */
+export function decemberLine(today: string, locale: Locale): string {
+  const open = (BARCELONA?.shops ?? []).filter((d) => d.startsWith("2026-12"));
+  const T = {
+    ca: { subject: "les botigues", pastOpen: "van poder obrir", nextOpen: "poden obrir", pastClose: "van haver de tancar", nextClose: "han de tancar", head: "Desembre del 2026 a Barcelona", rest: "A la resta de Catalunya, els mateixos dies, amb les excepcions de la taula de més avall." },
+    es: { subject: "las tiendas", pastOpen: "pudieron abrir", nextOpen: "pueden abrir", pastClose: "tuvieron que cerrar", nextClose: "deben cerrar", head: "Diciembre de 2026 en Barcelona", rest: "En el resto de Cataluña, los mismos días, con las excepciones de la tabla de más abajo." },
+    en: { subject: "shops", pastOpen: "could open on", nextOpen: "may open on", pastClose: "had to close on", nextClose: "must close on", head: "December 2026 in Barcelona", rest: "In the rest of Catalonia, the same days apart from the exceptions in the table below." },
+  }[locale];
+  const parts: string[] = [];
+  const add = (verb: string, isos: string[]) => {
+    if (isos.length) parts.push(`${parts.length ? "" : `${T.subject} `}${verb} ${decemberDays(isos, locale)}`);
+  };
+  add(T.pastOpen, open.filter((d) => d < today));
+  add(T.nextOpen, open.filter((d) => d >= today));
+  add(T.pastClose, DECEMBER_CLOSING.filter((d) => d < today));
+  add(T.nextClose, DECEMBER_CLOSING.filter((d) => d >= today));
+  return `${T.head}: ${parts.join("; ")}. ${T.rest}`;
 }
 
 const NOTE: Record<Locale, string> = {
@@ -249,7 +289,10 @@ export function shopsTodayLines(today: string, locale: Locale): ShopsTodayLines 
   const sundayIso = isSunday ? addDays(today, 7) : sundayFrom(today);
   const sundayKind = sundayIso <= SHOPS_TODAY_TO ? barcelonaShopsDay(sundayIso) : null;
   const sundayWord = WEEKDAY_NAMES[locale][0]!;
-  const sundayLabel = isSunday
+  const sundayTomorrow = !isSunday && addDays(today, 1) === sundayIso;
+  const sundayLabel = sundayTomorrow
+    ? { ca: `Demà, diumenge, ${shortDate(sundayIso, "ca")}`, es: `Mañana, domingo, ${shortDate(sundayIso, "es")}`, en: `Tomorrow, Sunday, ${shortDate(sundayIso, "en")}` }[locale]
+    : isSunday
     ? { ca: `El diumenge vinent, ${shortDate(sundayIso, "ca")}`, es: `El domingo siguiente, ${shortDate(sundayIso, "es")}`, en: `Next Sunday, ${shortDate(sundayIso, "en")}` }[locale]
     : { ca: `Aquest ${sundayWord}, ${shortDate(sundayIso, "ca")}`, es: `Este ${sundayWord}, ${shortDate(sundayIso, "es")}`, en: `This ${sundayWord}, ${shortDate(sundayIso, "en")}` }[locale];
   const pendingAfter = { ca: "Encara no publicat: cal la llista del 2027 del DOGC.", es: "Aún no publicado: falta la lista de 2027 del DOGC.", en: "Not published yet: the DOGC's 2027 list is needed." }[locale];
@@ -260,6 +303,15 @@ export function shopsTodayLines(today: string, locale: Locale): ShopsTodayLines 
   const next = nextOpeningAfter(today);
   const nextLabel = { ca: "Pròxim diumenge o festiu d'obertura a Barcelona", es: "Próximo domingo o festivo de apertura en Barcelona", en: "Next Sunday or holiday opening in Barcelona" }[locale];
   const nextValue = next ? cap(longDate(next, locale)) : pendingAfter;
+  // "Mañana": the queries ask "tiendas abiertas mañana en barcelona". When tomorrow is the Sunday row, that row says so.
+  const tomorrowIso = addDays(today, 1);
+  const tomorrowIsSunday = tomorrowIso === sundayIso;
+  const tomorrowKind = inShopsTodayWindow(tomorrowIso) ? barcelonaShopsDay(tomorrowIso) : null;
+  const tomorrowRest = tomorrowKind ? cataloniaSentence(tomorrowIso, tomorrowKind, locale) : null;
+  const tomorrowWord = { ca: "Demà", es: "Mañana", en: "Tomorrow" }[locale];
+  const tomorrowLabel = tomorrowKind && !tomorrowIsSunday ? `${tomorrowWord}, ${longDate(tomorrowIso, locale)}` : null;
+  const tomorrowValue = tomorrowKind && !tomorrowIsSunday ? [verdict(tomorrowKind, locale), tomorrowRest].filter(Boolean).join(" ") : null;
+  const decemberOn = today <= "2026-12-31";
   return {
     today: todaySentence(today, todayKind, locale),
     todayKind,
@@ -269,13 +321,17 @@ export function shopsTodayLines(today: string, locale: Locale): ShopsTodayLines 
     catalonia,
     nextLabel,
     nextValue,
+    tomorrowLabel,
+    tomorrowValue,
+    decemberLabel: decemberOn ? { ca: "Desembre del 2026", es: "Diciembre de 2026", en: "December 2026" }[locale] : null,
+    decemberValue: decemberOn ? decemberLine(today, locale) : null,
     note: NOTE[locale],
   };
 }
 
 /** What the block prints after 6 January 2027 (no verdict: the 2027 list is needed). */
 export const SHOPS_TODAY_AFTER: Record<Locale, string> = {
-  ca: "Des del 7 de gener de 2027, la resposta de cada dia depèn de la llista de dies d'obertura del 2027 de cada municipi, que el DOGC encara no havia publicat el 23 de novembre de 2026. Els vuit dies generals del 2027 són a la taula del calendari del 2027, més avall.",
-  es: "Desde el 7 de enero de 2027, la respuesta de cada día depende de la lista de días de apertura de 2027 de cada municipio, que el DOGC aún no había publicado el 23 de noviembre de 2026. Los ocho días generales de 2027 están en la tabla del calendario de 2027, más abajo.",
-  en: "From 7 January 2027, each day's answer depends on every town's list of 2027 opening days, which the DOGC had not published by 23 November 2026. The eight general days of 2027 are in the 2027 calendar table below.",
+  ca: "Des del 7 de gener de 2027, la resposta de cada dia depèn de la llista de dies d'obertura del 2027 de cada municipi, que el DOGC encara no havia publicat el 25 de novembre de 2026. Els vuit dies generals del 2027 són a la taula del calendari del 2027, més avall.",
+  es: "Desde el 7 de enero de 2027, la respuesta de cada día depende de la lista de días de apertura de 2027 de cada municipio, que el DOGC aún no había publicado el 25 de noviembre de 2026. Los ocho días generales de 2027 están en la tabla del calendario de 2027, más abajo.",
+  en: "From 7 January 2027, each day's answer depends on every town's list of 2027 opening days, which the DOGC had not published by 25 November 2026. The eight general days of 2027 are in the 2027 calendar table below.",
 };

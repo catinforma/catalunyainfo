@@ -26,14 +26,17 @@ import type { Locale } from "@/lib/i18n/config";
  */
 
 /**
- * The day every source below was read. 23 Nov 2026: DOGC summaries 9786-9800
- * scanned (no correction of the 2026 order, resolution or holiday orders, no
- * 2027 municipal list); each DOGC document URL answers 200; the BOE
- * consolidated Llei 18/2017 still "Última actualización publicada el
- * 31/12/2025", art. 36.2.d and 37.1.a-k as quoted; Barcelona's commerce page
- * lists no 2027 days (ZGAT 15 May-15 Sep).
+ * The day every source below was read. 25 Nov 2026 (re-read in full, DOGC
+ * 9798-9802 summaries and the PDFs of Ordre EMT/77/2025, Resolució
+ * EMT/4342/2025, Ordre EMT/89/2026 and Ordre EMT/52/2026): no correction of
+ * the 2026 order, resolution or holiday orders and no 2027 municipal list in
+ * the DOGC of 25 Nov (issue 9802); the BOE consolidated Llei 18/2017 still
+ * "Última actualización publicada el 31/12/2025", art. 36.2.d as quoted;
+ * Barcelona's commerce page (ajuntament.barcelona.cat/comerc, "Horaris
+ * comercials") lists only the 2026 resolution and the ZGAT (15 May-15 Sep),
+ * no 2027 days. Before that: 23 Nov (DOGC 9786-9800), 5 Nov.
  */
-export const CHRISTMAS_SHOPS_CHECKED = "2026-11-23";
+export const CHRISTMAS_SHOPS_CHECKED = "2026-11-25";
 
 /** From this day the 2027 municipal list must have been read: a test fails. */
 export const CHRISTMAS_SHOPS_STALE_FROM = "2027-01-01";
