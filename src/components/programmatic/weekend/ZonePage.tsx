@@ -29,7 +29,7 @@ import { MIN_EVENTS, zoneFilter, type WeekendLocale, type ZoneDef } from "@/lib/
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
 import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
-import { CarSection, FairList, Guidance, LinkList, Sources, TrainSection, WeatherSection, comarcaList, fuelLinks, townName } from "./parts";
+import { CarSection, ElectionNote, FairList, Guidance, LinkList, Sources, TrainSection, WeatherSection, comarcaList, fuelLinks, townName } from "./parts";
 
 const WIDER_HEADING: Record<WeekendLocale, (name: string) => string> = {
   ca: (name) => `Més plans a prop: ${name}`,
@@ -106,6 +106,7 @@ export function ZonePage({ zone, locale, window, agendas }: { zone: ZoneDef; loc
           </p>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{zoneLead(zone, locale)}</p>
           {longNote ? <p className="ci-measure mt-3">{longNote}</p> : null}
+          <ElectionNote window={window} locale={locale} />
           <ShareBar locale={locale} path={crumbPath(zoneCrumbs(zone, locale))} title={zoneH1(zone, locale)} contentType="weekend_zone" />
         </div>
       </header>

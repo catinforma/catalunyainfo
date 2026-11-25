@@ -20,7 +20,7 @@ import { zoneById, type WeekendLocale } from "@/lib/programmatic/weekend/zones";
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
 import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
-import { FairList, Guidance, LinkList, Sources } from "./parts";
+import { ElectionNote, FairList, Guidance, LinkList, Sources } from "./parts";
 
 export function hubCrumbs(locale: WeekendLocale): Crumb[] {
   return [
@@ -74,6 +74,7 @@ export function HubPage({ locale, window, agendas }: { locale: WeekendLocale; wi
           </p>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{copy.lead}</p>
           {longNote ? <p className="ci-measure mt-3">{longNote}</p> : null}
+          <ElectionNote window={window} locale={locale} />
           <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="weekend_hub" />
         </div>
       </header>

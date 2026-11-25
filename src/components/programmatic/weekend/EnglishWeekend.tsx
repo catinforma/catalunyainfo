@@ -27,6 +27,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
 import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
+import { ElectionNote } from "./parts";
 
 /**
  * The English weekend pages: /en/weekend/ (Catalonia) and
@@ -131,6 +132,7 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
               </p>
               <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{meta.lead}</p>
               {window.long ? <p className="ci-measure mt-3">{LONG_NOTE}</p> : null}
+              <ElectionNote window={window} locale="en" />
               <ShareBar locale="en" path={crumbPath(hubCrumbs())} title={meta.h1} contentType="weekend_hub" />
             </div>
           </header>
@@ -224,6 +226,7 @@ export async function EnglishBarcelonaRoute({ agendas }: { agendas?: WeekendAgen
               </p>
               <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{meta.lead}</p>
               {window.long ? <p className="ci-measure mt-3">{LONG_NOTE}</p> : null}
+              <ElectionNote window={window} locale="en" />
               <ShareBar locale="en" path={crumbPath(barcelonaCrumbs())} title={meta.h1} contentType="weekend_zone" />
             </div>
           </header>

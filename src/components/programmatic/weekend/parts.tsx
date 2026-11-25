@@ -8,6 +8,7 @@ import { caComarca, esName, joinList } from "@/lib/programmatic/holidays/names";
 import { hubPath as rodaliesHub, linePath } from "@/lib/programmatic/rodalies/paths";
 import { attribution, correctionNote, dayRange, fullDate, guidance, sectionTitles } from "@/lib/programmatic/weekend/copy";
 import { SNAPSHOT, comarcaName, linesIn, meteocatUrl, weatherTowns } from "@/lib/programmatic/weekend/data";
+import { electionWeekendNote } from "@/lib/programmatic/weekend/election-note";
 import type { SnapshotFair } from "@/lib/programmatic/weekend/types";
 import type { WeekendLocale, ZoneDef } from "@/lib/programmatic/weekend/zones";
 import type { ProvinceCode } from "@/lib/programmatic/weekend/types";
@@ -235,5 +236,16 @@ export function Sources({ locale }: { locale: WeekendLocale }) {
         {locale === "es" ? `Datos leídos el ${date(SNAPSHOT.readOn)}.` : `Dades llegides el ${date(SNAPSHOT.readOn)}.`}
       </p>
     </section>
+  );
+}
+
+/** Header notice when the weekend contains election day (lib/programmatic/weekend/election-note.ts); null otherwise. */
+export function ElectionNote({ window, locale }: { window: { from: string; to: string }; locale: WeekendLocale | "en" }) {
+  const note = electionWeekendNote(window, locale);
+  if (!note) return null;
+  return (
+    <p className="ci-measure mt-3" data-weekend-election="">
+      {note.text} <Link href={note.href}>{note.linkLabel}</Link>
+    </p>
   );
 }
