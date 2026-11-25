@@ -5,6 +5,7 @@ import {
   type AgendaCategory,
   type AgendaEvent,
 } from "@/lib/content/weekend/agenda";
+import { MarketsContextLine } from "@/components/programmatic/weekly-markets/ContextLinks";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { isWeekendLocale, weekendHubPath } from "@/lib/programmatic/weekend/paths";
@@ -164,6 +165,7 @@ export async function WeekendAgenda({ locale }: { locale: Locale }) {
           <a href={weekendHubPath(locale)}>{ZONES_LINK[locale]}</a>
         </p>
       ) : null}
+      <MarketsContextLine locale={locale} />
     </section>
   );
 }

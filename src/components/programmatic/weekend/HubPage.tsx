@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { MarketsContextLine, marketTownsInZone } from "@/components/programmatic/weekly-markets/ContextLinks";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import type { WeekendWindow } from "@/lib/content/weekend/agenda";
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
@@ -108,6 +109,8 @@ export function HubPage({ locale, window, agendas }: { locale: WeekendLocale; wi
         </p>
 
         <div className="ci-prose mt-10">
+          <MarketsContextLine locale={locale} />
+
           <h2 id="properes-fires">{t.fairsNext}</h2>
           {next.length > 0 ? <FairList fairs={next} locale={locale} /> : <p>{t.noFairsAfter(fullDate(SNAPSHOT.readOn, locale))}</p>}
           <Guidance locale={locale} zone={null} widerName={null} />

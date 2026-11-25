@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { MarketsContextLine, marketTownsInZone } from "@/components/programmatic/weekly-markets/ContextLinks";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { weekendWindow, type WeekendWindow } from "@/lib/content/weekend/agenda";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
@@ -149,6 +150,7 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
               <ChristmasThisWeekend locale="en" towns={christmas} id="christmas-markets" />
 
               <AgendaList locale="en" id="agenda" window={window} today={today} items={items} sources={sources} more="gencat" showTown />
+              <MarketsContextLine locale="en" />
               <WeekendFaq facts={facts} />
             </div>
 

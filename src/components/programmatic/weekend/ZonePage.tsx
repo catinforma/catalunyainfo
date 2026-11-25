@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { MarketsContextLine, marketTownsInZone } from "@/components/programmatic/weekly-markets/ContextLinks";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import type { WeekendWindow } from "@/lib/content/weekend/agenda";
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
@@ -161,6 +162,8 @@ export function ZonePage({ zone, locale, window, agendas }: { zone: ZoneDef; loc
 
           <h2 id="properes-fires">{t.fairsNext}</h2>
           {fairsNext.length > 0 ? <FairList fairs={fairsNext} locale={locale} /> : <p>{t.noFairsAfter(fullDate(SNAPSHOT.readOn, locale))}</p>}
+
+          <MarketsContextLine locale={locale} towns={marketTownsInZone(zone.id)} />
 
           <TrainSection zone={zone} locale={locale} />
           <CarSection links={fuelLinks(zone, locale, provinces, comarques)} locale={locale} />

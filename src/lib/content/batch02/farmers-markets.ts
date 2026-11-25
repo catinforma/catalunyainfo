@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
+import { marketsTownPath } from "@/lib/programmatic/weekly-markets/paths";
 
 import { B2_PATHS, b2Related, callout, faq, h2, keyFacts, lead, list, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
@@ -221,6 +222,7 @@ export function buildFarmersBody(locale: Locale): Block[] {
       markets: [
         "Els mercats de pagès els organitzen els ajuntaments i les associacions de productors, cadascun amb els seus dies i places, i la Generalitat no en publica cap calendari conjunt al web de la venda de proximitat. Per saber-ne els dies, consulta el teu ajuntament o pregunta directament als pagesos del llistat de la teva comarca, que et diran a quins mercats van.",
         "Al mercat, el que distingeix una parada de pagès acreditat d'una de revenedor és el segell: el logotip i l'acreditació a la vista, o el rètol «Mercat de venda directa» si tot el mercat és de productors acreditats.",
+        `No és el mateix un mercat de pagès que un mercat setmanal de carrer: el setmanal és el de cada dia fix a la plaça, amb parades de tota mena (roba, parament i també fruita, verdura o embotit), i no per això tot és de pagesos acreditats. Per al dia i la plaça, tens el ${a(marketsTownPath("ca", "vic"), "mercat setmanal de Vic")} i els ${a(marketsTownPath("ca", "mataro"), "mercats setmanals de Mataró")}.`,
       ],
       doubtH: "Si veus un mal ús del segell",
       doubt: [
@@ -317,6 +319,7 @@ export function buildFarmersBody(locale: Locale): Block[] {
       markets: [
         "Los mercados payeses los organizan los ayuntamientos y las asociaciones de productores, cada uno con sus días y plazas, y la Generalitat no publica ningún calendario conjunto en la web de la venta de proximidad. Para saber los días, consulta a tu ayuntamiento o pregunta directamente a los payeses de la lista de tu comarca, que te dirán a qué mercados van.",
         "En el mercado, lo que distingue un puesto de payés acreditado de uno de revendedor es el sello: el logotipo y la acreditación a la vista, o el cartel «Mercat de venda directa» si todo el mercado es de productores acreditados.",
+        `Un mercado payés no es lo mismo que un mercado semanal de calle: el semanal es el de cada día fijo en la plaza, con puestos de todo tipo (ropa, menaje y también fruta, verdura o embutido), y no por ello todo es de payeses acreditados. Para el día y la plaza, tienes el ${a(marketsTownPath("es", "vic"), "mercado semanal de Vic")} y los ${a(marketsTownPath("es", "mataro"), "mercados semanales de Mataró")}.`,
       ],
       doubtH: "Si ves un mal uso del sello",
       doubt: [
@@ -413,6 +416,7 @@ export function buildFarmersBody(locale: Locale): Block[] {
       markets: [
         "Farmers' markets are run by town councils and producers' associations, each with its own days and squares, and the Generalitat publishes no combined calendar on its direct-sale website. To find the days, check your town council or ask the farmers on your county's list directly: they will tell you which markets they attend.",
         "At the market, what tells an accredited farmer's stall from a reseller's is the label: the logo and accreditation on display, or a \"Mercat de venda directa\" sign if the whole market is made up of accredited producers.",
+        `A farmers' market is not the same as a weekly street market: the weekly one is held on a fixed day in the square, with stalls of every kind (clothes, household goods and also fruit, vegetables or cold meats), and that does not make every stall an accredited farmer's. For the day and the square, see the ${a(marketsTownPath("en", "vic"), "weekly market in Vic")} and the ${a(marketsTownPath("en", "mataro"), "weekly markets in Mataró")}.`,
       ],
       doubtH: "If you see the label misused",
       doubt: [

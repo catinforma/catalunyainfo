@@ -53,13 +53,13 @@
    "files": 6
   },
   "christmas-fairs": {
-   "date": "2026-11-25T15:35:45.696Z",
-   "fingerprint": "v1:b591effdc0b588d119ee854e6f6f96fa",
+   "date": "2026-11-25T17:41:20.000Z",
+   "fingerprint": "v1:c04f7897e80563344d8a636cfe1b1b24",
    "files": 26
   },
   "elections": {
-   "date": "2026-11-25T13:51:06.000Z",
-   "fingerprint": "v1:c73be32d57def35502df1ed35bccf993",
+   "date": "2026-11-25T17:41:20.000Z",
+   "fingerprint": "v1:37701ef01b9fe2b554570e24b4cd619d",
    "files": 35
   },
   "embed-2027": {
@@ -98,8 +98,8 @@
    "files": 29
   },
   "gordo": {
-   "date": "2026-11-25T16:25:34.000Z",
-   "fingerprint": "v1:856657c621526b2aaf76bd0047f7056a",
+   "date": "2026-11-25T17:46:57.401Z",
+   "fingerprint": "v1:d8a7edda443775f1cf20be2f45a88110",
    "files": 39
   },
   "grossa-check": {
@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-25T16:20:15.000Z",
-   "fingerprint": "v1:30d47e6b7f5716956de8e55030567808",
+   "date": "2026-11-25T17:41:20.000Z",
+   "fingerprint": "v1:b29bb90a167cf1bb448827043d4395a8",
    "files": 51
   },
   "holidays-report": {
@@ -298,8 +298,8 @@
    "files": 12
   },
   "weekend": {
-   "date": "2026-11-25T03:08:03.000Z",
-   "fingerprint": "v1:5c774c0153a1291d071be5bb85369ca6",
+   "date": "2026-11-25T17:46:57.401Z",
+   "fingerprint": "v1:6473308f0c42801014f925fd51c97d4c",
    "files": 33
   },
   "widow-pension": {
