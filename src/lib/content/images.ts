@@ -273,6 +273,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "beckham-torre-glories-22at-barcelona",
+    "url": "/images/beckham-torre-glories-22at-barcelona.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoQAAsAA4BaJZQCdAEPBn3eP3zAAP7qkSp2ncyblXCOCS1fZpU4cTYA8AvHU361fyE/aI2Cbk2wAA==",
+    "credit": "Ank Kumar",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Torre_Gl%C3%B2ries_(Torre_Agbar)_,_Barcelona,_Spain_(Ank_Kumar,_Infosys_Limited)_03.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "bolets-catalunya-2026-bosc-humit",
     "url": "/images/bolets-catalunya-2026-bosc-humit.webp",
     "width": 1600,
@@ -494,6 +504,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Enric",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:098_Portal_de_la_Pau_(Barcelona),_al_fons_el_monument_a_Colom_i_la_torre_de_Jaume_I.jpg",
     "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "defuncio-cementiri-poblenou-entrada",
+    "url": "/images/defuncio-cementiri-poblenou-entrada.webp",
+    "width": 1470,
+    "height": 1200,
+    "blurDataUrl": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQAgCdASoQAA0AA4BaJQBOgCFfxVrshPBAAP63jmaJwRowL/M8HhxPmsv6euu8pIchgQzFJoDf+KC3YDF6Lpw+6mx5jKlNx5ui1LBaFOEBoV8X0ykB80iV9+fJkcII1ywAAA==",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:01_Cementiri_del_Poblenou,_entrada_al_recinte.JPG",
+    "license": "CC BY-SA 3.0"
   },
   {
     "key": "eleccions-congres-diputats-facana",
@@ -743,6 +763,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 2.0"
   },
   {
+    "key": "irpf-agencia-tributaria-aduana-barcelona",
+    "url": "/images/irpf-agencia-tributaria-aduana-barcelona.webp",
+    "width": 1920,
+    "height": 1168,
+    "blurDataUrl": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoQAAoAA4BaJYwCdAEQ/F6hM0AA/tc3BHPFUjmsjOE9Odv2O4wFxfREANAwGrw8SL1jRw9Ogxh7BsRoGPwoZqAA",
+    "credit": "Stuart Smith",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Ag%C3%A8ncia_Tribut%C3%A0ria_(Tax_Office),_Passeig_Josep_Carner,_Barcelona,_Catalonia,_Spain_(52906191851).jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
     "key": "medieval-hero",
     "url": "/images/medieval-hero.webp",
     "width": 1920,
@@ -761,6 +791,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Mmorell",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Muralla_Montblanc_3.jpg",
     "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "mercat-pagesos-montserrat",
+    "url": "/images/mercat-pagesos-montserrat.webp",
+    "width": 1920,
+    "height": 1277,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAsAA4BaJQBdgBgOz5h0AAD+0J28HL78uKxQbNEphZ5oS98COwrmOEG6Ih9BXemoCsBO2kG9DpGj84lPbq8QQAA=",
+    "credit": "DimiTalen",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Farmers%27_market,_Passeig_de_l%27Escolania,_Monestir_de_Montserrat,_2023.jpg",
+    "license": "CC0"
   },
   {
     "key": "mercats-boqueria-rotol",

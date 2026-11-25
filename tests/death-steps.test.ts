@@ -188,9 +188,9 @@ test("death-steps: no clock times in the running text", () => {
   }
 });
 
-test("death-steps: no photograph, with the reason, and a disclaimer before the FAQ", () => {
-  assert.equal(DEATH_STEPS_GUIDE.heroKey, undefined);
-  assert.ok((DEATH_STEPS_GUIDE.noPhotoReason ?? "").length > 40);
+test("death-steps: sober lead photograph (cemetery gate, no people), and a disclaimer before the FAQ", () => {
+  assert.equal(DEATH_STEPS_GUIDE.heroKey, "defuncio-cementiri-poblenou-entrada");
+  assert.equal(DEATH_STEPS_GUIDE.noPhotoReason, undefined);
   for (const locale of LOCALES) {
     const types = (blocks(locale) as { type: string; tone?: string }[]).map((b) => (b.type === "callout" ? `callout:${b.tone}` : b.type));
     assert.ok(types.indexOf("callout:warning") > 0 && types.indexOf("callout:warning") < types.indexOf("faq"), `${locale}: YMYL disclaimer before the FAQ`);

@@ -604,7 +604,17 @@ export const BECKHAM_GUIDE: B2Article = {
   entryKey: "guide-beckham-law-spain",
   categoryKey: "public-services",
   sources: SOURCES,
-  noPhotoReason: "A tax guide: no photograph in the manifest shows a tax office or anything about the regime, and a stock picture would add nothing.",
+  heroKey: "beckham-torre-glories-22at-barcelona",
+  heroAlt: {
+    ca: "La Torre Glòries i els edificis d'oficines del districte 22@ de Barcelona",
+    es: "La Torre Glòries y los edificios de oficinas del distrito 22@ de Barcelona",
+    en: "Torre Glòries and the office blocks of Barcelona's 22@ district",
+  },
+  heroCaption: {
+    ca: "La Torre Glòries i el districte d'oficines 22@, a Barcelona.",
+    es: "La Torre Glòries y el distrito de oficinas 22@, en Barcelona.",
+    en: "Torre Glòries and the 22@ office district in Barcelona.",
+  },
   verifiedAt: BECKHAM_AS_OF,
   publishedAt: "2026-11-21T20:30:00+01:00",
   editions: Object.fromEntries(

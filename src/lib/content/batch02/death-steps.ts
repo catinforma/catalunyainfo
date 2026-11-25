@@ -714,8 +714,17 @@ export const DEATH_STEPS_GUIDE: B2Article = {
   entryKey: "guide-death-steps-deadlines-spain",
   categoryKey: "public-services",
   sources: SOURCES,
-  noPhotoReason:
-    "A guide for bereaved families: no photograph would help the reader, and none in the manifest shows a Civil Registry, notary or Social Security office.",
+  heroKey: "defuncio-cementiri-poblenou-entrada",
+  heroAlt: {
+    ca: "Portal d'entrada del Cementiri del Poblenou, a Barcelona, amb dos obeliscs de pedra i una reixa de ferro",
+    es: "Portal de entrada del Cementerio del Poblenou, en Barcelona, con dos obeliscos de piedra y una reja de hierro",
+    en: "Entrance gate of the Poblenou Cemetery in Barcelona, with two stone obelisks and an iron gate",
+  },
+  heroCaption: {
+    ca: "Entrada del Cementiri del Poblenou, a Barcelona.",
+    es: "Entrada del Cementerio del Poblenou, en Barcelona.",
+    en: "Entrance to the Poblenou Cemetery in Barcelona.",
+  },
   verifiedAt: DEATH_STEPS_AS_OF,
   publishedAt: "2026-11-19T21:00:00+01:00",
   editions: Object.fromEntries(

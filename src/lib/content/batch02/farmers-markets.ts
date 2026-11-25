@@ -462,8 +462,17 @@ export const FARMERS_MARKETS: B2Article = {
   entryKey: "guide-farmers-markets-venda-proximitat",
   categoryKey: "food",
   sources: SOURCES,
-  noPhotoReason:
-    "No licensed photograph in the manifest shows an accredited Venda de Proximitat stall or the logo; the food-fair images are AI illustrations and the market photos are municipal markets, which this page is not about.",
+  heroKey: "mercat-pagesos-montserrat",
+  heroAlt: {
+    ca: "Parades amb carpes blanques d'un mercat de productors al passeig de l'Escolania, al monestir de Montserrat",
+    es: "Puestos con carpas blancas de un mercado de productores en el paseo de la Escolania, en el monasterio de Montserrat",
+    en: "White-tented stalls of a producers' market on Passeig de l'Escolania at Montserrat monastery",
+  },
+  heroCaption: {
+    ca: "Mercat de productors al monestir de Montserrat.",
+    es: "Mercado de productores en el monasterio de Montserrat.",
+    en: "A producers' market at Montserrat monastery.",
+  },
   verifiedAt: FARMERS_AS_OF,
   publishedAt: "2026-11-17T12:00:00+01:00",
   editions: Object.fromEntries(

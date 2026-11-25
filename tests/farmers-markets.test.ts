@@ -134,9 +134,9 @@ test("farmers markets: no clock times in the running text", () => {
   }
 });
 
-test("farmers markets: no hero, with the reason stated", () => {
-  assert.equal(FARMERS_MARKETS.heroKey, undefined);
-  assert.ok((FARMERS_MARKETS.noPhotoReason ?? "").length > 40);
+test("farmers markets: lead photograph (hero details are covered by guide-heroes-nov26.test.ts)", () => {
+  assert.equal(FARMERS_MARKETS.heroKey, "mercat-pagesos-montserrat");
+  assert.equal(FARMERS_MARKETS.noPhotoReason, undefined);
 });
 
 test("farmers markets: the facts were read recently (re-read the Department's pages and the Excel, then move FARMERS_AS_OF)", () => {

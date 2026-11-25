@@ -625,7 +625,17 @@ export const INCOME_TAX_GUIDE: B2Article = {
   entryKey: "guide-income-tax-brackets-catalonia",
   categoryKey: "public-services",
   sources: SOURCES,
-  noPhotoReason: "A page of tax scales and worked examples: no photograph in the manifest shows anything about income tax, and a stock picture would add nothing.",
+  heroKey: "irpf-agencia-tributaria-aduana-barcelona",
+  heroAlt: {
+    ca: "Edifici de la Duana de Barcelona, que acull oficines de l'Agència Tributària, a la vora del port",
+    es: "Edificio de la Aduana de Barcelona, con oficinas de la Agencia Tributaria, junto al puerto",
+    en: "The Barcelona Customs House, home to Tax Agency (Agència Tributària) offices, beside the harbour",
+  },
+  heroCaption: {
+    ca: "Edifici de la Duana, oficina de l'Agència Tributària al port de Barcelona.",
+    es: "Edificio de la Aduana, oficina de la Agencia Tributaria en el puerto de Barcelona.",
+    en: "The Customs House, a Tax Agency office at the port of Barcelona.",
+  },
   verifiedAt: INCOME_TAX_AS_OF,
   publishedAt: "2026-11-21T20:00:00+01:00",
   editions: Object.fromEntries(

@@ -13780,3 +13780,13 @@ Skipped tonight as briefed (listed so nobody re-runs them): strikes (26 Nov vs e
 **Baseline.** EN Tarragona guide and EN Figueres guide: not measured (new link; English market pages had 14 impressions in week 47 for Girona). **Review 2026-12-23:** `snapshot.py page christmas-markets/tarragona 28`, `page christmas-markets/figueres 28`; fairs end 23-24 Dec, so keep the sentence until January and re-read in the new season.
 
 **Outcome:** _pending_
+
+## 2026-11-25 (night) - Lead photographs for four November guides that had none (ci-edicio) (review 2026-12-09)
+
+**URLs (ca/es/en each; no title, meta, H1, lead or body text changed).** `/es/guias/tramos-irpf-cataluna/` (`irpf-tramos`), `/es/guias/ley-beckham-regimen-impatriados/` (`ley-beckham`), `/es/guias/que-hacer-cuando-fallece-un-familiar/` (`fallecimiento`), `/es/guias/mercados-payeses-venta-proximidad-cataluna/` (`mercats-pages`), plus their ca and en editions. Live check 25 Nov: the four guides had no `<figure class="m-0 border-b`; the ca and en guides hubs (92 guides each, fetched one by one) show no other guide published since 1 Nov without a hero except the 11N city strike pages (past events, skipped by request).
+
+**Photographs (Wikimedia Commons, licence and author checked with the API; credit and file-page link print under the hero).** IRPF: Barcelona Customs House (Duana, Agència Tributària offices), Stuart Smith, CC BY-SA 2.0, File:Agència Tributària (Tax Office), Passeig Josep Carner, Barcelona... (52906191851).jpg. Beckham: Torre Glòries and the 22@ skyline, Ank Kumar, CC BY-SA 4.0, File:Torre Glòries (Torre Agbar) , Barcelona, Spain (Ank Kumar, Infosys Limited) 03.jpg. Death steps: Poblenou Cemetery entrance gate (no people), Enfo, CC BY-SA 3.0, File:01 Cementiri del Poblenou, entrada al recinte.JPG. Farmers' markets: producers' market at Montserrat monastery, DimiTalen, CC0, File:Farmers' market, Passeig de l'Escolania, Monestir de Montserrat, 2023.jpg. Imported with `images:commons pick` + `images:import`; 16:9, 4:3 and 1:1 crops at 1,200 px or more are served by `/img/<ratio>/<key>.jpg`. The `noPhotoReason` of the four entries is removed. Test `tests/guide-heroes-nov26.test.ts`; the two old "no hero" assertions (farmers-markets, death-steps tests) now assert the hero.
+
+**Baseline.** Not measured (image only; watch LCP and CTR in image-led surfaces). **Review 2026-12-09:** `snapshot.py page tramos-irpf 28` (and the other three), compare impressions and Discover/Images appearance; check the four hero requests return 200 and the figure renders on the live pages after the groups are published.
+
+**Outcome:** _pending_
