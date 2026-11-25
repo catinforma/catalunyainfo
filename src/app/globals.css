@@ -1009,37 +1009,76 @@
   /* Each unit reserves its height before Google fills it, so text below does
      not jump; a unit Google leaves unfilled disappears. */
   .ci-ad {
+    --ci-ad-chrome: calc(1px + 2.25rem);
     clear: both;
     margin: 2.5rem 0;
     padding-top: 0.5rem;
     border-top: 1px solid var(--color-rule);
     min-height: 280px;
   }
+  /* Google writes height:auto !important and (where there is one)
+     min-height:0 !important on every ancestor of the <ins> that constrains
+     its height, so the min-height of the <aside> is gone once the unit is
+     filled or found unfilled (measured 25 Nov 2026: a desktop top box fell
+     from 317 px to 37 px). The reservation therefore also sits in the wrapper
+     as a pseudo-element sharing one grid cell with the <ins>: the cell is as
+     high as the taller of the two, like a min-height Google cannot see.
+     --ci-ad-min is the ad area without the box's own chrome. */
+  .ci-ad {
+    --ci-ad-min: calc(280px - var(--ci-ad-chrome));
+  }
+  .ci-ad-slot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* Google also writes height:0 (not important) on the wrapper of an unfilled unit. */
+    height: auto !important;
+  }
+  .ci-ad-slot::before {
+    content: "";
+    grid-area: 1 / 1;
+    height: var(--ci-ad-min);
+  }
+  .ci-ad-slot > ins.adsbygoogle {
+    grid-area: 1 / 1;
+  }
   .ci-ad-end,
   .ci-ad-home-end {
+    --ci-ad-min: calc(320px - var(--ci-ad-chrome));
     min-height: 320px;
   }
+  /* Phones (measured 25 Nov 2026 at 360, 390 and 412 px wide): a full-width
+     responsive unit is filled square, as high as the screen is wide, and the
+     in-article fluid unit about 1.04 times that. Reserving less made the text
+     jump by 90 to 160 px when the ad arrived. */
+  @media (max-width: 30rem) {
+    .ci-ad-middle {
+      --ci-ad-min: 105vw;
+      min-height: calc(105vw + var(--ci-ad-chrome));
+    }
+  }
   /* The top box reserves the whole ad AND its own chrome (border 1px, padding
-     0.5rem, label line 1.25rem, label margin 0.5rem), so a 300x250 or 336x280
-     creative moves nothing. The ins gets an explicit height (250px on phones,
-     280px from 48rem): a responsive unit picks the size that fits it, so a
-     taller creative cannot push the text. */
+     0.5rem, label line 1.25rem, label margin 0.5rem: --ci-ad-chrome, set on
+     every .ci-ad), so a 300x250 or 336x280 creative moves nothing. Heights:
+     100vw up to 30rem (Google fills a phone's full-width unit square), 250px
+     up to 48rem, 280px from 48rem. */
   .ci-ad-top,
   .ci-ad-home-top {
     --ci-ad-h: 250px;
-    --ci-ad-chrome: calc(1px + 2.25rem);
+    --ci-ad-min: var(--ci-ad-h);
     min-height: calc(var(--ci-ad-h) + var(--ci-ad-chrome));
     margin: 0 0 2rem;
+  }
+  @media (max-width: 30rem) {
+    .ci-ad-top,
+    .ci-ad-home-top {
+      --ci-ad-h: 100vw;
+    }
   }
   @media (min-width: 48rem) {
     .ci-ad-top,
     .ci-ad-home-top {
       --ci-ad-h: 280px;
     }
-  }
-  .ci-ad-top .ci-ad-label,
-  .ci-ad-home-top .ci-ad-label {
-    line-height: 1.25rem;
   }
   .ci-ad-top ins.adsbygoogle,
   .ci-ad-home-top ins.adsbygoogle {
@@ -1057,16 +1096,19 @@
     padding: 0.5rem 0.75rem 0.75rem;
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-sm);
+    --ci-ad-min: calc(300px - 3rem - 2px);
     min-height: 300px;
   }
   /* The sidebar unit lives inside .ci-article-aside, which is sticky (top:
      6rem) and ends with its grid, so it never reaches the footer. */
   .ci-ad-side {
     margin: 1.5rem 0 0;
+    --ci-ad-min: 0px;
     min-height: 0;
   }
   .ci-ad-label {
     margin: 0 0 0.5rem;
+    line-height: 1.25rem;
     font-family: var(--font-sans);
     font-size: 0.7rem;
     letter-spacing: 0.08em;

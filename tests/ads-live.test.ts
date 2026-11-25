@@ -177,15 +177,46 @@ test("the top box never stands above the H1 or the lead: it comes inside the bod
 
 test("CLS: the top box reserves the ad plus its own label, rule and padding; the ins has an explicit height; it never collapses", () => {
   const css = read("app/globals.css");
-  // 250 px on phones, 280 px from 48rem; chrome = border 1px + padding 0.5rem + label 1.25rem + label margin 0.5rem.
-  assert.match(css, /--ci-ad-h: 250px;\s*--ci-ad-chrome: calc\(1px \+ 2\.25rem\);/);
+  // Chrome (on every box) = border 1px + padding 0.5rem + label 1.25rem + label margin 0.5rem.
+  assert.match(css, /\.ci-ad \{\s*--ci-ad-chrome: calc\(1px \+ 2\.25rem\);/);
+  // 100vw up to 30rem (measured 25 Nov 2026: Google fills a phone's full-width unit square), 250px up to 48rem, 280px from 48rem.
+  assert.match(css, /--ci-ad-h: 250px;\s*--ci-ad-min: var\(--ci-ad-h\);\s*min-height: calc\(var\(--ci-ad-h\) \+ var\(--ci-ad-chrome\)\)/);
+  assert.match(css, /@media \(max-width: 30rem\) \{\s*\.ci-ad-top,\s*\.ci-ad-home-top \{\s*--ci-ad-h: 100vw;/);
   assert.match(css, /@media \(min-width: 48rem\) \{\s*\.ci-ad-top,\s*\.ci-ad-home-top \{\s*--ci-ad-h: 280px;/);
-  assert.match(css, /\.ci-ad-top \.ci-ad-label,\s*\.ci-ad-home-top \.ci-ad-label \{\s*line-height: 1\.25rem;/);
+  assert.match(css, /\.ci-ad-label \{[^}]*line-height: 1\.25rem;/);
   assert.match(css, /\.ci-ad-top ins\.adsbygoogle,\s*\.ci-ad-home-top ins\.adsbygoogle \{\s*height: var\(--ci-ad-h\);/);
   // Unfilled: the top boxes keep their space and lose the label; every other box collapses.
   assert.match(css, /\.ci-ad\.ci-ad-top:has\(ins\.adsbygoogle\[data-ad-status="unfilled"\]\),\s*\.ci-ad\.ci-ad-home-top:has\([^)]*\) \{\s*display: block;/);
   assert.match(css, /\.ci-ad-top:has\(ins\.adsbygoogle\[data-ad-status="unfilled"\]\) \.ci-ad-label,[^{]*\{\s*visibility: hidden;/);
   assert.match(css, /\.ci-ad:has\(ins\.adsbygoogle\[data-ad-status="unfilled"\]\) \{\s*display: none;/);
+});
+
+test("CLS: every <ins> sits in a .ci-ad-slot wrapper, because Google zeroes min-height on the <ins>'s parent", () => {
+  const css = read("app/globals.css");
+  const slot = read("components/AdSlot.tsx");
+  const runtime = read("components/AdsRuntime.tsx");
+  // Server boxes carry the wrapper; fillSlots appends the <ins> into it (not into the <aside>).
+  assert.match(slot, /<div className="ci-ad-slot" \/>/);
+  assert.match(runtime, /\(box\.querySelector<HTMLElement>\("\.ci-ad-slot"\) \?\? box\)\.append\(ins\)/);
+  // Units built in the browser (middle, end, side) wrap it too.
+  assert.match(runtime, /box\.append\(caption, slotOf\(ins\)\)/);
+  assert.match(runtime, /slot\.className = "ci-ad-slot"/);
+  // The in-article planner measures the box, not the wrapper.
+  assert.match(runtime, /slots\.map\(\(ins\) => ins\.closest<HTMLElement>\("\.ci-ad"\) \?\? ins\)/);
+  // Google zeroes min-height on every ancestor of the <ins> that has one (the <aside> included), so the
+  // reservation is repeated as a ::before in the wrapper's single grid cell, shared with the <ins>.
+  assert.doesNotMatch(css, /\.ci-ad-slot \{[^}]*min-height/);
+  assert.match(css, /\.ci-ad-slot \{\s*display: grid;\s*grid-template-columns: minmax\(0, 1fr\);[^}]*height: auto !important;/);
+  assert.match(css, /\.ci-ad-slot::before \{\s*content: "";\s*grid-area: 1 \/ 1;\s*height: var\(--ci-ad-min\);/);
+  assert.match(css, /\.ci-ad-slot > ins\.adsbygoogle \{\s*grid-area: 1 \/ 1;/);
+  // Ad area per kind (the box's chrome is outside the wrapper): default 280, end 320, top = --ci-ad-h, feed card, side none.
+  assert.match(css, /\.ci-ad \{\s*--ci-ad-min: calc\(280px - var\(--ci-ad-chrome\)\);/);
+  assert.match(css, /--ci-ad-min: calc\(320px - var\(--ci-ad-chrome\)\);/);
+  assert.match(css, /--ci-ad-min: var\(--ci-ad-h\);/);
+  assert.match(css, /--ci-ad-min: calc\(300px - 3rem - 2px\);/);
+  assert.match(css, /\.ci-ad-side \{[^}]*--ci-ad-min: 0px;/);
+  // In-article units reserve a phone-sized box before the fill (fluid unit: about 1.04 x the screen width).
+  assert.match(css, /@media \(max-width: 30rem\) \{\s*\.ci-ad-middle \{\s*--ci-ad-min: 105vw;\s*min-height: calc\(105vw \+ var\(--ci-ad-chrome\)\);/);
 });
 
 /** The local files a route page renders from (its `@/…` imports, followed through the programmatic code). */

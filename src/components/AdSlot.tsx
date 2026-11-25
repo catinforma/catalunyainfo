@@ -12,7 +12,8 @@ import { adsensePublisherId } from "@/lib/site";
  * "top" goes on every programmatic template after its first answer block and
  * at the start of EntryArticle bodies; "home-feed" is one card-sized item in
  * the first headlines grid of the home pages. Each box reserves its height in
- * CSS (.ci-ad-*); Google's `unfilled` status collapses it.
+ * CSS (.ci-ad-*); Google's `unfilled` status collapses it (the top boxes keep
+ * their space).
  */
 const LABEL: Record<Locale, string> = { ca: "Publicitat", es: "Publicidad", en: "Advertisement" };
 
@@ -22,6 +23,10 @@ export function AdSlot({ kind, locale, path, className = "" }: { kind: "top" | "
   return (
     <aside className={`ci-ad ci-ad-${kind} ${className}`.trim()} data-ci-ad={kind} aria-label={LABEL[locale]}>
       <p className="ci-ad-label">{LABEL[locale]}</p>
+      {/* AdsRuntime puts the <ins> in here. Google sets height:auto and
+          min-height:0 (!important) on the <ins>'s parent when it fills or
+          collapses a unit, so the reserved height lives on the <aside>. */}
+      <div className="ci-ad-slot" />
     </aside>
   );
 }

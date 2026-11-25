@@ -43,6 +43,20 @@ const LABEL: Record<Locale, string> = { ca: "Publicitat", es: "Publicidad", en: 
 
 const SOURCES = /^(fonts|fuentes|sources|official sources|fonts oficials|fuentes oficiales)\b/i;
 
+/**
+ * The <div> an <ins> sits in. Google writes `height:auto !important;
+ * min-height:0 !important` on the parent of every unit it fills or collapses;
+ * with the <ins> straight in the <aside> that wiped the reserved height (a
+ * desktop top box went from 317 px to 37 px when unfilled). The <aside> keeps
+ * the reservation; this wrapper takes Google's styles.
+ */
+function slotOf(ins: HTMLElement): HTMLElement {
+  const slot = document.createElement("div");
+  slot.className = "ci-ad-slot";
+  slot.append(ins);
+  return slot;
+}
+
 function unit(kind: "middle" | "end" | "side", client: string, slot: string, label: string, height?: number): HTMLElement {
   const box = document.createElement("aside");
   box.className = `ci-ad ci-ad-${kind}`;
@@ -65,7 +79,7 @@ function unit(kind: "middle" | "end" | "side", client: string, slot: string, lab
     // A fixed box sized to the room left in the sidebar (responsive unit with an exact CSS size).
     ins.style.cssText = `display:block;width:100%;height:${height}px`;
   }
-  box.append(caption, ins);
+  box.append(caption, slotOf(ins));
   return box;
 }
 
@@ -156,7 +170,7 @@ function fillSlots(main: HTMLElement, client: string): HTMLElement[] {
       ins.dataset.adFormat = "auto";
       ins.dataset.fullWidthResponsive = "true";
     }
-    box.append(ins);
+    (box.querySelector<HTMLElement>(".ci-ad-slot") ?? box).append(ins);
     filled.push(ins);
   }
   return filled;
@@ -245,7 +259,7 @@ function placeUnits(client: string, locale: Locale, home: boolean, path: string,
 
   // In-article units: the first after the first section, the rest every ~2
   // screens (lib/ads/placement.ts), up to five units on the page in all.
-  const boxes: HTMLElement[] = [...slots.map((ins) => ins.parentElement ?? ins), ...(endBox ? [endBox] : [])];
+  const boxes: HTMLElement[] = [...slots.map((ins) => ins.closest<HTMLElement>(".ci-ad") ?? ins), ...(endBox ? [endBox] : [])];
   const body = (sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s).filter((h) => !h.closest("table, ul, ol, details"));
   const budget = unitBudget(boxes.length + (sideBox ? 1 : 0) + rails.length, rails.length ? MAX_UNITS_WITH_RAIL : undefined);
   if (chars >= 2000 && body.length >= 2) {

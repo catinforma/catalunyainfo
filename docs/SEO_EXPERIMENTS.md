@@ -14107,3 +14107,33 @@ Caveat: Dec-Jan is the peak; the local orders (Madrid, Andalucia, Valencia) appe
 **Needs the owner (optional).** The second rail unit reuses the "ci-lateral" unit (allowed by AdSense, but the report merges both). To report the two separately, create a vertical display unit "ci-lateral-2" in AdSense and give the id to the head. Also check in AdSense that "ci-lateral" is allowed at 300x600 ("responsive, vertical").
 
 **Baseline and review.** No ad revenue or RPM figures available to the worker; take them from AdSense. **Review 2026-12-08 (ads):** AdSense page RPM and viewable impressions on `/calculadoras/` pages versus the previous two weeks (before this deploy), bounce and engagement on the calculator pages in GA4, and Core Web Vitals CLS in Search Console for the calculator URLs (should not move: the rail is out of flow). If a fill rate on the rail is low, drop the second unit. Publish group: the calculators' pages are served by the client script, so the deploy alone applies it (no page body changed).
+## 2026-11-25 (ci-enginyeria) — Ad boxes: layout stability (CLS), Google collapsed our reserved heights (code only, no page text; review 2026-12-08 with the owner's ads review)
+
+**Brief.** Ticket: CLS and weight on pages with ads (AdSense live since 24 Nov). Ads, slot IDs, caps and placements untouched (owner decision); only the space around them.
+
+**Field data: not obtained.** No CrUX key in the environment; PageSpeed Insights without a key answered 429 (daily quota) for all 12 calls. CrUX/PSI field numbers (28 days, mostly before the ads) stay open: rerun with a key.
+
+**Lab method.** Headless Chromium 1140 over CDP (PerformanceObserver `layout-shift` with sources), 412x915 (DPR 2.625, mobile UA) and 1280x800, live pages on www, Google's consent dialog accepted at 6 s so ads fill, 11 s idle then a scroll through the page. Pages: `/ca/`, `/es/`, `/ca/guies/quan-es-cobra-atur-pensio/`, `/ca/festius/2027/illes-balears/sant-antoni-de-portmany/`, `/ca/calculadores/sou-net/`, `/ca/guies/vaga-26-novembre/`. Lab CLS (all shifts) before: mobile 0.405 on 5 of 6 pages, 0.023 on the strike page (unfilled run); desktop 0.004 to 0.006. Transfer: 1.9 to 2.4 MB per page (calculator 3.5 to 3.7 MB), 70 to 117 requests, 21 to 39 requests to Google ad hosts (pagead2.googlesyndication, googleads.g.doubleclick, fundingchoices, ep1.adtrafficquality) with consent, 11 without.
+
+**Causes found.**
+1. Mobile 0.38 of the 0.405 is **Google's own auto-ad overlay**: about 10 s after load an ad pushes `body` down with `padding-top: 373px` (iframe `aswift_1`, the bottom anchor/vignette family set in AdSense); the whole page (`nav.ci-alerts`, `main`) moves. Not ours; owner decision (below). 0.02 to 0.04 more is Google's consent dialog resizing.
+2. **Our reserved heights were wiped by Google.** After filling or finding a unit unfilled, Google writes `height:auto!important; min-height:0!important` on every ancestor of the `<ins>` that has a height or min-height, our `<aside>` included. Measured: a desktop top box went from 317 px (reserved) to 37 px when unfilled (the "top box keeps its space" design did not hold), 280 px of text jumping up. Google also writes `height:0` on the `<ins>`'s parent when unfilled.
+3. **Phone sizes were guessed.** Google fills the full-width top unit square (360 wide: 360 high, 390: 390, 412: 412) and the in-article fluid unit about 1.04 x the width (375, 407, 430); we reserved 250 and 280 (growth of 110 to 160 px and 90 to 150 px when the ad arrives).
+4. Images near ads: all `<img>` already carry width/height; nothing to fix.
+
+**What changed.** `src/app/globals.css`, `src/components/AdSlot.tsx`, `src/components/AdsRuntime.tsx`, `tests/ads-live.test.ts`. The `<ins>` now sits in a `.ci-ad-slot` wrapper (grid, `height:auto !important`) whose `::before` holds the reservation (`--ci-ad-min`: 280/320 default, `--ci-ad-h` for top boxes, feed card, 0 for the sidebar) in the same grid cell as the `<ins>`, so Google cannot zero it; top box 100vw high up to 30rem (250 px to 48rem, 280 px after, as before); in-article unit 105vw up to 30rem; label line-height 1.25rem on every box so the chrome is the same everywhere.
+
+**Lab after** (the changes injected into the live pages: CSS plus a script wrapping the `<ins>`, same runs): desktop top box 317 px on all 6 pages unfilled (before: 37 px), desktop CLS 0.003 to 0.006 unchanged (the top box lies below the 800 px fold, so the collapse was not yet counted; it would count on a short page); mobile 0.38 to 0.41 unchanged (Google overlay, item 1), own-box shifts 0 to 0.01 (noise, the footprint of the fill itself now 0 px against 162 px before for the top box at 412 px). Per URL (before / after, mobile total; own boxes): home ca 0.405 / 0.40 to 0.52; home es 0.405 / 0.41; guide 0.407 / 0.405; holiday town 0.406 / 0.408; calculator 0.405 / 0.408; strike 0.024 / 0.405 (unfilled before, filled after: the overlay appears only when Google serves it). The run-to-run spread (overlay served or not) is larger than our part; compare the box geometry, not these totals.
+
+**Not fixed, not ours or a placement decision.**
+- Google overlay (cause 1): in AdSense, Auto ads, switch off the anchor/vignette formats or accept about 0.38 of mobile CLS where they are served. Owner decision.
+- In-article units (`AdsRuntime`) are inserted 400 ms after hydration; when the chosen H2 is inside the first screen (allowed from half a screen), inserting 360+ px shifts the visible text. None of the 6 pages did it in the lab (first unit far below the fold). Fixing it means inserting only below the fold or after the first scroll, which changes placement: owner decision.
+- Unfilled non-top units collapse (`display:none`) as designed; a collapse inside the viewport is a shift.
+
+**Prediction.** Field CLS on pages whose top box lay in the first screen on desktop improves by the collapse (up to 0.1 to 0.2 on such pages); no effect on the mobile overlay. Wrong if CrUX CLS stays flat on desktop: then boxes sit below the fold and the gain is nil.
+
+**Tests.** `tests/ads-live.test.ts` 17 pass (2 CLS tests rewritten/added); `tsc --noEmit` clean.
+
+**Review 2026-12-08:** rerun CrUX/PSI with a key (mobile and desktop CLS/LCP/INP for the 6 URLs, now post-ads), rerun the lab script, check whether the owner turned off anchor/vignette.
+
+**Go-live.** Deploy (CSS and client bundle). Server HTML of every page with an ad slot changes (one empty `div.ci-ad-slot`): publish groups of all programmatic pages if a rebuild is wanted; not needed for stability (the old HTML works with the new runtime: the `<ins>` falls back to the `<aside>`, losing only the pseudo reservation).
