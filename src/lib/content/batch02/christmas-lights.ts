@@ -43,7 +43,7 @@ import {
 import { SHOPS } from "./shops";
 
 /**
- * Encesa de llums de Nadal 2026: Barcelona first, then 25 towns of Catalonia,
+ * Encesa de llums de Nadal 2026: Barcelona first, then 27 towns of Catalonia,
  * on year-free URLs (guies/encesa-llums-nadal-barcelona,
  * guias/encendido-luces-navidad-barcelona, guides/barcelona-christmas-lights)
  * with the year in the titles.
@@ -112,17 +112,17 @@ export const CHRISTMAS_LIGHTS_META: Record<Locale, { path: string; title: string
   ca: {
     path: "guies/encesa-llums-nadal-barcelona",
     title: "Encesa de llums de Nadal 2026 a Barcelona i Catalunya: dates, hores i llocs",
-    excerpt: "Quan s'encenen els llums de Nadal a Barcelona el 2026, a quina hora i on, i les dates de l'encesa a 25 municipis de Catalunya, de la web de cada ajuntament.",
+    excerpt: "Quan s'encenen els llums de Nadal a Barcelona el 2026, a quina hora i on, i les dates de l'encesa a 27 municipis de Catalunya, de la web de cada ajuntament.",
   },
   es: {
     path: "guias/encendido-luces-navidad-barcelona",
     title: "Encendido de luces de Navidad 2026 en Barcelona y Cataluña: fechas, horas y lugares",
-    excerpt: "Cuándo se encienden las luces de Navidad en Barcelona en 2026, a qué hora y dónde, y las fechas del encendido en 25 municipios de Cataluña, de la web de cada ayuntamiento.",
+    excerpt: "Cuándo se encienden las luces de Navidad en Barcelona en 2026, a qué hora y dónde, y las fechas del encendido en 27 municipios de Cataluña, de la web de cada ayuntamiento.",
   },
   en: {
     path: "guides/barcelona-christmas-lights",
     title: "Christmas lights switch-on 2026 in Barcelona and Catalonia: dates, times and places",
-    excerpt: "When Barcelona switches on its Christmas lights in 2026, at what time and where, plus the switch-on dates in 25 Catalan towns, from each town council's website.",
+    excerpt: "When Barcelona switches on its Christmas lights in 2026, at what time and where, plus the switch-on dates in 27 Catalan towns, from each town council's website.",
   },
 };
 
@@ -250,11 +250,14 @@ function townsLead(locale: Locale, towns: readonly LightsTown[]): string {
       en: `Elsewhere in Catalonia, none of the ${n} towns in this guide has published its 2026 date yet: we give the 2025 date wherever the council's website has it.`,
     }[locale];
   }
-  const items = dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, locale)})`);
+  const first = dated[0]!;
+  const last = dated[dated.length - 1]!;
+  // From the first to the last date, not twenty names: the table below gives every town with its time and place.
+  const span = (t: LightsTown) => `${t.name} (${shortDate(t.y2026!.date, locale)})`;
   return {
-    ca: `A la resta de Catalunya, ${dated.length} dels ${n} municipis d'aquesta guia ja han publicat la data del 2026: ${joinNames(items, "ca")}. Per als altres, et donem la del 2025 quan és a la web de l'ajuntament.`,
-    es: `En el resto de Cataluña, ${dated.length} de los ${n} municipios de esta guía ya han publicado la fecha de 2026: ${joinNames(items, "es")}. Para los demás, te damos la de 2025 cuando está en la web del ayuntamiento.`,
-    en: `Elsewhere in Catalonia, ${dated.length} of the ${n} towns in this guide have already published their 2026 date: ${joinNames(items, "en")}. For the rest, we give the 2025 date where the council's website has it.`,
+    ca: `A la resta de Catalunya, ${dated.length} dels ${n} municipis d'aquesta guia ja han publicat la data del 2026: de ${span(first)} a ${span(last)}. Per als altres, et donem la del 2025 quan és a la web de l'ajuntament.`,
+    es: `En el resto de Cataluña, ${dated.length} de los ${n} municipios de esta guía ya han publicado la fecha de 2026: de ${span(first)} a ${span(last)}. Para los demás, te damos la de 2025 cuando está en la web del ayuntamiento.`,
+    en: `Elsewhere in Catalonia, ${dated.length} of the ${n} towns in this guide have already published their 2026 date: from ${span(first)} to ${span(last)}. For the rest, we give the 2025 date where the council's website has it.`,
   }[locale];
 }
 
@@ -508,6 +511,27 @@ function tripsSentence(locale: Locale, towns: readonly LightsTown[]): string {
 
 const plain = (value: string) => value.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
+/** Towns with a question of their own in the FAQ, in the order of their searches. */
+const FAQ_TOWNS = ["hospitalet", "terrassa", "girona", "el-prat", "cornella", "santa-coloma", "tarragona", "lleida", "manresa"] as const;
+/** The name people type, where it is shorter than the council's. */
+const FAQ_NAME: Record<string, string> = { hospitalet: "L'Hospitalet", "el-prat": "El Prat", "santa-coloma": "Santa Coloma" };
+
+/** "de Girona", "del Prat", "de l'Hospitalet", "d'Olot": the preposition and article before a town name (English: the name). */
+export function of(name: string, locale: Locale): string {
+  if (locale === "en") return name;
+  if (/^El /.test(name)) return `del ${name.slice(3)}`;
+  if (locale === "ca" && /^L'/.test(name)) return `de l'${name.slice(2)}`;
+  if (locale === "ca" && /^[AEIOUÀÈÉÍÒÓÚ]/.test(name)) return `d'${name}`;
+  return `de ${name}`;
+}
+
+const shown = (t: LightsTown): string => FAQ_NAME[t.key] ?? t.name;
+
+/** A switch-on whose day is before the day the table was read has happened. */
+export function isHeld(slot: { date: string }): boolean {
+  return slot.date < LIGHTS_TOWNS_AS_OF;
+}
+
 function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTown[]): { question: string; answer: string }[] {
   const a = facts.lightsSwitchOn;
   const [y25, y24, y23] = SWITCH_ON_HISTORY;
@@ -521,7 +545,7 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
       who: "Qui encén els llums de Nadal de Barcelona?",
       until: "Fins quan estan encesos els llums de Nadal a Barcelona?",
       towns: "Quins municipis ja han anunciat l'encesa de llums 2026?",
-      town: (name: string) => `Quan és l'encesa de llums de Nadal de ${name} 2026?`,
+      town: (name: string) => `Quan és l'encesa de llums de Nadal ${of(name, "ca")} 2026?`,
     },
     es: {
       when: "¿Cuándo es el encendido de luces de Navidad de Barcelona 2026?",
@@ -530,7 +554,7 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
       who: "¿Quién enciende las luces de Navidad de Barcelona?",
       until: "¿Hasta cuándo están encendidas las luces de Navidad en Barcelona?",
       towns: "¿Qué municipios han anunciado ya el encendido de luces 2026?",
-      town: (name: string) => `¿Cuándo es el encendido de luces de Navidad de ${name} 2026?`,
+      town: (name: string) => `¿Cuándo es el encendido de luces de Navidad ${of(name, "es")} 2026?`,
     },
     en: {
       when: "When are Barcelona's Christmas lights switched on in 2026?",
@@ -605,10 +629,18 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
   const townAnswer = (t: LightsTown): string => {
     if (t.y2026) {
       const s = slotPhrase(t.y2026);
+      // A day before the reading date has happened: past tense (the guard test fails the day after a date if the reading has not moved).
+      if (isHeld(t.y2026)) {
+        return {
+          ca: `L'Ajuntament ${of(shown(t), "ca")} va encendre els llums de Nadal el ${s}.`,
+          es: `El Ayuntamiento ${of(shown(t), "es")} encendió las luces de Navidad el ${s}.`,
+          en: `${shown(t)} council switched the Christmas lights on on ${s}.`,
+        }[locale];
+      }
       return {
-        ca: `L'Ajuntament de ${t.name} l'ha anunciada per al ${s}.`,
-        es: `El Ayuntamiento de ${t.name} lo ha anunciado para el ${s}.`,
-        en: `${t.name} council has announced it for ${s}.`,
+        ca: `L'Ajuntament ${of(shown(t), "ca")} l'ha anunciada per al ${s}.`,
+        es: `El Ayuntamiento ${of(shown(t), "es")} lo ha anunciado para el ${s}.`,
+        en: `${shown(t)} council has announced it for ${s}.`,
       }[locale];
     }
     const before = t.y2025 ?? t.y2024;
@@ -616,12 +648,13 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
       ? { ca: ` L'any anterior va ser el ${slotPhrase(before)}.`, es: ` El año anterior fue el ${slotPhrase(before)}.`, en: ` The year before, it was on ${slotPhrase(before)}.` }[locale]
       : "";
     return {
-      ca: `L'Ajuntament de ${t.name} encara no l'ha publicada (comprovat el ${dateYear(LIGHTS_TOWNS_AS_OF, "ca")}).${last}`,
-      es: `El Ayuntamiento de ${t.name} aún no lo ha publicado (comprobado el ${dateYear(LIGHTS_TOWNS_AS_OF, "es")}).${last}`,
-      en: `${t.name} council has not published it yet (checked on ${dateYear(LIGHTS_TOWNS_AS_OF, "en")}).${last}`,
+      ca: `L'Ajuntament ${of(shown(t), "ca")} encara no l'ha publicada (comprovat el ${dateYear(LIGHTS_TOWNS_AS_OF, "ca")}).${last}`,
+      es: `El Ayuntamiento ${of(shown(t), "es")} aún no lo ha publicado (comprobado el ${dateYear(LIGHTS_TOWNS_AS_OF, "es")}).${last}`,
+      en: `${shown(t)} council has not published it yet (checked on ${dateYear(LIGHTS_TOWNS_AS_OF, "en")}).${last}`,
     }[locale];
   };
-  const capitals = ["girona", "tarragona", "lleida"].map((key) => towns.find((t) => t.key === key)).filter((t): t is LightsTown => Boolean(t));
+  // The towns people search ("encendido luces navidad hospitalet 2026" 38 impressions, terrassa 32, el prat 29, cornellà 25, santa coloma 18 in 28 days) and the provincial capitals.
+  const capitals = FAQ_TOWNS.map((key) => towns.find((t) => t.key === key)).filter((t): t is LightsTown => Boolean(t));
 
   return [
     { question: q.when, answer: when },
@@ -630,7 +663,7 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
     { question: q.who, answer: who },
     { question: q.until, answer: until },
     { question: q.towns, answer: townsAnswer },
-    ...capitals.map((t) => ({ question: q.town(t.name), answer: townAnswer(t) })),
+    ...capitals.map((t) => ({ question: q.town(shown(t)), answer: townAnswer(t) })),
   ];
 }
 

@@ -79,11 +79,11 @@ const GOOD: Announcements = {
 const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)];
 const PUBLISHED = new Set([...ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)), ...christmasFairsPaths().map((p) => p.path)]);
 
-/** The 25 towns the brief asked for. */
+/** The 25 towns the brief asked for on 4 Nov, plus Cerdanyola and Sant Boi (25 Nov: two of the 30 largest towns with an official switch-on). */
 const TOWNS = [
-  "Badalona", "Blanes", "Castelldefels", "Cornellà de Llobregat", "El Prat de Llobregat", "Figueres", "Girona", "Granollers", "Igualada",
+  "Badalona", "Blanes", "Castelldefels", "Cerdanyola del Vallès", "Cornellà de Llobregat", "El Prat de Llobregat", "Figueres", "Girona", "Granollers", "Igualada",
   "L'Hospitalet de Llobregat", "Lleida", "Manresa", "Mataró", "Olot", "Reus", "Rubí", "Sabadell", "Sant Cugat del Vallès",
-  "Santa Coloma de Gramenet", "Sitges", "Tarragona", "Terrassa", "Tortosa", "Vic", "Vilanova i la Geltrú",
+  "Sant Boi de Llobregat", "Santa Coloma de Gramenet", "Sitges", "Tarragona", "Terrassa", "Tortosa", "Vic", "Vilanova i la Geltrú",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -169,9 +169,9 @@ test("the page is honest about the towns: 'dates' in the title only when a town 
 /* -------------------------------------------------------------------------- */
 
 test("with no 2026 date, the lead says so with the check date and gives 2025 and 2024 with their years", () => {
-  // 20 Nov 2026: the City Council's mobility note of that day was read; the check date moved with it.
-  const checked: Record<Locale, string> = { ca: "comprovat el 20 de novembre de 2026", es: "comprobado el 20 de noviembre de 2026", en: "checked on 20 November 2026" };
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-20");
+  // 25 Nov 2026: the City Council's notes of 9 and 20 Nov were read again, unchanged; the check date moved with them.
+  const checked: Record<Locale, string> = { ca: "comprovat el 25 de novembre de 2026", es: "comprobado el 25 de noviembre de 2026", en: "checked on 25 November 2026" };
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-25");
   for (const locale of LOCALES) {
     const first = (buildChristmasLightsBody(locale, NONE)[0] as { text: string }).text;
     assert.ok(first.includes(checked[locale]), `${locale}: ${first}`);
@@ -226,7 +226,7 @@ test("the 2025 nightly hours read like the City Council's note of 16 Oct 2025", 
 /* Towns                                                                      */
 /* -------------------------------------------------------------------------- */
 
-test("the 25 towns the brief named, once each, every filled slot official and well formed", () => {
+test("the 27 towns, once each, every filled slot official and well formed", () => {
   assert.deepEqual([...LIGHTS_TOWNS].map((t) => t.name).sort((a, b) => a.localeCompare(b, "ca")), [...TOWNS].sort((a, b) => a.localeCompare(b, "ca")));
   assert.equal(new Set(LIGHTS_TOWNS.map((t) => t.key)).size, LIGHTS_TOWNS.length);
   for (const town of LIGHTS_TOWNS) {

@@ -86,7 +86,7 @@ export type B2Key =
   | "reis"
   // 3 Nov 2026: metro L2 closed between La Pau and Gorg for works (TMB).
   | "l2Closure"
-  // 4 Nov 2026: the Christmas lights switch-on, Barcelona and 25 towns.
+  // 4 Nov 2026: the Christmas lights switch-on, Barcelona and 27 towns.
   | "christmasLights"
   // 4 Nov 2026: one guide per called strike that people search by name,
   // rendered from its entry in strikes.ts (strike-guides.ts).
@@ -945,9 +945,9 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "L2 metro closure between La Pau and Gorg: shuttle bus and alternatives",
   },
   christmasLights: {
-    ca: "Encesa de llums de Nadal 2026: Barcelona i 25 municipis",
-    es: "Encendido de luces de Navidad 2026: Barcelona y 25 municipios",
-    en: "Christmas lights switch-on 2026: Barcelona and 25 towns",
+    ca: "Encesa de llums de Nadal 2026: Barcelona i 27 municipis",
+    es: "Encendido de luces de Navidad 2026: Barcelona y 27 municipios",
+    en: "Christmas lights switch-on 2026: Barcelona and 27 towns",
   },
   // Only days the strike's entry in strikes.ts lists (a test keeps them in step).
   strikeRenfe: {

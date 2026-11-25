@@ -462,7 +462,7 @@ export async function POST(request: Request) {
     // (read from l2-closure.ts) and go out with their own groups, `hours` and
     // `cards`, after this one and again after the reopening.
     if (wants("l2-closure")) published.push(await publishB2Article(L2_CLOSURE_GUIDE));
-    // Christmas lights switch-on 2026 (Barcelona and 25 towns): one page, on
+    // Christmas lights switch-on 2026 (Barcelona and 27 towns): one page, on
     // its own so Barcelona's date (festive.ts ANNOUNCED_2026.lightsSwitchOn)
     // or a town's (christmas-lights-towns.ts) republishes only it. The two
     // pages that gained one body sentence linking to it (Christmas in

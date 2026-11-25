@@ -108,7 +108,7 @@ import {
 // new Barcelona page.
 //
 // 4 Nov 2026: "I la resta de ciutats?" gains one sentence linking the new
-// Christmas lights page (Barcelona and 25 towns; group `llums-nadal-links`).
+// Christmas lights page (Barcelona and 27 towns; group `llums-nadal-links`).
 // No date in it; titles and descriptions untouched (3 Nov window).
 // 13 Nov 2026 (fairs freshness pass, the 30 most-searched towns): the
 // Ajuntament de Barcelona's guide (guia.barcelona.cat) lists the Sagrada

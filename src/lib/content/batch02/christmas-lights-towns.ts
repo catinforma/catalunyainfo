@@ -1,7 +1,7 @@
 import type { B2Key } from "./shared";
 
 /**
- * Christmas lights switch-on ("encesa de llums de Nadal") in 25 towns of
+ * Christmas lights switch-on ("encesa de llums de Nadal") in 27 towns of
  * Catalonia: the data behind the town table of the lights page
  * (christmas-lights.ts). Barcelona is not here: its dates live in festive.ts
  * (ANNOUNCED_2026.lightsSwitchOn, PAST, SWITCH_ON_HISTORY).
@@ -53,6 +53,19 @@ import type { B2Key } from "./shared";
  * be read: LIGHTS_TOWNS_NOT_REREAD, printed under the table with the 4 Nov date.
  */
 
+/**
+ * Re-read on 25 Nov 2026 (curl with a browser user agent, each date sentence
+ * grepped; council pages only): six more councils published 2026 (Figueres,
+ * Vic, Sant Cugat, Sabadell, Reus, Tortosa); Rubí's programme note gave its
+ * time and place; two towns of the 30 largest that were not in the table are
+ * now in it (Cerdanyola, Sant Boi); the other dated towns were read again
+ * unchanged. Blanes, Tarragona, Lleida, Sitges, Cornellà and Vilanova have no
+ * 2026 switch-on on their news pages or agendas. Only Santa Coloma (403)
+ * could not be read: LIGHTS_TOWNS_NOT_REREAD keeps its 4 Nov reading.
+ * Left out for lack of a council page with date, time and place: Gavà (its
+ * home page says Friday 27 Nov, nothing else), Viladecans (403), Sant Feliu de
+ * Llobregat (no answer), Esplugues (no 2026 page), Mollet (2024 only).
+ */
 /** The day the rows below were last read on the councils' own sites (all but LIGHTS_TOWNS_NOT_REREAD). */
 /**
  * Re-read on 20 Nov 2026 (curl with a browser user agent, each date sentence
@@ -64,14 +77,10 @@ import type { B2Key } from "./shared";
  * Coloma (403) could not be read: LIGHTS_TOWNS_NOT_REREAD keeps their last
  * reading.
  */
-export const LIGHTS_TOWNS_AS_OF = "2026-11-20";
+export const LIGHTS_TOWNS_AS_OF = "2026-11-25";
 
 /** Towns whose council site could not be read at LIGHTS_TOWNS_AS_OF, with the day they last were. */
-export const LIGHTS_TOWNS_NOT_REREAD: readonly { key: string; read: string }[] = [
-  { key: "sabadell", read: "2026-11-12" },
-  { key: "reus", read: "2026-11-12" },
-  { key: "santa-coloma", read: "2026-11-04" },
-];
+export const LIGHTS_TOWNS_NOT_REREAD: readonly { key: string; read: string }[] = [{ key: "santa-coloma", read: "2026-11-04" }];
 
 export interface TownSwitchOn {
   /** ISO day of the switch-on. */
@@ -109,6 +118,7 @@ export interface LightsTown {
 const READ = "2026-11-04";
 const READ_12NOV = "2026-11-12";
 const READ_20NOV = "2026-11-20";
+const READ_25NOV = "2026-11-25";
 
 export const LIGHTS_TOWNS: readonly LightsTown[] = [
   {
@@ -116,8 +126,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Girona",
     hosts: /(^|\.)girona\.cat$/,
     watch: "https://www.girona.cat/turisme/cat/agenda.php",
-    // Council traffic notice (read 20 Nov 2026): "El divendres 27 de novembre, de 16 a 19 h, amb motiu de l'encesa de les llums de Nadal, el vial Oest de la plaça de Catalunya romandrà tancat al trànsit." No time for the switch-on itself.
-    y2026: { date: "2026-11-27", place: "plaça de Catalunya", url: "https://web.girona.cat/incidencies/-/asset_publisher/BSkfy3ZBUKl3/content/afectacions-circulat%C3%B2ries-amb-motiu-de-l-encesa-llums-de-nadal-a-la-pla%C3%A7a-de-catalunya-divendres-27-de-novembre-", read: READ_20NOV },
+    // Council traffic notice (read again 25 Nov 2026): "El divendres 27 de novembre, de 16 a 19 h, amb motiu de l'encesa de les llums de Nadal, el vial Oest de la plaça de Catalunya romandrà tancat al trànsit." The council's Christmas page (web.girona.cat/nadal, read 25 Nov) shows "Encesa de llums de Nadal / Divendres 27 de novembre / Plaça de Catalunya". No time for the switch-on itself on either.
+    y2026: { date: "2026-11-27", place: "plaça de Catalunya", url: "https://web.girona.cat/incidencies/-/asset_publisher/BSkfy3ZBUKl3/content/afectacions-circulat%C3%B2ries-amb-motiu-de-l-encesa-llums-de-nadal-a-la-pla%C3%A7a-de-catalunya-divendres-27-de-novembre-", alsoUrl: "https://web.girona.cat/nadal", read: READ_25NOV },
     // Council agenda: "DIVENDRES 28 DE NOVEMBRE · Encesa de llums de Nadal [...] Plaça de Catalunya 17.50 h Parlament 18 h Encesa de llums 18.05 h Actuació musical amb Els Beta de SX3". The page prints no year: Friday 28 November is 2025 (in 2026 it is a Saturday; SX3 rules out 2014).
     y2025: { date: "2025-11-28", time: "18:00", place: "plaça de Catalunya", url: "https://www.girona.cat/turisme/cat/index_agenda.php?idReg=4658", read: READ },
     guide: "girona",
@@ -127,7 +137,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Figueres",
     hosts: /(^|\.)figueres\.cat$/,
     watch: "https://www.figueres.cat/actualitat/noticies",
-    y2026: null,
+    // Council news of 23 Nov 2026 (read 25 Nov): "L'encesa de llums de Nadal marcarà l'inici de la temporada aquest divendres 27 de novembre (17.45 h) amb la il·luminació del gran arbre de la Rambla, corals i l'aparició d'en Fumera i la Nadalina".
+    y2026: { date: "2026-11-27", time: "17:45", place: "la Rambla", url: "https://www.figueres.cat/actualitat/noticies/figueres-presenta-la-campanya-de-nadal-amb-dues-pistes-de-gel-un-parc-infantil-i-concurs-de-balcons-entre-les-novetats", read: READ_25NOV },
     // "L'encesa de llums de Nadal marcarà l'inici de la temporada aquest divendres 28 de novembre (18 h) a la Rambla, i a les 20 h a la plaça de l'Església" (24 Nov 2025).
     y2025: { date: "2025-11-28", time: "18:00", place: "la Rambla", url: "https://www.figueres.cat/actualitat/noticies/figueres-presenta-la-campanya-de-nadal-amb-mes-il-luminacio-nadalenca-arbres-naturals-parc-d2019atraccions-i-pista-de-gel", read: READ },
     guide: "figueres",
@@ -138,7 +149,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)olot\.cat$/,
     watch: "https://www.olot.cat/ajuntament/comunicacio/actualitat",
     // Council news (read 20 Nov 2026): "Aquest 2026 tindrà lloc el dissabte 28 de novembre a la plaça Major a les 18:30 h"; "l'encesa dels llums a les 19 h". The row gives the festa's start.
-    y2026: { date: "2026-11-28", time: "18:30", place: "plaça Major", url: "https://www.olot.cat/ajuntament/comunicacio/actualitat/pln217/olot-encendra-els-llums-de-nadal-amb-una-festa-a-la-placa-major", read: READ_20NOV },
+    y2026: { date: "2026-11-28", time: "18:30", place: "plaça Major", url: "https://www.olot.cat/ajuntament/comunicacio/actualitat/pln217/olot-encendra-els-llums-de-nadal-amb-una-festa-a-la-placa-major", read: READ_25NOV },
     // "Tindrà lloc el divendres 28 de novembre a les 19.30 h a la Plaça Major" (19 Nov 2025).
     y2025: { date: "2025-11-28", time: "19:30", place: "plaça Major", url: "https://www.olot.cat/ajuntament/comunicacio/actualitat/pln217/olot-el-millor-regal-de-nadal-2", read: READ },
   },
@@ -156,7 +167,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Vic",
     hosts: /(^|\.)vic\.cat$/,
     watch: "https://www.vic.cat/ajuntament/comunicacio-i-protocol/noticies",
-    y2026: null,
+    // Council news of 23 Nov 2026 (read 25 Nov): "Vic donarà la benvinguda a Nadal aquest divendres, 27 de novembre, amb l'encesa dels llums de Nadal a la Plaça Major de Vic, que tindrà lloc a les 6 de la tarda."
+    y2026: { date: "2026-11-27", time: "18:00", place: "plaça Major", url: "https://www.vic.cat/ajuntament/comunicacio-i-protocol/noticies/vic-encendra-els-llums-de-nadal-aquest-divendres-amb-un-espectacle-de-llum-i-musica-coral", read: READ_25NOV },
     // No council page gives the 2025 switch-on: the news of 14 Oct-12 Dec 2025, the 12 Dec 2025 Christmas note and the 2025 programme PDF do not mention it (the newest council pages are 2018 and 2019). A newspaper's date is not used.
     y2025: null,
   },
@@ -165,8 +177,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Terrassa",
     hosts: /(^|\.)terrassa\.cat$/,
     watch: "https://terrassanadal.terrassa.cat/",
-    // Same Christmas site, event "Inauguració del Nadal a la Ciutat" (read 12 Nov 2026; the page shows the maintenance notice, its iCal export reads "DTSTART;TZID=Europe/Paris:20261128T180000", "SUMMARY:Inauguració del Nadal a la Ciutat", "DESCRIPTION:Encesa de llums", "LOCATION:Raval de Montserrat, Raval de Montserrat, 14, Terrassa", "LAST-MODIFIED:20261111T120409Z"). 28 Nov 2026 is a Saturday.
-    y2026: { date: "2026-11-28", time: "18:00", place: "Raval de Montserrat", url: "https://terrassanadal.terrassa.cat/esdeveniment/inauguracio-del-nadal-a-la-ciutat/", read: READ_12NOV },
+    // Same Christmas site, event "Inauguració del Nadal a la Ciutat" (read 12 Nov 2026; the page shows the maintenance notice, its iCal export reads "DTSTART;TZID=Europe/Paris:20261128T180000", "SUMMARY:Inauguració del Nadal a la Ciutat", "DESCRIPTION:Encesa de llums", "LOCATION:Raval de Montserrat, Raval de Montserrat, 14, Terrassa", "LAST-MODIFIED:20261111T120409Z"). Read again 25 Nov 2026: the page itself now loads ("Inauguració del Nadal a la Ciutat 28 novembre | 18:00 [...] Encesa de llums [...] Recinte Raval de Montserrat, Raval de Montserrat, 14 Terrassa"). 28 Nov 2026 is a Saturday.
+    y2026: { date: "2026-11-28", time: "18:00", place: "Raval de Montserrat", url: "https://terrassanadal.terrassa.cat/esdeveniment/inauguracio-del-nadal-a-la-ciutat/", read: READ_25NOV },
     // The council's Christmas site, event "Acte d'encesa de llums" (organiser Ajuntament de Terrassa). The page shows a maintenance notice; its own iCal export (same URL + ?ical=1) reads "DTSTART;TZID=Europe/Paris:20251129T180000", "LOCATION:Raval de Montserrat, 14, Terrassa". www.terrassa.cat answers with a bot challenge.
     y2025: { date: "2025-11-29", time: "18:00", place: "Raval de Montserrat", url: "https://terrassanadal.terrassa.cat/esdeveniment/acte-dencesa-de-llums/", read: READ },
   },
@@ -175,7 +187,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Sabadell",
     hosts: /(^|\.)sabadell\.cat$/,
     watch: "https://web.sabadell.cat/servei-de-premsa/notes-premsa",
-    y2026: null,
+    // Press note "Un Nadal de postal que arriba a més barris" of 12 Nov 2026 (read 25 Nov): "El divendres, 27 de novembre, els llums s'encendran a les 18 h al passeig de la Plaça Major, a les 19 h a l'Avinguda de Matadepera (altura plaça del Pi) i a les 20 h a la plaça de la Creu de Barberà. L'endemà, dissabte 28 de novembre, l'encesa tindrà lloc a les 18 h a l'Eix Macià". The row gives the first.
+    y2026: { date: "2026-11-27", time: "18:00", place: "passeig de la Plaça Major", url: "https://web.sabadell.cat/servei-de-premsa/notes-premsa/item/un-nadal-de-postal-que-arriba-a-mes-barris", read: READ_25NOV },
     // Press note of 13 Nov 2025: "Divendres, 28 de novembre, hi haurà encesa a les 18 h al Passeig, a les 19 h a la plaça del Pi i a les 20 h a la plaça de la Creu de Barberà. Al dia següent, dissabte, 29, els llums s'encendran a les 18 h a l'Eix Macià." The row gives the first.
     y2025: { date: "2025-11-28", time: "18:00", place: "el Passeig", url: "https://web.sabadell.cat/servei-de-premsa/notes-premsa/item/el-nadal-portara-noves-cancons-i-personatges-del-somriu-nova-decoracio-i-un-espectacle-de-llum-musica-i-aigua-al-passeig", read: READ },
   },
@@ -184,8 +197,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Rubí",
     hosts: /(^|\.)rubi\.cat$/,
     watch: "https://www.rubi.cat/ca/actualitat/noticies",
-    // Council note of 20 Oct 2026 (read 12 Nov 2026; rubi.cat refused automated requests on 4 Nov): "Rubí prepara l'enllumenat de Nadal, que s'encendrà el 27 de novembre"; "tot estigui a punt per a l'encesa, prevista per al 27 de novembre". Second year of the 2025/2026-2026/2027 contract, so 2026. No time or place given.
-    y2026: { date: "2026-11-27", url: "https://www.rubi.cat/ca/actualitat/noticies/rubi-prepara-l2019enllumenat-de-nadal-que-s2019encendra-el-27-de-novembre", read: READ_12NOV },
+    // Council note of 18 Nov 2026 (read 25 Nov): "Rubí obrirà la programació de Nadal el pròxim divendres 27 de novembre, amb la tradicional encesa de l'enllumenat a la plaça de Pere Aguilera"; "La programació arrencarà el 27 de novembre a les 18 h a la plaça de Pere Aguilera, amb un acte d'encesa totalment renovat". The earlier note of 20 Oct 2026 ("l'encesa, prevista per al 27 de novembre", no time or place; second year of the 2025/2026-2026/2027 contract, so 2026) is the second source.
+    y2026: { date: "2026-11-27", time: "18:00", place: "plaça de Pere Aguilera", url: "https://www.rubi.cat/ca/actualitat/noticies/rubi-es-prepara-per-fer-la-seva-magia-en-un-nadal-marcadament-familiar", alsoUrl: "https://www.rubi.cat/ca/actualitat/noticies/rubi-prepara-l2019enllumenat-de-nadal-que-s2019encendra-el-27-de-novembre", read: READ_25NOV },
     // No council page gives the 2025 switch-on.
     y2025: null,
   },
@@ -194,7 +207,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Sant Cugat del Vallès",
     hosts: /(^|\.)santcugat\.cat$/,
     watch: "https://premsa.santcugat.cat/",
-    y2026: null,
+    // The council's visitor site, "Encesa dels llums de Nadal 2026 a Sant Cugat" of 23 Nov 2026 (read 25 Nov; "Organitza: Ajuntament de Sant Cugat"): "El divendres 27 de novembre a les 18:30 h [...] Encesa de llums a la Plaça Octavià [...] 18:30 h Acte d'encesa dels llums, amb representants del Consell d'infants i joves"; "Lloc: plaça d'Octavià". The press room (premsa.santcugat.cat) has no 2026 note yet.
+    y2026: { date: "2026-11-27", time: "18:30", place: "plaça d'Octavià", url: "https://visit.santcugat.cat/encessa-llums-de-nadal/", read: READ_25NOV },
     // The council's 2025 Christmas note (2 Dec 2025) does not mention the switch-on. 2024, press room 26 Nov 2024: "Sant Cugat s'il·luminarà [...] el proper divendres, 29 de novembre, amb la tradicional festa de l'Encesa de llums, que es farà a les 18.30 h, a la plaça d'Octavià."
     y2025: null,
     y2024: { date: "2024-11-29", time: "18:30", place: "plaça d'Octavià", url: "https://premsa.santcugat.cat/ajuntament/bon-nadal-sant-cugat-programa-mes-de-300-activitats-de-l1-de-desembre-al-5-de-gener/", read: READ },
@@ -205,7 +219,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)granollers\.cat$/,
     watch: "https://www.granollers.cat/noticies",
     // Council news of 17 Nov 2026 (read 20 Nov): "L'encesa oficial del Nadal tindrà lloc el divendres 27 de novembre, a les 18.30 h, a la plaça de la Porxada."
-    y2026: { date: "2026-11-27", time: "18:30", place: "plaça de la Porxada", url: "https://www.granollers.cat/noticies/ajuntament/granollers-enc%C3%A9n-el-nadal-amb-un-nou-mapping-la-t%C3%A8rmica-una-campanya-fomentar-el", read: READ_20NOV },
+    y2026: { date: "2026-11-27", time: "18:30", place: "plaça de la Porxada", url: "https://www.granollers.cat/noticies/ajuntament/granollers-enc%C3%A9n-el-nadal-amb-un-nou-mapping-la-t%C3%A8rmica-una-campanya-fomentar-el", read: READ_25NOV },
     // Press room, 20 Nov 2025: "L'encesa de Nadal serà aquest dilluns 1 de desembre, a les 18 h, amb l'arribada del Patge Gregori, la Patgessa Llum i en Picarol a la plaça Barangé."
     y2025: { date: "2025-12-01", time: "18:00", place: "plaça Barangé", url: "https://www.granollers.cat/noticies/sala-de-premsa/granollers-torna-encendre-la-ciutat-de-llum-colors-m%C3%BAsica-i-la-m%C3%A0gia-de-0", read: READ },
   },
@@ -224,7 +238,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Reus",
     hosts: /(^|\.)reus\.cat$/,
     watch: "https://www.reus.cat/ajuntament/notes-de-premsa",
-    y2026: null,
+    // Council note of 23 Nov 2026 on the Christmas safety plan (read 25 Nov): "posa en marxa aquest dijous, 26 de novembre, el dispositiu especial de seguretat de la campanya de Nadal 2026-2027, coincidint amb l'encesa de l'enllumenat nadalenc". No time or place on any council page we could read (the agenda pages answer 403).
+    y2026: { date: "2026-11-26", url: "https://www.reus.cat/noticia/reus-activa-el-dispositiu-de-seguretat-de-nadal-mes-coordinacio-i-proximitat-reforcar-la", read: READ_25NOV },
     // "La festa començarà el dijous, 27 de novembre, a les 18.45 h, amb l'espectacle lumínic inaugural [...] que donarà pas a l'encesa dels llums de Nadal de la ciutat, que serà a les 19 h." (25 Nov 2025); the place from the photo gallery of 27 Nov 2025 ("des de qualsevol punt de la plaça del Mercadal").
     y2025: {
       date: "2025-11-27",
@@ -240,7 +255,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Tortosa",
     hosts: /(^|\.)tortosa\.cat$/,
     watch: "https://www2.tortosa.cat/noticies/",
-    y2026: null,
+    // Press note of 24 Nov 2026 (read 25 Nov): "Tortosa farà l'encesa dels llums de Nadal la tarda del proper divendres 4 de desembre [...] l'encesa dels llums de Nadal tindrà lloc a la plaça de l'Ajuntament a partir de les 17.30 hores".
+    y2026: { date: "2026-12-04", time: "17:30", place: "plaça de l'Ajuntament", url: "https://www2.tortosa.cat/noticies/noticia.php?lang=ca&id=14463", read: READ_25NOV },
     // Published Monday 24 Nov 2025: "L'encesa dels llums de Nadal aquest divendres [...] començarà a partir de les 18.15 a la plaça de l'Ajuntament [...] aproximadament a les 18.45 serà el moment d'il·luminar Tortosa." "Aquest divendres" = 28 Nov 2025.
     y2025: { date: "2025-11-28", time: "18:15", place: "plaça de l'Ajuntament", url: "https://www2.tortosa.cat/noticies/noticia.php?lang=ca&id=14202", read: READ },
   },
@@ -268,8 +284,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Badalona",
     hosts: /(^|\.)badalona\.cat$/,
     watch: "https://www.badalona.cat/ca/actualitat/noticies",
-    // Council note of 10 Nov 2026 (read 12 Nov 2026): "L'encesa general de la il·luminació de Nadal a Badalona es farà el divendres 20 de novembre a les 18 hores." No place for it; the 40 m tree in plaça del President Tarradellas is lit on Saturday 21 November at 19 h.
-    y2026: { date: "2026-11-20", time: "18:00", url: "https://www.badalona.cat/ca/actualitat/noticies/badalona-aposta-per-continuar-essent-un-referent-del-nadal-amb-mes-il-luminacio-als-carrers-una-oferta-cultural-ampliada-i-una-inversio-de-prop-de-2-5-milions-deuros", read: READ_12NOV },
+    // Council note of 10 Nov 2026 (read 12 Nov, read again 25 Nov 2026): "L'encesa general de la il·luminació de Nadal a Badalona es farà el divendres 20 de novembre a les 18 hores." No place for it; the 40 m tree in plaça del President Tarradellas is lit on Saturday 21 November at 19 h.
+    y2026: { date: "2026-11-20", time: "18:00", url: "https://www.badalona.cat/ca/actualitat/noticies/badalona-aposta-per-continuar-essent-un-referent-del-nadal-amb-mes-il-luminacio-als-carrers-una-oferta-cultural-ampliada-i-una-inversio-de-prop-de-2-5-milions-deuros", read: READ_25NOV },
     // "Divendres 21 a les 18 hores s'encendrà l'arbre de Nadal de la plaça de la Vila i la il·luminació de tots els carrers" (20 Nov 2025). The 42 m tree in plaça del President Tarradellas was lit the next day.
     y2025: { date: "2025-11-21", time: "18:00", place: "plaça de la Vila", url: "https://www.badalona.cat/ca/actualitat/noticies/el-nadal-arriba-aquest-cap-de-setmana-a-badalona-amb-lencesa-del-gran-arbre-de-la-placa-del-president-tarradellas", read: READ },
   },
@@ -279,7 +295,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)(l-h|lh-on)\.cat$/,
     watch: "https://www.l-h.cat/",
     // The council's flyer, linked from l-h.cat's home page as "Encesa llums de nadal 26" (PDF on lh-on.cat, created 29 Oct 2026; read 20 Nov): "Dijous, 26 de novembre, a les 18 h · Plaça de l'Ajuntament".
-    y2026: { date: "2026-11-26", time: "18:00", place: "plaça de l'Ajuntament", url: "https://lh-on.cat/documents/encesa_2026.pdf", alsoUrl: "https://www.l-h.cat/", read: READ_20NOV },
+    // Read again 25 Nov 2026 on l-h.cat's home page (news of 24 Nov 2026): "L'Hospitalet donarà la benvinguda al Nadal dijous, 26 de novembre, amb l'encesa de l'enllumenat nadalenc, a les 18 hores, a la plaça de l'Ajuntament."
+    y2026: { date: "2026-11-26", time: "18:00", place: "plaça de l'Ajuntament", url: "https://lh-on.cat/documents/encesa_2026.pdf", alsoUrl: "https://www.l-h.cat/", read: READ_25NOV },
     // Christmas programme 2025 (PDF): "Dijous, 27 de novembre / Plaça de l'Ajuntament / 18 h / Encesa dels llums de Nadal".
     y2025: { date: "2025-11-27", time: "18:00", place: "plaça de l'Ajuntament", url: "https://l-h.cat/webs/especials/nadal/2025/docs/PROGRAMA_nadal_2025.pdf", read: READ },
   },
@@ -313,7 +330,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)elprat\.cat$/,
     watch: "https://www.elprat.cat/actualitat/noticies",
     // Council Christmas page (elprat.cat/nadal, dated 2 Nov 2026; read 20 Nov): "El 21 de novembre a partir de les 18:30 h, vine a l'acte d'encesa de l'enllumenat Nadalenc a la plaça de Catalunya."
-    y2026: { date: "2026-11-21", time: "18:30", place: "plaça de Catalunya", url: "https://www.elprat.cat/la-magia-illumina-el-prat", read: READ_20NOV },
+    y2026: { date: "2026-11-21", time: "18:30", place: "plaça de Catalunya", url: "https://www.elprat.cat/la-magia-illumina-el-prat", read: READ_25NOV },
     // Council agenda: "Quan 20/11/2025 [...] A les 18:30 h, encesa de llums On Plaça de Catalunya" (entertainment from earlier in the afternoon).
     y2025: { date: "2025-11-20", time: "18:30", place: "plaça de Catalunya", url: "https://www.elprat.cat/la-ciutat/guia-agenda/encesa-dels-llums-de-nadal", read: READ },
   },
@@ -323,7 +340,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)mataro\.cat$/,
     watch: "https://www.mataro.cat/ca/actualitat/noticies",
     // Council news (2026 section; read 20 Nov 2026): "El divendres 27 de novembre, la ciutat donarà el tret de sortida a les festes nadalenques"; "L'encesa de les llums de Nadal tindrà lloc divendres 27 de novembre, a les 18.30 h, a l'Espai Firal del Nou Parc Central".
-    y2026: { date: "2026-11-27", time: "18:30", place: "Espai Firal del Nou Parc Central", url: "https://www.mataro.cat/ca/actualitat/noticies/2026/mataro-encendra-el-nadal-el-27-de-novembre-amb-una-gran-festa-participativa-al-nou-parc-central", read: READ_20NOV },
+    y2026: { date: "2026-11-27", time: "18:30", place: "Espai Firal del Nou Parc Central", url: "https://www.mataro.cat/ca/actualitat/noticies/2026/mataro-encendra-el-nadal-el-27-de-novembre-amb-una-gran-festa-participativa-al-nou-parc-central", read: READ_25NOV },
     // "L'encesa de l'enllumenat es farà a les 19 h a la plaça de l'Ajuntament" on Friday 28 November (20 Nov 2025); three neighbourhood switch-ons followed on the 29th.
     y2025: { date: "2025-11-28", time: "19:00", place: "plaça de l'Ajuntament", url: "https://www.mataro.cat/ca/actualitat/noticies/2025/tot-a-punt-per-viure-un-nadal-amb-mes-llums-que-mai-i-amb-noves-carrosses-i-nous-personatges-a-la-cavalcada-1", read: READ },
   },
@@ -333,7 +350,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)manresa\.cat$/,
     watch: "https://web.manresa.cat/web/noticies",
     // Council news (read 20 Nov 2026): "Manresa donarà el pròxim divendres 27 de novembre (17.30 h) la benvinguda a les festes de Nadal amb un espectacle a la Plaça de Nadal, en el qual es viurà [...] l'encesa dels llums de carrers i places."
-    y2026: { date: "2026-11-27", time: "17:30", place: "Plaça de Nadal", url: "https://web.manresa.cat/web/noticies/14488-nadal-desembarca-al-centre-de-manresa-i-connecta-la-placa-major-i-neus-catala", read: READ_20NOV },
+    y2026: { date: "2026-11-27", time: "17:30", place: "Plaça de Nadal", url: "https://web.manresa.cat/web/noticies/14488-nadal-desembarca-al-centre-de-manresa-i-connecta-la-placa-major-i-neus-catala", read: READ_25NOV },
     // "L'encesa dels llums de Nadal, que es farà el divendres 28 de novembre a Sant Domènec" (12 Nov 2025). No time. The council's 2 Nov 2026 note on this year's lights gives no date.
     y2025: { date: "2025-11-28", place: "Sant Domènec", url: "https://web.manresa.cat/web/noticies/13499-la-placa-de-nadal-es-renova-amb-mes-activitat-i-l-arribada-d-un-nou-personatge-magic-i-ple-de-llum", read: READ },
   },
@@ -343,9 +360,29 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)igualada\.cat$/,
     watch: "https://www.igualada.cat/ca/noticies",
     // Council note of 10 Nov 2026 (read 12 Nov 2026): "L'acte central d'encesa dels llums de Nadal tornarà al cor del nucli antic i es farà a la plaça de l'Ajuntament"; "L'encesa de llums serà el dia 27 de novembre." Its only time is 19.30 h for collecting the light element in other squares, not the start: left out.
-    y2026: { date: "2026-11-27", place: "plaça de l'Ajuntament", url: "https://www.igualada.cat/ca/noticies/igualada-viura-un-nadal-amb-mes-carrers-il-luminats-suport-al-comerc-local-i-un-espectacle-interactiu-d2019encesa-de-llums-des-de-la-placa-de-l2019ajuntament", read: READ_12NOV },
+    y2026: { date: "2026-11-27", place: "plaça de l'Ajuntament", url: "https://www.igualada.cat/ca/noticies/igualada-viura-un-nadal-amb-mes-carrers-il-luminats-suport-al-comerc-local-i-un-espectacle-interactiu-d2019encesa-de-llums-des-de-la-placa-de-l2019ajuntament", read: READ_25NOV },
     // "El bosc màgic del Passeig Verdaguer tornarà a ser l'escenari de l'encesa de llums divendres vinent 28 de novembre" (24 Nov 2025). Time left out: that page says the show starts at 20 h, the council's 12 Nov page said "a partir de dos quarts de vuit del vespre".
     y2025: { date: "2025-11-28", place: "passeig de Verdaguer", url: "https://www.igualada.cat/ca/noticies/el-bosc-magic-del-passeig-verdaguer-escenari-de-l2019encesa-amb-l2019espectacle-interactiu-201ccolors-per-tornar-a-casa201d", read: READ },
+  },
+  {
+    key: "sant-boi",
+    name: "Sant Boi de Llobregat",
+    hosts: /(^|\.)santboi\.cat$/,
+    watch: "https://www.santboi.cat/",
+    // Municipal agenda, "Encesa de llums de Nadal 2026" (read 25 Nov 2026): "novembre 20 18:00 - 19:30 Plaça de l'Ajuntament"; "L'acte [...] comptarà amb un videomapping a la façana de l'Ajuntament". The home page news of 23 Nov 2026 says it took place: "Sant Boi viu una encesa de llums plena de màgia i emoció".
+    y2026: { date: "2026-11-20", time: "18:00", place: "plaça de l'Ajuntament", url: "https://www.santboi.cat/agenda/encesa-de-llums-de-nadal-2026", read: READ_25NOV },
+    // The council's magazine "Viure Sant Boi", November 2025 (PDF; read 25 Nov 2026): "El 28 de novembre els carrers de Sant Boi s'il·luminaran"; "un espectacle de vídeo mapping a la plaça de l'Ajuntament, a les 18 h. Aquest serà l'acte principal de l'encesa."
+    y2025: { date: "2025-11-28", time: "18:00", place: "plaça de l'Ajuntament", url: "https://www.santboi.cat/Documents/VIURESB/2025/VSBnovembre25.pdf", read: READ_25NOV },
+  },
+  {
+    key: "cerdanyola",
+    name: "Cerdanyola del Vallès",
+    hosts: /(^|\.)cerdanyola\.cat$/,
+    watch: "https://www.cerdanyola.cat/actualitat",
+    // Council news of 24 Nov 2026 (read 25 Nov): "Cerdanyola donarà el tret de sortida oficial a les festes de Nadal aquest divendres 27 de novembre, a partir de les 17:30 h, amb el tradicional acte d'encesa de llums. La celebració tindrà lloc a les places de Francesc Layret i d'Abat Oliba, davant de l'arbre de Nadal".
+    y2026: { date: "2026-11-27", time: "17:30", place: "plaça de Francesc Layret, plaça d'Abat Oliba", url: "https://www.cerdanyola.cat/actualitat/cerdanyola-donara-la-benvinguda-al-nadal-amb-lencesa-de-llums-aquest-divendres", read: READ_25NOV },
+    // The council's pages we found are of 2022 (1 Dec 2022); no 2025 page.
+    y2025: null,
   },
   {
     key: "vilanova",
@@ -362,7 +399,7 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     hosts: /(^|\.)castelldefels\.org$/,
     watch: "https://www.castelldefels.org/ca/actualitat/elcastell/noticies",
     // Council news dated 16 and 20 Nov 2026 (read 20 Nov): "Castelldefels encén els llums de Nadal aquest dissabte" (Saturday 21 Nov); "A les 18.00 hores, a la plaça de l'Església, Castelldefels celebra l'acte d'Encesa de Llums de Nadal".
-    y2026: { date: "2026-11-21", time: "18:00", place: "plaça de l'Església", url: "https://www.castelldefels.org/ca/actualitat/elcastell/noticies/castelldefels-encendra-llums-de-nadal-aquest-dissabte", read: READ_20NOV },
+    y2026: { date: "2026-11-21", time: "18:00", place: "plaça de l'Església", url: "https://www.castelldefels.org/ca/actualitat/elcastell/noticies/castelldefels-encendra-llums-de-nadal-aquest-dissabte", read: READ_25NOV },
     // "la Plaça de l'Església acull aquest dissabte 22 de novembre (a les 17 h) l'acte oficial d'encesa dels llums de Nadal". Time left out: the same page's detail line says "de 18:00 a 22:00".
     y2025: { date: "2025-11-22", place: "plaça de l'Església", url: "https://www.castelldefels.org/ca/actualitat/agenda/encesa-de-llum-de-nadal", read: READ },
   },

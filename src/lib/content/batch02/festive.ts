@@ -74,7 +74,8 @@ export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
  * page keep ANNOUNCEMENTS_CHECKED. Move it on every re-read.
  */
 // 20 Nov 2026: the press room's mobility note of that day (MOBILITY_2026) confirms 26 Nov, 18:00; still no name for who switches them on.
-export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-20";
+// 25 Nov 2026: both notes (9 and 20 Nov) read again on ajuntament.barcelona.cat, unchanged ("L'acte començarà a les 18 hores"; mobility note of 20 Nov: "Entre el dilluns 23 i el dijous 26 el tronc central del passeig de Gràcia estarà tallat").
+export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-25";
 
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {
