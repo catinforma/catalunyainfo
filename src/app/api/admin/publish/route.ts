@@ -80,6 +80,7 @@ import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
 import { PADRO } from "@/lib/content/batch02/padro";
 import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { WINTER_SALES_GUIDE } from "@/lib/content/batch02/winter-sales";
+import { BARCELONA_WINTER_GUIDE } from "@/lib/content/batch02/barcelona-winter";
 import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
 import { FARMERS_MARKETS } from "@/lib/content/batch02/farmers-markets";
@@ -345,6 +346,10 @@ export async function POST(request: Request) {
     if (wants("rebaixes-links")) {
       published.push(await publishB2Article(SHOPS), await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(NEW_YEAR), await publishB2Article(REIS), await publishHolidayTodayGuide());
     }
+    // 25 Nov 2026: Barcelona in January and February 2027 (ca/es/en), on its own.
+    // `barcelona-gener-febrer-links` republishes what gained a link to it: Barcelona in December and the weather guide.
+    if (wants("barcelona-gener-febrer")) published.push(await publishB2Article(BARCELONA_WINTER_GUIDE));
+    if (wants("barcelona-gener-febrer-links")) published.push(await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(CLIMATE));
     // 13 Nov 2026: the TSI health card (ca, es, en), on its own. The padró guide
     // and the Barcelona hub gained a link to it (the hub also got the English
     // Montserrat anchor in the query's words): `tsi-links`.

@@ -207,6 +207,11 @@ function monthHeading(locale: Locale, i: number): string {
   return `Barcelona ${/^[ao]/.test(lower) ? "a l'" : "al "}${lower}`;
 }
 
+/** The anchor id of month `i`'s heading in the weather guide, per language (for links into it from other guides). */
+export function monthAnchor(locale: Locale, i: number): string {
+  return slugifyAnchor(monthHeading(locale, i));
+}
+
 /**
  * The month H3 in the query's words (19 Nov 2026 plan, docs/SEO_EXPERIMENTS.md
  * 13 Nov entry): "Barcelona weather in January" / "El tiempo en Barcelona en
@@ -291,6 +296,13 @@ const DECEMBER_LINK: Record<Locale, string> = {
   ca: `Què fer aquest mes, els festius i què obre, dia a dia: ${b2link("barcelonaDecember", "ca", "Barcelona al desembre")}.`,
   es: `Qué hacer este mes, los festivos y qué abre, día a día: ${b2link("barcelonaDecember", "es", "Barcelona en diciembre")}.`,
   en: `What's on that month, the public holidays and what's open, day by day: ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
+};
+
+/** 25 Nov 2026: one sentence under February links the January-February hub (group `barcelona-gener-febrer-links`). */
+const WINTER_LINK: Record<Locale, string> = {
+  ca: `Festius, botigues, Carnaval i Santa Eulàlia al gener i al febrer: ${b2link("barcelonaWinter", "ca", "Barcelona al gener i al febrer del 2027")}.`,
+  es: `Festivos, tiendas, Carnaval y Santa Eulàlia en enero y febrero: ${b2link("barcelonaWinter", "es", "Barcelona en enero y febrero de 2027")}.`,
+  en: `Holidays, shops, Carnival and Santa Eulàlia in January and February: ${b2link("barcelonaWinter", "en", "Barcelona in January and February 2027")}.`,
 };
 
 const RAINY_LINK: Record<Locale, string> = {
@@ -542,6 +554,7 @@ function body(locale: Locale) {
     ...MONTHS[locale].flatMap((_, i) => [
       monthQueryHeading(locale, i),
       ...paras(monthText(locale, i), ...monthExtras(locale, i, monthFigures(i))),
+      ...(i === 1 ? paras(WINTER_LINK[locale]) : []),
       ...(i === 11 ? paras(DECEMBER_LINK[locale]) : []),
     ]),
     ...h2(t.seasonsTitle),
