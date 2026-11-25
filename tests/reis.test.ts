@@ -353,7 +353,7 @@ test("each town is the 5 January 2026 parade from its council's own site; Terras
 /* The towns added on 5 Nov 2026 (reis-towns.ts)                              */
 /* -------------------------------------------------------------------------- */
 
-const BIG_TOWNS = ["L'Hospitalet de Llobregat", "Badalona", "Terrassa", "Sabadell", "Mataró", "Santa Coloma de Gramenet", "Reus", "Girona", "Tarragona", "Lleida", "Cornellà de Llobregat", "Sant Boi de Llobregat", "Sant Cugat del Vallès", "Granollers", "Manresa", "Rubí", "Vilanova i la Geltrú", "Castelldefels", "Viladecans", "El Prat de Llobregat", "Mollet del Vallès", "Vic", "Figueres", "Igualada"];
+const BIG_TOWNS = ["L'Hospitalet de Llobregat", "Badalona", "Terrassa", "Sabadell", "Mataró", "Santa Coloma de Gramenet", "Reus", "Girona", "Tarragona", "Lleida", "Cornellà de Llobregat", "Sant Boi de Llobregat", "Sant Cugat del Vallès", "Granollers", "Manresa", "Rubí", "Vilanova i la Geltrú", "Castelldefels", "Viladecans", "El Prat de Llobregat", "Mollet del Vallès", "Vic", "Figueres", "Igualada", "Montcada i Reixac", "Ripollet", "Lloret de Mar", "Sitges", "Calella", "Olot"];
 
 test("Barcelona and about 25 municipalities: every big town is a row or named as left out, never both, never twice", () => {
   const rows = allTowns().map((t) => t.name);

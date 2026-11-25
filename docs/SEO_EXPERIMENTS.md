@@ -14741,3 +14741,15 @@ Tests: `ski-opening-table` (new), `ski-reread-25nov`, `ski-reread-23nov`, `batch
 **Date guard.** `tests/carnival.test.ts` fails after 2027-01-15 until `CARNIVAL_TABLE_READ` is moved by a re-read of each organiser page (Vilanova, Solsona, Platja d'Aro, Barcelona likely publish in January); the existing programmes guard fails from 25 Jan.
 
 Tests: `carnival` (17), `batch02` (63) pass; `tsc --noEmit` clean; `seo:body-dates` run.
+
+## 2026-11-25 (night) - Three Kings parade: six more towns in the towns table (ci-fonts + ci-edicio; ca/es/en; body only; group `reis-2027`) (review 2026-12-15)
+
+**Why (O5).** "cabalgata de reyes 2027" 143 impressions / 3 clicks at position 5.6, "cavalcada de reis 2027" 95 at 8.2 (90 d to 25 Nov); the page already ranks for the generic queries. Per-town queries have no demand yet (GSC 90 d: only "cavalcada reis vic 2027", 1 impression), so towns were taken by population and by a council page that gives the 2026 parade.
+
+**Changed.** `reis-towns.ts`: new rows Montcada i Reixac, Ripollet, Lloret de Mar, Sitges, Calella, Olot (2026 parade as each council's own page says it, labelled 2026; 2027 "per confirmar", watch link to the council). No 2027 time is printed anywhere, so the existing `REIS_REREAD_BY` guards (1, 15, 22 Dec, 2 Jan) cover them; `y2027` stays `null` until a council publishes, and `paradeProblems` already refuses a 2027 time with last year's date. Not added, councils read 25 Nov 2026: Cerdanyola, Esplugues, Banyoles, Blanes, Valls (pages of 2022-2025 only), Vilafranca, Pineda, Premia (yearless), Salou (no parade start time, only traffic cuts), Sant Feliu, Gava, Martorell, Cambrils, Tortosa (no readable page). Councils with an incomplete TLS chain (Cerdanyola, Esplugues, others) were read with `curl -k` for text only.
+
+**Verification cost** (minutes per town, incl. finding the page): about 4 for towns found by one search (Montcada, Ripollet, Lloret, Sitges, Calella, Olot); 6-8 for towns dropped (no dated page); about 45 min in total for 6 rows. Homepages rarely mention the parade, so a search restricted to the council domain is the quickest route.
+
+**Baseline** (GSC 90 d to 25 Nov): see Why; Barcelona page 1,553 impressions / 30 clicks, position 6.6. **Review 2026-12-15:** `snapshot.py page cabalgata 28`, per-town queries; re-read all watch pages from 1 Dec.
+
+Tests: `tests/reis.test.ts` (35 pass; BIG_TOWNS extended); `tsc --noEmit` clean; `seo:body-dates` run.

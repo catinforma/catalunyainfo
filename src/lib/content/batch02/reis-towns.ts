@@ -4,7 +4,7 @@ import type { Parade } from "./reis";
 import type { B2Key } from "./shared";
 
 /**
- * Cavalcada de Reis in 16 more towns of Catalonia: the compact rows behind
+ * Cavalcada de Reis in more towns of Catalonia: the compact rows behind
  * the towns table and town sections of the Three Kings parade page
  * (reis.ts). The eight towns the page covered first (Girona, Lleida,
  * Tarragona, Reus, Sabadell, Mataró, Badalona, Igualada) keep their richer
@@ -589,6 +589,142 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       es: "La cabalgata bajaba por la Rambla, y los Reyes hacían a pie la parte alta de la Rambla y la calle de Girona hasta la plaza del Ajuntament, adonde llegaban sobre las ocho y media de la tarde, recibían la llave y hablaban desde el balcón. Había una grada adaptada en la Rambla, con inscripción previa, y una zona de bajos estímulos en la plaza del Gra.",
       en: "The parade came down the Rambla, and the Kings walked the top of the Rambla and Carrer de Girona to Plaça de l'Ajuntament, arriving at about half past eight, receiving the key and speaking from the balcony. There was an adapted stand on the Rambla, by prior registration, and a low-stimulus area in Plaça del Gra.",
     },
+  },
+  /* ------------------------------ Added 25 Nov 2026: the next towns whose council page says the 2026 parade */
+  {
+    key: "montcada",
+    name: "Montcada i Reixac",
+    hosts: /(^|\.)montcada\.cat$/,
+    watch: "https://www.montcada.cat/",
+    // Council page "Cavalcada de Reis d'Orient 2026" (read 25 Nov 2026; shows no publication day): "Dilluns, 5 de gener de
+    // 2026 a les 18:00h"; "Recorregut: c. Bateria, c. Masia, c. Molí, c. Bifurcació, av. de la Unitat, c. Pasqual, c.
+    // Elionor, c. Major, pl. de l'Església, c. Barcelona Centre, pont dels 'Germans', rbla. dels Països Catalans, pl.
+    // Espanya, c. Anselm Clavé, c. Carrerada, av. Catalunya, c. Sant Ignasi i c. Ferrer i Guàrdia"; "Els horaris del
+    // recorregut ... es podrien veure alterats en cas de pluja". Can Cuiàs has its own parade (not covered here).
+    y2026: {
+      date: "2026-01-05",
+      time: "18:00",
+      start: "carrer de Bateria",
+      route: ["carrer de la Masia", "carrer del Molí", "carrer de la Bifurcació", "avinguda de la Unitat", "carrer de Pasqual", "carrer d'Elionor", "carrer Major", "plaça de l'Església", "carrer de Barcelona Centre", "pont dels Germans", "rambla dels Països Catalans", "plaça d'Espanya", "carrer d'Anselm Clavé", "carrer de la Carrerada", "avinguda de Catalunya", "carrer de Sant Ignasi"],
+      end: "carrer de Ferrer i Guàrdia",
+      url: "https://www.montcada.cat/temes/nadal/activitats-de-nadal/cavalcada-de-reis-dorient-2026.html",
+      read: "2026-11-25",
+    },
+    y2027: null,
+  },
+  {
+    key: "ripollet",
+    name: "Ripollet",
+    hosts: /(^|\.)ripollet\.cat$/,
+    watch: "https://www.ripollet.cat/actualitat/noticies",
+    // Council news "Ja venen els Reis d'Orient!" (read 25 Nov 2026; no publication day shown; "la Nit de Reis de 2026"):
+    // "El 5 de gener, a les 17.30 h, el parc del Riu Ripoll acollirà l'espectacle de benvinguda"; "La Cavalcada començarà
+    // cap a les 19 h i seguirà el recorregut habitual pels carrers Balmes, Sant Jaume, València, rambles de Sant Jordi i
+    // de Sant Esteve i finalitzarà a la rambla dels Pinetons".
+    y2026: {
+      date: "2026-01-05",
+      time: "19:00",
+      route: ["carrer de Balmes", "carrer de Sant Jaume", "carrer de València", "rambla de Sant Jordi", "rambla de Sant Esteve"],
+      end: "rambla dels Pinetons",
+      url: "https://www.ripollet.cat/actualitat/noticies/ja-venen-els-reis-d-orient",
+      read: "2026-11-25",
+    },
+    y2027: null,
+    startText: {
+      ca: "Cap a les 19:00, després de la rebuda al parc del Riu Ripoll (17:30)",
+      es: "Hacia las 19:00, tras la recepción en el parc del Riu Ripoll (17:30)",
+      en: "At about 19:00, after the welcome show in Parc del Riu Ripoll (17:30)",
+    },
+  },
+  {
+    key: "lloret",
+    name: "Lloret de Mar",
+    hosts: /(^|\.)lloret\.cat$/,
+    watch: "https://www.lloret.cat/ca/ajuntament/comunicacio-i-publicacions/notes-de-premsa",
+    // Press note of 2 Jan 2026 (read 25 Nov 2026): "Arribaran per mar, a les 18.00 h"; "El recorregut de la Cavalcada
+    // s'iniciarà cap a les 18.30 h, en direcció al Museu del Mar"; "Ses Majestats arribaran a la Casa de la Vila, on
+    // rebran el pa i la sal i faran el seu discurs"; letters at the royal thrones "a les 20.00 h". No start point given.
+    y2026: {
+      date: "2026-01-05",
+      time: "18:30",
+      end: "Casa de la Vila",
+      url: "https://www.lloret.cat/ca/ajuntament/comunicacio-i-publicacions/notes-de-premsa/tot-apunt-per-la-cavalcada-de-reis-el-proxim-5-de-gener-amb-diverses-novetats-destacades",
+      published: "2026-01-02",
+      read: "2026-11-25",
+    },
+    y2027: null,
+    startText: {
+      ca: "Cap a les 18:30, en direcció al Museu del Mar (la nota no diu el punt de sortida)",
+      es: "Hacia las 18:30, en dirección al Museu del Mar (la nota no dice el punto de salida)",
+      en: "At about 18:30, towards the Museu del Mar (the note gives no starting point)",
+    },
+    arrivalText: {
+      ca: "A les 18:00, per mar",
+      es: "A las 18:00, por mar",
+      en: "At 18:00, by sea",
+    },
+  },
+  {
+    key: "sitges",
+    name: "Sitges",
+    hosts: /(^|\.)sitges\.cat$/,
+    watch: "https://www.sitges.cat/serveis/festes/actualitat/noticies",
+    // Council news of 2 Jan 2026 (read 25 Nov 2026): "tindrà el seu moment més emblemàtic el dilluns 5 de gener";
+    // "La Cavalcada dels Reis Mags d'Orient sortirà el dia 5 a les 17 h des de la Fragata i recorrerà els principals
+    // carrers del municipi: passeig de la Ribera, carrer de la Bassa Rodona, plaça del Pou Vedre, Espalter, passeig de
+    // Vilafranca, Artur Carbonell, Francesc Gumà, Sant Isidre, Sant Gaudenci, Sant Josep, Parellades, Cap de la Vila i
+    // carrer Major fins a arribar a l'Ajuntament".
+    y2026: {
+      date: "2026-01-05",
+      time: "17:00",
+      start: "la Fragata",
+      route: ["passeig de la Ribera", "carrer de la Bassa Rodona", "plaça del Pou Vedre", "Espalter", "passeig de Vilafranca", "Artur Carbonell", "Francesc Gumà", "Sant Isidre", "Sant Gaudenci", "Sant Josep", "Parellades", "Cap de la Vila", "carrer Major"],
+      end: "Ajuntament",
+      url: "https://www.sitges.cat/serveis/festes/actualitat/noticies/la-cavalcada-dels-reis-mags-coronara-uns-dies-plens-de-magia-nadalenca-a-sitges",
+      published: "2026-01-02",
+      read: "2026-11-25",
+    },
+    y2027: null,
+  },
+  {
+    key: "calella",
+    name: "Calella",
+    hosts: /(^|\.)calella\.cat$/,
+    watch: "https://www.calella.cat/actualitat/temes/actualitat/noticies",
+    // Council news of Fri 2 Jan 2026 (read 25 Nov 2026): "La sortida serà a les 18 h des del Campament Reial i acabarà a
+    // la plaça de l'Ajuntament"; "arrencarà a les 18 h des del Campament Reial ubicat al Parc Dalmau i recorrerà diversos
+    // carrers del centre fins a arribar a la plaça de l'Església", then on foot to the Ajuntament. No street list.
+    y2026: {
+      date: "2026-01-05",
+      time: "18:00",
+      start: "Campament Reial, parc Dalmau",
+      end: "plaça de l'Ajuntament",
+      url: "https://www.calella.cat/actualitat/noticies/calella-es-prepara-per-a-la-nit-mes-magica-de-lany-amb-la-cavalcada-de-ses-majestats-els-reis-dorient.html",
+      published: "2026-01-02",
+      read: "2026-11-25",
+    },
+    y2027: null,
+  },
+  {
+    key: "olot",
+    name: "Olot",
+    hosts: /(^|\.)olot\.cat$/,
+    watch: "https://www.olot.cat/reis-orient",
+    // Council page "Reis d'Orient" (read 25 Nov 2026; it carries no publication day, but its camp section says "Elements
+    // clau del Campament Reial del 2026"): "El 5 de gener a la tarda ... Sortiran de la plaça Clarà a les 18:30 h
+    // enfilaran el carrer Mulleras, continuaran pel carrer Serra Ginesta, pujaran el Carrer Major i, ja a peu, passaran
+    // pel Passeig d'en Blay fins a arribar als tres trons reials, que estaran situats al Firal Petit". The page is reused
+    // every year: re-read it before printing anything as 2027's.
+    y2026: {
+      date: "2026-01-05",
+      time: "18:30",
+      start: "plaça Clarà",
+      route: ["carrer de Mulleras", "carrer de Serra Ginesta", "carrer Major", "passeig d'en Blay"],
+      end: "Firal Petit",
+      url: "https://www.olot.cat/reis-orient",
+      read: "2026-11-25",
+    },
+    y2027: null,
   },
 ];
 
