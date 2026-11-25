@@ -1,5 +1,5 @@
 import { SNAPSHOT, regionalDays, aranSwap, municipalities } from "./data";
-import { dateContent2027, isTranche4 } from "./dates-2027";
+import { WHIT_MONDAY_2027, dateContent2027, isTranche4, whitMondayNotice } from "./dates-2027";
 import { caDayArticle, capitalize, dayMonth, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
 import { GUIDES, type GuideKey } from "./links";
 import { esName, joinList } from "./names";
@@ -62,7 +62,7 @@ export interface DateContent {
   answerNote: string[];
   /** One sentence with one link, after the answer (11 November: the general strike; the others: `noticeFor`). */
   notice?: { before: string; label: string; href: string; after: string };
-  /** 21 Nov 2026: a second one-link sentence on the Christmas and New Year date pages (`transportNoticeFor`). */
+  /** A second one-link sentence under the first: 21 Nov 2026 on the Christmas and New Year date pages, 25 Nov on Pasqua Granada 2027 (`transportNoticeFor`). */
   transportNotice?: { before: string; label: string; href: string; after: string };
   /**
    * 20 Nov 2026, 7 and 8 December 2026 only: the Spain-wide December bridge
@@ -333,6 +333,9 @@ export function transportNoticeFor(iso: string, locale: DateLocale): DateContent
         href: GUIDES.newYear[locale],
         after: ".",
       };
+    // 25 Nov 2026: Pasqua Granada is not Easter; the Easter 2027 guide owns "pasqua 2027" (dates-2027.ts).
+    case WHIT_MONDAY_2027:
+      return whitMondayNotice(locale);
     default:
       return undefined;
   }

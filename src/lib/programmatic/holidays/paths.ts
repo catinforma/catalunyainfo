@@ -112,6 +112,20 @@ export function sameDayIn2026(iso: string): DatePage | null {
   return isDatePage(twin) ? twin : null;
 }
 
+/**
+ * The reverse of `sameDayIn2026`, for the two December 2026 pages that take
+ * the "el 7 de diciembre es festivo en cataluña" queries: 7 and 8 December 2026
+ * → the same day of 2027 (both 2027 pages exist and were indexable on 25 Nov
+ * 2026: robots "index, follow", self canonical, 200). Limited to these two on
+ * purpose; the other 2026 pages with a 2027 twin are not asked this way.
+ */
+export const TWINS_2027 = { "2026-12-07": "2027-12-07", "2026-12-08": "2027-12-08" } as const;
+
+export function sameDayIn2027(iso: string): DatePage | null {
+  const twin = (TWINS_2027 as Record<string, string>)[iso];
+  return twin && isDatePage(twin) ? twin : null;
+}
+
 /** The first and last dates with a page, for the summaries that give the range (llms.txt). */
 export const DATE_PAGE_RANGE = { first: DATE_PAGES[0] ?? "", last: DATE_PAGES.at(-1) ?? "" } as const;
 

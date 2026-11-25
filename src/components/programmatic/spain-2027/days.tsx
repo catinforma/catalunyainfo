@@ -13,6 +13,7 @@ import { SATURDAY_SOURCES } from "@/lib/content/holidays/saturday";
 import { getMessages } from "@/lib/i18n";
 import { BOE_2026 } from "@/lib/programmatic/holidays/boe-2026";
 import { REGIONS, type Region } from "@/lib/programmatic/holidays/boe-2027";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { dayMonth, dayMonthYear, longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { datePath, hubPath, isDatePage } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/question";
@@ -158,6 +159,8 @@ const UI = {
     notMoved: "No es trasllada",
     in: "a",
     catalonia: "A Catalunya, amb les festes locals de cada municipi:",
+    easter: "Pasqua 2027 a Catalunya: quins dies són festius, les vacances escolars i els ponts, a",
+    easterLink: "Setmana Santa 2027 a Catalunya",
     december: "El Nadal, Cap d'Any i Reis, comunitat per comunitat, amb els dies que cal demanar:",
     decemberLink: "pont de desembre del 2026 i Reis a Espanya",
     decemberBack: "Pont de desembre del 2026 a Espanya",
@@ -180,6 +183,8 @@ const UI = {
     notMoved: "No se traslada",
     in: "en",
     catalonia: "En Cataluña, con las fiestas locales de cada municipio:",
+    easter: "Semana Santa y Pascua 2027 en Cataluña: qué días son festivos, las vacaciones escolares y los puentes, en",
+    easterLink: "Semana Santa 2027 en Cataluña",
     december: "La Navidad, el Año Nuevo y Reyes, comunidad por comunidad, con los días que hay que pedir:",
     decemberLink: "puente de diciembre 2026 y Reyes en España",
     decemberBack: "Puente de diciembre 2026 en España",
@@ -202,6 +207,8 @@ const UI = {
     notMoved: "Not moved",
     in: "in",
     catalonia: "In Catalonia, with each town's local holidays:",
+    easter: "Easter 2027 in Catalonia: which days are public holidays, the school break and the long weekends, in",
+    easterLink: "Easter 2027 in Catalonia",
     december: "Christmas, New Year and Epiphany, region by region, with the days to take off:",
     decemberLink: "December 2026 holidays and Epiphany in Spain",
     decemberBack: "December 2026 holidays in Spain",
@@ -393,6 +400,15 @@ function shortDay(iso: string, locale: DateLocale): string {
   return locale === "es" ? compactDates([iso]) : dayMonth(iso, locale);
 }
 
+/**
+ * 25 Nov 2026 (Easter 2027 cluster): the Spain-wide pages of the days that move with
+ * Easter (Maundy Thursday, Good Friday, Easter Monday) take "pasqua 2027" and
+ * "dilluns de pasqua 2027" (48 + 18 impressions, ca) and "easter holiday 2027" (en);
+ * each sends those readers to the Easter 2027 guide, which owns them. A test pins
+ * the list against the Easter guide's own dates.
+ */
+export const EASTER_DAYS_2027: readonly string[] = ["2027-03-25", "2027-03-26", "2027-03-29"];
+
 export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: DateLocale }) {
   const day = spainDay(iso)!;
   const w = dayWords(locale);
@@ -445,6 +461,11 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
                   {isDatePage(iso) ? (
                     <p>
                       {ui.catalonia} <Link href={datePath(locale, iso)}>{dateQuestion(iso, locale)}</Link>
+                    </p>
+                  ) : null}
+                  {EASTER_DAYS_2027.includes(iso) ? (
+                    <p>
+                      {ui.easter} <Link href={GUIDES.easter2027[locale]}>{ui.easterLink}</Link>.
                     </p>
                   ) : null}
                 </>

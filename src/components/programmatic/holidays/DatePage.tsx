@@ -14,11 +14,12 @@ import { isTranche4 } from "@/lib/programmatic/holidays/dates-2027";
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { esName } from "@/lib/programmatic/holidays/names";
-import { datePath, hubPath, municipalityPath, sameDayIn2026, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
+import { datePath, hubPath, municipalityPath, sameDayIn2026, sameDayIn2027, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
 import { restOfSpainLabel } from "@/lib/programmatic/spain-2027/day-copy";
 import { restOfSpainLabelIntl } from "@/lib/programmatic/spain-2027/day-copy-intl";
 import { hasDayPage } from "@/lib/programmatic/spain-2027/days";
 import { spainDayPath } from "@/lib/programmatic/spain-2027/paths";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 
 import { DateQuestions, GuideLinks, Sources, type SourceKey } from "./parts";
 
@@ -27,6 +28,8 @@ const REST_OF_SPAIN: Record<DateLocale, string> = { ca: "I a la resta d'Espanya?
 
 /** The lead-in before the link from a 2027 date page to the same day in 2026. */
 const SAME_DAY_2026: Record<DateLocale, string> = { ca: "Busques el 2026?", es: "¿Buscas el de 2026?", en: "Looking for 2026?" };
+/** The lead-in before the link from the 7 and 8 December 2026 pages to the same day in 2027 (the reverse of the one above). */
+const SAME_DAY_2027: Record<DateLocale, string> = { ca: "Busques el 2027?", es: "¿Buscas el de 2027?", en: "Looking for 2027?" };
 
 export function dateCrumbs(iso: DatePageIso, locale: DateLocale): Crumb[] {
   const ui = DATE_UI[locale];
@@ -52,6 +55,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
   // school order; then each council whose days are listed, or the DOGC order once it is out.
   const tranche4 = isTranche4(iso);
   const sameDay2026 = sameDayIn2026(iso);
+  // Only a 2027 twin that is indexable: no link to a noindex page.
+  const twin2027 = sameDayIn2027(iso);
+  const sameDay2027 = twin2027 && !isLowDemandPath(datePath(locale, twin2027)) ? twin2027 : null;
   const sources: SourceKey[] = tranche4
     ? ["regional2027", "boe2027", "shopsOrder2027", "retailLaw", "school"]
     : year === "2026"
@@ -123,6 +129,12 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
             // 7 and 8 December 2026 (20 Nov 2026): the Spain-wide December bridge page.
             <p>
               <strong>{REST_OF_SPAIN[locale]}</strong> <Link href={content.restOfSpain.href}>{content.restOfSpain.label}</Link>.
+            </p>
+          ) : null}
+          {/* 25 Nov 2026: 7 and 8 December 2026 link the same day of 2027 (the 2027 page links back to this one). */}
+          {sameDay2027 ? (
+            <p>
+              <strong>{SAME_DAY_2027[locale]}</strong> <Link href={datePath(locale, sameDay2027)}>{dateQuestion(sameDay2027, locale)}</Link>
             </p>
           ) : null}
 

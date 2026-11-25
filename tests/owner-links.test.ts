@@ -8,17 +8,20 @@ import { CANDIDATES } from "../src/lib/content/batch02/candidates.ts";
 import { DECEMBER_BRIDGE, outsideCataloniaCallout } from "../src/lib/content/batch02/december-bridge.ts";
 import { DECEMBER_BRIDGE_SPAIN } from "../src/lib/content/batch02/december-bridge-spain.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
+import { EASTER } from "../src/lib/content/batch02/easter-2027.ts";
 import { B2_PATHS, type B2Key } from "../src/lib/content/batch02/shared.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
 import { buildBody as workCalendarBody } from "../src/lib/content/holidays/publish.ts";
 import { buildBody as reservoirGuideBody } from "../src/lib/content/reservoirs/publish.ts";
 import { dateContent } from "../src/lib/programmatic/holidays/dates.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
-import { datePath, sameDayIn2026 } from "../src/lib/programmatic/holidays/paths.ts";
+import { WHIT_MONDAY_2027, whitMondayNotice } from "../src/lib/programmatic/holidays/dates-2027.ts";
+import { datePath, sameDayIn2026, sameDayIn2027 } from "../src/lib/programmatic/holidays/paths.ts";
 import { dateQuestion } from "../src/lib/programmatic/holidays/question.ts";
 import { hubAnswer, relatedLinks } from "../src/lib/programmatic/reservoirs/copy.ts";
 import { snapshotReadings } from "../src/lib/programmatic/reservoirs/data.ts";
 import { reservoirHubPath } from "../src/lib/programmatic/reservoirs/paths.ts";
+import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
 import { SPAIN_MAIN, mainElsewhere } from "../src/lib/programmatic/spain-2027/main-urls.ts";
 import { todayLinks } from "../src/lib/programmatic/today/data.ts";
 
@@ -141,6 +144,24 @@ test("3. A 2027 date page links the same day of 2026 with the question '¿Es fes
   assert.match(view, /<Link href=\{datePath\(locale, sameDay2026\)\}>\{dateQuestion\(sameDay2026, locale\)\}<\/Link>/);
 });
 
+test("3. The 7 and 8 December 2026 pages link the same day of 2027 (the reverse), only to an indexable page", () => {
+  assert.equal(sameDayIn2027("2026-12-07"), "2027-12-07");
+  assert.equal(sameDayIn2027("2026-12-08"), "2027-12-08");
+  // Limited to the two pages that take the queries; and the other way round stays null.
+  assert.equal(sameDayIn2027("2026-12-24"), null);
+  assert.equal(sameDayIn2027("2027-12-07"), null);
+  assert.equal(sameDayIn2026("2027-12-07"), "2026-12-07");
+  for (const locale of LOCALES) {
+    for (const iso of ["2027-12-07", "2027-12-08"]) {
+      assert.equal(isLowDemandPath(datePath(locale, iso), "2026-11-25"), false, `${locale} ${iso}: the 2027 page must stay indexable (no link to noindex)`);
+    }
+  }
+  assert.match(dateQuestion("2027-12-07", "es"), /^¿Es festivo el 7 de diciembre de 2027 en Cataluña\?$/);
+  const view = read("src/components/programmatic/holidays/DatePage.tsx");
+  assert.match(view, /<Link href=\{datePath\(locale, sameDay2027\)\}>\{dateQuestion\(sameDay2027, locale\)\}<\/Link>/);
+  assert.match(view, /!isLowDemandPath\(datePath\(locale, twin2027\)\)/);
+});
+
 /* ------------------------------------------------------------------ 4 */
 /* "hoy es festivo en cataluña": the daily guide owns it; Barcelona, date pages, hub, work calendar and /hoy link it. */
 
@@ -231,4 +252,59 @@ test("7. Work calendar links the 2027 Spain calendar and the daily guide; the 20
   for (const file of ["src/components/programmatic/holidays/HubPage.tsx", "src/components/programmatic/holidays/EnglishHubPage.tsx"]) {
     assert.match(read(file), /keys=\{\[[^\]]*"workCalendar"/, file);
   }
+});
+
+/* ------------------------------------------------------------------ 8 */
+/* "pasqua 2027", "semana santa 2027", "dilluns de pasqua 2027": the Easter 2027 guide owns the dates; the
+   29 March Catalonia date page owns "dilluns de pasqua"; every other page that gets the words links the guide. */
+
+test("8. The Easter guide table = the published guides; date pages 25-29 March 2027 and the hubs list it", () => {
+  for (const locale of LOCALES) {
+    assert.equal(GUIDES.easter2027[locale], b2("easter2027", locale), `${locale}: guide table = published article`);
+    for (const iso of ["2027-03-26", "2027-03-29"]) {
+      assert.ok(dateContent(iso, locale).guides.includes("easter2027"), `${iso} ${locale}: guides list`);
+    }
+    // 17 May (Pasqua Granada) is not Easter: its notice names the Easter days and links the guide, and the rail lists it.
+    assert.ok(dateContent(WHIT_MONDAY_2027, locale).guides.includes("easter2027"), `${locale}: 17 May rail lists the Easter guide`);
+  }
+  for (const file of ["src/components/programmatic/holidays/HubPage.tsx", "src/components/programmatic/holidays/EnglishHubPage.tsx"]) {
+    assert.match(read(file), /easter/i, file);
+  }
+});
+
+test("8. Pasqua Granada 2027 (17 May) says it is not Easter, names Easter's own days and links the guide", () => {
+  assert.equal(WHIT_MONDAY_2027, EASTER.whitMonday);
+  const words = {
+    ca: /Pasqua Granada no és la Pasqua: la Pasqua del 2027 és el diumenge 28 de març.*Divendres Sant \(divendres 26 de març\).*Dilluns de Pasqua \(dilluns 29 de març\)/,
+    es: /La Pascua Granada no es la Pascua: la Pascua de 2027 es el domingo 28 de marzo.*Viernes Santo \(viernes 26 de marzo\).*Lunes de Pascua \(lunes 29 de marzo\)/,
+    en: /Whit Monday \(Pasqua Granada\) is not Easter: Easter 2027 is Sunday 28 March.*Good Friday \(Friday 26 March\).*Easter Monday \(Monday 29 March\)/,
+  };
+  for (const locale of LOCALES) {
+    const n = whitMondayNotice(locale);
+    assert.equal(n.href, GUIDES.easter2027[locale]);
+    assert.match(n.before, words[locale]);
+    const c = dateContent(WHIT_MONDAY_2027, locale);
+    assert.deepEqual(c.transportNotice, n, `${locale}: the date page carries the notice`);
+    // The Easter dates in the sentence are the guide's own.
+    assert.equal(EASTER.easterSunday, "2027-03-28");
+    assert.equal(EASTER.goodFriday, "2027-03-26");
+    assert.equal(EASTER.easterMonday, "2027-03-29");
+  }
+  assert.match(read("src/components/programmatic/holidays/DatePage.tsx"), /content\.transportNotice\.href/);
+});
+
+test("8. Spain-wide day pages of Maundy Thursday, Good Friday and Easter Monday 2027 link the Easter guide; hubs and the Catalonia page list it", () => {
+  assert.deepEqual([EASTER.holyThursday, EASTER.goodFriday, EASTER.easterMonday], ["2027-03-25", "2027-03-26", "2027-03-29"]);
+  const days = read("src/components/programmatic/spain-2027/days.tsx");
+  assert.match(days, /EASTER_DAYS_2027: readonly string\[\] = \["2027-03-25", "2027-03-26", "2027-03-29"\]/);
+  assert.match(days, /EASTER_DAYS_2027\.includes\(iso\)[\s\S]{0,160}GUIDES\.easter2027\[locale\]/);
+  assert.match(days, /easter: "Pasqua 2027 a Catalunya: quins dies són festius/);
+  assert.match(days, /easter: "Semana Santa y Pascua 2027 en Cataluña/);
+  assert.match(days, /easter: "Easter 2027 in Catalonia: which days are public holidays/);
+  const es = read("src/components/programmatic/spain-2027/pages.tsx");
+  assert.equal((es.match(/GUIDES\.easter2027\.es/g) ?? []).length, 2, "es: hub sentence and the Catalonia page list");
+  const intl = read("src/components/programmatic/spain-2027/pages-intl.tsx");
+  assert.match(intl, /GUIDES\.easter2027\[locale\]/, "ca/en hub sentence");
+  assert.match(intl, /GUIDES\.easter2027\.ca/);
+  assert.match(intl, /GUIDES\.easter2027\.en/);
 });

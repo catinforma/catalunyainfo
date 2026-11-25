@@ -950,6 +950,32 @@ function easterSection(locale: DateLocale): DateSection {
   };
 }
 
+/**
+ * 25 Nov 2026 (Easter 2027 cluster, GSC 26 Oct-22 Nov): the Catalan date page of
+ * Pasqua Granada (Monday 17 May 2027, Barcelona's local holiday) took "pasqua 2027"
+ * (36 impressions at 9.1), "dilluns de pasqua 2027" (6) and "pasqua 2027 data" (4)
+ * from readers who want Easter itself. A second one-sentence notice, after the
+ * answer, says that Pasqua Granada is Pentecost (seven weeks on), gives Easter's
+ * own days from the same constants as `easterSection` and links the owner, the
+ * Easter 2027 guide. Body only: no title, description, H1 or answer touched.
+ */
+export const WHIT_MONDAY_2027 = "2027-05-17";
+
+export function whitMondayNotice(locale: DateLocale): NonNullable<DateContent["transportNotice"]> {
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const sunday = addDays(EASTER_MONDAY, -1);
+  return {
+    before: L(
+      `Pasqua Granada no és la Pasqua: la Pasqua del ${YEAR} és el ${wdm(sunday, "ca")}, amb el Divendres Sant (${wdm(GOOD_FRIDAY, "ca")}) i el Dilluns de Pasqua (${wdm(EASTER_MONDAY, "ca")}) de festiu a Catalunya; els festius, les vacances escolars i els ponts de Pasqua són a `,
+      `La Pascua Granada no es la Pascua: la Pascua de ${YEAR} es el ${wdm(sunday, "es")}, con el Viernes Santo (${wdm(GOOD_FRIDAY, "es")}) y el Lunes de Pascua (${wdm(EASTER_MONDAY, "es")}) festivos en Cataluña; los festivos, las vacaciones escolares y los puentes de Semana Santa están en `,
+      `Whit Monday (Pasqua Granada) is not Easter: Easter ${YEAR} is ${wdm(sunday, "en")}, with Good Friday (${wdm(GOOD_FRIDAY, "en")}) and Easter Monday (${wdm(EASTER_MONDAY, "en")}) public holidays in Catalonia; the holidays, the school break and the long weekends over Easter are in `,
+    ),
+    label: L("Setmana Santa 2027 a Catalunya", "Semana Santa 2027 en Cataluña", "Easter 2027 in Catalonia"),
+    href: GUIDES.easter2027[locale],
+    after: ".",
+  };
+}
+
 export function dateContent2027(iso: string, locale: DateLocale, next: NextYearLocal = NEXT_YEAR): DateContent {
   const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
   const local = nextYearPlacesOn(iso, next);
@@ -986,7 +1012,8 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
     ...(transport ? [{ title: L("Transport", "Transporte", "Getting around"), paragraphs: [transport] }] : []),
   ];
 
-  const easter = notice.href === GUIDES.easter2027[locale];
+  // Pasqua Granada (17 May) is not on the way to Easter, but its readers often want Easter itself (`whitMondayNotice`): the guide is in its rail too.
+  const easter = notice.href === GUIDES.easter2027[locale] || iso === WHIT_MONDAY_2027;
   const guides: GuideKey[] = [
     ...(easter ? (["easter2027"] as GuideKey[]) : []),
     ...GUIDE_ORDER[kind].filter((g) => !(g === "metroHours" && !transport)),

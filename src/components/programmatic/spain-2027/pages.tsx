@@ -507,6 +507,8 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
               {" · "}
               <Link href={GUIDES.workCalendar.es}>Calendario laboral 2027 de Cataluña</Link>
               {" · "}
+              <Link href={GUIDES.easter2027.es}>Semana Santa 2027 en Cataluña</Link>
+              {" · "}
               <Link href={GUIDES.holidayToday.es}>¿Es festivo hoy o mañana en Cataluña?</Link>.
             </p>
           ) : null}
@@ -721,7 +723,8 @@ export function SpainHubPage() {
           <h2 id="puentes">Puentes de {YEAR} en toda España</h2>
           <p>
             Sin gastar vacaciones y en todas las comunidades: {free.map((r) => rangeWords(r.from, r.to)).join("; ")}. La Semana Santa da al menos
-            4 días seguidos en todas partes; el resto de puentes depende de cada comunidad.{" "}
+            4 días seguidos en todas partes; el resto de puentes depende de cada comunidad. Los festivos, las vacaciones escolares y los puentes de
+            la Semana Santa de 2027 en Cataluña, en <Link href={GUIDES.easter2027.es}>Semana Santa 2027 en Cataluña</Link>.{" "}
             <Link href={spainBridgesPath()}>Todos los puentes de {YEAR}, comunidad por comunidad</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{COMPUTED_NOTE}</p>

@@ -108,13 +108,13 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-24T23:31:12.000Z",
-   "fingerprint": "v1:f2589d0ff42c0c601f1cd0c61f884782",
+   "date": "2026-11-25T08:11:30.000Z",
+   "fingerprint": "v1:99c37f329058106bbc05e8138ca371f9",
    "files": 51
   },
   "holidays-report": {
-   "date": "2026-11-24T23:31:12.000Z",
-   "fingerprint": "v1:1e8570ec8f5a768e9d6cabba4bcc6fba",
+   "date": "2026-11-25T08:11:30.000Z",
+   "fingerprint": "v1:d6e11c6f2a03a0ba1ec9b7abbae7ffe1",
    "files": 15
   },
   "home-purchase-tax": {
@@ -253,18 +253,18 @@
    "files": 11
   },
   "spain-2027": {
-   "date": "2026-11-25T00:42:02.603Z",
-   "fingerprint": "v1:4449c844732964005026edcf1b5ced20",
+   "date": "2026-11-25T08:11:30.000Z",
+   "fingerprint": "v1:010ee810a406cf37255654d926219cf7",
    "files": 29
   },
   "spain-2027-days": {
-   "date": "2026-11-24T23:53:35.771Z",
-   "fingerprint": "v1:b09b8a0d17b0d334b2ab66672995df97",
+   "date": "2026-11-25T08:11:30.000Z",
+   "fingerprint": "v1:8b745f6fdf0adcd3265672722def3995",
    "files": 21
   },
   "spain-2027-editions": {
-   "date": "2026-11-25T00:42:02.603Z",
-   "fingerprint": "v1:4df811378e7408eddf48db50b6716b8c",
+   "date": "2026-11-25T08:11:30.000Z",
+   "fingerprint": "v1:9d3c1aaeee335df4fee8d20d8c861576",
    "files": 37
   },
   "today": {

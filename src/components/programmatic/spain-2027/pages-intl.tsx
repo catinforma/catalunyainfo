@@ -589,6 +589,8 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
                   {" · "}
                   <Link href={GUIDES.workCalendar.ca}>Calendari laboral 2027 de Catalunya</Link>
                   {" · "}
+                  <Link href={GUIDES.easter2027.ca}>Setmana Santa 2027 a Catalunya</Link>
+                  {" · "}
                   <Link href={GUIDES.holidayToday.ca}>És festiu avui o demà a Catalunya?</Link>.
                 </>
               ) : (
@@ -598,6 +600,8 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
                   <Link href={GUIDES.bridges2027.en}>Long weekends in Catalonia in 2027</Link>
                   {" · "}
                   <Link href={GUIDES.workCalendar.en}>Catalonia public holidays 2027</Link>
+                  {" · "}
+                  <Link href={GUIDES.easter2027.en}>Easter 2027 in Catalonia</Link>
                   {" · "}
                   <Link href={GUIDES.holidayToday.en}>Is today or tomorrow a holiday in Catalonia?</Link>.
                 </>
@@ -855,6 +859,8 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               `Sense gastar vacances i a totes les comunitats: ${free.map((r) => rangeWordsIntl(r.from, r.to, locale)).join("; ")}. La Setmana Santa dona com a mínim 4 dies seguits a tot arreu; la resta de ponts depèn de cada comunitat. `,
               `With no leave and in every region: ${free.map((r) => rangeWordsIntl(r.from, r.to, locale)).join("; ")}. Easter gives at least 4 days in a row everywhere; the other long weekends depend on the region. `,
             )}
+            {tr(locale, "Els festius, les vacances escolars i els ponts de la Setmana Santa del 2027 a Catalunya, a ", "The public holidays, school break and long weekends of Easter 2027 in Catalonia are in ")}
+            <Link href={GUIDES.easter2027[locale]}>{tr(locale, "Setmana Santa 2027 a Catalunya", "Easter 2027 in Catalonia")}</Link>.{" "}
             <Link href={editionBridgesPath(locale)}>{tr(locale, `Tots els ponts del ${YEAR}, comunitat per comunitat`, `Every long weekend of ${YEAR}, region by region`)}</Link>.
           </p>
           <p className="text-sm text-[var(--color-muted)]">{computedNote(locale)}</p>
