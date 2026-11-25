@@ -189,6 +189,16 @@ export const REGION_DATA: readonly RegionData[] = [
         christmas: { from: "2026-12-23", to: "2027-01-06" },
         easter: { from: "2027-03-22", to: "2027-03-28" },
         otherBreaks: [{ name: "Semana Blanca", from: "2027-02-22", to: "2027-02-26", note: "con el lunes 1 de marzo, festivo, se vuelve el martes 2" }],
+        // Read 25 Nov 2026 on the resolution of 20 May 2026 (Infantil, Primaria y Educación Especial): "Centros cuyas
+        // dos fiestas locales no coinciden con el periodo lectivo: serán no lectivos los días 29 de marzo de 2027
+        // y 3 de mayo de 2027. Centros con una fiesta local coincidente con el periodo lectivo: será festivo el
+        // día de fiesta local correspondiente y no lectivo el día 3 de mayo de 2027. Centros cuyas dos fiestas
+        // locales coinciden con el periodo lectivo: serán festivos los dos días de fiesta local correspondientes."
+        // `partial`: not a day without class in every school of the province.
+        nonTeaching: [
+          { date: "2027-03-29", reason: "día no lectivo en los centros cuyas dos fiestas locales no caen en periodo lectivo", partial: true },
+          { date: "2027-05-03", reason: "día no lectivo salvo en los centros cuyas dos fiestas locales caen en periodo lectivo", partial: true },
+        ],
         localDays:
           "La resolución fija los días según dónde caigan las fiestas locales: si ninguna cae en periodo lectivo, no hay clase el 29 de marzo y el 3 de mayo; si cae una, esa fiesta y el 3 de mayo; si caen las dos, solo ellas.",
       },

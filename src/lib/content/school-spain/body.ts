@@ -91,6 +91,22 @@ function groupsInWords(groups: { date: string; names: string[] }[], locale: Loca
     .join("; ");
 }
 
+/**
+ * Where the provinces set their own Christmas (Andalucía): the last day of class
+ * in the searched words, grouped by day, "el martes 22 de diciembre en Almería,
+ * Cádiz, ... y Málaga; el miércoles 23 de diciembre en Sevilla". Computed from
+ * the provincial records; a province whose resolution is pending is not in it.
+ */
+function lastDayGroups(region: RegionCalendar, kind: BreakKind): string {
+  const L = lang(region);
+  const groups = new Map<string, string[]>();
+  for (const { name, days } of breakDaysAll(region, kind)) groups.set(days.last, [...(groups.get(days.last) ?? []), name ?? region.short]);
+  return groupsInWords(
+    [...groups.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, names]) => ({ date, names })),
+    L,
+  );
+}
+
 /** "las 17 comunidades, Ceuta y Melilla" while none is pending. */
 function scopeWords(locale: Locale): string {
   const pendingList = pendingRegions(locale);
@@ -287,9 +303,9 @@ function christmasSection(region: RegionCalendar): Block[] {
         type: "paragraph",
         text: t(
           L,
-          `Cada provincia fija su Navidad: no hay clase ${c.label}. Así queda en cada una:`,
-          `Cada província fixa el seu Nadal: no hi ha classe ${c.label}. Així queda a cadascuna:`,
-          `Each province sets its own Christmas: there is no class from ${c.label}. This is how it works out in each one:`,
+          `Cada provincia fija su Navidad: no hay clase ${c.label}. Las vacaciones empiezan al acabar el último día de clase, que es ${lastDayGroups(region, "christmas")}. Así queda en cada una:`,
+          `Cada província fixa el seu Nadal: no hi ha classe ${c.label}. Les vacances comencen en acabar l'últim dia de classe, que és ${lastDayGroups(region, "christmas")}. Així queda a cadascuna:`,
+          `Each province sets its own Christmas: there is no class from ${c.label}. The holidays start after the last day of class, which is ${lastDayGroups(region, "christmas")}. This is how it works out in each one:`,
         ),
       },
       {
@@ -791,15 +807,15 @@ function regionFaq(region: RegionCalendar): Block {
       answer: c.label
         ? t(
             L,
-            `Depende de la provincia: no hay clase ${c.label}. La tabla de Navidad por provincias tiene el último día de clase y la vuelta de cada una.`,
-            `Depèn de la província: no hi ha classe ${c.label}. La taula de Nadal per províncies té l'últim dia de classe i la tornada de cadascuna.`,
-            `It depends on the province: there is no class from ${c.label}. The Christmas table by province has each one's last day of class and return.`,
+            `Depende de la provincia: no hay clase ${c.label}. El último día de clase es ${lastDayGroups(region, "christmas")}. La tabla de Navidad por provincias tiene también la vuelta de cada una.`,
+            `Depèn de la província: no hi ha classe ${c.label}. L'últim dia de classe és ${lastDayGroups(region, "christmas")}. La taula de Nadal per províncies té també la tornada de cadascuna.`,
+            `It depends on the province: there is no class from ${c.label}. The last day of class is ${lastDayGroups(region, "christmas")}. The Christmas table by province also has each one's return.`,
           )
         : t(
             L,
-            `El ${weekdayDay(c.from)} es el primer día sin clase y el ${weekdayDay(c.to)} el último, según ${theOrder(region.order.short)}. El último día de clase es el ${weekdayDay(lastClassBefore(region, c))}.${minimum(c)}`,
-            `El ${weekdayDay(c.from, L)} és el primer dia sense classe i el ${weekdayDay(c.to, L)} l'últim, segons ${theOrder(region.order.short, L)}. L'últim dia de classe és el ${weekdayDay(lastClassBefore(region, c), L)}.${minimum(c)}`,
-            `${weekdayDay(c.from, L)} is the first day without class and ${weekdayDay(c.to, L)} the last, according to ${theOrder(region.order.short, L)}. The last day of class is ${weekdayDay(lastClassBefore(region, c), L)}.${minimum(c)}`,
+            `El último día de clase es el ${weekdayDay(lastClassBefore(region, c))} y las vacaciones empiezan el ${weekdayDay(c.from)}: es el primer día sin clase y el ${weekdayDay(c.to)} el último, según ${theOrder(region.order.short)}.${minimum(c)}`,
+            `L'últim dia de classe és el ${weekdayDay(lastClassBefore(region, c), L)} i les vacances comencen el ${weekdayDay(c.from, L)}: és el primer dia sense classe i el ${weekdayDay(c.to, L)} l'últim, segons ${theOrder(region.order.short, L)}.${minimum(c)}`,
+            `The last day of class is ${weekdayDay(lastClassBefore(region, c), L)} and the holidays start on ${weekdayDay(c.from, L)}: it is the first day without class and ${weekdayDay(c.to, L)} the last, according to ${theOrder(region.order.short, L)}.${minimum(c)}`,
           ),
     },
     {
@@ -887,6 +903,69 @@ function christmasHubLink(region: RegionCalendar): Block {
   };
 }
 
+/**
+ * 25 Nov 2026: "días no lectivos <provincia>" (Andalucía sets them by province:
+ * Sevilla, Málaga, Granada, Cádiz...). One row per province with the days its
+ * Delegación Territorial declares without class outside the Christmas and Easter
+ * tables, in date order, from the same records as the province table further
+ * down (resolutions re-read 25 Nov 2026, quotes in data.ts). Empty where the
+ * provinces repeat the regional dates.
+ */
+function provinceDaysOffSection(region: RegionCalendar): Block[] {
+  const calendars = provinceCalendars(region);
+  if (calendars.length === 0) return [];
+  const L = lang(region);
+  const P = pending(L);
+  const byName = new Map((region.provinces ?? []).map((p) => [p.name, p]));
+  const rows = calendars.map(({ name }) => {
+    const p = byName.get(name)!;
+    const items = [
+      ...(p.christmas?.note ? [`${t(L, "Navidad", "Nadal", "Christmas")}: ${p.christmas.note}`] : []),
+      ...(p.easter?.note ? [`${t(L, "Semana Santa", "Setmana Santa", "Easter")}: ${p.easter.note}`] : []),
+      ...(p.nonTeaching ?? [])
+        .slice()
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .map((d) => `${weekdayDay(d.date, L)} (${d.reason})`),
+      ...(p.otherBreaks ?? []).map((b) => `${b.name}: ${span(b, L)}`),
+    ];
+    return [name, items.length ? items.join("; ") : t(L, "ninguno más", "cap més", "none besides")];
+  });
+  return [
+    {
+      type: "heading",
+      level: 2,
+      text: t(
+        L,
+        `Días no lectivos por provincia ${region.inName}, curso ${Y}`,
+        `Dies no lectius per província ${region.inName}, curs ${Y}`,
+        `Non-teaching days by province ${region.inName}, ${Y}`,
+      ),
+    },
+    {
+      type: "paragraph",
+      text: t(
+        L,
+        `Cada Delegación Territorial declara sus propios días no lectivos, además de los festivos y de las vacaciones de Navidad y Semana Santa: no son los mismos en ${joinList(calendars.map((c) => c.name), L)}. Son los de Infantil y Primaria, en las resoluciones de cada delegación.`,
+        `Cada Delegació Territorial declara els seus propis dies no lectius, a més dels festius i de les vacances de Nadal i Setmana Santa: no són els mateixos a ${joinList(calendars.map((c) => c.name), L)}. Són els d'Infantil i Primària, a les resolucions de cada delegació.`,
+        `Each provincial office declares its own non-teaching days, on top of the public holidays and the Christmas and Easter holidays: they are not the same in ${joinList(calendars.map((c) => c.name), L)}. These are the Infant and Primary ones, from each office's resolution.`,
+      ),
+    },
+    {
+      type: "table",
+      caption: t(L, `Días no lectivos ${Y} por provincia ${region.inName}`, `Dies no lectius ${Y} per província ${region.inName}`, `Non-teaching days ${Y} by province ${region.inName}`),
+      headers: t(L, ["Provincia", "Días no lectivos (fuera de los festivos)"], ["Província", "Dies no lectius (fora dels festius)"], ["Province", "Non-teaching days (apart from public holidays)"]),
+      rows: [...rows, ...(region.pendingProvinces ?? []).map((name) => [name, P])],
+      note: t(
+        L,
+        "Resoluciones de las delegaciones territoriales, leídas el 25 de noviembre de 2026. No cuenta las fiestas locales ni los días que fija cada ayuntamiento: están en la tabla por provincias, más abajo.",
+        "Resolucions de les delegacions territorials, llegides el 25 de novembre de 2026. No compta les festes locals ni els dies que fixa cada ajuntament: són a la taula per províncies, més avall.",
+        "Resolutions of the provincial offices, read on 25 November 2026. Local holidays and the days each town council sets are not counted: they are in the table by province further down.",
+      ),
+      stickyColumn: 0,
+    },
+  ];
+}
+
 /** The whole body of one community's page, in the record's language. */
 export function buildRegionBody(region: RegionCalendar): Block[] {
   const L = lang(region);
@@ -896,6 +975,7 @@ export function buildRegionBody(region: RegionCalendar): Block[] {
     { type: "spainSchoolCalendar", region: region.slug },
     ...christmasSection(region),
     christmasHubLink(region),
+    ...provinceDaysOffSection(region),
     ...easterSection(region),
     ...otherBreaksSection(region),
     ...levelsSection(region),

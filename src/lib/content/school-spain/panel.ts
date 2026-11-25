@@ -16,6 +16,7 @@ import {
   schoolDayIn,
   variesByProvince,
   weekdayDay,
+  provinceCalendars,
 } from "./logic";
 import { hubRegions, pendingRegions, regionPath } from "./regions";
 import type { Period, RegionCalendar } from "./types";
@@ -139,8 +140,15 @@ export function regionPanel(region: RegionCalendar, today: string): RegionPanel 
     const name =
       next.kind === "break" ? next.period.name : next.kind === "christmas" ? t(L, "Navidad", "Nadal", "Christmas") : t(L, "Semana Santa", "Setmana Santa", "Easter");
     const minimum = next.kind !== "break" && next.period.minimum ? t(L, ", como mínimo", ", com a mínim", ", at least") : "";
-    const span = L === "en" ? `from ${longSpan(next.period, L)}` : longSpan(next.period, L);
-    nextLine = `${t(L, "Próximas vacaciones", "Properes vacances", "Next holidays")}: ${name}, ${span}${minimum} ${inDays(daysBetween(today, next.period.from), L)}.`;
+    // 25 Nov 2026: where the provinces start on different days (Andalucía: 23 Dec, 24 in
+    // Sevilla), the record's own dates are one province's; say the label the lead says and
+    // count the days to the earliest start, as the lead and the table do.
+    const label = next.kind === "break" ? undefined : region[next.kind].label;
+    const firstDay = label
+      ? [next.period.from, ...provinceCalendars(region).map((p) => p.calendar[next.kind as "christmas" | "easter"].from)].sort()[0]!
+      : next.period.from;
+    const span = label ? (L === "en" ? `from ${label}` : label) : L === "en" ? `from ${longSpan(next.period, L)}` : longSpan(next.period, L);
+    nextLine = `${t(L, "Próximas vacaciones", "Properes vacances", "Next holidays")}: ${name}, ${span}${minimum} ${inDays(daysBetween(today, firstDay), L)}.`;
   } else if (next?.kind === "summer" && today >= start) {
     const label = t(L, "Último día de clase", "Últim dia de classe", "Last day of class");
     nextLine = main.endText ? `${label}: ${main.endText}.` : `${label}: ${fullDate(end, L)} ${inDays(daysBetween(today, end), L)}.`;

@@ -214,6 +214,14 @@ export const SCHOOL_TEXT: Record<string, readonly [ca: string, en: string]> = {
 
   // Single days without class: why, and for whom
   "día no lectivo provincial": ["dia no lectiu provincial", "provincial non-teaching day"],
+  "día no lectivo en los centros cuyas dos fiestas locales no caen en periodo lectivo": [
+    "dia no lectiu als centres que no tenen cap de les dues festes locals en període lectiu",
+    "non-teaching day in schools whose two local holidays do not fall in term time",
+  ],
+  "día no lectivo salvo en los centros cuyas dos fiestas locales caen en periodo lectivo": [
+    "dia no lectiu llevat dels centres que tenen les dues festes locals en període lectiu",
+    "non-teaching day except in schools whose two local holidays both fall in term time",
+  ],
   "Día de la Comunidad Educativa": ["Dia de la Comunitat Educativa", "Education Community Day"],
   "vacaciones provinciales": ["vacances provincials", "provincial holidays"],
   "en la provincia de Zaragoza": ["a la província de Saragossa", "in the province of Zaragoza"],
