@@ -287,6 +287,65 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 /** "diumenge 28 de març", "domingo 28 de marzo", "Sunday 28 March". */
 const dayLabel = (iso: string, L: Locale) => day(iso, L);
 
+/* -------------------------------------------------------------------------- */
+/* "Main Carnival parades 2027": town by town, read from the organisers         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Read 25 Nov 2026 (ci-fonts, opportunity O8). Quotes, all read that day:
+ *  - Sitges (VisitSitges): «el Arribo de S. M. Carnestoltes, el jueves 4 de febrero;
+ *    la Rua de la Disbauxa, el domingo 7; la Rua de l'Extermini, el martes 9».
+ *  - Solsona (carnavalsolsona.com, home): «El Carnaval més boig del 4 al 10 de
+ *    febrer»; /programa/: «Programa 2027 ... Encara no hi ha cap acte publicat al programa».
+ *  - Vilanova (carnavaldevilanova.cat, home): «El Carnaval 2026 s'ha acabat... Ens veiem
+ *    el 2027»; no 2027 programme. Monday 8 local day: see the local-days table.
+ *  - Platja d'Aro (ciutada.platjadaro.com): only the 2026 edition page; no 2027 notice.
+ *  - Barcelona (barcelona.cat/culturapopular, ca): «les rues de carnaval barcelonines,
+ *    que normalment s'organitzen el dissabte a la tarda»; no 2027 programme.
+ *  Not listed: Badalona (site blocks automated reads), Tarragona, Torelló, Sallent,
+ *  Sabadell: no council page with 2027 Carnival dates found on 25 Nov.
+ * Re-read in mid-January: the test fails after 2027-01-15 until this date moves.
+ */
+export const CARNIVAL_TABLE_READ = "2026-11-25";
+
+const PARADES_SLUGS = ["sitges", "vilanova-i-la-geltru", "solsona", "castell-d-aro-platja-d-aro-i-s-agaro", "barcelona"] as const;
+type ParadeSlug = (typeof PARADES_SLUGS)[number];
+
+function paradeTownLink(slug: ParadeSlug, name: string, L: Locale): string {
+  if (L === "en" && !hasEnglishPage(slug)) return name;
+  return a(municipalityPath(L, slug), name);
+}
+
+function paradesRows(L: Locale): string[][] {
+  const read = shortDate(CARNIVAL_TABLE_READ, L);
+  const t = {
+    ca: {
+      sitges: `Rua de la Disbauxa, diumenge 7 de febrer; Rua de l'Extermini, dimarts 9 (${a(CARNIVAL_URLS.sitges2027, "VisitSitges")})`,
+      vilanova: `Programa del 2027 no anunciat (llegit el ${read}): la web de la Federació diu «Ens veiem el 2027». El dilluns 8 és festa local. ${a(CARNIVAL_URLS.vilanova, "Federació")}`,
+      solsona: `Carnaval del 4 al 10 de febrer; programa del 2027 no publicat: «Encara no hi ha cap acte publicat al programa» (llegit el ${read}). ${a("https://carnavalsolsona.com/programa/", "Associació de Festes")}`,
+      platja: `Programa del 2027 no anunciat (llegit el ${read}): l'Ajuntament només té la pàgina del 2026. El dijous 4 és festa local. ${a(CARNIVAL_URLS.platjaDaro, "Ajuntament")}`,
+      bcn: `Normalment, rues als barris el dissabte a la tarda, segons l'Ajuntament; dates del 2027 no anunciades (llegit el ${read}). ${a(CARNIVAL_URLS.bcnCa, "Cultura Popular")}`,
+    },
+    es: {
+      sitges: `Rua de la Disbauxa, domingo 7 de febrero; Rua de l'Extermini, martes 9 (${a(CARNIVAL_URLS.sitges2027, "VisitSitges")})`,
+      vilanova: `Programa de 2027 no anunciado (leído el ${read}): la web de la Federació dice «Ens veiem el 2027». El lunes 8 es fiesta local. ${a(CARNIVAL_URLS.vilanova, "Federació")}`,
+      solsona: `Carnaval del 4 al 10 de febrero; programa de 2027 no publicado: «Encara no hi ha cap acte publicat al programa» (leído el ${read}). ${a("https://carnavalsolsona.com/programa/", "Associació de Festes")}`,
+      platja: `Programa de 2027 no anunciado (leído el ${read}): el Ayuntamiento solo tiene la página de 2026. El jueves 4 es fiesta local. ${a(CARNIVAL_URLS.platjaDaro, "Ayuntamiento")}`,
+      bcn: `Normalmente, rúas en los barrios el sábado por la tarde, según el Ayuntamiento; fechas de 2027 no anunciadas (leído el ${read}). ${a(CARNIVAL_URLS.bcnEs, "Cultura Popular")}`,
+    },
+    en: {
+      sitges: `Rua de la Disbauxa, Sunday 7 February; Rua de l'Extermini, Tuesday 9 (${a(CARNIVAL_URLS.sitges2027, "VisitSitges")})`,
+      vilanova: `2027 programme not announced (read ${read}): the Federation's site says «Ens veiem el 2027» (see you in 2027). Monday 8 is a local holiday. ${a(CARNIVAL_URLS.vilanova, "Federation")}`,
+      solsona: `Carnival 4 to 10 February; 2027 programme not published: «Encara no hi ha cap acte publicat al programa» (no event listed yet; read ${read}). ${a("https://carnavalsolsona.com/programa/", "Carnival association")}`,
+      platja: `2027 programme not announced (read ${read}): the council only has the 2026 page. Thursday 4 is a local holiday. ${a(CARNIVAL_URLS.platjaDaro, "Council")}`,
+      bcn: `Usually neighbourhood parades on a Saturday afternoon, per the council; 2027 dates not announced (read ${read}). ${a(CARNIVAL_URLS.bcnEn, "Popular Culture")}`,
+    },
+  }[L];
+  const names: Record<ParadeSlug, string> = { sitges: "Sitges", "vilanova-i-la-geltru": "Vilanova i la Geltrú", solsona: "Solsona", "castell-d-aro-platja-d-aro-i-s-agaro": "Platja d'Aro", barcelona: "Barcelona" };
+  const keyOf: Record<ParadeSlug, keyof typeof t> = { sitges: "sitges", "vilanova-i-la-geltru": "vilanova", solsona: "solsona", "castell-d-aro-platja-d-aro-i-s-agaro": "platja", barcelona: "bcn" };
+  return PARADES_SLUGS.map((slug) => [paradeTownLink(slug, names[slug], L), t[keyOf[slug]]]);
+}
+
 function townName(town: SnapshotMunicipality, L: Locale): string {
   return L === "ca" ? town.name : L === "es" ? displayName(town, "es") : cap(town.name);
 }
@@ -488,6 +547,9 @@ export function buildCarnivalBody(L: Locale): Block[] {
       ],
       schoolCaption: "Dies de lliure disposició escolar la setmana de Carnaval del 2027",
       schoolHead: ["Municipi", "Dia sense classe", "Tipus"],
+      paradesH: 'Principals rues de Carnaval 2027',
+      paradesIntro: "Poble per poble, amb la font de cada dada. Només hi ha dates del 2027 on l'organitzador les ha publicat; on no, ho diem. Badalona, Tarragona, Torelló, Sallent i Sabadell no hi són: no hem trobat cap pàgina oficial amb dates del Carnaval 2027 (llegit el 25 de novembre). Ho tornarem a llegir a mitjan gener.",
+      paradesHead: ['Població', 'Rua i programa del 2027'],
       bigH: "Els grans carnavals",
       sitgesH: "Sitges",
       sitges: [`Del 4 al 10 de febrer de 2027, amb un any especial pels 150 anys del Casino Prado Suburense, que organitza les figures de Carnestoltes i de la Reina. Els dies marcats: l'Arribo de Carnestoltes el dijous 4, la **Rua de la Disbauxa el diumenge 7**, la **Rua de l'Extermini el dimarts 9** i l'enterrament de Carnestoltes el dimecres 10. Font: ${a(CARNIVAL_URLS.sitges2027, "VisitSitges")}. Si hi vas des de Barcelona en tren, ${b2link("sitges", "ca", "la guia de Sitges")} té la línia i els bitllets.`],
@@ -548,6 +610,9 @@ export function buildCarnivalBody(L: Locale): Block[] {
       ],
       schoolCaption: "Días de libre disposición escolar en la semana de Carnaval de 2027",
       schoolHead: ["Municipio", "Día sin clase", "Tipo"],
+      paradesH: 'Principales rúas de Carnaval 2027',
+      paradesIntro: 'Pueblo por pueblo, con la fuente de cada dato. Solo hay fechas de 2027 donde el organizador las ha publicado; donde no, lo decimos. Badalona, Tarragona, Torelló, Sallent y Sabadell no están: no hemos encontrado ninguna página oficial con fechas del Carnaval 2027 (leído el 25 de noviembre). Lo volveremos a leer a mediados de enero.',
+      paradesHead: ['Población', 'Rúa y programa de 2027'],
       bigH: "Los grandes carnavales",
       sitgesH: "Sitges",
       sitges: [`Del 4 al 10 de febrero de 2027, con un año especial por los 150 años del Casino Prado Suburense, que organiza las figuras de Carnestoltes y de la Reina. Los días marcados: el Arribo de Carnestoltes el jueves 4, la **Rua de la Disbauxa el domingo 7**, la **Rua de l'Extermini el martes 9** y el entierro de Carnestoltes el miércoles 10. Fuente: ${a(CARNIVAL_URLS.sitges2027, "VisitSitges")}. Si vas desde Barcelona en tren, ${b2link("sitges", "es", "la guía de Sitges")} tiene la línea y los billetes.`],
@@ -608,6 +673,9 @@ export function buildCarnivalBody(L: Locale): Block[] {
       ],
       schoolCaption: "School free days in Carnival week 2027",
       schoolHead: ["Town", "Day without classes", "Type"],
+      paradesH: 'Main Carnival parades 2027',
+      paradesIntro: 'Town by town, with the source of each fact. 2027 dates appear only where the organiser has published them; where not, we say so. Badalona, Tarragona, Torelló, Sallent and Sabadell are not listed: we found no official page with 2027 Carnival dates (read 25 November). We will read them again in mid-January.',
+      paradesHead: ['Town', '2027 parade and programme'],
       bigH: "The big carnivals",
       sitgesH: "Sitges",
       sitges: [`4 to 10 February 2027, a special year for the 150th anniversary of the Casino Prado Suburense, which stages both King Carnestoltes and the Carnival Queen. The dated events: the Arribo of Carnestoltes on Thursday 4, the **Rua de la Disbauxa on Sunday 7**, the **Rua de l'Extermini on Tuesday 9** and the burial of Carnestoltes on Wednesday 10. Source: ${a(CARNIVAL_URLS.sitges2027, "VisitSitges")}. Going by train from Barcelona? ${b2link("sitges", "en", "Our Sitges guide")} has the line and the tickets.`],
@@ -641,6 +709,8 @@ export function buildCarnivalBody(L: Locale): Block[] {
     table(t.holCaption, t.holHead, localRows(L)),
     ...h2(t.schoolH, ...t.schoolP),
     table(t.schoolCaption, t.schoolHead, schoolRows(L), { ca: `Dies llegits a la pàgina de cada ajuntament o consell escolar (última lectura: ${shortDate(FREE_DAYS_AS_OF, "ca")}).`, es: `Días leídos en la página de cada ayuntamiento o consejo escolar (última lectura: ${shortDate(FREE_DAYS_AS_OF, "es")}).`, en: `Days read on each council's or school council's page (last read ${shortDate(FREE_DAYS_AS_OF, "en")}).` }[L]),
+    ...h2(t.paradesH, t.paradesIntro),
+    table(t.paradesH, t.paradesHead, paradesRows(L)),
     { type: "heading", level: 2, text: t.bigH } as Block,
     ...h3(t.sitgesH, ...t.sitges),
     ...h3(t.vilanovaH, ...t.vilanova),

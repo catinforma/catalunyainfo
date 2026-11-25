@@ -8,6 +8,7 @@ import {
   CARNIVAL,
   CARNIVAL_AS_OF,
   CARNIVAL_GUIDE,
+  CARNIVAL_TABLE_READ,
   CARNIVAL_WEEK,
   PROGRAMMES_2027,
   buildCarnivalBody,
@@ -235,5 +236,20 @@ test("carnival plan: the town counts are qualified as the councils' approved day
     assert.match(plain, wording[locale], locale);
     assert.ok(plain.includes(read[locale]), `${locale}: the read date ${readOn}`);
     assert.doesNotMatch(plain, /(municipis tenen una festa local la setmana|municipios tienen una fiesta local la semana|towns have a local holiday in Carnival week)/, `${locale}: no unqualified count`);
+  }
+});
+
+test("carnival: the parades table says what each town has published, never 2026 dates as 2027, and is re-read by mid-January", () => {
+  assert.ok(today <= "2027-01-15" || CARNIVAL_TABLE_READ >= "2027-01-05", `Re-read the parades table (organisers' pages) and move CARNIVAL_TABLE_READ; last read ${CARNIVAL_TABLE_READ}`);
+  for (const locale of LOCALES) {
+    const table = CARNIVAL_GUIDE.editions[locale].blocks.find((b) => b.type === "table" && /2027/.test((b as { caption: string }).caption) && /(rues|rúas|parades)/i.test((b as { caption: string }).caption)) as { rows: string[][] } | undefined;
+    assert.ok(table, `${locale}: parades table`);
+    assert.equal(table.rows.length, 5);
+    const flat = table.rows.map((r) => r.join(" | "));
+    assert.match(flat[0]!, /7/);
+    assert.match(flat[0]!, /9/);
+    for (const row of flat.slice(1)) assert.match(row, /2026|25|novembre|noviembre|November/, `${locale}: states the read date`);
+    assert.ok(!flat.slice(1).some((r) => /14 de febrer|14 de febrero|14 February/.test(r)), `${locale}: no 2026 parade date`);
+    assert.ok(table.rows[0]![0]!.includes("/sitges"), `${locale}: Sitges linked`);
   }
 });

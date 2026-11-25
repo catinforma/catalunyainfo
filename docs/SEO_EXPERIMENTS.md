@@ -14729,3 +14729,15 @@ Tests: `ski-opening-table` (new), `ski-reread-25nov`, `ski-reread-23nov`, `batch
 - **Field target:** CLS p75 <= 0.10. **There is no field data yet** (the site is new; CrUX needs enough Chrome visits and 28 days). The lab 0.38-0.41 is a worst case from a server IP that gets the consent dialog; visitors who get no anchor (unfilled, capped, desktop) measure 0.
 
 **Review 2026-12-08.** Re-run `CONSENT=accept node scripts/ads-cls-lab.mjs <url> 412 915` on the three URLs; read the owner's AdSense by-format report; read CrUX / Search Console mobile CLS for the origin if it exists. Decide then whether to keep anchors off.
+
+## 2026-11-25 (late) — Carnival 2027: "Main Carnival parades 2027" table, town by town (ci-fonts + ci-edicio; ca/es/en; body only; group `carnaval`) (review 2027-01-20)
+
+**URLs.** `/ca/tradicions/carnaval-catalunya/`, `/es/tradiciones/carnaval-cataluna/`, `/en/traditions/carnival-catalonia/`. Title, meta, H1 and lead untouched (the page's planning block of the same day is not repeated).
+
+**Change.** New H2 + table before "The big carnivals": Sitges (Rua de la Disbauxa Sun 7, Rua de l'Extermini Tue 9, VisitSitges), Vilanova, Solsona (organiser: Carnival 4-10 Feb, programme empty), Platja d'Aro, Barcelona (council: rues "normalment ... el dissabte a la tarda"). Each row names its source and the read date (25 Nov); 2026 dates are not printed as 2027. Badalona, Tarragona, Torelló, Sallent and Sabadell left out: no official page with 2027 Carnival dates found (Badalona's site blocks automated reads). Code: `paradesRows`, `CARNIVAL_TABLE_READ`.
+
+**Baseline (GSC, 28 d to 25 Nov, from the opportunities note).** "carnaval 2027 catalunya" EN 336 impr pos 4.8 (2 clicks); "carnestoltes 2027" 203; "dijous gras 2027" 109; "quan es carnestoltes 2027" 104; "carnaval 2027 platja d aro" 31 pos 4.7. Review 2027-01-20: `scripts/snapshot.py page carnaval 28`, `page carnival-catalonia 28`.
+
+**Date guard.** `tests/carnival.test.ts` fails after 2027-01-15 until `CARNIVAL_TABLE_READ` is moved by a re-read of each organiser page (Vilanova, Solsona, Platja d'Aro, Barcelona likely publish in January); the existing programmes guard fails from 25 Jan.
+
+Tests: `carnival` (17), `batch02` (63) pass; `tsc --noEmit` clean; `seo:body-dates` run.
