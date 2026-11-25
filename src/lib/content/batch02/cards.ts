@@ -300,7 +300,7 @@ function body(locale: Locale) {
     list(...t.pick),
     callout("warning", t.warnTitle, t.warn),
     faq(t.faq),
-    ...b2Related(["transport", "museums", "monuments", "airport"], locale),
+    ...b2Related(["transport", "museums", "monuments", "tibidabo", "airport"], locale),
   ];
 }
 

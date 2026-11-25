@@ -37,6 +37,16 @@ import {
 // 91, phone; Christmas 2025-26 openings post of 9 Dec 2025), the Aug 2026
 // reform note (group rule restated). No 2026-27 Sunday or holiday openings
 // are published yet, so none is printed.
+// Re-read 25 Nov 2026 (body only): boqueria.barcelona/contact ("Market opening
+// hours Monday to Saturday: 8:00am - 8:30pm", "Information Point telephone
+// 93 318 20 17", "INFORMATION POINT Monday to Saturday: 9:00am - 15:00pm",
+// "Rambla, 91"), its news list (latest post n-381, none on Christmas 2026-27;
+// the Christmas post n-352 is still the 2025-26 one: "open on Saturday,
+// December 6, Sunday, December 21, Sunday, December 28, and Sunday, January 4")
+// and the IMMB page (hours "De dilluns a dissabte, 6 desembre, 21 desembre,
+// 28 desembre i 4 gener 08:00-20:30", no year: the 2025-26 list). The
+// "2026-27 not published" sentence is guarded by BOQUERIA_CHRISTMAS_REREAD_BY.
+export const BOQUERIA_CHRISTMAS_REREAD_BY = "2026-12-04";
 const VERIFIED = "2026-10-28";
 // The Zoo page alone was re-checked on 26 Oct 2026 (winter hours); the
 // markets page keeps VERIFIED.
@@ -422,8 +432,8 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     lead: "**La Boqueria opens Monday to Saturday, 8:00 to 20:30**; on Sundays and public holidays it opens only on the dates the market announces, usually a few over Christmas. Each stall sets its own hours inside that window. Sant Antoni keeps the same hours, while Santa Caterina, La Concepció, La Llibertat and El Ninot close early on some days (table below). These are working markets first: the city runs them for the people who shop there.",
     boqTitle: "La Boqueria opening hours, Sundays and holidays",
     boq: [
-      "The Mercat de Sant Josep, La Boqueria, is at La Rambla 91 and opens Monday to Saturday from 8:00 to 20:30; the nearest metro is Liceu (L3). Phone: 93 413 23 03.",
-      "**Sundays and public holidays:** the market opens only on the days it announces. Over Christmas 2025-26 it opened on Saturday 6 December and on Sundays 21 and 28 December and 4 January; the 2026-27 dates have not been published yet.",
+      "The Mercat de Sant Josep, La Boqueria, is at La Rambla 91 and opens Monday to Saturday from 8:00 to 20:30; the nearest metro is Liceu (L3). Phone: 93 413 23 03. The market's information point is open Monday to Saturday 9:00–15:00 (phone 93 318 20 17).",
+      "**Sundays and public holidays:** the market opens only on the days it announces. Over Christmas 2025-26 it opened on Saturday 6 December and on Sundays 21 and 28 December and 4 January; the 2026-27 dates had not been published on the market's website by 25 November 2026.",
       "A renovation is under way: smaller works start after the summer of 2026, the central fish stalls are expected to move temporarily to Plaça de la Gardunya, and the main works on the roof and structure run from 2027 to 2029, with trading continuing where possible.",
     ],
     rulesTitle: "Rules for visitors",
@@ -455,6 +465,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       { question: "Is La Boqueria open on public holidays?", answer: "Only on the days the market announces. Over Christmas 2025-26 those were 6, 21 and 28 December and 4 January; the 2026-27 dates are not published yet." },
       { question: "Can tour groups visit La Boqueria?", answer: "Not organised groups of 15 or more on Fridays and Saturdays from April to October." },
       { question: "Which Barcelona markets are open on Sundays?", answer: "None of the big food markets in the table: they all open Monday to Saturday. On Sundays the book, comics and collectables market around Sant Antoni runs from 8:30 to 14:00." },
+      { question: "Where is La Boqueria and how do I get there?", answer: "At La Rambla 91, in Ciutat Vella; the nearest metro station is Liceu (L3). It is open Monday to Saturday, 8:00 to 20:30." },
       { question: "What time does La Boqueria close?", answer: "At 20:30, Monday to Saturday; each stall sets its own hours within that." },
     ],
     note: "Market hours change for holidays and works: check the City Council's markets pages.",
@@ -463,8 +474,8 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     lead: "**La Boqueria abre de lunes a sábado de 8:00 a 20:30**; los domingos y festivos solo abre los días que anuncia el mercado, normalmente unos pocos en Navidad. Cada parada fija su horario dentro de esa franja. Sant Antoni tiene el mismo horario, mientras que Santa Caterina, la Concepció, la Llibertat y el Ninot cierran antes algunos días (tabla más abajo). Son ante todo mercados de barrio: el Ayuntamiento los gestiona para quien compra en ellos.",
     boqTitle: "Horario de la Boqueria: domingos y festivos",
     boq: [
-      "El Mercat de Sant Josep, la Boqueria, está en La Rambla, 91, y abre de lunes a sábado de 8:00 a 20:30; el metro más cercano es Liceu (L3). Teléfono: 93 413 23 03.",
-      "**Domingos y festivos:** el mercado solo abre los días que anuncia. En la Navidad de 2025-26 abrió el sábado 6 de diciembre y los domingos 21 y 28 de diciembre y 4 de enero; las fechas de 2026-27 aún no se han publicado.",
+      "El Mercat de Sant Josep, la Boqueria, está en La Rambla, 91, y abre de lunes a sábado de 8:00 a 20:30; el metro más cercano es Liceu (L3). Teléfono: 93 413 23 03. El punto de información del mercado abre de lunes a sábado de 9:00 a 15:00 (teléfono 93 318 20 17).",
+      "**Domingos y festivos:** el mercado solo abre los días que anuncia. En la Navidad de 2025-26 abrió el sábado 6 de diciembre y los domingos 21 y 28 de diciembre y 4 de enero; las fechas de 2026-27 no estaban publicadas en la web del mercado el 25 de noviembre de 2026.",
       "Hay una reforma en marcha: las obras menores empiezan después del verano de 2026, está previsto que las paradas centrales de pescado se trasladen temporalmente a la plaza de la Gardunya, y las obras grandes de cubierta y estructura van de 2027 a 2029, manteniendo la actividad donde sea posible.",
     ],
     rulesTitle: "Normas para los visitantes",
@@ -505,8 +516,8 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     lead: "**El Mercat de la Boqueria obre de dilluns a dissabte de 8:00 a 20:30**; els diumenges i festius només obre els dies que anuncia el mercat, normalment uns quants per Nadal. Cada parada fixa el seu horari dins d'aquesta franja. Sant Antoni té el mateix horari, mentre que Santa Caterina, la Concepció, la Llibertat i el Ninot tanquen abans alguns dies (taula més avall). Són abans de res mercats de barri: l'Ajuntament els gestiona per a qui hi compra.",
     boqTitle: "Horari de la Boqueria: diumenges i festius",
     boq: [
-      "El Mercat de Sant Josep, la Boqueria, és a la Rambla, 91, i obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Telèfon: 93 413 23 03.",
-      "**Diumenges i festius:** el mercat només obre els dies que anuncia. El Nadal de 2025-26 va obrir el dissabte 6 de desembre i els diumenges 21 i 28 de desembre i 4 de gener; les dates del 2026-27 encara no s'han publicat.",
+      "El Mercat de Sant Josep, la Boqueria, és a la Rambla, 91, i obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Telèfon: 93 413 23 03. El punt d'informació del mercat obre de dilluns a dissabte de 9:00 a 15:00 (telèfon 93 318 20 17).",
+      "**Diumenges i festius:** el mercat només obre els dies que anuncia. El Nadal de 2025-26 va obrir el dissabte 6 de desembre i els diumenges 21 i 28 de desembre i 4 de gener; les dates del 2026-27 no eren publicades al web del mercat el 25 de novembre de 2026.",
       "Hi ha una reforma en marxa: les obres menors comencen després de l'estiu del 2026, està previst que les parades centrals de peix es traslladin temporalment a la plaça de la Gardunya, i les obres grans de coberta i estructura van del 2027 al 2029, mantenint l'activitat on sigui possible.",
     ],
     rulesTitle: "Normes per als visitants",
@@ -538,6 +549,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       { question: "Quin és l'horari de la Boqueria els festius?", answer: "Només obre els festius que anuncia el mercat. El Nadal de 2025-26 van ser el 6, el 21 i el 28 de desembre i el 4 de gener; les dates del 2026-27 encara no s'han publicat." },
       { question: "Poden visitar la Boqueria els grups turístics?", answer: "No els grups organitzats de 15 persones o més, els divendres i dissabtes d'abril a octubre." },
       { question: "Quins mercats de Barcelona obren el diumenge?", answer: "Cap dels grans mercats d'alimentació de la taula: tots obren de dilluns a dissabte. El diumenge, al voltant de Sant Antoni, es fa el mercat de llibres, còmics i col·leccionisme, de 8:30 a 14:00." },
+      { question: "On és la Boqueria i com s'hi arriba?", answer: "A la Rambla, 91, a Ciutat Vella; l'estació de metro més propera és Liceu (L3). Obre de dilluns a dissabte, de 8:00 a 20:30." },
       { question: "A quina hora tanca la Boqueria?", answer: "A les 20:30, de dilluns a dissabte; cada parada fixa el seu horari dins d'aquest." },
     ],
     note: "Els horaris dels mercats canvien per festes i obres: consulta les pàgines de mercats de l'Ajuntament.",
