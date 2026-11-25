@@ -69,13 +69,14 @@ test("ski: Wednesday half price from FGC's 6 Nov note, with its own question; th
   }
 });
 
-test("ski: re-read due once Baqueira's planned opening day has come", () => {
-  // The page says Baqueira "plans" to open on Sat 28 Nov 2026 and that
-  // Masella has no date. From 29 Nov 2026 that may no longer be true: re-read
-  // baqueira.es/es/noticias, the FGC calendars and masella.com, rewrite the
-  // opening section in the past tense where it applies, move VERIFIED, then
-  // move this date to the next planned change (FGC opening, 4 Dec).
-  const REREAD_BY = "2026-11-29";
+test("ski: re-read due before the season starts (moved on 25 Nov, when Baqueira postponed 28 Nov)", () => {
+  // 25 Nov 2026: Baqueira's news of 24 Nov postponed the 28 Nov opening and
+  // gave no new date; the page says so. From 30 Nov 2026 (it may announce
+  // over the weekend) re-read baqueira.es/es/noticias, the FGC calendars and
+  // masella.com, write the opening section in the present or past tense
+  // where it applies, move VERIFIED, then move this date to the FGC opening
+  // (4 Dec) and then to the end of the FGC offers (8 Dec).
+  const REREAD_BY = "2026-11-30";
   const today = new Date().toISOString().slice(0, 10);
   assert.ok(today < REREAD_BY || SKI.verifiedAt >= REREAD_BY, `ski: verified ${SKI.verifiedAt}, re-read due ${REREAD_BY}`);
 });

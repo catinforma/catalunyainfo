@@ -363,7 +363,7 @@ const SOURCES: B2Source[] = [
     : []),
   { name: "Carilló del Palau de la Generalitat", url: "https://presidencia.gencat.cat/ca/ambits_d_actuacio/palau-de-la-generalitat/carillo-del-palau/", publisher: "Generalitat de Catalunya" },
   { name: "33è Pessebre Vivent de la Torre del Suro", url: TORRE_DEL_SURO_2026.url, publisher: TORRE_DEL_SURO.publisher },
-  ...[skiSource("baqueira-beret-activa-el-invierno"), skiSource("lamolina/estacio/informacio-tecnica")].filter((s): s is B2Source => Boolean(s)),
+  ...[skiSource("baqueira-beret-prepara-el-inicio"), skiSource("lamolina/estacio/informacio-practica")].filter((s): s is B2Source => Boolean(s)),
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -879,7 +879,8 @@ export function buildBarcelonaDecemberBody(
   const grossa = dayDate(GROSSA_DRAW_DATE, locale, false);
   const pending = pendingItems(locale, facts, traditions, drawTime);
   const torre = dayDate(TORRE_DEL_SURO_2026.date, locale, false);
-  const baqueira = dayDate(SKI_OPENING_2026.baqueira, locale, false);
+  // Baqueira postponed its planned 28 Nov opening on 24 Nov 2026 (ski guide); no new date yet.
+  const baqueiraPlanned = dayDate("2026-11-28", locale, false);
   const fgc = dayDate(SKI_OPENING_2026.fgc, locale, false);
   const lightsNews = facts.lightsSwitchOn
     ? { ca: `L'encesa dels llums de Nadal és ${when(facts.lightsSwitchOn, "ca")}.`, es: `El encendido de las luces de Navidad es ${when(facts.lightsSwitchOn, "es")}.`, en: `The Christmas lights switch-on is on ${when(facts.lightsSwitchOn, "en")}.` }[locale]
@@ -954,7 +955,7 @@ export function buildBarcelonaDecemberBody(
       agendaList("ca"),
       ...h2(
         "Escapades i neu",
-        `Baqueira Beret té previst obrir la temporada el ${baqueira} i les estacions d'FGC (la Molina, Vallter, Port Ainé i Boí Taüll), el ${fgc}, si la meteorologia i la neu ho permeten. A la Molina s'hi arriba en tren des de Barcelona. Totes les estacions, a ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
+        `Baqueira Beret ha ajornat l'obertura que tenia prevista per al ${baqueiraPlanned} i anunciarà la nova data segons la neu; les estacions d'FGC (la Molina, Vallter, Port Ainé i Boí Taüll) tenen previst obrir el ${fgc}, si la meteorologia i la neu ho permeten. A la Molina s'hi arriba en tren des de Barcelona. Totes les estacions, a ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
       ),
       faq([
         { question: "Què fer a Barcelona al desembre del 2026?", answer: `Hi ha els llums i les fires de Nadal, concerts com l'Oratori El Pessebre al Palau de la Música (${dayDate("2026-12-15", "ca", false)}), El trencanous al Liceu, La Marató de 3Cat (${marato}) i Cap d'Any. Les botigues poden obrir ${shopDays}.` },
@@ -1040,7 +1041,7 @@ export function buildBarcelonaDecemberBody(
       agendaList("es"),
       ...h2(
         "Escapadas y nieve",
-        `Baqueira Beret tiene previsto abrir la temporada el ${baqueira} y las estaciones de FGC (La Molina, Vallter, Port Ainé y Boí Taüll), el ${fgc}, siempre que las condiciones meteorológicas y de nieve lo permitan. A La Molina se llega en tren desde Barcelona. Todas las estaciones, en ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
+        `Baqueira Beret ha aplazado la apertura que tenía prevista para el ${baqueiraPlanned} y anunciará la nueva fecha según la nieve; las estaciones de FGC (La Molina, Vallter, Port Ainé y Boí Taüll) tienen previsto abrir el ${fgc}, siempre que las condiciones meteorológicas y de nieve lo permitan. A La Molina se llega en tren desde Barcelona. Todas las estaciones, en ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
       ),
       faq([
         { question: "¿Qué hacer en Barcelona en diciembre de 2026?", answer: `Están las luces y las ferias de Navidad, conciertos como el Oratorio El Pessebre en el Palau de la Música (${dayDate("2026-12-15", "es", false)}), El trencanous en el Liceu, La Marató de 3Cat (${marato}) y Nochevieja. Las tiendas pueden abrir ${shopDays}.` },
@@ -1125,7 +1126,7 @@ export function buildBarcelonaDecemberBody(
     agendaList("en"),
     ...h2(
       "Day trips and snow",
-      `Baqueira Beret plans to open its season on ${baqueira} and the FGC resorts (La Molina, Vallter, Port Ainé and Boí Taüll) on ${fgc}, weather and snow permitting. La Molina can be reached by train from Barcelona. Every resort is in ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
+      `Baqueira Beret has postponed the opening it had planned for ${baqueiraPlanned} and will announce a new date depending on the snow; the FGC resorts (La Molina, Vallter, Port Ainé and Boí Taüll) plan to open on ${fgc}, weather and snow permitting. La Molina can be reached by train from Barcelona. Every resort is in ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
     ),
     faq([
       { question: "What is there to do in Barcelona in December 2026?", answer: `The Christmas lights and markets, concerts such as Pau Casals' oratorio El Pessebre at the Palau de la Música (${dayDate("2026-12-15", "en", false)}), The Nutcracker at the Liceu, La Marató de 3Cat (${marato}) and New Year's Eve. Shops may open on ${shopDays}.` },

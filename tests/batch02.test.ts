@@ -1144,11 +1144,12 @@ test("ski: opening dates answered first, from Baqueira's news and the FGC calend
   for (const locale of LOCALES) {
     const edition = SKI.editions[locale];
     const blocks = edition.blocks as { type: string; lead?: boolean; text?: string; rows?: string[][]; items?: { question: string }[] }[];
-    // The first sentence of the lead gives the earliest planned opening.
+    // The first sentence of the lead gives Baqueira's state: from 25 Nov 2026 its 28 Nov opening is postponed (24 Nov note).
     const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
     const firstSentence = lead.split(/(?<=\.)\s/)[0] ?? "";
     assert.match(firstSentence, /Baqueira/, `${locale}: lead opens with the first resort to open`);
     assert.match(firstSentence, firstOpening[locale], `${locale}: lead opens with its date`);
+    assert.match(firstSentence, /ajornat|aplazado|postponed/, `${locale}: the lead says it was postponed`);
     assert.match(lead, fgc[locale], `${locale}: FGC calendar date in the lead`);
     // The opening table comes before the comparison table and covers all ten resorts.
     const tables = blocks.filter((b) => b.type === "table");

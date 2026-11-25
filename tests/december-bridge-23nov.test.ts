@@ -48,7 +48,7 @@ test("Catalan bridge: re-read on 23 Nov 2026, Baqueira from its 11 Nov news", ()
   const baqueira = DECEMBER_BRIDGE.sources.filter((s) => s.url.includes("baqueira.es"));
   assert.deepEqual(
     baqueira.map((s) => s.url),
-    ["https://www.baqueira.es/es/noticia/baqueira-beret-invierte-24-millones-de-euros-en-el-nuevo-mirador-y-la-renovacion-total-de"],
+    ["https://www.baqueira.es/es/noticia/baqueira-beret-prepara-el-inicio-de-temporada-la-espera-de-las-proximas-nevadas"],
   );
   for (const locale of LOCALES) {
     const body = bodyToPlainText(DECEMBER_BRIDGE.editions[locale].blocks);

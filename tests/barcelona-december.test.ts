@@ -123,7 +123,7 @@ test("sources are https and untracked, never aerobusbcn, and the reader sees the
     urls.add(source.url);
   }
   // The climate and ski sources were found in their own modules, not dropped.
-  for (const part of ["valoresclimatologicos?l=0076", "efemerides_extremos", "X4_2010-2025", "astronomia.ign.es", "baqueira-beret-activa", "lamolina/estacio/informacio-tecnica", L2_WORKS.url]) {
+  for (const part of ["valoresclimatologicos?l=0076", "efemerides_extremos", "X4_2010-2025", "astronomia.ign.es", "baqueira-beret-prepara", "lamolina/estacio/informacio-practica", L2_WORKS.url]) {
     assert.ok([...urls].some((url) => url.includes(part)), part);
   }
   assert.equal(BARCELONA_DECEMBER.verifiedAt, BARCELONA_DECEMBER_AS_OF);

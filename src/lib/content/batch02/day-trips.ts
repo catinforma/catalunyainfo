@@ -1433,7 +1433,7 @@ const CERDANYA_SOURCES = [
   },
   {
     name: "La Molina — informació pràctica i transport",
-    url: "https://pirineu365.cat/lamolina/estacio/informacio-tecnica/",
+    url: "https://pirineu365.cat/lamolina/estacio/informacio-practica/",
     publisher: "FGC (PIRINEU365)",
   },
 ];

@@ -641,7 +641,7 @@ export const SETCASES: B2Article = {
         ),
         ...h2(
           "Setcases a l'hivern: Vallter i la neu",
-          `Vallter té 14,15 km de pistes entre 2.000 i 2.535 m, i el forfet de dia d'adult, a la seva pàgina de tarifes (consultada el 23 de novembre de 2026), és de 29 € en temporada baixa (dies feiners) i 35 € en temporada alta. També hi ha raquetes de neu i pista de trineus. El calendari de l'estació marca l'obertura de la temporada 2026-27 el divendres 4 de desembre i el darrer dia, el 4 d'abril de 2027, sempre que hi hagi neu: comparem totes les estacions a ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}, i si no esquies, mira ${b2link("snow", "ca", "on veure neu sense esquiar")}.`,
+          `Vallter té 14,15 km de pistes entre 2.000 i 2.535 m segons la seva fitxa tècnica (el 24 de novembre va tancar el telecadira Enric Planella, i la xifra no s'ha actualitzat), i el forfet de dia d'adult, a la seva pàgina de tarifes (consultada el 25 de novembre de 2026), és de 29 € en temporada baixa (dies feiners) i 35 € en temporada alta. També hi ha raquetes de neu i pista de trineus. El calendari de l'estació marca l'obertura de la temporada 2026-27 el divendres 4 de desembre i el darrer dia, el 4 d'abril de 2027, sempre que hi hagi neu: comparem totes les estacions a ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}, i si no esquies, mira ${b2link("snow", "ca", "on veure neu sense esquiar")}.`,
         ),
         callout(
           "warning",
@@ -736,7 +736,7 @@ export const SETCASES: B2Article = {
         ),
         ...h2(
           "Setcases en invierno: Vallter y la nieve",
-          `Vallter tiene 14,15 km de pistas entre 2.000 y 2.535 m, y el forfait de día de adulto, en su página de tarifas (consultada el 23 de noviembre de 2026), es de 29 € en temporada baja (laborables) y 35 € en temporada alta. También hay raquetas de nieve y pista de trineos. El calendario de la estación marca la apertura de la temporada 2026-27 el viernes 4 de diciembre y el último día, el 4 de abril de 2027, siempre que haya nieve: comparamos todas las estaciones en ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}, y si no esquías, mira ${b2link("snow", "es", "dónde ver nieve sin esquiar")}.`,
+          `Vallter tiene 14,15 km de pistas entre 2.000 y 2.535 m según su ficha técnica (el 24 de noviembre cerró el telesilla Enric Planella, y la cifra no se ha actualizado), y el forfait de día de adulto, en su página de tarifas (consultada el 25 de noviembre de 2026), es de 29 € en temporada baja (laborables) y 35 € en temporada alta. También hay raquetas de nieve y pista de trineos. El calendario de la estación marca la apertura de la temporada 2026-27 el viernes 4 de diciembre y el último día, el 4 de abril de 2027, siempre que haya nieve: comparamos todas las estaciones en ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}, y si no esquías, mira ${b2link("snow", "es", "dónde ver nieve sin esquiar")}.`,
         ),
         callout(
           "warning",
@@ -832,7 +832,7 @@ export const SETCASES: B2Article = {
         ),
         ...h2(
           "Setcases in winter: Vallter and the snow",
-          `Vallter has 14.15 km of runs between 2,000 and 2,535 m, and its rates page (checked 23 November 2026) lists an adult day pass at €29 in low season (weekdays) and €35 in high season. There are snowshoe outings and a sledging run too. The resort's calendar shows the 2026-27 season opening on Friday 4 December and ending on 4 April 2027, snow permitting: we compare every resort in ${b2link("ski", "en", "Catalonia's ski resorts")}, and if you do not ski, see ${b2link("snow", "en", "where to see snow without skiing")}.`,
+          `Vallter has 14.15 km of runs between 2,000 and 2,535 m according to its technical sheet (the Enric Planella chairlift closed on 24 November and the figure has not been updated), and its rates page (checked 25 November 2026) lists an adult day pass at €29 in low season (weekdays) and €35 in high season. There are snowshoe outings and a sledging run too. The resort's calendar shows the 2026-27 season opening on Friday 4 December and ending on 4 April 2027, snow permitting: we compare every resort in ${b2link("ski", "en", "Catalonia's ski resorts")}, and if you do not ski, see ${b2link("snow", "en", "where to see snow without skiing")}.`,
         ),
         callout(
           "warning",

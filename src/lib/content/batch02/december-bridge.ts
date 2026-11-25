@@ -55,9 +55,11 @@ import {
  *  - Ordre EMT/77/2025 (shops, 2026): 6 December is a general opening day;
  *    art. 6 makes 8 December a default municipal day. Resolució EMT/4342/2025
  *    lists Barcelona with "6, 8, 13, 20 i 27 de desembre".
- *  - Baqueira Beret, news of 28/07/2026 (since 23 Nov 2026, its news of
- *    11/11/2026, which says the same): opening planned for 28 November
- *    "siempre que las condiciones meteorológicas y de nieve lo permitan".
+ *  - Baqueira Beret, news of 24/11/2026 (factual correction on 25 Nov 2026):
+ *    "La estación pospone la apertura prevista para el sábado 28 de noviembre
+ *    y anunciará la nueva fecha en función de las condiciones de nieve en
+ *    pistas". Until then its news of 11/11/2026 had repeated the 28 November
+ *    opening.
  *  - Ajuntament d'Espinelves (45a Fira de l'Avet, 28 Nov - 8 Dec 2026) and
  *    Ajuntament de Vic agenda (Mercat Medieval from 5 Dec 2026; the listing's
  *    end, "08/12/2026 a 00:00", leaves the 8th unclear).
@@ -348,7 +350,7 @@ const SOURCES: B2Source[] = [
   { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Resolució EMT/4342/2025, dies festius d'obertura comercial dels municipis per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1030324&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Llei 18/2017, de comerç, serveis i fires (text consolidat, article 37)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320", publisher: "BOE" },
-  { name: "Baqueira Beret invierte 24 millones de euros en el nuevo Mirador y la renovación total de Baqueira 1800", url: "https://www.baqueira.es/es/noticia/baqueira-beret-invierte-24-millones-de-euros-en-el-nuevo-mirador-y-la-renovacion-total-de", publisher: "Baqueira Beret" },
+  { name: "Baqueira Beret prepara el inicio de temporada a la espera de las próximas nevadas (24/11/2026)", url: "https://www.baqueira.es/es/noticia/baqueira-beret-prepara-el-inicio-de-temporada-la-espera-de-las-proximas-nevadas", publisher: "Baqueira Beret" },
   { name: "Fira de l'Avet 2026", url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/", publisher: "Ajuntament d'Espinelves" },
   { name: "Mercat Medieval Vic 2026", url: "https://www.vic.cat/ciutat/agenda/mercat-medieval-vic-2026", publisher: "Ajuntament de Vic" },
   { name: "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona", url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020", publisher: "Agenda Cultural de la Generalitat" },
@@ -568,7 +570,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         bridgeMuseums("ca"),
         `**Pessebres vivents.** El calendari, amb les dates de cada un quan les publiquen, és a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
-        `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el dissabte 28 de novembre, si les condicions ho permeten (notícia de l'estació de l'11 de novembre de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
+        `**Neu i esquí.** Baqueira Beret ha ajornat l'obertura que tenia prevista per al dissabte 28 de novembre i anunciarà la nova data segons la neu (nota de l'estació del 24 de novembre de 2026); les estacions d'FGC marquen el 4 de desembre al calendari; cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
         `**El temps.** Les mitjanes del desembre són a ${b2link("climate", "ca", "la guia del temps a Barcelona mes a mes")}.`,
       ),
       ...paras(
@@ -659,7 +661,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         bridgeMuseums("es"),
         `**Belenes vivientes.** El calendario, con las fechas de cada uno cuando se publican, está en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
-        `**Nieve y esquí.** Baqueira Beret tiene prevista la apertura para el sábado 28 de noviembre «siempre que las condiciones lo permitan» (noticia de la estación del 11 de noviembre de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
+        `**Nieve y esquí.** Baqueira Beret ha aplazado la apertura que tenía prevista para el sábado 28 de noviembre y anunciará la nueva fecha según la nieve (nota de la estación del 24 de noviembre de 2026); las estaciones de FGC marcan el 4 de diciembre en su calendario; ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
         `**El tiempo.** Las medias de diciembre están en ${b2link("climate", "es", "la guía del tiempo en Barcelona mes a mes")}.`,
       ),
       ...paras(
@@ -749,7 +751,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       bridgeMuseums("en"),
       `**Living nativity scenes.** The calendar, with each one's dates once published, is in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
-      `**Snow and skiing.** Baqueira Beret plans to open its season on Saturday 28 November, conditions permitting (the resort's news item of 11 November 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
+      `**Snow and skiing.** Baqueira Beret has postponed the opening it had planned for Saturday 28 November and will announce a new date depending on the snow (the resort's note of 24 November 2026); the FGC resorts show 4 December on their calendars; no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
       `**Weather.** December averages are in ${b2link("climate", "en", "our Barcelona weather by month guide")}.`,
     ),
     ...paras(

@@ -72,7 +72,7 @@ const SOURCES: B2Source[] = [
   { name: "Informació nivològica", url: "https://bpa.icgc.cat/", publisher: "Institut Cartogràfic i Geològic de Catalunya" },
   { name: "Infoneu PIRINEU365", url: "https://pirineu365.cat/infoneu-pirineu365/", publisher: "FGC (PIRINEU365)" },
   { name: "Baqueira Beret — estado de la estación", url: "https://www.baqueira.es/es/estado-de-la-estacion", publisher: "Baqueira Beret" },
-  { name: "La Molina — plànol de pistes i fitxa tècnica", url: "https://pirineu365.cat/lamolina/estacio/planol-pistes-fitxa-tecnica/", publisher: "FGC (PIRINEU365)" },
+  { name: "La Molina — plànol de pistes i fitxa tècnica", url: "https://pirineu365.cat/lamolina/estacio/planol-de-pistes/", publisher: "FGC (PIRINEU365)" },
   { name: "Estat del trànsit", url: "https://transit.gencat.cat/ca/informacio-viaria/estat-transit/", publisher: "Servei Català de Trànsit" },
   { name: "Cobertura del 112", url: "https://112.gencat.cat/ca/us-del-112/cobertura-del-112/index.html", publisher: "112 Catalunya" },
 ];
