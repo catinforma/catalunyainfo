@@ -49,6 +49,12 @@ import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, pa
  *  - CatSalut, "Targeta sanitària individual (TSI)" (31.07.2025): the card
  *    carries the CIP, the name, the «Codi SNS», and on the back the «Nivell de
  *    Cobertura»; old designs «continua essent vàlida, no cal canviar-la».
+ *  - Re-read 25 Nov 2026 15:05 UTC, https://catsalut.gencat.cat/ca/coneix-catsalut/acces-sistema-salut/la-tsi/
+ *    (HTTP 200): «A l'anvers de la targeta hi ha, impreses, les dades de la
+ *    persona acreditada: Codi d'identificació personal (CIP). … Nom i
+ *    cognoms de la persona titular. Codi SNS. … El revers de la tarjeta,
+ *    incorpora el Nivell de Cobertura». Used for the "Què és el CIP?" FAQ
+ *    (searchers: "codigo tsi tarjeta sanitaria donde esta", 8 impr. at 8.5).
  *  - CatSalut, "La TSI digital" (17.09.2025): in La Meva Salut and La Meva
  *    Cartera, «té la mateixa validesa que la targeta física i es genera
  *    automàticament quan s'assigna el codi d'identificació personal (CIP)»;
@@ -337,7 +343,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         { question: "Soc ciutadà de la UE: em serveix la targeta sanitària europea?", answer: "Només per a estades temporals. Si vius a Catalunya, has de lliurar a l'INSS el formulari del teu país (l'S1, per exemple) o, si no en tens, demanar-hi el reconeixement del dret; després demanes la TSI." },
         { question: "He perdut la targeta sanitària: què faig?", answer: "Demana un duplicat al teu CAP. Arriba per correu postal i l'antiga deixa de funcionar. Mentrestant pots fer servir la TSI digital de La Meva Salut, que té la mateixa validesa." },
         { question: "Com canvio de CAP o de metge de capçalera?", answer: "Presenta la sol·licitud de lliure elecció en persona al CAP on vols anar. Et responen en deu dies hàbils com a màxim i, si no ho fan, s'entén acceptada. Ho pots tornar a canviar al cap d'un any." },
-        { question: "Què és el CIP?", answer: "El codi d'identificació personal que el CatSalut assigna a cada persona. Surt a la targeta i al resguard provisional, i és el que fan servir els centres per identificar-te." },
+        { question: "Què és el CIP?", answer: "El codi d'identificació personal que el CatSalut assigna a cada persona. Està imprès a l'anvers de la targeta, amb el teu nom i cognoms i el codi SNS (el nivell de cobertura és al revers), i també surt al resguard provisional. És el que fan servir els centres per identificar-te." },
       ],
       official: "CatSalut (obtenció de la TSI, formulari en línia, TSI digital, gestions, accés, nivells de cobertura, S1, conveni especial, desplaçaments, lliure elecció de CAP, La Meva Salut), Seguretat Social (titulars i documents) i Reial decret 180/2026 (BOE).",
     },
@@ -455,7 +461,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         { question: "Soy ciudadano de la UE: ¿me sirve la tarjeta sanitaria europea?", answer: "Solo para estancias temporales. Si vives en Cataluña, tienes que entregar al INSS el formulario de tu país (el S1, por ejemplo) o, si no lo tienes, pedir allí el reconocimiento del derecho; después pides la TSI." },
         { question: "He perdido la tarjeta sanitaria: ¿qué hago?", answer: "Pide un duplicado en tu CAP. Llega por correo postal y la antigua deja de funcionar. Mientras tanto puedes usar la TSI digital de La Meva Salut, que tiene la misma validez." },
         { question: "¿Cómo cambio de CAP o de médico de cabecera?", answer: "Presenta la solicitud de libre elección en persona en el CAP al que quieres ir. Te responden en diez días hábiles como máximo y, si no lo hacen, se entiende aceptada. Puedes volver a cambiarlo al cabo de un año." },
-        { question: "¿Qué es el CIP?", answer: "El código de identificación personal que el CatSalut asigna a cada persona. Aparece en la tarjeta y en el resguardo provisional, y es lo que usan los centros para identificarte." },
+        { question: "¿Qué es el CIP?", answer: "El código de identificación personal que el CatSalut asigna a cada persona. Está impreso en el anverso de la tarjeta, con tu nombre y apellidos y el código SNS (el nivel de cobertura va en el reverso), y también aparece en el resguardo provisional. Es lo que usan los centros para identificarte." },
       ],
       official: "CatSalut (obtención de la TSI, formulario en línea, TSI digital, gestiones, acceso, niveles de cobertura, S1, convenio especial, desplazamientos, libre elección de CAP, La Meva Salut; páginas en catalán), Seguridad Social (titulares y documentos) y Real Decreto 180/2026 (BOE).",
     },
@@ -573,7 +579,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         { question: "I am an EU citizen: is my EHIC enough?", answer: "Only for temporary stays. If you live in Catalonia, hand your country's form (the S1, for example) to the INSS or, if you have none, ask it to recognise your right; then apply for the TSI." },
         { question: "I have lost my health card: what do I do?", answer: "Ask your CAP for a duplicate. It arrives by post and the old card stops working. Meanwhile you can use the digital TSI in La Meva Salut, which is just as valid." },
         { question: "How do I change my CAP or GP?", answer: "Hand in the free-choice request in person at the CAP you want. It must answer within ten working days and, if it does not, the request counts as accepted. You can change again after a year." },
-        { question: "What is the CIP?", answer: "The personal identification code CatSalut gives each person. It is on the card and on the provisional receipt, and it is what health centres use to identify you." },
+        { question: "What is the CIP?", answer: "The personal identification code CatSalut gives each person. It is printed on the front of the card, with your name and the SNS code (the coverage level is on the back), and it is also on the provisional receipt. It is what health centres use to identify you." },
       ],
       official: "CatSalut (first TSI, online form, digital TSI, card procedures, access, coverage levels, S1, special agreement, travel, free choice of CAP, La Meva Salut; pages in Catalan), Spain's Social Security (holders and documents) and Royal Decree 180/2026 (BOE).",
     },

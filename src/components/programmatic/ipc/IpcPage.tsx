@@ -14,6 +14,7 @@ import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { bareDay, elDay, ipcEditions, ipcPath, monthText, rate, signedRate, type IpcLocale } from "@/lib/programmatic/ipc/copy";
+import { CATALONIA_IPC, cataloniaSection } from "@/lib/programmatic/ipc/catalonia";
 import { flashAfter, freshnessText, ipcMeta, leadText } from "@/lib/programmatic/ipc/page";
 import { INE_LINKS, IPC_SERIES, IPC_SERIES_IDS, calendarRows, hasCalendarFor, ipcApiUrl, ipcTableUrl, latestFigures, nextReleases, tableRows } from "@/lib/programmatic/ipc/series";
 import type { ServerIpcData } from "@/lib/programmatic/ipc/server";
@@ -62,6 +63,7 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
   const nextYearOut = hasCalendarFor(data.releases, year + 1);
   const next = nextReleases(data, data.today);
   const flash = flashAfter(data);
+  const catalonia = cataloniaSection(locale, latest);
   const day = (iso: string) => bareDay(iso, locale);
 
   const h = L(locale, {
@@ -186,6 +188,15 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
                     ))}
                   </dl>
                   {flashLine ? <p>{flashLine}</p> : null}
+                  {catalonia ? (
+                    <>
+                      <h2 id="catalunya">{catalonia.heading}</h2>
+                      <p>{catalonia.text}</p>
+                      <p className="text-sm text-[var(--color-muted)]">
+                        <A href={CATALONIA_IPC.tableUrl}>{catalonia.source}</A>
+                      </p>
+                    </>
+                  ) : null}
                 </>
               ) : null}
               <CalculatorNextStep current="ipc" locale={locale} />
