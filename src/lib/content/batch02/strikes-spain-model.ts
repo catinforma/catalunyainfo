@@ -106,6 +106,14 @@ export interface SpainOpenStrike {
    * strike is removed.
    */
   msValidUntil: string;
+  /** 25 Nov 2026: short name for the day-by-day answers ("Serveo, limpieza de Barajas"). */
+  short: L;
+  /** First day the strike is on (ISO), or the first day of the resolution when the call's own start is not on the Ministry's list. */
+  inForceFrom: string;
+  /** Clock time of the start on `inForceFrom` when it is not at midnight, as the Ministry's list words it ("23.00"). */
+  startsAt?: string;
+  /** Days of the week it is on (0 Sunday to 6 Saturday); every day when absent. */
+  weekdays?: number[];
   sources: B2Source[];
 }
 

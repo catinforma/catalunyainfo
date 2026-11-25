@@ -673,6 +673,36 @@ export const BRIDGE_NAMES: Record<Locale, string> = {
   en: "This is the Constitution Day and Immaculate Conception long weekend, also called the puente de la Purísima (or de la Inmaculada).",
 };
 
+/**
+ * 25 Nov 2026 (docs/SEO_EXPERIMENTS.md): the same names as a short section
+ * right under the sources box, so the answer to "puente de la purisima 2026"
+ * / "puente de diciembre 2026" (GSC 22-24 Nov: 341 and 245 impressions at 5.6
+ * and 7.7, 0 clicks) is not only in the FAQ. All dates and the list of
+ * communities come from the BOE rows used above. Body only.
+ */
+export function purisimaH2(locale: Locale): Block[] {
+  const bridge = runIn("MD", SPAIN_DAYS.immaculada);
+  const run = cap(runWords(bridge, locale));
+  const n7 = countWords(MONDAY_7, locale);
+  const rest = proseList(MONDAY_7_WORKING, locale);
+  if (locale === "es") {
+    return h2(
+      "¿Cuándo es el puente de la Purísima de 2026? (Constitución e Inmaculada)",
+      `**${run}.** El martes 8, la Purísima o Inmaculada, es festivo en toda España; el domingo 6, Día de la Constitución, pasa al lunes 7 en ${n7}, y allí el puente sale sin pedir ningún día. En ${rest} el lunes 7 se trabaja: hay que pedirlo para tener los mismos días.`,
+    );
+  }
+  if (locale === "ca") {
+    return h2(
+      "Quan és el pont de la Puríssima del 2026? (Constitució i Immaculada)",
+      `**${run}.** El dimarts 8, la Puríssima o Immaculada, és festiu a tot Espanya; el diumenge 6, Dia de la Constitució, passa al dilluns 7 en ${n7}, i allà el pont surt sense demanar cap dia. En ${rest} el dilluns 7 es treballa: cal demanar-lo per tenir els mateixos dies.`,
+    );
+  }
+  return h2(
+    "When is the 2026 puente de la Purísima? (Constitution Day and Immaculate Conception)",
+    `**${run}.** Tuesday the 8th, the Purísima or Immaculate Conception, is a holiday everywhere in Spain; Sunday the 6th, Constitution Day, moves to Monday the 7th in ${n7}, where the break comes without booking a day. In ${rest} Monday the 7th is a working day: take it off to get the same days.`,
+  );
+}
+
 export function purisimaFaq(locale: Locale): { question: string; answer: string } {
   const bridge = runIn("MD", SPAIN_DAYS.immaculada);
   const withMonday = inRegion("bridge", "CT");
@@ -797,6 +827,7 @@ function bodyEs(): Block[] {
       "De dónde salen estas fechas",
       "De la relación de fiestas laborales que el Ministerio de Trabajo publica cada año en el BOE con los calendarios que le envían las comunidades: la de 2026 (BOE del 28 de octubre de 2025) para diciembre y la de 2027 (BOE del 13 de octubre de 2026) para enero. Las hemos vuelto a leer el 20 de noviembre de 2026: ninguna tiene correcciones, y no hemos encontrado ningún decreto autonómico posterior que cambie estos días. Ese mismo día leímos en su boletín el calendario de nueve de los diez lugares que dan fiesta el lunes 7 (el de La Rioja no se pudo consultar): están en la tabla, más abajo.",
     ),
+    ...purisimaH2("es"),
     ...h2(
       "¿Es festivo el 7 de diciembre? Comunidad por comunidad",
       `El lunes 7 es el día que cambia de una comunidad a otra; el martes 8, el 25 de diciembre, el 1 y el 6 de enero son festivos en todas, y el sábado 26 solo en ${proseList(stStephen, L)}. Busca la tuya en la tabla:`,
@@ -908,6 +939,7 @@ function bodyCa(): Block[] {
       `**El dilluns 7 de desembre de 2026 és festiu en ${n7}:** ${proseList(communities(MONDAY_7), L)}. Allà el pont va ${runWords(bridge, L)} sense demanar cap dia. A Catalunya, no: el 7 és feiner, llevat de ${local} municipis amb festa local, i el dimarts 8 és festiu a tot Espanya.`,
     ),
     keyFacts("El pont de desembre del 2026, d'un cop d'ull", bridgeSummaryFacts(L)),
+    ...purisimaH2("ca"),
     ...h2(
       "On és festiu el 7 de desembre? Comunitat per comunitat",
       `El dilluns 7 és el dia que canvia d'una comunitat a una altra; el dimarts 8, el 25 de desembre, l'1 i el 6 de gener són festius a totes, i el dissabte 26 només a ${proseList(stStephen, L)}.`,
@@ -982,6 +1014,7 @@ function bodyEn(): Block[] {
       "Where these dates come from",
       "Spain's Ministry of Labour publishes each year's public holidays, region by region, in the BOE (the official state gazette): the 2026 list on 28 October 2025 and the 2027 list on 13 October 2026. We re-read both on 20 November 2026; neither has been corrected, and we found no later regional decree changing these days. The same day we read, in its own bulletin, the calendar of nine of the ten places that give Monday the 7th off (La Rioja's could not be reached): they are in the table below.",
     ),
+    ...purisimaH2("en"),
     ...h2(
       "Is 7 December a holiday in Spain? Region by region",
       `Monday the 7th is the day that changes from one region to the next; Tuesday the 8th, Christmas Day, New Year's Day and Epiphany are holidays in all of them, and Saturday the 26th only in ${proseList(stStephen, L)}. Find yours in the table:`,

@@ -1253,6 +1253,8 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
   {
     id: "huelga-saerco-controladores",
     msValidUntil: "2026-11-30",
+    inForceFrom: "2026-04-17",
+    short: { ca: "controladors aeris de SAERCO", es: "controladores aéreos de SAERCO", en: "SAERCO air traffic controllers" },
     title: {
       ca: "Controladors aeris de SAERCO: nou aeroports",
       es: "Controladores aéreos de SAERCO: nueve aeropuertos",
@@ -1272,6 +1274,8 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
   {
     id: "huelga-groundforce-el-prat",
     msValidUntil: "2026-11-30",
+    inForceFrom: "2026-08-04",
+    short: { ca: "Groundforce a El Prat", es: "Groundforce en El Prat", en: "Groundforce at El Prat" },
     title: {
       ca: "Groundforce: personal de terra a l'aeroport de Barcelona-El Prat",
       es: "Groundforce: personal de tierra en el aeropuerto de Barcelona-El Prat",
@@ -1290,6 +1294,10 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
   {
     id: "huelga-outsmart-barajas",
     msValidUntil: "2026-11-30",
+    // The resolution's effects start on 1 Oct 2026; the Ministry's list gives no start day for the call itself. Mondays, Thursdays to Sundays only.
+    inForceFrom: "2026-10-01",
+    weekdays: [1, 4, 5, 6, 0],
+    short: { ca: "Outsmart a Barajas (equipatges, aturades parcials)", es: "Outsmart en Barajas (equipajes, paros parciales)", en: "Outsmart at Barajas (baggage, partial stoppages)" },
     title: {
       ca: "Outsmart: sistema d'equipatges de Madrid-Barajas",
       es: "Outsmart: sistema de equipajes de Madrid-Barajas",
@@ -1309,6 +1317,9 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
     // 25 Nov 2026 (read ~10:10 CET): new on the Ministry's air list that morning; the resolution was signed on 24 Nov at 20:45. It starts at 23:00 on the 25th, so 26 Nov is its first full day.
     id: "huelga-serveo-barajas-limpieza",
     msValidUntil: "2027-01-31",
+    inForceFrom: "2026-11-25",
+    startsAt: "23.00",
+    short: { ca: "Serveo (neteja de Barajas)", es: "Serveo (limpieza de Barajas)", en: "Serveo (Barajas cleaning)" },
     title: {
       ca: "Serveo: neteja de les terminals T1, T2 i T3 de Madrid-Barajas",
       es: "Serveo: limpieza de las terminales T1, T2 y T3 de Madrid-Barajas",

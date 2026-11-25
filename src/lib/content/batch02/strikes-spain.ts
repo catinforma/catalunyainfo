@@ -122,6 +122,15 @@ export function expiredOpenStrikes(day: string, open: SpainOpenStrike[] = SPAIN_
   return open.filter((strike) => strike.msValidUntil < day);
 }
 
+/**
+ * 25 Nov 2026: the open-ended airport strikes that are on during `day` (from the day they start, by weekday when the call
+ * is for some days only, until their minimum-services resolution ends). "Serveo" starts at 23:00 on 25 Nov, so it is on the 25th
+ * (late) and all of the 26th.
+ */
+export function openStrikesOn(day: string, open: SpainOpenStrike[] = SPAIN_OPEN_STRIKES): SpainOpenStrike[] {
+  return open.filter((strike) => strike.inForceFrom <= day && day <= strike.msValidUntil && (!strike.weekdays || strike.weekdays.includes(weekdayIndex(day))));
+}
+
 /** Strikes of the Catalan hub that this calendar does not list itself: the ones called in Catalonia only. */
 export function catalanOnlyStrikes(asOf: string = STRIKES_SPAIN_AS_OF, spain: SpainStrike[] = SPAIN_STRIKES, catalan: Strike[] = STRIKES): Strike[] {
   const mirrored = new Set(spain.map((strike) => strike.catalanEntry).filter(Boolean));
@@ -395,6 +404,10 @@ interface Wording {
   dayStrike: (items: string) => string;
   /** The Catalan hub's Catalonia-only strikes on that day. */
   dayCatalan: (items: string) => string;
+  /** The open-ended airport strikes on that day (25 Nov 2026). */
+  dayOpen: (items: string) => string;
+  /** "Serveo starts at 23.00." for a strike that starts late on its first day. */
+  startsAt: (name: string, time: string) => string;
   msWord: string;
   noneOnDays: string;
   openToo: (titles: string) => string;
@@ -479,6 +492,8 @@ const T: Record<Locale, Wording> = {
     dayYes: (items) => `Sí que hi ha: ${items}.`,
     dayStrike: (items) => `hi ha vaga: ${items}.`,
     dayCatalan: (items) => `Només a Catalunya: ${items}.`,
+    dayOpen: (items) => `Als aeroports, vagues indefinides en curs: ${items}.`,
+    startsAt: (name, time) => `${name} comença a les ${time} h.`,
     msWord: "Serveis mínims",
     aToday: (when, days, open, checked) => `Depèn del dia. La setmana ${when}: ${days}.${open} Fonts revisades: ${checked}.`,
     noneOnDays: "cap amb data en aquest calendari",
@@ -559,6 +574,8 @@ const T: Record<Locale, Wording> = {
     dayYes: (items) => `Sí hay: ${items}.`,
     dayStrike: (items) => `hay huelga: ${items}.`,
     dayCatalan: (items) => `Solo en Cataluña: ${items}.`,
+    dayOpen: (items) => `En los aeropuertos, huelgas indefinidas en curso: ${items}.`,
+    startsAt: (name, time) => `${name} empieza a las ${time} h.`,
     msWord: "Servicios mínimos",
     aToday: (when, days, open, checked) => `Depende del día. En la semana ${when}: ${days}.${open} Fuentes revisadas: ${checked}.`,
     noneOnDays: "ninguna con fecha en este calendario",
@@ -639,6 +656,8 @@ const T: Record<Locale, Wording> = {
     dayYes: (items) => `Strikes that day: ${items}.`,
     dayStrike: (items) => `there is a strike: ${items}.`,
     dayCatalan: (items) => `In Catalonia only: ${items}.`,
+    dayOpen: (items) => `At airports, open-ended strikes under way: ${items}.`,
+    startsAt: (name, time) => `${name} starts at ${time.replace(".", ":")}.`,
     msWord: "Minimum services",
     aToday: (when, days, open, checked) => `It depends on the day. In the week of ${when}: ${days}.${open} Sources checked: ${checked}.`,
     noneOnDays: "none with a date in this calendar",
@@ -734,6 +753,8 @@ export interface SpainDayAnswer {
   strikes: SpainStrike[];
   /** The Catalan hub's Catalonia-only strikes on that day. */
   catalan: Strike[];
+  /** The open-ended airport strikes that are on that day. */
+  open: SpainOpenStrike[];
 }
 
 /**
@@ -755,7 +776,10 @@ export function spainDayAnswers(locale: Locale, asOf: string = STRIKES_SPAIN_AS_
     const items = on.map((strike) => `${spainDayTitle(strike, day, locale)}${strike.status === "called" ? ` (${lower(STATUS_LABEL.called[locale])})` : ""}`).join("; ");
     const head = on.length === 0 ? `${catalan.length === 0 ? t.dayNothing : t.dayNoRail}.` : generalOrRail ? t.dayStrike(items) : `${t.dayNoRail}. ${t.dayYes(items)}`;
     const tail = catalan.length > 0 ? ` ${t.dayCatalan(catalan.map((strike) => strikeDayNote(strike, day, locale) ?? strike.title[locale]).join("; "))}` : "";
-    return { day, label: cap(dayDate(day, locale)), text: strip(`${head}${tail}`), generalOrRail, strikes: on, catalan };
+    const openOn = openStrikesOn(day, input.open ?? SPAIN_OPEN_STRIKES);
+    const late = openOn.filter((strike) => strike.startsAt && strike.inForceFrom === day).map((strike) => t.startsAt(cap(strike.short[locale]), strike.startsAt!));
+    const airports = openOn.length > 0 ? ` ${t.dayOpen(andList(openOn.map((strike) => strike.short[locale]), locale))}${late.length > 0 ? ` ${late.join(" ")}` : ""}` : "";
+    return { day, label: cap(dayDate(day, locale)), text: strip(`${head}${tail}${airports}`), generalOrRail, strikes: on, catalan, open: openOn };
   });
 }
 
@@ -820,9 +844,8 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   // 24 Nov 2026: the rail strikes of this calendar have a standing page ("huelga renfe" 1,803 impressions at 3.7, 9 clicks, on a dated page).
   const railPrefix = { ca: "Trens (Renfe, Adif i Rodalies)", es: "Trenes (Renfe, Adif y Rodalies)", en: "Trains (Renfe, Adif and Rodalies)" }[locale];
   blocks.push(...paras(`**${railPrefix}:** ${b2link("strikeRenfe", locale, RENFE_STANDING_ANCHOR[locale])}.`));
-  blocks.push(callout("official", STATUS_KEY[locale].title, STATUS_KEY[locale].text));
-
-  /* 24 Nov 2026: the as-of day and the next three in plain words, above the week's table. */
+  // 25 Nov 2026: the day-by-day answers moved up, right under the week line and the rail link ("el 25 de noviembre hay huelga" 323 impressions at 9.3,
+  // "huelga miercoles 25 noviembre" 180, "huelga 24 noviembre 2026" 175): the first screen now answers the as-of day and the next three.
   const dayAnswers = spainDayAnswers(locale, asOf, input);
   const firstAnswer = dayAnswers[0];
   const lastAnswer = dayAnswers[dayAnswers.length - 1];
@@ -831,6 +854,8 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
     blocks.push(...paras(t.daysIntro(checked, open.length > 0)));
     blocks.push(list(...dayAnswers.map((answer) => `**${answer.label}:** ${answer.text}`)));
   }
+
+  blocks.push(callout("official", STATUS_KEY[locale].title, STATUS_KEY[locale].text));
 
   /* This week, day by day. */
   blocks.push(heading(2, t.weekHeading(when), t.weekId));

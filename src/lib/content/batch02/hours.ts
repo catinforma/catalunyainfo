@@ -66,6 +66,14 @@ import {
  * everyday: from 5.00 to 24.00 hours". Read 24 Nov 2026. VERIFIED stays 2026-10-30:
  * the tram, NitBus and funicular were not re-read.
  *
+ * 25 Nov 2026 (position 8-20 push, GSC 22-24 Nov: "horario metro barcelona sabado" 6 impressions at 15.8,
+ * "a que hora cierra el metro entre semana" 3 at 10.7, "horari metro barcelona divendres" 3 at 11.3): two H2s,
+ * "...entre semana" and "...los sábados", one sentence each. TMB's hours page re-read today in EN, ES and CA
+ * (same rules and quotes as 24 Nov; ES: "De lunes a jueves y festivos intersemanales De 5.00 a 24.00 horas",
+ * "Sábados Inicio: a las 5.00 horas; servicio continuo toda la noche del sábado al domingo", "Domingos Hasta las
+ * 24.00 h"; funicular "Del 26/10/2026 al 28/03/2027" unchanged). Read 25 Nov 2026, 11:50 UTC. VERIFIED unchanged
+ * (tram, NitBus not re-read).
+ *
  * 5 Nov 2026: the "Christmas and New Year" line now ends with one sentence
  * linking the new Christmas transport page (christmasTransportMention);
  * title and descriptions untouched. Goes out with `transport-nadal-links`.
@@ -126,6 +134,10 @@ type T = {
   today: string;
   fridayTitle: string;
   friday: string;
+  saturdayTitle: string;
+  saturday: string;
+  weekdayTitle: string;
+  weekday: string;
   sundayTitle: string;
   sunday: string;
   closeTitle: string;
@@ -169,6 +181,10 @@ const COPY: Record<Locale, T> = {
     today: "Tonight's closing time is in the box at the top of the page. The rule behind it: **midnight** from Sunday to Thursday (and on midweek public holidays), **2:00** on Fridays and the night before a midweek public holiday, and **no closing** on Saturday night. Those times are when the last train leaves the terminal station at each end of the line.",
     fridayTitle: "What time does the metro close on Fridays?",
     friday: "At **2:00** in the early hours of Saturday. The same 2:00 closing applies on the night before a public holiday that falls Monday to Friday.",
+    saturdayTitle: "What time does the metro close on Saturdays?",
+    saturday: "It does not close: the metro opens at **5:00** on Saturday and runs without a break until **midnight on Sunday**. The seven outer stations of L9 Sud and L10 Sud are the exception: 5:00 to midnight every day, Saturdays included.",
+    weekdayTitle: "What time does the metro close on weekdays?",
+    weekday: "At **midnight (24:00)** from Monday to Thursday and on public holidays that fall midweek; on Fridays and the night before a midweek public holiday it closes at 2:00. TMB's time is when the last train leaves the terminal station at each end of the line.",
     sundayTitle: "Metro hours on Sundays and public holidays",
     sunday: `On Sunday the metro does not open at 5:00, because it has been running non-stop since Saturday night; it closes at **midnight**. A public holiday from Monday to Thursday also runs from 5:00 to midnight, and the night before it the metro closes at 2:00. Barcelona's holidays, its two local ones included, are on [Barcelona public holidays](/en/holidays/barcelona/), and the Catalonia-wide dates in ${b2link("workCalendar", "en", "the Catalonia public holiday calendar")}.`,
     closeTitle: "What time is the last metro in Barcelona?",
@@ -238,6 +254,10 @@ const COPY: Record<Locale, T> = {
     today: "El cierre de esta noche está en el recuadro del principio de la página. La regla de la que sale: a **medianoche** de domingo a jueves (y en los festivos entre semana), a las **2:00** los viernes y la víspera de un festivo entre semana, y **sin cierre** la noche del sábado. Esas horas son las de salida del último tren desde la estación de cabecera de cada extremo de la línea.",
     fridayTitle: "¿A qué hora cierra el metro los viernes?",
     friday: "A las **2:00** de la madrugada del sábado. El mismo cierre a las 2:00 se aplica la víspera de un festivo que cae de lunes a viernes.",
+    saturdayTitle: "¿A qué hora cierra el metro los sábados?",
+    saturday: "No cierra: el metro abre a las **5:00** del sábado y funciona sin interrupción hasta la **medianoche del domingo**. Las siete estaciones de los extremos de la L9 Sud y la L10 Sud son la excepción: de 5:00 a 24:00 todos los días, sábados incluidos.",
+    weekdayTitle: "¿A qué hora cierra el metro entre semana?",
+    weekday: "A **medianoche (24:00)** de lunes a jueves y en los festivos entre semana; los viernes y la víspera de un festivo entre semana cierra a las 2:00. La hora de TMB es la de salida del último tren desde la estación de cabecera de cada extremo de la línea.",
     sundayTitle: "Horario del metro el domingo y los festivos",
     sunday: "El domingo el metro no abre a las 5:00 porque funciona sin parar desde la noche del sábado; cierra a **medianoche**. Un festivo de lunes a jueves también funciona de 5:00 a medianoche, y la víspera el metro cierra a las 2:00: las fechas están en [el calendario de festivos de Barcelona](/es/festivos/barcelona/).",
     closeTitle: "¿A qué hora pasa el último metro?",
@@ -307,6 +327,10 @@ const COPY: Record<Locale, T> = {
     today: "El tancament d'aquesta nit és al requadre del principi de la pàgina. La regla de què surt: a **mitjanit** de diumenge a dijous (i als festius entre setmana), a les **2:00** els divendres i la vigília d'un festiu entre setmana, i **sense tancament** la nit del dissabte. Aquestes hores són les de sortida de l'últim tren des de l'estació de capçalera de cada extrem de la línia.",
     fridayTitle: "A quina hora tanca el metro els divendres?",
     friday: "A les **2:00** de la matinada del dissabte. El mateix tancament a les 2:00 s'aplica la vigília d'un festiu que cau de dilluns a divendres.",
+    saturdayTitle: "A quina hora tanca el metro els dissabtes?",
+    saturday: "No tanca: el metro obre a les **5:00** del dissabte i funciona sense interrupció fins a la **mitjanit del diumenge**. Les set estacions dels extrems de la L9 Sud i la L10 Sud són l'excepció: de 5:00 a 24:00 cada dia, dissabtes inclosos.",
+    weekdayTitle: "A quina hora tanca el metro entre setmana?",
+    weekday: "A **mitjanit (24:00)** de dilluns a dijous i als festius entre setmana; els divendres i la vigília d'un festiu entre setmana tanca a les 2:00. L'hora de TMB és la de sortida de l'últim tren des de l'estació de capçalera de cada extrem de la línia.",
     sundayTitle: "Horari del metro el diumenge i els festius",
     sunday: "El diumenge el metro no obre a les 5:00 perquè funciona sense parar des de la nit del dissabte; tanca a **mitjanit**. Un festiu de dilluns a dijous també funciona de 5:00 a mitjanit, i la vigília el metro tanca a les 2:00: les dates són al [calendari de festius de Barcelona](/ca/festius/barcelona/).",
     closeTitle: "A quina hora passa l'últim metro?",
@@ -366,7 +390,9 @@ function body(locale: Locale) {
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     ...h2(t.openTitle, t.open),
     ...h2(t.todayTitle, t.today),
+    ...h2(t.weekdayTitle, t.weekday),
     ...h2(t.fridayTitle, t.friday),
+    ...h2(t.saturdayTitle, t.saturday),
     ...h2(t.sundayTitle, t.sunday),
     ...h2(t.specialTitle),
     list(...t.special),

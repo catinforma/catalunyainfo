@@ -495,6 +495,34 @@ export function outsideCataloniaCallout(locale: Locale): Block {
   return callout("info", OUTSIDE_CATALONIA_TITLE[locale], text);
 }
 
+/**
+ * 25 Nov 2026 (docs/SEO_EXPERIMENTS.md): the searchers' own words as a short
+ * section under the first screen. GSC 22-24 Nov: "puente de la purisima 2026"
+ * (341 impressions, position 5.6, 0 clicks), "puente de diciembre 2026"
+ * (245, 7.7, 0 clicks). Same facts as the lead and the key facts (Ordre
+ * EMT/66/2025; BOE-A-2025-21667 for the territories with Monday 7); the
+ * dates come from BRIDGE_DAYS through runWords. Body only.
+ */
+export function purisimaH2(locale: Locale, bridge: Run): Block[] {
+  const run = cap(runWords(bridge, locale));
+  if (locale === "ca") {
+    return h2(
+      "Quan és el pont de la Puríssima del 2026 (Constitució i Immaculada)?",
+      `**${run}, si demanes el dilluns 7.** A Catalunya l'únic festiu és el dimarts 8, la Puríssima o Immaculada; el diumenge 6, Dia de la Constitució, no passa al dilluns (sí que hi passa a Madrid, Andalusia o Astúries, entre d'altres). Al pont de la Constitució i la Immaculada, doncs, cal demanar un dia.`,
+    );
+  }
+  if (locale === "es") {
+    return h2(
+      "¿Cuándo es el puente de la Purísima de 2026 (Constitución e Inmaculada)?",
+      `**${run}, si pides el lunes 7.** En Cataluña el único festivo es el martes 8, la Purísima o Inmaculada; el domingo 6, Día de la Constitución, no pasa al lunes (sí pasa en Madrid, Andalucía o Asturias, entre otras). En el puente de la Constitución y la Inmaculada, por tanto, hay que pedir un día.`,
+    );
+  }
+  return h2(
+    "When is the December 2026 puente de la Purísima (Constitution Day and Immaculate Conception)?",
+    `**${run}, if you take Monday the 7th off.** In Catalonia the only holiday is Tuesday the 8th, the Immaculate Conception (la Purísima); Sunday the 6th, Constitution Day, is not moved to the Monday here (it is in Madrid, Andalusia and Asturias, among others). So this puente needs one day of leave.`,
+  );
+}
+
 export function buildDecemberBridgeBody(locale: Locale): Block[] {
   const regions = joinList(MONDAY_7_REGIONS[locale], locale);
   const n = LOCAL_MONDAY_7.municipalities;
@@ -520,6 +548,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Del calendari oficial de festes laborals del 2026, l'Ordre EMT/66/2025 (DOGC del 6 de maig de 2025), que fixa dotze festius a tot Catalunya; del desembre, només el 8, el 25 i el 26. L'hem tornat a llegir al DOGC el 23 de novembre de 2026 i no ha estat modificada.",
       ),
       outsideCataloniaCallout("ca"),
+      ...purisimaH2("ca", bridge),
       ...h2(
         "Quins dies són festius al desembre del 2026 a Catalunya?",
         "Tres: el **dimarts 8** (la Immaculada), el **divendres 25** (Nadal) i el **dissabte 26** (Sant Esteve). A l'Aran, el 26 de desembre no és festiu: el substitueix la Festa d'Aran, el 17 de juny.",
@@ -611,6 +640,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Del calendario oficial de fiestas laborales de 2026, la Orden EMT/66/2025 (DOGC del 6 de mayo de 2025), que fija doce festivos en toda Cataluña; de diciembre, solo el 8, el 25 y el 26. La hemos vuelto a leer en el DOGC el 23 de noviembre de 2026 y no ha sido modificada.",
       ),
       outsideCataloniaCallout("es"),
+      ...purisimaH2("es", bridge),
       ...h2(
         "¿Qué días son festivos en diciembre de 2026 en Cataluña?",
         "Tres: el **martes 8** (la Inmaculada), el **viernes 25** (Navidad) y el **sábado 26** (San Esteban). En Arán, el 26 de diciembre no es festivo: lo sustituye la Fiesta de Arán, el 17 de junio.",
@@ -701,6 +731,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       "The official 2026 holiday calendar, Order EMT/66/2025 (DOGC, Catalonia's official gazette, 6 May 2025), which sets twelve holidays across Catalonia; in December, only the 8th, 25th and 26th. We re-read it in the DOGC on 23 November 2026; it has not been amended.",
     ),
     outsideCataloniaCallout("en"),
+    ...purisimaH2("en", bridge),
     ...h2(
       "Which days are public holidays in Catalonia in December 2026?",
       "Three: **Tuesday 8** (Immaculate Conception), **Friday 25** (Christmas Day) and **Saturday 26** (Sant Esteve, St Stephen's Day). In Aran, 26 December is not a holiday: the Festa d'Aran on 17 June replaces it.",
