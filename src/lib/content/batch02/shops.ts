@@ -549,7 +549,7 @@ const COPY: Record<Locale, T> = {
     ],
     salesTitle: "I les rebaixes?",
     sales: [
-      "No hi ha cap data obligatòria: cada botiga decideix si fa rebaixes, i les ha d'anunciar amb aquest nom i amb el període que duren. El Consell Assessor de la Generalitat en matèria de comerç proposa cada any unes dates recomanades. El preu de referència ha de ser el més baix dels trenta dies anteriors, segons l'Agència Catalana del Consum.",
+      "No hi ha cap data obligatòria: cada botiga decideix si fa rebaixes, i les ha d'anunciar amb aquest nom i amb el període que duren. El Consell Assessor de la Generalitat en matèria de comerç proposa cada any unes dates recomanades. El preu de referència ha de ser el més baix dels trenta dies anteriors, segons l'Agència Catalana del Consum. Els teus drets i el primer diumenge del 2027, a " + b2link("winterSales", "ca", "rebaixes d'hivern 2027 a Catalunya") + ".",
     ],
     faq: [
       { question: "Quins festius d'obertura comercial queden el 2026?", answer: `A Barcelona i a la majoria de municipis, el diumenge 29 de novembre, dia d'eleccions, i el 6, 8, 13, 20 i 27 de desembre. Són dies en què les botigues poden obrir, no dies en què hagin d'obrir. ${TOWNS_NOV_DEC.length} municipis en canvien algun (són a la taula de dalt).` },
@@ -636,7 +636,7 @@ const COPY: Record<Locale, T> = {
     ],
     salesTitle: "¿Y las rebajas?",
     sales: [
-      "No hay ninguna fecha obligatoria: cada tienda decide si hace rebajas, y debe anunciarlas con ese nombre y con el periodo que duran. El Consell Assessor de la Generalitat en materia de comercio propone cada año unas fechas recomendadas. El precio de referencia debe ser el más bajo de los treinta días anteriores, según la Agència Catalana del Consum.",
+      "No hay ninguna fecha obligatoria: cada tienda decide si hace rebajas, y debe anunciarlas con ese nombre y con el periodo que duran. El Consell Assessor de la Generalitat en materia de comercio propone cada año unas fechas recomendadas. El precio de referencia debe ser el más bajo de los treinta días anteriores, según la Agència Catalana del Consum. Tus derechos y el primer domingo de 2027, en " + b2link("winterSales", "es", "rebajas de enero 2027 en Cataluña") + ".",
     ],
     faq: [
       { question: "¿Abren las tiendas el domingo 29 de noviembre, día de elecciones?", answer: `Sí. El domingo 29 de noviembre es día de apertura comercial en Barcelona y en todos los municipios salvo ${joinList(NO_29_NOV, "es")}, y las elecciones no lo convierten en día de cierre. También pueden abrir los centros comerciales. Quien trabaje ese día tiene derecho a hasta cuatro horas retribuidas para ir a votar.` },
@@ -722,7 +722,7 @@ const COPY: Record<Locale, T> = {
     ],
     salesTitle: "What about the sales?",
     sales: [
-      "There is no compulsory date: each shop decides whether to hold sales and must announce them as such, with the period they cover. The Generalitat's retail advisory council proposes recommended dates every year. The reference price must be the lowest of the previous thirty days, according to the Catalan Consumer Agency.",
+      "There is no compulsory date: each shop decides whether to hold sales and must announce them as such, with the period they cover. The Generalitat's retail advisory council proposes recommended dates every year. The reference price must be the lowest of the previous thirty days, according to the Catalan Consumer Agency. Your rights and the first Sunday of 2027 are in " + b2link("winterSales", "en", "winter sales 2027 in Barcelona and Catalonia") + ".",
     ],
     faq: [
       { question: "Are shops open on Sunday 29 November, election day?", answer: `Yes. Sunday 29 November is a shop opening day in Barcelona and every town except ${joinList(NO_29_NOV, "en")}, and the election does not make it a closing day. Shopping centres may open too. Anyone working that day is entitled to up to four paid hours off to vote.` },

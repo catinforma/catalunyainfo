@@ -1325,7 +1325,7 @@ function daysParas(locale: Locale): string[] {
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
-const RELATED = ["christmasBarcelona", "christmasTraditions", "barcelonaDecember", "newYear", "shops", "bridges2027", "hours"] as const;
+const RELATED = ["christmasBarcelona", "christmasTraditions", "barcelonaDecember", "newYear", "shops", "winterSales", "bridges2027", "hours"] as const;
 
 /** Barcelona's call for people to take part: open until 23 Nov 2026, then in the past tense. */
 function signupsSentence(): Record<Locale, string> {

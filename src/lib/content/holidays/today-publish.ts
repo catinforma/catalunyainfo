@@ -138,7 +138,7 @@ const COPY: Record<Locale, TodayCopy> = {
       "Això explica per què hi ha anys amb molts més ponts que altres sense que canviï el nombre de dies.",
     ],
     plannerLine:
-      "Si el que vols és planificar vacances i ponts amb temps, tenim el [calendari laboral complet](/ca/guies/calendari-laboral-catalunya/), amb els ponts i el fitxer per afegir-lo al teu calendari.",
+      "Si el que vols és planificar vacances i ponts amb temps, tenim el [calendari laboral complet](/ca/guies/calendari-laboral-catalunya/), amb els ponts i el fitxer per afegir-lo al teu calendari. I per saber quan obren les botigues a les rebaixes de gener, mira les [rebaixes d'hivern 2027 a Catalunya](/ca/guies/rebaixes-hivern-catalunya/).",
   },
 
   es: {
@@ -170,7 +170,7 @@ const COPY: Record<Locale, TodayCopy> = {
       "Eso explica que haya años con muchos más puentes que otros sin que cambie el número de días.",
     ],
     plannerLine:
-      "Si lo que quieres es planificar vacaciones y puentes con tiempo, tenemos el [calendario laboral completo](/es/guias/calendario-laboral-cataluna/), con los puentes y el archivo para añadirlo a tu calendario.",
+      "Si lo que quieres es planificar vacaciones y puentes con tiempo, tenemos el [calendario laboral completo](/es/guias/calendario-laboral-cataluna/), con los puentes y el archivo para añadirlo a tu calendario. Y para saber cuándo abren las tiendas en las rebajas de enero, mira las [rebajas de enero 2027 en Cataluña](/es/guias/rebajas-invierno-cataluna/).",
   },
 
   en: {
@@ -202,7 +202,7 @@ const COPY: Record<Locale, TodayCopy> = {
       "That is why some years have far more long weekends than others without the number of days changing.",
     ],
     plannerLine:
-      "If you are planning leave and long weekends ahead of time, see the [full public holiday guide](/en/guides/catalonia-public-holidays/), with the bridges and a calendar file to download.",
+      "If you are planning leave and long weekends ahead of time, see the [full public holiday guide](/en/guides/catalonia-public-holidays/), with the bridges and a calendar file to download. For shop opening in the January sales, see [winter sales 2027 in Catalonia](/en/guides/winter-sales-barcelona-catalonia/).",
   },
 };
 

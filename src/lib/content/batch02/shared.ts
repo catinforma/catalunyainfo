@@ -125,6 +125,8 @@ export type B2Key =
   | "padro"
   // Carnival 2027 in Catalonia: dates, local holidays, schools, the big carnivals (carnival.ts).
   | "carnival"
+  // Winter sales 2027 in Catalonia: what the law says, opening Sundays, consumer rights (winter-sales.ts).
+  | "winterSales"
   // The TSI health card: who is entitled, documents, how to apply (tsi.ts).
   | "tsi"
   // NIE, TIE and the EU registration certificate: forms, fee, appointments, offices (nie-tie.ts).
@@ -562,6 +564,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/carnaval-catalunya",
     es: "tradiciones/carnaval-cataluna",
     en: "traditions/carnival-catalonia",
+  },
+  // No year in the path: next winter's sales roll onto the same URLs.
+  winterSales: {
+    ca: "guies/rebaixes-hivern-catalunya",
+    es: "guias/rebajas-invierno-cataluna",
+    en: "guides/winter-sales-barcelona-catalonia",
   },
   // Evergreen: no year in the path.
   tsi: {
@@ -1047,6 +1055,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Carnaval 2027 a Catalunya: dates, festius locals i rues",
     es: "Carnaval 2027 en Cataluña: fechas, festivos locales y rúas",
     en: "Carnival 2027 in Catalonia: dates, local holidays and parades",
+  },
+  winterSales: {
+    ca: "Rebaixes d'hivern 2027 a Catalunya: què diu la llei i els teus drets",
+    es: "Rebajas de enero 2027 en Cataluña: qué dice la ley y tus derechos",
+    en: "Winter sales 2027 in Barcelona and Catalonia: the law and your rights",
   },
   tsi: {
     ca: "Com demanar la targeta sanitària (TSI) a Catalunya",
