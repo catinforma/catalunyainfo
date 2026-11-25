@@ -14535,3 +14535,13 @@ Follow-up: 26 Nov and daily until done, `curl` tables 66237 and 66252 for "Anyo"
 **Follow-up.** 15 Dec 2026 (INE November release): re-read `IPC294107`/`IPC294109`, update `CATALONIA_IPC` (date guard fails from 16 Dec). **Review 2026-12-23:** `snapshot.py page calculadores/ipc 28` per-query; `page tsi 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-25 — Canyelles' Petita Llúcia (28–29 Nov) reaches the agenda, the weekend hub and the zone page (group `christmas`; weekend pages are dynamic)
+
+**Cause.** The weekend and agenda lists take their Christmas fairs from `christmasFairsThisWeekend` (our fairs data). Canyelles' only row was the calendar's 28–29 Nov fair, which the council's page corrects to 21–22 Nov (`org:canyelles-santa-llucia`, `replaces`). The Petita Llúcia of 28–29 Nov was only prose in that fair's `details`, so no list could pick it up. No selection bug: the data had no row.
+
+**Change.** New organiser entry `org:canyelles-petita-llucia` (28–29 Nov, Ajuntament de Canyelles, read 25 Nov 2026, quote from the council's news "Petita Llúcia. Exposicions Obertes el 28 i 29 de novembre": "Els dies 28 i 29 de novembre, es mantenen obertes: Castell dels Contes Màgics, Patge Reial Vibó, Park Noël, … Els Colors del Nadal"; agenda "Dis. 28 Nov, 2026 (10:00 - 20:00)", "Diu. 29 Nov, 2026 (10:00 - 20:00)"; the news itself says the exhibition runs 9–21 h, so the entry gives no hours). It flows to: the agenda hub and weekend hub "fires de Nadal" lists in ca/es/en (26–29 Nov; gone from 30 Nov), the zone page whose province holds Canyelles, the town page's fairs section, table, FAQ and Event JSON-LD, the Christmas fairs hub and the sitemap. The Canyelles town page's title, description, H1 and lead stay as they were (title changed 13 Nov, lead 20 Nov: 28-day windows): `SNIPPET_HOLDS["08043"]` with the new `headline` flag keeps them on the 21–22 Nov fair until 18 Dec 2026 (date-guard test fails on 19 Dec).
+
+**Baseline (GSC, 14 days to 25 Nov).** Canyelles ES 50 clicks / 3,192 impressions / position 7.8; CA 11 / 759 / 7.9.
+
+**Review:** 2026-12-04 (clicks and position of the Canyelles pages; agenda and weekend hubs unaffected); remove the hold on 2026-12-18 or later and log it. **Tests:** `christmas-fairs` 45, `weekend-agenda-list` 20 (26–29 Nov list Canyelles in ca/es/en and in a zone; 30 Nov and 2 Dec do not), `christmas-facts`, 24 other files that import the families: green. `tsc --noEmit` clean; `seo:body-dates` run (`christmas-fairs` moved). **Publish group:** `christmas`; IndexNow `/ca/fires-de-nadal/canyelles/ /es/mercados-navidad/canyelles/`.

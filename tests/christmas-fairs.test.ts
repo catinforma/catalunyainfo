@@ -275,7 +275,9 @@ test("merge: a fair listed by both the agenda and its council is shown once", ()
   }
   for (const slug of ["canyelles", "vic"]) {
     const town = townBySlug(slug)!;
-    assert.equal(town.fairs.length, 1, `${slug}: ${town.fairs.map((f) => f.id).join(", ")}`);
+    // Canyelles also has the Petita Llúcia (28-29 Nov, org:canyelles-petita-llucia): its own fair, not a duplicate of the 21-22 Nov one.
+    const own = town.fairs.filter((f) => f.id !== "org:canyelles-petita-llucia");
+    assert.equal(own.length, 1, `${slug}: ${town.fairs.map((f) => f.id).join(", ")}`);
   }
   // Without the fold the duplicates would be back.
   const unfolded = mergeFairs(SNAPSHOT, ORGANISER_FAIRS.map(({ alsoReplaces: _drop, ...o }) => o));
@@ -578,7 +580,9 @@ test("Canyelles (20 Nov 2026): hours, programme, shuttle buses and parking from 
   // The lead hold ended with the 20 Nov review: the first sentence gives the days.
   assert.ok(!("08043" in LEAD_HOLDS));
   for (const locale of ["ca", "es"] as const) {
-    assert.ok(townLead({ ...town, comarcaName: "Garraf" }, locale, "2026-11-20").startsWith(townDatesLine(town, locale)), locale);
+    // 25 Nov: the Petita Llúcia is a second entry; the lead keeps speaking of the 21-22 Nov fair (SNIPPET_HOLDS, headline).
+    const held = { ...town, fairs: [fair] };
+    assert.ok(townLead({ ...town, comarcaName: "Garraf" }, locale, "2026-11-20").startsWith(townDatesLine(held, locale)), locale);
     const description = townDescription(town, locale);
     assert.ok(description.length <= DESCRIPTION_LIMIT && /9 a 21 h/.test(description) && /Vilafranca/.test(description), description);
   }
@@ -769,7 +773,9 @@ test("metadata: titles <= 60 with the year and the town, descriptions <= 155", (
       const bare = t.name.replace(/^(el|la|les|els) |^l'/, "");
       assert.ok(title.toLowerCase().includes(bare.toLowerCase()), `${title} / ${bare}`);
       assert.ok(!/\$\{|undefined|null/.test(title + description), title);
-      assert.equal(townH1(t, locale), `${headline(t, locale)} ${SEASON_YEAR}`);
+      // SNIPPET_HOLDS with `headline` (Canyelles): the H1 speaks of the held fair.
+      const held = SNIPPET_HOLDS[t.ine]?.headline ? { ...t, fairs: t.fairs.filter((f) => f.id === SNIPPET_HOLDS[t.ine]!.fairId) } : t;
+      assert.equal(townH1(t, locale), `${headline(held, locale)} ${SEASON_YEAR}`);
     }
   }
   for (const locale of FAIRS_LOCALES) {

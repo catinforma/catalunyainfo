@@ -184,7 +184,8 @@ test("FAQ: the dates answer states the dates the page shows, and the read date",
   const canyelles = towns().find((t) => t.slug === "canyelles")!;
   const faq = townFaqFor(canyelles, "es");
   assert.match(faq[0]!.question, /Canyelles/);
-  assert.match(faq[0]!.answer, /21 y domingo 22 de noviembre de 2026/);
+  // 25 Nov 2026: the answer lists both of Canyelles' fairs (the Petita Llúcia is its own entry).
+  assert.match(faq[0]!.answer, /Feria de Santa Llúcia: 21 y 22 de noviembre.*Petita Llúcia: 28 y 29 de noviembre/);
   assert.match(faq[0]!.answer, /leído el \d+ de noviembre de 2026/);
   const hours = faq.find((i) => /A qué hora/.test(i.question))!;
   assert.match(hours.answer, /9 a 21 h/);

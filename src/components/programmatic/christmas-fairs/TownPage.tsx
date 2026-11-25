@@ -13,7 +13,7 @@ import { fairPagePhoto } from "@/lib/content/place-photos";
 import { christmasNextStep } from "@/lib/engagement/next-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
-import { confirmationNote, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
+import { confirmationNote, headlineFairs, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import {
   FAIRS,
   comarcaOf,
@@ -112,7 +112,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
           <Breadcrumbs items={townCrumbs(town, locale)} locale={locale} />
           <h1 className="ci-measure">{townH1(town, locale)}</h1>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">
-            {[townLead({ ...town, comarcaName: comarcaOf(town) }, locale, checked), confirmationNote(town.fairs, locale)].filter(Boolean).join(" ")}
+            {[townLead({ ...town, comarcaName: comarcaOf(town) }, locale, checked), confirmationNote(headlineFairs(town), locale)].filter(Boolean).join(" ")}
           </p>
           <ShareBar locale={locale} path={crumbPath(townCrumbs(town, locale))} title={townH1(town, locale)} contentType="christmas_fairs_town" />
         </div>

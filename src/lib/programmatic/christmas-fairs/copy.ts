@@ -73,16 +73,28 @@ interface TownLike {
  * Nov) go into the page body and H1 only. Remove the entry after 1 Dec
  * (tests/christmas-fairs.test.ts fails from 2 Dec 2026 as a reminder).
  */
-export const SNIPPET_HOLDS: Readonly<Record<string, { fairId: string; until: string }>> = {
+/**
+ * `headline: true` also holds the H1 and the lead on that fair. Canyelles (25 Nov 2026): its
+ * title changed on 13 Nov and its lead on 20 Nov (docs/SEO_EXPERIMENTS.md), so the Petita
+ * Llúcia (28-29 Nov, a second entry so the weekend and agenda lists carry it) goes into the
+ * page body, FAQ and JSON-LD only until the 28 days of the lead change have run (18 Dec).
+ */
+export const SNIPPET_HOLDS: Readonly<Record<string, { fairId: string; until: string; headline?: boolean }>> = {
   "08019": { fairId: "agenda:2026110300020", until: "2026-12-01" },
+  "08043": { fairId: "vm32:24033377", until: "2026-12-18", headline: true },
 };
 
 /** The fairs the title and description speak of: all of the town's, or the held one. */
-function snippetTown<T extends TownLike & { ine?: string }>(town: T): T {
+function snippetTown<T extends TownLike & { ine?: string }>(town: T, scope: "snippet" | "headline" = "snippet"): T {
   const hold = town.ine ? SNIPPET_HOLDS[town.ine] : undefined;
-  if (!hold) return town;
+  if (!hold || (scope === "headline" && !hold.headline)) return town;
   const fair = town.fairs.find((f) => f.id === hold.fairId);
   return fair ? { ...town, fairs: [fair] } : town;
+}
+
+/** The fairs the H1 and the lead speak of (all of the town's, or the held one). */
+export function headlineFairs<T extends TownLike & { ine?: string }>(town: T): T["fairs"] {
+  return snippetTown(town, "headline").fairs;
 }
 
 /**
@@ -99,8 +111,8 @@ export function headline(town: TownLike, locale: FairsLocale): string {
   return locale === "es" ? `${name} de ${townName(town.name, "es")}` : `${name} ${caDe(town.name)}`;
 }
 
-export function townH1(town: TownLike, locale: FairsLocale): string {
-  return `${headline(town, locale)} ${SEASON_YEAR}`;
+export function townH1(subject: TownLike & { ine?: string }, locale: FairsLocale): string {
+  return `${headline(snippetTown(subject, "headline"), locale)} ${SEASON_YEAR}`;
 }
 
 const TITLE_TAIL: Record<FairsLocale, { one: string; many: string }> = {
@@ -225,7 +237,8 @@ export function townDatesLine(town: TownLike, locale: FairsLocale): string {
 }
 
 /** The sentence under the H1. Markdown links allowed. */
-export function townLead(town: TownLike & { comarcaName: string; ine?: string }, locale: FairsLocale, checked: string): string {
+export function townLead(subject: TownLike & { comarcaName: string; ine?: string }, locale: FairsLocale, checked: string): string {
+  const town = snippetTown(subject, "headline");
   const where = locale === "ca" ? `${caStart(town.name)} (${town.comarcaName})` : `${townName(town.name, locale)} (${town.comarcaName})`;
   const n = town.fairs.length;
   if (!(town.ine && LEAD_HOLDS[town.ine]) && n > 0) {

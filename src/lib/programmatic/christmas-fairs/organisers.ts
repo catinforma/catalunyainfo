@@ -941,6 +941,25 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     details: CANYELLES_DETAILS,
   },
   {
+    // 25 Nov 2026: the Petita Llúcia is its own entry. The calendar's 28-29 Nov row is the
+    // fair's own (corrected to 21-22 Nov above); the council's news of 24 Nov (curl, browser
+    // user agent, grepped) gives the exhibitions that stay open on 28 and 29 Nov, so the
+    // weekend and agenda lists carry Canyelles through this entry. No hours: the news says
+    // "L'horari de l'exposició és de 9h a 21h", its agenda says 10:00 - 20:00 (both on the
+    // fair's page, which already shows them as written), and the entry does not choose.
+    id: "org:canyelles-petita-llucia",
+    ine: "08043",
+    name: "Petita Llúcia",
+    start: "2026-11-28",
+    end: "2026-11-29",
+    place: null,
+    url: `${CANYELLES}/fira-de-santa-llucia/petita-llucia-exposicions-obertes-el-28-i-29-de-novembre`,
+    publisher: "Ajuntament de Canyelles",
+    readOn: "2026-11-25",
+    quote:
+      "Petita Llúcia. Nova oportunitat per gaudir dels espais i exposicions més màgics de la 24a Fira de Santa Llúcia de Canyelles. Els dies 28 i 29 de novembre, es mantenen obertes: Castell dels Contes Màgics, Patge Reial Vibó, Park Noël, Exposició de Diorames, Exposició de Playmobil, Espai Harry Potter, Pessebre Solidari, Pessebre de l'Ajuntament, Arbre dels Desitjos, Els Colors del Nadal. … Petita Llúcia Dis. 28 Nov, 2026 (10:00 - 20:00) Petita Llúcia Diu. 29 Nov, 2026 (10:00 - 20:00)",
+  },
+  {
     id: "org:barcelona-sagrada-familia",
     // Programme and practical information, read 20 Nov 2026 (above).
     details: SAGRADA_FAMILIA_DETAILS,

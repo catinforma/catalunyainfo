@@ -28,7 +28,8 @@ import {
 } from "../src/lib/programmatic/weekend/agenda-list.ts";
 import { bcnItems, bcnSql, gencatItems, readBcn, readGencat, type BcnRow } from "../src/lib/programmatic/weekend/agenda-upstream.ts";
 import { christmasFairsThisWeekend } from "../src/lib/programmatic/weekend/christmas-weekend.ts";
-import { SNAPSHOT } from "../src/lib/programmatic/weekend/data.ts";
+import { SNAPSHOT, shippedZones } from "../src/lib/programmatic/weekend/data.ts";
+import { zoneFilter } from "../src/lib/programmatic/weekend/zones.ts";
 
 const ROOT = join(import.meta.dirname, "..");
 const FIXTURES = join(import.meta.dirname, "fixtures", "weekend-agenda");
@@ -285,4 +286,30 @@ test("pages: the agenda is server-rendered on the hubs, the zones and the Englis
   }
   const list = readFileSync(join(dir, "AgendaList.tsx"), "utf8");
   assert.ok(!/dangerouslySetInnerHTML|<img\b/.test(list), "no markup or images from the sources");
+});
+
+/**
+ * Canyelles' Petita Llúcia (28-29 Nov 2026, council news read 25 Nov 2026): the fair itself
+ * is 21-22 Nov, the exhibitions stay open the next weekend. It is its own organiser entry, so
+ * the agenda hub, the weekend hub and the zone pages list Canyelles on 26-29 Nov and not after.
+ */
+test("Canyelles' Petita Llúcia is in this weekend's Christmas fairs on 26-29 Nov, and gone on 30 Nov", () => {
+  for (const today of ["2026-11-26", "2026-11-27", "2026-11-28", "2026-11-29"]) {
+    for (const locale of ["ca", "es", "en"] as const) {
+      const list = christmasFairsThisWeekend(weekendWindow(today), today, locale);
+      const canyelles = list.find((t) => t.ine === "08043");
+      assert.ok(canyelles, `${today} ${locale}`);
+      assert.deepEqual(canyelles.fairs, [{ name: "Petita Llúcia", start: "2026-11-28", end: "2026-11-29" }], `${today} ${locale}`);
+      assert.equal(canyelles.href, locale === "ca" ? "/ca/fires-de-nadal/canyelles/" : locale === "es" ? "/es/mercados-navidad/canyelles/" : "/en/christmas-markets/");
+    }
+    // The zone page of its province lists it too.
+    const zones = shippedZones().filter((z) => christmasFairsThisWeekend(weekendWindow(today), today, "ca", zoneFilter(z)).some((t) => t.ine === "08043"));
+    assert.ok(zones.length > 0, `${today}: a zone page lists Canyelles`);
+  }
+  // Sunday 29 Nov: still listed (the last day); Monday 30 Nov: the window is 4-6 Dec and the exhibitions are over.
+  assert.ok(!christmasFairsThisWeekend(weekendWindow("2026-11-30"), "2026-11-30", "ca").some((t) => t.ine === "08043"));
+  assert.ok(!christmasFairsThisWeekend(weekendWindow("2026-12-02"), "2026-12-02", "es").some((t) => t.ine === "08043"));
+  // The 21-22 Nov fair is not listed for the 28-29 Nov weekend.
+  const list = christmasFairsThisWeekend(weekendWindow("2026-11-27"), "2026-11-27", "ca");
+  assert.ok(list.find((t) => t.ine === "08043")!.fairs.every((f) => f.start === "2026-11-28"));
 });
