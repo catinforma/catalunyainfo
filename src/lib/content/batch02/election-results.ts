@@ -56,6 +56,46 @@ const VERIFIED = "2026-10-12";
 const PARLIAMENT_VERIFIED = "2026-11-11";
 
 /**
+ * "When is the next Catalan election?" (25 Nov 2026, English page at 8.7 for
+ * "next catalan election"; body only, logged in docs/SEO_EXPERIMENTS.md).
+ * Re-read 25 Nov 2026 on boe.es, Estatut 2006 (BOE-A-2006-13087, consolidated
+ * text, last update 28/12/2022):
+ * - art. 56.1 "elegidos para un plazo de cuatro años";
+ * - art. 56.4 "El Presidente o Presidenta de la Generalitat, quince días antes
+ *   de la finalización de la legislatura, debe convocar las elecciones, que
+ *   deben tener lugar entre cuarenta y sesenta días después de la
+ *   convocatoria";
+ * - art. 66 "La legislatura finaliza por expiración del mandato legal al
+ *   cumplirse los cuatro años de la fecha de las elecciones. También puede
+ *   finalizar anticipadamente si no tiene lugar la investidura del presidente
+ *   o presidenta de la Generalitat, o por disolución anticipada, acordada por
+ *   el presidente o presidenta de la Generalitat";
+ * - art. 67.3 "Si una vez transcurridos dos meses desde la primera votación de
+ *   investidura, ningún candidato o candidata es elegido, el Parlamento queda
+ *   disuelto automáticamente y el Presidente o Presidenta de la Generalitat en
+ *   funciones convoca elecciones de forma inmediata, que deben tener lugar
+ *   entre cuarenta y sesenta días después de la convocatoria".
+ * The date is our arithmetic, and the timetable is the LOREG's, not the
+ * Statute's 15 days: Ley Orgánica 5/1985 (BOE-A-1985-11672), read 25 Nov 2026,
+ * disposición adicional primera.2 applies "los siguientes artículos del Título
+ * I [...] 1 al 42" to elections to the regional assemblies, and art. 42.2 says
+ * that when the President does not use the power of early dissolution "los
+ * decretos de convocatoria se expiden el día vigésimo quinto anterior a la
+ * expiración del mandato de las respectivas Cámaras, y se publican al día
+ * siguiente" and "señalan la fecha de las elecciones que habrán de celebrarse
+ * el día quincuagésimo cuarto posterior a la convocatoria". Election 12 May
+ * 2024 + 4 years = term ends 12 May 2028; decree issued 17 April 2028 (25th
+ * day before), published 18 April, election on the 54th day after publication
+ * = Sunday 11 June 2028 (same count as the 2010 election: published 5 October,
+ * vote 28 November). Statute art. 56.4 only says 40 to 60 days after the call,
+ * which 54 satisfies; its "15 days before" is not printed. Precedent check by
+ * the head: Catalonia 2010. tests/en-pages-25nov-demand.test.ts recomputes the
+ * date. "No election called" is a statement that goes stale the day a snap
+ * election is called: the guard test fails from PARLIAMENT_NEXT_REREAD_BY.
+ */
+export const PARLIAMENT_NEXT_REREAD_BY = "2026-12-23";
+
+/**
  * The 29 November 2026 results, first thing after the lead (Congress page
  * only). 13 Nov 2026 (body only, logged in docs/SEO_EXPERIMENTS.md, "13 Nov
  * 2026 — 29N results night"): the shared results-night line (when, who,
@@ -290,13 +330,14 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
         "Within each province a list needs at least 3% of the valid votes to take part in the share-out, and seats are then allocated by the D'Hondt rule. Because seats are fixed per province, the electorate behind each seat differs: in 2024 it was about 50,300 voters per seat in Barcelona, 33,500 in Tarragona, 32,500 in Girona and 21,300 in Lleida (electorate divided by seats).",
       ],
     },
-    nextTitle: "The next one",
-    next: "The last election was on 12 May 2024. A Parliament is elected for four years under the Statute of Autonomy, unless the President dissolves it early; at the end of a full term, the President calls the election fifteen days before the term ends and voting takes place 40 to 60 days after the call. No election has been called.",
+    nextTitle: "When is the next Catalan election?",
+    next: "No election to the Parliament of Catalonia has been called (checked on 25 November 2026); the last one was on 12 May 2024. The Statute of Autonomy gives the Parliament a four-year term counted from the date of the election, so a full term ends on 12 May 2028. By our calculation the election would then be held on Sunday 11 June 2028: the decree is issued 25 days before the term ends (17 April), published the next day, and the election is held on the 54th day after its publication (electoral law, article 42.2, which applies to regional parliaments through its additional provision 1.2; the Statute, article 56.4, allows 40 to 60 days). It can come sooner: the President can dissolve the Parliament early, and if no president has been elected two months after the first investiture vote, the Parliament is dissolved automatically and the election is called at once (Statute, articles 66 and 67.3).",
     faq: [
       { question: "How many seats does the Parliament of Catalonia have?", answer: "135, elected in the four provinces: Barcelona 85, Tarragona 18, Girona 17 and Lleida 15." },
       { question: "What was the turnout at the 2024 Catalan election?", answer: "55.3%: 3,183,137 voters out of an electorate of 5,754,952, from the Generalitat's data. It was 51.3% in 2021 and 79.1% in 2017." },
       { question: "When was the last Catalan election?", answer: "On 12 May 2024." },
-      { question: "When is the next Catalan election?", answer: "None has been called. The term is four years from May 2024 unless the President calls an early election." },
+      { question: "When is the next Catalan election?", answer: "None has been called yet. By our calculation a full four-year term from the 12 May 2024 election would put the next one on Sunday 11 June 2028 (decree 17 April, election 54 days after its publication); the President can bring it forward by dissolving the Parliament." },
+      { question: "How often are Catalan elections held?", answer: "Every four years at most: the Statute of Autonomy sets a four-year term from the election date, which an early dissolution can cut short. The last three were on 21 December 2017, 14 February 2021 and 12 May 2024." },
     ],
     note: "The tables are read live from the Generalitat's open data.",
   },
@@ -314,13 +355,14 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
         "En cada provincia, una candidatura necesita al menos el 3 % de los votos válidos para entrar en el reparto, y los escaños se asignan con la regla D'Hondt. Como los escaños están fijados por provincia, el censo que hay detrás de cada escaño cambia: en 2024 eran unos 50.300 electores por escaño en Barcelona, 33.500 en Tarragona, 32.500 en Girona y 21.300 en Lleida (censo dividido por escaños).",
       ],
     },
-    nextTitle: "Las próximas",
-    next: "Las últimas elecciones fueron el 12 de mayo de 2024. Según el Estatuto de Autonomía, el Parlament se elige por cuatro años, salvo disolución anticipada por el presidente o la presidenta; si la legislatura se agota, el presidente convoca las elecciones quince días antes de que acabe y se vota entre 40 y 60 días después de la convocatoria. No hay elecciones convocadas.",
+    nextTitle: "¿Cuándo son las próximas elecciones catalanas?",
+    next: "No hay ninguna elección al Parlament de Catalunya convocada (comprobado el 25 de noviembre de 2026); las últimas fueron el 12 de mayo de 2024. El Estatuto de Autonomía da al Parlament una legislatura de cuatro años contados desde la fecha de las elecciones, así que una legislatura completa acaba el 12 de mayo de 2028. Según nuestro cálculo, las elecciones serían entonces el domingo 11 de junio de 2028: el decreto se expide 25 días antes de que acabe el mandato (el 17 de abril), se publica al día siguiente y las elecciones se celebran el día 54 posterior a su publicación (ley electoral, artículo 42.2, que se aplica a los parlamentos autonómicos por su disposición adicional primera.2; el Estatuto, artículo 56.4, admite de 40 a 60 días). Pueden llegar antes: el presidente puede disolver el Parlament de forma anticipada, y si pasados dos meses de la primera votación de investidura no hay presidente elegido, el Parlament queda disuelto automáticamente y se convocan elecciones de inmediato (Estatuto, artículos 66 y 67.3).",
     faq: [
       { question: "¿Cuántos escaños tiene el Parlament de Catalunya?", answer: "135, elegidos en las cuatro provincias: Barcelona 85, Tarragona 18, Girona 17 y Lleida 15." },
       { question: "¿Qué participación hubo en las elecciones catalanas de 2024?", answer: "El 55,3 %: 3.183.137 votantes de un censo de 5.754.952, según los datos de la Generalitat. En 2021 fue el 51,3 % y en 2017, el 79,1 %." },
       { question: "¿Cuándo fueron las últimas elecciones catalanas?", answer: "El 12 de mayo de 2024." },
-      { question: "¿Cuándo son las próximas elecciones catalanas?", answer: "No hay ninguna convocada. La legislatura dura cuatro años desde mayo de 2024, salvo adelanto electoral." },
+      { question: "¿Cuándo son las próximas elecciones catalanas?", answer: "Todavía no hay ninguna convocada. Según nuestro cálculo, una legislatura completa de cuatro años desde las elecciones del 12 de mayo de 2024 situaría las próximas el domingo 11 de junio de 2028 (decreto el 17 de abril, elecciones 54 días después de su publicación); el presidente puede adelantarlas disolviendo el Parlament." },
+      { question: "¿Cada cuánto hay elecciones catalanas?", answer: "Como máximo cada cuatro años: el Estatuto de Autonomía fija una legislatura de cuatro años desde la fecha de las elecciones, que una disolución anticipada puede acortar. Las tres últimas fueron el 21 de diciembre de 2017, el 14 de febrero de 2021 y el 12 de mayo de 2024." },
     ],
     note: "Las tablas se leen en directo de los datos abiertos de la Generalitat.",
   },
@@ -338,13 +380,14 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
         "A cada província, una candidatura necessita com a mínim el 3 % dels vots vàlids per entrar al repartiment, i els escons s'assignen amb la regla D'Hondt. Com que els escons estan fixats per província, el cens que hi ha darrere de cada escó canvia: el 2024 eren uns 50.300 electors per escó a Barcelona, 33.500 a Tarragona, 32.500 a Girona i 21.300 a Lleida (cens dividit per escons).",
       ],
     },
-    nextTitle: "Les properes",
-    next: "Les últimes eleccions van ser el 12 de maig de 2024. Segons l'Estatut d'Autonomia, el Parlament s'escull per quatre anys, llevat de dissolució anticipada pel president o la presidenta; si la legislatura s'esgota, el president convoca les eleccions quinze dies abans que acabi i es voten entre 40 i 60 dies després de la convocatòria. No hi ha eleccions convocades.",
+    nextTitle: "Quan són les properes eleccions catalanes?",
+    next: "No hi ha cap elecció al Parlament de Catalunya convocada (comprovat el 25 de novembre de 2026); les últimes van ser el 12 de maig de 2024. L'Estatut d'Autonomia dona al Parlament una legislatura de quatre anys comptats des de la data de les eleccions, així que una legislatura completa acaba el 12 de maig de 2028. Segons el nostre càlcul, les eleccions serien llavors el diumenge 11 de juny de 2028: el decret s'expedeix 25 dies abans que acabi el mandat (el 17 d'abril), es publica l'endemà i les eleccions se celebren el dia 54 posterior a la publicació (llei electoral, article 42.2, que s'aplica als parlaments autonòmics per la seva disposició addicional primera.2; l'Estatut, article 56.4, admet de 40 a 60 dies). Poden arribar abans: el president pot dissoldre el Parlament anticipadament, i si passats dos mesos de la primera votació d'investidura no hi ha president escollit, el Parlament queda dissolt automàticament i es convoquen eleccions de seguida (Estatut, articles 66 i 67.3).",
     faq: [
       { question: "Quants escons té el Parlament de Catalunya?", answer: "135, escollits a les quatre províncies: Barcelona 85, Tarragona 18, Girona 17 i Lleida 15." },
       { question: "Quina participació hi va haver a les eleccions catalanes del 2024?", answer: "El 55,3 %: 3.183.137 votants d'un cens de 5.754.952, segons les dades de la Generalitat. El 2021 va ser el 51,3 % i el 2017, el 79,1 %." },
       { question: "Quan van ser les últimes eleccions catalanes?", answer: "El 12 de maig de 2024." },
-      { question: "Quan són les properes eleccions catalanes?", answer: "No n'hi ha cap de convocada. La legislatura dura quatre anys des del maig del 2024, llevat d'avançament electoral." },
+      { question: "Quan són les properes eleccions catalanes?", answer: "Encara no n'hi ha cap de convocada. Segons el nostre càlcul, una legislatura completa de quatre anys des de les eleccions del 12 de maig de 2024 situaria les properes el diumenge 11 de juny de 2028 (decret el 17 d'abril, eleccions 54 dies després de publicar-lo); el president les pot avançar dissolent el Parlament." },
+      { question: "Cada quant hi ha eleccions catalanes?", answer: "Com a màxim cada quatre anys: l'Estatut d'Autonomia fixa una legislatura de quatre anys des de la data de les eleccions, que una dissolució anticipada pot escurçar. Les tres últimes van ser el 21 de desembre de 2017, el 14 de febrer de 2021 i el 12 de maig de 2024." },
     ],
     note: "Les taules es llegeixen en directe de les dades obertes de la Generalitat.",
   },

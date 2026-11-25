@@ -46,6 +46,19 @@ import {
 // the cruise line. "Formerly the Portbus", the World Trade Center / Columbus /
 // Drassanes description of the city stop and "unlimited rides" as the Port's
 // wording were dropped: none is on a Port or operator page.
+//
+// Re-read 25 Nov 2026 (English-page query pass, "cruise bus barcelona ticket"
+// 11 impressions at 8.4, "is there a shuttle bus from barcelona cruise port to
+// city centre" at 5.5, "what can i do in barcelona on a cruise stop?" at
+// 10.3): cruisebus.barcelona/en/ "From the ship to La Rambla in 5 minutes",
+// "CRUISE BUS – ONE WAY WEB (3.50€)", "DAY TICKET WEB (5€)", "Day Tickets allow
+// multiple trips only for the date indicated on the ticket"; /en/el-servei/
+// "the shuttle bus service that connects the cruise terminals at Muelle
+// Adosado and Portal de la Pau"; /en/parades/ "From terminals A, B, C, D and
+// E, the Cruise Bus will drop you off right next to La Rambla and very close
+// to Plaza Catalunya, from where you can get to any part of the city or pick
+// up a transport connection to the airport on the Aerobus service". Prices and
+// stops unchanged; the Port and AMB pages were not re-read (VERIFIED stays).
 const VERIFIED = "2026-10-28";
 
 const SOURCES: B2Source[] = [
@@ -142,8 +155,11 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Going on to the airport:** a taxi on the fixed €46 fare is the simplest with luggage.",
       "**Back on board in time:** leave a generous margin for the shuttle or taxi back; all-aboard times are strict.",
+      `**Only a few hours in port:** the Cruise Bus leaves you beside La Rambla, close to Plaça de Catalunya, so the old city is the nearest thing to see. For the Sagrada Família or Park Güell, book ${b2link("monuments", "en", "their timed tickets")} before you sail; for museums, see the ${b2link("museums", "en", "free museum slots")}.`,
     ],
     faq: [
+      { question: "Is there a shuttle bus from the Barcelona cruise port to the city centre?", answer: "Yes, the Cruise Bus. It connects the cruise terminals on the Moll Adossat with the Portal de la Pau and, according to its operator, drops you right next to La Rambla and very close to Plaça de Catalunya, where the Aerobús stops for the airport. It costs €3.50 one way or €5 for a day ticket. For the MSC terminal, ask your cruise line." },
+      { question: "How long does the Cruise Bus take from the port to La Rambla?", answer: "The operator's slogan is \"from the ship to La Rambla in 5 minutes\". Neither the Port nor the operator publishes a timetable or any other journey time." },
       { question: "How do I get from the Barcelona cruise port to the city?", answer: "By the Cruise Bus shuttle (€3.50 one way, €5 day ticket) from terminals A to E to the Portal de la Pau, at the foot of La Rambla, or by taxi. Only the World Trade Center terminal is within walking distance." },
       { question: "How far is the cruise port from Barcelona city centre?", answer: "The Moll Adossat terminals are 2 km (A, B), 2.5 km (D), 3 km (E) and 3.9 km (MSC) from the city, according to the Port; the World Trade Center terminal is 400 m away." },
       { question: "How much is the Cruise Bus in Barcelona?", answer: "€3.50 one way and €5 for the day ticket, which the Port calls a return ticket. Online tickets are for one date and paid by card." },
@@ -193,8 +209,11 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Si sigues hacia el aeropuerto:** un taxi con la tarifa fija de 46 € es lo más sencillo con equipaje.",
       "**Para volver a bordo a tiempo:** deja un buen margen para la lanzadera o el taxi de vuelta; la hora de embarque es estricta.",
+      `**Si solo tienes unas horas en puerto:** el Cruise Bus te deja junto a La Rambla, cerca de la plaza de Catalunya, así que el casco antiguo es lo más cercano. Para la Sagrada Família o el Park Güell, reserva ${b2link("monuments", "es", "sus entradas con hora")} antes de zarpar; para museos, mira las ${b2link("museums", "es", "franjas gratuitas")}.`,
     ],
     faq: [
+      { question: "¿Hay autobús del puerto de cruceros de Barcelona al centro?", answer: "Sí, el Cruise Bus. Une las terminales de cruceros del Moll Adossat con el Portal de la Pau y, según su operador, te deja junto a La Rambla y muy cerca de la plaza de Catalunya, donde para el Aerobús del aeropuerto. Cuesta 3,50 € el trayecto o 5 € el billete de día. Para la terminal MSC, pregunta a la naviera." },
+      { question: "¿Cuánto tarda el Cruise Bus del puerto a La Rambla?", answer: "El lema del operador es «del barco a La Rambla en 5 minutos». Ni el Port ni el operador publican horario ni otro tiempo de trayecto." },
       { question: "¿De dónde salen los cruceros en Barcelona?", answer: "Sobre todo del Moll Adossat (Muelle Adosado), con las terminales A, B, D (Palacruceros), E (Helix) y MSC, y de la terminal Sur del World Trade Center, en el Muelle de Barcelona, junto a la ciudad." },
       { question: "¿Cómo se va del puerto de cruceros de Barcelona a la ciudad?", answer: "En la lanzadera Cruise Bus (3,50 € el trayecto, 5 € el billete de día) desde las terminales A a E hasta el Portal de la Pau, al pie de La Rambla, o en taxi. Solo la terminal del World Trade Center está a distancia de ir a pie." },
       { question: "¿A qué distancia está el puerto de cruceros del centro de Barcelona?", answer: "Las terminales del Moll Adossat están a 2 km (A, B), 2,5 km (D), 3 km (E) y 3,9 km (MSC) de la ciudad, según el Port; la del World Trade Center, a 400 m." },
@@ -245,6 +264,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Si continues cap a l'aeroport:** un taxi amb la tarifa fixa de 46 € és el més senzill amb equipatge.",
       "**Per tornar a bord a temps:** deixa un bon marge per a la llançadora o el taxi de tornada; l'hora d'embarcament és estricta.",
+      `**Si només tens unes hores al port:** el Cruise Bus et deixa al costat de la Rambla, a prop de la plaça de Catalunya, així que el casc antic és el més proper. Per a la Sagrada Família o el Park Güell, reserva ${b2link("monuments", "ca", "les entrades amb hora")} abans de salpar; per a museus, mira les ${b2link("museums", "ca", "franges gratuïtes")}.`,
     ],
     faq: [
       { question: "Com s'hi va del port de creuers de Barcelona a la ciutat?", answer: "Amb la llançadora Cruise Bus (3,50 € el trajecte, 5 € el bitllet de dia) des de les terminals A a E fins al Portal de la Pau, al peu de la Rambla, o en taxi. Només la terminal del World Trade Center és a distància d'anar-hi a peu." },
@@ -252,6 +272,8 @@ const COPY: Record<Locale, T> = {
       { question: "Quant costa el Cruise Bus de Barcelona?", answer: "3,50 € el trajecte senzill i 5 € el bitllet de dia, que el Port anomena d'anada i tornada. Els bitllets en línia són per a una data i es paguen amb targeta." },
       { question: "Quant costa el taxi del port de creuers al centre?", answer: "Va amb taxímetre: 2,80 € de baixada de bandera, d'1,35 a 1,66 € per km i un suplement de 4,60 € al Moll Adossat. Cap font oficial no en dona un total." },
       { question: "Quant costa el taxi del port de creuers a l'aeroport?", answer: "Una tarifa fixa de 46 € entre l'aeroport i el Moll Adossat, amb suplements inclosos, segons la tarifa de l'AMB del 2026." },
+      { question: "Hi ha autobús del port de creuers de Barcelona al centre?", answer: "Sí, el Cruise Bus. Uneix les terminals de creuers del Moll Adossat amb el Portal de la Pau i, segons l'operador, et deixa al costat de la Rambla i molt a prop de la plaça de Catalunya, on para l'Aerobús de l'aeroport. Costa 3,50 € el trajecte o 5 € el bitllet de dia. Per a la terminal MSC, pregunta a la naviliera." },
+      { question: "Quant triga el Cruise Bus del port a la Rambla?", answer: "El lema de l'operador és «del vaixell a la Rambla en 5 minuts». Ni el Port ni l'operador no publiquen horari ni cap altre temps de trajecte." },
       { question: "D'on surten els creuers a Barcelona?", answer: "Sobretot del Moll Adossat, amb les terminals A, B, D (Palacruceros), E (Helix) i MSC, i de la terminal Sud del World Trade Center, al Moll de Barcelona, al costat de la ciutat." },
     ],
     note: "Les terminals assignades, els preus i els serveis canvien: confirma-ho amb la naviliera i el Port abans d'atracar.",

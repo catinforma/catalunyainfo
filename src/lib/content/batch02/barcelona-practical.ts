@@ -603,6 +603,21 @@ const ZBE_SOURCES = [
 // qualifying foreign car; 5 € / 6 € a day since January 2022). The table's
 // note keeps its own date (28 Oct). Not re-read: the end of the 2026
 // suspension on 16 March (left as written).
+// 25 Nov 2026 (English page, "barcelona low emission zone" 9 impressions at
+// 18.7, "zbe barcelone voiture française", "lez barcelona"; page 758 impressions
+// at 8.0): two FAQ entries (rental cars, tourists). Re-read today:
+// zberegistre.ambmobilitat.cat/en/VehiclesEstrangers ("All foreign vehicles
+// must be included in the Register before they can drive in the low emission
+// zones (ZBE)", "Applications can be made to include any kind of vehicle with
+// foreign number plate", 7 euros, 15 business days "both to vehicles that meet
+// the environmental standards, and to those ... seeking to obtain single-day
+// permits") and zbe.barcelona vehicles-afectats ("vehicles sense etiqueta
+// ambiental", "Els vehicles amb etiqueta ambiental 0, ECO, C o B poden
+// circular sense restriccions a la ZBE Rondes de Barcelona", "dies laborables,
+// de dilluns a divendres, de 7.00 a 20.00 h"). The rental answer is an
+// inference from those two texts (a Spanish-plated car is not a "foreign
+// vehicle"); no AMB page mentions rental cars, and the answer says so by
+// sending the reader to the rental company for the label. ZBE_VERIFIED stays.
 const ZBE_VERIFIED = "2026-10-30";
 
 const ZBE_TABLE: Record<"ca" | "es" | "en", { title: string; caption: string; headers: string[]; rows: string[][]; note: string }> = {
@@ -914,6 +929,8 @@ export const ZBE: B2Article = {
           { question: "Quins dièsel poden entrar a la ZBE?", answer: "Els Euro 4 o superiors, habitualment els matriculats a partir del 2005 o 2006. Mana el nivell Euro del permís de circulació." },
           { question: "Quant triga el registre de la ZBE?", answer: "Fins a 15 dies hàbils; fins que no arriba la confirmació, el vehicle no pot circular per la ZBE." },
           { question: "Quina multa hi ha si entro sense registrar?", answer: "Segons l'AMB, un vehicle que compleix els requisits però no s'ha registrat pot rebre una multa a partir de 200 euros." },
+          { question: "Un cotxe de lloguer ha de registrar-se per a la ZBE de Barcelona?", answer: "El registre de l'AMB és per a vehicles amb matrícula estrangera. Un cotxe de lloguer amb matrícula espanyola és un vehicle espanyol, així que el que compta és l'etiqueta ambiental de la DGT: amb etiqueta 0, ECO, C o B es circula sense restriccions, i només en queden fora els que no en tenen. Pregunta a l'empresa de lloguer quina etiqueta porta." },
+          { question: "La ZBE de Barcelona afecta els turistes?", answer: "Sí, a tot vehicle de la zona, el condueixi qui el condueixi. Els vehicles sense etiqueta de la DGT no poden circular de dilluns a divendres de 7:00 a 20:00, i un cotxe amb matrícula estrangera s'ha de registrar abans a l'AMB (7 € una sola vegada si compleix, o fins a 24 autoritzacions diàries l'any)." },
         ]),
         ...paras(verifiedLine("ca", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "ca", [...zbeFamilyLinks("ca"), relatedItem(workingDaysLink("ca"))]),
@@ -1020,6 +1037,8 @@ export const ZBE: B2Article = {
           { question: "¿Qué diésel pueden entrar en la ZBE?", answer: "Los Euro 4 o superiores, normalmente los matriculados a partir de 2005 o 2006. Manda el nivel Euro del permiso de circulación." },
           { question: "¿Cuánto tarda el registro de la ZBE?", answer: "Hasta 15 días hábiles; hasta que llega la confirmación, el vehículo no puede circular por la ZBE." },
           { question: "¿Qué multa hay si entro sin registrar?", answer: "Según la AMB, un vehículo que cumple los requisitos pero no se ha registrado puede recibir una multa a partir de 200 euros." },
+          { question: "¿Un coche de alquiler tiene que registrarse para la ZBE de Barcelona?", answer: "El registro de la AMB es para vehículos con matrícula extranjera. Un coche de alquiler con matrícula española es un vehículo español, así que lo que cuenta es su etiqueta ambiental de la DGT: con etiqueta 0, ECO, C o B se circula sin restricciones, y solo quedan fuera los que no tienen etiqueta. Pregunta a la empresa de alquiler qué etiqueta lleva." },
+          { question: "¿La ZBE de Barcelona afecta a los turistas?", answer: "Sí, a todo vehículo en la zona, lo conduzca quien lo conduzca. Los vehículos sin etiqueta de la DGT no pueden circular de lunes a viernes de 7:00 a 20:00, y un coche con matrícula extranjera debe registrarse antes en la AMB (7 € una sola vez si cumple, o hasta 24 autorizaciones diarias al año)." },
         ]),
         ...paras(verifiedLine("es", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "es", [...zbeFamilyLinks("es"), relatedItem(workingDaysLink("es"))]),
@@ -1128,6 +1147,8 @@ export const ZBE: B2Article = {
           { question: "Can a diesel car enter the Barcelona LEZ?", answer: "Yes if it is Euro 4 or higher, which usually means registered from 2005 or 2006. The Euro level on your registration document is what counts." },
           { question: "How long does LEZ registration take?", answer: "Up to 15 working days; until it is confirmed, the car may not drive in the zone." },
           { question: "What is the fine for driving in without registering?", answer: "According to the AMB, a qualifying vehicle that was not registered can be fined from €200." },
+          { question: "Does a rental car in Barcelona need to be registered for the low emission zone?", answer: "The AMB's registration is for vehicles with foreign number plates. A rental car with Spanish plates is a Spanish vehicle, so what counts is its DGT environmental label: vehicles with label 0, ECO, C or B may drive in without restrictions, and only those without a label are barred. Ask the rental company which label the car has." },
+          { question: "Does the Barcelona low emission zone apply to tourists?", answer: "Yes, to every vehicle in the zone, whoever is driving. Vehicles without a DGT label are barred Monday to Friday from 07:00 to 20:00, and a car with foreign plates must be registered with the AMB first (€7 once if it meets the standard, or up to 24 day permits a year)." },
         ]),
         ...paras(verifiedLine("en", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "en", [...zbeFamilyLinks("en"), relatedItem(workingDaysLink("en"))]),
