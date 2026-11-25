@@ -39,7 +39,7 @@ import {
 } from "../src/lib/programmatic/reservoirs/live.ts";
 import { INDICATORS, OFFICIAL, indicatorsOf } from "../src/lib/programmatic/reservoirs/official.ts";
 import { SERVER_REVALIDATE_SECONDS, freshReadings, yearAgoBySlug } from "../src/lib/programmatic/reservoirs/server.ts";
-import { hubAnswer, liveReadLine, reservoirAnswer } from "../src/lib/programmatic/reservoirs/copy.ts";
+import { hubAnswer, liveReadLine, reservoirAnswer, staleNote } from "../src/lib/programmatic/reservoirs/copy.ts";
 import { caDel, caEl, liveStamp } from "../src/lib/programmatic/live-stamp.ts";
 import {
   NOT_FOUND_METADATA,
@@ -666,4 +666,28 @@ test("hub answer and read line: fullest and lowest, the guide's total with a lin
   assert.equal(liveReadLine("ca", "2026-11-11", "2026-11-13T10:50:52Z"), "Dada de l'ACA de l'11/11/2026 · consultada el 13/11/2026 a les 11:50");
   assert.equal(liveReadLine("es", "2026-11-11", "2026-11-13T10:50:52Z"), "Dato de la ACA del 11/11/2026 · consultado el 13/11/2026 a las 11:50");
   assert.equal(liveReadLine("en", "2026-11-11", "2026-11-13T10:50:52Z"), "ACA reading of 11 Nov 2026 · checked 13 Nov 2026, 11:50");
+});
+
+test("stale note: only beyond two days, with the reading's date, in every language", () => {
+  for (const l of LOCALES) {
+    assert.equal(staleNote(l, "2026-11-23", "2026-11-25"), null, `${l}: two days is normal`);
+    const note = staleNote(l, "2026-11-20", "2026-11-25")!;
+    assert.match(note, l === "en" ? /20 Nov 2026/ : /20\/11\/2026/, l);
+    assert.match(note, /5/, l);
+    assert.doesNotMatch(note, /undefined|NaN/, l);
+  }
+  assert.match(staleNote("ca", "2026-11-11", "2026-11-25")!, /la de l'11\/11\/2026 \(fa 14 dies\)/);
+});
+
+test("hub answer: total hm3 and week change only when the total is of the same day; rounding; no undefined", () => {
+  const readings = snapshotReadings().map((r) => ({ ...r, date: "2026-11-25" }));
+  const totals = { percent: 79.84, volume: 596.449, capacity: 747.04, date: "2026-11-25", change: 0.449, compareDate: "2026-11-18" };
+  assert.match(hubAnswer("es", readings, totals.percent, totals), /al \*\*79,8 %\*\* \(596,4 hm³ de 747,0 hm³\), \+0,4 puntos desde el 18\/11\/2026:/);
+  assert.match(hubAnswer("en", readings, totals.percent, totals), /79\.8%\*\* full \(596\.4 hm³ of 747\.0 hm³\), \+0\.4 points since 18 Nov 2026:/);
+  assert.match(hubAnswer("ca", readings, totals.percent, totals), /punts des del 18\/11\/2026/);
+  for (const l of LOCALES) {
+    const other = hubAnswer(l, readings, totals.percent, { ...totals, date: "2026-11-24" });
+    assert.doesNotMatch(other, /hm³ de|hm³ of|puntos|punts|points/, `${l}: other day, no volume`);
+    assert.doesNotMatch(hubAnswer(l, readings, totals.percent, totals), /undefined|NaN/, l);
+  }
 });

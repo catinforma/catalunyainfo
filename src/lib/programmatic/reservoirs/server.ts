@@ -2,8 +2,9 @@ import "server-only";
 
 import { answeredAt, loadReservoirs, loadReservoirsYearAgo, type ReservoirReport } from "@/lib/content/reservoirs/levels";
 
+import type { HubTotals } from "./copy";
 import { RESERVOIR_DATA, snapshotReadings } from "./data";
-import type { Reading } from "./live";
+import { madridDate, type Reading } from "./live";
 import { liveReadings, type AcaRow } from "./prepare";
 import { MIN_RESERVOIRS, liveQueryUrl } from "./upstream";
 import { slugOfName, type ReservoirSlug } from "./types";
@@ -36,6 +37,8 @@ export interface ServerReservoirs {
   fetchedAt: string | null;
   /** The newest reading date among `readings`. */
   latestDate: string;
+  /** Madrid date of this render, for the "older than two days" note (the page regenerates every three hours). */
+  asOf: string;
   /** Each reservoir's clean reading a year before the latest date, when the ACA has one. */
   yearAgo: Partial<Record<ReservoirSlug, { date: string; percent: number; volume: number }>>;
 }
@@ -92,6 +95,21 @@ export async function loadTotalPercent(): Promise<number | null> {
   return report.error || report.reservoirs.length === 0 ? null : report.total.percent;
 }
 
+/** The guide's Catalonia-wide total with volume, date and week change, from the same request. Null on failure. */
+export async function loadHubTotals(): Promise<HubTotals | null> {
+  const report = await loadReservoirs();
+  if (report.error || report.reservoirs.length === 0) return null;
+  const change = report.totalCompare && report.compareDate ? report.total.percent - report.totalCompare.percent : null;
+  return {
+    percent: report.total.percent,
+    volume: report.total.volume,
+    capacity: report.total.capacity,
+    date: report.date,
+    change,
+    compareDate: change === null ? null : report.compareDate,
+  };
+}
+
 /** The newest date among the readings a page would print. Pure. */
 export function newestDate(readings: readonly Reading[]): string {
   return readings.reduce((max, r) => (r.date > max ? r.date : max), RESERVOIR_DATA[0]?.trend.latest.date ?? "");
@@ -112,5 +130,5 @@ export async function loadServerReservoirs(now: Date = new Date()): Promise<Serv
   const { readings, live } = freshReadings(latest ? liveReadings(latest.rows) : null);
   const latestDate = newestDate(readings);
   const yearAgo = live ? yearAgoBySlug(await loadReservoirsYearAgo(latestDate, now)) : {};
-  return { readings, live, fetchedAt: live ? (latest?.fetchedAt ?? null) : null, latestDate, yearAgo };
+  return { readings, live, fetchedAt: live ? (latest?.fetchedAt ?? null) : null, latestDate, asOf: madridDate(now), yearAgo };
 }

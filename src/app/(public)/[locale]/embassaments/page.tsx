@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ReservoirHubPage } from "@/components/programmatic/reservoirs/ReservoirPages";
 import { NOT_FOUND_METADATA, resolveReservoirHub, reservoirHubMetadata } from "@/lib/programmatic/reservoirs/pages";
-import { loadServerReservoirs, loadTotalPercent } from "@/lib/programmatic/reservoirs/server";
+import { loadServerReservoirs, loadHubTotals } from "@/lib/programmatic/reservoirs/server";
 
 /**
  * /ca/embassaments/ — els embassaments de l'ACA, un per un. Només `ca`; ISR
@@ -27,6 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const locale = resolveReservoirHub(ROUTE, (await params).locale);
   if (!locale) notFound();
-  const [server, totalPct] = await Promise.all([loadServerReservoirs(), loadTotalPercent()]);
-  return <ReservoirHubPage locale={locale} server={server} totalPct={totalPct} />;
+  const [server, totals] = await Promise.all([loadServerReservoirs(), loadHubTotals()]);
+  return <ReservoirHubPage locale={locale} server={server} totals={totals} />;
 }

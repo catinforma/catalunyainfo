@@ -17,6 +17,7 @@ import {
   facts,
   faq,
   hubAnswer,
+  type HubTotals,
   hubCopy,
   liveReadLine,
   readParagraphs,
@@ -24,6 +25,7 @@ import {
   reservoirAnswer,
   reservoirH1,
   reservoirLead,
+  staleNote,
   reservoirLinkLabel,
   sources,
   thresholdTables,
@@ -83,6 +85,7 @@ function Header({
 }) {
   const w = words(locale);
   const live = server.live && server.fetchedAt;
+  const stale = staleNote(locale, server.latestDate, server.asOf);
   return (
     <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
       <div className="ci-shell py-5 md:py-8 lg:py-12">
@@ -90,6 +93,11 @@ function Header({
         <p className="ci-label mb-3 max-md:hidden">{kicker}</p>
         <h1 className="ci-measure">{h1}</h1>
         {answer ? <p className="ci-measure mt-4 text-lg">{renderInline(answer)}</p> : null}
+        {stale ? (
+          <p className="ci-measure mt-2 text-base font-semibold" role="note">
+            {stale}
+          </p>
+        ) : null}
         <p className={`ci-measure ${answer ? "mt-3 text-base" : "mt-4 text-lg"} text-[var(--color-ink-soft)]`}>{lead}</p>
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
           <span className="ci-verified">
@@ -122,7 +130,7 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
   const sib = siblingsOf(r.slug);
   const own = server.readings;
   const mine = own.find((x) => x.slug === r.slug);
-  const answer = server.live && mine ? reservoirAnswer(r, locale, mine, o.capacity, server.yearAgo[r.slug] ?? null) : undefined;
+  const answer = mine ? reservoirAnswer(r, locale, mine, o.capacity, server.live ? (server.yearAgo[r.slug] ?? null) : null) : undefined;
   const pctSign = locale === "en" ? "%" : " %";
   const toc = [
     { id: "avui", label: w.today },
@@ -307,11 +315,11 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
 /* Hub                                                                        */
 /* -------------------------------------------------------------------------- */
 
-export function ReservoirHubPage({ locale, server, totalPct }: { locale: Locale; server: ServerReservoirs; totalPct: number | null }) {
+export function ReservoirHubPage({ locale, server, totals }: { locale: Locale; server: ServerReservoirs; totals: HubTotals | null }) {
   const t = hubCopy(locale);
   const w = words(locale);
   const crumbs = hubCrumbs(locale);
-  const answer = server.live ? hubAnswer(locale, server.readings, totalPct) : undefined;
+  const answer = hubAnswer(locale, server.readings, totals?.percent ?? null, totals);
   const rows = RESERVOIR_DATA.map((r) => ({
     slug: r.slug,
     name: r.name.charAt(0).toUpperCase() + r.name.slice(1),

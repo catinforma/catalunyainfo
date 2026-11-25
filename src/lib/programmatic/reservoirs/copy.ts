@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { caDel, caEl, liveStamp } from "@/lib/programmatic/live-stamp";
 
 import { SNAPSHOT, reservoirBySlug } from "./data";
-import { formatChange, formatDate, formatNumber, type Reading } from "./live";
+import { STALE_AFTER_DAYS, daysBetween, formatChange, formatDate, formatNumber, type Reading } from "./live";
 import { OFFICIAL, OFFICIAL_VERIFIED, SOURCES, indicatorsOf, officialUrl, type Indicator, type Stage } from "./official";
 import { reservoirHubPath, reservoirPath } from "./paths";
 import type { ReservoirSlug, SnapshotReservoir } from "./types";
@@ -666,30 +666,62 @@ export function reservoirAnswer(r: SnapshotReservoir, l: Locale, reading: Readin
 }
 
 /**
+ * When the newest ACA reading is more than two days older than the day the
+ * page was generated (`asOf`, Madrid date), say so with its date instead of
+ * letting "hoy" stand. Null when the reading is current.
+ */
+export function staleNote(l: Locale, readingDate: string, asOf: string): string | null {
+  const days = daysBetween(readingDate, asOf);
+  if (!(days > STALE_AFTER_DAYS)) return null;
+  const day = date(readingDate, l);
+  if (l === "ca") return `Atenció: aquesta no és una dada d'avui. L'ACA no ha publicat cap lectura més recent que la ${caDel(day)} (fa ${days} dies); la pàgina s'actualitza sola quan en publiqui una de nova.`;
+  if (l === "es") return `Atención: este no es un dato de hoy. La ACA no ha publicado ninguna lectura más reciente que la del ${day} (hace ${days} días); la página se actualiza sola cuando publique una nueva.`;
+  return `Note: this is not today's figure. The ACA has not published a reading newer than ${day} (${days} days ago); the page updates itself when it does.`;
+}
+
+/** The guide's Catalonia-wide total, for the hub's first line. */
+export interface HubTotals {
+  percent: number;
+  volume: number;
+  capacity: number;
+  /** ISO date of the reading the total is computed on. */
+  date: string;
+  /** Percentage points against `compareDate`, when the guide has a clean day. */
+  change: number | null;
+  compareDate: string | null;
+}
+
+/**
  * The hub's first line: the fullest and the emptiest reservoir of the day,
  * and the overall figure with a link to the guide that owns it (the total and
  * Ter-Llobregat), so the two pages answer different questions. `totalPct` is
  * the guide's own report, so both pages print the same number.
  */
-export function hubAnswer(l: Locale, readings: Reading[], totalPct: number | null): string {
+export function hubAnswer(l: Locale, readings: Reading[], totalPct: number | null, totals: HubTotals | null = null): string {
   const named = readings
     .map((x) => ({ x, r: reservoirBySlug(x.slug) }))
     .sort((a, b) => b.x.percent - a.x.percent);
   const top = named[0];
   const low = named.at(-1);
   if (!top || !low) return "";
-  const day = date(readings.reduce((max, x) => (x.date > max ? x.date : max), readings[0]!.date), l);
+  const latestIso = readings.reduce((max, x) => (x.date > max ? x.date : max), readings[0]!.date);
+  const day = date(latestIso, l);
   const nm = (r: SnapshotReservoir) => upper(r.name);
   const guide = `/${l}/${TOOL_PATHS.reservoirs[l]}/`;
+  // hm³ and week change only when the guide's total is of the same day as the readings above.
+  const same = totals && totalPct !== null && totals.date === latestIso;
+  const vol = same ? ` (${num(totals.volume, l)} hm³ de ${num(totals.capacity, l)} hm³)` : "";
+  const volEn = same ? ` (${num(totals.volume, l)} hm³ of ${num(totals.capacity, l)} hm³)` : "";
+  const wk = same && totals.change !== null && totals.compareDate ? { pp: formatChange(totals.change, l), from: date(totals.compareDate, l) } : null;
   if (l === "ca") {
-    const total = totalPct === null ? "" : ` En conjunt són al **${num(totalPct, l)} %**: el total i el Ter-Llobregat, a [l'estat dels embassaments avui](${guide}).`;
+    const total = totalPct === null ? "" : ` En conjunt són al **${num(totalPct, l)} %**${vol}${wk ? `, ${wk.pp} punts des ${caDel(wk.from)}` : ""}: el total i el Ter-Llobregat, a [l'estat dels embassaments avui](${guide}).`;
     return `Amb la dada de l'ACA ${caDel(day)}, el més ple és **${nm(top.r)} (${num(top.x.percent, l)} %)** i el més baix, **${nm(low.r)} (${num(low.x.percent, l)} %)**.${total}`;
   }
   if (l === "es") {
-    const total = totalPct === null ? "" : ` En conjunto están al **${num(totalPct, l)} %**: el total y el Ter-Llobregat, en [los embalses de Cataluña hoy](${guide}).`;
+    const total = totalPct === null ? "" : ` En conjunto están al **${num(totalPct, l)} %**${vol}${wk ? `, ${wk.pp} puntos desde el ${wk.from}` : ""}: el total y el Ter-Llobregat, en [los embalses de Cataluña hoy](${guide}).`;
     return `Con el dato de la ACA del ${day}, el más lleno es **${nm(top.r)} (${num(top.x.percent, l)} %)** y el más bajo, **${nm(low.r)} (${num(low.x.percent, l)} %)**.${total}`;
   }
-  const total = totalPct === null ? "" : ` Together they are **${num(totalPct, l)}%** full: the total and Ter-Llobregat are on [Catalonia reservoir levels today](${guide}).`;
+  const total = totalPct === null ? "" : ` Together they are **${num(totalPct, l)}%** full${volEn}${wk ? `, ${wk.pp} points since ${wk.from}` : ""}: the total and Ter-Llobregat are on [Catalonia reservoir levels today](${guide}).`;
   return `On the ACA's reading of ${day}, the fullest is **${nm(top.r)} (${num(top.x.percent, l)}%)** and the lowest **${nm(low.r)} (${num(low.x.percent, l)}%)**.${total}`;
 }
 
