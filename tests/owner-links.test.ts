@@ -9,7 +9,10 @@ import { DECEMBER_BRIDGE, outsideCataloniaCallout } from "../src/lib/content/bat
 import { DECEMBER_BRIDGE_SPAIN } from "../src/lib/content/batch02/december-bridge-spain.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { EASTER } from "../src/lib/content/batch02/easter-2027.ts";
-import { B2_PATHS, type B2Key } from "../src/lib/content/batch02/shared.ts";
+import { B2_PATHS, b2href, type B2Key } from "../src/lib/content/batch02/shared.ts";
+import { lineCopy } from "../src/lib/programmatic/rodalies/copy.ts";
+import { lineById } from "../src/lib/programmatic/rodalies/data.ts";
+import type { LineId } from "../src/lib/programmatic/rodalies/types.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
 import { buildBody as workCalendarBody } from "../src/lib/content/holidays/publish.ts";
 import { buildBody as reservoirGuideBody } from "../src/lib/content/reservoirs/publish.ts";
@@ -389,4 +392,42 @@ test("10. Spain 2027 hub: nationwide list (weekday + date) and count first, then
     [/id="comuns"/, /commonRows\(\)\.map/, /"Font: "/, /\{hubLeadIntl\(locale\)\}/, /id="mesos"/],
     "ca/en hub",
   );
+});
+
+/**
+ * 25 Nov 2026 night (consolidation row 7): the day-trip guides sit at position
+ * 21-71 with one URL per query, so the Rodalies line pages that rank link the
+ * guide of the place the line reaches. Each pair is also checked against the
+ * snapshot: the line must stop at the destination.
+ */
+test("Rodalies line pages link the day-trip guide of the place the line reaches (ca/es/en)", () => {
+  const stops = (id: LineId, re: RegExp) => lineById(id).stations.some((s) => re.test(s.name));
+  const pairs: [LineId, B2Key, RegExp][] = [
+    ["R2S", "sitges", /Sitges/],
+    ["R11", "girona", /Girona/],
+    ["R11", "figueres", /Figueres/],
+    ["R14", "tarragona", /Tarragona/],
+    ["R15", "tarragona", /Tarragona/],
+    ["R16", "tarragona", /Tarragona/],
+    ["R17", "tarragona", /Tarragona/],
+    ["R17", "portaventura", /Port Aventura/],
+    ["RT2", "portaventura", /Port Aventura/],
+    ["R3", "nuria", /Ribes de Freser/],
+    ["R3", "cerdanya", /Puigcerd/],
+  ];
+  for (const [id, key, station] of pairs) {
+    assert.ok(stops(id, station), `${id} must stop at ${station}`);
+    for (const locale of ["ca", "es", "en"] as const) {
+      const hrefs = lineCopy(lineById(id), locale).related.map((l) => l.href);
+      assert.ok(hrefs.includes(b2href(key, locale)), `${locale} ${id} page links ${key}`);
+      assert.ok(!isLowDemandPath(b2href(key, locale)), `${key} ${locale} is indexable`);
+    }
+  }
+  // Lines that reach none of the destinations get no day-trip link.
+  for (const id of ["R1", "R2N", "R4"] as const) {
+    const hrefs = lineCopy(lineById(id), "es").related.map((l) => l.href);
+    for (const key of ["sitges", "girona", "figueres", "tarragona", "portaventura", "nuria", "cerdanya"] as const) {
+      assert.ok(!hrefs.includes(b2href(key, "es")), `${id} does not link ${key}`);
+    }
+  }
 });

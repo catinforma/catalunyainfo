@@ -6,7 +6,7 @@
  * and always prints the time they were read, never "now".
  */
 
-import { b2href } from "@/lib/content/batch02/shared";
+import { B2_TITLES, b2href, type B2Key } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { caDel, liveStamp } from "@/lib/programmatic/live-stamp";
@@ -300,6 +300,29 @@ function sources(locale: Locale): LinePageCopy["sources"] {
   ];
 }
 
+/**
+ * Day-trip guides a line takes you to (25 Nov 2026 cannibalisation audit, row 7:
+ * the day-trip pages sit at position 21-71 with one URL per query, so the
+ * fix is links from the pages that rank, not a merge). Only lines whose stations
+ * in the snapshot include the destination: R2 Sud stops at Sitges; R11 at Girona
+ * and Figueres; R14, R15, R16 and R17 at Tarragona; R17 and the RT2 shuttle at
+ * Salou-Port Aventura; R3 at Ribes de Freser (Vall de Núria) and Puigcerdà.
+ */
+const DAY_TRIP_KEYS: Partial<Record<LineId, B2Key[]>> = {
+  R2S: ["sitges"],
+  R11: ["girona", "figueres"],
+  R14: ["tarragona"],
+  R15: ["tarragona"],
+  R16: ["tarragona"],
+  R17: ["tarragona", "portaventura"],
+  RT2: ["portaventura", "tarragona"],
+  R3: ["nuria", "cerdanya"],
+};
+
+export function dayTripLinks(id: LineId, locale: Locale): LinkItem[] {
+  return (DAY_TRIP_KEYS[id] ?? []).map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
+}
+
 export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
   const official = LINE_OFFICIAL[line.id];
   const n = line.stations.length;
@@ -380,6 +403,7 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
         { label: "Targetes de transport de Barcelona (T-casual i altres)", href: transport },
         { label: "Horari del metro de Barcelona", href: hours },
         ...(line.id === "R2N" ? [{ label: "De l'aeroport al centre de Barcelona", href: airport }] : []),
+        ...dayTripLinks(line.id, locale),
       ],
       sourcesTitle: "Fonts",
       sourcesNote: `Dades oficials. Els avisos en directe es llegeixen en obrir la pàgina; la resta, ${read}.`,
@@ -452,6 +476,7 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
         { label: "Barcelona transport passes", href: transport },
         { label: "Barcelona metro hours", href: hours },
         ...(line.id === "R2N" ? [{ label: "Barcelona airport to the city centre", href: airport }] : []),
+        ...dayTripLinks(line.id, locale),
       ],
       sourcesTitle: "Sources",
       sourcesNote: `Official data. Live notices are read when you open the page; everything else on ${read}.`,
@@ -524,6 +549,7 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
       { label: "Tarjetas de transporte de Barcelona (T-casual y otras)", href: transport },
       { label: "Horario del metro de Barcelona", href: hours },
       ...(line.id === "R2N" ? [{ label: "Del aeropuerto al centro de Barcelona", href: airport }] : []),
+      ...dayTripLinks(line.id, locale),
     ],
     sourcesTitle: "Fuentes",
     sourcesNote: `Datos oficiales. Los avisos en directo se leen al abrir la página; el resto, ${read}.`,
