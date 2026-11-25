@@ -223,7 +223,7 @@ test("Christmas answered first: each community's lead, the hub's table with one 
 
   // Hub: one row per community, Catalonia included, each with its official text.
   const hub = buildHubBody();
-  const table = hub.find((b) => b.type === "table") as { headers: string[]; rows: string[][] };
+  const table = hub.find((b) => b.type === "table" && b.headers.length === 5) as { headers: string[]; rows: string[][] };
   assert.deepEqual(table.headers, ["Comunidad", "Último día de clase", "Primer día sin clase", "Vuelta a clase", "Fuente"]);
   assert.equal(table.rows.length, hubRegions().length + pendingRegions().length);
   for (const row of table.rows) assert.match(row[4]!, /\]\(https:\/\//, row[0]);

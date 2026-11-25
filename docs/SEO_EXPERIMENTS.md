@@ -14339,3 +14339,22 @@ Caveat: Dec-Jan is the peak; the local orders (Madrid, Andalucia, Valencia) appe
 **Outcome:** _pending_
 
 **Follow-up, same day (review of 5de331b).** (a) The sources list prints `entry_sources.note` only through `publicSourceRef` (`src/lib/content/source-ref.ts`): a bulletin reference in the pipeline form ("núm. 9551, 27.11.2025", optionally after DOGC/BOE/...); any other text the admin editor stored stays private, and `publishArticle` refuses a `ref` in another form. (b) Spain guide, Catalonia row: Sun 6 now "Sí, salvo en 2 municipios" (Terrassa, Riells i Viabrea: PDF lists "8, 13, 20 i 27 de desembre") and Mon 7 "No, salvo en 1 municipio" (Sant Boi de Llobregat adds the 7th), ca/es/en, from the same shared town table (`closedOn`/`extraOn`). Tests: `tests/source-citation-dates.test.ts` now 7.
+
+## 2026-11-25 (evening) — School calendar hub owns the national Christmas question: sentence + compact table in the first screen, regional pages link it with the query words (ci-edicio + ci-arquitectura; ca/es/en; body only; group `calendario-escolar-espana`) (review 2026-12-09)
+
+**Ticket.** Audit 25 Nov, §3 opportunity 2: "cuando dan / son / empiezan las vacaciones de navidad 2026" is national but impressions spread over the 17 regional school-calendar pages while the hub did not win.
+
+**Baseline (GSC, 28 d to 25 Nov).** `/es/guias/calendario-escolar-espana/`: 1,100 impressions, position about 10, 6 clicks. Regional pages already carry the Spain-wide line and a first-FAQ answer (commits 2a7f46f, 1826788; not duplicated).
+
+**Changed (body only: no title, meta, H1 or lead touched, so no measurement window applies; lead and title of the hub stay as in the 13 Nov window).**
+1. Hub, straight after the lead and before the live panel: H2 "¿Cuándo dan las vacaciones de Navidad 2026 en España?" / "Quan són les vacances de Nadal 2026 a les escoles d'Espanya?" / "When do the 2026 Christmas school holidays start in Spain?", one sentence (earliest and latest last day of class, the most common day, the return window), and a 3-column table "Vacaciones de Navidad 2026-27 por comunidad" (community, last day of class, back to school), sorted from the earliest last day, Andalucía as alternatives "(según la provincia)", País Vasco "como muy tarde", Jaén "por confirmar" in the note. Everything comes from `data.ts` through `breakDaysAll`/`alternatives`/`dayGroups` (`christmasWhenSentence`, `christmasQuickBlocks`, `breakCell` in `school-spain/body.ts`); `tests/school-hub-christmas-when.test.ts` recomputes every cell from the records.
+2. Each community page's Spain-wide line (and the Catalan guide's Christmas box, same function `spainChristmasLine`) now links the hub as "[vacaciones de Navidad 2026 en toda España]" / "[vacances de Nadal 2026 a tot Espanya]" / "[Christmas 2026 school holidays across Spain]" (was "por comunidades").
+3. FAQ checked: one `faq` block on the hub, `faqSchema` yields one FAQPage with exactly the printed questions (test).
+
+**Prediction.** Hub impressions for the national queries rise and the position moves from about 10 towards 5-7 within 2-3 weeks; regional pages lose generic-query impressions only if Google swaps the ranking URL. Wrong if the hub is still at 9+ on 9 Dec or the regional pages lose their regional-query clicks.
+
+**Review 2026-12-09:** `scripts/snapshot.py page calendario-escolar-espana 28` and the 17 regional pages, queries "cuando dan / son / empiezan las vacaciones de navidad 2026".
+
+**Go-live.** Deploy, then `publish.sh calendario-escolar-espana` (hub and 17 community pages x 3) and, for the Catalan guide's changed link text, group `school-calendar`. IndexNow: `/es/guias/calendario-escolar-espana/`, `/ca/guies/calendari-escolar-espanya/`, `/en/guides/spain-school-calendar/`.
+
+**Outcome:** _pending_

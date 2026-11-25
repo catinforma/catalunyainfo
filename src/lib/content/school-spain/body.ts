@@ -128,9 +128,9 @@ export function spainChristmasLine(locale: Locale): string {
   const year = regions[0]!.christmas.from.slice(0, 4);
   return t(
     locale,
-    `En toda España, el último día de clase antes de Navidad es el ${lasts}, según la comunidad, y se vuelve ${window}: las fechas de ${scopeWords(locale)}, con la orden de cada una, están en [vacaciones de Navidad ${year} por comunidades](${href(HUB_PATH)}).`,
-    `A tot Espanya, l'últim dia de classe abans de Nadal és ${caEl(lasts)}, segons la comunitat, i es torna ${window}: les dates de ${scopeWords(locale)}, amb el text oficial de cadascuna, són a [vacances de Nadal ${year} per comunitats](${href(HUB_PATHS.ca, "ca")}).`,
-    `Across Spain, the last day of class before Christmas is ${lasts}, depending on the region, and school resumes ${window}: the dates for ${scopeWords(locale)}, each with its official text, are in [Christmas ${year} school holidays by region](${href(HUB_PATHS.en, "en")}).`,
+    `En toda España, el último día de clase antes de Navidad es el ${lasts}, según la comunidad, y se vuelve ${window}: las fechas de ${scopeWords(locale)}, con la orden de cada una, están en la tabla de [vacaciones de Navidad ${year} en toda España](${href(HUB_PATH)}).`,
+    `A tot Espanya, l'últim dia de classe abans de Nadal és ${caEl(lasts)}, segons la comunitat, i es torna ${window}: les dates de ${scopeWords(locale)}, amb el text oficial de cadascuna, són a la taula de [vacances de Nadal ${year} a tot Espanya](${href(HUB_PATHS.ca, "ca")}).`,
+    `Across Spain, the last day of class before Christmas is ${lasts}, depending on the region, and school resumes ${window}: the dates for ${scopeWords(locale)}, each with its official text, are in the table of [Christmas ${year} school holidays across Spain](${href(HUB_PATHS.en, "en")}).`,
   );
 }
 
@@ -1044,6 +1044,18 @@ function sourceCell(region: RegionCalendar, kind: BreakKind): string {
 }
 
 /**
+ * One date cell of a break table: the day, the alternatives where the provinces
+ * differ ("7, 8 u 11 de enero (según la provincia)"), or the day with how a
+ * minimum bends ("como muy tarde").
+ */
+function breakCell(r: RegionCalendar, kind: BreakKind, pick: keyof BreakDays, minimum: string, L: Locale): string {
+  const dates = breakDaysAll(r, kind).map((x) => x.days[pick]);
+  const varies = new Set(dates).size > 1;
+  const byProvince = t(L, " (según la provincia)", " (segons la província)", " (by province)");
+  return `${alternatives(dates, L)}${varies ? byProvince : r[kind].minimum ? ` (${minimum})` : ""}`;
+}
+
+/**
  * One row per community: last day of class, first day without, first day
  * back and the text that says so. Where the provinces differ, the cell gives
  * their alternatives ("22 o 23 de diciembre"); where the text sets a minimum,
@@ -1055,12 +1067,7 @@ function breakTable(kind: BreakKind, locale: Locale): Block {
   const regions = hubRegions(L).sort((a, b) => earliest(a).localeCompare(earliest(b)) || a.short.localeCompare(b.short, L));
   const name = kind === "christmas" ? t(L, "Navidad", "Nadal", "Christmas") : t(L, "Semana Santa", "Setmana Santa", "Easter");
   const year = regions[0]![kind].from.slice(0, 4);
-  const byProvince = t(L, " (según la provincia)", " (segons la província)", " (by province)");
-  const cell = (r: RegionCalendar, pick: keyof BreakDays, minimum: string) => {
-    const dates = breakDaysAll(r, kind).map((x) => x.days[pick]);
-    const varies = new Set(dates).size > 1;
-    return `${alternatives(dates, L)}${varies ? byProvince : r[kind].minimum ? ` (${minimum})` : ""}`;
-  };
+  const cell = (r: RegionCalendar, pick: keyof BreakDays, minimum: string) => breakCell(r, kind, pick, minimum, L);
   const latest = t(L, "como muy tarde", "com a molt tard", "at the latest");
   const earliestWords = t(L, "como pronto", "com a molt aviat", "at the earliest");
   const pendingProvinces = regions.filter((r) => r.pendingProvinces?.length);
@@ -1142,6 +1149,75 @@ function christmasHubAnswer(regions: RegionCalendar[]): string {
   return `${head} ${tail}`;
 }
 
+/**
+ * 25 Nov 2026: "cuando dan / son / empiezan las vacaciones de navidad 2026" is
+ * asked for the whole country and was spread over the 17 community pages. The
+ * hub owns it: one sentence with the earliest and latest last day of class and
+ * the window of return, then a compact table (community, last day of class,
+ * back to school). Both come from the records of data.ts through the same
+ * helpers as the full table below; no date is typed here.
+ */
+export function christmasWhenSentence(regions: RegionCalendar[]): string {
+  const L = lang(regions[0]!);
+  const groups = dayGroups(regions, "christmas", "last", "");
+  const main = [...groups].sort((a, b) => b.names.length - a.names.length || a.date.localeCompare(b.date))[0]!;
+  const from = weekdayDay(groups[0]!.date, L);
+  const to = weekdayDay(groups.at(-1)!.date, L);
+  const backs = regions.flatMap((r) => breakDaysAll(r, "christmas").map((x) => x.days.back)).sort();
+  const window = between(backs[0]!, backs.at(-1)!, L);
+  const year = regions[0]!.christmas.from.slice(0, 4);
+  return t(
+    L,
+    `Las vacaciones de Navidad ${year} empiezan al terminar las clases, entre el ${from} y el ${to}, según la comunidad (en la mayoría, el ${weekdayDay(main.date)}), y se vuelve a clase ${window}.`,
+    `Les vacances de Nadal ${year} comencen quan s'acaben les classes, entre ${caEl(from)} i ${caEl(to)}, segons la comunitat (a la majoria, ${caEl(weekdayDay(main.date, L))}), i es torna a classe ${window}.`,
+    `The ${year} Christmas school holidays begin when classes end, between ${from} and ${to} depending on the region (in most, ${weekdayDay(main.date, L)}), and school resumes ${window}.`,
+  );
+}
+
+function christmasQuickBlocks(regions: RegionCalendar[], L: Locale): Block[] {
+  const lastDay = (r: RegionCalendar) => breakDaysAll(r, "christmas").map((x) => x.days.last).sort()[0]!;
+  const rows = [...regions].sort((a, b) => lastDay(a).localeCompare(lastDay(b)) || a.short.localeCompare(b.short, L));
+  const year = regions[0]!.christmas.from.slice(0, 4);
+  const course = `${year}-${String(Number(year) + 1).slice(2)}`;
+  const latest = t(L, "como muy tarde", "com a molt tard", "at the latest");
+  const earliestWords = t(L, "como pronto", "com a molt aviat", "at the earliest");
+  const pendingNote = regions
+    .filter((r) => r.pendingProvinces?.length)
+    .map((r) =>
+      t(
+        L,
+        ` ${r.short}: ${joinList(r.pendingProvinces!, L)}, por confirmar.`,
+        ` ${r.short}: ${joinList(r.pendingProvinces!, L)}, per confirmar.`,
+        ` ${r.short}: ${joinList(r.pendingProvinces!, L)} to be confirmed.`,
+      ),
+    )
+    .join("");
+  return [
+    {
+      type: "heading",
+      level: 2,
+      text: t(L, `¿Cuándo dan las vacaciones de Navidad ${year} en España?`, `Quan són les vacances de Nadal ${year} a les escoles d'Espanya?`, `When do the ${year} Christmas school holidays start in Spain?`),
+    },
+    { type: "paragraph", text: christmasWhenSentence(regions) },
+    {
+      type: "table",
+      caption: t(L, `Vacaciones de Navidad ${course} por comunidad`, `Vacances de Nadal ${course} per comunitat`, `Christmas ${course} school holidays by region`),
+      headers: t(L, ["Comunidad", "Último día de clase", "Vuelta a clase"], ["Comunitat", "Últim dia de classe", "Tornada a classe"], ["Region", "Last day of class", "Back to school"]),
+      rows: [
+        ...rows.map((r) => [link(r), breakCell(r, "christmas", "last", latest, L), breakCell(r, "christmas", "back", earliestWords, L)]),
+        ...pendingRows(3, L),
+      ],
+      note: t(
+        L,
+        `Infantil y Primaria, según la orden o resolución de cada comunidad; la tabla de más abajo da también el primer día sin clase y el texto oficial.${pendingNote}`,
+        `Infantil i Primària, segons l'ordre o resolució de cada comunitat; la taula de més avall dona també el primer dia sense classe i el text oficial.${pendingNote}`,
+        `Infant and Primary, following each region's order or resolution; the table further down also gives the first day off and the official text.${pendingNote}`,
+      ),
+      stickyColumn: 0,
+    },
+  ];
+}
+
 export function buildHubBody(locale: Locale = "es"): Block[] {
   const L = locale;
   const regions = hubRegions(L);
@@ -1175,6 +1251,7 @@ export function buildHubBody(locale: Locale = "es"): Block[] {
           `Here are the dates for ${scope} for the ${Y} school year, each with its official text.`,
       ),
     },
+    ...christmasQuickBlocks(regions, L),
     { type: "spainSchoolCalendar", region: "espana" },
     { type: "heading", level: 2, text: t(L, "Vacaciones de Navidad 2026 por comunidades", "Vacances de Nadal 2026 per comunitats", "Christmas holidays 2026 by region") },
     {

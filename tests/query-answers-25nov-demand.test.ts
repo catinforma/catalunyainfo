@@ -12,9 +12,9 @@ test("every community school page answers 'when are the Christmas holidays 2026'
   const ca = spainChristmasLine("ca");
   const en = spainChristmasLine("en");
   assert.match(es, /el último día de clase antes de Navidad es el .+, según la comunidad, y se vuelve /);
-  assert.match(es, /vacaciones de Navidad 2026 por comunidades/);
-  assert.match(ca, /vacances de Nadal 2026 per comunitats/);
-  assert.match(en, /Christmas 2026 school holidays by region/);
+  assert.match(es, /\[vacaciones de Navidad 2026 en toda España\]\(\/es\/guias\/calendario-escolar-espana\/\)/);
+  assert.match(ca, /\[vacances de Nadal 2026 a tot Espanya\]\(\/ca\/guies\/calendari-escolar-espanya\/\)/);
+  assert.match(en, /\[Christmas 2026 school holidays across Spain\]\(\/en\/guides\/spain-school-calendar\/\)/);
   const opener = /^(¿Y en otras comunidades\?|I a les altres comunitats\?|What about other regions\?) /;
   let checked = 0;
   for (const region of SPAIN_REGIONS) {
