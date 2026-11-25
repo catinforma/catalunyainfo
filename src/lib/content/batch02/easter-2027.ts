@@ -1,10 +1,12 @@
 import type { Block } from "@/lib/content/blocks";
 import { link } from "@/lib/content/features/shared";
-import { HOLIDAYS_BY_YEAR, addDays, holidayOn, shortDate, weekdayIndex, type Holiday } from "@/lib/content/holidays/calendar";
+import { HOLIDAYS_BY_YEAR, WEEKDAY_NAMES, addDays, daysBetween, holidayOn, shortDate, weekdayIndex, type Holiday } from "@/lib/content/holidays/calendar";
 import { BARCELONA_LOCAL } from "@/lib/content/holidays/payload";
 import { metroDay, metroLines } from "@/lib/content/metro/tonight";
 import { SCHOOL_SOURCE, SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { SPAIN_REGIONS, regionPath } from "@/lib/content/school-spain/regions";
 import type { Locale } from "@/lib/i18n/config";
+import { BOE_2027_ROWS, REGION_NAME, type Region } from "@/lib/programmatic/holidays/boe-2027";
 import { councilLabel, displayName } from "@/lib/programmatic/holidays/copy";
 import type { CouncilApproved } from "@/lib/programmatic/holidays/council-2027";
 import { aranSwap, councilApproved2027, municipalities, nextYearFor, nextYearPublished } from "@/lib/programmatic/holidays/data";
@@ -592,6 +594,177 @@ function metroTable(locale: Locale): Block {
   return table(caption, headers, metroRows(locale), metroLines(EASTER.goodFriday, locale).caveat);
 }
 
+/* -------------------------------------------------------------------------- */
+/* "How to make the most of Easter 2027": the planning block near the top      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * 25 Nov 2026 (ci-demanda, audit opportunity 5): the Easter queries had 10,423
+ * impressions at 0.4 % CTR (28 d); the SERP already shows the date, so the
+ * page opens with what it can do with it: which days are holidays, how many
+ * days to ask for, when the schools break, and the same for Madrid and the
+ * Valencian Community. Body only (no title, meta, H1 or lead).
+ *
+ * Catalonia: `EASTER_OPTIONS` and `schoolEdges()` above. The two other
+ * regions: the BOE's 2027 table (`BOE_2027_ROWS`, BOE-A-2026-21254, read
+ * 2 Nov 2026, holidays between 14 March and 4 April) and the school break of
+ * their own order, as `school-spain/data.ts` holds it (Madrid: Orden
+ * 2034/2026, BOCM 4.6.2026; Valencian Community: Resolución de 15 de junio de
+ * 2026, DOGV 18.6.2026). Nothing is typed here.
+ */
+/** Regions whose school order calls the first and last day of the break "no lectivos" (Madrid, Orden 2034/2026, 5.2.2). */
+const NON_TEACHING_EDGES: readonly Region[] = ["MD"];
+
+export const PLAN_REGIONS = ["MD", "VC"] as const satisfies readonly Region[];
+
+const HOLY_NAMES: Record<string, Record<Locale, string>> = {
+  "San José": { ca: "Sant Josep", es: "San José", en: "St Joseph's Day" },
+  "Jueves Santo": { ca: "Dijous Sant", es: "Jueves Santo", en: "Maundy Thursday" },
+  "Viernes Santo": { ca: "Divendres Sant", es: "Viernes Santo", en: "Good Friday" },
+  "Lunes de Pascua": { ca: "Dilluns de Pasqua", es: "Lunes de Pascua", en: "Easter Monday" },
+};
+
+export interface RegionPlan {
+  region: Region;
+  /** The region's holidays inside LOCAL_WINDOW, with the BOE's name. */
+  holidays: { date: string; name: string }[];
+  /** The working days between its first and last holiday of the window: what to ask for. */
+  leave: string[];
+  /** The run of days off around Good Friday with that leave. */
+  run: Run;
+  /** The region's school Easter break, both days included, from its own order. */
+  school: { from: string; to: string };
+  slug: string;
+}
+
+/** Holidays of a region in the Easter window, the days to ask for between them, and the break that gives. */
+export function regionPlan(region: Region): RegionPlan {
+  const holidays = BOE_2027_ROWS.filter((row) => row.marks[region] && row.date >= LOCAL_WINDOW.from && row.date <= LOCAL_WINDOW.to)
+    .map((row) => ({ date: row.date, name: row.name }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  for (const h of holidays) if (!HOLY_NAMES[h.name]) throw new Error(`easter page: no wording for the ${h.name} holiday of ${region}`);
+  const dates = new Set(holidays.map((h) => h.date));
+  const leave: string[] = [];
+  for (let iso = holidays[0]!.date; iso <= holidays.at(-1)!.date; iso = addDays(iso, 1)) {
+    if (weekdayIndex(iso) !== 0 && weekdayIndex(iso) !== 6 && !dates.has(iso)) leave.push(iso);
+  }
+  const off = (iso: string) => weekdayIndex(iso) === 0 || weekdayIndex(iso) === 6 || dates.has(iso) || leave.includes(iso);
+  let from: string = EASTER.goodFriday;
+  while (off(addDays(from, -1))) from = addDays(from, -1);
+  let to: string = EASTER.goodFriday;
+  while (off(addDays(to, 1))) to = addDays(to, 1);
+  const record = SPAIN_REGIONS.find((r) => r.boe === region);
+  if (!record) throw new Error(`easter page: no school record for ${region}`);
+  return { region, holidays, leave, run: { from, to, days: daysBetween(from, to) + 1 }, school: { from: record.easter.from, to: record.easter.to }, slug: record.slug };
+}
+
+function lowerFirst(text: string, locale: Locale): string {
+  if (locale === "en") return text;
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
+/** "divendres 19 (Sant Josep), dijous 25 (Dijous Sant) i divendres 26 de març (Divendres Sant)". */
+function holidayList(holidays: RegionPlan["holidays"], locale: Locale): string {
+  const month = dm(holidays.at(-1)!.date, locale).replace(/^\d+\s*/, "");
+  const items = holidays.map((h, i) => {
+    const last = i === holidays.length - 1;
+    return `${WEEKDAY_NAMES[locale][weekdayIndex(h.date)]} ${Number(h.date.slice(8))}${last ? ` ${month}` : ""} (${HOLY_NAMES[h.name]![locale]})`;
+  });
+  return joinList(items, locale);
+}
+
+export function planBlocks(locale: Locale): Block[] {
+  const E = EASTER;
+  const school = schoolEdges();
+  const weekBeforeRun = optionRun(EASTER_OPTIONS.find((o) => o.id === "weekBefore")!);
+  const thursdayRun = runAround(E.goodFriday, [E.holyThursday]);
+  const n = weekBefore.length;
+  // In Aran Easter Monday is a working day: the run stops on Easter Sunday.
+  const aranRunDays = daysBetween(weekBeforeRun.from, addDays(E.easterMonday, -1)) + 1;
+  const matchesSchool = weekBeforeRun.from === E.schoolFrom && weekBeforeRun.to === E.schoolTo;
+  const schoolWords = runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, locale);
+  const leaveWordsBefore = lowerFirst(leaveWords(weekBefore, locale), locale);
+  const schoolLink = (label: string) => `[${label}](/${locale}/${SIBLING_PATHS.school[locale]}/)`;
+  const freeDays = b2link("schoolFreeDays", locale, { ca: "dies de lliure disposició per municipi", es: "días de libre disposición por municipio", en: "school free days by town" }[locale]);
+  const localLink = `[${{ ca: "festius locals de tots els municipis", es: "festivos locales de todos los municipios", en: "local holidays in every town" }[locale]}](/${locale}/${SIBLING_PATHS.local[locale]}/)`;
+
+  const regionItem = (region: Region): string => {
+    const plan = regionPlan(region);
+    const name = cap(REGION_NAME[region][locale]);
+    const page = `[${{ ca: "calendari escolar", es: "calendario escolar", en: "school calendar" }[locale]}](/${locale}/${regionPath(plan.slug, locale)}/)`;
+    const m = plan.leave.length;
+    const days = { ca: m === 1 ? "dia" : "dies", es: m === 1 ? "día" : "días", en: m === 1 ? "day" : "days" }[locale];
+    const hol = holidayList(plan.holidays, locale);
+    const run = runWords(plan.run, locale);
+    const sch = span(plan.school.from, plan.school.to, locale);
+    const leaveText = lowerFirst(leaveWords(plan.leave, locale), locale);
+    // Madrid's order: the holidays are the days inside the period, the first and last day are "no lectivos" (the 0-3 nursery schools keep class on both).
+    const edges = NON_TEACHING_EDGES.includes(region)
+      ? {
+          ca: ` Vacances del ${Number(addDays(plan.school.from, 1).slice(8))} al ${Number(addDays(plan.school.to, -1).slice(8))} de març i no lectius el ${Number(plan.school.from.slice(8))} i el ${Number(plan.school.to.slice(8))}; a les escoles infantils de 0 a 3 anys, aquests dos dies hi ha classe, segons l'ordre.`,
+          es: ` Vacaciones del ${Number(addDays(plan.school.from, 1).slice(8))} al ${Number(addDays(plan.school.to, -1).slice(8))} de marzo y no lectivos el ${Number(plan.school.from.slice(8))} y el ${Number(plan.school.to.slice(8))}; en las escuelas infantiles de 0 a 3 años esos dos días sí hay clase, según la orden.`,
+          en: ` Holidays ${Number(addDays(plan.school.from, 1).slice(8))} to ${Number(addDays(plan.school.to, -1).slice(8))} March plus non-teaching days on the ${ordinal(Number(plan.school.from.slice(8)))} and the ${ordinal(Number(plan.school.to.slice(8)))}; nursery schools for ages 0 to 3 have classes on both days, according to the order.`,
+        }[locale]
+      : "";
+    if (locale === "ca") return `**${name}:** festius ${hol}. Demanant ${m} ${days} (${leaveText}), ${plan.run.days} dies seguits, ${run}. Sense classe a escoles i instituts ${sch} (${page}).${edges}`;
+    if (locale === "es") return `**${name}:** festivos ${hol}. Pidiendo ${m} ${days} (${leaveText}), ${plan.run.days} días seguidos, ${run}. Sin clase en colegios e institutos ${sch} (${page}).${edges}`;
+    return `**${name}:** holidays on ${hol}. Taking ${m} ${days} off (${leaveText}) gives ${plan.run.days} days in a row, ${run}. No school in schools and institutes ${sch} (${page}).${edges}`;
+  };
+
+  if (locale === "ca") {
+    return [
+      ...h2(
+        `Com aprofitar la Setmana Santa del ${EASTER_YEAR}: ${n} dies de vacances per a ${weekBeforeRun.days} de festa`,
+        `A Catalunya només són festius el Divendres Sant (${dm(E.goodFriday, "ca")}) i el Dilluns de Pasqua (${dm(E.easterMonday, "ca")}; a l'Aran, no). Si treballes de dilluns a divendres, això és el que en pots treure:`,
+      ),
+      list(
+        `**Demanant ${n} dies (${leaveWordsBefore}):** ${weekBeforeRun.days} dies seguits de festa, ${runWords(weekBeforeRun, "ca")}${matchesSchool ? ", les mateixes dates que les vacances escolars" : ""}. A l'Aran, el ${dayDate(E.easterMonday, "ca", false)} és feiner (el festiu passa al ${dm(E.aranDay, "ca")}): la festa acaba el ${dayDate(addDays(E.easterMonday, -1), "ca", false)}, ${aranRunDays} dies; vegeu «Ponts de Setmana Santa 2027: quins dies demanar», més avall.`,
+        `**Demanant només el Dijous Sant (${dm(E.holyThursday, "ca")}):** ${thursdayRun.days} dies seguits, ${runWords(thursdayRun, "ca")}.`,
+        `**Escoles de Catalunya:** vacances ${schoolWords}, tots dos inclosos; es torna a classe el ${dayDate(school.back, "ca", false)}. Els dies de lliure disposició no poden caure dins d'aquestes vacances, i una festa local del teu municipi les pot allargar: ${schoolLink("calendari escolar")} i ${freeDays}.`,
+        regionItem("MD"),
+        regionItem("VC"),
+      ),
+      ...paras(
+        `Les dues comunitats, només amb els festius autonòmics de la relació del BOE (13 d'octubre de 2026); la teva ciutat pot sumar-hi festes locals: ${localLink}. Més avall, la taula amb totes les combinacions de dies per demanar.`,
+      ),
+    ];
+  }
+  if (locale === "es") {
+    return [
+      ...h2(
+        `Cómo aprovechar la Semana Santa de ${EASTER_YEAR}: ${n} días de vacaciones para ${weekBeforeRun.days} de fiesta`,
+        `En Cataluña solo son festivos el Viernes Santo (${dm(E.goodFriday, "es")}) y el Lunes de Pascua (${dm(E.easterMonday, "es")}; en Arán, no). Si trabajas de lunes a viernes, esto es lo que puedes sacar:`,
+      ),
+      list(
+        `**Pidiendo ${n} días (${leaveWordsBefore}):** ${weekBeforeRun.days} días seguidos de fiesta, ${runWords(weekBeforeRun, "es")}${matchesSchool ? ", las mismas fechas que las vacaciones escolares" : ""}. En Arán, el ${dayDate(E.easterMonday, "es", false)} es laborable (el festivo pasa al ${dm(E.aranDay, "es")}): la fiesta acaba el ${dayDate(addDays(E.easterMonday, -1), "es", false)}, ${aranRunDays} días; véase «Puentes de Semana Santa 2027: qué días pedir», más abajo.`,
+        `**Pidiendo solo el Jueves Santo (${dm(E.holyThursday, "es")}):** ${thursdayRun.days} días seguidos, ${runWords(thursdayRun, "es")}.`,
+        `**Colegios de Cataluña:** vacaciones ${schoolWords}, ambos incluidos; se vuelve a clase el ${dayDate(school.back, "es", false)}. Los días de libre disposición no pueden caer dentro de estas vacaciones, y una fiesta local de tu municipio puede alargarlas: ${schoolLink("calendario escolar")} y ${freeDays}.`,
+        regionItem("MD"),
+        regionItem("VC"),
+      ),
+      ...paras(
+        `Las dos comunidades, solo con los festivos autonómicos de la relación del BOE (13 de octubre de 2026); tu ciudad puede sumar fiestas locales: ${localLink}. Más abajo, la tabla con todas las combinaciones de días que pedir.`,
+      ),
+    ];
+  }
+  return [
+    ...h2(
+      `How to make the most of Easter ${EASTER_YEAR}: ${n} days of leave for ${weekBeforeRun.days} days off`,
+      `In Catalonia only Good Friday (${dm(E.goodFriday, "en")}) and Easter Monday (${dm(E.easterMonday, "en")}; not in Aran) are public holidays. If you work Monday to Friday, this is what you can get out of it:`,
+    ),
+    list(
+      `**Taking ${n} days off (${leaveWordsBefore}):** ${weekBeforeRun.days} days in a row, ${runWords(weekBeforeRun, "en")}${matchesSchool ? ", the same dates as the school holidays" : ""}. In Aran, ${dayDate(E.easterMonday, "en", false)} is a working day (the holiday moves to ${dm(E.aranDay, "en")}): the break ends on ${dayDate(addDays(E.easterMonday, -1), "en", false)}, ${aranRunDays} days; see "Easter 2027 long weekends: which days to take off" further down.`,
+      `**Taking only Maundy Thursday (${dm(E.holyThursday, "en")}):** ${thursdayRun.days} days in a row, ${runWords(thursdayRun, "en")}.`,
+      `**Schools in Catalonia:** off ${schoolWords}, both days included; classes resume on ${dayDate(school.back, "en", false)}. School free days cannot fall inside these holidays, and a local holiday in your town can stretch them: ${schoolLink("school calendar")} and ${freeDays}.`,
+      regionItem("MD"),
+      regionItem("VC"),
+    ),
+    ...paras(
+      `Both communities use only the regional holidays in the BOE list (13 October 2026); your town may add local ones: ${localLink}. Further down, the table with every combination of days to book.`,
+    ),
+  ];
+}
+
 export function buildEasterBody(locale: Locale): Block[] {
   const E = EASTER;
   const school = schoolEdges();
@@ -665,6 +838,8 @@ export function buildEasterBody(locale: Locale): Block[] {
         "D'on surten aquestes dates",
         `Els festius, de l'Ordre EMT/52/2026 (DOGC de l'1 d'abril de 2026), que el BOE del 13 d'octubre de 2026 recull a la relació de festes del 2027; les vacances escolars, de l'Ordre EDF/66/2026 (DOGC del 27 d'abril de 2026). Les hem tornat a llegir el ${dateYear(EASTER_DATES_REREAD, "ca")}.`,
       ),
+      // 25 Nov 2026 (ci-demanda, audit opportunity 5): the planning block comes first. Body only.
+      ...planBlocks("ca"),
       // 25 Nov 2026 (ci-demanda): "quan es setmana santa 2027" (151 impressions in 14 days at 8.6, 0 clicks)
       // was answered only in the FAQ and the glance table; now a visible H2 in the query's words. Same dates as
       // the glance table and the FAQ (Ordre EMT/52/2026, treball.gencat.cat 2027 calendar: "26 de març, divendres",
@@ -787,6 +962,8 @@ export function buildEasterBody(locale: Locale): Block[] {
         "De dónde salen estas fechas",
         `Los festivos, de la Orden EMT/52/2026 (DOGC del 1 de abril de 2026), que el BOE del 13 de octubre de 2026 recoge en la relación de fiestas de 2027; las vacaciones escolares, de la Orden EDF/66/2026 (DOGC del 27 de abril de 2026). Las hemos vuelto a leer el ${dateYear(EASTER_DATES_REREAD, "es")}.`,
       ),
+      // 25 Nov 2026 (ci-demanda, audit opportunity 5): the planning block comes first. Body only.
+      ...planBlocks("es"),
       // 25 Nov 2026 (ci-demanda): same H2 as the Catalan edition, in the Spanish query's words.
       ...h2(
         `¿Cuándo es la Semana Santa de ${EASTER_YEAR} en Cataluña?`,
@@ -905,6 +1082,8 @@ export function buildEasterBody(locale: Locale): Block[] {
       "Where these dates come from",
       `The holidays come from Order EMT/52/2026 (DOGC, Catalonia's official gazette, 1 April 2026), listed again in the BOE's national list of 2027 holidays on 13 October 2026; the school holidays from Order EDF/66/2026 (DOGC, 27 April 2026). We re-read them on ${dateYear(EASTER_DATES_REREAD, "en")}.`,
     ),
+    // 25 Nov 2026 (ci-demanda, audit opportunity 5): the planning block comes first. Body only.
+    ...planBlocks("en"),
     // 25 Nov 2026 (ci-demanda): same H2 as the Catalan edition, in English.
     ...h2(
       `When is Holy Week ${EASTER_YEAR} in Catalonia?`,

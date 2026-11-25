@@ -26,6 +26,7 @@ import {
   localDaysAroundEaster,
   metroRows,
   optionRun,
+  regionPlan,
   schoolBreakWith,
   schoolEdges,
 } from "../src/lib/content/batch02/easter-2027.ts";
@@ -39,6 +40,7 @@ import { buildBody as buildHolidayBody } from "../src/lib/content/holidays/publi
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { metroDay } from "../src/lib/content/metro/tonight.ts";
 import { SCHOOL_YEARS } from "../src/lib/content/school/calendar.ts";
+import { SPAIN_REGIONS, regionPath } from "../src/lib/content/school-spain/regions.ts";
 import { buildBody as buildSchoolBody } from "../src/lib/content/school/publish.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { displayName, hubCopy } from "../src/lib/programmatic/holidays/copy.ts";
@@ -72,6 +74,7 @@ const PUBLISHED = new Set([
     LOCALES.map((locale) => `/${locale}/${paths[locale]}/`),
   ),
   ...holidayFamilyPaths().map((p) => p.path),
+  ...SPAIN_REGIONS.flatMap((r) => LOCALES.map((locale) => `/${locale}/${regionPath(r.slug, locale)}/`)),
 ]);
 
 /* -------------------------------------------------------------------------- */
@@ -479,5 +482,86 @@ test("the body links the bridges guide and the work calendar in words, and gives
     assert.ok(plain.includes(year(SCHOOL_CHRISTMAS.from)) && plain.includes(year(SCHOOL_CHRISTMAS.to)), `${locale}: school Christmas`);
     const official = blocks.find((b) => b.type === "callout" && (b as { tone?: string }).tone === "official") as unknown as { text: string };
     assert.ok(official.text.includes(reread[locale]), `${locale}: ${official.text}`);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* 25 Nov 2026: "how to make the most of Easter 2027", the planning block      */
+/* -------------------------------------------------------------------------- */
+
+test("planning block: the 4-day / 10-day figures come from the calendar, and Madrid and Valencia from the BOE table and their school orders", () => {
+  const weekBefore = EASTER_OPTIONS.find((o) => o.id === "weekBefore")!;
+  assert.deepEqual(weekBefore.leave, ["2027-03-22", "2027-03-23", "2027-03-24", "2027-03-25"]);
+  const run = optionRun(weekBefore);
+  assert.deepEqual(run, { from: "2027-03-20", to: "2027-03-29", days: 10 });
+  // The same ten days as the school break.
+  assert.equal(run.from, EASTER.schoolFrom);
+  assert.equal(run.to, EASTER.schoolTo);
+  // Madrid: San José (Fri 19), Jueves Santo, Viernes Santo; no Easter Monday. Valencia: San José, Viernes Santo, Lunes de Pascua; no Jueves Santo.
+  const md = regionPlan("MD");
+  assert.deepEqual(md.holidays.map((h) => h.date), ["2027-03-19", "2027-03-25", "2027-03-26"]);
+  assert.deepEqual(md.leave, ["2027-03-22", "2027-03-23", "2027-03-24"]);
+  assert.deepEqual(md.run, { from: "2027-03-19", to: "2027-03-28", days: 10 });
+  assert.deepEqual(md.school, { from: "2027-03-19", to: "2027-03-29" });
+  const vc = regionPlan("VC");
+  assert.deepEqual(vc.holidays.map((h) => h.date), ["2027-03-19", "2027-03-26", "2027-03-29"]);
+  assert.deepEqual(vc.leave, ["2027-03-22", "2027-03-23", "2027-03-24", "2027-03-25"]);
+  assert.deepEqual(vc.run, { from: "2027-03-19", to: "2027-03-29", days: 11 });
+  assert.deepEqual(vc.school, { from: "2027-03-25", to: "2027-04-05" });
+  for (const plan of [md, vc]) for (const iso of plan.leave) assert.ok(![0, 6].includes(weekdayIndex(iso)), `${iso} is a weekday`);
+  // Valencia is, with Catalonia, the community without Holy Thursday; Madrid has it.
+  assert.ok(!vc.holidays.some((h) => h.date === EASTER.holyThursday));
+  assert.ok(md.holidays.some((h) => h.date === EASTER.holyThursday));
+});
+
+test("planning block: sits right after the 'where these dates come from' box, with Madrid, Valencia and the school pages linked, in all three editions", () => {
+  for (const locale of LOCALES) {
+    const blocks = EASTER_2027.editions[locale].blocks;
+    const official = blocks.findIndex((b) => b.type === "callout" && (b as { tone?: string }).tone === "official");
+    const heading = blocks[official + 1] as { type: string; level?: number; text?: string };
+    assert.equal(heading.type, "heading", locale);
+    assert.match(heading.text ?? "", /(aprofitar|aprovechar|make the most of)/i, locale);
+    assert.match(heading.text ?? "", /\b4\b/, `${locale}: leave days in the H2`);
+    assert.match(heading.text ?? "", /\b10\b/, `${locale}: days off in the H2`);
+    const slice = blocks.slice(official + 1, official + 6);
+    const plain = text(slice);
+    assert.match(plain, /Madrid/, locale);
+    assert.match(plain, /Valenciana|Valencian/, locale);
+    const inBlock = JSON.stringify(slice);
+    for (const region of ["MD", "VC"] as const) assert.ok(inBlock.includes(`/${locale}/${regionPath(regionPlan(region).slug, locale)}/`), `${locale}: ${region}`);
+    assert.ok(inBlock.includes(`/${locale}/${SIBLING_PATHS.school[locale]}/`), locale);
+    assert.ok(inBlock.includes(`/${locale}/${B2_PATHS.schoolFreeDays[locale]}/`), `${locale}: free days page`);
+  }
+});
+
+test("planning block: the lead stays as it was (the 18 Nov snippet is in its measurement window)", () => {
+  for (const locale of LOCALES) {
+    const lead = EASTER_2027.editions[locale].blocks[0] as { type: string; lead?: boolean; text?: string };
+    assert.equal(lead.lead, true, locale);
+    assert.doesNotMatch(lead.text ?? "", /(aprofitar|aprovechar|make the most of)/i, locale);
+  }
+});
+
+test("planning block: Aran's Easter Monday is a working day, so the run stops on Sunday 28 (9 days); Madrid's order wording and the nursery exception are printed", () => {
+  const madridRecord = SPAIN_REGIONS.find((r) => r.boe === "MD")!;
+  assert.match(madridRecord.easter.note ?? "", /20 al 28 de marzo.*19.*29/, "data.ts still says vacations 20-28 and non-teaching 19 and 29");
+  assert.match(madridRecord.notes.join(" "), /19 y 29 de marzo.*lectivos/, "data.ts still says the 0-3 schools keep class on 19 and 29");
+  const expected = {
+    ca: /A l'Aran, el dilluns 29 de març és feiner .*acaba el diumenge 28 de març, 9 dies; vegeu «Ponts de Setmana Santa 2027: quins dies demanar»/,
+    es: /En Arán, el lunes 29 de marzo es laborable .*acaba el domingo 28 de marzo, 9 días; véase «Puentes de Semana Santa 2027: qué días pedir»/,
+    en: /In Aran, Monday 29 March is a working day .*ends on Sunday 28 March, 9 days; see "Easter 2027 long weekends: which days to take off"/,
+  } as const;
+  const madrid = {
+    ca: /[Vv]acances del 20 al 28 de març i no lectius el 19 i el 29; a les escoles infantils de 0 a 3 anys/,
+    es: /[Vv]acaciones del 20 al 28 de marzo y no lectivos el 19 y el 29; en las escuelas infantiles de 0 a 3 años/,
+    en: /[Hh]olidays 20 to 28 March plus non-teaching days on the 19th and the 29th; nursery schools for ages 0 to 3/,
+  } as const;
+  for (const locale of LOCALES) {
+    const blocks = EASTER_2027.editions[locale].blocks;
+    const official = blocks.findIndex((b) => b.type === "callout" && (b as { tone?: string }).tone === "official");
+    const plain = text(blocks.slice(official + 1, official + 6));
+    assert.match(plain, expected[locale], locale);
+    assert.match(plain, madrid[locale], locale);
+    assert.ok(weekdayIndex(addDays(EASTER.easterMonday, -1)) === 0, "Easter Sunday");
   }
 });

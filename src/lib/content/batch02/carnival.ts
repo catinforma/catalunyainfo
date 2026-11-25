@@ -1,5 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
-import { HOLIDAYS_BY_YEAR, addDays, shortDate, weekdayIndex, WEEKDAY_NAMES } from "@/lib/content/holidays/calendar";
+import { HOLIDAYS_BY_YEAR, addDays, daysBetween, holidayOn, shortDate, weekdayIndex, WEEKDAY_NAMES } from "@/lib/content/holidays/calendar";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { displayName } from "@/lib/programmatic/holidays/copy";
 import type { CouncilApproved } from "@/lib/programmatic/holidays/council-2027";
@@ -9,7 +9,8 @@ import { municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { FREE_DAYS_AS_OF, FREE_DAYS_TOWNS, joinNames, nameIn, type FreeDaysTown } from "./school-free-days-towns";
-import { B2_PATHS, b2Related, b2link, callout, faq, h2, h3, keyFacts, lead, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { runWords, type Run } from "./december-bridge";
+import { B2_PATHS, b2Related, b2link, callout, faq, h2, h3, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
  * Carnival 2027 in Catalonia (13 Nov 2026): the dates, whether it is a holiday,
@@ -126,6 +127,64 @@ export function carnivalSchoolDays(towns: readonly FreeDaysTown[] = FREE_DAYS_TO
 }
 
 /* -------------------------------------------------------------------------- */
+/* "How to make the most of Carnival 2027": days to ask for                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * 25 Nov 2026 (ci-demanda, audit opportunity 5): the planning block under the
+ * key facts. Everything is computed from the week above, the local-day list
+ * and the school free-days table; the Sitges local days come from the
+ * council's own act (`councilApproved2027`) or the DOGC order once parsed.
+ * Body only (no title, meta, H1 or lead).
+ */
+export interface CarnivalPlan {
+  /** Leave to ask for when Monday 8 is a working day, and the run it gives from the Saturday of the parade weekend. */
+  everyone: { leave: string[]; run: Run };
+  /** Towns where Monday 8 is a local holiday: with it, and with Tuesday 9 added. */
+  mondayLocal: { alone: Run; withTuesday: Run; leave: string[] };
+}
+
+function offRun(anchor: string, leave: readonly string[]): Run {
+  const off = (iso: string) => weekdayIndex(iso) === 0 || weekdayIndex(iso) === 6 || holidayOn(iso) !== null || leave.includes(iso);
+  if (!off(anchor)) throw new Error(`carnival plan: ${anchor} is not a day off`);
+  let from = anchor;
+  while (off(addDays(from, -1))) from = addDays(from, -1);
+  let to = anchor;
+  while (off(addDays(to, 1))) to = addDays(to, 1);
+  return { from, to, days: daysBetween(from, to) + 1 };
+}
+
+export function carnivalPlan(): CarnivalPlan {
+  const leave = [CARNIVAL.monday, CARNIVAL.tuesday];
+  return {
+    everyone: { leave, run: offRun(CARNIVAL.saturday, leave) },
+    mondayLocal: {
+      leave: [CARNIVAL.tuesday],
+      alone: offRun(CARNIVAL.saturday, [CARNIVAL.monday]),
+      withTuesday: offRun(CARNIVAL.saturday, [CARNIVAL.monday, CARNIVAL.tuesday]),
+    },
+  };
+}
+
+/** A town's 2027 local days: the DOGC order's once parsed, else its council's own act (null if neither is held). */
+export function townLocalDays2027(slug: string): { dates: string[]; names: (string | null)[]; pending: boolean } | null {
+  if (nextYearPublished()) {
+    const local = nextYearFor(slug)?.local;
+    return local ? { dates: local, names: local.map(() => null), pending: false } : null;
+  }
+  const council = councilApproved2027(slug);
+  return council ? { dates: council.local, names: council.local.map((_, i) => council.names?.[i] ?? null), pending: true } : null;
+}
+
+/** Barcelona and Tarragona, when the school table has them on Monday 8, for the sentence on schools. */
+function mondaySchoolNames(L: Locale): string {
+  const names = carnivalSchoolDays()
+    .filter((t) => t.days.includes(CARNIVAL.monday) && ["barcelona", "tarragona"].includes(t.town.slug))
+    .map((t) => nameIn(t.town.name, L));
+  return joinNames(names, L);
+}
+
+/* -------------------------------------------------------------------------- */
 /* The 2027 programmes, filled when each organiser publishes                  */
 /* -------------------------------------------------------------------------- */
 
@@ -225,6 +284,8 @@ const a = (href: string, label: string) => `[${label}](${href.replace(/\(/g, "%2
 /** "dijous 4 de febrer", "jueves 4 de febrero", "Thursday 4 February". */
 const day = (iso: string, L: Locale) => `${WEEKDAY_NAMES[L][weekdayIndex(iso)]} ${shortDate(iso, L)}`;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+/** "diumenge 28 de març", "domingo 28 de marzo", "Sunday 28 March". */
+const dayLabel = (iso: string, L: Locale) => day(iso, L);
 
 function townName(town: SnapshotMunicipality, L: Locale): string {
   return L === "ca" ? town.name : L === "es" ? displayName(town, "es") : cap(town.name);
@@ -294,6 +355,87 @@ export const CARNIVAL_META: Record<Locale, { title: string; seoTitle: string; se
     excerpt: "When Carnival 2027 is, where it is a local holiday, which schools close on Monday 8 February, and the big days in Sitges, Vilanova, Solsona, Platja d'Aro and Barcelona.",
   },
 };
+
+function planBlocks(L: Locale, school: ReturnType<typeof schoolCounts>, localTowns: number): Block[] {
+  const C = CARNIVAL;
+  const plan = carnivalPlan();
+  const lowerFirst = (text: string) => (L === "en" ? text : text.charAt(0).toLowerCase() + text.slice(1));
+  const sitges = townLocalDays2027("sitges");
+  const sitgesInWeek = sitges?.dates.some(inWeek) ?? false;
+  const sitgesDays = sitges ? joinNames(sitges.dates.map((iso) => shortDate(iso, L)), L) : "";
+  const mondayTowns = [...new Set(carnivalLocalDays().filter((x) => x.date === C.monday).sort((x, y) => x.town.rank - y.town.rank).map((x) => x.town))];
+  const mondayNames = joinNames(mondayTowns.slice(0, 2).map((town) => (L === "ca" ? cap(town.name) : townName(town, L))), L);
+  const hasVilanova = mondayTowns.some((town) => town.slug === "vilanova-i-la-geltru");
+  const free = b2link("schoolFreeDays", L, { ca: "dies de lliure disposició municipi per municipi", es: "días de libre disposición municipio por municipio", en: "school free days town by town" }[L]);
+  const work = b2link("workCalendar", L, { ca: "calendari laboral del 2027", es: "calendario laboral de 2027", en: "2027 work calendar" }[L]);
+  const easter = b2link("easter2027", L, { ca: "Setmana Santa 2027", es: "Semana Santa 2027", en: "Easter 2027" }[L]);
+  const goodFriday = addDays(C.easterSunday, -2);
+  // The count is of the councils' own acts until the DOGC order is parsed: say so, with the day the acts were read.
+  const readOn = carnivalLocalDays().map((x) => x.council?.readOn).filter((x): x is string => Boolean(x)).sort().at(-1);
+  const readDate = readOn ? `${shortDate(readOn, L)}${L === "en" ? " " : " de "}${readOn.slice(0, 4)}` : "";
+  const countsWords = {
+    ca: readOn ? `dels municipis que ja han aprovat les seves festes locals (dades llegides el ${readDate}), ${localTowns} en tenen una la setmana de Carnaval i ${mondayTowns.length} el dilluns, com ${mondayNames}` : `${localTowns} municipis tenen una festa local la setmana de Carnaval, i el dilluns la tenen ${mondayTowns.length}, com ${mondayNames}`,
+    es: readOn ? `de los municipios cuyo ayuntamiento ya ha aprobado sus fiestas locales (datos leídos el ${readDate}), ${localTowns} tienen una la semana de Carnaval y ${mondayTowns.length} el lunes, como ${mondayNames}` : `${localTowns} municipios tienen una fiesta local la semana de Carnaval, y el lunes la tienen ${mondayTowns.length}, como ${mondayNames}`,
+    en: readOn ? `of the towns whose councils have approved their local days (data read ${readDate}), ${localTowns} have one in Carnival week and ${mondayTowns.length} on the Monday, among them ${mondayNames}` : `${localTowns} towns have a local holiday in Carnival week, and ${mondayTowns.length} have it on the Monday, among them ${mondayNames}`,
+  }[L];
+  const mondayLocalWords = runWords(plan.mondayLocal.alone, L);
+  const bothWords = runWords(plan.everyone.run, L);
+  const sitgesSentence =
+    sitges && !sitgesInWeek
+      ? {
+          ca: ` A Sitges cap de les dues festes locals del 2027 (${sitgesDays}) cau al Carnaval${sitges.pending ? ", segons l'acta del Ple" : ""}.`,
+          es: ` En Sitges ninguna de las dos fiestas locales de 2027 (${sitgesDays}) cae en Carnaval${sitges.pending ? ", según el acta del Pleno" : ""}.`,
+          en: ` In Sitges neither of the two 2027 local holidays (${sitgesDays}) falls in Carnival${sitges.pending ? ", according to the council's minutes" : ""}.`,
+        }[L]
+      : "";
+  const vilanovaSentence = hasVilanova
+    ? { ca: " A Vilanova i la Geltrú el dilluns 8 és festa local.", es: " En Vilanova i la Geltrú el lunes 8 es fiesta local.", en: " In Vilanova i la Geltrú Monday 8 is a local holiday." }[L]
+    : "";
+
+  if (L === "ca") {
+    return [
+      ...h2(
+        "Com aprofitar el Carnaval 2027: quins dies demanar",
+        `El Carnaval no és festiu a Catalunya (cap dia del ${work} cau aquella setmana), així que els ponts depenen del teu municipi. Si treballes de dilluns a divendres:`,
+      ),
+      list(
+        `**Sense festa local:** demanant el dilluns 8 i el dimarts 9 de febrer (${plan.everyone.leave.length} dies), ${plan.everyone.run.days} dies seguits, ${bothWords}. El Dimecres de Cendra, el 10, és feiner.`,
+        `**Si el dilluns 8 és festa local al teu municipi:** ${countsWords}. En aquest cas, ${plan.mondayLocal.alone.days} dies seguits sense demanar res, ${mondayLocalWords}; demanant també el dimarts 9, ${plan.mondayLocal.withTuesday.days} dies.`,
+        `**Escoles:** el dilluns 8 és dia de lliure disposició a ${school.monday.length} dels ${school.total} municipis de la nostra taula${mondaySchoolNames("ca") ? `, entre ells ${mondaySchoolNames("ca")}` : ""}. Si només és una proposta, cada escola ho confirma: ${free}.`,
+        `**Sitges i Vilanova:** la Rua de la Disbauxa és el diumenge 7 i la Rua de l'Extermini, el dimarts 9 (VisitSitges).${sitgesSentence}${vilanovaSentence}`,
+      ),
+      ...paras(`El Carnaval es mou amb la Pasqua: el Diumenge de Pasqua és el ${dayLabel(C.easterSunday, "ca")} i el Divendres Sant, el ${dayLabel(goodFriday, "ca")}. Els dies que cal demanar per a aquella setmana, a ${easter}.`),
+    ];
+  }
+  if (L === "es") {
+    return [
+      ...h2(
+        "Cómo aprovechar el Carnaval 2027: qué días pedir",
+        `El Carnaval no es festivo en Cataluña (ningún día del ${work} cae esa semana), así que los puentes dependen de tu municipio. Si trabajas de lunes a viernes:`,
+      ),
+      list(
+        `**Sin fiesta local:** pidiendo el lunes 8 y el martes 9 de febrero (${plan.everyone.leave.length} días), ${plan.everyone.run.days} días seguidos, ${bothWords}. El Miércoles de Ceniza, el 10, es laborable.`,
+        `**Si el lunes 8 es fiesta local en tu municipio:** ${countsWords}. En ese caso, ${plan.mondayLocal.alone.days} días seguidos sin pedir nada, ${mondayLocalWords}; pidiendo también el martes 9, ${plan.mondayLocal.withTuesday.days} días.`,
+        `**Colegios:** el lunes 8 es día de libre disposición en ${school.monday.length} de los ${school.total} municipios de nuestra tabla${mondaySchoolNames("es") ? `, entre ellos ${mondaySchoolNames("es")}` : ""}. Si solo es una propuesta, cada colegio lo confirma: ${free}.`,
+        `**Sitges y Vilanova:** la Rua de la Disbauxa es el domingo 7 y la Rua de l'Extermini, el martes 9 (VisitSitges).${sitgesSentence}${vilanovaSentence}`,
+      ),
+      ...paras(`El Carnaval se mueve con la Pascua: el Domingo de Pascua es el ${dayLabel(C.easterSunday, "es")} y el Viernes Santo, el ${dayLabel(goodFriday, "es")}. Los días que pedir para esa semana, en ${easter}.`),
+    ];
+  }
+  return [
+    ...h2(
+      "How to make the most of Carnival 2027: which days to book",
+      `Carnival is not a public holiday in Catalonia (no day of the ${work} falls that week), so long weekends depend on your town. If you work Monday to Friday:`,
+    ),
+    list(
+      `**No local holiday:** taking Monday 8 and Tuesday 9 February off (${plan.everyone.leave.length} days) gives ${plan.everyone.run.days} days in a row, ${bothWords}. Ash Wednesday, the 10th, is a working day.`,
+      `**If Monday 8 is a local holiday in your town:** ${countsWords}. In that case, ${plan.mondayLocal.alone.days} days in a row without booking anything, ${mondayLocalWords}; taking Tuesday 9 as well, ${plan.mondayLocal.withTuesday.days} days.`,
+      `**Schools:** Monday 8 is a school free day in ${school.monday.length} of the ${school.total} towns in our table${mondaySchoolNames("en") ? `, among them ${mondaySchoolNames("en")}` : ""}. Where it is only a proposal, each school confirms it: ${free}.`,
+      `**Sitges and Vilanova:** the Rua de la Disbauxa is on Sunday 7 and the Rua de l'Extermini on Tuesday 9 (VisitSitges).${sitgesSentence}${vilanovaSentence}`,
+    ),
+    ...paras(`Carnival moves with Easter: Easter Sunday is ${dayLabel(C.easterSunday, "en")} and Good Friday ${dayLabel(goodFriday, "en")}. The days to book for that week are in ${easter}.`),
+  ];
+}
 
 export function buildCarnivalBody(L: Locale): Block[] {
   const C = CARNIVAL;
@@ -492,6 +634,7 @@ export function buildCarnivalBody(L: Locale): Block[] {
   return [
     lead(t.lead),
     keyFacts(t.factsTitle, t.facts),
+    ...planBlocks(L, school, localTowns),
     ...h2(t.whenH, ...t.when),
     table(t.weekCaption, t.weekHead, t.week.map(([dd, what]) => [cap(dd!), what!]), t.weekNote),
     ...h2(t.holH, ...t.hol),

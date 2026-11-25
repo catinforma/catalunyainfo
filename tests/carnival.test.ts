@@ -12,7 +12,9 @@ import {
   PROGRAMMES_2027,
   buildCarnivalBody,
   carnivalLocalDays,
+  carnivalPlan,
   carnivalSchoolDays,
+  townLocalDays2027,
   programmeProblems,
   regionalHolidaysInWeek,
   type CarnivalTown,
@@ -163,4 +165,75 @@ test("carnival: hero exists; the Sitges guide and the calçots guide link here; 
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /wants\("carnaval"\)\) published\.push\(await publishB2Article\(CARNIVAL_GUIDE\)\)/);
   assert.match(route, /wants\("carnaval-links"\)\) published\.push\(await publishB2Article\(SITGES\), await publishB2Article\(CALCOTS\)\)/);
+});
+
+/* 25 Nov 2026: "how to make the most of Carnival 2027", the planning block under the key facts */
+
+test("carnival plan: runs are computed from the week (Sat 6 - Tue 9 with two days off; Sat 6 - Mon 8 where Monday is local)", () => {
+  const plan = carnivalPlan();
+  assert.deepEqual(plan.everyone.leave, ["2027-02-08", "2027-02-09"]);
+  assert.deepEqual(plan.everyone.run, { from: "2027-02-06", to: "2027-02-09", days: 4 });
+  assert.deepEqual(plan.mondayLocal.alone, { from: "2027-02-06", to: "2027-02-08", days: 3 });
+  assert.deepEqual(plan.mondayLocal.withTuesday, { from: "2027-02-06", to: "2027-02-09", days: 4 });
+  assert.equal(weekdayIndex(plan.everyone.run.from), 6, "the run starts on the Saturday");
+});
+
+test("carnival plan: Sitges' local days come from its council act or the DOGC order, and none falls in the week", () => {
+  const sitges = townLocalDays2027("sitges");
+  assert.ok(sitges, "Sitges has 2027 local days");
+  assert.deepEqual(sitges!.dates, ["2027-08-24", "2027-09-23"]);
+  for (const date of sitges!.dates) assert.ok(!CARNIVAL_WEEK.includes(date), date);
+  assert.equal(sitges!.pending, !nextYearPublished());
+  for (const locale of LOCALES) assert.match(blockText(locale), /24 (d'agost|de agosto|August)/, `${locale}: Sitges local days`);
+});
+
+test("carnival plan: block sits under the key facts in all three editions with the counts the tables give, and links Easter, the work calendar and the free-days page", () => {
+  const monday = carnivalLocalDays().filter((d) => d.date === CARNIVAL.monday);
+  const mondayTowns = new Set(monday.map((d) => d.town.slug)).size;
+  const school = carnivalSchoolDays().filter((t) => t.days.includes(CARNIVAL.monday)).length;
+  for (const locale of LOCALES) {
+    const blocks = CARNIVAL_GUIDE.editions[locale].blocks;
+    const facts = blocks.findIndex((b) => b.type === "keyFacts");
+    const heading = blocks.find((b) => b.type === "heading" && /(aprofitar|aprovechar|make the most of)/i.test((b as { text?: string }).text ?? "")) as { text: string } | undefined;
+    assert.ok(heading, `${locale}: planning H2`);
+    if (facts >= 0) assert.ok(blocks.indexOf(heading as unknown as Block) > facts, `${locale}: after the key facts`);
+    const plain = blockText(locale);
+    assert.ok(plain.includes(String(mondayTowns)), `${locale}: ${mondayTowns} towns with a local Monday`);
+    assert.ok(plain.includes(String(school)), `${locale}: ${school} towns with a school free Monday`);
+    for (const key of ["easter2027", "workCalendar", "schoolFreeDays"] as const) {
+      assert.ok(links(locale).includes(b2href(key, locale)), `${locale}: links ${key}`);
+    }
+  }
+});
+
+function blockText(locale: Locale): string {
+  const blocks = CARNIVAL_GUIDE.editions[locale].blocks;
+  const start = blocks.findIndex((b) => b.type === "heading" && /(aprofitar|aprovechar|make the most of)/i.test((b as { text?: string }).text ?? ""));
+  return bodyToPlainText(blocks.slice(start, start + 4));
+}
+
+test("carnival plan: the town counts are qualified as the councils' approved days, with the day they were read, until the DOGC order is parsed", () => {
+  const reads = carnivalLocalDays().map((d) => d.council?.readOn).filter((x): x is string => Boolean(x)).sort();
+  const readOn = reads.at(-1);
+  if (nextYearPublished()) {
+    assert.equal(readOn, undefined);
+    return;
+  }
+  assert.ok(readOn, "council acts carry a read date");
+  const read: Record<Locale, string> = {
+    ca: `${Number(readOn.slice(8))} d`,
+    es: `${Number(readOn.slice(8))} de `,
+    en: `${Number(readOn.slice(8))} `,
+  };
+  const wording = {
+    ca: /dels municipis que ja han aprovat les seves festes locals \(dades llegides el /,
+    es: /de los municipios cuyo ayuntamiento ya ha aprobado sus fiestas locales \(datos leídos el /,
+    en: /of the towns whose councils have approved their local days \(data read /,
+  } as const;
+  for (const locale of LOCALES) {
+    const plain = blockText(locale);
+    assert.match(plain, wording[locale], locale);
+    assert.ok(plain.includes(read[locale]), `${locale}: the read date ${readOn}`);
+    assert.doesNotMatch(plain, /(municipis tenen una festa local la setmana|municipios tienen una fiesta local la semana|towns have a local holiday in Carnival week)/, `${locale}: no unqualified count`);
+  }
 });
