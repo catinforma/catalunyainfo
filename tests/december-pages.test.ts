@@ -343,10 +343,11 @@ test("local holidays on the 7th, school and shops are stated as the orders state
 test("ski openings are never promised", () => {
   for (const locale of LOCALES) {
     const body = text(DECEMBER_BRIDGE.editions[locale].blocks);
-    // 23 Nov 2026: the resort's news of 11 Nov says "siempre que las condiciones lo permitan".
-    const proviso = { ca: /si les condicions ho permeten/, es: /«siempre que las condiciones lo permitan»/, en: /conditions permitting/ }[locale];
-    assert.match(body, proviso, locale);
-    assert.match(body, /11 (de novembre|de noviembre|November) (de )?2026/, `${locale}: the news item's date`);
+    // 25 Nov 2026: Baqueira's note of 24 Nov postponed the 28 Nov opening with no new date
+    // (factual correction); the page must say so and date the note.
+    const postponed = { ca: /ha ajornat l'obertura/, es: /ha aplazado la apertura/, en: /postponed/ }[locale];
+    assert.match(body, postponed, locale);
+    assert.match(body, /24 (de novembre|de noviembre|November) (de )?2026/, `${locale}: the note's date`);
     assert.doesNotMatch(body, /hi haurà neu|habrá nieve|there will be snow|garantit|garantizad|guaranteed/i, locale);
   }
 });
