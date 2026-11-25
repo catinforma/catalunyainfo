@@ -265,7 +265,7 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * the server, so its notice PDF was not re-fetched; huelgamedica.es (the campaign's own site, read) still says "16 AL 27 DE NOVIEMBRE" and its feed's newest
  * item is 20 Nov; the notice itself was read at 00:40 the same day ("hasta las 08:00 horas del sábado 28 de noviembre de 2026").
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-25";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-26";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.

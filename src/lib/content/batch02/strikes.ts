@@ -468,7 +468,7 @@ import { sourcesCheckedLine } from "./strike-citable";
  * notice. The reviewer's queued note is done: `pastFaq` (who / minimum services in the past tense) on the education entry, used only by the
  * education guide's past FAQ (strike-guides.ts `pastEducationFaq`, shown from 27 Nov).
  */
-export const STRIKES_AS_OF: string = "2026-11-25";
+export const STRIKES_AS_OF: string = "2026-11-26";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
