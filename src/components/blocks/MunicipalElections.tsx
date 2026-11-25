@@ -101,6 +101,7 @@ export async function MunicipalElections({ locale }: { locale: Locale }) {
       <MunicipalResults
         t={t}
         intlLocale={INTL_LOCALE[locale]}
+        locale={locale}
         municipalities={municipalities}
         initial={barcelona}
         initialName="Barcelona"

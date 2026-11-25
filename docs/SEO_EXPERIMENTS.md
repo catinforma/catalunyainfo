@@ -14425,3 +14425,15 @@ Caveat: Dec-Jan is the peak; the local orders (Madrid, Andalucia, Valencia) appe
 **Review 2026-12-15:** `snapshot.py page nochevieja 28`, `page cap-d-any-barcelona 28`, `page new-years-eve 28`, `page barcelona-en-diciembre 28`, `page barcelona-al-desembre 28`; re-read press room tag `nadal-2026`, barcelona.cat/nadal Cap d'Any, TMB press room (the test forces a re-read from 1, 15, 23 and 29 Dec).
 
 **Go-live.** Deploy, then `publish.sh nye barcelona-december shops llums-nadal`. IndexNow: `/ca/guies/cap-d-any-barcelona/ /es/guias/nochevieja-barcelona/ /en/guides/new-years-eve-barcelona/ /ca/guies/barcelona-al-desembre/ /es/guias/barcelona-en-diciembre/ /en/guides/barcelona-in-december/ /ca/guies/botigues-obertes-festius-catalunya/ /es/guias/tiendas-abiertas-festivos-cataluna/ /en/guides/shops-open-sundays-holidays-catalonia/` `/ca/guies/encesa-llums-nadal-barcelona/ /es/guias/encendido-luces-navidad-barcelona/ /en/guides/barcelona-christmas-lights/`.
+
+## 2026-11-25 - Measurement gaps from the audit (analytics only, no page text)
+
+**URLs.** None changed in title, description, H1 or lead. Client-side events added on `/{ca,es,en}/eleccions/` (municipal results selector; wherever `MunicipalElections` is rendered), `/ca/festius/2027/al-teu-web/` and its ES/EN editions (widget builder), the working-days calculator pages (embed box) and the internal search results page.
+
+**Changed.** New consent-gated events `town_select` (`tool` closed list, `locale`; no town name) and `search_no_results` (`locale` only), in `src/lib/analytics/events.ts`. `docs/ANALYTICS.md`: how to count `/embed/*` embedding sites and `.ics` fetches from the Caddy log (jq queries tested on sample lines), GA4 custom dimensions to register (`block_position`, `target_type`, `step_family`, `tool`), retention reading by landing family with the audit's `families.py` regexes.
+
+**Baseline.** Audit Annex B §C: municipal selector, widget selectors, embeds and `.ics` fetches had no usage figure; internal search 54 `view_search_results` (35 users) in 28 d.
+
+**Tests.** `tests/analytics-events-selectors.test.ts` (6) and `tests/analytics-events.test.ts` pass.
+
+**Review 2026-12-09:** GA4 `town_select` by `tool` (after the owner registers `tool`; not retroactive), `search_no_results` count, and the embed host list from the Caddy log (keep the result: logs roll after 14 days).

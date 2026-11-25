@@ -73,6 +73,7 @@ export function WidgetRoute({ locale }: { locale: EmbedLocale }) {
               <EmbedBuilder
                 groups={pickerGroups(locale)}
                 initial="barcelona"
+                locale={locale}
                 origin={siteOrigin()}
                 labels={{
                   picker: t.picker,

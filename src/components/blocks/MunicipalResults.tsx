@@ -1,7 +1,8 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 
+import { track } from "@/lib/analytics/events";
 import type { ElectionHistory, MunicipalityOption } from "@/lib/content/elections/history";
 
 export interface MunicipalCopy {
@@ -41,6 +42,7 @@ const fold = (text: string) =>
 export function MunicipalResults({
   t,
   intlLocale,
+  locale,
   municipalities,
   initial,
   initialName,
@@ -48,12 +50,15 @@ export function MunicipalResults({
 }: {
   t: MunicipalCopy;
   intlLocale: string;
+  /** Site locale (ca, es, en) for the `town_select` event. */
+  locale: string;
   municipalities: MunicipalityOption[];
   initial: ElectionHistory;
   initialName: string;
   monthNames: string[];
 }) {
   const listId = useId();
+  const lastReported = useRef("");
   const [query, setQuery] = useState("");
   const [name, setName] = useState(initialName);
   const [history, setHistory] = useState<ElectionHistory>(initial);
@@ -72,6 +77,11 @@ export function MunicipalResults({
     if (!match) {
       setState(value.trim().length > 2 ? "notFound" : "idle");
       return;
+    }
+    // One `town_select` per municipality picked (typing it letter by letter matches once, at the full name).
+    if (lastReported.current !== match.code) {
+      lastReported.current = match.code;
+      track({ name: "town_select", params: { tool: "municipal_results", locale } });
     }
     setState("loading");
     try {

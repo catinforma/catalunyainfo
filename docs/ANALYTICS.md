@@ -123,6 +123,8 @@ registration is not retroactive.
 | `useful_feedback` | "Was this useful?" yes/no (`PageFeedback.tsx`). This is the plan's *page_feedback*; the name is kept so the history since September stays in one series. | `is_useful`, `content_type`, `locale` | registered | The quality signal that is not a pageview | Live |
 | `related_content_click` | Click on one of our own pages inside the "next useful step" box (`components/NextStep.tsx`, `data-ci-placement="next_step"`), the box right after a page's answer on six families (`lib/engagement/next-step.ts`), or inside a town's list of its other pages (`components/TownHub.tsx`, `data-ci-placement="town_hub"`, low on the holiday, Christmas fair and election town pages, since 18 Nov 2026: `lib/engagement/town-hub.ts`), or inside the strike pages' "Útil ahora" list (`components/UsefulNow.tsx`, `data-ci-placement="useful_now"`, after the body, since 23 Nov 2026: `lib/engagement/useful-now.ts`). Other internal links are not measured. | `link_context` = `next_step` \| `town_hub` \| `useful_now` (closed list `RELATED_LINK_CONTEXTS`), `link_url` (target path, no origin, query or hash), `locale` | registered (`link_context`, `locale`); built-in (`link_url` → "Link URL"); the page clicked on is GA4's own "Page path" | Does the box take readers to a second page, from which family, to which target. Read with `snapshot.py landing [start end]` (clicks per 100 page views per family) | New, 18 Nov 2026 (wired; was declared with `from_type`/`to_type`/`position`, never sent) |
 | `next_step_click` | Click on any link of the "keep it" block of the strike and election pages (`components/ReturnStep.tsx`, `data-ci-placement="return_step"`, since 25 Nov 2026: `lib/engagement/return-step.ts`). One event per click, on top of the link's own (the WhatsApp link also sends `whatsapp_channel_click` with `link_context` = `return_step`). Attributes are read from `data-ci-position`, `data-ci-family` (the block) and `data-ci-target` (the link) and checked against closed lists (`RETURN_POSITIONS`, `RETURN_FAMILIES`, `RETURN_TARGETS`). | `block_position` = `after_answer` \| `after_intro`, `target_type` = `whatsapp_channel` \| `town_calendar` \| `holiday_today` \| `strikes_hub` \| `strikes_spain_hub` \| `spain_holidays`, `step_family` = `strikes` \| `elections`, `link_url` (our own pages only), `locale` | **register `block_position`, `target_type`, `step_family`** (event-scoped custom dimensions; not retroactive); `link_url` built-in; `locale` registered | Does an event reader take something they can reuse (alert, calendar, holiday check, hub), which one, from which family. Clicks per 100 sessions of strike/election landings; the old box's baseline was 0.4 per 100 (`related_content_click`, `link_context` = `next_step`) | New, 25 Nov 2026 |
+| `town_select` | The visitor picks a municipality or a year in a selector that had no event: the municipal election results (`MunicipalResults.tsx`, once per municipality, at the full name matched, not per keystroke) and the pickers of the widget builder (`EmbedBuilder.tsx`) and of the working-days embed box (`WorkingDaysEmbedPicker.tsx`). The server-rendered default and a `#town` hash link do not count. | `tool` = `municipal_results` \| `embed_builder_town` \| `embed_builder_year` \| `embed_working_days` (closed list `TOWN_SELECT_TOOLS`), `locale`. The town is never sent. | **register `tool`**; `locale` registered | Is the municipal search used at all (audit Annex B §C: "no hi ha cap esdeveniment propi"); do webmasters who open the widget builder choose a town, which one tool | New, 25 Nov 2026 |
+| `search_no_results` | The search results page (`SearchAnalytics.tsx`) rendered a query of 2+ characters and found 0 results and 0 direct pages. Sent next to `internal_search` (which carries `results_count` 0 and the term length). | `locale` only: no text, no length | `locale` registered | Searches that find nothing, as an event that can be marked or counted without a filter; read the text of the terms in `view_search_results` | New, 25 Nov 2026 |
 | `article_view`, `news_view`, `language_change`, `map_interaction`, `affiliate_click`, `newsletter_signup` | — | see `events.ts` | — | — | Declared, not wired |
 
 The five link events (`whatsapp_channel_click`, `outbound_official_source_click`,
@@ -148,6 +150,134 @@ in the 48-hour step below that "Link URL" shows the target paths on this event.
 
 Suggested key events (Admin → Events → Mark as key event), once a week of data
 shows the volumes: `calculator_use` and `whatsapp_channel_click`.
+
+### Parts that send nothing from our code, and how to count them (25 Nov 2026)
+
+The audit (Annex B §C, §10) found three products with no usage figure. For two
+of them the right answer is no new code, because adding a script would break
+a promise.
+
+**`/embed/*` widgets (holiday calendar, net salary, working days).** They
+carry no scripts and no tracking on purpose: they run inside other people's
+pages, and we add nothing to third-party pages. The only privacy-safe count
+is the server's own access log (Caddy, `ops/vps/Caddyfile`, JSON, 14 days, 40
+rolls: `/var/log/caddy/catalunyainfo.access.log*`; Cloudflare's analytics
+show the same requests by path and `Referer` host). Each time a visitor's
+browser loads a frame it asks for `/embed/<locale>/...` with the embedding
+page as `Referer`. Count **embedding sites**, not requests, and drop our own
+pages (the builder's preview, the "embed this" boxes). Run as a user who can
+read the log, aggregated, printing hosts only (the log holds IP addresses:
+never print or store them):
+
+```
+# distinct embedding sites and frame loads per host, last 14 days
+sudo sh -c 'zcat -f /var/log/caddy/catalunyainfo.access.log*' \
+ | jq -r 'select((.request.uri | startswith("/embed/")) and .status == 200)
+          | (.request.headers.Referer[0] // "(no referrer)")
+          | sub("^https?://"; "") | split("/")[0]' \
+ | grep -v -e '^www\.catalunyainfo\.com$' -e '^catalunyainfo\.com$' \
+ | sort | uniq -c | sort -rn | head -50
+```
+
+How to read it: each line is `frame loads  embedding host`. The number of
+lines is the number of embedding sites; `(no referrer)` is a browser or an
+embedder that strips it, not a site. Loads include crawlers and previews, so
+treat counts as an upper bound and the host list as the evidence. A host that
+appears on several days is a live embed; a host with one hit is a visit or a
+bot. Add `.request.uri` instead of the host (`| capture("^/embed/(?<w>[^/]+/[^/]+)")`)
+to split by widget. The same count by day for the trend: pipe
+`.ts | todate | .[0:10]` instead of the host. Rolled logs only reach back 14
+days, so keep the weekly result in `docs/OUTREACH_PLAN.md`'s tracker; the log
+cannot be read later.
+
+**`.ics` calendar files.** The subscribe click is measured
+(`ics_subscribe_click`, by method), but a real subscription is a calendar app
+fetching the file on a schedule, with no browser and no consent, so it can
+only be seen in the log. Path `/ics/<locale>/<town>.ics` (and
+`/ics/<locale>/2027/<community>/<file>`). Distinct subscribers are
+approximated by distinct user agents per file per day, never by IP:
+
+```
+sudo sh -c 'zcat -f /var/log/caddy/catalunyainfo.access.log*' \
+ | jq -r 'select((.request.uri | startswith("/ics/")) and .status == 200)
+          | [(.ts | todate | .[0:10]), .request.uri, (.request.headers["User-Agent"][0] // "")] | @tsv' \
+ | sort -u | cut -f1,2 | uniq -c | sort -rn | head -40
+```
+
+Calendar apps refetch the same URL daily, so a file seen on many consecutive
+days under one user agent is a subscription; a single day is a download.
+`webcal://` clicks arrive as normal `https` requests with these paths.
+
+### GA4 admin: custom dimensions to register, and how to read retention (25 Nov 2026)
+
+Registration is Admin → Data display → Custom definitions → Create custom
+dimension, **scope Event**, parameter name exactly as below. It is not
+retroactive: data sent before registering is never reportable by that
+dimension, so register before the first week of data you want.
+
+| Parameter | Events that send it | Suggested display name | Status |
+| --- | --- | --- | --- |
+| `block_position` | `next_step_click` | Posició del bloc | **register** |
+| `target_type` | `next_step_click` | Destí del bloc | **register** |
+| `step_family` | `next_step_click` | Família del bloc | **register** |
+| `tool` | `town_select` | Eina de selecció | **register** |
+| `calculator_id` | `calculator_use` | Calculadora | **register** (also in the table above) |
+| `link_context` | link events | (already registered) | done |
+| `results_count` | `internal_search` | (already registered) | done |
+| `locale` | all | (already registered) | done |
+
+`link_url`, `method`, `link_domain` are built-in (Link URL, Method, Link
+domain). `displayName` rejects an apostrophe. Mark `town_select`,
+`next_step_click` and `search_no_results` as key events only once a week of
+volume shows they are not noise.
+
+**How to read retention (hypothesis 2 of the audit: do readers of one family
+come back).** GA4 → Explore → blank → Technique **Cohort exploration**.
+
+1. Cohort inclusion: **First touch** (`first_session_date`'s event is
+   `first_visit`); return criteria: **Any event** (or `session_start`);
+   cohort granularity: **Weekly**; calculation: **Standard**; show
+   **Day 7 and Day 28** by choosing granularity Daily and reading the 7 and 28
+   columns (or Weekly, columns +1 and +4).
+2. Breakdown: **Landing page + query string** is a dimension on sessions, not
+   on users, so use the segment route: create one **segment** per family
+   (Segments → User segment → Add condition **Landing page** *matches regex*
+   the family regex below, event scope `first_visit`), and apply up to four at
+   a time in Segment comparisons. Name the segment with the family.
+3. Export the table as CSV after the cohort has had 28 days. The audit's
+   baseline question needs the cohorts of the weeks from 27 Oct; the audit
+   asked for the export on 23 Dec 2026.
+4. Reading: GA4 shows only users who accepted measurement (about half of
+   Google's clicks, ratio 0.51), so compare families with each other, never
+   with Search Console. Retention under about 30 users in a cohort cell is
+   noise.
+
+Family regexes (the audit's `families.py`, first match wins, applied to the
+lower-cased path without query or hash; in GA4 use *Landing page* "matches
+regex" with the family's pattern. GA4 matches the whole value, so wrap each as
+`.*(...).*`; to emulate "first match wins" exclude the earlier families in the
+same segment or compare only families that do not overlap, such as
+`vagues`, `eleccions` and `calculadores`):
+
+| Order | Family | Regex |
+| --- | --- | --- |
+| 1 | vagues | `(huelga\|vaga\|vague\|strike\|serveis-minims\|servicios-minimos)` |
+| 2 | eleccions | `(/eleccions\|/elecciones\|/elections\|elecci\|eleccio\|election\|vot-correu\|vot-per-correu\|voto-correo\|voto-por-correo\|postal-vote\|how-to-vote\|com-votar\|como-votar\|mesa-electoral\|polling\|sondeig\|encuesta\|polls\|candidat\|foreign-vote\|vot-estrangers\|voto-extranjeros\|resultats\|resultados\|results)` |
+| 3 | nadal-loteria | `(fires-de-nadal\|mercados-navidad\|christmas\|nadal\|navidad\|llums\|luces\|lights\|reis\|reyes\|three-kings\|cavalcada\|cabalgata\|loteria\|lottery\|grossa\|gordo\|nino\|marato\|gran-recapte)` |
+| 4 | calendari-escolar | `(calendari-escolar\|calendario-escolar\|school-calendar\|school-holidays\|vacances-escolars\|vacaciones-escolares\|lliure-disposicio\|libre-disposicion\|school-free)` |
+| 5 | festius-2027 | `(/2027/\|-2027\|2027-)` |
+| 6 | festius | `(/festius\|/festivos\|/holidays\|festiu\|festivo\|holiday\|pont-\|puente\|long-weekend\|bridge\|calendari-laboral\|calendario-laboral\|work-calendar\|setmana-santa\|semana-santa\|easter\|carnaval\|carnival\|carnestoltes)` |
+| 7 | calculadores | `(/calculadores/\|/calculadoras/\|/calculators/)` |
+| 8 | carburants-energia | `(benzineres\|gasolineras\|fuel-prices\|butano\|butane\|preu-llum\|precio-luz\|electricity-price\|bono-social\|pvpc)` |
+| 9 | mobilitat | `(rodalies\|zbe\|low-emission\|zona-blava\|zona-azul\|blue-zone\|metro\|renfe\|transport\|parking\|aparcament\|aparcamiento\|cruise\|creuers\|cruceros\|aeroport\|aeropuerto\|airport\|tren\|train)` |
+| 10 | escapades-oci | `(escapades\|escapadas\|nieve\|-neu\|snow\|day-trips\|cap-de-setmana\|fin-de-semana\|weekend\|destinacions\|destinos\|destinations\|natura\|naturaleza\|nature\|embassaments\|embalses\|reservoirs\|agenda\|events\|esqui\|ski\|montserrat\|portaventura\|tibidabo\|boqueria\|museu\|museo\|museum\|temps\|tiempo\|weather\|tradicions\|tradiciones\|traditions\|platja\|playa\|beach\|bolets\|setas\|mushroom\|tardor\|otono\|autumn)` |
+| 11 | tramits-diners | `(irpf\|renta\|beckham\|nie-\|-nie\|tie-\|-tie\|padro\|padron\|empadron\|tsi\|tarjeta-sanitaria\|sanitaria\|fallece\|defuncio\|death\|cobra\|pay-dates\|smi\|salari\|salario\|salary\|pensi\|paro\|atur\|unemployment\|iprem\|hisenda\|hacienda\|tax\|impost\|impuesto\|treball\|trabajo\|botigues\|tiendas\|shops\|comer)` |
+| 12 | institucional | `(/legal/\|quienes-somos\|qui-som\|about\|contacto\|contacte\|contact\|autores\|autors\|authors\|avisos\|metodologia\|methodology)` |
+
+Also: **portada** = path is exactly `/ca/`, `/es/`, `/en/` or `/`; **hubs** =
+`/<locale>/(guies|guias|guides)/` or at most two path segments; anything else
+is **sense-classificar**. The `\|` above is the table's escape: type a plain
+`|` in GA4.
 
 ### Search terms (owner decision)
 

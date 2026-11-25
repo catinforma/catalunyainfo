@@ -58,7 +58,19 @@ export type AnalyticsEvent =
   | { name: "whatsapp_channel_click"; params: { link_context: ChannelLinkContext; locale: string } }
   // The town/city "add to your calendar" block. `method` is GA4's own
   // dimension, the same one `share` fills.
-  | { name: "ics_subscribe_click"; params: { method: IcsMethod; locale: string } };
+  | { name: "ics_subscribe_click"; params: { method: IcsMethod; locale: string } }
+  // 25 Nov 2026: a visitor picked a municipality (or a year) in one of the
+  // selectors the audit found unmeasured. `tool` is a closed list (the town's
+  // name is never sent): is the municipal search used at all? One event per
+  // deliberate choice, never for the server-rendered default or a #hash link.
+  | { name: "town_select"; params: { tool: TownSelectTool; locale: string } }
+  // 25 Nov 2026: the results page found nothing for a query of 2+ characters.
+  // Count only: no query text, no length (internal_search carries the length).
+  | { name: "search_no_results"; params: { locale: string } };
+
+/** The selectors that report `town_select`. */
+export const TOWN_SELECT_TOOLS = ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days"] as const;
+export type TownSelectTool = (typeof TOWN_SELECT_TOOLS)[number];
 
 /** Where an official link sits: a page's source list, inside a calculator, or anywhere else in the content. */
 export type OfficialLinkContext = "sources" | "calculator" | "content";
@@ -166,6 +178,8 @@ export const ANALYTICS_EVENTS: AnalyticsEventName[] = [
   "calculator_use",
   "whatsapp_channel_click",
   "ics_subscribe_click",
+  "town_select",
+  "search_no_results",
 ];
 
 declare global {

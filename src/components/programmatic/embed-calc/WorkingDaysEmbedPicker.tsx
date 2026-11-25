@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 
+import { track } from "@/lib/analytics/events";
 import { CodeBox } from "@/components/programmatic/embed-2027/CodeBox";
 import { CALC_BOX_COPY } from "@/lib/programmatic/embed-calc/copy";
 import { WORKING_DAYS_HEIGHT, workingDaysEmbedPath, type CalcEmbedLocale } from "@/lib/programmatic/embed-calc/paths";
@@ -31,7 +32,11 @@ export function WorkingDaysEmbedPicker({ locale, data, origin }: { locale: CalcE
       <label htmlFor={`${id}-place`} className="block font-semibold">
         {t.place}
       </label>
-      <select id={`${id}-place`} className="ci-field mt-2 w-full max-w-md" value={value} aria-describedby={`${id}-help`} onChange={(e) => setValue(e.target.value)}>
+      <select id={`${id}-place`} className="ci-field mt-2 w-full max-w-md" value={value} aria-describedby={`${id}-help`} onChange={(e) => {
+          track({ name: "town_select", params: { tool: "embed_working_days", locale } });
+          setValue(e.target.value);
+        }}
+      >
         {data.groups.map((g) => (
           <optgroup key={g.label} label={g.label}>
             {g.items.map(([v, l]) => (

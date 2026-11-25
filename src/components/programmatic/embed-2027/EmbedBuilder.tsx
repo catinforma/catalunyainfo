@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 
+import { track } from "@/lib/analytics/events";
 import type { PickerGroup } from "@/lib/programmatic/embed-2027/places";
 import { CALENDAR_HEIGHT, iframeSnippet, linkSnippet } from "@/lib/programmatic/embed-2027/snippet";
 
@@ -54,7 +55,7 @@ function choicesOf(groups: PickerGroup[]): Map<string, Choice> {
   return out;
 }
 
-export function EmbedBuilder({ groups, initial, origin, labels }: { groups: PickerGroup[]; initial: string; origin: string; labels: BuilderLabels }) {
+export function EmbedBuilder({ groups, initial, origin, labels, locale }: { groups: PickerGroup[]; initial: string; origin: string; labels: BuilderLabels; locale: string }) {
   const id = useId();
   const choices = useMemo(() => choicesOf(groups), [groups]);
   const [value, setValue] = useState(initial);
@@ -82,6 +83,7 @@ export function EmbedBuilder({ groups, initial, origin, labels }: { groups: Pick
   const visible = year === 2026 ? groups.filter((g) => g.embedPrefix2026) : groups;
 
   function pick(next: string) {
+    track({ name: "town_select", params: { tool: "embed_builder_town", locale } });
     setValue(next);
     window.history.replaceState(null, "", `#${next}`);
   }
@@ -106,7 +108,11 @@ export function EmbedBuilder({ groups, initial, origin, labels }: { groups: Pick
       <label htmlFor={`${id}-year`} className="mt-4 block font-semibold">
         {labels.year}
       </label>
-      <select id={`${id}-year`} className="ci-field mt-2 w-full max-w-md" value={year} onChange={(e) => setYear(e.target.value === "2026" ? 2026 : 2027)}>
+      <select id={`${id}-year`} className="ci-field mt-2 w-full max-w-md" value={year} onChange={(e) => {
+          track({ name: "town_select", params: { tool: "embed_builder_year", locale } });
+          setYear(e.target.value === "2026" ? 2026 : 2027);
+        }}
+      >
         <option value="2027">2027</option>
         <option value="2026">{labels.year2026}</option>
       </select>
