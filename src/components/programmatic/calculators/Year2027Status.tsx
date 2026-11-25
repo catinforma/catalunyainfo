@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { year2027Notices, type Notice, type NoticeItem } from "@/lib/programmatic/calculators/year-2027";
 import type { CalcLocale, CalculatorId } from "@/lib/programmatic/calculators/paths";
 import { madridDay } from "@/lib/seo/article-dates";
@@ -18,6 +20,12 @@ function Items({ items }: { items: NoticeItem[] }) {
       {items.map((item) => (
         <li key={item.text}>
           {item.text}{" "}
+          {item.onward ? (
+            <>
+              <Link href={item.onward.url}>{item.onward.label}</Link>
+              {item.links.length ? " · " : null}
+            </>
+          ) : null}
           {item.links.map((link, i) => (
             <span key={link.url}>
               {i > 0 ? " · " : null}

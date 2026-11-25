@@ -195,6 +195,26 @@ test("watch-list: every pending 2027 figure is looked for again by its recheck d
   }
 });
 
+test("onward links: SMI facts, pending pensions and IPREM link to their calculator in the query's words, never to the page itself", () => {
+  type Id = Parameters<typeof year2027Notices>[0];
+  const onward = (id: Id, l: "es" | "ca" | "en") => {
+    const s = year2027Notices(id, l)!;
+    return [s.before, s.after].flatMap((n) => (n ? [...n.official, ...n.pending] : [])).flatMap((i) => (i.onward ? [i.onward] : []));
+  };
+  const labels = {
+    es: ["Salario mínimo (SMI) 2027", "Subida de las pensiones 2027", "IPREM 2026"],
+    ca: ["Salari mínim (SMI) 2027", "Pujada de les pensions 2027", "IPREM 2026"],
+    en: ["Spain minimum wage (SMI) 2027", "Spain pension increase 2027", "2026 IPREM"],
+  };
+  for (const l of CALC_LOCALES) {
+    const sub = onward("unemployment-subsidy", l).map((o) => o.label);
+    for (const w of labels[l]) assert.ok(sub.some((x) => x.startsWith(w)), `${l}: subsidy -> ${w}`);
+    assert.ok(onward("self-employed", l).some((o) => o.label === labels[l][0]), `${l}: self-employed -> SMI`);
+    assert.equal(onward("iprem", l).length, 0, "the IPREM page never links itself");
+    for (const o of onward("non-contributory-pension", l)) assert.match(o.url, /^\/(ca|es|en)\/[^/]+\/[^/]+\/$/);
+  }
+});
+
 test("RDL 38/2026 (IRPF deduction 2027) convalidation is re-read in the BOE before its 30 days run out", () => {
   assert.ok(
     today < RDL38_CONVALIDATION_RECHECK_BY,

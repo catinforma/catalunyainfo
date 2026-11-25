@@ -19,7 +19,7 @@ import {
 } from "@/lib/programmatic/widow-pension/rules";
 
 import { calculatorCard } from "./hub";
-import type { CalcLocale, CalculatorId } from "./paths";
+import { calcPath, type CalcLocale, type CalculatorId } from "./paths";
 
 /**
  * 2027 in every calculator of the registry (paths.ts): which 2027 figures are
@@ -507,6 +507,8 @@ export const CALC_2027: Record<CalculatorId, CalcYear> = {
 export interface NoticeItem {
   text: string;
   links: { label: string; url: string }[];
+  /** Internal link to the calculator the item is about (anchor in the query's words), never to the host page itself. */
+  onward?: { label: string; url: string };
   note?: string;
 }
 
@@ -561,15 +563,37 @@ const WORDS = {
   },
 } as const;
 
-function officialItem(f: OfficialFact, locale: CalcLocale): NoticeItem {
-  return { text: f.text[locale], links: f.sources.map((s) => ({ label: s.name, url: s.url })), note: f.caveat?.[locale] };
+const SMI_LABEL: Record<CalcLocale, string> = { es: "Salario mínimo (SMI) 2027", ca: "Salari mínim (SMI) 2027", en: "Spain minimum wage (SMI) 2027" };
+
+/**
+ * Which calculator each 2027 fact is about, with the words people search: the
+ * SMI facts link to the SMI 2027 page, the pending pension amounts to the
+ * pension increase page, the pending IPREM to the IPREM page.
+ */
+const ONWARD: Partial<Record<OfficialId | PendingId, { calc: CalculatorId; label: Record<CalcLocale, string> }>> = {
+  smi2027: { calc: "smi-2027", label: SMI_LABEL },
+  subsidyIncome2027: { calc: "smi-2027", label: SMI_LABEL },
+  widowSmi2027: { calc: "smi-2027", label: SMI_LABEL },
+  flatRateSmi2027: { calc: "smi-2027", label: SMI_LABEL },
+  pensions2027: { calc: "pensions-2027", label: { es: "Subida de las pensiones 2027", ca: "Pujada de les pensions 2027", en: "Spain pension increase 2027" } },
+  iprem2027: { calc: "iprem", label: { es: "IPREM 2026: cuantías", ca: "IPREM 2026: quanties", en: "2026 IPREM amounts" } },
+};
+
+function onwardFor(fact: OfficialId | PendingId, host: CalculatorId, locale: CalcLocale): NoticeItem["onward"] {
+  const o = ONWARD[fact];
+  return o && o.calc !== host ? { label: o.label[locale], url: calcPath(o.calc, locale) } : undefined;
 }
 
-function pendingItem(p: PendingFact, locale: CalcLocale): NoticeItem {
+function officialItem(f: OfficialFact, locale: CalcLocale, host: CalculatorId): NoticeItem {
+  return { text: f.text[locale], links: f.sources.map((s) => ({ label: s.name, url: s.url })), onward: onwardFor(f.id, host, locale), note: f.caveat?.[locale] };
+}
+
+function pendingItem(p: PendingFact, locale: CalcLocale, host: CalculatorId): NoticeItem {
   const last = p.last?.[locale];
   return {
     text: `${p.what[locale]}: ${p.instrument[locale]}.`,
     links: [{ label: WORDS[locale].source, url: p.watch }],
+    onward: onwardFor(p.id, host, locale),
     note: last ? `${last.charAt(0).toUpperCase()}${last.slice(1)}.` : undefined,
   };
 }
@@ -579,8 +603,8 @@ export function year2027Notices(id: CalculatorId, locale: CalcLocale): NoticeSta
   const c = CALC_2027[id];
   if (c.kind === "self") return null;
   const w = WORDS[locale];
-  const official = c.official.map((k) => officialItem(OFFICIAL[k], locale));
-  const pending = c.pending.map((k) => pendingItem(PENDING[k], locale));
+  const official = c.official.map((k) => officialItem(OFFICIAL[k], locale, id));
+  const pending = c.pending.map((k) => pendingItem(PENDING[k], locale, id));
 
   if (c.kind === "yearly") {
     const until = c.until!;
