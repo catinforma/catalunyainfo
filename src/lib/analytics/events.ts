@@ -66,7 +66,22 @@ export type AnalyticsEvent =
   | { name: "town_select"; params: { tool: TownSelectTool; locale: string } }
   // 25 Nov 2026: the results page found nothing for a query of 2+ characters.
   // Count only: no query text, no length (internal_search carries the length).
-  | { name: "search_no_results"; params: { locale: string } };
+  | { name: "search_no_results"; params: { locale: string } }
+  // 25 Nov 2026: a tap on one of the "Go to your community" links above the
+  // Spain school calendar's Christmas table (a same-page anchor, no script of
+  // its own). `region` is the community's slug from a closed list; the
+  // question it answers: do families use the list, and which communities?
+  | { name: "school_region_jump"; params: { region: SchoolJumpRegion; locale: string } };
+
+/** `data-ci-placement` of the school calendar's "go to your community" list, and the prefix of its row ids (school-spain/body.ts CCAA_ROW_PREFIX). */
+export const SCHOOL_JUMP_PLACEMENT = "school_jump";
+export const SCHOOL_ROW_PREFIX = "ccaa-";
+/** The community slugs of the Christmas table (a test keeps this list in step with school-spain/regions.ts). */
+export const SCHOOL_JUMP_REGIONS = [
+  "andalucia", "aragon", "asturias", "baleares", "pais-vasco", "canarias", "cantabria", "castilla-y-leon", "castilla-la-mancha", "cataluna",
+  "ceuta", "extremadura", "galicia", "la-rioja", "madrid", "melilla", "murcia", "navarra", "comunidad-valenciana",
+] as const;
+export type SchoolJumpRegion = (typeof SCHOOL_JUMP_REGIONS)[number];
 
 /** The selectors that report `town_select`. */
 export const TOWN_SELECT_TOOLS = ["municipal_results", "embed_builder_town", "embed_builder_year", "embed_working_days", "market_square"] as const;
@@ -180,6 +195,7 @@ export const ANALYTICS_EVENTS: AnalyticsEventName[] = [
   "ics_subscribe_click",
   "town_select",
   "search_no_results",
+  "school_region_jump",
 ];
 
 declare global {

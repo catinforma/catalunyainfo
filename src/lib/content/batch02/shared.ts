@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { HUB_PATHS } from "@/lib/content/school-spain/regions";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 
 /**
@@ -1078,6 +1079,20 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Beckham law Spain: who qualifies, 24% tax and how to apply",
   },
 };
+
+/**
+ * 25 Nov 2026: the strike guides that are about schools link the Spain school
+ * calendar, where a family finds its community's Christmas dates and return day
+ * in two taps (the "Go to your community" list). Hub path from school-spain/regions.ts.
+ */
+export function schoolSpainHubLink(locale: Locale): string {
+  const label: Record<Locale, string> = {
+    ca: "Calendari escolar a Espanya per comunitats: vacances de Nadal i tornada a classe",
+    es: "Calendario escolar en España por comunidades: vacaciones de Navidad y vuelta a clase",
+    en: "Spain school calendar by region: Christmas holidays and back-to-school dates",
+  };
+  return `[${label[locale]}](/${locale}/${HUB_PATHS[locale]}/)`;
+}
 
 export const RELATED_HEADING: Record<Locale, string> = {
   ca: "Continua llegint",

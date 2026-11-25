@@ -76,6 +76,14 @@ export const tableBlock = z.object({
    * Spain shops guide's Catalonia cells); every other table keeps its in-text links.
    */
   tapLinks: z.boolean().optional(),
+  /**
+   * An `id` for each row (same length as `rows`), so a link can jump to it. With
+   * `jumpLabel`, the renderer prints a server-rendered list of links above the
+   * table, one per row and sorted by name ("Go to your community"), no script
+   * needed. Only the Spain school calendar's Christmas table uses it.
+   */
+  rowIds: z.array(z.string().regex(/^[a-z0-9-]{1,80}$/)).max(300).optional(),
+  jumpLabel: z.string().max(80).optional(),
 });
 
 /**

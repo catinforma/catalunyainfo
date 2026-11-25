@@ -27,6 +27,7 @@ import { TRAINS } from "../src/lib/content/features/trains.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
+import { HUB_PATHS } from "../src/lib/content/school-spain/regions.ts";
 import { schoolStatusOn } from "../src/lib/content/school/calendar.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { hubPath as rodaliesHubPath, linePath } from "../src/lib/programmatic/rodalies/paths.ts";
@@ -76,6 +77,8 @@ const PUBLISHED = new Set([
   ...ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   // The Rodalies hub (ca, es, en) and its line pages (ca, es) are code routes.
   ...LOCALES.map((locale) => rodaliesHubPath(locale)),
+  // 25 Nov 2026: the education guide links the Spain school calendar (a guide published by school-spain/publish.ts).
+  ...LOCALES.map((locale) => `/${locale}/${HUB_PATHS[locale]}/`),
   ...LINE_IDS.flatMap((id) => [linePath("ca", id), linePath("es", id)]),
 ]);
 

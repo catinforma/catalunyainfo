@@ -7,6 +7,8 @@
 export function safeHref(raw: string): string | null {
   const value = raw.trim();
   if (value.startsWith("/")) return value;
+  // A jump to an id on the same page (the school calendar's "go to your community" list): letters, digits and hyphens only.
+  if (/^#[a-z0-9-]{1,80}$/.test(value)) return value;
   if (value.startsWith("mailto:")) return value;
   try {
     const url = new URL(value);

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { classifyLinkClick, classifyReturnStepClick } from "@/lib/analytics/clicks";
+import { classifyLinkClick, classifyReturnStepClick, classifySchoolJumpClick } from "@/lib/analytics/clicks";
 import { track } from "@/lib/analytics/events";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -43,6 +43,9 @@ export function AnalyticsClicks({ locale, channelUrl }: { locale: Locale; channe
         target: link.getAttribute("data-ci-target"),
       });
       if (step) track(step);
+      // The school calendar's "go to your community" list.
+      const jump = classifySchoolJumpClick({ href: link.href, locale, placement: box?.getAttribute("data-ci-placement") });
+      if (jump) track(jump);
     };
     // Capture phase: a component that stops propagation still gets counted.
     document.addEventListener("click", onClick, true);

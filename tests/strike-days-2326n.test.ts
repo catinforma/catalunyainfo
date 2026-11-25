@@ -1,3 +1,4 @@
+import { HUB_PATHS } from "../src/lib/content/school-spain/regions.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -212,6 +213,8 @@ test("the 23rd: called off, said from SEMAF's notice; the 26th's school order pe
 
 test("links: external ones are named https non-press sources; internal ones are registered paths in the page's language", () => {
   const registered = new Set(Object.values(B2_PATHS).flatMap((paths) => LOCALES.map((l) => `/${l}/${paths[l]}/`)));
+  // 25 Nov 2026: the 26th links the Spain school calendar.
+  for (const l of LOCALES) registered.add(`/${l}/${HUB_PATHS[l]}/`);
   for (const key of KEYS) {
     const urls = strikeDay2326Sources(key).map((s) => s.url);
     assert.deepEqual(GUIDES[key].sources.map((s) => s.url), urls);

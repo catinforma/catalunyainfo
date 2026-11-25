@@ -4,7 +4,7 @@ import { addDays } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate } from "./festive";
-import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
+import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, schoolSpainHubLink, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { DAY_URLS, MADRID_SOURCES, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
 import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKE_GUIDE_SPECS } from "./strike-guides";
@@ -810,7 +810,7 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
     ),
     faq(faqItems),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
-    ...b2Related(key === "strike23n" ? ["strikesSpain", "strikeRenfe", "strikes"] : ["strikesSpain", "strikeEducation", "strikes"], locale),
+    ...b2Related(key === "strike23n" ? ["strikesSpain", "strikeRenfe", "strikes"] : ["strikesSpain", "strikeEducation", "strikes"], locale, key === "strike23n" ? [] : [schoolSpainHubLink(locale)]),
   ];
 }
 

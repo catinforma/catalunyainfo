@@ -22,6 +22,7 @@ import {
   lead,
   list,
   paras,
+  schoolSpainHubLink,
   table,
   verifiedLine,
   type B2Article,
@@ -1363,7 +1364,7 @@ export function buildStrikeGuideBody(
 
   blocks.push(faq(s.faq(c).map((item) => ({ question: item.question, answer: strip(item.answer) }))));
   blocks.push(...paras(verifiedLine(locale, STRIKES_VERIFIED)));
-  blocks.push(...b2Related(spec.related, locale));
+  blocks.push(...b2Related(spec.related, locale, spec.key === "strikeEducation" ? [schoolSpainHubLink(locale)] : []));
   return blocks;
 }
 

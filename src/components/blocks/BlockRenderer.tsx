@@ -190,6 +190,8 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "table":
       return (
+        <>
+        {block.jumpLabel && block.rowIds ? <TableJumpList label={block.jumpLabel} rows={block.rows} ids={block.rowIds} /> : null}
         <div className="ci-table-wrap">
           {/*
             Explicit ARIA roles are set even though this is a real <table>.
@@ -212,7 +214,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
             </thead>
             <tbody>
               {block.rows.map((row, i) => (
-                <tr key={i} role="row">
+                <tr key={i} role="row" id={block.rowIds?.[i]}>
                   {row.map((cell, j) =>
                     j === 0 ? (
                       <th
@@ -240,6 +242,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
             </p>
           ) : null}
         </div>
+        </>
       );
 
     case "keyFacts":
@@ -519,6 +522,31 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
  * for it, so a third-party frame never touches the critical path or LCP. Until
  * then the coordinates themselves are shown, which is the useful part anyway.
  */
+/**
+ * "Go to your community": one link per row of a table that has `rowIds`, in name
+ * order, straight to the row (a same-page anchor, no script). Server-rendered;
+ * the delegated click listener (AnalyticsClicks) reports `school_region_jump`
+ * from `data-ci-placement` and the `#ccaa-` id.
+ */
+function TableJumpList({ label, rows, ids }: { label: string; rows: string[][]; ids: string[] }) {
+  const items = rows
+    .map((row, i) => ({ id: ids[i], name: (row[0] ?? "").replace(/^\[([^\]]+)\]\([^)]*\)$/, "$1") }))
+    .filter((item): item is { id: string; name: string } => Boolean(item.id && item.name))
+    .sort((a, b) => a.name.localeCompare(b.name, "es"));
+  return (
+    <nav className="ci-jump" aria-label={label} data-ci-placement="school_jump">
+      <p className="ci-jump-title">{label}</p>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>
+            <a href={`#${item.id}`}>{item.name}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 function MapBlock({
   block,
   locale,

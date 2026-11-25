@@ -4,6 +4,9 @@ import {
   RETURN_POSITIONS,
   RETURN_STEP_PLACEMENT,
   RETURN_TARGETS,
+  SCHOOL_JUMP_PLACEMENT,
+  SCHOOL_JUMP_REGIONS,
+  SCHOOL_ROW_PREFIX,
   safePath,
   type AnalyticsEvent,
   type ChannelLinkContext,
@@ -134,6 +137,25 @@ export function classifyReturnStepClick(click: ReturnStepClick): AnalyticsEvent 
     name: "next_step_click",
     params: { block_position, target_type, step_family, ...(own ? { link_url: safePath(url.pathname) } : {}), locale: click.locale },
   };
+}
+
+/**
+ * A tap on the school calendar's "go to your community" list: `school_region_jump`
+ * with the community slug, only when the link sits in that list and its hash is
+ * `#ccaa-<slug>` of a community on the closed list.
+ */
+export function classifySchoolJumpClick(click: { href: string; locale: string; placement?: string | null }): AnalyticsEvent | null {
+  if (click.placement !== SCHOOL_JUMP_PLACEMENT) return null;
+  let url: URL;
+  try {
+    url = new URL(click.href);
+  } catch {
+    return null;
+  }
+  if (!url.hash.startsWith(`#${SCHOOL_ROW_PREFIX}`)) return null;
+  const slug = url.hash.slice(SCHOOL_ROW_PREFIX.length + 1);
+  const region = SCHOOL_JUMP_REGIONS.find((r) => r === slug);
+  return region ? { name: "school_region_jump", params: { region, locale: click.locale } } : null;
 }
 
 /** The event a click on this link sends, or null when the link is not measured. */

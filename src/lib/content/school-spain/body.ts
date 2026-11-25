@@ -1174,6 +1174,9 @@ export function christmasWhenSentence(regions: RegionCalendar[]): string {
   );
 }
 
+/** The id of a community's row in the Christmas table (`#ccaa-andalucia`); the analytics listener reads the same prefix. */
+export const CCAA_ROW_PREFIX = "ccaa-";
+
 function christmasQuickBlocks(regions: RegionCalendar[], L: Locale): Block[] {
   const lastDay = (r: RegionCalendar) => breakDaysAll(r, "christmas").map((x) => x.days.last).sort()[0]!;
   const rows = [...regions].sort((a, b) => lastDay(a).localeCompare(lastDay(b)) || a.short.localeCompare(b.short, L));
@@ -1214,6 +1217,10 @@ function christmasQuickBlocks(regions: RegionCalendar[], L: Locale): Block[] {
         `Infant and Primary, following each region's order or resolution; the table further down also gives the first day off and the official text.${pendingNote}`,
       ),
       stickyColumn: 0,
+      // 25 Nov 2026: 19 stacked cards on a phone (about three per screen, sorted by date, not by name): a family
+      // looked for its community by scrolling. The list above the table jumps to the row; ids are the region slugs.
+      rowIds: [...rows.map((r) => `${CCAA_ROW_PREFIX}${r.slug}`), ...pendingRegions(L).map((p) => `${CCAA_ROW_PREFIX}${p.slug}`)],
+      jumpLabel: t(L, "Ve a tu comunidad", "Ves a la teva comunitat", "Go to your region"),
     },
   ];
 }
