@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { reservoirsSentence } from "@/lib/content/audit-links";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 
+import { SUN_COPY, SUN_SOURCES, SUN_VERIFIED, daylightText, monthExtras, sunMonth, sunRows } from "./climate-months";
 import {
   b2Related,
   b2link,
@@ -59,6 +60,7 @@ const SOURCES: B2Source[] = [
   { name: "Climatologies comarcals (1991-2020 en elaboració)", url: "https://www.meteo.cat/wpweb/climatologia/el-clima/climatologies-comarcals/", publisher: "Servei Meteorològic de Catalunya" },
   { name: "Atles climàtic de Catalunya 1991-2020", url: "https://www.meteo.cat/wpweb/climatologia/el-clima/atles-climatic/", publisher: "Servei Meteorològic de Catalunya" },
   { name: "Butlletí climàtic de l'estiu del 2026", url: "https://www.meteo.cat/wpweb/climatologia/butlletins-i-episodis-meteorologics/butlleti-estacional/", publisher: "Servei Meteorològic de Catalunya" },
+  ...SUN_SOURCES,
   { name: "Start of winter 2026-2027", url: "https://astronomia.ign.es/en/inicio-estaciones/invierno", publisher: "Instituto Geográfico Nacional — Observatorio Astronómico Nacional" },
 ];
 
@@ -453,6 +455,53 @@ const COPY: Record<Locale, T> = {
   },
 };
 
+/** One month's figures for the pack line, from the same tables as the month text. */
+function monthFigures(i: number) {
+  const [, high, low, rain, rainDays] = NORMALS[i]!;
+  return { high, low, rain, rainDays, cityLow: RAVAL[i]![1] };
+}
+
+/**
+ * FAQs added 25 Nov 2026 for the month queries the page did not answer in a
+ * sentence (May, July, September) and for daylight (IGN table); every number
+ * is read from the tables above or from climate-months.ts.
+ */
+function extraFaq(locale: Locale): { question: string; answer: string }[] {
+  const f = (v: number) => fmt(locale, v);
+  const temp = (v: number) => (locale === "en" ? `${f(v)} °C (${toF(v)} °F)` : `${f(v)} °C`);
+  const m = (i: number) => {
+    const [, high, low, rain, days, sun] = NORMALS[i]!;
+    return { high, low, rain, days, sun };
+  };
+  const may = m(4);
+  const jul = m(6);
+  const sep = m(8);
+  const dec = sunMonth(11);
+  const jun = sunMonth(5);
+  if (locale === "en") {
+    return [
+      { question: "What is the weather like in Barcelona in May?", answer: `Average highs of ${temp(may.high)} and lows of ${temp(may.low)} at the airport, with ${may.rain} mm of rain over about ${f(may.days)} days and ${may.sun} hours of sunshine (AEMET, 1981-2010).` },
+      { question: "What is the weather like in Barcelona in July?", answer: `Average highs of ${temp(jul.high)} and lows of ${temp(jul.low)} at the airport. It is the driest month, with ${jul.rain} mm of rain, and the sunniest, with ${jul.sun} hours (AEMET, 1981-2010).` },
+      { question: "What is the weather like in Barcelona in September?", answer: `Average highs of ${temp(sep.high)} and lows of ${temp(sep.low)} at the airport, with ${sep.rain} mm of rain over about ${f(sep.days)} days, the second-wettest month (AEMET, 1981-2010). AEMET gives no sunshine figure for September.` },
+      { question: "How many hours of daylight does Barcelona get in winter and summer?", answer: `On 15 December 2027 the sun rises at ${dec.sunrise} and sets at ${dec.sunset}: ${daylightText(11)} of daylight. On 15 June it rises at ${jun.sunrise} and sets at ${jun.sunset}: ${daylightText(5)} (official time, Instituto Geográfico Nacional).` },
+    ];
+  }
+  if (locale === "es") {
+    return [
+      { question: "¿Qué tiempo hace en Barcelona en mayo?", answer: `Máximas medias de ${temp(may.high)} y mínimas de ${temp(may.low)} en el aeropuerto, con ${may.rain} mm de lluvia en unos ${f(may.days)} días y ${may.sun} horas de sol (AEMET, 1981-2010).` },
+      { question: "¿Qué tiempo hace en Barcelona en julio?", answer: `Máximas medias de ${temp(jul.high)} y mínimas de ${temp(jul.low)} en el aeropuerto. Es el mes más seco, con ${jul.rain} mm de lluvia, y el más soleado, con ${jul.sun} horas (AEMET, 1981-2010).` },
+      { question: "¿Qué tiempo hace en Barcelona en septiembre?", answer: `Máximas medias de ${temp(sep.high)} y mínimas de ${temp(sep.low)} en el aeropuerto, con ${sep.rain} mm de lluvia en unos ${f(sep.days)} días, el segundo mes más lluvioso (AEMET, 1981-2010). La AEMET no da horas de sol para septiembre.` },
+      { question: "¿Cuántas horas de luz hay en Barcelona en invierno y en verano?", answer: `El 15 de diciembre de 2027 el sol sale a las ${dec.sunrise} y se pone a las ${dec.sunset}: ${daylightText(11)} de luz. El 15 de junio sale a las ${jun.sunrise} y se pone a las ${jun.sunset}: ${daylightText(5)} (hora oficial, Instituto Geográfico Nacional).` },
+    ];
+  }
+  return [
+    { question: "Quin temps fa a Barcelona al maig?", answer: `Màximes mitjanes de ${temp(may.high)} i mínimes de ${temp(may.low)} a l'aeroport, amb ${may.rain} mm de pluja en uns ${f(may.days)} dies i ${may.sun} hores de sol (AEMET, 1981-2010).` },
+    { question: "Quin temps fa a Barcelona al juliol?", answer: `Màximes mitjanes de ${temp(jul.high)} i mínimes de ${temp(jul.low)} a l'aeroport. És el mes més sec, amb ${jul.rain} mm de pluja, i el més assolellat, amb ${jul.sun} hores (AEMET, 1981-2010).` },
+    { question: "Quin temps fa a Barcelona al setembre?", answer: `Màximes mitjanes de ${temp(sep.high)} i mínimes de ${temp(sep.low)} a l'aeroport, amb ${sep.rain} mm de pluja en uns ${f(sep.days)} dies, el segon mes més plujós (AEMET, 1981-2010). L'AEMET no dona hores de sol per al setembre.` },
+    { question: "Quantes hores de llum hi ha a Barcelona a l'hivern i a l'estiu?", answer: `El 15 de desembre del 2027 el sol surt a les ${dec.sunrise} i es pon a les ${dec.sunset}: ${daylightText(11)} de llum. El 15 de juny surt a les ${jun.sunrise} i es pon a les ${jun.sunset}: ${daylightText(5)} (hora oficial, Instituto Geográfico Nacional).` },
+  ];
+}
+
 function body(locale: Locale) {
   const t = COPY[locale];
   const f = (v: number) => fmt(locale, v);
@@ -487,14 +536,20 @@ function body(locale: Locale) {
     table(t.tableCaption, t.tableHeaders, rows, t.tableNote),
     ...h2(t.cityTitle, ...t.city),
     table(t.cityCaption, t.cityHeaders, cityRows, t.cityNote),
+    ...h2(SUN_COPY[locale].title, SUN_COPY[locale].intro),
+    table(SUN_COPY[locale].caption, SUN_COPY[locale].headers, sunRows(MONTHS[locale]), `${SUN_COPY[locale].note} ${verifiedLine(locale, SUN_VERIFIED)}`),
     ...h2(t.monthsTitle, t.monthsIntro),
-    ...MONTHS[locale].flatMap((_, i) => [monthQueryHeading(locale, i), ...paras(monthText(locale, i)), ...(i === 11 ? paras(DECEMBER_LINK[locale]) : [])]),
+    ...MONTHS[locale].flatMap((_, i) => [
+      monthQueryHeading(locale, i),
+      ...paras(monthText(locale, i), ...monthExtras(locale, i, monthFigures(i))),
+      ...(i === 11 ? paras(DECEMBER_LINK[locale]) : []),
+    ]),
     ...h2(t.seasonsTitle),
     list(...t.seasons),
     ...h2(t.recordsTitle, ...t.records),
     ...h2(t.seaTitle, t.sea),
     ...paras(reservoirsSentence(locale)),
-    faq(t.faq),
+    faq([...t.faq, ...extraFaq(locale)]),
     ...b2Related(["barcelonaHub", "beaches", "museums", "snow"], locale),
   ];
 }

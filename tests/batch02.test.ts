@@ -972,7 +972,7 @@ test("climate: 1981-2010 table with the year row, city-centre table, a section p
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = CLIMATE.editions[locale].blocks as { type: string; level?: number; text?: string; caption?: string; rows?: string[][] }[];
     const tables = blocks.filter((b) => b.type === "table");
-    assert.equal(tables.length, 2, `${locale}: airport and city-centre tables`);
+    assert.equal(tables.length, 3, `${locale}: airport, city-centre and sunrise tables`);
     assert.match(tables[0]?.caption ?? "", /1981-2010/, `${locale}: AEMET period`);
     assert.match(tables[1]?.caption ?? "", /2010-2025/, `${locale}: Meteocat period`);
     assert.equal(tables[0]?.rows?.length, 13, `${locale}: 12 months and the year`);
