@@ -63,6 +63,11 @@ test("the page prints every FAQ question, and the layout emits FAQPage from the 
   }
 });
 
-test("review fix: no unsourced claim that each payment covers the previous month", () => {
-  for (const locale of CALC_LOCALES) assert.doesNotMatch(exampleCopy(locale).faq[3]!.a, /mes anterior|previous month|mes d'abans/);
+test("payment FAQ: paid in the month following the accrual, citing RD 625/1985 art. 26.1 (BOE, read 25 Nov 2026)", () => {
+  const re = { ca: /dins del mes immediat següent[^()]*\(Reial decret 625\/1985, art\. 26\.1\)/, es: /dentro del mes inmediato siguiente[^()]*\(Real Decreto 625\/1985, art\. 26\.1\)/, en: /within the month immediately following[^()]*\(Royal Decree 625\/1985, art\. 26\.1\)/ };
+  for (const locale of CALC_LOCALES) {
+    const a = exampleCopy(locale).faq[3]!.a;
+    assert.match(a, re[locale]);
+    assert.match(a, /10/);
+  }
 });

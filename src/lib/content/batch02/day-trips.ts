@@ -1,4 +1,5 @@
 import { link } from "@/lib/content/features/shared";
+import { townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import {
   b2Related,
@@ -420,6 +421,7 @@ const GIRONA_BASE: B2Article = {
           "There is no need to try to see everything. A well-planned day concentrates on the historic city: cross the Onyar, walk into the Barri Vell, and climb gradually towards the Cathedral.",
           "The Arab Baths and Sant Pere de Galligants sit in the northern part of the old town, so they follow the Cathedral naturally.",
           "If you have time and the weather holds, the walk along the city walls is the best way to finish before dropping back down to the Rambla de la Llibertat and the station.",
+          `Going in December? Girona also has a Christmas market in Plaça de la Independència: the dates and the place are on our [Girona Christmas market page](${fairsTownPath("en", "girona")}).`,
         ),
         ...h2(
           "Sights: hours and prices",

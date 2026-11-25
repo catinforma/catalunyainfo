@@ -13706,3 +13706,11 @@ The FAQ blocks added on 24-25 Nov (fairs, strikes, weekend, money pages) are not
 **Go-live.** Deploy, then publish group `llums-nadal` (the lights page is a published article); group `llums-nadal-links` too for the count "27 municipis" in the Christmas in Barcelona hub and the Christmas markets hub. Tests: `christmas-lights` and `christmas-lights-2026` (30), plus 305 in 16 files that import the family; `tsc --noEmit` clean; `seo:body-dates` run.
 
 **Outcome:** _pending_
+
+## 2026-11-25 - Three small fixes: unemployment payment month, weekend held-read wording, EN Girona Christmas link (ci-edicio)
+
+**URLs.** Unemployment calculator (ca `/ca/calculadores/atur/`, es `/es/calculadoras/paro/`, en `/en/calculators/unemployment-benefit-spain/`): FAQ "when is unemployment paid" re-adds that the benefit is paid in the month following the accrual, «El abono de la prestación o subsidio por desempleo se realizará por mensualidades de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo» (RD 625/1985 art. 26.1, boe.es/eli/es/rd/1985/04/02/625/con, re-read 25 Nov 2026); test now requires the citation (the old test forbade the unsourced "previous month" claim). Weekend hub and zone pages (ca/es/en): the "where does this come from" FAQ answer no longer says the page refreshes the agenda every hour when the shown read is the kept one; it says the source does not answer, the page keeps that read of this same weekend and retries hourly. `/en/day-trips/girona-from-barcelona-by-train/`: one body link to `/en/christmas-markets/girona/` (200, indexable, dated fair 27 Nov 2026 - 5 Jan 2027) in a "Going in December?" sentence. No title, meta, H1 or lead changed.
+
+**Baseline.** None measured for the first two (factual wording). Girona EN guide: 18 AI sessions in 28 d; English Girona market page 14 impressions in week 47 (entry above).
+
+**Review.** 2026-12-23: `snapshot.py page girona-from-barcelona-by-train 28` and `page christmas-markets/girona 28` (impressions and clicks of the EN market page vs 14 a week); BOE art. 26.1 is stable, re-read only if RD 625/1985 is amended.

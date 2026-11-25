@@ -79,7 +79,7 @@ interface Copy {
     activities: (c: { all: number; free: number; family: number; music: number; exhibitions: number }, dates: string, stamp: string) => string;
     fairs: (n: number, list: string, christmas: number, fairsRead: string) => string;
     fairsNone: (christmas: number, fairsRead: string) => string;
-    sources: (sources: string, agendaRead: string | null, fairsRead: string) => string;
+    sources: (sources: string, agendaRead: string | null, fairsRead: string, held: boolean) => string;
   };
 }
 
@@ -117,8 +117,8 @@ const COPY: Record<Locale, Copy> = {
         `Sí: el calendari oficial de fires de la Generalitat (llegit el ${fairsRead}) n'hi té ${n}${list ? `: ${list}` : ""}.${christmas > 0 ? ` A més, hi ha fires de Nadal obertes a ${christmas} ${christmas === 1 ? "municipi" : "municipis"}.` : ""}`,
       fairsNone: (christmas, fairsRead) =>
         `El calendari oficial de fires de la Generalitat (llegit el ${fairsRead}) no en té cap per a aquestes dates.${christmas > 0 ? ` Sí que hi ha fires de Nadal obertes a ${christmas} ${christmas === 1 ? "municipi" : "municipis"}, llistades en aquesta pàgina.` : ""}`,
-      sources: (sources, agendaRead, fairsRead) =>
-        `Activitats: ${sources}. Fires: calendari de fires de la Generalitat (Departament d'Empresa i Treball), llegit el ${fairsRead}. ${agendaRead ? `L'agenda es va llegir el ${agendaRead} i la pàgina l'actualitza cada hora` : "Ara no hem pogut llegir l'agenda oficial d'aquest cap de setmana"}; mai no mostrem la d'un altre cap de setmana. Els noms, els horaris i els preus són els de l'organisme que els publica.`,
+      sources: (sources, agendaRead, fairsRead, held) =>
+        `Activitats: ${sources}. Fires: calendari de fires de la Generalitat (Departament d'Empresa i Treball), llegit el ${fairsRead}. ${agendaRead ? (held ? `La darrera lectura de l'agenda és del ${agendaRead}: la font no respon ara i la pàgina en manté aquesta lectura, d'aquest mateix cap de setmana, mentre torna a provar-ho cada hora` : `L'agenda es va llegir el ${agendaRead} i la pàgina l'actualitza cada hora`) : "Ara no hem pogut llegir l'agenda oficial d'aquest cap de setmana"}; mai no mostrem la d'un altre cap de setmana. Els noms, els horaris i els preus són els de l'organisme que els publica.`,
     },
   },
   es: {
@@ -152,8 +152,8 @@ const COPY: Record<Locale, Copy> = {
         `Sí: el calendario oficial de ferias de la Generalitat (leído el ${fairsRead}) tiene ${n}${list ? `: ${list}` : ""}.${christmas > 0 ? ` Además, hay mercados de Navidad abiertos en ${christmas} ${christmas === 1 ? "municipio" : "municipios"}.` : ""}`,
       fairsNone: (christmas, fairsRead) =>
         `El calendario oficial de ferias de la Generalitat (leído el ${fairsRead}) no tiene ninguna para estas fechas.${christmas > 0 ? ` Sí hay mercados de Navidad abiertos en ${christmas} ${christmas === 1 ? "municipio" : "municipios"}, listados en esta página.` : ""}`,
-      sources: (sources, agendaRead, fairsRead) =>
-        `Actividades: ${sources}. Ferias: calendario de ferias de la Generalitat (Departament d'Empresa i Treball), leído el ${fairsRead}. ${agendaRead ? `La agenda se leyó el ${agendaRead} y la página la actualiza cada hora` : "Ahora no hemos podido leer la agenda oficial de este fin de semana"}; nunca mostramos la de otro fin de semana. Los nombres, los horarios y los precios son los del organismo que los publica.`,
+      sources: (sources, agendaRead, fairsRead, held) =>
+        `Actividades: ${sources}. Ferias: calendario de ferias de la Generalitat (Departament d'Empresa i Treball), leído el ${fairsRead}. ${agendaRead ? (held ? `La última lectura de la agenda es del ${agendaRead}: la fuente no responde ahora y la página mantiene esa lectura, de este mismo fin de semana, mientras vuelve a intentarlo cada hora` : `La agenda se leyó el ${agendaRead} y la página la actualiza cada hora`) : "Ahora no hemos podido leer la agenda oficial de este fin de semana"}; nunca mostramos la de otro fin de semana. Los nombres, los horarios y los precios son los del organismo que los publica.`,
     },
   },
   en: {
@@ -187,8 +187,8 @@ const COPY: Record<Locale, Copy> = {
         `Yes: the Generalitat's official fairs calendar (read on ${fairsRead}) has ${n}${list ? `: ${list}` : ""}.${christmas > 0 ? ` Christmas markets are also open in ${christmas} ${christmas === 1 ? "municipality" : "municipalities"}.` : ""}`,
       fairsNone: (christmas, fairsRead) =>
         `The Generalitat's official fairs calendar (read on ${fairsRead}) has none for these dates.${christmas > 0 ? ` Christmas markets are open in ${christmas} ${christmas === 1 ? "municipality" : "municipalities"}, listed on this page.` : ""}`,
-      sources: (sources, agendaRead, fairsRead) =>
-        `Activities: ${sources}. Fairs: the Generalitat's fairs calendar (Departament d'Empresa i Treball), read on ${fairsRead}. ${agendaRead ? `The agenda was read on ${agendaRead} and the page refreshes it every hour` : "We cannot read the official agenda for this weekend right now"}; we never show another weekend's. Names, times and prices are the publisher's own.`,
+      sources: (sources, agendaRead, fairsRead, held) =>
+        `Activities: ${sources}. Fairs: the Generalitat's fairs calendar (Departament d'Empresa i Treball), read on ${fairsRead}. ${agendaRead ? (held ? `The latest read of the agenda is from ${agendaRead}: the source is not answering now, so the page keeps that read, from this same weekend, and tries again every hour` : `The agenda was read on ${agendaRead} and the page refreshes it every hour`) : "We cannot read the official agenda for this weekend right now"}; we never show another weekend's. Names, times and prices are the publisher's own.`,
     },
   },
 };
@@ -258,7 +258,7 @@ export function weekendFacts(input: FactsInput): WeekendFacts {
     question: c.q.fairs(input.where, window.long),
     answer: input.fairs.length > 0 ? c.a.fairs(input.fairs.length, fairList(input.fairs, locale), input.christmasTowns, fairsRead) : c.a.fairsNone(input.christmasTowns, fairsRead),
   });
-  faq.push({ question: c.q.sources, answer: c.a.sources(sourceLabel ?? c.sourceNames.gencat, agendaRead, fairsRead) });
+  faq.push({ question: c.q.sources, answer: c.a.sources(sourceLabel ?? c.sourceNames.gencat, agendaRead, fairsRead, held) });
 
   return { heading: c.heading(window.long), caption: c.caption(input.where), rows, faqHeading: c.faqHeading, faq: faq.length >= 2 ? faq : [] };
 }

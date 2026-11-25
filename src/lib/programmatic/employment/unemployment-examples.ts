@@ -13,6 +13,10 @@ import { benefitDays, benefitLimits, unemploymentBenefit } from "./unemployment"
  * "calcular prestación por desempleo". The monthly amount by base and the "si cobro
  * 1200" answer are in the how-it-is-calculated section (unemployment-howto.ts).
  *
+ * "Paid the following month": RD 625/1985 art. 26.1, re-read on boe.es/eli/es/rd/1985/04/02/625/con
+ * on 25 Nov 2026: «El abono de la prestación o subsidio por desempleo se realizará por mensualidades
+ * de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo».
+ *
  * The bases are the monthly contribution base for unemployment (the payslip's
  * base de contingencias profesionales), not the net salary. Pure; client-safe.
  */
@@ -105,7 +109,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
         },
         {
           q: "¿Cuándo se cobra el paro?",
-          a: `El SEPE paga el día 10 de cada mes, o el primer día hábil siguiente si es festivo. Fechas mes a mes en la guía de días de pago.`,
+          a: `El SEPE paga el día 10 de cada mes, o el primer día hábil siguiente si es festivo. La prestación se abona por mensualidades de treinta días, dentro del mes inmediato siguiente al que corresponda el devengo (Real Decreto 625/1985, art. 26.1): cada pago llega, pues, al mes siguiente. Fechas mes a mes en la guía de días de pago.`,
         },
       ],
     };
@@ -133,7 +137,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
         },
         {
           q: "Quan es cobra l'atur?",
-          a: `El SEPE paga el dia 10 de cada mes, o el primer dia hàbil següent si és festiu. Dates mes a mes a la guia de dies de pagament.`,
+          a: `El SEPE paga el dia 10 de cada mes, o el primer dia hàbil següent si és festiu. La prestació s'abona per mensualitats de trenta dies, dins del mes immediat següent al que correspongui la meritació (Reial decret 625/1985, art. 26.1): cada pagament arriba, doncs, al mes següent. Dates mes a mes a la guia de dies de pagament.`,
         },
       ],
     };
@@ -160,7 +164,7 @@ export function exampleCopy(locale: CalcLocale): ExampleCopy {
       },
       {
         q: "When is unemployment benefit paid in Spain?",
-        a: `SEPE pays on the 10th of each month, or the next business day if it is a holiday. Month-by-month dates are in the payment-dates guide.`,
+        a: `SEPE pays on the 10th of each month, or the next business day if it is a holiday. The benefit is paid in months of thirty days, within the month immediately following the one it accrues for (Royal Decree 625/1985, art. 26.1), so each payment arrives the month after. Month-by-month dates are in the payment-dates guide.`,
       },
     ],
   };

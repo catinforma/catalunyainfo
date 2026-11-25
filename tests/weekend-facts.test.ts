@@ -146,3 +146,20 @@ test("pages: one facts table and one FAQ per page, JSON-LD from the same items, 
   assert.equal((readFileSync(join(dir, "EnglishWeekend.tsx"), "utf8").match(/weekendFaqNode\(facts\.faq\)/g) ?? []).length, 2, "English hub and Barcelona JSON-LD");
   assert.ok(!/faq/i.test(readFileSync(join(dir, "AgendaList.tsx"), "utf8")), "no other FAQ in the agenda list");
 });
+
+test("sources FAQ: says the page keeps the last read when the source does not answer, and refreshes hourly only when live", () => {
+  const live = { ...agendas, gencat: { ...agendas.gencat, status: "live" as const }, bcn: { ...agendas.bcn, status: "live" as const } };
+  const heldRe = { ca: /la font no respon ara i la pàgina en manté aquesta lectura/, es: /la fuente no responde ahora y la página mantiene esa lectura/, en: /the source is not answering now, so the page keeps that read/ };
+  const liveRe = { ca: /l'actualitza cada hora/, es: /la actualiza cada hora/, en: /refreshes it every hour/ };
+  const question = { ca: "D'on surt aquesta informació i quan s'ha llegit?", es: "¿De dónde sale esta información y cuándo se ha leído?", en: "Where does this information come from and when was it read?" };
+  const answer = (locale: "ca" | "es" | "en", a: typeof agendas) => hubFacts(locale, a, "x").faq.find((f) => f.question === question[locale])?.answer ?? "";
+  for (const locale of ["ca", "es", "en"] as const) {
+    const h = answer(locale, agendas);
+    assert.match(h, heldRe[locale], `${locale}: held`);
+    assert.match(h, /(?:cada hora|every hour)/, `${locale}: still says it retries hourly`);
+    assert.doesNotMatch(h, liveRe[locale], `${locale}: a held read is not "refreshed every hour"`);
+    const l = answer(locale, live);
+    assert.match(l, liveRe[locale], `${locale}: live`);
+    assert.doesNotMatch(l, heldRe[locale], `${locale}: live`);
+  }
+});
