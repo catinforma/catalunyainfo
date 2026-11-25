@@ -550,7 +550,7 @@ function body(locale: Locale) {
     ...h2(t.seaTitle, t.sea),
     ...paras(reservoirsSentence(locale)),
     faq([...t.faq, ...extraFaq(locale)]),
-    ...b2Related(["barcelonaHub", "beaches", "museums", "snow"], locale),
+    ...b2Related(["barcelonaHub", "beaches", "museums", "snow", "montserratFree"], locale),
   ];
 }
 

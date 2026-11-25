@@ -117,3 +117,20 @@ test("cluster links: rail labels in the searched words, hub, transport passes an
     assert.ok(json(SITGES.editions[locale].blocks).includes(b2href("montserratFree", locale)), `${locale}: Sitges already links Montserrat`);
   }
 });
+
+test("montserrat: Escolania needs advance booking (escolania.cat, 25 Nov), sings Sundays at 11:00; booking FAQ in 3 languages", () => {
+  const re = { ca: /reserva prèvia/, es: /reserva previa/, en: /advance booking required/ };
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(MONTSERRAT_FREE.editions[locale].blocks);
+    assert.match(text, re[locale as "ca" | "es" | "en"], `${locale}: booking`);
+    assert.match(text, /11:00/, `${locale}: Sunday conventual Mass`);
+    assert.match(faqText(MONTSERRAT_FREE, locale), /Escolania/, `${locale}: FAQ`);
+  }
+});
+
+test("montserrat: linked from the weather guide (25 Nov)", async () => {
+  const { CLIMATE } = await import("../src/lib/content/batch02/climate.ts");
+  for (const locale of LOCALES) {
+    assert.ok(json(CLIMATE.editions[locale].blocks).includes(b2href("montserratFree", locale)), `${locale}: climate`);
+  }
+});

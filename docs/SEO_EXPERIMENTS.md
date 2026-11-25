@@ -14765,3 +14765,23 @@ Tests: `tests/reis.test.ts` (35 pass; BIG_TOWNS extended); `tsc --noEmit` clean;
 **Decision, Sant Antoni Abat / Tres Tombs: no page now.** Evidence: zero impressions on any query (GSC), no page, no query in `gaps`; demand is seasonal (January) and unmeasured, and a page would need per-town council programmes that are not published in November (Sunday 17 Jan 2027 would be only a calendar fact). A thin date-only page would break the "no thin pages" rule. Instead: when O9 ("Barcelona in January/February") or a January traditions section is built, add Sant Antoni with only the council dates then published. Revisit 2027-01-10: if `gaps`/queries show >= 100 impressions/28 d for "tres tombs"/"sant antoni abat 2027", build a compact ca/es/en guide from councils (Barcelona, Igualada, Vilanova, Valls, Sant Cugat) with date guards. No dates were put anywhere today.
 
 Tests: `tests/calcots.test.ts`, `tsc --noEmit`; `seo:body-dates` run.
+## 2026-11-25 - Montserrat without a tour (O15): Escolania booking and Sundays, two inbound links (body only)
+
+**URLs.** `/en/day-trips/montserrat-without-a-tour-from-barcelona/`, `/es/escapadas/montserrat-por-libre-desde-barcelona/`,
+`/ca/escapades/montserrat-per-lliure-des-barcelona/`; links added in the weather guide (`climate.ts`) and the Barcelona
+December guide (`barcelona-december.ts`) related lists. Title, meta, H1 and lead untouched (21 Nov window).
+
+**Diagnosis.** GSC 90 d: ~2,800 impressions, 0 clicks recorded in the page query table, head queries at 25-45 ("montserrat cable
+car" 34.8, "fgc montserrat ticket" 45.7, "montserrat to barcelona" 53.9). Almost all of that data predates the 21 Nov upgrade
+(tickets table, funiculars, timed day, R5 21:41 fix), so no further large change: wait for its 14/28-day reads.
+
+**Re-read 25 Nov 2026.** montserratvisita.com FAQ: "The Escolania sings from Monday to Friday at 1:00 p.m. and on Sundays the
+boys participate in the Conventual Mass"; "Bookings can be made one month in advance"; packages with the Throne: "the time
+chosen/booked is that of the Throne". escolania.cat/quan-cantem: "Cal reserva prèvia ... pel cant de la Salve i Virolai
+(dilluns a divendres a les 13.00) i ... per la missa dels diumenges (11.00)"; November 2026 calendar: no singing Sat 7, 14, 28.
+"Montserrat Exprés": still no official ticket of that name (not printed).
+
+**Changed.** Escolania row in the hours table (Sunday Mass, booking), the "Best time to go" bullet (it said weekdays only: factual
+correction), one FAQ "Do I need to book...?" (ca/es/en). **Baseline** 90 d to 25 Nov as above. **Review 2026-12-23**:
+`snapshot.py page montserrat-without-a-tour 28`. Upkeep: re-read the Escolania calendar for December/January before 20 Dec.
+Tests: `tests/day-trips-21nov.test.ts` (+2), montserrat, batch02, b2-sources-unique 80/80; tsc clean; `seo:body-dates` run (no change).

@@ -550,6 +550,11 @@ const MONTSERRAT_SOURCES = [
     publisher: "Abadia de Montserrat",
   },
   {
+    name: "Escolania de Montserrat: quan cantem (Salve i Virolai, missa dels diumenges; reserva prèvia)",
+    url: "https://www.escolania.cat/quan-cantem",
+    publisher: "Escolania de Montserrat",
+  },
+  {
     name: "Trans Montserrat (cremallera, des de Pl. Espanya)",
     url: "https://vol.cremallerademontserrat.cat/trans-montserrat-cremallera-placa-espanya",
     publisher: "Ferrocarrils de la Generalitat de Catalunya",
@@ -749,7 +754,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Santa Cova (a peu; el funicular és tancat)", "Feiners 10:30–16:00; caps de setmana i festius 10:30–16:30"],
       ["Museu de Montserrat", "10:00–17:45"],
       ["Espai Audiovisual", "Feiners 9:00–17:45; caps de setmana i festius 9:00–18:45"],
-      ["Escolania", "Canta de dilluns a divendres a les 13:00 (no després de Sant Joan fins a final d'agost, després de Nadal ni per Setmana Santa)"],
+      ["Escolania", "Canta la Salve i el Virolai de dilluns a divendres a les 13:00 i la missa conventual els diumenges a les 11:00; cal reserva prèvia (no després de Sant Joan fins a final d'agost, després de Nadal ni per Setmana Santa)"],
     ],
     hoursNote: "Horaris publicats per Montserrat Visita (Abadia de Montserrat), consultats el 13 de novembre de 2026. Poden variar per les celebracions religioses.",
     pricesTitle: "Preus del cremallera, l'Aeri i el funicular",
@@ -901,7 +906,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Santa Cova (a pie; el funicular está cerrado)", "Laborables 10:30–16:00; fines de semana y festivos 10:30–16:30"],
       ["Museu de Montserrat", "10:00–17:45"],
       ["Espai Audiovisual", "Laborables 9:00–17:45; fines de semana y festivos 9:00–18:45"],
-      ["Escolania", "Canta de lunes a viernes a las 13:00 (no después de Sant Joan hasta finales de agosto, después de Navidad ni en Semana Santa)"],
+      ["Escolania", "Canta la Salve y el Virolai de lunes a viernes a las 13:00 y la misa conventual los domingos a las 11:00; hace falta reserva previa (no después de Sant Joan hasta finales de agosto, después de Navidad ni en Semana Santa)"],
     ],
     hoursNote: "Horarios publicados por Montserrat Visita (Abadía de Montserrat), consultados el 13 de noviembre de 2026. Pueden variar por las celebraciones religiosas.",
     pricesTitle: "Precios del cremallera, el teleférico y el funicular",
@@ -1053,7 +1058,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Santa Cova (on foot; the funicular is closed)", "Weekdays 10:30–16:00; weekends and holidays 10:30–16:30"],
       ["Museu de Montserrat", "10:00–17:45"],
       ["Audiovisual Space", "Weekdays 9:00–17:45; weekends and holidays 9:00–18:45"],
-      ["Escolania boys' choir", "Sings Monday to Friday at 13:00 (not from Sant Joan, 24 June, to the end of August, after Christmas or in Holy Week)"],
+      ["Escolania boys' choir", "Sings the Salve and the Virolai Monday to Friday at 13:00 and the conventual Mass on Sundays at 11:00; advance booking required (not from Sant Joan, 24 June, to the end of August, after Christmas or in Holy Week)"],
     ],
     hoursNote: "Hours published by Montserrat Visita (the Abbey of Montserrat), read on 13 November 2026. They can change for religious services.",
     pricesTitle: "Rack railway, cable car and funicular fares",
@@ -1179,7 +1184,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
     whenTitle: "Quan anar-hi",
     when: [
       "**Al novembre i al desembre, surt d'hora.** Els feiners del 2 de novembre al 24 de desembre, l'últim cremallera de baixada i l'Aeri acaben una hora abans que els caps de setmana (mira els horaris), i els caps de setmana l'R5 només passa un cop per hora.",
-      "**Per sentir l'Escolania, vés-hi entre setmana:** només canta de dilluns a divendres, amb pauses a l'estiu, després de Nadal i per Setmana Santa (taula d'horaris de dalt).",
+      "**Per sentir l'Escolania, reserva i vés-hi entre setmana:** canta de dilluns a divendres i els diumenges a la missa conventual del migdia, i l'Escolania demana reserva prèvia per a totes dues; al calendari de novembre de 2026 no canta els dissabtes 7, 14 i 28. Fa pauses a l'estiu, després de Nadal i per Setmana Santa (taula d'horaris de dalt).",
       "**Festius:** el 7 i el 8 de desembre hi ha horari de cap de setmana; el 25 de desembre el cremallera i l'Aeri tanquen a primera hora de la tarda.",
       "**Gener del 2027:** a 21 de novembre de 2026, ni FGC ni l'Aeri no havien publicat els preus del 2027 ni el calendari de gener del telefèric: comprova-ho abans d'anar-hi.",
     ],
@@ -1201,6 +1206,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
       { question: "Quin bitllet he de comprar a Plaça Espanya per anar a Montserrat?", answer: "Per al cremallera, el combinat tren + cremallera d'FGC d'anada i tornada (4 zones, 28,80 €). Per a l'Aeri, un bitllet de tren de 4 zones (6,90 € cada trajecte) i l'Aeri d'anada i tornada (15 €). El Trans Montserrat (50 €) hi afegeix el funicular de Sant Joan, l'Espai Audiovisual i un bitllet de metro." },
       { question: "Serveix la T-casual per anar a Montserrat?", answer: "Per a l'R5, sí: és un trajecte de 4 zones, així que cal la T-casual de 4 zones (44,65 € els 10 viatges). No val per al cremallera, l'Aeri ni els funiculars." },
       { question: "A quina hora surt l'últim tren de Montserrat a Barcelona?", answer: "L'últim cremallera de baixada i l'últim Aeri enllacen amb trens R5 cap a Plaça Espanya, que encara circulen almenys dues hores després que l'últim cremallera arribi a Monistrol. Del 2 de novembre al 24 de desembre, el cremallera i l'Aeri acaben una hora abans els feiners. Les hores exactes són a les taules de dalt." },
+      { question: "Cal reservar per veure l'Escolania o la Mare de Déu de Montserrat?", answer: "L'Escolania indica \"Cal reserva prèvia\" per a la Salve i el Virolai i per a la missa dels diumenges. Els residents a Catalunya, Espanya o la UE reserven al web de l'Abadia per a la missa, l'Escolania i la veneració de la Mare de Déu, amb un mes d'antelació; els turistes no residents compren una de les combinacions d'entrada de Montserrat Visita, i si inclou el Cambril, l'hora que importa és la del Cambril. Els funiculars no es poden reservar." },
     ],
   },
   es: {
@@ -1233,7 +1239,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
     whenTitle: "Cuándo ir",
     when: [
       "**En noviembre y diciembre, sal temprano.** Los laborables del 2 de noviembre al 24 de diciembre, el último cremallera de bajada y el teleférico terminan una hora antes que los fines de semana (mira los horarios), y los fines de semana la R5 pasa solo una vez por hora.",
-      "**Para oír la Escolania, ve entre semana:** canta solo de lunes a viernes, con pausas en verano, después de Navidad y en Semana Santa (tabla de horarios de arriba).",
+      "**Para oír la Escolania, reserva y ve entre semana:** canta de lunes a viernes y los domingos en la misa conventual del mediodía, y la Escolania pide reserva previa para ambas; en el calendario de noviembre de 2026 no canta los sábados 7, 14 y 28. Hace pausas en verano, después de Navidad y en Semana Santa (tabla de horarios de arriba).",
       "**Festivos:** el 7 y el 8 de diciembre rige el horario de fin de semana; el 25 de diciembre el cremallera y el teleférico cierran a primera hora de la tarde.",
       "**Enero de 2027:** a 21 de noviembre de 2026, ni FGC ni el Aeri habían publicado los precios de 2027 ni el calendario de enero del teleférico: compruébalo antes de ir.",
     ],
@@ -1255,6 +1261,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
       { question: "¿Qué billete hay que comprar en Plaça Espanya para ir a Montserrat?", answer: "Para el cremallera, el combinado tren + cremallera de FGC de ida y vuelta (4 zonas, 28,80 €). Para el teleférico, un billete de tren de 4 zonas (6,90 € cada trayecto) y el Aeri de ida y vuelta (15 €). El Trans Montserrat (50 €) añade el funicular de Sant Joan, el Espai Audiovisual y un billete de metro." },
       { question: "¿Sirve la T-casual para ir a Montserrat?", answer: "Para la R5, sí: es un trayecto de 4 zonas, así que hace falta la T-casual de 4 zonas (44,65 € los 10 viajes). No vale para el cremallera, el teleférico ni los funiculares." },
       { question: "¿A qué hora sale el último tren de Montserrat a Barcelona?", answer: "El último cremallera de bajada y el último teleférico enlazan con trenes R5 hacia Plaça Espanya, que siguen circulando al menos dos horas después de que el último cremallera llegue a Monistrol. Del 2 de noviembre al 24 de diciembre, el cremallera y el Aeri terminan una hora antes los laborables. Las horas exactas están en las tablas de arriba." },
+      { question: "¿Hay que reservar para ver la Escolania o la Virgen de Montserrat?", answer: "La Escolania indica \"Cal reserva prèvia\" para la Salve y el Virolai y para la misa de los domingos. Los residentes en Cataluña, España o la UE reservan en la web de la Abadía para la misa, la Escolania y la veneración de la Virgen, con un mes de antelación; los turistas no residentes compran una de las combinaciones de entrada de Montserrat Visita y, si incluye el Camarín, la hora que cuenta es la del Camarín. Los funiculares no se pueden reservar." },
     ],
   },
   en: {
@@ -1287,7 +1294,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
     whenTitle: "Best time to go",
     when: [
       "**In November and December, start early.** On weekdays from 2 November to 24 December, the last rack railway down and the cable car finish an hour earlier than at weekends (see the timetables), and at weekends the R5 runs only once an hour.",
-      "**For the Escolania choir, go on a weekday:** it sings Monday to Friday only, with breaks in summer, after Christmas and in Holy Week (hours table above).",
+      "**For the Escolania choir, book and go on a weekday:** it sings Monday to Friday and, on Sundays, at the conventual Mass, and the Escolania asks for advance booking for both; its November 2026 calendar shows no singing on Saturdays 7, 14 and 28. It pauses in summer, after Christmas and in Holy Week (hours table above).",
       "**Holidays:** 7 and 8 December run the weekend timetable; on 25 December the rack railway and the cable car close in the early afternoon.",
       "**January 2027:** as of 21 November 2026, neither FGC nor the Aeri had published 2027 fares or the cable car's January calendar: check both before you go.",
     ],
@@ -1309,6 +1316,7 @@ const MONTSERRAT_21NOV: Record<"ca" | "es" | "en", MontX> = {
       { question: "Which ticket do I buy at Plaça Espanya for Montserrat?", answer: "For the rack railway, FGC's train + rack railway return (4 zones, €28.80). For the cable car, a 4-zone train ticket (€6.90 each way) and an Aeri return (€15). Trans Montserrat (€50) adds the Sant Joan funicular, the audiovisual space and a metro ticket." },
       { question: "Can I use the T-casual to get to Montserrat?", answer: "On the R5 train, yes: it is a 4-zone journey, so you need a 4-zone T-casual (€44.65 for 10 journeys). It is not valid on the rack railway, the cable car or the funiculars." },
       { question: "What time is the last train from Montserrat to Barcelona?", answer: "The last rack railway down and the last cable car both connect with R5 trains to Plaça Espanya, which keep running for at least two hours after the last rack railway reaches Monistrol. From 2 November to 24 December, the rack railway and the Aeri stop an hour earlier on weekdays. The exact times are in the timetables above." },
+      { question: "Do I need to book to hear the Escolania or see the Black Madonna?", answer: "The Escolania says \"Cal reserva prèvia\" (advance booking required) for the Salve and Virolai (Monday to Friday) and for the Sunday Mass. Residents of Catalonia, Spain or the EU book on the Abbey's website for Mass, the Escolania and venerating the Virgin, up to one month ahead; non-resident tourists buy one of the ticket combinations on Montserrat Visita, and where it includes the Throne of Our Lady, the time that counts is the Throne's. The funiculars cannot be booked." },
     ],
   },
 };
