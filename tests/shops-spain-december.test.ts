@@ -11,7 +11,9 @@ import {
   DECEMBER_2026,
   SHOPS_SPAIN_AS_OF,
   SHOPS_SPAIN_DECEMBER,
+  TOWN_PAGES,
   buildShopsSpainBody,
+  townSearchHref,
 } from "../src/lib/content/batch02/shops-spain-december.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { WEEKDAY_NAMES } from "../src/lib/content/holidays/calendar.ts";
@@ -76,7 +78,7 @@ test("the three editions carry the same days: same blocks, same numbers in every
   const shape = (locale: Locale) => (SHOPS_SPAIN_DECEMBER.editions[locale].blocks as Block[]).map((b) => b.type).join(",");
   // Day numbers only: a note such as "uno es el 8 de diciembre" keeps its 8 in the three languages.
   const numbers = (locale: Locale) => tables(locale).map((t) => t.rows!.map((row) => (row.join(" ").match(/\d+/g) ?? []).join(" ")));
-  const answers = (locale: Locale) => tables(locale)[0]!.rows!.map((row) => row.slice(1, 4).map((cell) => (cell === "—" ? "—" : /^(Sí|Yes)/.test(cell) ? "y" : "n")).join(""));
+  const answers = (locale: Locale) => tables(locale)[0]!.rows!.map((row) => row.slice(1, 4).map((cell) => (cell === "—" ? "—" : cell.startsWith("[") ? "d" : /^(Sí|Yes)/.test(cell) ? "y" : "n")).join(""));
   const external = (locale: Locale) => links(locale).filter((href) => href.startsWith("http"));
   for (const locale of LOCALES) {
     assert.equal(shape(locale), shape("es"), `${locale}: block sequence`);
@@ -120,10 +122,13 @@ test("each community and each note has a Catalan and an English form; weekdays a
 test("internal links stay in the edition's own language: each edition sends to its own Catalonia shops guide", () => {
   for (const locale of LOCALES) {
     const internal = links(locale).filter((h) => h.startsWith("/"));
-    assert.deepEqual(internal, [b2href("shops", locale)], locale);
+    // 25 Nov 2026: Catalonia's three cells and the paragraph under the table link to the town search of that guide
+    // (an anchor), and the paragraph names two town pages (Barcelona, Badalona; their existence is held in tests/shops-8dec-regression.test.ts).
+    const search = townSearchHref(locale);
+    assert.deepEqual(internal, [search, search, search, search, TOWN_PAGES.barcelona[locale], TOWN_PAGES.badalona[locale], b2href("shops", locale)], locale);
     for (const href of internal) {
       assert.ok(href.startsWith(`/${locale}/`), `${locale}: ${href} crosses languages`);
-      assert.ok(PUBLISHED.has(href), `${locale}: ${href} is not a published page`);
+      if (!/\/(festius|festivos|holidays)\//.test(href)) assert.ok(PUBLISHED.has(href.split("#")[0]!), `${locale}: ${href} is not a published page`);
     }
   }
 });

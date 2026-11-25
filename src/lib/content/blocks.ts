@@ -70,6 +70,12 @@ export const tableBlock = z.object({
   note: z.string().max(400).optional(),
   /** Column index to keep pinned when the table scrolls horizontally. */
   stickyColumn: z.number().int().min(0).max(11).optional(),
+  /**
+   * Links in this table's cells are tap targets (about 44 px tall) on a phone:
+   * adds `ci-table--taplinks`. Set only where a link is the answer itself (the
+   * Spain shops guide's Catalonia cells); every other table keeps its in-text links.
+   */
+  tapLinks: z.boolean().optional(),
 });
 
 /**

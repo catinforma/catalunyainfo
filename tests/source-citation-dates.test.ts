@@ -7,7 +7,7 @@ import { pathToFileURL } from "node:url";
 import { SHOPS, TOWNS_NOV_DEC, closedOn } from "../src/lib/content/batch02/shops.ts";
 import { isSourceRef, publicSourceRef } from "../src/lib/content/source-ref.ts";
 import { CHRISTMAS_SOURCES } from "../src/lib/content/batch02/shops-christmas.ts";
-import { CATALONIA_NO_8_DEC, CATALONIA_TOWNS, SHOPS_SPAIN_DECEMBER } from "../src/lib/content/batch02/shops-spain-december.ts";
+import { CATALONIA_DEPENDS, CATALONIA_NO_8_DEC, CATALONIA_TOWNS, SHOPS_SPAIN_DECEMBER, townSearchHref } from "../src/lib/content/batch02/shops-spain-december.ts";
 import { closedOn as closedOnShared, extraOn, TOWNS_NOV_DEC as sharedTowns } from "../src/lib/content/batch02/shops-towns-nov-dec.ts";
 import { formatDateNumeric } from "../src/lib/format.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
@@ -98,7 +98,8 @@ test("Catalonia on 8 December: the Spain guide's cell is computed from the Catal
   for (const locale of LOCALES) {
     const blocks = SHOPS_SPAIN_DECEMBER.editions[locale].blocks as unknown as { type: string; rows?: string[][] }[];
     const row = blocks.find((b) => b.type === "table")!.rows!.find((r) => /^(Cataluña|Catalunya|Catalonia)$/.test(r[0]!))!;
-    assert.equal(row[3], cell[locale], `${locale}: Catalonia, Tue 8`);
+    // 25 Nov 2026: the answer is "depends on the town" with the link to the town search; the count is the secondary part.
+    assert.equal(row[3], `[${CATALONIA_DEPENDS[locale]}](${townSearchHref(locale)}) (${cell[locale]})`, `${locale}: Catalonia, Tue 8`);
     // The lead names Catalonia among the places where shops may open on the 8th.
     const lead = JSON.stringify(blocks[0]);
     assert.match(lead, /(Cataluña \(en Barcelona|Catalunya \(a Barcelona|Catalonia \(in Barcelona)/, `${locale}: lead`);
@@ -230,6 +231,10 @@ test("Catalonia on Sunday 6 and Monday 7: the cells come from the same town tabl
   for (const locale of LOCALES) {
     const blocks = SHOPS_SPAIN_DECEMBER.editions[locale].blocks as unknown as { type: string; rows?: string[][] }[];
     const row = blocks.find((b) => b.type === "table")!.rows!.find((r) => /^(Cataluña|Catalunya|Catalonia)$/.test(r[0]!))!;
-    assert.deepEqual(row.slice(1, 4), expected[locale], locale);
+    assert.deepEqual(
+      row.slice(1, 4),
+      expected[locale].map((detail) => `[${CATALONIA_DEPENDS[locale]}](${townSearchHref(locale)}) (${detail})`),
+      locale,
+    );
   }
 });

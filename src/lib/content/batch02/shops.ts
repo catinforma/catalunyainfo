@@ -1,4 +1,4 @@
-import type { Block } from "@/lib/content/blocks";
+import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { nameKey } from "@/lib/programmatic/holidays/dogc";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
@@ -20,7 +20,7 @@ import {
 } from "./shared";
 import { CHRISTMAS_SHOPS_CHECKED, compactDays, windowDaysFromDiff, type ChristmasSourceKey } from "./shops-christmas";
 import { notIn } from "./shops-sundays";
-import { TOWNS_NOV_DEC, closedOn, extraOn } from "./shops-towns-nov-dec";
+import { SELECTOR_TITLE, TOWNS_NOV_DEC, closedOn, extraOn } from "./shops-towns-nov-dec";
 
 /**
  * Shops open on Sundays and holidays in Catalonia: the yearly calendar.
@@ -492,7 +492,7 @@ const COPY: Record<Locale, T> = {
     weeksNote: "«Sí» vol dir que les botigues hi poden obrir, no que hagin d'obrir. D'octubre a maig, cap botiga amb horari general no pot obrir entre les 21.00 i les 6.00 (Llei 18/2017, art. 36.2.a). Un dia laborable pot ser festa local en algun municipi, i llavors compta com a festiu.",
     weeksAfter: "Els dies de «No», hi poden obrir igualment les botigues exemptes de l'horari general: fleques, pastisseries, floristeries, premsa, botigues de conveniència, farmàcies i botigues d'alimentació o de pimes de fins a 300 m², entre d'altres (la llista és més avall). A Barcelona, la zona turística (ZGAT) només amplia l'obertura del 15 de maig al 15 de setembre: del novembre al gener hi valen els mateixos dies que a la resta de la ciutat.",
     saintStephen: "El dissabte 26 de desembre, Sant Esteve, és festiu a Catalunya (excepte a l'Aran) i dia de tancament obligatori per a les botigues amb horari general, encara que sigui dissabte. Les botigues d'alimentació de fins a 300 m² i les de conveniència, entre d'altres, hi poden obrir.",
-    townsChristmasTitle: "Botigues obertes per Nadal al teu municipi",
+    townsChristmasTitle: SELECTOR_TITLE.ca,
     townsChristmasLead: "Busca el municipi a la taula: hi són tots els de Catalunya, amb els diumenges i festius en què hi poden obrir les botigues del 29 de novembre al 31 de desembre. La pàgina de cada municipi a [festius locals per municipi](/ca/festius/) ho detalla dia per dia, amb les seves festes locals.",
     electionTitle: "Diumenge 29 de novembre, dia d'eleccions: quines botigues obren",
     election: [
@@ -579,7 +579,7 @@ const COPY: Record<Locale, T> = {
     weeksNote: "«Sí» quiere decir que las tiendas pueden abrir, no que deban hacerlo. De octubre a mayo, ninguna tienda con horario general puede abrir entre las 21.00 y las 6.00 (Ley 18/2017, art. 36.2.a). Un día laborable puede ser fiesta local en algún municipio, y entonces cuenta como festivo.",
     weeksAfter: "Los días de «No» pueden abrir igualmente las tiendas exentas del horario general: panaderías, pastelerías, floristerías, prensa, tiendas de conveniencia, farmacias y tiendas de alimentación o de pymes de hasta 300 m², entre otras (la lista está más abajo). En Barcelona, la zona turística (ZGAT) solo amplía la apertura del 15 de mayo al 15 de septiembre: de noviembre a enero valen los mismos días que en el resto de la ciudad.",
     saintStephen: "El sábado 26 de diciembre, San Esteban, es festivo en Cataluña (salvo en Arán) y en Baleares, pero no en el resto de España, y es día de cierre obligatorio para las tiendas con horario general en Cataluña, aunque caiga en sábado. Las tiendas de alimentación de hasta 300 m² y las de conveniencia, entre otras, pueden abrir.",
-    townsChristmasTitle: "Tiendas abiertas en Navidad en tu municipio",
+    townsChristmasTitle: SELECTOR_TITLE.es,
     townsChristmasLead: "Busca el municipio en la tabla: están todos los de Cataluña, con los domingos y festivos en que pueden abrir las tiendas del 29 de noviembre al 31 de diciembre. La página de cada municipio en [festivos locales por municipio](/es/festivos/) lo detalla día a día, con sus fiestas locales.",
     electionTitle: "Domingo 29 de noviembre, día de elecciones: qué tiendas abren",
     election: [
@@ -665,7 +665,7 @@ const COPY: Record<Locale, T> = {
     weeksNote: "\"Yes\" means shops may open, not that they must. From October to May no shop on the general timetable may open between 21:00 and 6:00 (Llei 18/2017, art. 36.2.a). A working day can be a local holiday in some towns, and then it counts as a holiday.",
     weeksAfter: "On the \"No\" days, shops outside the general timetable may still open: bakeries, cake shops, florists, newsagents, convenience stores, pharmacies, and food or small-business shops of up to 300 m², among others (the list is further down). In Barcelona the tourist zone (ZGAT) only extends opening from 15 May to 15 September: from November to January it follows the same days as the rest of the city.",
     saintStephen: "Saturday 26 December, St Stephen's Day, is a public holiday in Catalonia (except Aran) and the Balearic Islands, not in the rest of Spain, and a compulsory closing day for shops on the general timetable in Catalonia, even though it is a Saturday. Food shops of up to 300 m² and convenience stores, among others, may open.",
-    townsChristmasTitle: "Shops open at Christmas in your town",
+    townsChristmasTitle: SELECTOR_TITLE.en,
     townsChristmasLead: "Find your town in the table: it lists every town in Catalonia, with the Sundays and holidays from 29 November to 31 December when shops may open there.",
     electionTitle: "Sunday 29 November, election day: which shops open",
     election: [
@@ -776,6 +776,17 @@ export function mallsAreaRows(locale: Locale): string[][] {
   });
 }
 
+/**
+ * 25 Nov 2026 (ci-edicio): the guide's summary points to its own town search,
+ * which the Spain-wide guide's Catalonia cells also link to: the answer for a
+ * town is the search's row (or the town's page), never a Catalonia-wide yes.
+ */
+export const FIND_YOUR_TOWN: Record<Locale, string> = {
+  ca: `El teu municipi pot tenir dies propis: [busca'l a la taula](#${slugifyAnchor(SELECTOR_TITLE.ca)}).`,
+  es: `Tu municipio puede tener días propios: [búscalo en la tabla](#${slugifyAnchor(SELECTOR_TITLE.es)}).`,
+  en: `Your town may have days of its own: [find it in the table](#${slugifyAnchor(SELECTOR_TITLE.en)}).`,
+};
+
 function body(locale: Locale) {
   const t = COPY[locale];
   // 30 Oct 2026 (seasonal top-3 push): the strongest page of the December
@@ -788,7 +799,7 @@ function body(locale: Locale) {
   const days = (isos: string[]) => (isos.length ? isos.map((iso) => weekdayDayMonth(iso, locale)).join(", ") : "—");
   return [
     lead(t.lead),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
+    callout("official", verifiedLine(locale, VERIFIED), `${t.note} ${FIND_YOUR_TOWN[locale]}`),
     ...h2(t.sundaysTitle),
     { type: "shopsSundays", scope: "catalonia" } as Block,
     { type: "shopsSundays", scope: "spainRest" } as Block,

@@ -1,10 +1,10 @@
-import type { Block } from "@/lib/content/blocks";
+import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { WEEKDAY_NAMES } from "@/lib/content/holidays/calendar";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { joinList } from "@/lib/programmatic/holidays/names";
 
-import { closedOn, extraOn } from "./shops-towns-nov-dec";
-import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, type B2Edition, type B2Source } from "./shared";
+import { SELECTOR_TITLE, closedOn, extraOn } from "./shops-towns-nov-dec";
+import { B2_PATHS, b2href, b2link, callout, faq, h2, lead, list, paras, table, type B2Article, type B2Edition, type B2Source } from "./shared";
 
 /**
  * "Tiendas abiertas en diciembre de 2026 por comunidad" (9 Nov 2026), Spain-wide.
@@ -28,6 +28,11 @@ import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, 
  * (shops-towns-nov-dec.ts, Resolució EMT/4342/2025, DOGC núm. 9551,
  * 27.11.2025, re-read in the PDF on 25 Nov). The Ministry PDF was not re-read:
  * SHOPS_SPAIN_AS_OF stays 23 Nov.
+ *
+ * 25 Nov 2026 (night, owner): Catalonia's cells for the 6th, 7th and 8th answer
+ * "Depende del municipio · consulta el tuyo", linked to the Catalan guide's town
+ * search (`townSearchHref`), with the count as the secondary part in brackets;
+ * a paragraph under the table names Barcelona (8th yes) and Badalona (no).
  *
  * Three editions since 10 Nov 2026 (owner rule: every page in ca, es and en).
  * The days come from the same two tables in the three languages; only the
@@ -58,6 +63,33 @@ export const CATALONIA_TOWNS = {
 } as const;
 
 const link = (href: string, label: string) => `[${label}](${href})`;
+
+/**
+ * 25 Nov 2026 (owner, plan item 1): Catalonia's cells answer "depends on the
+ * town" and link to the town search of the Catalan guide, right next to the
+ * answer; "Sí, salvo en 21 municipios" stays as the secondary part. The
+ * search is the guide's own `shopsChristmas` table (Resolució EMT/4342/2025
+ * and its defaults), and every town's page has the same days.
+ */
+export const CATALONIA_DEPENDS: Record<Locale, string> = {
+  es: "Depende del municipio · consulta el tuyo",
+  ca: "Depèn del municipi · consulta el teu",
+  en: "Depends on the town · check yours",
+};
+/** "/es/guias/tiendas-abiertas-festivos-cataluna/#tiendas-abiertas-en-navidad-en-tu-municipio" */
+export const townSearchHref = (L: Locale) => `${b2href("shops", L)}#${slugifyAnchor(SELECTOR_TITLE[L])}`;
+/** The two towns the paragraph under the table names: Barcelona (own list with the 8th) and Badalona (the 8th swapped). */
+export const TOWN_PAGES: Record<"barcelona" | "badalona", Record<Locale, string>> = {
+  barcelona: { ca: "/ca/festius/barcelona/#botigues-nadal", es: "/es/festivos/barcelona/#botigues-nadal", en: "/en/holidays/barcelona/#christmas-shops" },
+  badalona: { ca: "/ca/festius/badalona/#botigues-nadal", es: "/es/festivos/badalona/#botigues-nadal", en: "/en/holidays/badalona/#christmas-shops" },
+};
+const CATALONIA_NOTE: Record<Locale, string> = {
+  es: "**En Cataluña la respuesta depende del municipio.** Cada ayuntamiento tiene diez días de apertura y la mayoría usa los de por defecto, que incluyen el 8 de diciembre; algunos los cambian. Mira el tuyo en [la tabla de municipios]({search}): por ejemplo, [Barcelona]({bcn}) puede abrir el martes 8 y [Badalona]({bdn}) no. Los días son de apertura autorizada: el horario de cada tienda lo fija la propia tienda.",
+  ca: "**A Catalunya la resposta depèn del municipi.** Cada ajuntament té deu dies d'obertura i la majoria fa servir els per defecte, que inclouen el 8 de desembre; alguns els canvien. Mira el teu a [la taula de municipis]({search}): per exemple, [Barcelona]({bcn}) pot obrir el dimarts 8 i [Badalona]({bdn}) no. Els dies són d'obertura autoritzada: l'horari de cada botiga el fixa la mateixa botiga.",
+  en: "**In Catalonia the answer depends on the town.** Each council has ten opening days and most use the default ones, which include 8 December; some swap them. Look yours up in [the town table]({search}): for example, [Barcelona]({bcn}) may open on Tuesday 8 and [Badalona]({bdn}) may not. These are days of authorised opening: each shop sets its own hours.",
+};
+const cataloniaNote = (L: Locale) =>
+  CATALONIA_NOTE[L].replace("{search}", townSearchHref(L)).replace("{bcn}", TOWN_PAGES.barcelona[L]).replace("{bdn}", TOWN_PAGES.badalona[L]);
 
 type Row = { name: string; days: number[]; note?: string };
 export const DECEMBER_2026: Row[] = [
@@ -416,7 +448,9 @@ const COPY: Record<Locale, ShopsCopy> = {
 export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   const L = locale;
   const t = COPY[L];
-  const yes = (r: Row, d: number) => (r.name === "Cataluña" && d === 8 ? t.yesExcept(CATALONIA_NO_8_DEC) : r.name === "Cataluña" && d === 6 ? t.yesExcept(CATALONIA_TOWNS.closed[6]) : r.name === "Cataluña" && d === 7 ? t.noExcept(CATALONIA_TOWNS.extra[7]) : r.days.includes(d) ? t.yes : r.name === "Madrid" ? t.yesFree : r.days.length ? t.no : "—");
+  // Catalonia: the answer is the town search; the Catalonia-wide count is the secondary part, in brackets.
+  const depends = (detail: string) => `${link(townSearchHref(L), CATALONIA_DEPENDS[L])} (${detail})`;
+  const yes = (r: Row, d: number) => (r.name === "Cataluña" && d === 8 ? depends(t.yesExcept(CATALONIA_NO_8_DEC)) : r.name === "Cataluña" && d === 6 ? depends(t.yesExcept(CATALONIA_TOWNS.closed[6])) : r.name === "Cataluña" && d === 7 ? depends(t.noExcept(CATALONIA_TOWNS.extra[7])) : r.days.includes(d) ? t.yes : r.name === "Madrid" ? t.yesFree : r.days.length ? t.no : "—");
   const days = (r: Row) => r.days.map((d) => day(d, L)).join(", ");
   const rows = DECEMBER_2026.map((r) => {
     const note = noteOf(r, L);
@@ -431,7 +465,9 @@ export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   };
   return [
     lead(t.lead(on)),
-    table(t.table.caption, t.table.headers, rows, t.table.note),
+    // The Catalonia cells are links to the town search: tap targets on a phone (`tapLinks`, globals.css).
+    { ...table(t.table.caption, t.table.headers, rows, t.table.note), tapLinks: true } as Block,
+    ...paras(cataloniaNote(L)),
     ...h2(t.sundays.heading),
     { type: "shopsSundays", scope: "spain" } as Block,
     ...h2(t.islands.heading),

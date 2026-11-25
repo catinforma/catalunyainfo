@@ -58,3 +58,15 @@ export const closedOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t
 
 /** The towns of TOWNS_NOV_DEC that add a day which is not an opening day elsewhere. */
 export const extraOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t.extra.includes(iso)).map((t) => t.town);
+
+/**
+ * The H2 over the Catalan guide's town search (the `shopsChristmas` block).
+ * Kept here, with no imports, so the Spain guide can link to the search by
+ * anchor (`slugifyAnchor` of this text) without importing the guide; the guide
+ * reads its heading from here, so the two cannot drift apart.
+ */
+export const SELECTOR_TITLE = {
+  ca: "Botigues obertes per Nadal al teu municipi",
+  es: "Tiendas abiertas en Navidad en tu municipio",
+  en: "Shops open at Christmas in your town",
+} as const;

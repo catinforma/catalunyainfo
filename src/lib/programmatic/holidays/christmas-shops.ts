@@ -6,8 +6,10 @@ import {
   type ChristmasDay,
 } from "@/lib/content/batch02/shops-christmas";
 
+import { BARCELONA_DOGC_ENTRY, COUNCIL_CALENDARS, COUNCIL_CALENDARS_READ } from "@/lib/content/batch02/shops-council-calendars";
+
 import { isAran } from "./data";
-import { dayMonth, dayMonthYear, weekdayDayMonth } from "./format";
+import { dayMonth, dayMonthYear, weekdayDayMonth, type DateLocale } from "./format";
 import { caA, caStart, esName, joinList } from "./names";
 import type { MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -37,7 +39,44 @@ export interface ChristmasShopsRow {
   answer: ChristmasDay["answer"];
 }
 
+/**
+ * Towns whose council prints its own calendar (shops-council-calendars.ts):
+ * the page quotes it, with the read date and time, and says that the actual
+ * hours depend on each shop. Barcelona and Badalona (25 Nov 2026).
+ */
+export interface CouncilCopy {
+  text: string;
+  href: string;
+  label: string;
+}
+
+export function councilCopy(slug: string, locale: DateLocale): CouncilCopy | null {
+  if (slug !== "barcelona" && slug !== "badalona") return null;
+  const c = COUNCIL_CALENDARS[slug];
+  const date = dayMonthYear(COUNCIL_CALENDARS_READ.date, locale);
+  const time = locale === "ca" ? `${COUNCIL_CALENDARS_READ.time.replace(":", ".")} h` : locale === "es" ? `${COUNCIL_CALENDARS_READ.time} h` : `${COUNCIL_CALENDARS_READ.time} Catalonia time`;
+  const q = (s: string) => `«${s}»`;
+  if (slug === "barcelona") {
+    const [days, note] = c.quotes.map(q) as [string, string];
+    const dogc = q(BARCELONA_DOGC_ENTRY);
+    const text = {
+      ca: `Barcelona ho diu així a la seva guia (Ajuntament de Barcelona, llegida el ${date} a les ${time}): ${days}, ${note}. El 8 de desembre de 2026 és, doncs, dia d'obertura autoritzada, igual que a la Resolució EMT/4342/2025 (DOGC 9551, 27.11.2025), que per a Barcelona diu: ${dogc} L'horari efectiu depèn de cada establiment.`,
+      es: `Barcelona lo dice así en su guía (Ayuntamiento de Barcelona, leída el ${date} a las ${time}), en catalán: ${days}, ${note}. El 8 de diciembre de 2026 es, por tanto, día de apertura autorizada, igual que en la Resolución EMT/4342/2025 (DOGC 9551, 27.11.2025), que para Barcelona dice: ${dogc} El horario efectivo depende de cada establecimiento.`,
+      en: `Barcelona says so in its city guide (Barcelona City Council, read on ${date} at ${time}), in Catalan: ${days}, ${note}. So 8 December 2026 is a day of authorised opening, as in Resolution EMT/4342/2025 (DOGC 9551, 27 Nov 2025), which says for Barcelona: ${dogc} Actual opening hours depend on each shop.`,
+    }[locale];
+    return { text, href: c.url, label: { ca: "Calendari d'obertura de comerços de Barcelona", es: "Calendario de apertura de comercios de Barcelona", en: "Barcelona's shop opening calendar" }[locale] };
+  }
+  const quote = c.quotes.map(q).join(" ");
+  const text = {
+    ca: `L'Ajuntament de Badalona ho diu així al seu calendari (llegit el ${date} a les ${time}): ${quote} El 8 de desembre no hi consta: la Resolució EMT/4342/2025 el va canviar. La pàgina de l'Ajuntament no esmenta cap excepció per tipus de comerç; les que fixa la llei (Llei 18/2017, article 37) s'apliquen igualment. L'horari efectiu depèn de cada establiment.`,
+    es: `El Ayuntamiento de Badalona lo dice así en su calendario (leído el ${date} a las ${time}), en catalán: ${quote} El 8 de diciembre no consta: la Resolución EMT/4342/2025 lo cambió. La página del Ayuntamiento no menciona ninguna excepción por tipo de comercio; las que fija la ley (Ley 18/2017, artículo 37) se aplican igualmente. El horario efectivo depende de cada establecimiento.`,
+    en: `Badalona City Council says so in its calendar (read on ${date} at ${time}), in Catalan: ${quote} 8 December is not on it: Resolution EMT/4342/2025 swapped it. The council's page names no exception by type of shop; those set by law (Law 18/2017, article 37) still apply. Actual opening hours depend on each shop.`,
+  }[locale];
+  return { text, href: c.url, label: { ca: "Calendari d'obertura de Badalona", es: "Calendario de apertura de Badalona", en: "Badalona's shop opening calendar" }[locale] };
+}
+
 export interface ChristmasShopsCopy {
+  council?: CouncilCopy | null;
   title: string;
   lead: string;
   cols: { day: string; answer: string };
@@ -126,6 +165,7 @@ export function christmasShopsCopy(
         ? "A Barcelona, la zona turística (ZGAT) només amplia l'obertura del 15 de maig al 15 de setembre: al desembre hi valen aquests mateixos dies."
         : "Als municipis declarats turístics a efectes d'horaris comercials, les botigues de la zona declarada en queden fora durant el període aprovat; aquesta declaració es publica al butlletí oficial de la província i no és a les fonts d'aquesta taula.";
     return {
+      council: councilCopy(m.slug, "ca"),
       title: `Obertura comercial a Nadal ${caA(m.name)}`,
       lead: `Les botigues amb horari general ${caA(m.name)} poden obrir ${open.length === 1 ? "el dia" : "els dies"} ${decemberDays(open, "ca")}.${swappedLine} El 25 i el 26 de desembre i l'1 i el 6 de gener han de tancar, i el diumenge 3 de gener de 2027 és dia d'obertura del calendari general, si l'Ajuntament no l'ha canviat.`,
       cols: { day: "Dia", answer: "Botigues amb horari general" },
@@ -150,6 +190,7 @@ export function christmasShopsCopy(
       ? "En Barcelona, la zona turística (ZGAT) solo amplía la apertura del 15 de mayo al 15 de septiembre: en diciembre valen estos mismos días."
       : "En los municipios declarados turísticos a efectos de horarios comerciales, las tiendas de la zona declarada quedan fuera durante el periodo aprobado; esa declaración se publica en el boletín oficial de la provincia y no está en las fuentes de esta tabla.";
   return {
+    council: councilCopy(m.slug, "es"),
     title: `Apertura comercial en Navidad en ${name}`,
     lead: `Las tiendas con horario general de ${name} pueden abrir ${open.length === 1 ? "el día" : "los días"} ${decemberDays(open, "es")}.${swappedLine} El 25 y el 26 de diciembre y el 1 y el 6 de enero deben cerrar, y el domingo 3 de enero de 2027 es día de apertura del calendario general, si el Ayuntamiento no lo ha cambiado.`,
     cols: { day: "Día", answer: "Tiendas con horario general" },
@@ -224,6 +265,7 @@ export function christmasShopsCopyEn(
       ? "In Barcelona the tourist zone (ZGAT) only extends opening from 15 May to 15 September: in December these same days apply."
       : "In towns declared tourist areas for shop hours, shops inside the declared zone are exempt during the approved period; that declaration is published in the provincial gazette and is not in the sources of this table.";
   return {
+    council: councilCopy(m.slug, "en"),
     title: `Are shops open at Christmas in ${name}?`,
     lead: `Shops on the general timetable in ${name} may open on ${joinList(open, "en")} December.${swappedLine} On 25 and 26 December and on 1 and 6 January they must close, and Sunday 3 January 2027 is an opening day on the general calendar unless the council has changed it.`,
     cols: { day: "Day", answer: "Shops on the general timetable" },

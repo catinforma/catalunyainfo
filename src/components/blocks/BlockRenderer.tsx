@@ -199,7 +199,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
             every width. `data-label` carries the column name into the stacked
             layout, where the header row is hidden.
           */}
-          <table className="ci-table" role="table">
+          <table className={block.tapLinks ? "ci-table ci-table--taplinks" : "ci-table"} role="table">
             {block.caption ? <caption>{block.caption}</caption> : null}
             <thead>
               <tr role="row">

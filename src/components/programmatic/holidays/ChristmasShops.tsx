@@ -54,6 +54,11 @@ function ShopsSection({ t, id, guideHref }: { t: ChristmasShopsCopy; id: string;
         </table>
       </div>
       <p>{t.after}</p>
+      {t.council ? (
+        <p>
+          {t.council.text} <a href={t.council.href} rel="noopener" target="_blank">{t.council.label}</a>
+        </p>
+      ) : null}
       <p className="text-sm">
         {t.source} <Link href={guideHref}>{t.guide}</Link>
       </p>

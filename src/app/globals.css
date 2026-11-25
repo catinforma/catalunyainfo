@@ -1020,6 +1020,14 @@
       width: 5.75rem;
       margin-left: -6.5rem;
     }
+    /* A link in a card is a tap target (25 Nov 2026: the Spain shops guide's
+       "Depende del municipio · consulta el tuyo"): about 44px tall, no hover
+       needed. Only tables that ask for it (`tapLinks` on the table block): the
+       answer is the link there. Every other table keeps its in-text links. */
+    .ci-table--taplinks tbody td a {
+      display: inline-block;
+      padding-block: 0.65rem;
+    }
   }
 
   /* Consent: a centred card over a dimmed page (ConsentGate.tsx). */
