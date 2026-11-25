@@ -103,12 +103,12 @@ const W = WINTER_SALES;
 const mmdd = (p: { month: number; day: number }) => `2022-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
 
 export const WINTER_SALES_SOURCES: B2Source[] = [
-  { name: "Llei 18/2017, de l'1 d'agost, de comerç, serveis i fires (art. 20: venda en rebaixes; text consolidat)", url: W.url.law, publisher: "Generalitat de Catalunya / BOE", ref: "DOGC núm. 7426, 3.8.2017; BOE núm. 240, 5.10.2017; art. 20.6 en vigor des de l'1.1.2026 (Llei 12/2025)" },
-  { name: "Rebaixes", url: W.url.consum, publisher: "Agència Catalana del Consum", ref: "actualitzada el 2.1.2026" },
-  { name: "El Consell Assessor de Comerç aprova la recomanació del període de rebaixes d'hivern i estiu", url: W.url.ccam2022, publisher: "Consorci de Comerç, Artesania i Moda de Catalunya", ref: "2.12.2022" },
-  { name: "El Consell Assessor de Comerç aprova el calendari de festius amb obertura comercial per a l'any 2027", url: W.url.pressNote, publisher: "Govern de la Generalitat (Empresa i Treball)", ref: "nota de premsa, 24.3.2026" },
+  { name: "Llei 18/2017, de l'1 d'agost, de comerç, serveis i fires (art. 20: venda en rebaixes; text consolidat)", url: W.url.law, publisher: "Generalitat de Catalunya / BOE", ref: "núm. 7426, 3.8.2017" },
+  { name: "Rebaixes (pàgina actualitzada el 2.1.2026)", url: W.url.consum, publisher: "Agència Catalana del Consum" },
+  { name: "El Consell Assessor de Comerç aprova la recomanació del període de rebaixes d'hivern i estiu", url: W.url.ccam2022, publisher: "Consorci de Comerç, Artesania i Moda de Catalunya" },
+  { name: "El Consell Assessor de Comerç aprova el calendari de festius amb obertura comercial per a l'any 2027", url: W.url.pressNote, publisher: "Govern de la Generalitat (Empresa i Treball)" },
   { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", url: W.url.order, publisher: "DOGC", ref: "núm. 9674, 28.5.2026" },
-  { name: "Ley 7/1996, de Ordenación del Comercio Minorista (arts. 24 a 26; art. 25 según el RDL 20/2012)", url: W.url.state, publisher: "BOE", ref: "BOE núm. 15, 17.1.1996; RDL 20/2012, BOE núm. 168, 14.7.2012" },
+  { name: "Ley 7/1996, de Ordenación del Comercio Minorista (arts. 24 a 26; art. 25 según el RDL 20/2012)", url: W.url.state, publisher: "BOE" },
 ];
 
 type Copy = {

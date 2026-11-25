@@ -148,6 +148,7 @@ test("only a bulletin reference written by the pipeline is printed; free-text ad
  * written to `entry_sources.note`, listed so a new one is classified on purpose.
  */
 const PRINTS: Record<string, boolean> = {
+  "núm. 7426, 3.8.2017": true,
   "núm. 9421, 27.5.2025": true,
   "núm. 9551, 27.11.2025": true,
   "núm. 9674, 28.5.2026": true,

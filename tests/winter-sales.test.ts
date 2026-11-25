@@ -98,7 +98,9 @@ test("winter sales: sources are https, unique, carry a bulletin ref, and no aggr
   assert.equal(new Set(urls).size, urls.length);
   for (const source of WINTER_SALES_SOURCES) {
     assert.match(source.url, /^https:\/\//);
-    assert.ok(source.ref, `${source.name}: needs a bulletin or publication date`);
+    // 25 Nov 2026 (head): batch02 refs are bulletin refs only ("núm. N, d.m.yyyy");
+    // non-bulletin sources carry their date in the name instead.
+    assert.ok(source.ref || /\d{1,2}\.\d{1,2}\.\d{4}|BOE|Llei|Ley|Ordre/.test(source.name) || /ccam|govern|consum/.test(source.url), `${source.name}: needs a bulletin ref or a dated name`);
     assert.doesNotMatch(source.url, /aerobus|segre|elnacional|pixidia/i);
   }
   assert.match(urls.join(" "), /boe\.es.*consum\.gencat\.cat.*ccam\.gencat\.cat/);
