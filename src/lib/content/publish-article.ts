@@ -289,7 +289,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
       path: edition.path,
       excerpt: edition.excerpt,
       body: edition.body as unknown[],
-      searchText: bodyToPlainText(edition.body),
+      searchText: bodyToPlainText(edition.body, edition.locale),
       seoTitle: edition.seoTitle,
       seoDescription: edition.seoDescription,
       canonicalUrl: null,

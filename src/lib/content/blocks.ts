@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+
+import { dayDependentText } from "./day-dependent-text";
+
 /**
  * The body of every entry is an ordered array of typed blocks, not a blob of
  * HTML.
@@ -675,7 +679,7 @@ export function slugifyAnchor(text: string): string {
  * Plain-text projection used for full-text search, reading time and the
  * automatic quality checks. Stored in `entry_translations.search_text`.
  */
-export function bodyToPlainText(body: Body): string {
+export function bodyToPlainText(body: Body, locale: Locale = DEFAULT_LOCALE): string {
   const parts: string[] = [];
   const strip = (s: string) =>
     s
@@ -757,9 +761,11 @@ export function bodyToPlainText(body: Body): string {
         break;
       case "electionPhased":
         // Search reads the page as it is until polling day.
-        parts.push(bodyToPlainText(parseBody(block.pre)));
+        parts.push(bodyToPlainText(parseBody(block.pre), locale));
         break;
       default:
+        // Day-dependent blocks: a stable, date-free description (day-dependent-text.ts).
+        parts.push(dayDependentText(block, locale));
         break;
     }
   }

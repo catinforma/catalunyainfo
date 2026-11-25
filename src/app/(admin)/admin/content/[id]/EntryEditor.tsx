@@ -85,7 +85,7 @@ export function EntryEditor({
   const [message, setMessage] = useState<ActionResult | null>(null);
   const [pending, startTransition] = useTransition();
 
-  const plain = bodyToPlainText(state.body);
+  const plain = bodyToPlainText(state.body, state.locale);
   const words = wordCount(plain);
 
   function set<K extends keyof EditorInitialState>(key: K, value: EditorInitialState[K]) {

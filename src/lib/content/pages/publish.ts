@@ -95,7 +95,7 @@ export async function publishInstitutionalPages(keys?: readonly string[]): Promi
         path,
         excerpt: copy.excerpt,
         body: copy.blocks as unknown[],
-        searchText: bodyToPlainText(copy.blocks),
+        searchText: bodyToPlainText(copy.blocks, locale),
         seoTitle: copy.seoTitle,
         seoDescription: copy.seoDescription,
         canonicalUrl: null,

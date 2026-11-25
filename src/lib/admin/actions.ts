@@ -238,7 +238,7 @@ export async function saveTranslation(input: unknown): Promise<ActionResult> {
     }
 
     const body = parseBody(data.body);
-    const searchText = bodyToPlainText(body);
+    const searchText = bodyToPlainText(body, data.locale);
 
     const existingRows = data.translationId
       ? await db

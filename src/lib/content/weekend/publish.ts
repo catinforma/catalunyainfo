@@ -295,7 +295,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
       path: copy.path,
       excerpt: copy.excerpt,
       body: body as unknown[],
-      searchText: bodyToPlainText(body),
+      searchText: bodyToPlainText(body, locale),
       seoTitle: copy.seoTitle,
       seoDescription: copy.seoDescription,
       canonicalUrl: null,
