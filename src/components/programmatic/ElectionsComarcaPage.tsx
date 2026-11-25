@@ -7,6 +7,9 @@ import { IntentLink } from "@/components/nav/IntentLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
+import { ReturnStep } from "@/components/ReturnStep";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { returnStepForElectionHub } from "@/lib/engagement/return-step";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { buildComarcaPage } from "@/lib/programmatic/elections/comarca";
@@ -70,6 +73,9 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
                   </div>
                 ))}
               </dl>
+
+              {/* The "keep it" block (lib/engagement/return-step.ts), after the facts. */}
+              <ReturnStep step={returnStepForElectionHub(locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
               <h2 id="municipis">{model.tableTitle}</h2>
               <div className="ci-table-wrap">

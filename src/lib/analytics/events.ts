@@ -30,6 +30,15 @@ export type AnalyticsEvent =
   // path (no origin, query or hash), read by GA4's built-in "Link URL"; the
   // page it was clicked on is GA4's own page path.
   | { name: "related_content_click"; params: { link_context: RelatedLinkContext; link_url: string; locale: string } }
+  // 25 Nov 2026: a click in the "keep it" block of the strike and election
+  // pages (components/ReturnStep.tsx): the WhatsApp alert, the town's
+  // calendar, "is today a holiday?", the strikes hub. `block_position` is
+  // where the block sits, `target_type` what the link is, `step_family` the
+  // page family. `link_url` is the target path, only for our own pages (the
+  // channel link has none). One event per click on top of the link's own:
+  // the WhatsApp link also sends whatsapp_channel_click (link_context
+  // "return_step").
+  | { name: "next_step_click"; params: { block_position: ReturnPosition; target_type: ReturnTarget; step_family: ReturnFamily; link_url?: string; locale: string } }
   | { name: "language_change"; params: { from_locale: string; to_locale: string } }
   // A click to an official or primary source (clicks.ts decides which links
   // count). Domain only, never the URL: a BOE or SEPE link can carry a query.
@@ -54,10 +63,20 @@ export type AnalyticsEvent =
 /** Where an official link sits: a page's source list, inside a calculator, or anywhere else in the content. */
 export type OfficialLinkContext = "sources" | "calculator" | "content";
 /** The end-of-article box, the "every morning" box of daily pages, the footer line. */
-export type ChannelLinkContext = "article_box" | "daily_box" | "footer" | "other";
+export type ChannelLinkContext = "article_box" | "daily_box" | "footer" | "return_step" | "other";
 /** The box an internal onward link sits in (`data-ci-placement`): the "next useful step" box, a town's list of its other pages (TownHub.tsx), or the strike pages' "useful now" list (UsefulNow.tsx). */
 export type RelatedLinkContext = "next_step" | "town_hub" | "useful_now";
 export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step", "town_hub", "useful_now"];
+/** `data-ci-placement` of the strike and election pages' "keep it" block (components/ReturnStep.tsx). */
+export const RETURN_STEP_PLACEMENT = "return_step";
+/** Where the block sits: right after the page's answer, or after the intro of a hub page. */
+export const RETURN_POSITIONS = ["after_answer", "after_intro"] as const;
+export type ReturnPosition = (typeof RETURN_POSITIONS)[number];
+/** What a link in the block is. */
+export const RETURN_TARGETS = ["whatsapp_channel", "town_calendar", "holiday_today", "strikes_hub", "strikes_spain_hub", "spain_holidays"] as const;
+export type ReturnTarget = (typeof RETURN_TARGETS)[number];
+export const RETURN_FAMILIES = ["strikes", "elections"] as const;
+export type ReturnFamily = (typeof RETURN_FAMILIES)[number];
 /** webcal:// subscription, Google Calendar's add-by-URL, or the plain .ics download. */
 export type IcsMethod = "apple" | "google" | "download";
 
@@ -136,6 +155,7 @@ export const ANALYTICS_EVENTS: AnalyticsEventName[] = [
   "news_view",
   "internal_search",
   "related_content_click",
+  "next_step_click",
   "language_change",
   "outbound_official_source_click",
   "map_interaction",

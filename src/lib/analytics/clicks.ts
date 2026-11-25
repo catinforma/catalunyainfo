@@ -1,4 +1,14 @@
-import { RELATED_LINK_CONTEXTS, safePath, type AnalyticsEvent, type ChannelLinkContext, type OfficialLinkContext } from "./events";
+import {
+  RELATED_LINK_CONTEXTS,
+  RETURN_FAMILIES,
+  RETURN_POSITIONS,
+  RETURN_STEP_PLACEMENT,
+  RETURN_TARGETS,
+  safePath,
+  type AnalyticsEvent,
+  type ChannelLinkContext,
+  type OfficialLinkContext,
+} from "./events";
 
 /**
  * Which link clicks become an analytics event (AnalyticsClicks.tsx listens,
@@ -68,7 +78,7 @@ export function officialDomain(host: string): string | null {
   return OFFICIAL_DOMAINS.some((d) => h === d || h.endsWith(`.${d}`)) ? h : null;
 }
 
-const CHANNEL_CONTEXTS: readonly ChannelLinkContext[] = ["article_box", "daily_box", "footer"];
+const CHANNEL_CONTEXTS: readonly ChannelLinkContext[] = ["article_box", "daily_box", "footer", RETURN_STEP_PLACEMENT];
 
 function channelContext(placement: string | null | undefined): ChannelLinkContext {
   return CHANNEL_CONTEXTS.find((c) => c === placement) ?? "other";
@@ -85,6 +95,45 @@ function sameChannel(url: URL, channelUrl: string): boolean {
 
 function isIcsPath(pathname: string): boolean {
   return pathname.startsWith("/ics/") && pathname.endsWith(".ics");
+}
+
+/** What the "keep it" block (`data-ci-placement="return_step"`) says about a link: its position, family and target type. */
+export interface ReturnStepClick {
+  href: string;
+  siteHost: string;
+  locale: string;
+  placement?: string | null;
+  /** `data-ci-position` of the block. */
+  position?: string | null;
+  /** `data-ci-family` of the block. */
+  family?: string | null;
+  /** `data-ci-target` of the link. */
+  target?: string | null;
+}
+
+/**
+ * The extra event a click in the "keep it" block sends (components/ReturnStep.tsx):
+ * `next_step_click` with the block position and the link's target type, all
+ * checked against closed lists (a value outside them sends nothing).
+ * `classifyLinkClick` still reports the WhatsApp link as whatsapp_channel_click.
+ */
+export function classifyReturnStepClick(click: ReturnStepClick): AnalyticsEvent | null {
+  if (click.placement !== RETURN_STEP_PLACEMENT) return null;
+  const block_position = RETURN_POSITIONS.find((p) => p === click.position);
+  const step_family = RETURN_FAMILIES.find((f) => f === click.family);
+  const target_type = RETURN_TARGETS.find((t) => t === click.target);
+  if (!block_position || !step_family || !target_type) return null;
+  let url: URL;
+  try {
+    url = new URL(click.href);
+  } catch {
+    return null;
+  }
+  const own = url.hostname.toLowerCase().replace(/^www\./, "") === click.siteHost.toLowerCase().replace(/^www\./, "");
+  return {
+    name: "next_step_click",
+    params: { block_position, target_type, step_family, ...(own ? { link_url: safePath(url.pathname) } : {}), locale: click.locale },
+  };
 }
 
 /** The event a click on this link sends, or null when the link is not measured. */

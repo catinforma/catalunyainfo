@@ -7,6 +7,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
 import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
+import { ReturnStep } from "@/components/ReturnStep";
 import { UsefulNow } from "@/components/UsefulNow";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
@@ -20,6 +21,7 @@ import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
 import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
+import { returnStepForEntry } from "@/lib/engagement/return-step";
 import { usefulNow } from "@/lib/engagement/useful-now";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
 import { HERO_SIZES } from "@/lib/layout/hero-image";
@@ -69,12 +71,22 @@ export function EntryArticle({
   // "Siguiente paso útil" (lib/engagement/next-step.ts): under the answer-first
   // summary, or after the answer in the body (key facts, else the lead).
   const step = entryNextStep({ href: entry.href, key: entry.key, locale }, todayInCatalonia());
+  // Strike and election pages (25 Nov 2026, lib/engagement/return-step.ts): the compact "keep it" block
+  // takes that place (the WhatsApp alert and short links to what a reader reuses), and the longer
+  // "next useful step" box moves down, before "Útil ahora".
+  const ret = returnStepForEntry({ href: entry.href, key: entry.key, locale }, todayInCatalonia());
   const nextStepInSummary = Boolean(step && layout?.summary);
+  const returnInSummary = Boolean(ret && layout?.summary);
   // "Útil ahora" (lib/engagement/useful-now.ts): strike pages hand on to the
   // evergreen pages their readers need next, after the body.
   const useful = usefulNow({ href: entry.href, key: entry.key, locale }, step);
-  const bodyInsert =
-    step && !nextStepInSummary ? { at: nextStepIndex(body), node: <NextStep step={step} locale={locale} /> } : undefined;
+  const bodyInsert = ret
+    ? returnInSummary
+      ? undefined
+      : { at: nextStepIndex(body), node: <ReturnStep step={ret} locale={locale} /> }
+    : step && !nextStepInSummary
+      ? { at: nextStepIndex(body), node: <NextStep step={step} locale={locale} /> }
+      : undefined;
 
   // Phones never see the sidebar index; long pages get it collapsed, without
   // JavaScript. On answer-first pages it sits under the summary, closed.
@@ -214,7 +226,13 @@ export function EntryArticle({
         <div className="ci-shell pt-5 md:pt-8">
           <div className="ci-answer-wrap">
             <SummaryBox summary={layout.summary} context={context} locale={locale} />
-            {nextStepInSummary ? <NextStep step={step} locale={locale} className="mt-3" /> : null}
+            {ret ? (
+              returnInSummary ? (
+                <ReturnStep step={ret} locale={locale} />
+              ) : null
+            ) : nextStepInSummary ? (
+              <NextStep step={step} locale={locale} className="mt-3" />
+            ) : null}
             {phoneToc}
           </div>
         </div>
@@ -250,6 +268,8 @@ export function EntryArticle({
                 <BlockRenderer body={endBlocks} context={context} />
               </div>
             ) : null}
+
+            {ret ? <NextStep step={step} locale={locale} className="mt-12" /> : null}
 
             <UsefulNow data={useful} locale={locale} />
 

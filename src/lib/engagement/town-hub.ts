@@ -174,3 +174,21 @@ export function townHub(slug: string, locale: Locale, current: TownFamily, today
   }[locale];
   return { title, links };
 }
+
+/**
+ * The town's calendar subscription for the "keep it" block (return-step.ts):
+ * the holiday page's subscribe box (the feed itself is noindex, so the link
+ * goes to the page's `#afegeix-calendari`), only for a town with the full
+ * holiday page in this language. Null otherwise.
+ */
+export function townCalendarLink(slug: string, locale: Locale): { href: string; label: string } | null {
+  const name = ALL_TOWNS.get(slug);
+  if (!name) return null;
+  const hub = holidayPage(slug, locale);
+  if (!hub?.full || !linkable(hub.path)) return null;
+  const place = placeIn(name, locale);
+  return {
+    href: `${hub.path}#${ANCHOR.feed}`,
+    label: { ca: `Festius ${caDe(place)} al teu calendari`, es: `Festivos de ${place} en tu calendario`, en: `${place} holidays in your calendar` }[locale],
+  };
+}

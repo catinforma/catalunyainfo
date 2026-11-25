@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { NextStep } from "@/components/NextStep";
+import { ReturnStep } from "@/components/ReturnStep";
 import { PlacePhoto } from "@/components/PlacePhoto";
 import { TownHub } from "@/components/TownHub";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -18,6 +19,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { photoImageObject, townPhoto } from "@/lib/content/place-photos";
 import { electionTownNextStep } from "@/lib/engagement/next-step";
+import { returnStepForElectionTown } from "@/lib/engagement/return-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -134,13 +136,16 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                   </section>
                 )}
 
-                {/* The next useful step (lib/engagement/next-step.ts): the postal vote while it can be requested, then results night. */}
-                <NextStep step={electionTownNextStep(locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
+                {/* The "keep it" block (lib/engagement/return-step.ts): the WhatsApp alert, the town's calendar, "is today a holiday?". */}
+                <ReturnStep step={returnStepForElectionTown(municipality.slug, locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
                 {/* Time-bound and compact (excuses are due within 7 days of the notice): before the polling places. */}
                 {model.mesa ? <MesaSection mesa={model.mesa} headingId={id(model.mesa.title)} /> : null}
 
                 <PollingSection polling={model.polling} headingId={id(model.polling.title)} />
+
+                {/* The next useful step (lib/engagement/next-step.ts): the postal vote while it can be requested, then results night. */}
+                <NextStep step={electionTownNextStep(locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
                 {/* The town's licensed photograph (lib/content/place-photos.ts): after the 29N slot, the mesa and
                     the polling places, so the election-day answers keep their place; lazy-loaded. */}

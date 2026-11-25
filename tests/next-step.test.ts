@@ -280,7 +280,8 @@ test("templates render the box server-side, after the answer, with the placement
   for (const locale of LOCALES) assert.ok(NEXT_STEP_TITLE[locale].length > 0);
 
   const article = read("src/components/pages/EntryArticle.tsx");
-  assert.match(article, /<SummaryBox[^>]*\/>\s*\{nextStepInSummary \? <NextStep/);
+  // 25 Nov 2026: the strike and election pages show the "keep it" block (return-step.ts) in this place and the box lower down.
+  assert.match(article, /<SummaryBox[^>]*\/>\s*\{ret \?[^]*?nextStepInSummary \? \(?\s*<NextStep/);
   assert.match(article, /<BlockRenderer body=\{body\} context=\{context\} insert=\{bodyInsert\} \/>/);
   for (const [file, re] of [
     // Right after the first screen (answer, table, lead: holidays/first-screen.ts, 19 Nov 2026), before #avui.

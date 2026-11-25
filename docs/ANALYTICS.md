@@ -115,17 +115,18 @@ registration is not retroactive.
 | Event | Trigger | Parameters | Dimension | Question it answers | Status |
 | --- | --- | --- | --- | --- | --- |
 | `calculator_use` | First change of a calculator's result caused by the visitor's own input; once per tab session per calculator (`lib/analytics/calculator-use.ts`, hook `use-calculator-use.ts`). The server-rendered example and a result restored from a shared `#hash` link do not count. | `calculator_id` (`CALCULATOR_USE_IDS`), `locale` | `calculator_id`: **register** ("Calculadora"); `locale`: registered | Which tools are used, not just read about; use rate per tool = users with the event ÷ users on the page | New |
-| `whatsapp_channel_click` | Click on our channel link (`FollowChannel.tsx`) | `link_context` = `article_box` \| `daily_box` \| `footer` \| `other`, `locale` | registered (`link_context`) | Which placement grows the owned audience | New |
+| `whatsapp_channel_click` | Click on our channel link (`FollowChannel.tsx`) | `link_context` = `article_box` \| `daily_box` \| `footer` \| `return_step` \| `other`, `locale` | registered (`link_context`) | Which placement grows the owned audience | New |
 | `share` | Share bar: a channel link, the copy button, or a completed native share sheet (`ShareControls.tsx`). This is the plan's *share_click*, under GA4's recommended name so it feeds the built-in reports. | `method`, `content_type`, `item_id` (path, no query), `locale` | built-in (`method`); registered (`content_type`, `locale`) | Which pages readers pass on, and through which channel. The shared URL carries `utm_source=share&utm_medium=<method>` | Live since 12 Nov |
 | `internal_search` | Search results page rendered with a query of 2+ characters (`SearchAnalytics.tsx`) | `search_term_length`, `results_count` (articles + direct pages), `locale` | registered (`results_count`, `locale`) | How often a search finds nothing. The term itself is **not** sent by us: enhanced measurement's `view_search_results` already carries it (see below) | New |
 | `outbound_official_source_click` | Click on a link in a page's source list (`.ci-sources`, any domain: by house rule every listed source is official or primary), or on an official domain anywhere else (`OFFICIAL_DOMAINS` in `lib/analytics/clicks.ts`) | `link_domain` (host only, never the URL), `link_context` = `sources` \| `calculator` \| `content`, `locale` | built-in (`link_domain` → "Link domain"); registered (`link_context`) | Do readers check the official source, and from where | New (replaces the never-wired `external_link`) |
 | `ics_subscribe_click` | Click in the town/city "Add to your calendar" block (`CalendarSubscribe.tsx`), recognised from the href | `method` = `apple` (webcal) \| `google` \| `download`, `locale` | built-in (`method`) | Is the calendar feed product used, and which app | New |
 | `useful_feedback` | "Was this useful?" yes/no (`PageFeedback.tsx`). This is the plan's *page_feedback*; the name is kept so the history since September stays in one series. | `is_useful`, `content_type`, `locale` | registered | The quality signal that is not a pageview | Live |
 | `related_content_click` | Click on one of our own pages inside the "next useful step" box (`components/NextStep.tsx`, `data-ci-placement="next_step"`), the box right after a page's answer on six families (`lib/engagement/next-step.ts`), or inside a town's list of its other pages (`components/TownHub.tsx`, `data-ci-placement="town_hub"`, low on the holiday, Christmas fair and election town pages, since 18 Nov 2026: `lib/engagement/town-hub.ts`), or inside the strike pages' "Útil ahora" list (`components/UsefulNow.tsx`, `data-ci-placement="useful_now"`, after the body, since 23 Nov 2026: `lib/engagement/useful-now.ts`). Other internal links are not measured. | `link_context` = `next_step` \| `town_hub` \| `useful_now` (closed list `RELATED_LINK_CONTEXTS`), `link_url` (target path, no origin, query or hash), `locale` | registered (`link_context`, `locale`); built-in (`link_url` → "Link URL"); the page clicked on is GA4's own "Page path" | Does the box take readers to a second page, from which family, to which target. Read with `snapshot.py landing [start end]` (clicks per 100 page views per family) | New, 18 Nov 2026 (wired; was declared with `from_type`/`to_type`/`position`, never sent) |
+| `next_step_click` | Click on any link of the "keep it" block of the strike and election pages (`components/ReturnStep.tsx`, `data-ci-placement="return_step"`, since 25 Nov 2026: `lib/engagement/return-step.ts`). One event per click, on top of the link's own (the WhatsApp link also sends `whatsapp_channel_click` with `link_context` = `return_step`). Attributes are read from `data-ci-position`, `data-ci-family` (the block) and `data-ci-target` (the link) and checked against closed lists (`RETURN_POSITIONS`, `RETURN_FAMILIES`, `RETURN_TARGETS`). | `block_position` = `after_answer` \| `after_intro`, `target_type` = `whatsapp_channel` \| `town_calendar` \| `holiday_today` \| `strikes_hub` \| `strikes_spain_hub` \| `spain_holidays`, `step_family` = `strikes` \| `elections`, `link_url` (our own pages only), `locale` | **register `block_position`, `target_type`, `step_family`** (event-scoped custom dimensions; not retroactive); `link_url` built-in; `locale` registered | Does an event reader take something they can reuse (alert, calendar, holiday check, hub), which one, from which family. Clicks per 100 sessions of strike/election landings; the old box's baseline was 0.4 per 100 (`related_content_click`, `link_context` = `next_step`) | New, 25 Nov 2026 |
 | `article_view`, `news_view`, `language_change`, `map_interaction`, `affiliate_click`, `newsletter_signup` | — | see `events.ts` | — | — | Declared, not wired |
 
-The four link events (`whatsapp_channel_click`, `outbound_official_source_click`,
-`ics_subscribe_click`, `related_content_click`) come from one delegated click
+The five link events (`whatsapp_channel_click`, `outbound_official_source_click`,
+`ics_subscribe_click`, `related_content_click`, `next_step_click`) come from one delegated click
 listener mounted in the layout (`components/AnalyticsClicks.tsx`), so the
 server-rendered links stay plain links. Everything else outbound is left to
 enhanced measurement's own `click`, so nothing is counted twice under our
@@ -363,3 +364,30 @@ report takes rows as JSON: either the raw MCP result or a bare array of
 Compare 7 days against the previous 7 on **qualified** clicks, impressions and
 CTR, plus cluster shares, new queries, and pages entering the top 10 and 11–20.
 Never on site-wide CTR.
+
+## Which links carry a utm, and why "0 sessions from WhatsApp" (25 Nov 2026)
+
+The site's WhatsApp buttons (end-of-article box, footer, the "keep it" block)
+link **to** `whatsapp.com/channel/...`: they send readers away and cannot carry
+a utm that anything reads. A visit **from** WhatsApp comes from one of three
+places, each tagged differently:
+
+| Where the link is | utm | Shows in GA4 as |
+| --- | --- | --- |
+| The channel's daily post (`lib/share/channel-message.ts`, `channelUrl()`, pasted by the owner from `/canal/<token>/` or `/admin/canal/`) | `utm_source=whatsapp&utm_medium=channel&utm_campaign=daily` (+ `utm_content` for the weekend line) | source `whatsapp`, medium `channel` |
+| The share bar's WhatsApp button (`lib/share/links.ts`, `sharedUrl()`) | `utm_source=share&utm_medium=whatsapp` | source `share`, medium `whatsapp` (not source `whatsapp`) |
+| A link typed or pasted by hand, or a post not built by the generator | none | Direct |
+
+Checked in the code on 25 Nov: every link of a generated post and every share
+URL carries its utm (`tests/channel-message.test.ts`, `tests/return-step.test.ts`);
+the apex-to-www and slash redirects keep the query (curl, 25 Nov); nothing
+strips it client-side. So no site-generated link lacks a utm. The zero
+`utm_source=whatsapp` sessions in 28 d is therefore not a tagging bug on our
+side; the candidates are (a) too few channel followers or posts that were not
+published with the generated links (followers are not readable from the
+server: owner to read them in WhatsApp), (b) readers who denied measurement
+(GA4 sees a minimum, ratio 0.51 of Google clicks), (c) shares counted as
+`share / whatsapp`. To read the channel's real pull: GA4 Traffic acquisition,
+session source/medium, filter source in (`whatsapp`, `share`) and medium in
+(`channel`, `whatsapp`). Owner rule: paste the post exactly as the private
+page generates it, never retype a link.

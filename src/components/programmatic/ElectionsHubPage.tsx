@@ -6,6 +6,9 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
+import { ReturnStep } from "@/components/ReturnStep";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { returnStepForElectionHub } from "@/lib/engagement/return-step";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
@@ -76,6 +79,9 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
             {copy.intro.map((text) => (
               <p key={text}>{renderInline(text)}</p>
             ))}
+
+            {/* The "keep it" block (lib/engagement/return-step.ts), after the intro. */}
+            <ReturnStep step={returnStepForElectionHub(locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
             <h2 id="comarques">{copy.listTitle}</h2>
             <nav aria-label={copy.jumpLabel} className="text-sm">

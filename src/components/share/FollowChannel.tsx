@@ -2,7 +2,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { DAILY_FOLLOW_COPY, FOLLOW_CHANNEL_COPY, WHATSAPP_CHANNEL_URL } from "@/lib/share/channel";
 
-function WhatsAppIcon({ size = 18 }: { size?: number }) {
+export function WhatsAppIcon({ size = 18 }: { size?: number }) {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width={size} height={size} focusable="false">
       <path
