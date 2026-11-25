@@ -48,6 +48,12 @@ import {
  * (11-13 Dec), Sant Pere de Vilamajor and Roquetes (12-13 Dec), les Masies de
  * Voltregà (18-20 Dec).
  *
+ * 25 Nov 2026: the councils of Tarragona (fairs page: Fira de Nadal 4-23 Dec,
+ * Fira d'Artesania from 4 Dec), Sabadell, Mataró and Badalona have published
+ * their fairs (organisers.ts, each with its quote); "I la resta de ciutats?"
+ * gives them. Reus, Terrassa and Sant Cugat answered 403/503 to curl and to the web
+ * fetch tool that day: no 2026 date is given for them.
+ *
  * Removed on 24 Oct: Santa Margarida i els Monjos (its announcement now
  * returns 404), Sabadell, Terrassa, Tarragona, Reus and Tortosa (no official
  * page found, only aggregators that disagree), and two unsourced claims about
@@ -249,7 +255,10 @@ const SOURCES: B2Source[] = [
   { name: "1a Fira «Un Nadal com cal»", url: "https://www.santantonidevilamajor.cat/actualitat/noticies/busquem-artesanses-i-creadorses-per-omplir-de-magia-la-1a-fira-un-nadal-com-cal-de-sant-antoni-de-vilamajor.html", publisher: "Ajuntament de Sant Antoni de Vilamajor" },
   { name: "Cubelles recupera la Fira de Nadal", url: "https://www.cubelles.cat/cubelles-facil/promocio-economica/cubelles-recupera-la-fira-de-nadal-amb-un-format-renovat-inspirat-en-els-mercats-nadalencs-tradicionals.html", publisher: "Ajuntament de Cubelles" },
   { name: "Mercat de Nadal a la plaça de la Independència", url: "https://web.girona.cat/comerc/firesimercatsalcarrer/permisos/nadalplindependencia", publisher: "Ajuntament de Girona" },
-  { name: "La Rambla Nova, a punt per les fires de Nadal i d'artesania (2025)", url: "https://www.tarragona.cat/comerc/noticies/la-rambla-nova-a-punt-per-les-fires-de-nadal-i-dartesania-1", publisher: "Ajuntament de Tarragona" },
+  { name: "Fires de Nadal i d'Artesania 2026 (Rambla Nova, 4 de desembre)", url: "https://www.tarragona.cat/la-ciutat/nadal-a-tarragona/fires", publisher: "Ajuntament de Tarragona" },
+  { name: "Fira de Santa Llúcia 2026 (27 de novembre - 22 de desembre)", url: "https://web.sabadell.cat/nadal/fira-de-santa-llucia", publisher: "Ajuntament de Sabadell" },
+  { name: "Calendari de fires 2026: Fira de Nadal (27 de novembre - 23 de desembre)", url: "https://www.mataro.cat/ca/temes/comerc-mercats-i-fires/fires", publisher: "Ajuntament de Mataró" },
+  { name: "Programa de Nadal 2026-2027: Fira de Nadal Tradicional (20 de novembre - 23 de desembre)", url: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/festes/nadal/nadal-2026-2027/nadal-2026-2027/nadal_triptic_a3_28oct_def-1.pdf", publisher: "Ajuntament de Badalona" },
   { name: "Reus té a punt la campanya de Nadal 2025-2026", url: "https://www.reus.cat/noticia/reus-te-punt-la-campanya-de-nadal-2025-2026", publisher: "Ajuntament de Reus" },
   { name: "Barcelona, Capital Europea del Nadal 2026", url: "https://www.barcelona.cat/infobarcelona/en/barcelona-capital-europea-de-nadal-2026_1579437.html", publisher: "Ajuntament de Barcelona" },
 ];
@@ -439,7 +448,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "I la resta de ciutats?",
-        `A **Tarragona**, el 2025 la Fira de Nadal va ser del 4 al 24 de desembre a la Rambla Nova, i a **Reus** el Mercat de Nadal, del 30 de novembre al 23 de desembre a la plaça del Mercadal; cap de les dues ciutats no ha publicat encara les dates del 2026. Sabadell, Terrassa, Tortosa i molts altres municipis també munten fires a l'Advent, però no n'hem trobat cap pàgina oficial amb dates del 2026; les webs d'agenda es contradiuen entre elles. Consulta l'agenda de l'ajuntament abans d'anar-hi. Si vas a Tarragona en tren, ${b2link("tarragona", "ca", "Tarragona des de Barcelona")}.`,
+        `A **Tarragona**, l'Ajuntament publica per al 2026 la Fira de Nadal a la Rambla Nova (tram Teresianes), del 4 al 23 de desembre, de 10 a 21 h i gratuïta, i la Fira d'Artesania, que s'inaugura el divendres 4 a les 17 h (la seva pàgina l'allarga fins al 6 de gener en un punt i fins al 23 de desembre en un altre); [fires de Nadal a Tarragona](${fairsTownPath("ca", "tarragona")}). A **Sabadell**, la Fira de Santa Llúcia és del 27 de novembre al 22 de desembre ([fires de Nadal a Sabadell](${fairsTownPath("ca", "sabadell")})); a **Mataró**, la Fira de Nadal, del 27 de novembre al 23 de desembre, a la plaça de Santa Anna ([Mataró](${fairsTownPath("ca", "mataro")})); i a **Badalona**, la Fira de Nadal Tradicional, del 20 de novembre al 23 de desembre, de 9 a 21 h, a la plaça de la Plana ([Badalona](${fairsTownPath("ca", "badalona")})), tot segons els seus ajuntaments (llegit el 25 de novembre). Els webs de **Reus**, **Terrassa** i **Sant Cugat** no es van poder llegir aquell dia, i no en donem dates del 2026 (a Reus, el 2025, el Mercat de Nadal va ser del 30 de novembre al 23 de desembre a la plaça del Mercadal). Consulta l'agenda de l'ajuntament abans d'anar-hi. Si vas a Tarragona en tren, ${b2link("tarragona", "ca", "Tarragona des de Barcelona")}.`,
         `Quan i on s'encenen els llums de Nadal a Barcelona i a ${LIGHTS_TOWNS.length} municipis més, de Girona a Tortosa, amb la data del 2026 de cada ajuntament quan ja l'ha publicada, ho trobaràs a ${b2link("christmasLights", "ca", "l'encesa de llums de Nadal 2026")}.`,
       ),
       ...h2(
@@ -523,7 +532,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "¿Y el resto de ciudades?",
-        `En **Tarragona**, en 2025 la Fira de Nadal fue del 4 al 24 de diciembre en la Rambla Nova, y en **Reus** el Mercat de Nadal, del 30 de noviembre al 23 de diciembre en la plaza del Mercadal; ninguna de las dos ciudades ha publicado aún las fechas de 2026. Sabadell, Terrassa, Tortosa y muchos otros municipios también montan ferias en Adviento, pero no hemos encontrado ninguna página oficial con fechas de 2026; las webs de agenda se contradicen entre sí. Consulta la agenda del ayuntamiento antes de ir. Si vas a Tarragona en tren, ${b2link("tarragona", "es", "Tarragona desde Barcelona")}.`,
+        `En **Tarragona**, el Ayuntamiento publica para 2026 la Fira de Nadal en la Rambla Nova (tramo Teresianes), del 4 al 23 de diciembre, de 10 a 21 h y gratuita, y la Fira d'Artesania, que se inaugura el viernes 4 a las 17 h (su página la alarga hasta el 6 de enero en un punto y hasta el 23 de diciembre en otro); [ferias de Navidad en Tarragona](${fairsTownPath("es", "tarragona")}). En **Sabadell**, la Fira de Santa Llúcia es del 27 de noviembre al 22 de diciembre ([ferias de Navidad en Sabadell](${fairsTownPath("es", "sabadell")})); en **Mataró**, la Fira de Nadal, del 27 de noviembre al 23 de diciembre, en la plaza de Santa Anna ([Mataró](${fairsTownPath("es", "mataro")})); y en **Badalona**, la Fira de Nadal Tradicional, del 20 de noviembre al 23 de diciembre, de 9 a 21 h, en la plaza de la Plana ([Badalona](${fairsTownPath("es", "badalona")})), todo según sus ayuntamientos (leído el 25 de noviembre). Las webs de **Reus**, **Terrassa** y **Sant Cugat** no se pudieron leer ese día, y no damos fechas de 2026 para ellas (en Reus, en 2025, el Mercat de Nadal fue del 30 de noviembre al 23 de diciembre en la plaza del Mercadal). Consulta la agenda del ayuntamiento antes de ir. Si vas a Tarragona en tren, ${b2link("tarragona", "es", "Tarragona desde Barcelona")}.`,
         `Cuándo y dónde se encienden las luces de Navidad en Barcelona y en ${LIGHTS_TOWNS.length} municipios más, de Girona a Tortosa, con la fecha de 2026 de cada ayuntamiento cuando ya la ha publicado, lo encontrarás en ${b2link("christmasLights", "es", "el encendido de luces de Navidad 2026")}.`,
       ),
       ...h2(
@@ -606,7 +615,7 @@ function body(locale: Locale) {
     ),
     ...h2(
       "What about other towns?",
-      `In **Tarragona** the 2025 Christmas fair ran from 4 to 24 December on the Rambla Nova, and in **Reus** the Christmas market from 30 November to 23 December on Plaça del Mercadal; neither city has published its 2026 dates yet. Sabadell, Terrassa, Tortosa and many other towns also hold Advent fairs, but we have found no official page with 2026 dates, and listing sites contradict each other. Check the council's events page before you go. By train to Tarragona, see ${b2link("tarragona", "en", "Tarragona from Barcelona")}.`,
+      `In **Tarragona** the council publishes for 2026 the Christmas fair on the Rambla Nova (Teresianes stretch), 4 to 23 December, 10:00 to 21:00 and free, and the craft fair, which opens on Friday 4 at 17:00 (its page runs it to 6 January in one place and to 23 December in another); [Christmas fairs in Tarragona](${fairsTownPath("en", "tarragona")}). In **Sabadell** the Fira de Santa Llúcia runs 27 November to 22 December; in **Mataró** the Christmas fair runs 27 November to 23 December on Plaça de Santa Anna; and in **Badalona** the Traditional Christmas Fair runs 20 November to 23 December, 9:00 to 21:00, on Plaça de la Plana, all according to their councils (read on 25 November). The websites of **Reus**, **Terrassa** and **Sant Cugat** could not be read that day, so we give no 2026 dates for them (in Reus in 2025 the Christmas market ran 30 November to 23 December on Plaça del Mercadal). Check the council's events page before you go. By train to Tarragona, see ${b2link("tarragona", "en", "Tarragona from Barcelona")}.`,
       `When and where the Christmas lights are switched on in Barcelona and ${LIGHTS_TOWNS.length} other towns, from Girona to Tortosa, with each council's 2026 date once it is published, is in ${b2link("christmasLights", "en", "our Christmas lights switch-on guide")}.`,
     ),
     ...h2(

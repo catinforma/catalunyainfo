@@ -30,6 +30,25 @@ import type { FairDetails, OrganiserFair, PendingMarket, UnconfirmedFair } from 
  * Barcelona (27 Nov - 23 Dec), Canyelles and Vic; `alsoReplaces` folds the
  * last two into their council entries so each is listed once.
  *
+ * Re-read on 25 Nov 2026 (00:55-01:10 CET, curl with a browser user agent, every quote
+ * below for a fair of 28 Nov - 8 Dec grepped on its page; downloads in a scratch dir):
+ *   - Canyelles: the fair page is unchanged; the Petita Llúcia news was republished on
+ *     24 Nov and now lists the Harry Potter space and Els Colors del Nadal; it says
+ *     nothing of buses or parking for 28-29 Nov (the shuttle and minibus timetables are
+ *     for 21-22 Nov);
+ *   - Caldes de Montbui: programme PDF unchanged (last modified 4 Nov), the council's
+ *     "Com arribar" page gives the public car parks and the Granollers and Sabadell bus lines;
+ *   - Espinelves, Girona, Vic, Olot, Granollers, Vallirana, Barcelona (Santa Llúcia
+ *     agenda updated 17 Nov, Sagrada Família, Nadal al Port), Ascó, Sant Antoni de
+ *     Vilamajor, Ripoll, Arbúcies, Balaguer, Tivissa, Berga, Garriguella, Solsona,
+ *     Figueres: dates, hours and places unchanged;
+ *   - not readable: Terrassa, Reus and Sant Cugat (403/503 to curl and to the web
+ *     fetch tool), Santa Coloma (self-signed certificate), Sitges (login form);
+ *   - new in the 15 largest towns: Sabadell (Fira de Santa Llúcia), Mataró (Fira de
+ *     Nadal), Badalona (Fira de Nadal Tradicional), Tarragona (Fira de Nadal and Fira
+ *     d'Artesania). Hospitalet (Fira de Nadal i Reis from 11 Dec), Rubí (from 11 Dec)
+ *     start after 8 Dec; Cornellà and Sant Boi publish nothing for the window.
+ *
  * 13 Nov 2026 (season push: the 30 towns with the most search impressions,
  * each organiser page opened with a browser user agent and grepped):
  *   - every quote below from 30 Oct / 3 Nov is still on its page;
@@ -106,8 +125,8 @@ const CANYELLES_APP = "https://www.santalluciacanyelles.cat";
  *     price, or says entry to the fair is free: the page says neither.
  */
 const CANYELLES_DETAILS: FairDetails = {
-  // 24 Nov 2026: fair page re-read (unchanged) and the Petita Llúcia news added (`after`).
-  readOn: "2026-11-24",
+  // 25 Nov 2026: fair page re-read (unchanged); the Petita Llúcia news was republished on 24 Nov (`after`).
+  readOn: "2026-11-25",
   organizer: { name: "Ajuntament de Canyelles", url: `${CANYELLES}/promocio-economica-i-turisme/la-fira-de-santa-llucia` },
   times: { opens: "09:00", closes: "21:00" },
   why: {
@@ -169,21 +188,37 @@ const CANYELLES_DETAILS: FairDetails = {
   // l'exposició és de 9h a 21h". The council's agenda the same day: "Petita
   // Llúcia Dis. 28 Nov, 2026 (10:00 - 20:00)", "Diu. 29 Nov, 2026 (10:00 -
   // 20:00)" (the two pages give different hours: both are shown as written).
+  // Re-read 25 Nov 2026: the council's news is now headed "Publicat el Dimarts, 24
+  // Novembre 2026 13:08" and lists "Castell dels Contes Màgics, Patge Reial Vibó, Park
+  // Noël, Exposició de Diorames, Exposició de Playmobil, Espai Harry Potter, Pessebre
+  // Solidari, Pessebre de l'Ajuntament, Arbre dels Desitjos, Els Colors del Nadal";
+  // "Són entrades individuals. Són vàlides per entrar a les exposicions de 9h a 21h el
+  // dia per al qual s'han adquirit No hi ha horari d'entrada"; "L'entrada costa 1 euro
+  // per a la resta de públic"; "Entrades limitades"; the box offices "de 9h a 20h".
   after: {
-    ca: "**La Petita Llúcia, dissabte 28 i diumenge 29 de novembre:** no hi ha parades, però les exposicions de la fira continuen obertes: el Castell dels Contes Màgics, el Patge Vibó, el Park Noël, Playmobil, els diorames, l'Arbre dels Desitjos, Nadal de Colors, el Pessebre Solidari gegant del Casal i el pessebre de l'Ajuntament. La notícia de l'Ajuntament (23 de novembre) dona l'horari de les exposicions de 9 a 21 h; la seva agenda, de 10 a 20 h. Per al Castell dels Contes Màgics, el Patge Vibó i el Park Noël cal entrada: 1 euro, gratuïta de 0 a 3 anys, anticipada a Entradium.com o a les taquilles del Pol Nord, de 9 a 20 h, fins que s'exhaureixin.",
-    es: "**La Petita Llúcia, sábado 28 y domingo 29 de noviembre:** no hay paradas, pero las exposiciones de la feria siguen abiertas: el Castell dels Contes Màgics, el Paje Vibó, el Park Noël, Playmobil, los dioramas, el Arbre dels Desitjos, Nadal de Colors, el Pessebre Solidari gigante del Casal y el belén del Ayuntamiento. La noticia del Ayuntamiento (23 de noviembre) da el horario de las exposiciones de 9 a 21 h; su agenda, de 10 a 20 h. Para el Castell dels Contes Màgics, el Paje Vibó y el Park Noël hace falta entrada: 1 euro, gratis de 0 a 3 años, anticipada en Entradium.com o en las taquillas del Pol Nord, de 9 a 20 h, hasta agotarlas.",
-    en: "**La Petita Llúcia, Saturday 28 and Sunday 29 November:** there are no stalls, but the fair's exhibitions stay open: the Castle of Magic Tales, the Page Vibó, Park Noël, Playmobil, the dioramas, the Wishing Tree, Nadal de Colors, the giant charity nativity at the Casal and the town hall's nativity scene. The council's news item (23 November) gives the exhibitions' hours as 9:00 to 21:00; its agenda says 10:00 to 20:00. The Castle of Magic Tales, the Page Vibó and Park Noël need a ticket: 1 euro, free for children aged 0 to 3, in advance on Entradium.com or at the ticket desks at the Pol Nord, 9:00 to 20:00, while they last.",
+    ca: "**La Petita Llúcia, dissabte 28 i diumenge 29 de novembre:** no hi ha parades, però les exposicions de la fira continuen obertes: el Castell dels Contes Màgics, el Patge Reial Vibó, el Park Noël, els diorames, Playmobil, l'Espai Harry Potter, el Pessebre Solidari, el pessebre de l'Ajuntament, l'Arbre dels Desitjos i Els Colors del Nadal. La notícia de l'Ajuntament (24 de novembre) dona l'horari de les exposicions de 9 a 21 h; la seva agenda, de 10 a 20 h. Per al Castell dels Contes Màgics, el Patge Reial Vibó i el Park Noël cal entrada: 1 euro, gratuïta de 0 a 3 anys, individual, vàlida el dia comprat i sense hora d'entrada, i les entrades són limitades; es compren anticipades a Entradium.com o a les taquilles del Pol Nord, de 9 a 20 h, fins que s'exhaureixin.",
+    es: "**La Petita Llúcia, sábado 28 y domingo 29 de noviembre:** no hay paradas, pero las exposiciones de la feria siguen abiertas: el Castell dels Contes Màgics, el Paje Real Vibó, el Park Noël, los dioramas, Playmobil, el Espai Harry Potter, el Pessebre Solidari, el belén del Ayuntamiento, el Arbre dels Desitjos y Els Colors del Nadal. La noticia del Ayuntamiento (24 de noviembre) da el horario de las exposiciones de 9 a 21 h; su agenda, de 10 a 20 h. Para el Castell dels Contes Màgics, el Paje Real Vibó y el Park Noël hace falta entrada: 1 euro, gratis de 0 a 3 años, individual, válida el día de compra y sin hora de entrada, y las entradas son limitadas; se compran anticipadas en Entradium.com o en las taquillas del Pol Nord, de 9 a 20 h, hasta agotarlas.",
+    en: "**La Petita Llúcia, Saturday 28 and Sunday 29 November:** there are no stalls, but the fair's exhibitions stay open: the Castle of Magic Tales, the Royal Page Vibó, Park Noël, the dioramas, Playmobil, the Harry Potter space, the charity nativity, the town hall's nativity scene, the Wishing Tree and Els Colors del Nadal (the colours of Christmas). The council's news item (24 November) gives the exhibitions' hours as 9:00 to 21:00; its agenda says 10:00 to 20:00. The Castle of Magic Tales, the Royal Page Vibó and Park Noël need a ticket: 1 euro, free for children aged 0 to 3, individual, valid on the day bought with no entry time, and limited in number; buy in advance on Entradium.com or at the ticket desks at the Pol Nord, 9:00 to 20:00, while they last.",
   },
   access: [
+    // 25 Nov 2026: the council's news on the Petita Llúcia (re-read, "Publicat el
+    // Dimarts, 24 Novembre 2026 13:08") and its agenda give hours and tickets for 28 and
+    // 29 Nov and say nothing of a shuttle bus or parking; the shuttle and minibus
+    // timetables it links are headed "21 i 22 de novembre".
     {
-      ca: "**Bus llançadora gratuït Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, dissabte i diumenge: surt de Vilanova (parada: Estació) a les 9, 11, 13, 15, 17 i 19 h, i de Vilafranca (estació d'autobusos) a les 10, 12, 14, 16, 18 i 20 h. De Canyelles cap a Vilafranca, a les 9.30, 11.30, 13.30, 15.30, 17.30 i 19.30 h; cap a Vilanova, a les 10.30, 12.30, 14.30, 16.30, 18.30 i 20.30 h.",
-      es: "**Bus lanzadera gratuito Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, sábado y domingo: sale de Vilanova (parada: Estació) a las 9, 11, 13, 15, 17 y 19 h, y de Vilafranca (estación de autobuses) a las 10, 12, 14, 16, 18 y 20 h. De Canyelles hacia Vilafranca, a las 9.30, 11.30, 13.30, 15.30, 17.30 y 19.30 h; hacia Vilanova, a las 10.30, 12.30, 14.30, 16.30, 18.30 y 20.30 h.",
-      en: "**Free shuttle bus Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, Saturday and Sunday: from Vilanova (stop: Estació) at 9:00, 11:00, 13:00, 15:00, 17:00 and 19:00, and from Vilafranca (bus station) at 10:00, 12:00, 14:00, 16:00, 18:00 and 20:00. From Canyelles to Vilafranca at 9:30, 11:30, 13:30, 15:30, 17:30 and 19:30; to Vilanova at 10:30, 12:30, 14:30, 16:30, 18:30 and 20:30.",
+      ca: "**La Petita Llúcia (28 i 29 de novembre):** la notícia de l'Ajuntament (24 de novembre) i la seva agenda no parlen de bus llançadora ni d'aparcament per a aquests dos dies; els horaris del bus llançadora i del minibús urbà que publica són els del 21 i 22 de novembre, els dies de la fira.",
+      es: "**La Petita Llúcia (28 y 29 de noviembre):** la noticia del Ayuntamiento (24 de noviembre) y su agenda no hablan de bus lanzadera ni de aparcamiento para esos dos días; los horarios del bus lanzadera y del minibús urbano que publica son los del 21 y 22 de noviembre, los días de la feria.",
+      en: "**La Petita Llúcia (28 and 29 November):** the council's news item (24 November) and its agenda mention no shuttle bus or parking for these two days; the shuttle and town minibus timetables it publishes are for 21 and 22 November, the fair days.",
     },
     {
-      ca: "**Bus llançadora gratuït Sitges – Sant Pere de Ribes – Canyelles:** surt de Sitges (Parc de Can Robert, costat Oasis) a les 10, 13 i 16 h i passa per Sant Pere de Ribes (plaça de Catalunya) deu minuts després; torna de Canyelles a les 13.30, 16.30 i 21 h.",
-      es: "**Bus lanzadera gratuito Sitges – Sant Pere de Ribes – Canyelles:** sale de Sitges (Parc de Can Robert, junto a Oasis) a las 10, 13 y 16 h y pasa por Sant Pere de Ribes (plaza de Catalunya) diez minutos después; vuelve de Canyelles a las 13.30, 16.30 y 21 h.",
-      en: "**Free shuttle bus Sitges – Sant Pere de Ribes – Canyelles:** from Sitges (Parc de Can Robert, next to Oasis) at 10:00, 13:00 and 16:00, calling at Sant Pere de Ribes (Plaça de Catalunya) ten minutes later; back from Canyelles at 13:30, 16:30 and 21:00.",
+      ca: "**Bus llançadora gratuït Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, dissabte 21 i diumenge 22 de novembre (els dies de la fira): surt de Vilanova (parada: Estació) a les 9, 11, 13, 15, 17 i 19 h, i de Vilafranca (estació d'autobusos) a les 10, 12, 14, 16, 18 i 20 h. De Canyelles cap a Vilafranca, a les 9.30, 11.30, 13.30, 15.30, 17.30 i 19.30 h; cap a Vilanova, a les 10.30, 12.30, 14.30, 16.30, 18.30 i 20.30 h.",
+      es: "**Bus lanzadera gratuito Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, sábado 21 y domingo 22 de noviembre (los días de la feria): sale de Vilanova (parada: Estació) a las 9, 11, 13, 15, 17 y 19 h, y de Vilafranca (estación de autobuses) a las 10, 12, 14, 16, 18 y 20 h. De Canyelles hacia Vilafranca, a las 9.30, 11.30, 13.30, 15.30, 17.30 y 19.30 h; hacia Vilanova, a las 10.30, 12.30, 14.30, 16.30, 18.30 y 20.30 h.",
+      en: "**Free shuttle bus Vilanova i la Geltrú – Canyelles – Vilafranca del Penedès**, Saturday 21 and Sunday 22 November (the fair days): from Vilanova (stop: Estació) at 9:00, 11:00, 13:00, 15:00, 17:00 and 19:00, and from Vilafranca (bus station) at 10:00, 12:00, 14:00, 16:00, 18:00 and 20:00. From Canyelles to Vilafranca at 9:30, 11:30, 13:30, 15:30, 17:30 and 19:30; to Vilanova at 10:30, 12:30, 14:30, 16:30, 18:30 and 20:30.",
+    },
+    {
+      ca: "**Bus llançadora gratuït Sitges – Sant Pere de Ribes – Canyelles (21 i 22 de novembre):** surt de Sitges (Parc de Can Robert, costat Oasis) a les 10, 13 i 16 h i passa per Sant Pere de Ribes (plaça de Catalunya) deu minuts després; torna de Canyelles a les 13.30, 16.30 i 21 h.",
+      es: "**Bus lanzadera gratuito Sitges – Sant Pere de Ribes – Canyelles (21 y 22 de noviembre):** sale de Sitges (Parc de Can Robert, junto a Oasis) a las 10, 13 y 16 h y pasa por Sant Pere de Ribes (plaza de Catalunya) diez minutos después; vuelve de Canyelles a las 13.30, 16.30 y 21 h.",
+      en: "**Free shuttle bus Sitges – Sant Pere de Ribes – Canyelles (21 and 22 November):** from Sitges (Parc de Can Robert, next to Oasis) at 10:00, 13:00 and 16:00, calling at Sant Pere de Ribes (Plaça de Catalunya) ten minutes later; back from Canyelles at 13:30, 16:30 and 21:00.",
     },
     {
       ca: "**Des de Barcelona en tren:** l'R2 Sud para a Vilanova i la Geltrú, on el bus llançadora surt de l'Estació, i l'R4 a Vilafranca del Penedès, on surt de l'estació d'autobusos. L'Ajuntament avisa que els horaris dels autobusos poden variar pel trànsit.",
@@ -243,7 +278,7 @@ const SANTA_LLUCIA_SITE = "https://firadesantallucia.cat";
  * stay credited to the Agenda Cultural entry below, as before.
  */
 const SANTA_LLUCIA_DETAILS: FairDetails = {
-  readOn: "2026-11-20",
+  readOn: "2026-11-25",
   times: { opens: "10:00", closes: "21:00" },
   organizer: { name: "Associació Fira de Santa Llúcia", url: `${SANTA_LLUCIA_SITE}/` },
   programme: [
@@ -293,7 +328,7 @@ const SANTA_LLUCIA_DETAILS: FairDetails = {
  * No organiser site, programme or transport advice on that page.
  */
 const SAGRADA_FAMILIA_DETAILS: FairDetails = {
-  readOn: "2026-11-20",
+  readOn: "2026-11-25",
   times: { opens: "10:00", closes: "21:00" },
   programme: [
     {
@@ -378,8 +413,8 @@ const CARDEDEU_DETAILS: FairDetails = {
  * difference. The map marks parking with "P" but gives no text on it.
  */
 const ARBUCIES_DETAILS: FairDetails = {
-  // 24 Nov 2026: the programme PDF re-fetched: same file (created 18 Nov 2026).
-  readOn: "2026-11-24",
+  // 25 Nov 2026: the programme PDF re-fetched: same file (created 18 Nov 2026), hours read again on the rendered page.
+  readOn: "2026-11-25",
   why: {
     ca: "Horari del programa: dissabte de 10 a 19 h i diumenge de 10 a 18 h, al carrer Camprodon i la plaça de la Vila. Les normes per als paradistes fixen el tancament del diumenge a les 15 h, «pot variar».",
     es: "Horario del programa: sábado de 10 a 19 h y domingo de 10 a 18 h, en la calle Camprodon y la plaza de la Vila. Las normas para los paradistas fijan el cierre del domingo a las 15 h, «puede variar».",
@@ -433,7 +468,7 @@ const ARBUCIES_DETAILS: FairDetails = {
  */
 const CALDES_DETAILS: FairDetails = {
   // 24 Nov 2026: the programme PDF re-fetched: same file (created 30 Oct 2026).
-  readOn: "2026-11-24",
+  readOn: "2026-11-25",
   programme: [
     {
       ca: "**Divendres 4, a les 18 h**, a la plaça de la Font del Lleó: obertura del mercat amb el primer tast de caldo de Nadal, gratuït, i el Ball de Diables de Caldes, que celebra els 40 anys del mercat.",
@@ -465,9 +500,18 @@ const CALDES_DETAILS: FairDetails = {
   },
   access: [
     {
-      ca: "**Des de Barcelona en autobús:** línies de Sagalés e9 (per autopista) i 202 i 203 (per carretera), segons el web de turisme de l'Ajuntament.",
-      es: "**Desde Barcelona en autobús:** líneas de Sagalés e9 (por autopista) y 202 y 203 (por carretera), según la web de turismo del Ayuntamiento.",
-      en: "**From Barcelona by bus:** Sagalés lines e9 (by motorway) and 202 and 203 (by the old road), according to the council's tourism website.",
+      ca: "**Des de Barcelona en autobús:** línies de Sagalés e9 (per autopista) i 202 i 203 (per carretera), segons el web de turisme de l'Ajuntament; des de Granollers, les 420 i 260, i des de Sabadell, les 230, 231 i 234.",
+      es: "**Desde Barcelona en autobús:** líneas de Sagalés e9 (por autopista) y 202 y 203 (por carretera), según la web de turismo del Ayuntamiento; desde Granollers, las 420 y 260, y desde Sabadell, las 230, 231 y 234.",
+      en: "**From Barcelona by bus:** Sagalés lines e9 (by motorway) and 202 and 203 (by the old road), according to the council's tourism website; from Granollers, the 420 and 260, and from Sabadell, the 230, 231 and 234.",
+    },
+    // 25 Nov 2026, "Com arribar" (visiteucaldes.cat/turisme/com-arribar/): "APARCAMENT PÚBLIC
+    // Zona esportiva les Cremades Carrer Bigues (Bonastre) Carrer Balmes (Era del sindicat)
+    // Aparcament Centre El Sindicat (de pagament)"; "Línies des de Granollers 420 i 260
+    // Línies des de Sabadell 230 , 231 i 234". General page, not written for the market.
+    {
+      ca: "**Aparcament públic**, segons la mateixa pàgina de l'Ajuntament (no escrita per al mercat): la zona esportiva Les Cremades, el carrer Bigues (Bonastre), el carrer Balmes (Era del Sindicat) i l'aparcament del Centre, El Sindicat, que és de pagament.",
+      es: "**Aparcamiento público**, según la misma página del Ayuntamiento (no escrita para el mercado): la zona deportiva Les Cremades, la calle Bigues (Bonastre), la calle Balmes (Era del Sindicat) y el aparcamiento del Centre, El Sindicat, que es de pago.",
+      en: "**Public car parks**, from the same council page (not written for the market): the Les Cremades sports ground, carrer Bigues (Bonastre), carrer Balmes (Era del Sindicat) and the Centre car park, El Sindicat, which is paid.",
     },
   ],
   links: [
@@ -488,7 +532,7 @@ const CALDES_DETAILS: FairDetails = {
  * programme (third programme line corrected, see below).
  */
 const ESPINELVES_DETAILS: FairDetails = {
-  readOn: "2026-11-24",
+  readOn: "2026-11-25",
   organizer: { name: "Ajuntament d'Espinelves (Fira de l'Avet)", url: "https://www.firadelavet.cat/" },
   programme: [
     {
@@ -535,6 +579,12 @@ const ESPINELVES_DETAILS: FairDetails = {
       es: "**En coche:** el plano de 2026 marca varios aparcamientos alrededor del pueblo, hacia el Arboretum Masjoan y el Coll de Ravell, y un peaje en la carretera de acceso; la web no publica el precio.",
       en: "**By car:** the 2026 map shows several car parks around the village, towards the Arboretum Masjoan and Coll de Ravell, and a toll barrier on the access road; the website gives no price.",
     },
+    // 25 Nov 2026: firadelavet.cat (modified 12 Nov) and the council's notice have no bus, shuttle or train.
+    {
+      ca: "**Autobús i tren:** el web de la fira (llegit el 25 de novembre) no publica cap servei d'autobús, llançadora ni tren cap a Espinelves.",
+      es: "**Autobús y tren:** la web de la feria (leída el 25 de noviembre) no publica ningún servicio de autobús, lanzadera ni tren hacia Espinelves.",
+      en: "**Bus and train:** the fair's website (read on 25 November) publishes no bus, shuttle or train service to Espinelves.",
+    },
   ],
   links: [
     { label: { ca: "Fira de l'Avet (web oficial)", es: "Fira de l'Avet (web oficial)", en: "Fira de l'Avet (official website)" }, url: "https://www.firadelavet.cat/" },
@@ -553,7 +603,7 @@ const ESPINELVES_DETAILS: FairDetails = {
  * gives no time for the opening, and web.girona.cat/nadal had none either.
  */
 const GIRONA_DETAILS: FairDetails = {
-  readOn: "2026-11-24",
+  readOn: "2026-11-25",
   organizer: { name: "Ajuntament de Girona", url: "https://www.girona.cat/agenda/cat/agenda_fitxa.php?id=44370&ta=age" },
   programme: [
     {
@@ -600,7 +650,7 @@ const VIC_FIRES = "https://www.vicfires.cat";
  * organiser's list leaves out.
  */
 const VIC_DETAILS: FairDetails = {
-  readOn: "2026-11-24",
+  readOn: "2026-11-25",
   organizer: { name: "Ajuntament de Vic (Organisme Autònom de Fires i Mercats)", url: `${VIC_FIRES}/fira-d-artesania-de-nadal-2026` },
   times: { opens: "10:00", closes: "21:00" },
   programme: [
@@ -676,7 +726,7 @@ const OLOT_NEWS = "https://www.olot.cat/ajuntament/comunicacio/actualitat/pln217
  *     2027: the closing date is left out.
  */
 const OLOT_DETAILS: FairDetails = {
-  readOn: "2026-11-24",
+  readOn: "2026-11-25",
   organizer: { name: "Ajuntament d'Olot", url: OLOT_NEWS },
   programme: [
     {
@@ -779,6 +829,89 @@ const MANRESA_DETAILS: FairDetails = {
   ],
 };
 
+/**
+ * Barcelona, Nadal al Port (27 Nov 2026 - 6 Jan 2027), read on 25 Nov 2026: the
+ * organiser's own site (nadalalportvell.com, Autoritat Portuària de Barcelona):
+ * "Disponibles de 11:00 a 23:00 del 27 de novembre al 6 de gener", with a
+ * calendar of the shows; and the council's Guia BCN entry: "Del 27 de novembre al 6
+ * de gener, té lloc una nova edició de la fira Nadal al Port"; "La instal·lació
+ * oferirà tres passis diaris, a les 18.30, 20.30 i 22.30 hores"; "El divendres 27
+ * de novembre, a les 18 h, tindrà lloc la inauguració de la vuitena edició … al
+ * moll de la Fusta, amb la tradicional encesa de llums"; "El Messies Participatiu
+ * … posarà el punt final a l'acte inaugural"; "Preus … Entrada Gratuïta". The site
+ * sells tickets ("Comprar tickets") for the Fada del Mar and the Fàbrica de
+ * Joguines + Golondrinas; their prices were not read.
+ */
+const PORT_DETAILS: FairDetails = {
+  readOn: "2026-11-25",
+  organizer: { name: "Autoritat Portuària de Barcelona (Port de Barcelona)", url: "https://www.nadalalportvell.com" },
+  times: { opens: "11:00", closes: "23:00" },
+  programme: [
+    {
+      ca: "**Cada dia, d'11 a 23 h**, al Moll de la Fusta, del 27 de novembre al 6 de gener. El tema d'enguany és Gaudí: una gran instal·lació inflable a la plaça del Portal de la Pau, inspirada en la torre de Jesucrist de la Sagrada Família, i un cel de llum i música que recrea el trencadís.",
+      es: "**Cada día, de 11 a 23 h**, en el Moll de la Fusta, del 27 de noviembre al 6 de enero. El tema de este año es Gaudí: una gran instalación hinchable en la plaza del Portal de la Pau, inspirada en la torre de Jesucristo de la Sagrada Família, y un cielo de luz y música que recrea el trencadís.",
+      en: "**Every day, 11:00 to 23:00**, at the Moll de la Fusta, from 27 November to 6 January. This year's theme is Gaudí: a large inflatable on Plaça del Portal de la Pau inspired by the Tower of Jesus Christ of the Sagrada Família, and a sky of light and music that recreates his trencadís mosaic.",
+    },
+    {
+      ca: "**Divendres 27 de novembre, a les 18 h:** inauguració amb l'encesa de llums; després, l'espectacle de llum i música i el concert coral El Messies Participatiu. L'espectacle té tres passis diaris, a les 18.30, 20.30 i 22.30 h.",
+      es: "**Viernes 27 de noviembre, a las 18 h:** inauguración con el encendido de luces; después, el espectáculo de luz y música y el concierto coral El Messies Participatiu. El espectáculo tiene tres pases diarios, a las 18.30, 20.30 y 22.30 h.",
+      en: "**Friday 27 November, 18:00:** opening with the lights switch-on, then the light and music show and the choral concert El Messies Participatiu. The show runs three times a day, at 18:30, 20:30 and 22:30.",
+    },
+  ],
+  tickets: {
+    ca: "La Guia BCN dona l'entrada a la fira com a gratuïta. El web de la fira ven tiquets per a algunes atraccions (la Fada del Mar, la Fàbrica de Joguines amb Golondrinas); no n'hem llegit els preus.",
+    es: "La Guia BCN da la entrada a la feria como gratuita. La web de la feria vende entradas para algunas atracciones (el Hada del Mar, la Fábrica de Juguetes con Golondrinas); no hemos leído sus precios.",
+    en: "The Guia BCN lists entry to the fair as free. The fair's website sells tickets for some attractions (the Sea Fairy, the Toy Factory with Golondrinas boats); we did not read their prices.",
+  },
+  links: [
+    { label: { ca: "Nadal al Port (web oficial)", es: "Nadal al Port (web oficial)", en: "Nadal al Port (official website, Catalan)" }, url: "https://www.nadalalportvell.com" },
+    { label: { ca: "Guia BCN: Nadal al Port", es: "Guia BCN: Nadal al Port", en: "Guia BCN: Nadal al Port" }, url: "https://guia.barcelona.cat/detall/fira-nadal-al-port_99400639592.html" },
+  ],
+};
+
+/**
+ * Sabadell, Fira de Santa Llúcia (27 Nov - 22 Dec 2026), the council's Christmas site
+ * (web.sabadell.cat), read on 25 Nov 2026. The fair's own page: "Una vintena de
+ * parades s'instal·laran aquests dies a la plaça de Sant Roc"; "La tradicional fira
+ * obrirà portes el proper divendres, 27 de novembre, a les 5 de la tarda"; "La Fira de
+ * Santa Llúcia, que ja compta amb 75 anys d'història, romandrà a la plaça de Sant
+ * Roc fins el 22 de desembre de 10 del matí a les 2 del migdia i de 5 de la tarda a 8
+ * del vespre (fins a les 9 de la nit els caps de setmana i festius)"; the free
+ * workshops "28/11/2026 d' 11 a 14 h - Muntatge del pessebre de la Fira", "06/12/2026
+ * d'11 a 13 h - Pinta-cares a la Fira", "08/12/2026 d'11 a 13 h - Taller fem un segell
+ * a la Fira", "13/12/2026 de 12 a 13 h - Cantada de nadales", "20/12/2026 d'11 a 13 h -
+ * Caga Tió". The council's Nadal home page says "FIRA DE SANTA LLÚCIA Del 27 de
+ * novembre al 22 de desembre a la Plaça del Doctor Robert De dilluns a divendres, de
+ * 10 a 14 h i de 17 a 20 h. Caps de setmana i festius, de 10 a 14 h i de 17 a 21 h
+ * Inauguració: 27 de novembre, a les 17h": the same dates and hours, another square.
+ * The two pages disagree on the square, so the entry gives no place and says so.
+ */
+const SABADELL_DETAILS: FairDetails = {
+  readOn: "2026-11-25",
+  organizer: { name: "Ajuntament de Sabadell", url: "https://web.sabadell.cat/nadal/fira-de-santa-llucia" },
+  programme: [
+    {
+      ca: "**Obre divendres 27 de novembre, a les 17 h, i tanca el 22 de desembre:** de dilluns a divendres, de 10 a 14 h i de 17 a 20 h; caps de setmana i festius, de 10 a 14 h i de 17 a 21 h. Una vintena de parades de tot el que cal per guarnir la llar: arbres, tions i figures de pessebre. La fira té 75 anys d'història.",
+      es: "**Abre el viernes 27 de noviembre, a las 17 h, y cierra el 22 de diciembre:** de lunes a viernes, de 10 a 14 h y de 17 a 20 h; fines de semana y festivos, de 10 a 14 h y de 17 a 21 h. Una veintena de paradas con todo lo necesario para adornar el hogar: árboles, tions y figuras de belén. La feria tiene 75 años de historia.",
+      en: "**Opens on Friday 27 November at 17:00 and closes on 22 December:** Monday to Friday, 10:00 to 14:00 and 17:00 to 20:00; weekends and holidays, 10:00 to 14:00 and 17:00 to 21:00. About twenty stalls with what you need to decorate the home: trees, tions and nativity figures. The fair is 75 years old.",
+    },
+    {
+      ca: "**On és:** la pàgina de la fira diu la plaça de Sant Roc; la pàgina de Nadal de l'Ajuntament diu la plaça del Doctor Robert. Les dues donen les mateixes dates i hores, i no resolen la diferència: confirma el lloc a l'Ajuntament abans d'anar-hi.",
+      es: "**Dónde es:** la página de la feria dice la plaza de Sant Roc; la página de Navidad del Ayuntamiento dice la plaza del Doctor Robert. Las dos dan las mismas fechas y horas y no resuelven la diferencia: confirma el lugar con el Ayuntamiento antes de ir.",
+      en: "**Where it is:** the fair's page says Plaça de Sant Roc; the council's Christmas page says Plaça del Doctor Robert. Both give the same dates and hours and neither settles the difference: confirm the place with the council before you go.",
+    },
+    {
+      ca: "**Tallers gratuïts a la fira:** 28 de novembre, d'11 a 14 h, muntatge del pessebre de la fira; 6 de desembre, d'11 a 13 h, pinta-cares; 8 de desembre, d'11 a 13 h, taller de fer un segell; 13 de desembre, de 12 a 13 h, cantada de nadales (escola de música Praeludium); 20 de desembre, d'11 a 13 h, Caga Tió de la fira.",
+      es: "**Talleres gratuitos en la feria:** 28 de noviembre, de 11 a 14 h, montaje del belén de la feria; 6 de diciembre, de 11 a 13 h, pintacaras; 8 de diciembre, de 11 a 13 h, taller de hacer un sello; 13 de diciembre, de 12 a 13 h, cantada de villancicos (escuela de música Praeludium); 20 de diciembre, de 11 a 13 h, Caga Tió de la feria.",
+      en: "**Free workshops at the fair:** 28 November, 11:00 to 14:00, building the fair's nativity scene; 6 December, 11:00 to 13:00, face painting; 8 December, 11:00 to 13:00, a stamp-making workshop; 13 December, 12:00 to 13:00, carol singing (Praeludium music school); 20 December, 11:00 to 13:00, the fair's Caga Tió.",
+    },
+  ],
+  links: [
+    { label: { ca: "Fira de Santa Llúcia (Ajuntament de Sabadell)", es: "Fira de Santa Llúcia (Ayuntamiento de Sabadell)", en: "Fira de Santa Llúcia (Sabadell council, Catalan)" }, url: "https://web.sabadell.cat/nadal/fira-de-santa-llucia" },
+    { label: { ca: "Nadal a Sabadell", es: "Navidad en Sabadell", en: "Christmas in Sabadell (council, Catalan)" }, url: "https://web.sabadell.cat/nadal" },
+  ],
+};
+
 export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   {
     id: "org:canyelles-santa-llucia",
@@ -789,7 +922,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.canyelles.cat/promocio-economica-i-turisme/la-fira-de-santa-llucia",
     publisher: "Ajuntament de Canyelles",
-    readOn: "2026-11-20",
+    readOn: "2026-11-25",
     quote:
       "La 24a edició de la Fira de Santa Llúcia se celebra el 21 i 22 de novembre de 2026. … 24a Fira de Santa Llúcia Dis. 21 Nov, 2026 (9:00 - 21:00) 24a Fira de Santa Llúcia Diu. 22 Nov, 2026 (9:00 - 21:00)",
     replaces: "vm32:24033377",
@@ -809,7 +942,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de la Sagrada Família",
     url: "https://guia.barcelona.cat/detall/fira-de-nadal-a-la-sagrada-familia_99400017122.html",
     publisher: "Ajuntament de Barcelona (Guia BCN)",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Cada dia de 10:00 h a 21:00 h … On Plaça Sagrada Familia Quan Des de 21/11/2026 al 23/12/2026",
     hours: { ca: "cada dia, de 10 a 21 h", es: "todos los días, de 10 a 21 h", en: "daily, 10:00 to 21:00" },
   },
@@ -824,7 +957,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Avinguda de la Catedral",
     url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020",
     publisher: "Agenda Cultural de Catalunya (Generalitat de Catalunya)",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Inici: 27/11/2026 Fi: 23/12/2026 … Horari: de 10 a 21 h",
     replaces: "agenda:2026110300020",
     hours: { ca: "de 10 a 21 h", es: "de 10 a 21 h", en: "10:00 to 21:00" },
@@ -838,7 +971,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "La Rambla",
     url: "https://www.figueres.cat/tramits/convocatories/mercatnadal26",
     publisher: "Ajuntament de Figueres",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "L’Ajuntament de Figueres organitza el Mercat de Nadal, que es celebrarà a la Rambla de la ciutat del 27 de novembre al 24 de desembre.",
   },
   {
@@ -851,7 +984,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     url: "https://www.girona.cat/agenda/cat/agenda_fitxa.php?id=44370&ta=age",
     publisher: "Ajuntament de Girona (Agenda de Girona)",
     // Re-read 24 Nov 2026: unchanged. Opening, price and what is sold: GIRONA_DETAILS (above).
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     details: GIRONA_DETAILS,
     quote:
       "El Mercat de Nadal s'inaugura el divendres, 27 de novembre. … Activitat de l'Agenda de Girona fins al – 05/01/27. … Horari: de 10.30 a 21 h. Horari tancament dies 24 i 31 de desembre i 5 de gener: 19 h. Dies que el mercat romandrà tancat: 25 i 26 de desembre i 1 de gener",
@@ -864,6 +997,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   },
   {
     id: "org:barcelona-nadal-al-port",
+    details: PORT_DETAILS,
     ine: "08019",
     name: "Fira Nadal al Port",
     start: "2026-11-27",
@@ -871,7 +1005,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Moll de la Fusta",
     url: "https://guia.barcelona.cat/detall/fira-nadal-al-port_99400639592.html",
     publisher: "Ajuntament de Barcelona (Guia BCN)",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Cada dia d'11.00 h a 23.00 h … On Moll de la Fusta Quan Des de 27/11/2026 al 06/01/2027",
     hours: { ca: "cada dia, d'11 a 23 h", es: "todos los días, de 11 a 23 h", en: "daily, 11:00 to 23:00" },
   },
@@ -884,7 +1018,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de la Vila",
     url: "https://www.santantonidevilamajor.cat/actualitat/noticies/busquem-artesanses-i-creadorses-per-omplir-de-magia-la-1a-fira-un-nadal-com-cal-de-sant-antoni-de-vilamajor.html",
     publisher: "Ajuntament de Sant Antoni de Vilamajor",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Dates: dissabte 28 i diumenge 29 de novembre de 2026.",
   },
   {
@@ -896,7 +1030,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.asco.cat/esdeveniment/xvii-fira-de-nadal-i-xv-mostra-del-cava-vi-escumos-corpinat/",
     publisher: "Ajuntament d'Ascó",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Esdeveniments de novembre 2026 … XVII FIRA DE NADAL I XV MOSTRA DEL CAVA – VI ESCUMÓS – CORPINAT 28 novembre a les 11:00 - 29 novembre a les 23:00",
     replaces: "vm32:24033607",
   },
@@ -912,7 +1046,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/",
     publisher: "Ajuntament d'Espinelves",
     // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote: "A aquesta notícia trobareu tota la informació relacionada amb la 45a Fira de l’Avet any 2026 – Del 28 de novembre al 8 de desembre de 2026.",
     replaces: "vm32:24032308",
   },
@@ -928,7 +1062,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     url: "https://www.visiteucaldes.cat/04-fires/fires/",
     publisher: "Ajuntament de Caldes de Montbui (Visiteu Caldes)",
     // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote: "FIRES 2026 … MERCAT DE NADAL 4 de desembre de 18 a 20h. Obertura. Només Plaça Font del Lleó. 5, 6, 7 i 8 de desembre de 10 a 20h. Centre Històric.",
     replaces: "vm32:24032937",
     hours: {
@@ -946,7 +1080,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://ripoll.cat/activitat/fira-de-nadal-de-ripoll-2026/",
     publisher: "Ajuntament de Ripoll",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Fira de Nadal de Ripoll 2026 5 desembre - 8 desembre … Aquest pont de la Puríssima, Ripoll es vesteix de Nadal i els seus carrers es converteixen en una gran festa! Quatre dies de música, espectacles, llums…",
     replaces: "vm32:24032983",
   },
@@ -962,7 +1096,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     url: "https://arbucies.cat/ca/agenda/festes.html",
     publisher: "Ajuntament d'Arbúcies",
     // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote: "Fira del Tió Dissabte 5 i diumenge 6 de desembre de 2026",
     replaces: "vm32:24032545",
   },
@@ -975,7 +1109,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.balaguer.cat/portal/102/",
     publisher: "Paeria de Balaguer",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Mercat de Santa Llúcia - La fira dels alls Propera edició: dissabte 5 de desembre de 2026",
     replaces: "vm32:24033337",
   },
@@ -991,7 +1125,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Del carrer de Sant Esteve a la plaça del Carme",
     url: OLOT_FAIR_PAGE,
     publisher: "Descobreix Olot (DinàmiG i Ajuntament d'Olot)",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote: "Fira del Pessebre Olot 2026 Dates Del 5 al 7 de desembre Horaris Dissabte i diumenge de 10 a 20 h Dilluns de 10 a 19 h On De Sant Esteve a la plaça del Carme",
     replaces: "vm32:24032768",
     hours: {
@@ -1010,7 +1144,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.tivissa.cat/fira-de-nadal-a-tivissa/",
     publisher: "Ajuntament de Tivissa",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "Els dies 5 i 6 de desembre de 2026 torna la XIV Fira de Nadal de Tivissa!",
     replaces: "vm32:34895242",
   },
@@ -1026,7 +1160,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     // "Quan? 05/12/2026 a 00:00 fins a 04/01/2027 a 00:00") only gave the range.
     url: `${VIC_FIRES}/fira-d-artesania-de-nadal-2026`,
     publisher: "Ajuntament de Vic (Vic Fires)",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote:
       "FIRA D'ARTESANIA DE NADAL 2026 del 5 de desembre al 4 de gener PLAÇA MAJOR de Vic Horaris: Dies 5, 6, 7, 8, 12, 13, 19, 20, 21, 22, 23 i 24 de desembre i 2, 3 i 4 de gener: de 10 a 21 h",
     hours: {
@@ -1052,7 +1186,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.ajberga.cat/ambits/fires",
     publisher: "Ajuntament de Berga",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "FIRA DEL JOC I DEL NADAL Instruccions per participar 6 de desembre de 2026",
     replaces: "vm32:24032523",
   },
@@ -1065,7 +1199,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de l'Església",
     url: "https://garriguella.cat/obertes-les-inscripcions-per-participar-en-el-6e-mercat-de-nadal-de-garriguella/",
     publisher: "Ajuntament de Garriguella",
-    readOn: "2026-11-13",
+    readOn: "2026-11-25",
     quote: "L’Ajuntament de Garriguella obre el termini d’inscripcions per participar al 6è Mercat de Nadal de Garriguella, que se celebrarà dimarts 8 de desembre, de 9.00 h a 14.00 h, a la Plaça de l’Església.",
     hours: { ca: "de 9 a 14 h", es: "de 9 a 14 h", en: "9:00 to 14:00" },
   },
@@ -1178,6 +1312,99 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     quote:
       "L’Ajuntament de les Masies de Voltregà obre les inscripcions per a les persones artesanes, comerços, projectes i iniciatives que vulguin participar com a expositors al Mercat de Nadal de les Masies de Voltregà, que se celebrarà els dies 18, 19 i 20 de desembre de 2026.",
   },
+  // --- Found on 25 Nov 2026 in the councils of the 15 largest towns (they were not in the calendar or this list) ---
+  {
+    id: "org:sabadell-fira-de-santa-llucia",
+    details: SABADELL_DETAILS,
+    ine: "08187",
+    name: "Fira de Santa Llúcia",
+    start: "2026-11-27",
+    end: "2026-12-22",
+    // Two pages of the council give two squares (Sant Roc, Doctor Robert): no place (SABADELL_DETAILS).
+    place: null,
+    url: "https://web.sabadell.cat/nadal/fira-de-santa-llucia",
+    publisher: "Ajuntament de Sabadell",
+    readOn: "2026-11-25",
+    quote:
+      "La tradicional fira obrirà portes el proper divendres, 27 de novembre, a les 5 de la tarda. … romandrà a la plaça de Sant Roc fins el 22 de desembre de 10 del matí a les 2 del migdia i de 5 de la tarda a 8 del vespre (fins a les 9 de la nit els caps de setmana i festius).",
+    hours: {
+      ca: "de dilluns a divendres, de 10 a 14 h i de 17 a 20 h; caps de setmana i festius, de 10 a 14 h i de 17 a 21 h",
+      es: "de lunes a viernes, de 10 a 14 h y de 17 a 20 h; fines de semana y festivos, de 10 a 14 h y de 17 a 21 h",
+      en: "Monday to Friday, 10:00 to 14:00 and 17:00 to 20:00; weekends and holidays, 10:00 to 14:00 and 17:00 to 21:00",
+    },
+  },
+  {
+    // The council's calendar "Fires 2026" (page note: "Aquest calendari es pot modificar"); the page of the
+    // 2024 edition (fira-de-nadal-a-mataro-2) and the 2025 one are not used. No hours are published for 2026.
+    id: "org:mataro-fira-de-nadal",
+    ine: "08121",
+    name: "Fira de Nadal",
+    start: "2026-11-27",
+    end: "2026-12-23",
+    place: "Plaça de Santa Anna, La Rambla",
+    url: "https://www.mataro.cat/ca/temes/comerc-mercats-i-fires/fires",
+    publisher: "Ajuntament de Mataró (calendari de fires)",
+    readOn: "2026-11-25",
+    quote: "FIRA DE NADAL Del 27 de novembre al 23 de desembre Plaça de Santa Anna La Rambla DIRECCIÓ DE PROMOCIÓ ECONÒMICA",
+    // The page's note: "Aquest calendari es pot modificar i es pot anar complementant amb noves propostes".
+    hours: {
+      ca: "calendari de l'Ajuntament, sense horari publicat; pot canviar",
+      es: "calendario del Ayuntamiento, sin horario publicado; puede cambiar",
+      en: "council calendar, no opening hours published; it may change",
+    },
+  },
+  {
+    // The council's "Programa de Nadal 2026-2027" (PDF linked from badalona.cat/.../nadal-2026-2027, which says the
+    // Christmas tree moves to plaça de la Plana "per les obres"): the fair listed under "Pl. de la Plana".
+    id: "org:badalona-fira-de-nadal-tradicional",
+    ine: "08015",
+    name: "Fira de Nadal Tradicional",
+    start: "2026-11-20",
+    end: "2026-12-23",
+    place: "Plaça de la Plana",
+    url: "https://www.badalona.cat/ca/serveis-ajuntament/cultura/festes/nadal/nadal-2026-2027/nadal-2026-2027/nadal_triptic_a3_28oct_def-1.pdf",
+    publisher: "Ajuntament de Badalona (Programa de Nadal 2026-2027)",
+    readOn: "2026-11-25",
+    quote: "FIRA DE NADAL TRADICIONAL Del 20 de novembre al 23 de desembre De 9 a 21 h · Pl. de la Plana",
+    hours: { ca: "de 9 a 21 h", es: "de 9 a 21 h", en: "9:00 to 21:00" },
+  },
+  {
+    // The council's fairs page (tarragona.cat/la-ciutat/nadal-a-tarragona/fires): "Quan i on 04/12/2026 a 10:00 a 23/12/2026 a 21:00
+    // Rambla Nova - Tram Teresianes Preu Gratuït Organitzat per Mercats de Tarragona". Left out: the 26a Fira de l'Oli DOP Siurana
+    // (27-28 Nov, plaça Corsini), an olive-oil fair, not a Christmas one.
+    id: "org:tarragona-fira-de-nadal",
+    ine: "43148",
+    name: "Fira de Nadal",
+    start: "2026-12-04",
+    end: "2026-12-23",
+    place: "Rambla Nova (tram Teresianes)",
+    url: "https://www.tarragona.cat/la-ciutat/nadal-a-tarragona/fires",
+    publisher: "Ajuntament de Tarragona",
+    readOn: "2026-11-25",
+    quote:
+      "La Rambla Nova acull la Fira de Nadal, del 4 al 23 de desembre. … Durada: Del 4 de desembre al 23 de desembre de 2026 Horari d’obertura: 10 - 21 h … Rambla Nova - Tram Teresianes Preu Gratuït",
+    hours: { ca: "de 10 a 21 h; entrada gratuïta", es: "de 10 a 21 h; entrada gratuita", en: "10:00 to 21:00; free entry" },
+  },
+  {
+    // The same page gives two end dates for the craft fair: its text and date field say 6 January, its "Durada" line 23 December.
+    // The earlier one is printed (the safer one for someone planning a trip) and the quote shows both.
+    id: "org:tarragona-fira-d-artesania",
+    ine: "43148",
+    name: "Fira d'Artesania",
+    start: "2026-12-04",
+    end: "2026-12-23",
+    place: "Rambla Nova (tram Balcó)",
+    url: "https://www.tarragona.cat/la-ciutat/nadal-a-tarragona/fires",
+    publisher: "Ajuntament de Tarragona",
+    readOn: "2026-11-25",
+    quote:
+      "La Rambla Nova acull la Fira d’Artesania, del 4 de desembre al 6 de gener. … Inauguració: Divendres, 4 de desembre a les 17 h Durada: Del 4 de desembre al 23 de desembre de 2026 Horari d’obertura: 10 - 21 h (menys el dia 4 de desembre)",
+    hours: {
+      ca: "de 10 a 21 h; el 4 de desembre, inauguració a les 17 h; la pàgina també diu «fins al 6 de gener» i la seva línia de durada, fins al 23 de desembre",
+      es: "de 10 a 21 h; el 4 de diciembre, inauguración a las 17 h; la página también dice «hasta el 6 de enero» y su línea de duración, hasta el 23 de diciembre",
+      en: "10:00 to 21:00; on 4 December the opening is at 17:00; the page also says \"until 6 January\" while its duration line says 23 December",
+    },
+  },
   // --- Confirmed on 24 Nov 2026 (they were in UNCONFIRMED_FAIRS or PENDING_MARKETS until then) ---
   {
     // Council news "Comparteix el Nadal 2026-2027" ("Divendres, 20 de novembre
@@ -1197,7 +1424,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Rambla de la Sobirania",
     url: "https://www.vallirana.cat/actualitat/noticies/comparteix-el-nadal-2026-2027.html",
     publisher: "Ajuntament de Vallirana",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote:
       "La sortida a totes les propostes serà el divendres 27 de novembre amb l’encesa de les llums de Nadal i l’obertura de la Fira que estarà a la rambla de la Sobirania fins al diumenge 29.",
     replaces: "vm32:24032398",
@@ -1258,7 +1485,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://solsonaturisme.com/la-fira-del-tio-de-solsona-amplia-el-recinte-firal-i-creix-fins-als-30-artesans/",
     publisher: "Solsona Turisme",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote:
       "En la seva dotzena edició, el dissabte 5 de desembre, la Fira del Tió assolirà una xifra rècord de participació artesana, amb 30 parades, cinc més que en l’edició anterior.",
     replaces: "vm32:24032429",
@@ -1282,7 +1509,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de la Porxada",
     url: "https://www.granollers.cat/nadal/fires-de-nadal",
     publisher: "Ajuntament de Granollers",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote:
       "Fira de pessebres i ornamentació a la plaça de la Porxada Del 26 de novembre al 24 de desembre, de 10 a 13.30 h i de 16.30 a 20.30 h … Hi haurà un total de 6 paradistes.",
     hours: { ca: "de 10 a 13.30 h i de 16.30 a 20.30 h; 6 parades", es: "de 10 a 13.30 h y de 16.30 a 20.30 h; 6 paradas", en: "10:00 to 13:30 and 16:30 to 20:30; 6 stalls" },
@@ -1296,7 +1523,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça Barangé",
     url: "https://www.granollers.cat/nadal/fires-de-nadal",
     publisher: "Ajuntament de Granollers",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote:
       "Fira d'Artesania a la plaça Barangé De l'11 de desembre al 5 de gener, de 10 a 13.30 h i de 16.30 a 20.30 h (tancat els dies 25 i 26 desembre i l'1 de gener) L'espai comptarà amb una dotzena de casetes de fusta i il·luminacio led, un carrusel d’època",
     hours: {
@@ -1315,7 +1542,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Roca Umbert (Dents de Serra)",
     url: "https://www.granollers.cat/nadal/fires-de-nadal",
     publisher: "Ajuntament de Granollers",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     quote: "Roca Umbert Market L'11 de desembre, de 17.30 a 20.30 h, i el 12 i 13 de desembre, de 10 a 20.30 h",
     hours: {
       ca: "divendres 11, de 17.30 a 20.30 h; dissabte 12 i diumenge 13, de 10 a 20.30 h",
@@ -1339,7 +1566,7 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24033611",
     url: "https://santceloni.cat/34917",
     publisher: "Ajuntament de Sant Celoni",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "La pàgina de la fira encara és la del 2025 (6 i 7 de desembre de 2025).",
       es: "La página de la feria aún es la de 2025 (6 y 7 de diciembre de 2025).",
@@ -1350,7 +1577,7 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24033508",
     url: "https://guixols.cat/nadal",
     publisher: "Ajuntament de Sant Feliu de Guíxols",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "La pàgina de Nadal de l'Ajuntament encara és la del 2025-2026.",
       es: "La página de Navidad del Ayuntamiento aún es la de 2025-2026.",
@@ -1361,7 +1588,7 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24033327",
     url: "https://www.valls.cat/",
     publisher: "Ajuntament de Valls",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "El web de l'Ajuntament encara no anuncia el mercat del 2026.",
       es: "La web del Ayuntamiento aún no anuncia el mercado de 2026.",
@@ -1372,7 +1599,7 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24033323",
     url: "https://www.arbocenc.cat/",
     publisher: "Ajuntament de l'Arboç",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "El web de l'Ajuntament encara no anuncia la fira del 2026 (l'última que publica és la del 13 i 14 de desembre de 2025).",
       es: "La web del Ayuntamiento aún no anuncia la feria de 2026 (la última que publica es la del 13 y 14 de diciembre de 2025).",
@@ -1383,18 +1610,18 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24033253",
     url: "https://www.balsareny.cat/",
     publisher: "Ajuntament de Balsareny",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
-      ca: "El web de l'Ajuntament encara no anuncia la fira del 2026.",
-      es: "La web del Ayuntamiento aún no anuncia la feria de 2026.",
-      en: "The council's website does not announce the 2026 fair yet.",
+      ca: "El web de l'Ajuntament encara no anuncia la fira del 2026, i la seva agenda de novembre (actualitzada el 30 d'octubre) no hi posa cap fira el diumenge 29: només hi surt un partit de futbol.",
+      es: "La web del Ayuntamiento aún no anuncia la feria de 2026, y su agenda de noviembre (actualizada el 30 de octubre) no pone ninguna feria el domingo 29: solo aparece un partido de fútbol.",
+      en: "The council's website does not announce the 2026 fair yet, and its November agenda (updated 30 October) lists no fair on Sunday 29: only a football match appears.",
     },
   },
   {
     fairId: "vm32:24033306",
     url: "https://www.montgat.cat/turisme/festes-i-fires",
     publisher: "Ajuntament de Montgat",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "L'Ajuntament només diu que es fa «un diumenge al volts de Nadal al Parc del Tramvia», sense data del 2026.",
       es: "El Ayuntamiento solo dice que se hace un domingo cerca de Navidad en el Parc del Tramvia, sin fecha de 2026.",
@@ -1405,7 +1632,7 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
     fairId: "vm32:24032332",
     url: "https://www.lapobladesegur.cat/ca/fira-de-nadal/",
     publisher: "Ajuntament de la Pobla de Segur",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "La pàgina de la fira és d'una edició anterior i no dona la data del 2026.",
       es: "La página de la feria es de una edición anterior y no da la fecha de 2026.",
@@ -1421,6 +1648,10 @@ export const UNCONFIRMED_FAIRS: readonly UnconfirmedFair[] = [
  * 13 Nov 2026: the Sagrada Família and Girona published and left this list.
  * 24 Nov 2026: Granollers published (ORGANISER_FAIRS); Lleida and Tarragona
  * read the same; Sitges answered with the login form again.
+ * 25 Nov 2026: Tarragona's council published its fairs page (Fira de Nadal and
+ * Fira d'Artesania, 4 Dec on the Rambla Nova), so it left this list; Lleida's page
+ * still links only the 2025-26 calendar; Sitges answered with the login form again
+ * (the 30 Oct reading stays).
  */
 export const PENDING_MARKETS: readonly PendingMarket[] = [
   {
@@ -1429,24 +1660,11 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Mercat de Nadal",
     url: "https://comercmercatsconsum.paeria.cat/comerc-i-mercats/mercats-ambulants/mercat-de-nadal",
     publisher: "Paeria de Lleida",
-    readOn: "2026-11-24",
+    readOn: "2026-11-25",
     shows: {
       ca: "La Paeria només enllaça el calendari dels mercats de Nadal 2025-2026, a la plaça de la Catedral i voltants.",
       es: "La Paeria solo enlaza el calendario de los mercados de Navidad 2025-2026, en la plaza de la Catedral y alrededores.",
       en: "The city only links the 2025-2026 Christmas market calendar, on Plaça de la Catedral and around it.",
-    },
-  },
-  {
-    id: "pending:tarragona-fira-de-nadal",
-    ine: "43148",
-    name: "Fires de Nadal i d'Artesania",
-    url: "https://www.tarragona.cat/la-ciutat/nadal-a-tarragona/",
-    publisher: "Ajuntament de Tarragona",
-    readOn: "2026-11-24",
-    shows: {
-      ca: "La pàgina de Nadal de l'Ajuntament encara no dona dates per a les fires del 2026.",
-      es: "La página de Navidad del Ayuntamiento aún no da fechas para las ferias de 2026.",
-      en: "The council's Christmas page gives no dates for the 2026 fairs yet.",
     },
   },
   {
@@ -1455,7 +1673,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Nadal a Sitges",
     url: "https://www.sitges.cat/serveis/nadal-a-sitges",
     publisher: "Ajuntament de Sitges",
-    // 3, 13 and 24 Nov 2026: the page answered with a login form, so this stays the 30 Oct reading.
+    // 3, 13, 24 and 25 Nov 2026: the page answered with a login form, so this stays the 30 Oct reading.
     readOn: "2026-10-30",
     shows: {
       ca: "La pàgina de Nadal de l'Ajuntament encara no anuncia cap fira ni mercat del 2026.",

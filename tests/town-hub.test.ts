@@ -123,11 +123,12 @@ test("the pages of one town link each other both ways, the holiday page first", 
 });
 
 test("the holiday page's own sections are reached through it, and the .ics feed (noindex) through its subscribe box", () => {
+  // Mataró has a Christmas fair page since 25 Nov 2026 (Fira de Nadal, 27 Nov - 23 Dec): the hub links it.
   const ca = townHub("mataro", "ca", "elections", TODAY)!;
   assert.equal(ca.title, "Mataró: tot el que hi ha a CatalunyaInfo");
   assert.deepEqual(
     ca.links.flatMap((l) => [l.href, ...(l.more ?? []).map((m) => m.href)]),
-    ["/ca/festius/mataro/", "/ca/festius/mataro/#festius-2027", "/ca/festius/mataro/#avui", "/ca/calculadores/dies-habils/#p=mataro", "/ca/festius/mataro/#afegeix-calendari"],
+    ["/ca/festius/mataro/", "/ca/festius/mataro/#festius-2027", "/ca/festius/mataro/#avui", "/ca/fires-de-nadal/mataro/", "/ca/calculadores/dies-habils/#p=mataro", "/ca/festius/mataro/#afegeix-calendari"],
   );
   const en = townHub("barcelona", "en", "elections", TODAY)!;
   assert.ok(en.links.some((l) => l.more?.some((m) => m.href === "/en/holidays/barcelona/#holidays-2027")));

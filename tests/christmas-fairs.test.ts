@@ -395,7 +395,7 @@ test("24 Nov 2026: newly confirmed fairs, Vic's open days, Granollers' own page"
   for (const id of ["vm32:24032442", "vm32:24033249", "vm32:24032429", "vm32:24032398"]) {
     const f = byId.get(id)!;
     assert.equal(f.unconfirmed, null, id);
-    assert.equal(f.checked?.readOn, "2026-11-24", id);
+    assert.ok((f.checked?.readOn ?? "") >= "2026-11-24", id);
     assert.ok(f.hours, id);
     assert.ok(!UNCONFIRMED_FAIRS.some((u) => u.fairId === id), id);
   }
@@ -426,6 +426,69 @@ test("24 Nov 2026: newly confirmed fairs, Vic's open days, Granollers' own page"
   const granollers = townBySlug("granollers")!;
   assert.equal(granollers.fairs.length, 3);
   assert.deepEqual(granollers.fairs.find((f) => f.id === "org:granollers-fira-d-artesania")?.closed, ["2026-12-25", "2026-12-26", "2027-01-01"]);
+});
+
+/**
+ * 25 Nov 2026 re-read of every fair of 28 Nov - 8 Dec on its organiser's page, and of the
+ * councils of the 15 largest towns: Sabadell, Mataró, Badalona and Tarragona publish
+ * fairs in that window and get a page (Tarragona also an English one).
+ */
+test("25 Nov 2026: fairs found in the largest towns, with the organiser's own dates and hours", () => {
+  const byId = new Map(FAIRS.map((f) => [f.id, f]));
+  const expectFair = (id: string, range: string, readOn = "2026-11-25") => {
+    const f = byId.get(id)!;
+    assert.ok(f, id);
+    assert.equal(`${f.start}..${f.end}`, range, id);
+    assert.equal(f.checked?.readOn, readOn, id);
+    assert.equal(f.source, "organiser", id);
+    return f;
+  };
+  const sabadell = expectFair("org:sabadell-fira-de-santa-llucia", "2026-11-27..2026-12-22");
+  assert.equal(sabadell.place, null, "two pages of the council give two squares: no place printed");
+  assert.match(sabadell.hours!.ca, /de dilluns a divendres, de 10 a 14 h i de 17 a 20 h; caps de setmana i festius, de 10 a 14 h i de 17 a 21 h/);
+  for (const locale of ["ca", "es", "en"] as const) assert.match(sabadell.details!.programme.map((l) => l[locale]).join(" "), /Sant Roc.*Doctor Robert/s, locale);
+  const mataro = expectFair("org:mataro-fira-de-nadal", "2026-11-27..2026-12-23");
+  assert.match(mataro.place!, /Santa Anna/);
+  // The calendar gives no 2026 hours and says it may change: the page says both.
+  assert.match(mataro.hours!.ca, /sense horari publicat; pot canviar/);
+  assert.match(mataro.hours!.es, /sin horario publicado; puede cambiar/);
+  assert.match(mataro.hours!.en, /no opening hours published; it may change/);
+  const badalona = expectFair("org:badalona-fira-de-nadal-tradicional", "2026-11-20..2026-12-23");
+  assert.equal(badalona.place, "Plaça de la Plana");
+  assert.equal(badalona.hours!.ca, "de 9 a 21 h");
+  for (const locale of ["ca", "es", "en"] as const) assert.ok(!/cada dia|todos los días|daily/.test(`${badalona.hours![locale]}`), locale);
+  const tgnFair = expectFair("org:tarragona-fira-de-nadal", "2026-12-04..2026-12-23");
+  assert.equal(tgnFair.hours!.ca, "de 10 a 21 h; entrada gratuïta");
+  for (const locale of ["ca", "es", "en"] as const) assert.ok(!/cada dia|todos los días|daily/.test(`${tgnFair.hours![locale]}`), locale);
+  // The craft fair's page gives 6 Jan and 23 Dec: the earlier is printed, and the quote carries both.
+  const tgnCraft = expectFair("org:tarragona-fira-d-artesania", "2026-12-04..2026-12-23");
+  assert.match(tgnCraft.checked!.quote, /6 de gener/);
+  assert.match(tgnCraft.checked!.quote, /23 de desembre/);
+  for (const slug of ["sabadell", "mataro", "badalona", "tarragona"]) assert.ok(townBySlug(slug), slug);
+  assert.deepEqual(englishTowns().map((t) => t.slug), ["barcelona", "figueres", "girona", "tarragona", "vic"]);
+  // Tarragona left the pending list.
+  assert.ok(!PENDING_MARKETS.some((p) => p.ine === "43148"));
+  // Nadal al Port: the organiser's own site gives the hours; the opening evening is in the programme.
+  const port = byId.get("org:barcelona-nadal-al-port")!;
+  assert.deepEqual(port.details?.times, { opens: "11:00", closes: "23:00" });
+  assert.match(port.details!.programme.map((l) => l.es).join(" "), /18\.30, 20\.30 y 22\.30/);
+  // Balsareny: the council's November agenda lists no fair on 29 Nov.
+  assert.match(UNCONFIRMED_FAIRS.find((u) => u.fairId === "vm32:24033253")!.shows.ca, /agenda de novembre/);
+  // Canyelles: no shuttle or parking is published for the Petita Llúcia (28-29 Nov).
+  const canyelles = byId.get("vm32:24033377")!;
+  assert.match(canyelles.details!.access![0]!.ca, /Petita Llúcia \(28 i 29 de novembre\)/);
+  assert.match(canyelles.details!.after!.ca, /Espai Harry Potter/);
+  // Caldes de Montbui: car parks and the Granollers and Sabadell bus lines from the council's "Com arribar" page.
+  const caldes = byId.get("vm32:24032937")!;
+  assert.match(caldes.details!.access!.map((l) => l.ca).join(" "), /Les Cremades.*El Sindicat.*de pagament/s);
+  assert.match(caldes.details!.access!.map((l) => l.ca).join(" "), /420 i 260.*230, 231 i 234/s);
+  // Every fair of the window was read on the 24th or 25th, the unconfirmed ones included.
+  for (const f of FAIRS) {
+    if (f.end < "2026-11-28" || f.start > "2026-12-08") continue;
+    const readOn = f.checked?.readOn ?? f.unconfirmed?.readOn;
+    if (!readOn) continue; // calendar-only rows (Aiguafreda, Maçanet de la Selva): no organiser page to read
+    assert.ok(readOn >= "2026-11-24", `${f.id} last read ${readOn}`);
+  }
 });
 
 test("date guard: unconfirmed fairs re-read within 10 days while still to come", () => {
@@ -488,7 +551,7 @@ test("Canyelles (20 Nov 2026): hours, programme, shuttle buses and parking from 
   const town = townBySlug("canyelles")!;
   const fair = town.fairs.find((f) => f.id === "vm32:24033377")!;
   assert.equal(fair.hours?.ca, "dissabte i diumenge, de 9 a 21 h");
-  assert.equal(fair.details?.readOn, "2026-11-24");
+  assert.ok((fair.details?.readOn ?? "") >= "2026-11-24");
   assert.match(fair.details!.after!.ca, /28 i diumenge 29 de novembre.*1 euro/);
   assert.ok(fair.details!.links.every((l) => /^https:\/\/www\.(canyelles\.cat|santalluciacanyelles\.cat)\//.test(l.url)));
   const text = (locale: "ca" | "es" | "en") => [...fair.details!.programme, ...(fair.details!.access ?? [])].map((l) => l[locale]).join(" ");
@@ -598,7 +661,8 @@ test("guardrail: a town has a page only with at least one dated fair of the seas
   // Lleida and Tarragona have no dated fair yet: no page. (Barcelona got its page on
   // 3 Nov 2026, when Santa Llúcia was published in the cultural agenda; Girona on
   // 13 Nov, from the council's agenda.)
-  for (const slug of ["lleida", "tarragona", "sitges", "igualada", "vilafranca-del-penedes"]) assert.equal(townBySlug(slug), null, slug);
+  // (Tarragona published on 25 Nov 2026 and has a page: see the 25 Nov test.)
+  for (const slug of ["lleida", "sitges", "igualada", "vilafranca-del-penedes"]) assert.equal(townBySlug(slug), null, slug);
   // A fair whose dates are still to be confirmed does not give its town a page on its own.
   const pending: ChristmasSnapshot = {
     ...SNAPSHOT,
@@ -618,7 +682,7 @@ test("guardrail: English pages only for the visitor towns, and only with a dated
     assert.ok(EN_TOWNS.includes(t.ine));
     assert.ok(t.fairs.some(qualifies));
   }
-  assert.deepEqual(englishTowns().map((t) => t.slug).sort(), ["barcelona", "figueres", "girona", "vic"]);
+  assert.deepEqual(englishTowns().map((t) => t.slug).sort(), ["barcelona", "figueres", "girona", "tarragona", "vic"]);
 });
 
 /* -------------------------------------------------------------------------- */
