@@ -1164,7 +1164,7 @@ test("ski: opening dates answered first, from Baqueira's news and the FGC calend
     for (const name of ["Masella", "Port del Comte", "Tavascan"]) {
       const row = opening.find((r) => r[0] === name) ?? [];
       assert.match(row[1] ?? "", /^(Sense data anunciada|Sin fecha anunciada|Not announced)/, `${locale}: ${name} has no announced date`);
-      assert.equal(row[2], "—", `${locale}: ${name} has no last day`);
+      assert.equal(row[3], "—", `${locale}: ${name} has no last day`);
     }
     // FAQ per resort for the most-searched resorts.
     const faqItems = blocks.find((b) => b.type === "faq")?.items ?? [];

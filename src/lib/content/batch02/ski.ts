@@ -341,44 +341,62 @@ export const SKI_OPENING_2026 = {
   espot: "2026-12-05",
 } as const;
 
-const OPENING: Record<Locale, string[][]> = {
-  ca: [
-    ["Baqueira Beret", "Ajornada (estava prevista el dissabte 28 de novembre de 2026); nova data per anunciar", "4 d'abril de 2027 (anunci de l'11 de novembre)"],
-    ["La Molina", "Divendres 4 de desembre de 2026", "4 d'abril de 2027"],
-    ["Vallter", "Divendres 4 de desembre de 2026", "4 d'abril de 2027"],
-    ["Port Ainé", "Divendres 4 de desembre de 2026", "4 d'abril de 2027"],
-    ["Boí Taüll", "Divendres 4 de desembre de 2026", "4 d'abril de 2027"],
-    ["Espot", "Dissabte 5 de desembre de 2026", "4 d'abril de 2027"],
-    ["Masella", "Sense data anunciada", "—"],
-    ["Vall de Núria", "Divendres 4 de desembre de 2026", "4 d'abril de 2027"],
-    ["Port del Comte", "Sense data anunciada", "—"],
-    ["Tavascan", "Sense data anunciada (pistes alpines tancades el 2025-26)", "—"],
-  ],
-  es: [
-    ["Baqueira Beret", "Aplazada (estaba prevista el sábado 28 de noviembre de 2026); nueva fecha por anunciar", "4 de abril de 2027 (anuncio del 11 de noviembre)"],
-    ["La Molina", "Viernes 4 de diciembre de 2026", "4 de abril de 2027"],
-    ["Vallter", "Viernes 4 de diciembre de 2026", "4 de abril de 2027"],
-    ["Port Ainé", "Viernes 4 de diciembre de 2026", "4 de abril de 2027"],
-    ["Boí Taüll", "Viernes 4 de diciembre de 2026", "4 de abril de 2027"],
-    ["Espot", "Sábado 5 de diciembre de 2026", "4 de abril de 2027"],
-    ["Masella", "Sin fecha anunciada", "—"],
-    ["Vall de Núria", "Viernes 4 de diciembre de 2026", "4 de abril de 2027"],
-    ["Port del Comte", "Sin fecha anunciada", "—"],
-    ["Tavascan", "Sin fecha anunciada (pistas alpinas cerradas en 2025-26)", "—"],
-  ],
-  en: [
-    ["Baqueira Beret", "Postponed (it was planned for Saturday 28 November 2026); new date to be announced", "4 April 2027 (announced on 11 November)"],
-    ["La Molina", "Friday 4 December 2026", "4 April 2027"],
-    ["Vallter", "Friday 4 December 2026", "4 April 2027"],
-    ["Port Ainé", "Friday 4 December 2026", "4 April 2027"],
-    ["Boí Taüll", "Friday 4 December 2026", "4 April 2027"],
-    ["Espot", "Saturday 5 December 2026", "4 April 2027"],
-    ["Masella", "Not announced", "—"],
-    ["Vall de Núria", "Friday 4 December 2026", "4 April 2027"],
-    ["Port del Comte", "Not announced", "—"],
-    ["Tavascan", "Not announced (alpine runs closed in 2025-26)", "—"],
-  ],
+/**
+ * When the opening table was last read on the operators' own pages (25 Nov 2026,
+ * 17:26 CET: Baqueira's news of 24 Nov, the six FGC "Calendari de l'estació"
+ * widgets, Port del Comte's pistes page "ACCÉS TANCAT / 0,0 km", Masella and
+ * Tavascan without a date). tests/ski-opening-table.test.ts fails if this is more
+ * than 7 days old after 1 Dec 2026: re-read the table weekly in December.
+ */
+export const SKI_OPENING_READ = { date: "2026-11-25", time: "17:26" } as const;
+
+type OpenKind = "baqueira" | "fgc4" | "espot" | "none" | "pdc" | "tavascan";
+const OPEN_ROWS: [string, OpenKind][] = [
+  ["Baqueira Beret", "baqueira"],
+  ["La Molina", "fgc4"],
+  ["Vallter", "fgc4"],
+  ["Port Ainé", "fgc4"],
+  ["Boí Taüll", "fgc4"],
+  ["Espot", "espot"],
+  ["Masella", "none"],
+  ["Vall de Núria", "fgc4"],
+  ["Port del Comte", "pdc"],
+  ["Tavascan", "tavascan"],
+];
+
+const OPEN_CELLS: Record<Locale, { announced: Record<OpenKind, string>; status: Record<OpenKind, string>; last: Record<OpenKind, string>; source: Record<OpenKind, string> }> = {
+  ca: {
+    announced: { baqueira: "Ajornada (estava prevista el dissabte 28 de novembre de 2026); nova data per anunciar", fgc4: "Divendres 4 de desembre de 2026", espot: "Dissabte 5 de desembre de 2026", none: "Sense data anunciada", pdc: "Sense data anunciada", tavascan: "Sense data anunciada (pistes alpines tancades el 2025-26)" },
+    status: { baqueira: "No ha obert; obertura ajornada el 24/11", fgc4: "No ha obert; el calendari marca el 4 de desembre", espot: "No ha obert; el calendari marca el 5 de desembre", none: "No ha obert", pdc: "Tancat: «ACCÉS TANCAT», 0,0 km", tavascan: "No ha obert" },
+    last: { baqueira: "4 d'abril de 2027 (anunci de l'11 de novembre)", fgc4: "4 d'abril de 2027", espot: "4 d'abril de 2027", none: "—", pdc: "—", tavascan: "—" },
+    source: { baqueira: "Notícia de Baqueira Beret del 24/11/2026", fgc4: "Calendari de l'estació, PIRINEU365 (FGC)", espot: "Calendari de l'estació, PIRINEU365 (FGC)", none: "Web de Masella (blog i fitxa tècnica)", pdc: "Pàgina de pistes de Port del Comte", tavascan: "Web de Tavascan" },
+  },
+  es: {
+    announced: { baqueira: "Aplazada (estaba prevista el sábado 28 de noviembre de 2026); nueva fecha por anunciar", fgc4: "Viernes 4 de diciembre de 2026", espot: "Sábado 5 de diciembre de 2026", none: "Sin fecha anunciada", pdc: "Sin fecha anunciada", tavascan: "Sin fecha anunciada (pistas alpinas cerradas en 2025-26)" },
+    status: { baqueira: "No ha abierto; apertura aplazada el 24/11", fgc4: "No ha abierto; el calendario marca el 4 de diciembre", espot: "No ha abierto; el calendario marca el 5 de diciembre", none: "No ha abierto", pdc: "Cerrado: «ACCÉS TANCAT», 0,0 km", tavascan: "No ha abierto" },
+    last: { baqueira: "4 de abril de 2027 (anuncio del 11 de noviembre)", fgc4: "4 de abril de 2027", espot: "4 de abril de 2027", none: "—", pdc: "—", tavascan: "—" },
+    source: { baqueira: "Noticia de Baqueira Beret del 24/11/2026", fgc4: "Calendari de l'estació, PIRINEU365 (FGC)", espot: "Calendari de l'estació, PIRINEU365 (FGC)", none: "Web de Masella (blog y ficha técnica)", pdc: "Página de pistas de Port del Comte", tavascan: "Web de Tavascan" },
+  },
+  en: {
+    announced: { baqueira: "Postponed (it was planned for Saturday 28 November 2026); new date to be announced", fgc4: "Friday 4 December 2026", espot: "Saturday 5 December 2026", none: "Not announced", pdc: "Not announced", tavascan: "Not announced (alpine runs closed in 2025-26)" },
+    status: { baqueira: "Not open; opening postponed on 24/11", fgc4: "Not open; the calendar shows 4 December", espot: "Not open; the calendar shows 5 December", none: "Not open", pdc: "Closed: 'ACCÉS TANCAT', 0.0 km", tavascan: "Not open" },
+    last: { baqueira: "4 April 2027 (announced on 11 November)", fgc4: "4 April 2027", espot: "4 April 2027", none: "—", pdc: "—", tavascan: "—" },
+    source: { baqueira: "Baqueira Beret news of 24/11/2026", fgc4: "Calendari de l'estació, PIRINEU365 (FGC)", espot: "Calendari de l'estació, PIRINEU365 (FGC)", none: "Masella website (blog and technical sheet)", pdc: "Port del Comte pistes page", tavascan: "Tavascan website" },
+  },
 };
+
+const readStamp: Record<Locale, string> = {
+  ca: "llegit el 25/11/2026, 17:26",
+  es: "leído el 25/11/2026, 17:26",
+  en: "read on 25/11/2026, 17:26",
+};
+
+const OPENING: Record<Locale, string[][]> = Object.fromEntries(
+  (["ca", "es", "en"] as Locale[]).map((locale) => {
+    const c = OPEN_CELLS[locale];
+    return [locale, OPEN_ROWS.map(([name, k]) => [name, c.announced[k], c.status[k], c.last[k], `${c.source[k]}, ${readStamp[locale]}`])];
+  }),
+) as Record<Locale, string[][]>;
 
 const SEASON_PASS: Record<Locale, string[][]> = {
   ca: [
@@ -465,6 +483,7 @@ const COPY: Record<Locale, T> = {
     tableNote: "Quilòmetres i altituds de la fitxa tècnica de cada estació. Preus de les pàgines de tarifes, revisades el 25/11/2026 (a Vallter, el 31/10 eren 30 i 36,50 €; la seva fitxa tècnica encara dona 14,15 km després que el 24/11 tanqués un telecadira). Baqueira els etiqueta «temporada 26-27»; Boí Taüll no indica la temporada. Port del Comte mostra dues taules amb imports diferents.",
     openTitle: "Obertura de les estacions d'esquí 2026-2027: quan obre cada estació",
     open: [
+      "**Quan obre la Molina el 2026?** El «Calendari de l'estació» de PIRINEU365 marca el divendres 4 de desembre de 2026 com a primer dia obert i el 4 d'abril de 2027 com a últim (llegit el 25 de novembre de 2026, 17:26). FGC pot avançar-lo si hi ha neu, com va fer el 29 de novembre de 2025.",
       "**Baqueira Beret ha ajornat l'obertura que tenia prevista per al dissabte 28 de novembre.** La nota de l'estació del 24 de novembre de 2026 diu: «La estación pospone la apertura prevista para el sábado 28 de noviembre y anunciará la nueva fecha en función de las condiciones de nieve en pistas». Les previsions apunten a nevades i a un descens de les temperatures a la Val d'Aran i a les Valls d'Àneu, i els equips avaluaran la neu acumulada a les pistes per decidir quan pot començar la temporada. El tancament que va anunciar l'11 de novembre és el diumenge 4 d'abril de 2027, també «siempre que las condiciones lo permitan»; la nota del 24 no el torna a dir. Per saber la data nova: l'Oficina d'Informació de Baqueira 1500 atén de dilluns a divendres de 8.30 a 14.30 h, i Reservas Baqueira Beret, al 973 63 90 00, cada dia de 8 a 18 h (segons la mateixa nota).",
       "**Les estacions d'esquí alpí d'FGC ja tenen calendari:** al web de PIRINEU365, la Molina, Vallter, Port Ainé, Boí Taüll i la Vall de Núria marquen l'obertura el **divendres 4 de desembre de 2026**, i Espot, el **dissabte 5**; totes, fins al **diumenge 4 d'abril de 2027**. El de la Vall de Núria, que el 31 d'octubre encara era el de la temporada passada, marca obert del 4 al 8 de desembre (el pont), el 12 i el 13 i cada dia a partir del 19 (calendaris consultats el 25 de novembre de 2026). La nota amb què FGC va presentar la temporada, el 6 de novembre, diu que les sis estacions obriran «del 4 de desembre al 4 d'abril», amb 189 km esquiables i 180 pistes; el calendari d'Espot, però, continua marcant com a primer dia el dissabte 5.",
       "**Vallter tanca un telecadira.** El 24 de novembre l'estació va explicar que el telecadira Enric Planella, en servei fa 48 anys, «no ha superat les darreres proves de càrrega» i que «la seva reparació no és viable»: la pista del Xalet quedarà habilitada com a itinerari d'esquí de muntanya. També diu que ha congelat els preus dels forfets, que es mantenen respecte als de la temporada anterior. La fitxa tècnica de Vallter continua dient 14,15 km esquiables (consultada el 25 de novembre): no hi ha una xifra nova després del tancament.",
@@ -472,8 +491,8 @@ const COPY: Record<Locale, T> = {
       "Les dates depenen de la neu i del fred per fabricar-ne. La temporada passada, FGC va avançar l'obertura de la **Molina** al **29 de novembre de 2025**, i les altres cinc estacions d'FGC van obrir el **4 de desembre de 2025**.",
     ],
     openCaption: "Obertura prevista de les estacions d'esquí alpí de Catalunya, temporada 2026-2027",
-    openHeaders: ["Estació", "Obertura prevista", "Últim dia previst"],
-    openNote: "Baqueira: notes de l'estació del 24/11/2026 (ajornament) i de l'11/11/2026 (tancament, «siempre que las condiciones lo permitan»). Estacions d'FGC: el «Calendari de l'estació» de la pàgina d'informació pràctica de cada una. Consultat el 25/11/2026. Totes les dates depenen de la neu.",
+    openHeaders: ["Estació", "Obertura anunciada", "Estat avui (25/11)", "Últim dia previst", "Font i lectura"],
+    openNote: "Baqueira: notes de l'estació del 24/11/2026 (ajornament) i de l'11/11/2026 (tancament, «siempre que las condiciones lo permitan»). Estacions d'FGC: el «Calendari de l'estació» de la pàgina d'informació pràctica de cada una. Llegit el 25/11/2026, 17:26; es rellegeix cada setmana al desembre. Totes les dates depenen de la neu.",
     passTitle: "Forfet de temporada 2026-2027",
     passCaption: "Forfet de temporada d'adult, temporada 2026-2027",
     passHeaders: ["Estació o domini", "Preu adult"],
@@ -513,6 +532,7 @@ const COPY: Record<Locale, T> = {
       "Cada estació publica cada dia les pistes obertes, el gruix de neu i els remuntadors en marxa: les sis d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) a l'[Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira a «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» i Port del Comte a [la seva pàgina de pistes](https://portdelcomte.net/pistes/); Masella hi té càmeres web. Abans de l'obertura surten buits: el 25 de novembre l'Infoneu i la pàgina de Baqueira encara no donaven cap xifra i Port del Comte mostrava 0,0 km. Mira-ho el mateix matí: a principi i final de temporada canvia d'un dia per l'altre.",
       "Càmeres web oficials: [Baqueira Beret](https://www.baqueira.es/es/webcams), [les sis estacions d'FGC](https://pirineu365.cat/webcams-pirineu365/), [Masella](https://www.masella.com/ca/webcam) i [Port del Comte](https://portdelcomte.net/webcams-i-meteo/).",
       `Per saber si hi ha neu a terra a l'alta muntanya, fora de les pistes, mira ${b2link("snowNow", "ca", "el gruix de neu d'avui a les estacions meteorològiques del Meteocat")}.`,
+      "Neu a l'alta muntanya, dades oficials: [Meteocat (XEMA)](https://www.meteo.cat/observacions/xema), [la predicció del Meteocat per al Pirineu](https://www.meteo.cat/prediccio/pirineu) i [l'InfoGruixNEU de l'ICGC](https://www.icgc.cat/ca/Ambits-tematics/Riscos-i-emergencies/Allaus/Informacio-nivologica/InfoGruixNEU).",
     ],
     pickTitle: "Quina estació triar",
     pick: [
@@ -546,6 +566,7 @@ const COPY: Record<Locale, T> = {
     tableNote: "Kilómetros y altitudes de la ficha técnica de cada estación. Precios de las páginas de tarifas, revisadas el 25/11/2026 (en Vallter, el 31/10 eran 30 y 36,50 €; su ficha técnica sigue dando 14,15 km tras cerrar el 24/11 un telesilla). Baqueira los etiqueta «temporada 26-27»; Boí Taüll no indica la temporada. Port del Comte muestra dos tablas con importes distintos.",
     openTitle: "Apertura de las estaciones de esquí 2026-2027: cuándo abre cada estación",
     open: [
+      "**¿Cuándo abre La Molina en 2026?** El «Calendari de l'estació» de PIRINEU365 marca el viernes 4 de diciembre de 2026 como primer día abierto y el 4 de abril de 2027 como último (leído el 25 de noviembre de 2026, 17:26). FGC puede adelantarlo si hay nieve, como hizo el 29 de noviembre de 2025.",
       "**Baqueira Beret ha aplazado la apertura que tenía prevista para el sábado 28 de noviembre.** La nota de la estación del 24 de noviembre de 2026 dice: «La estación pospone la apertura prevista para el sábado 28 de noviembre y anunciará la nueva fecha en función de las condiciones de nieve en pistas». Las previsiones apuntan a nevadas y a un descenso de las temperaturas en el Valle de Arán y las Valls d'Àneu, y sus equipos evaluarán la nieve acumulada en las pistas para decidir cuándo puede empezar la temporada. El cierre que anunció el 11 de noviembre es el domingo 4 de abril de 2027, también «siempre que las condiciones lo permitan»; la nota del 24 no lo repite. Para saber la fecha nueva: la Oficina de Información de Baqueira 1500 atiende de lunes a viernes de 8.30 a 14.30 h, y Reservas Baqueira Beret, en el 973 63 90 00, todos los días de 8 a 18 h (según la misma nota).",
       "**Las estaciones de esquí alpino de FGC ya tienen calendario:** en la web de PIRINEU365, La Molina, Vallter, Port Ainé, Boí Taüll y la Vall de Núria marcan la apertura el **viernes 4 de diciembre de 2026**, y Espot, el **sábado 5**; todas, hasta el **domingo 4 de abril de 2027**. El de la Vall de Núria, que el 31 de octubre aún era el de la temporada pasada, marca abierto del 4 al 8 de diciembre (el puente), el 12 y el 13 y cada día a partir del 19 (calendarios consultados el 25 de noviembre de 2026). La nota con la que FGC presentó la temporada, el 6 de noviembre, dice que las seis estaciones abrirán «del 4 de desembre al 4 d'abril» (del 4 de diciembre al 4 de abril), con 189 km esquiables y 180 pistas; el calendario de Espot, sin embargo, sigue marcando como primer día el sábado 5.",
       "**Vallter cierra un telesilla.** El 24 de noviembre la estación explicó que el telesilla Enric Planella, en servicio desde hace 48 años, «no ha superat les darreres proves de càrrega» (no ha superado las últimas pruebas de carga) y que «la seva reparació no és viable» (su reparación no es viable): la pista del Xalet quedará habilitada como itinerario de esquí de montaña. También dice que ha congelado los precios de los forfaits, que se mantienen respecto a los de la temporada anterior. La ficha técnica de Vallter sigue diciendo 14,15 km esquiables (consultada el 25 de noviembre): no hay una cifra nueva tras el cierre.",
@@ -553,8 +574,8 @@ const COPY: Record<Locale, T> = {
       "Las fechas dependen de la nieve y del frío para fabricarla. La temporada pasada, FGC adelantó la apertura de **La Molina** al **29 de noviembre de 2025**, y las otras cinco estaciones de FGC abrieron el **4 de diciembre de 2025**.",
     ],
     openCaption: "Apertura prevista de las estaciones de esquí alpino de Cataluña, temporada 2026-2027",
-    openHeaders: ["Estación", "Apertura prevista", "Último día previsto"],
-    openNote: "Baqueira: notas de la estación del 24/11/2026 (aplazamiento) y del 11/11/2026 (cierre, «siempre que las condiciones lo permitan»). Estaciones de FGC: el «Calendari de l'estació» de la página de información práctica de cada una. Consultado el 25/11/2026. Todas las fechas dependen de la nieve.",
+    openHeaders: ["Estación", "Apertura anunciada", "Estado hoy (25/11)", "Último día previsto", "Fuente y lectura"],
+    openNote: "Baqueira: notas de la estación del 24/11/2026 (aplazamiento) y del 11/11/2026 (cierre, «siempre que las condiciones lo permitan»). Estaciones de FGC: el «Calendari de l'estació» de la página de información práctica de cada una. Leído el 25/11/2026, 17:26; se relee cada semana en diciembre. Todas las fechas dependen de la nieve.",
     passTitle: "Forfait de temporada 2026-2027",
     passCaption: "Forfait de temporada de adulto, temporada 2026-2027",
     passHeaders: ["Estación o dominio", "Precio adulto"],
@@ -594,6 +615,7 @@ const COPY: Record<Locale, T> = {
       "Cada estación publica a diario las pistas abiertas, el espesor de nieve y los remontes en marcha: las seis de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) en el [Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira en «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» y Port del Comte en [su página de pistas](https://portdelcomte.net/pistes/); Masella tiene cámaras web. Antes de la apertura salen vacíos: el 25 de noviembre el Infoneu y la página de Baqueira aún no daban ninguna cifra y Port del Comte mostraba 0,0 km. Míralo la misma mañana: a principio y final de temporada cambia de un día para otro.",
       "Cámaras web oficiales: [Baqueira Beret](https://www.baqueira.es/es/webcams), [las seis estaciones de FGC](https://pirineu365.cat/webcams-pirineu365/), [Masella](https://www.masella.com/ca/webcam) y [Port del Comte](https://portdelcomte.net/webcams-i-meteo/).",
       `Para saber si hay nieve en el suelo en la alta montaña, fuera de las pistas, mira ${b2link("snowNow", "es", "el espesor de nieve de hoy en las estaciones meteorológicas de Meteocat")}.`,
+      "Nieve en la alta montaña, datos oficiales: [Meteocat (XEMA)](https://www.meteo.cat/observacions/xema), [la predicción de Meteocat para el Pirineo](https://www.meteo.cat/prediccio/pirineu) e [InfoGruixNEU del ICGC](https://www.icgc.cat/ca/Ambits-tematics/Riscos-i-emergencies/Allaus/Informacio-nivologica/InfoGruixNEU).",
     ],
     pickTitle: "Qué estación elegir",
     pick: [
@@ -627,6 +649,7 @@ const COPY: Record<Locale, T> = {
     tableNote: "Kilometres and altitudes from each resort's technical sheet. Prices from the rates pages, re-read 25/11/2026 (Vallter showed €30 and €36.50 on 31/10; its technical sheet still says 14.15 km after a chairlift closed on 24/11). Baqueira labels them 'temporada 26-27'; Boí Taüll states no season. Port del Comte shows two tables with different amounts.",
     openTitle: "Opening dates for the 2026-2027 ski season: when each resort opens",
     open: [
+      "**When does La Molina open in 2026?** The 'Calendari de l'estació' on PIRINEU365 marks Friday 4 December 2026 as the first open day and 4 April 2027 as the last (read on 25 November 2026, 17:26). FGC can bring it forward if there is snow, as it did on 29 November 2025.",
       "**Baqueira Beret has postponed the opening it had planned for Saturday 28 November.** The resort's note of 24 November 2026 says: 'La estación pospone la apertura prevista para el sábado 28 de noviembre y anunciará la nueva fecha en función de las condiciones de nieve en pistas' (the resort postpones the opening planned for Saturday 28 November and will announce the new date depending on snow conditions on the runs). Forecasts point to snowfall and falling temperatures in the Val d'Aran and the Valls d'Àneu, and its teams will assess the snow on the runs to decide when the season can start. The closing day it announced on 11 November is Sunday 4 April 2027, also 'siempre que las condiciones lo permitan' (conditions permitting); the 24 November note does not repeat it. To learn the new date: the Baqueira 1500 information office is open Monday to Friday 8:30 to 14:30, and Reservas Baqueira Beret answers on 973 63 90 00 every day from 8:00 to 18:00 (per the same note).",
       "**FGC's alpine resorts have published their calendars:** on the PIRINEU365 website, La Molina, Vallter, Port Ainé, Boí Taüll and Vall de Núria show opening on **Friday 4 December 2026**, and Espot on **Saturday 5 December**; all of them run to **Sunday 4 April 2027**. Vall de Núria's, still last season's on 31 October, marks it open from 4 to 8 December (the long weekend), on 12 and 13 December and every day from the 19th (calendars checked 25 November 2026). FGC's season presentation of 6 November says all six resorts open 'from 4 December to 4 April', with 189 km of skiable terrain and 180 runs; Espot's calendar, however, still shows Saturday 5 December as its first day.",
       "**Vallter closes a chairlift.** On 24 November the resort said that the Enric Planella chairlift, in service for 48 years, 'no ha superat les darreres proves de càrrega' (did not pass its latest load tests) and that 'la seva reparació no és viable' (repair is not viable): the Xalet run will become a ski-touring route. It also says it has frozen lift pass prices, which stay at last season's level. Vallter's technical sheet still says 14.15 km of runs (read 25 November): there is no new figure after the closure.",
@@ -634,8 +657,8 @@ const COPY: Record<Locale, T> = {
       "Dates depend on snowfall and on nights cold enough to make snow. Last season FGC brought **La Molina**'s opening forward to **29 November 2025**, and the other five FGC resorts opened on **4 December 2025**.",
     ],
     openCaption: "Planned opening of Catalonia's alpine ski resorts, 2026-2027 season",
-    openHeaders: ["Resort", "Planned opening", "Planned last day"],
-    openNote: "Baqueira: the resort's notes of 24/11/2026 (postponement) and 11/11/2026 (closing day, 'siempre que las condiciones lo permitan'). FGC resorts: the 'Calendari de l'estació' on each one's practical information page. Checked 25/11/2026. Every date depends on snow.",
+    openHeaders: ["Resort", "Announced opening", "Status today (25/11)", "Planned last day", "Source and read time"],
+    openNote: "Baqueira: the resort's notes of 24/11/2026 (postponement) and 11/11/2026 (closing day, 'siempre que las condiciones lo permitan'). FGC resorts: the 'Calendari de l'estació' on each one's practical information page. Read on 25/11/2026, 17:26; re-read weekly in December. Every date depends on snow.",
     passTitle: "Season passes for 2026-2027",
     passCaption: "Adult season pass, 2026-2027 season",
     passHeaders: ["Resort or area", "Adult price"],
@@ -675,6 +698,7 @@ const COPY: Record<Locale, T> = {
       "Each resort posts open runs, snow depth and running lifts daily: the six FGC resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) on [PIRINEU365's Infoneu](https://pirineu365.cat/infoneu-pirineu365/), Baqueira under '[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)' and Port del Comte on [its pistes page](https://portdelcomte.net/pistes/); Masella has webcams. Before opening they are empty: on 25 November Infoneu and Baqueira's page still showed no figures and Port del Comte showed 0.0 km. Check on the morning itself: at the start and end of the season it changes from one day to the next.",
       "Official webcams: [Baqueira Beret](https://www.baqueira.es/es/webcams), [FGC's six resorts](https://pirineu365.cat/webcams-pirineu365/), [Masella](https://www.masella.com/ca/webcam) and [Port del Comte](https://portdelcomte.net/webcams-i-meteo/).",
       `To see whether there is snow on the ground in the high mountains away from the pistes, see ${b2link("snowNow", "en", "today's snow depth at Meteocat's weather stations")}.`,
+      "Snow in the high mountains, official data: [Meteocat (XEMA)](https://www.meteo.cat/observacions/xema), [Meteocat's Pyrenees forecast](https://www.meteo.cat/prediccio/pirineu) and [the ICGC's InfoGruixNEU](https://www.icgc.cat/ca/Ambits-tematics/Riscos-i-emergencies/Allaus/Informacio-nivologica/InfoGruixNEU).",
     ],
     pickTitle: "Which resort to choose",
     pick: [
