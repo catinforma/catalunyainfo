@@ -13677,3 +13677,17 @@ The FAQ blocks added on 24-25 Nov (fairs, strikes, weekend, money pages) are not
 **After.** Expected on the live HTML after the deploy and the pages' revalidation: conflicting `@id` 0 of the same 73 pages (47 before); everything else unchanged at 0. Check with `npm run site:audit` (codes above) or the same fetch of the 73 pages.
 
 **Review.** 2026-12-02 (after the deploy): re-fetch the 73 pages, expect `jsonld-id-conflict` 0 and no new `jsonld-faq-*`; run `npm run site:audit` and read the new codes site-wide (weekend and Christmas-fair FAQs once live). Search Console, Enhancements, 2026-12-09: no new Article / Event / Breadcrumb errors. No traffic effect expected (FAQ rich results ended in May; Article publisher is a trust signal, not a ranking one).
+
+## 2026-11-25 - Barcelona-Sitges train guide: quick answer + searchers' H2s (ci-edicio)
+
+**URLs.** `/ca/escapades/sitges-des-de-barcelona-tren/`, `/es/escapadas/sitges-desde-barcelona-tren/`, `/en/day-trips/sitges-from-barcelona-by-train/` (group `coast-trips`). Title, meta, H1 and lead untouched.
+
+**Changed (body only, ca/es/en).** The key-facts block under the lead is now the "Quick answer" (title, plus stations, ATM T-casual 3 zones EUR 34.70 and a dated source row); new H2 "How long is the train from Barcelona to Sitges?" (31 min semi-fast / 37 min stopping from Sants, 38-44 Passeig de Gracia, 49-55 Estacio de Franca, 35-41 back) with its source dates; fare H2 now "How much is the train from Barcelona to Sitges?". FAQ already held the same facts and is unchanged (JSON-LD = visible text).
+
+**Sources read 25 Nov 2026 (curl --max-time 20).** Rodalies R2 Sud line page (lists Sitges, Sants, Passeig de Gracia, Estacio de Franca); fare page "4 zones: 5,50 EUR", Bonotren 4 zones 35,80, monthly 20 EUR to 31/12/2026; planner API Sants -> Sitges Thu 26 Nov (68 trains, first 5:45, 31/37 min, :06 :15 :36 :45) and Sitges -> Sants (72 trains, first 4:51, last 22:22, 35-41 min); atm.cat T-casual 3 zones 34,70 EUR. Not re-read: Passeig de Gracia / Franca times and weekend trains (20 Nov values). The line page does not state the last train: it comes from the planner and the page keeps the "check the Rodalies app on the day" note.
+
+**Baseline (GSC, 28 d to 24 Nov, EN page).** about 1,140 impressions over the three locales per the ticket; EN: "barcelona to sitges train" 127 impr at 25.5, "barcelona to sitges" 115 at 25.4, "barcelona to sitges train schedule" 16 at 9.2, "last train from barcelona to sitges" 12 at 9.6; 4 clicks in 28 d.
+
+**Tests.** New `tests/sitges-quick-answer.test.ts` (4, incl. date guard: after 2027-01-02 SITGES_QUICK_READ must be re-read); batch02, bcn-practical-20nov, day-trips-21nov, day-trip-glance, internal-link-day-row-sitges, features pass; tsc clean.
+
+**Review.** 2026-12-23: `snapshot.py page sitges-from-barcelona-by-train 28` (EN "barcelona to sitges train" position vs 25.5, impressions, CTR) and the es/ca pages; re-read the fare page and planner after 1 Jan 2027 (fare change).

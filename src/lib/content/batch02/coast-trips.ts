@@ -77,6 +77,28 @@ const VERIFIED = "2026-10-28";
  */
 const SITGES_VERIFIED = "2026-11-20";
 
+/**
+ * Quick-answer block and "how long" section, re-read on 25 Nov 2026 (curl,
+ * --max-time 20):
+ * - rodalies.gencat.cat/ca/sobre-rodalies/linies-i-estacions/servei_rodalia_barcelona/r2s/
+ *   "Línia R2 Sud ... Principals estacions Sant Vicenç de Calders Vilanova i la
+ *   Geltrú Sitges Castelldefels Barcelona-Sants Barcelona-Passeig de Gràcia
+ *   Barcelona-Estació de França ..."
+ * - Fare page (.../nomes_rodalies/): "Bitllet senzill ... 4 zones: 5,50 €",
+ *   "Anada i tornada (dos viatges)", "Bonotren 10 viatges ... 4 zones: 35,80 €",
+ *   "Abonament mensual - 20 €" (on sale "fins al 31/12/2026").
+ * - Journey planner serveisgrs.rodalies.gencat.cat/api/timetables, Sants
+ *   (71801) -> Sitges (71701), Thu 26 Nov 2026, window 0-23 h: 68 trains,
+ *   5:45 first, 31 or 37 min, the :06 :15 :36 :45 pattern, last in the window
+ *   23:06 (the R2 PDF of 1 Sep 2026 gives the 0:06). Sitges -> Sants: 72
+ *   trains, first 4:51, last 22:22, 35-41 min.
+ * - atm.cat/titols-i-tarifes/t-casual: "3 zones ... 34,70 €".
+ * The official pages do not state the last train in prose: it is read off the
+ * planner, so the page tells people to check the planner on the day.
+ * Passeig de Gràcia / França times were not re-read (20 Nov values).
+ */
+export const SITGES_QUICK_READ = "2026-11-25";
+
 const SITGES_SOURCES: B2Source[] = [
   { name: "Cercador d'horaris de Rodalies", url: "https://rodalies.gencat.cat/ca/horaris/", publisher: "Rodalies de Catalunya" },
   { name: "Horaris R2 (Rodalies de Catalunya)", url: "https://rodalies.gencat.cat/web/.content/02_Horaris/horaris/R2.pdf", publisher: "Rodalies de Catalunya" },
@@ -132,6 +154,8 @@ const SITGES_META: Record<Locale, Meta> = {
 type SitgesT = {
   lead: string;
   factsTitle: string; facts: { label: string; value: string }[];
+  /** H2 in the searchers' words: how long the journey is (read 25 Nov 2026). */
+  howLongTitle: string; howLong: string[];
   tableCaption: string; headers: string[]; rows: string[][]; tableNote: string;
   timesTitle: string; times: string[]; backTitle: string;
   /** Every departure, by direction and type of day (planner, 20 Nov 2026). */
@@ -148,13 +172,20 @@ type SitgesT = {
 const SITGES_COPY: Record<Locale, SitgesT> = {
   en: {
     lead: "The train from Barcelona to Sitges is the **Rodalies R2 Sud**. It leaves from Sants, Passeig de Gràcia and Estació de França about **four times an hour**, takes **31 to 37 minutes from Sants** and costs **€5.50 single** (€11 return). The **last train back** leaves Sitges at **22:22**, every day of the week.",
-    factsTitle: "Barcelona–Sitges train at a glance",
+    factsTitle: "Quick answer: the train from Barcelona to Sitges",
     facts: [
       { label: "Line", value: "Rodalies R2 Sud (direction Sant Vicenç de Calders / Vilanova)" },
+      { label: "Barcelona stations", value: "Barcelona-Sants (quickest), Passeig de Gràcia, Estació de França" },
       { label: "Journey", value: "31–37 min from Sants" },
       { label: "Trains", value: "4 an hour in the daytime, every 30 min after 22:00" },
       { label: "Fare", value: "€5.50 single, €11 return (4 zones)" },
+      { label: "ATM ticket", value: "T-casual, 3 zones: €34.70 for 10 trips" },
       { label: "Last train back", value: "22:22 from Sitges" },
+      { label: "Source", value: "Rodalies de Catalunya (line page, journey planner, fares) and ATM, read on 25 November 2026" },
+    ],
+    howLongTitle: "How long is the train from Barcelona to Sitges?",
+    howLong: [
+      "From Barcelona-Sants the R2 Sud takes **31 minutes** on the semi-fast trains (at :06 and :36) and **37 minutes** on the ones that call at every station (at :15 and :45). From Passeig de Gràcia it takes 38 to 44 minutes and from Estació de França 49 to 55; the way back from Sitges to Sants takes 35 to 41. Sants times: Rodalies journey planner, Thursday 26 November 2026, read on 25 November 2026; the other stations, read on 20 November 2026.",
     ],
     tableCaption: "Barcelona to Sitges on the R2 Sud",
     headers: ["From", "Journey time", "First train", "Last train", "Back from Sitges"],
@@ -183,7 +214,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     ],
     allNote: "Rodalies journey planner for 24, 28 and 29 November 2026 and the R2 timetable of 1 September 2026, read on 20 November 2026. Passeig de Gràcia is about 7 minutes before Sants on the way out and 6 after it on the way back; Estació de França about 18 and 17.",
     stay: `Staying the night? Sitges is not one of the seven towns with their own tourist-tax surcharge, so hotels charge the Catalan rate only: see ${b2link("touristTax", "en", "the tourist tax in Barcelona and Catalonia")}. For getting around Barcelona itself, see ${b2link("transport", "en", "which transport pass to buy")}.`,
-    fareTitle: "How much is the train to Sitges?",
+    fareTitle: "How much is the train from Barcelona to Sitges?",
     fare: [
       "Sitges is in **zone 4** of the Rodalies Barcelona fare map, so a trip from any Barcelona station costs **€5.50 single** and **€11 return** (a return is simply two singles). A single is valid for two hours after you validate it.",
       "If you go often: a **Bonotren 10-trip** ticket for 4 zones costs €35.80, is valid for a year and can be shared by people making the same journey; Rodalies' **€20 monthly pass** gives unlimited travel on a Renfe&Tu card and is on sale until 31 December 2026. Children under 4 travel free if they do not take a seat, and the Targeta Daurada (over-60s and some disability cards) takes 40% off singles and returns.",
@@ -226,13 +257,20 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
   },
   es: {
     lead: "El tren de Barcelona a Sitges es la **R2 Sud de Rodalies**. Sale de Sants, Passeig de Gràcia y Estació de França unas **cuatro veces por hora**, tarda **de 31 a 37 minutos desde Sants** y el billete cuesta **5,50 € el sencillo** (11 € ida y vuelta). El **último tren de vuelta** sale de Sitges a las **22:22**, todos los días de la semana.",
-    factsTitle: "El tren Barcelona–Sitges, en resumen",
+    factsTitle: "Respuesta rápida: el tren de Barcelona a Sitges",
     facts: [
       { label: "Línea", value: "Rodalies R2 Sud (dirección Sant Vicenç de Calders / Vilanova)" },
+      { label: "Estaciones en Barcelona", value: "Barcelona-Sants (la más rápida), Passeig de Gràcia, Estació de França" },
       { label: "Duración", value: "31–37 min desde Sants" },
       { label: "Frecuencia", value: "4 trenes por hora de día, cada 30 min a partir de las 22:00" },
       { label: "Precio", value: "5,50 € sencillo, 11 € ida y vuelta (4 zonas)" },
+      { label: "Billete ATM", value: "T-casual, 3 zonas: 34,70 € los 10 viajes" },
       { label: "Último tren de vuelta", value: "22:22 desde Sitges" },
+      { label: "Fuente", value: "Rodalies de Catalunya (página de la línea, planificador, tarifas) y ATM, consultados el 25 de noviembre de 2026" },
+    ],
+    howLongTitle: "¿Cuánto tarda el tren de Barcelona a Sitges?",
+    howLong: [
+      "Desde Barcelona-Sants la R2 Sud tarda **31 minutos** en los trenes semidirectos (a :06 y :36) y **37 minutos** en los que paran en todas las estaciones (a :15 y :45). Desde Passeig de Gràcia tarda de 38 a 44 minutos y desde Estació de França de 49 a 55; la vuelta de Sitges a Sants, de 35 a 41. Horarios de Sants: planificador de Rodalies, jueves 26 de noviembre de 2026, consultado el 25 de noviembre de 2026; las demás estaciones, consultadas el 20 de noviembre de 2026.",
     ],
     tableCaption: "De Barcelona a Sitges en la R2 Sud",
     headers: ["Desde", "Duración", "Primer tren", "Último tren", "Vuelta desde Sitges"],
@@ -261,7 +299,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     ],
     allNote: "Planificador de Rodalies para el 24, el 28 y el 29 de noviembre de 2026 y horario de la R2 del 1 de septiembre de 2026, consultados el 20 de noviembre de 2026. Passeig de Gràcia va unos 7 minutos antes que Sants a la ida y 6 después a la vuelta; Estació de França, unos 18 y 17.",
     stay: `¿Te quedas a dormir? Sitges no es uno de los siete municipios con recargo propio de la tasa turística, así que los hoteles cobran solo la tarifa de la Generalitat: mira ${b2link("touristTax", "es", "la tasa turística en Barcelona y Cataluña")}. Para moverte por Barcelona, ${b2link("transport", "es", "qué tarjeta de transporte comprar")}.`,
-    fareTitle: "¿Cuánto cuesta el tren a Sitges?",
+    fareTitle: "¿Cuánto cuesta el tren de Barcelona a Sitges?",
     fare: [
       "Sitges está en la **zona 4** del mapa de tarifas de Rodalies de Barcelona, así que un viaje desde cualquier estación de Barcelona cuesta **5,50 € el sencillo** y **11 € ida y vuelta** (la ida y vuelta es el doble del sencillo). El sencillo vale durante las dos horas siguientes a la validación.",
       "Si vas a menudo: el **Bonotren 10 viajes** de 4 zonas cuesta 35,80 €, vale un año y lo pueden usar varias personas con el mismo origen y destino; el **abono mensual de Rodalies de 20 €** da viajes ilimitados en la tarjeta Renfe&Tu y se vende hasta el 31 de diciembre de 2026. Los menores de 4 años viajan gratis si no ocupan asiento, y la Tarjeta Dorada (mayores de 60 y algunas discapacidades) descuenta un 40 % en sencillos e idas y vueltas.",
@@ -304,13 +342,20 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
   },
   ca: {
     lead: "El tren de Barcelona a Sitges és l'**R2 Sud de Rodalies**. Surt de Sants, Passeig de Gràcia i l'Estació de França unes **quatre vegades per hora**, triga **de 31 a 37 minuts des de Sants** i el bitllet costa **5,50 € el senzill** (11 € anada i tornada). L'**últim tren de tornada** surt de Sitges a les **22:22**, tots els dies de la setmana.",
-    factsTitle: "El tren Barcelona–Sitges, en resum",
+    factsTitle: "Resposta ràpida: el tren de Barcelona a Sitges",
     facts: [
       { label: "Línia", value: "Rodalies R2 Sud (direcció Sant Vicenç de Calders / Vilanova)" },
+      { label: "Estacions a Barcelona", value: "Barcelona-Sants (la més ràpida), Passeig de Gràcia, Estació de França" },
       { label: "Durada", value: "31–37 min des de Sants" },
       { label: "Freqüència", value: "4 trens per hora de dia, cada 30 min a partir de les 22:00" },
       { label: "Preu", value: "5,50 € senzill, 11 € anada i tornada (4 zones)" },
+      { label: "Bitllet ATM", value: "T-casual, 3 zones: 34,70 € els 10 viatges" },
       { label: "Últim tren de tornada", value: "22:22 des de Sitges" },
+      { label: "Font", value: "Rodalies de Catalunya (pàgina de la línia, cercador, tarifes) i ATM, consultats el 25 de novembre de 2026" },
+    ],
+    howLongTitle: "Quant triga el tren de Barcelona a Sitges?",
+    howLong: [
+      "Des de Barcelona-Sants l'R2 Sud triga **31 minuts** en els trens semidirectes (a :06 i :36) i **37 minuts** en els que paren a totes les estacions (a :15 i :45). Des de Passeig de Gràcia triga de 38 a 44 minuts i des de l'Estació de França de 49 a 55; la tornada de Sitges a Sants, de 35 a 41. Horaris de Sants: cercador de Rodalies, dijous 26 de novembre de 2026, consultat el 25 de novembre de 2026; les altres estacions, consultades el 20 de novembre de 2026.",
     ],
     tableCaption: "De Barcelona a Sitges amb l'R2 Sud",
     headers: ["Des de", "Durada", "Primer tren", "Últim tren", "Tornada des de Sitges"],
@@ -339,7 +384,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     ],
     allNote: "Cercador de Rodalies per al 24, el 28 i el 29 de novembre de 2026 i horari de l'R2 de l'1 de setembre de 2026, consultats el 20 de novembre de 2026. Passeig de Gràcia va uns 7 minuts abans que Sants a l'anada i 6 després a la tornada; l'Estació de França, uns 18 i 17.",
     stay: `Et quedes a dormir? Sitges no és un dels set municipis amb recàrrec propi de la taxa turística, així que els hotels cobren només la tarifa de la Generalitat: mira ${b2link("touristTax", "ca", "la taxa turística a Barcelona i Catalunya")}. Per moure't per Barcelona, ${b2link("transport", "ca", "quina targeta de transport comprar")}.`,
-    fareTitle: "Quant costa el tren a Sitges?",
+    fareTitle: "Quant costa el tren de Barcelona a Sitges?",
     fare: [
       "Sitges és a la **zona 4** del mapa de tarifes de Rodalies de Barcelona, així que un viatge des de qualsevol estació de Barcelona costa **5,50 € el senzill** i **11 € anada i tornada** (l'anada i tornada és el doble del senzill). El senzill val durant les dues hores següents a la validació.",
       "Si hi vas sovint: el **Bonotren 10 viatges** de 4 zones costa 35,80 €, val un any i el poden fer servir diverses persones amb el mateix origen i destinació; l'**abonament mensual de Rodalies de 20 €** dona viatges il·limitats a la targeta Renfe&Tu i es ven fins al 31 de desembre de 2026. Els menors de 4 anys viatgen gratis si no ocupen seient, i la Targeta Daurada (majors de 60 i algunes discapacitats) descompta un 40 % en senzills i anades i tornades.",
@@ -404,6 +449,7 @@ function sitgesBody(locale: Locale) {
     keyFacts(t.factsTitle, t.facts),
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
     callout("official", verifiedLine(locale, SITGES_VERIFIED), t.note + SITGES_STRIKES[locale]),
+    ...h2(t.howLongTitle, ...t.howLong),
     ...h2(t.timesTitle, t.times[0] ?? ""),
     ...h2(t.backTitle, ...t.times.slice(1)),
     table(t.allCaption, t.allHeaders, t.allRows, t.allNote),
