@@ -13770,3 +13770,13 @@ Skipped tonight as briefed (listed so nobody re-runs them): strikes (26 Nov vs e
 **Tests.** shops-today (10), shops-christmas, town-shops-line, shops-spain-december, holiday-engine, holiday-english, answer-first, sitemap-lastmod, useful-now green; `npx tsc --noEmit -p .`; `npm run -s seo:body-dates`.
 
 **Outcome:** _pending_
+
+## 2026-11-25 (night) - EN Tarragona and Figueres day trips link their Christmas-market page; owner-link test (ci-arquitectura) (review 2026-12-23)
+
+**URLs.** `/en/day-trips/tarragona-from-barcelona-by-train/` and `/en/day-trips/figueres-dali-museum-from-barcelona/`: one body sentence each, "Going in December? ..." under the day plan, linking `/en/christmas-markets/tarragona/` (Fira de Nadal and Fira d'Artesania, Rambla Nova, 4-23 Dec 2026) and `/en/christmas-markets/figueres/` (Mercat de Nadal, La Rambla, 27 Nov-24 Dec 2026). Both targets exist in English (INE 43148 and 17066 are in `EN_TOWNS`), have a dated fair and no noindex. Catalan and Spanish guides untouched; Vic has no day-trip guide, so no Vic link. No title, meta, H1 or lead changed. Test `tests/en-day-trip-christmas-links.test.ts`.
+
+**Owner-link lock (no page changed).** `tests/owner-links.test.ts` holds, at the source that builds each link, the owner links of the 7 clusters of the "Cannibalisation pass" entry above: (1) Catalonia and Spain December bridge pages both ways (callout builder, key facts, related list); (2) the 7 and 8 Dec 2026 date pages to the Spain page (`restOfSpain` and guides list) and back; (3) 2027 date page to the 2026 twin, labelled with that page's own question; (4) the daily "es festivo hoy" guide from date pages, work calendar, `/hoy`, hubs, town and comarca pages; (5) reservoir hub and guide both ways; (6) how-to-vote guide from the candidates and night guides, and back; (7) work calendar, 2027 Spain pages and holiday hubs. Not found at source: the log's "and the reverse" in cluster 3 (the 2026 date page does not link the 2027 one), so it is not locked.
+
+**Baseline.** EN Tarragona guide and EN Figueres guide: not measured (new link; English market pages had 14 impressions in week 47 for Girona). **Review 2026-12-23:** `snapshot.py page christmas-markets/tarragona 28`, `page christmas-markets/figueres 28`; fairs end 23-24 Dec, so keep the sentence until January and re-read in the new season.
+
+**Outcome:** _pending_

@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { ARTICLE_TITLES, href, link } from "@/lib/content/features/shared";
 import { trainGuideNextSentence } from "@/lib/content/sitges-links";
+import { townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import {
   b2link,
@@ -694,6 +695,10 @@ function tarragonaBody(locale: Locale) {
     ...h2(t.mnatTitle, t.mnat),
     ...h2(t.planTitle),
     list(...t.plan),
+    // 25 Nov 2026: English only; the town page exists in English (Tarragona, INE 43148, is in EN_TOWNS) and has a dated fair.
+    ...(locale === "en"
+      ? paras(`Going in December? Tarragona has a Christmas fair and a craft fair on the Rambla Nova: the dates and the place are on our [Tarragona Christmas market page](${fairsTownPath("en", "tarragona")}).`)
+      : []),
     faq(t.faq),
     ...b2Related(["portaventura", "sitges", "figueres", "girona", "montserratFree"], locale),
   ];

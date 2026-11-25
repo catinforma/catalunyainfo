@@ -14,6 +14,7 @@ import {
   type B2Source,
 } from "./shared";
 import { withGlance } from "./day-trip-glance";
+import { townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 /**
  * Figueres and the Dalí Theatre-Museum from Barcelona.
@@ -406,6 +407,10 @@ function body(locale: Locale) {
     list(...t.more),
     ...h2(t.planTitle),
     list(...t.plan),
+    // 25 Nov 2026: English only; the town page exists in English (Figueres, INE 17066, is in EN_TOWNS) and has a dated fair.
+    ...(locale === "en"
+      ? paras(`Going in December? Figueres has a Christmas market on La Rambla: the dates and the place are on our [Figueres Christmas market page](${fairsTownPath("en", "figueres")}).`)
+      : []),
     faq([...t.faq, ...x.faq]),
     ...b2Related(["girona", "montserratFree", "sitges", "tarragona", "museums", "christmas"], locale),
   ];
