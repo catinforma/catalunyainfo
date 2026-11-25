@@ -63,11 +63,23 @@ import {
  * Card's €7 discount at Casa Batlló (thisisbarcelona.com). The night-visit
  * price is still left out: Casa Batlló sells it "until 15 Nov".
  *
+ * Re-read on 25 Nov 2026 (17:44 UTC, each page fetched and the words grepped):
+ * sagradafamilia.org/en/prices ("Base price 26,00 € 30,00 €", towers 36,00 €),
+ * schedules-how-to-get ("November through February: Monday to Saturday from 9:00 am
+ * to 6:00 pm. Sundays from 10:30 am"), parkguell.barcelona prices-and-times
+ * ("General ticket 18 €", "From 9:30 am to 17:30 pm"), casabatllo.es ("From
+ * €29", "Opening hours: 8:30am to 10:30pm*. Last admission: 9:30pm"),
+ * lapedrera.com ("WINTER HOURS 2 November 2026 - 25 February 2027 ... 9:00 am -
+ * 6:30 pm"; "From €29"), santpaubarcelona.org ("Self-Guided Visit: €18 (until 2
+ * PM), €17 (after 2 PM)"; new: "From 1 January 2027: Self-guided visit online:
+ * €19 (until 2 pm), €18 (from 2 pm) ... ticket office: €20 ... €19 ... Guided
+ * visit: €22.00"). Nothing else changed since 28 Oct.
+ *
  * No reseller links. Sagrada Família refuses tickets bought from resellers,
  * and Park Güell bans resale: the useful advice is the official site.
  */
 
-const VERIFIED = "2026-10-28";
+const VERIFIED = "2026-11-25";
 
 const SOURCES: B2Source[] = [
   { name: "Sagrada Família — prices", url: "https://sagradafamilia.org/en/prices", publisher: "Junta Constructora del Temple de la Sagrada Família" },
@@ -170,7 +182,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "**A Sagrada Família ticket costs €26** (€36 with the towers; under-30s €24, seniors €21, under 11s free), **Park Güell costs €18**, sold online only for a 30-minute slot, and **Casa Batlló starts from €29**, depending on the date. La Pedrera also starts at €29 and Sant Pau €18 before 14:00. Those are the prices on each monument's own website on 28 October 2026. All of them sell timed tickets, and the rule that saves most money is to buy on the official site, in advance.",
+    lead: "**A Sagrada Família ticket costs €26** (€36 with the towers; under-30s €24, seniors €21, under 11s free), **Park Güell costs €18**, sold online only for a 30-minute slot, and **Casa Batlló starts from €29**, depending on the date. La Pedrera also starts at €29 and Sant Pau €18 before 14:00. Those are the prices on each monument's own website on 25 November 2026. All of them sell timed tickets, and the rule that saves most money is to buy on the official site, in advance.",
     tableCaption: "Adult prices and winter hours at a glance",
     headers: ["Monument", "Adult ticket", "Free", "Winter hours"],
     rows: [
@@ -195,7 +207,7 @@ const COPY: Record<Locale, T> = {
       ["With towers", "€36", "€34", "€28", "Free"],
       ["Guided tour and towers", "€40", "€38", "€32", "Free"],
     ],
-    sfPriceNote: "Prices per person from sagradafamilia.org, checked on 28 October 2026. A disabled visitor's companion pays €0, €4, €10 or €14 for the same four tickets. The audio guide covers the Basilica only.",
+    sfPriceNote: "Prices per person from sagradafamilia.org, checked on 25 November 2026. A disabled visitor's companion pays €0, €4, €10 or €14 for the same four tickets. The audio guide covers the Basilica only.",
     sfHoursTitle: "Sagrada Família opening hours",
     sfHoursCaption: "Sagrada Família opening hours by season",
     sfHoursHeaders: ["Months", "Monday to Friday", "Saturday", "Sunday"],
@@ -205,7 +217,7 @@ const COPY: Record<Locale, T> = {
       ["April to September", "9:00–20:00", "9:00–18:00", "10:30–20:00"],
       ["25 and 26 December, 1 and 6 January", "9:00–14:00", "9:00–14:00", "9:00–14:00"],
     ],
-    sfHoursNote: "From sagradafamilia.org, checked on 28 October 2026. Hours can change for events inside the Basilica.",
+    sfHoursNote: "From sagradafamilia.org, checked on 25 November 2026. Hours can change for events inside the Basilica.",
     sfHours: [
       "The Basilica is cleared fifteen minutes before closing time, so do not book the last slot of the day. Individual visitors use the general entrance on the Nativity façade, on carrer de la Marina.",
       "**Getting there:** metro L2 and L5, Sagrada Família station; buses 19, 33, 34, D50, H10 and B24.",
@@ -226,7 +238,7 @@ const COPY: Record<Locale, T> = {
       ["Companion of a person with a disability", "€13.50"],
       ["With a Museu d'Història de Barcelona or Ruta del Modernisme ticket", "€14.50"],
     ],
-    pgPriceNote: "Prices including VAT from parkguell.barcelona, checked on 28 October 2026. Discounts need documentation when you buy.",
+    pgPriceNote: "Prices including VAT from parkguell.barcelona, checked on 25 November 2026. Discounts need documentation when you buy.",
     pgHoursTitle: "Park Güell opening hours and how to get there",
     pgHours: [
       "The park is open all year. Tourist tickets cover the slots from 9:30 to 17:30; from 7:00 to 9:30 and from 18:00 to 22:00 the Monumental Zone is reserved for local residents and Passi Verd holders, with no tourist visits.",
@@ -245,7 +257,7 @@ const COPY: Record<Locale, T> = {
     ],
     santpauTitle: "Sant Pau Recinte Modernista",
     santpau: [
-      `Domènech i Montaner's hospital complex costs **€18** before 14:00 and **€17** after, or €21 with a guide; reduced tickets are €12.60 and €11.90, or €14.70 guided (${a("plan your visit", URL.santpau)}). It opens daily 9:30–17:00 from November to March and 9:30–18:30 from April to October, with last entry 30 minutes before closing, and it is closed on 25 December. Entry is free on 23 April, on the Night of Museums and on 24 September.`,
+      `Domènech i Montaner's hospital complex costs **€18** before 14:00 and **€17** after, or €21 with a guide; reduced tickets are €12.60 and €11.90, or €14.70 guided (${a("plan your visit", URL.santpau)}). It opens daily 9:30–17:00 from November to March and 9:30–18:30 from April to October, with last entry 30 minutes before closing, and it is closed on 25 December. Entry is free on 23 April, on the Night of Museums and on 24 September. From 1 January 2027 the self-guided ticket rises to **€19** before 14:00 and **€18** after when bought online (€20 and €19 at the ticket office), and the guided visit to €22.`,
     ],
     resellerTitle: "Avoid resellers",
     reseller: "The Sagrada Família's conditions of sale say it will not accept any ticket bought through a reseller, and its tickets carry the visitor's name. Search results are full of third-party sellers at a mark-up; the official links above are the ones to use.",
@@ -268,7 +280,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   es: {
-    lead: "**La entrada a la Sagrada Familia cuesta 26 €** (36 € con torres; menores de 30, 24 €; sénior, 21 €; menores de 11, gratis), **el Park Güell 18 €**, solo en línea y para una franja de 30 minutos, y **la Casa Batlló desde 29 €**, según la fecha. La Pedrera también empieza en 29 € y Sant Pau, 18 € antes de las 14:00. Son los precios de la web de cada monumento el 28 de octubre de 2026. Todos venden entradas con hora, y la regla que más ahorra es comprar en la web oficial y con antelación.",
+    lead: "**La entrada a la Sagrada Familia cuesta 26 €** (36 € con torres; menores de 30, 24 €; sénior, 21 €; menores de 11, gratis), **el Park Güell 18 €**, solo en línea y para una franja de 30 minutos, y **la Casa Batlló desde 29 €**, según la fecha. La Pedrera también empieza en 29 € y Sant Pau, 18 € antes de las 14:00. Son los precios de la web de cada monumento el 25 de noviembre de 2026. Todos venden entradas con hora, y la regla que más ahorra es comprar en la web oficial y con antelación.",
     tableCaption: "Precios de adulto y horario de invierno, de un vistazo",
     headers: ["Monumento", "Entrada adulto", "Gratis", "Horario de invierno"],
     rows: [
@@ -293,7 +305,7 @@ const COPY: Record<Locale, T> = {
       ["Con torres", "36 €", "34 €", "28 €", "Gratis"],
       ["Visita guiada y torres", "40 €", "38 €", "32 €", "Gratis"],
     ],
-    sfPriceNote: "Precios por persona de sagradafamilia.org, comprobados el 28 de octubre de 2026. El acompañante de una persona con discapacidad paga 0, 4, 10 o 14 € por las mismas cuatro entradas. La audioguía cubre solo la basílica.",
+    sfPriceNote: "Precios por persona de sagradafamilia.org, comprobados el 25 de noviembre de 2026. El acompañante de una persona con discapacidad paga 0, 4, 10 o 14 € por las mismas cuatro entradas. La audioguía cubre solo la basílica.",
     sfHoursTitle: "Horario de la Sagrada Familia",
     sfHoursCaption: "Horario de la Sagrada Familia por temporada",
     sfHoursHeaders: ["Meses", "Lunes a viernes", "Sábado", "Domingo"],
@@ -303,7 +315,7 @@ const COPY: Record<Locale, T> = {
       ["Abril a septiembre", "9:00–20:00", "9:00–18:00", "10:30–20:00"],
       ["25 y 26 de diciembre, 1 y 6 de enero", "9:00–14:00", "9:00–14:00", "9:00–14:00"],
     ],
-    sfHoursNote: "De sagradafamilia.org, comprobado el 28 de octubre de 2026. El horario puede cambiar por actos en la basílica.",
+    sfHoursNote: "De sagradafamilia.org, comprobado el 25 de noviembre de 2026. El horario puede cambiar por actos en la basílica.",
     sfHours: [
       "El templo se desaloja quince minutos antes del cierre, así que no reserves la última franja del día. Los visitantes individuales entran por la puerta general de la fachada del Nacimiento, en la calle de la Marina.",
       "**Cómo llegar:** metro L2 y L5, estación Sagrada Família; autobuses 19, 33, 34, D50, H10 y B24.",
@@ -324,7 +336,7 @@ const COPY: Record<Locale, T> = {
       ["Acompañante de una persona con discapacidad", "13,50 €"],
       ["Con entrada del Museu d'Història de Barcelona o de la Ruta del Modernisme", "14,50 €"],
     ],
-    pgPriceNote: "Precios con IVA de parkguell.barcelona, comprobados el 28 de octubre de 2026. Los descuentos piden documentación al comprar.",
+    pgPriceNote: "Precios con IVA de parkguell.barcelona, comprobados el 25 de noviembre de 2026. Los descuentos piden documentación al comprar.",
     pgHoursTitle: "Horario del Park Güell y cómo llegar",
     pgHours: [
       "El parque abre todo el año. Las entradas para turistas cubren las franjas de 9:30 a 17:30; de 7:00 a 9:30 y de 18:00 a 22:00 la Zona Monumental queda reservada a los vecinos y a quien tiene el Passi Verd, sin visitas turísticas.",
@@ -343,7 +355,7 @@ const COPY: Record<Locale, T> = {
     ],
     santpauTitle: "Recinte Modernista de Sant Pau",
     santpau: [
-      `El conjunto hospitalario de Domènech i Montaner cuesta **18 €** antes de las 14:00 y **17 €** después, o 21 € con guía; la entrada reducida es de 12,60 € y 11,90 €, o 14,70 € con guía (${a("prepara la visita", URL.santpau)}). Abre cada día de 9:30 a 17:00 de noviembre a marzo y de 9:30 a 18:30 de abril a octubre, con último acceso 30 minutos antes del cierre, y cierra el 25 de diciembre. La entrada es gratuita el 23 de abril, la Noche de los Museos y el 24 de septiembre.`,
+      `El conjunto hospitalario de Domènech i Montaner cuesta **18 €** antes de las 14:00 y **17 €** después, o 21 € con guía; la entrada reducida es de 12,60 € y 11,90 €, o 14,70 € con guía (${a("prepara la visita", URL.santpau)}). Abre cada día de 9:30 a 17:00 de noviembre a marzo y de 9:30 a 18:30 de abril a octubre, con último acceso 30 minutos antes del cierre, y cierra el 25 de diciembre. La entrada es gratuita el 23 de abril, la Noche de los Museos y el 24 de septiembre. Desde el 1 de enero de 2027 la visita autoguiada sube a **19 €** antes de las 14:00 y **18 €** después si se compra en línea (20 € y 19 € en taquilla), y la visita guiada a 22 €.`,
     ],
     resellerTitle: "Evita los revendedores",
     reseller: "Las condiciones de venta de la Sagrada Familia dicen que no aceptará ninguna entrada comprada a un revendedor, y sus entradas son nominativas. Los resultados de búsqueda están llenos de vendedores con recargo: los enlaces oficiales de arriba son los buenos.",
@@ -366,7 +378,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   ca: {
-    lead: "**L'entrada a la Sagrada Família costa 26 €** (36 € amb torres; menors de 30, 24 €; sèniors, 21 €; menors d'11, gratis), **el Park Güell 18 €**, només en línia i per a una franja de 30 minuts, i **la Casa Batlló des de 29 €**, segons la data. La Pedrera també comença a 29 € i Sant Pau, 18 € abans de les 14:00. Són els preus del web de cada monument el 28 d'octubre de 2026. Tots venen entrades amb hora, i la norma que més estalvia és comprar al web oficial i amb antelació.",
+    lead: "**L'entrada a la Sagrada Família costa 26 €** (36 € amb torres; menors de 30, 24 €; sèniors, 21 €; menors d'11, gratis), **el Park Güell 18 €**, només en línia i per a una franja de 30 minuts, i **la Casa Batlló des de 29 €**, segons la data. La Pedrera també comença a 29 € i Sant Pau, 18 € abans de les 14:00. Són els preus del web de cada monument el 25 de novembre de 2026. Tots venen entrades amb hora, i la norma que més estalvia és comprar al web oficial i amb antelació.",
     tableCaption: "Preus d'adult i horari d'hivern, d'un cop d'ull",
     headers: ["Monument", "Entrada adult", "Gratis", "Horari d'hivern"],
     rows: [
@@ -391,7 +403,7 @@ const COPY: Record<Locale, T> = {
       ["Amb torres", "36 €", "34 €", "28 €", "Gratis"],
       ["Visita guiada i torres", "40 €", "38 €", "32 €", "Gratis"],
     ],
-    sfPriceNote: "Preus per persona de sagradafamilia.org, comprovats el 28 d'octubre de 2026. L'acompanyant d'una persona amb discapacitat paga 0, 4, 10 o 14 € per les mateixes quatre entrades. L'audioguia cobreix només la basílica.",
+    sfPriceNote: "Preus per persona de sagradafamilia.org, comprovats el 25 de novembre de 2026. L'acompanyant d'una persona amb discapacitat paga 0, 4, 10 o 14 € per les mateixes quatre entrades. L'audioguia cobreix només la basílica.",
     sfHoursTitle: "Horari de la Sagrada Família",
     sfHoursCaption: "Horari de la Sagrada Família per temporada",
     sfHoursHeaders: ["Mesos", "Dilluns a divendres", "Dissabte", "Diumenge"],
@@ -401,7 +413,7 @@ const COPY: Record<Locale, T> = {
       ["Abril a setembre", "9:00–20:00", "9:00–18:00", "10:30–20:00"],
       ["25 i 26 de desembre, 1 i 6 de gener", "9:00–14:00", "9:00–14:00", "9:00–14:00"],
     ],
-    sfHoursNote: "De sagradafamilia.org, comprovat el 28 d'octubre de 2026. L'horari pot canviar per actes a la basílica.",
+    sfHoursNote: "De sagradafamilia.org, comprovat el 25 de novembre de 2026. L'horari pot canviar per actes a la basílica.",
     sfHours: [
       "El temple es desallotja quinze minuts abans del tancament, així que no reservis l'última franja del dia. Els visitants individuals entren per la porta general de la façana del Naixement, al carrer de la Marina.",
       "**Com arribar-hi:** metro L2 i L5, estació Sagrada Família; autobusos 19, 33, 34, D50, H10 i B24.",
@@ -422,7 +434,7 @@ const COPY: Record<Locale, T> = {
       ["Acompanyant d'una persona amb discapacitat", "13,50 €"],
       ["Amb entrada del Museu d'Història de Barcelona o de la Ruta del Modernisme", "14,50 €"],
     ],
-    pgPriceNote: "Preus amb IVA de parkguell.barcelona, comprovats el 28 d'octubre de 2026. Els descomptes demanen documentació en comprar.",
+    pgPriceNote: "Preus amb IVA de parkguell.barcelona, comprovats el 25 de novembre de 2026. Els descomptes demanen documentació en comprar.",
     pgHoursTitle: "Horari del Park Güell i com arribar-hi",
     pgHours: [
       "El parc obre tot l'any. Les entrades per a turistes cobreixen les franges de 9:30 a 17:30; de 7:00 a 9:30 i de 18:00 a 22:00 la Zona Monumental queda reservada als veïns i a qui té el Passi Verd, sense visites turístiques.",
@@ -441,7 +453,7 @@ const COPY: Record<Locale, T> = {
     ],
     santpauTitle: "Recinte Modernista de Sant Pau",
     santpau: [
-      `El conjunt hospitalari de Domènech i Montaner costa **18 €** abans de les 14:00 i **17 €** després, o 21 € amb guia; l'entrada reduïda és de 12,60 € i 11,90 €, o 14,70 € amb guia (${a("prepara la visita", URL.santpau)}). Obre cada dia de 9:30 a 17:00 de novembre a març i de 9:30 a 18:30 d'abril a octubre, amb últim accés 30 minuts abans del tancament, i tanca el 25 de desembre. L'entrada és gratuïta el 23 d'abril, la Nit dels Museus i el 24 de setembre.`,
+      `El conjunt hospitalari de Domènech i Montaner costa **18 €** abans de les 14:00 i **17 €** després, o 21 € amb guia; l'entrada reduïda és de 12,60 € i 11,90 €, o 14,70 € amb guia (${a("prepara la visita", URL.santpau)}). Obre cada dia de 9:30 a 17:00 de novembre a març i de 9:30 a 18:30 d'abril a octubre, amb últim accés 30 minuts abans del tancament, i tanca el 25 de desembre. L'entrada és gratuïta el 23 d'abril, la Nit dels Museus i el 24 de setembre. A partir de l'1 de gener de 2027 la visita autoguiada puja a **19 €** abans de les 14:00 i **18 €** després si es compra en línia (20 € i 19 € a taquilla), i la visita guiada a 22 €.`,
     ],
     resellerTitle: "Evita els revenedors",
     reseller: "Les condicions de venda de la Sagrada Família diuen que no acceptarà cap entrada comprada a un revenedor, i les seves entrades són nominatives. Els resultats de cerca són plens de venedors amb recàrrec: els enllaços oficials d'aquí dalt són els bons.",
