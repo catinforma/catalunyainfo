@@ -641,8 +641,17 @@ const QUARTER_NET = QUARTER_FIRST - QUARTER_LEVY;
  * prorrateará entre los cotitulares") and the same AEAT notice ("titulares de
  * participaciones", "no tendrán que presentar ninguna otra autoliquidación").
  */
-export const TAX_CHECKED = "2026-11-20";
-const TAX_CHECKED_TEXT: Record<Locale, string> = { ca: "20 de novembre de 2026", es: "20 de noviembre de 2026", en: "20 November 2026" };
+export const TAX_CHECKED = "2026-11-25";
+const TAX_CHECKED_TEXT: Record<Locale, string> = { ca: "25 de novembre de 2026", es: "25 de noviembre de 2026", en: "25 November 2026" };
+/*
+ * Re-read 25 Nov 2026 on boe.es (BOE-A-2006-20764, "Última actualización
+ * publicada el 25/11/2026"): DA 33ª.2 "Estarán exentos del gravamen especial
+ * los premios cuyo importe íntegro sea igual o inferior a 40.000 euros" and
+ * DA 33ª.6 "El porcentaje de retención o ingreso a cuenta será el 20 por
+ * ciento" unchanged; the AEAT notice (17 Dec 2024) still says "Estarán
+ * exentos los premios cuyo importe íntegro sea igual o inferior a 40.000
+ * euros". SELAE and Loteries de Catalunya answered 403 to the server.
+ */
 
 /**
  * "A quina hora és el sorteig?" (20 Nov 2026): its own FAQ item, because the
@@ -731,7 +740,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Emissió", value: "205 sèries de 100.000 números: 4.100 milions d'euros, i el 70% (2.870 milions) en premis" },
       { label: "Compra per internet", value: "Al web i l'app de SELAE, fins a les 23:45 del 21 de desembre" },
       { label: "Termini per cobrar", value: "Tres mesos, comptats des de l'endemà del sorteig" },
-      { label: "Impostos", value: "El 20% del que passa de 40.000 € per dècim" },
+      { label: "Impostos", value: `El 20% del que passa de 40.000 € per dècim; ${link(calcPath("lottery-tax", "ca"), "calcula què et queda")}` },
+      ...(c.results || c.time ? [] : [{ label: "On veure'l", value: "El 2025, en directe a La 1, TVE Internacional i RTVE Play; la retransmissió del 2026 encara no s'ha anunciat" }]),
+      { label: "Com comprovar-lo", value: `Al ${link(U.lnac, "comprovador de SELAE")} o al nostre ${link(checkPath("ca"), "comprovador de la Loteria de Nadal")}; només val la llista oficial de premis` },
     ],
     data: (c) =>
       c.results
@@ -947,7 +958,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Emisión", value: "205 series de 100.000 números: 4.100 millones de euros, y el 70% (2.870 millones) en premios" },
       { label: "Compra por internet", value: "En la web y la app de SELAE, hasta las 23:45 del 21 de diciembre" },
       { label: "Plazo para cobrar", value: "Tres meses, contados desde el día siguiente al sorteo" },
-      { label: "Impuestos", value: "El 20% de lo que pasa de 40.000 € por décimo" },
+      { label: "Impuestos", value: `El 20% de lo que pasa de 40.000 € por décimo; ${link(calcPath("lottery-tax", "es"), "calcula cuánto te queda")}` },
+      ...(c.results || c.time ? [] : [{ label: "Dónde verlo", value: "En 2025, en directo en La 1, TVE Internacional y RTVE Play; la retransmisión de 2026 aún no se ha anunciado" }]),
+      { label: "Cómo comprobarlo", value: `En el ${link(U.lnac, "comprobador de SELAE")} o en nuestro ${link(checkPath("es"), "comprobador de la Lotería de Navidad")}; solo vale la lista oficial de premios` },
     ],
     data: (c) =>
       c.results
@@ -1163,7 +1176,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Issue", value: "205 series of 100,000 numbers: €4.1 billion, with 70% (€2.87 billion) paid out in prizes" },
       { label: "Buying online", value: "On SELAE's website and app, until 23:45 on 21 December" },
       { label: "Deadline to claim", value: "Three months, counted from the day after the draw" },
-      { label: "Tax", value: "20% of anything above €40,000 per décimo" },
+      { label: "Tax", value: `20% of anything above €40,000 per décimo; ${link(calcPath("lottery-tax", "en"), "work out what you keep")}` },
+      ...(c.results || c.time ? [] : [{ label: "Where to watch", value: "In 2025, live on La 1, TVE Internacional and RTVE Play; the 2026 broadcast has not been announced yet" }]),
+      { label: "How to check", value: `On ${link(U.lnac, "SELAE's checker")} or our ${link(checkPath("en"), "Spanish Christmas Lottery checker")}; only the official prize list counts` },
     ],
     data: (c) =>
       c.results

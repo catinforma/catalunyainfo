@@ -57,7 +57,7 @@ import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { SNAPSHOT as ELECTIONS } from "../src/lib/programmatic/elections/snapshot.ts";
 import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { GORDO_ROUTE } from "../src/lib/programmatic/gordo/paths.ts";
-import { CHECK_ROUTE } from "../src/lib/programmatic/lottery-check/paths.ts";
+import { CHECK_ROUTE, checkPath } from "../src/lib/programmatic/lottery-check/paths.ts";
 import { GROSSA_CHECK_ROUTE } from "../src/lib/programmatic/grossa-check/paths.ts";
 import { NINO_CHECK_ROUTE } from "../src/lib/programmatic/nino-check/paths.ts";
 
@@ -476,7 +476,7 @@ test("20 Nov 2026: the time and per-décimo questions, the Gordo's tax in the ta
     assert.ok(answer(asks[locale].tax).includes(eur(levy(perDecimo("first")), locale)), `${locale}: the Gordo's levy`);
     assert.ok(answer(asks[locale].tax).includes(eur(perDecimo("first") - levy(perDecimo("first")), locale)), `${locale}: the Gordo's net`);
     // The prize tax calculator is linked from the body, once.
-    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 1, `${locale}: calculator link`);
+    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 2, `${locale}: calculator link (key facts + tax section)`);
   }
 });
 
@@ -703,8 +703,8 @@ test("participaciones: the exemption is split by share, with a quarter-share Gor
     const plain = body(locale);
     assert.match(plain, figures[locale], locale);
     assert.match(plain, /titulars de les participacions|titulares de las participaciones|holders of the participaciones/, locale);
-    // TAX_CHECKED: first read 13 Nov 2026, re-read 20 Nov 2026 (BOE consolidated text of 18 Nov, same AEAT notice).
-    assert.match(plain, /20 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the tax re-read is dated`);
+    // TAX_CHECKED: first read 13 Nov 2026, re-read 25 Nov 2026 (BOE consolidated text of 25 Nov, same AEAT notice).
+    assert.match(plain, /25 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the tax re-read is dated`);
   }
 });
 
@@ -721,5 +721,24 @@ test("the FAQ answers 'la grossa de nadal' with the two draws and their dates", 
     assert.ok(item, `${locale}: missing "${question[locale]}"`);
     assert.match(item.answer, /^No\./, locale);
     assert.match(item.answer, days[locale], locale);
+  }
+});
+
+test("the key facts answer where to watch, how to check and the tax, linking our checker and calculator (25 Nov 2026)", () => {
+  const labels: Record<Locale, string[]> = {
+    ca: ["On veure'l", "Com comprovar-lo", "Impostos"],
+    es: ["Dónde verlo", "Cómo comprobarlo", "Impuestos"],
+    en: ["Where to watch", "How to check", "Tax"],
+  };
+  for (const locale of LOCALES) {
+    const facts = LOTERIA_NADAL.editions[locale].blocks.find((b) => b.type === "keyFacts") as { items: { label: string; value: string }[] };
+    for (const label of labels[locale]) assert.ok(facts.items.some((i) => i.label === label), `${locale}: ${label}`);
+    const all = facts.items.map((i) => i.value).join(" ");
+    assert.ok(all.includes(checkPath(locale)), `${locale}: checker link`);
+    assert.ok(all.includes(calcPath("lottery-tax", locale)), `${locale}: calculator link`);
+    // The 2026 broadcast is not announced: the watch line only gives 2025 and says so.
+    const watch = facts.items.find((i) => i.label === labels[locale][0])!.value;
+    assert.match(watch, /2025/, locale);
+    assert.match(watch, /2026/, locale);
   }
 });

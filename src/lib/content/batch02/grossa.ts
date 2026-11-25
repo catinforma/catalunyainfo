@@ -558,6 +558,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Números", value: "100.000 (del 00000 al 99999), amb 35 sèries de cada número" },
       { label: "Venda", value: "Des del 12 de setembre fins a les 11:00 del 31 de desembre de 2026" },
       { label: "Termini per cobrar", value: "90 dies des del sorteig" },
+      ...(c.results || c.time ? [] : [{ label: "On veure'l", value: "El 2025, en directe per 3Cat; la retransmissió del 2026 encara no s'ha anunciat" }]),
+      { label: "Impostos", value: `El 20% del que passa de 40.000 € per bitllet (el primer i el segon premi); ${link(calcPath("lottery-tax", "ca"), "calcula què et queda")}` },
+      { label: "Com comprovar-ho", value: `Al nostre ${link(grossaCheckPath("ca"), "comprovador de La Grossa de Cap d'Any")}, amb els números de Loteries de Catalunya` },
     ],
     data: (c) =>
       c.results
@@ -757,6 +760,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Números", value: "100.000 (del 00000 al 99999), con 35 series de cada número" },
       { label: "Venta", value: "Desde el 12 de septiembre hasta las 11:00 del 31 de diciembre de 2026" },
       { label: "Plazo para cobrar", value: "90 días desde el sorteo" },
+      ...(c.results || c.time ? [] : [{ label: "Dónde verlo", value: "En 2025, en directo por 3Cat; la retransmisión de 2026 aún no se ha anunciado" }]),
+      { label: "Impuestos", value: `El 20% de lo que pasa de 40.000 € por billete (el primer y el segundo premio); ${link(calcPath("lottery-tax", "es"), "calcula cuánto te queda")}` },
+      { label: "Cómo comprobarlo", value: `En nuestro ${link(grossaCheckPath("es"), "comprobador de La Grossa de Cap d'Any")}, con los números de Loteries de Catalunya` },
     ],
     data: (c) =>
       c.results
@@ -956,6 +962,9 @@ const COPY: Record<Locale, Copy> = {
       { label: "Numbers", value: "100,000 (00000 to 99999), with 35 series of each number" },
       { label: "On sale", value: "From 12 September until 11:00 on 31 December 2026" },
       { label: "Deadline to claim", value: "90 days from the draw" },
+      ...(c.results || c.time ? [] : [{ label: "Where to watch", value: "In 2025, live on 3Cat; the 2026 broadcast has not been announced yet" }]),
+      { label: "Tax", value: `20% of anything above €40,000 per ticket (first and second prizes only); ${link(calcPath("lottery-tax", "en"), "work out what you keep")}` },
+      { label: "How to check", value: `On our ${link(grossaCheckPath("en"), "La Grossa de Cap d'Any checker")}, with Loteries de Catalunya's numbers` },
     ],
     data: (c) =>
       c.results

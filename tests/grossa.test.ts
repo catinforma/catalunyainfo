@@ -45,7 +45,7 @@ import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
-import { GROSSA_CHECK_ROUTE } from "../src/lib/programmatic/grossa-check/paths.ts";
+import { GROSSA_CHECK_ROUTE, grossaCheckPath } from "../src/lib/programmatic/grossa-check/paths.ts";
 import { NINO_CHECK_ROUTE } from "../src/lib/programmatic/nino-check/paths.ts";
 
 /**
@@ -372,7 +372,7 @@ test("20 Nov 2026: the deadline and participacions questions, the calculator in 
     assert.match(answer(asks[locale].shares), shares[locale], locale);
     // Only 2025's last day: never a computed 2026 one.
     assert.doesNotMatch(answer(asks[locale].deadline), /2027/, locale);
-    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 1, `${locale}: calculator link`);
+    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 2, `${locale}: calculator link (key facts + tax section)`);
     assert.equal(json(locale).split(`](/${locale}/${NINO_CHECK_ROUTE[locale]}/)`).length - 1, 1, `${locale}: El Niño checker link`);
   }
 });
@@ -566,4 +566,23 @@ test("the publish route has a grossa group", () => {
   assert.match(route, /wants\("grossa"\)\) published\.push\(await publishB2Article\(GROSSA\)\)/);
   // The NYE page that links here goes out with its own group.
   assert.match(route, /wants\("nye"\)\) published\.push\(await publishB2Article\(NEW_YEAR\)\)/);
+});
+
+test("the key facts answer where to watch, the tax and how to check, linking our checker and calculator (25 Nov 2026)", () => {
+  const labels: Record<Locale, string[]> = {
+    ca: ["On veure'l", "Impostos", "Com comprovar-ho"],
+    es: ["Dónde verlo", "Impuestos", "Cómo comprobarlo"],
+    en: ["Where to watch", "Tax", "How to check"],
+  };
+  for (const locale of LOCALES) {
+    const facts = GROSSA.editions[locale].blocks.find((b) => b.type === "keyFacts") as { items: { label: string; value: string }[] };
+    for (const label of labels[locale]) assert.ok(facts.items.some((i) => i.label === label), `${locale}: ${label}`);
+    const all = facts.items.map((i) => i.value).join(" ");
+    assert.ok(all.includes(grossaCheckPath(locale)), `${locale}: checker link`);
+    assert.ok(all.includes(calcPath("lottery-tax", locale)), `${locale}: calculator link`);
+    assert.match(all, /40\.000|40,000/, locale);
+    const watch = facts.items.find((i) => i.label === labels[locale][0])!.value;
+    assert.match(watch, /2025/, locale);
+    assert.match(watch, /2026/, locale);
+  }
 });
