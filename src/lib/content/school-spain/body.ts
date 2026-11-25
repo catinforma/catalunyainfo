@@ -112,9 +112,9 @@ export function spainChristmasLine(locale: Locale): string {
   const year = regions[0]!.christmas.from.slice(0, 4);
   return t(
     locale,
-    `En el resto de España, el último día de clase antes de Navidad es el ${lasts}, según la comunidad, y se vuelve ${window}: las fechas de ${scopeWords(locale)}, con la orden de cada una, están en [vacaciones de Navidad ${year} por comunidades](${href(HUB_PATH)}).`,
-    `A la resta d'Espanya, l'últim dia de classe abans de Nadal és ${caEl(lasts)}, segons la comunitat, i es torna ${window}: les dates de ${scopeWords(locale)}, amb el text oficial de cadascuna, són a [vacances de Nadal ${year} per comunitats](${href(HUB_PATHS.ca, "ca")}).`,
-    `Elsewhere in Spain, the last day of class before Christmas is ${lasts}, depending on the region, and school resumes ${window}: the dates for ${scopeWords(locale)}, each with its official text, are in [Christmas ${year} school holidays by region](${href(HUB_PATHS.en, "en")}).`,
+    `En toda España, el último día de clase antes de Navidad es el ${lasts}, según la comunidad, y se vuelve ${window}: las fechas de ${scopeWords(locale)}, con la orden de cada una, están en [vacaciones de Navidad ${year} por comunidades](${href(HUB_PATH)}).`,
+    `A tot Espanya, l'últim dia de classe abans de Nadal és ${caEl(lasts)}, segons la comunitat, i es torna ${window}: les dates de ${scopeWords(locale)}, amb el text oficial de cadascuna, són a [vacances de Nadal ${year} per comunitats](${href(HUB_PATHS.ca, "ca")}).`,
+    `Across Spain, the last day of class before Christmas is ${lasts}, depending on the region, and school resumes ${window}: the dates for ${scopeWords(locale)}, each with its official text, are in [Christmas ${year} school holidays by region](${href(HUB_PATHS.en, "en")}).`,
   );
 }
 
@@ -870,17 +870,20 @@ function regionFaq(region: RegionCalendar): Block {
 }
 
 /** Under the Christmas section: the same three days for every other community, one click away. */
+/**
+ * "Cuándo son las vacaciones de Navidad 2026" is asked without a community
+ * ("cuando dan las vacaciones de navidad 2026", 283 impressions in 14 days at
+ * position 7.1 on the Andalucía page, 0 clicks; the same on Madrid and
+ * Valencia): every community page now answers it for the whole country, with
+ * the days computed from the same records as the hub table (spainChristmasLine),
+ * before the link to that table. Read 25 Nov 2026 against the 18 orders already
+ * quoted in data.ts; no date is typed here.
+ */
 function christmasHubLink(region: RegionCalendar): Block {
   const L = lang(region);
-  const year = region.christmas.from.slice(0, 4);
   return {
     type: "paragraph",
-    text: t(
-      L,
-      `¿Y en otras comunidades? El último día de clase, el primer día de vacaciones y la vuelta al cole de ${scopeWords(L)}, cada una con su orden, están en la tabla de [vacaciones de Navidad ${year} por comunidades](${href(HUB_PATH)}).`,
-      `I a les altres comunitats? L'últim dia de classe, el primer dia de vacances i la tornada a l'escola de ${scopeWords(L)}, cadascuna amb el seu text oficial, són a la taula de [vacances de Nadal ${year} per comunitats](${href(HUB_PATHS.ca, "ca")}).`,
-      `What about other regions? The last day of class, the first day of the holidays and the return to school for ${scopeWords(L)}, each with its official text, are in the table of [Christmas ${year} school holidays by region](${href(HUB_PATHS.en, "en")}).`,
-    ),
+    text: `${t(L, "¿Y en otras comunidades?", "I a les altres comunitats?", "What about other regions?")} ${spainChristmasLine(L)}`,
   };
 }
 

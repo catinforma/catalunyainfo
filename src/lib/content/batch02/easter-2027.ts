@@ -665,6 +665,14 @@ export function buildEasterBody(locale: Locale): Block[] {
         "D'on surten aquestes dates",
         `Els festius, de l'Ordre EMT/52/2026 (DOGC de l'1 d'abril de 2026), que el BOE del 13 d'octubre de 2026 recull a la relació de festes del 2027; les vacances escolars, de l'Ordre EDF/66/2026 (DOGC del 27 d'abril de 2026). Les hem tornat a llegir el ${dateYear(EASTER_DATES_REREAD, "ca")}.`,
       ),
+      // 25 Nov 2026 (ci-demanda): "quan es setmana santa 2027" (151 impressions in 14 days at 8.6, 0 clicks)
+      // was answered only in the FAQ and the glance table; now a visible H2 in the query's words. Same dates as
+      // the glance table and the FAQ (Ordre EMT/52/2026, treball.gencat.cat 2027 calendar: "26 de març, divendres",
+      // "29 de març, dilluns"; read 20 Nov 2026, EASTER_DATES_REREAD). Body only: title, meta, H1 and lead untouched.
+      ...h2(
+        `Quan és la Setmana Santa del ${EASTER_YEAR}?`,
+        `La Setmana Santa del ${EASTER_YEAR} va del **Diumenge de Rams, ${d(E.palmSunday, "ca")}**, al **Diumenge de Pasqua, ${d(E.easterSunday, "ca")}**. A Catalunya en són festius el Divendres Sant (${dm(E.goodFriday, "ca")}) i el Dilluns de Pasqua (${dm(E.easterMonday, "ca")}); el Dijous Sant (${dm(E.holyThursday, "ca")}) és feiner.`,
+      ),
       ...h2(
         "Quins dies són festius per Setmana Santa del 2027 a Catalunya?",
         `Dos: el **Divendres Sant, ${d(E.goodFriday, "ca")}**, i el **Dilluns de Pasqua, ${d(E.easterMonday, "ca")}**. Són dos dels ${b2link("workCalendar", "ca", "dotze festius del 2027 a tot Catalunya")}; a l'Aran, el Dilluns de Pasqua no és festiu, perquè el substitueix la Festa d'Aran, el ${d(E.aranDay, "ca")}.`,
@@ -779,6 +787,11 @@ export function buildEasterBody(locale: Locale): Block[] {
         "De dónde salen estas fechas",
         `Los festivos, de la Orden EMT/52/2026 (DOGC del 1 de abril de 2026), que el BOE del 13 de octubre de 2026 recoge en la relación de fiestas de 2027; las vacaciones escolares, de la Orden EDF/66/2026 (DOGC del 27 de abril de 2026). Las hemos vuelto a leer el ${dateYear(EASTER_DATES_REREAD, "es")}.`,
       ),
+      // 25 Nov 2026 (ci-demanda): same H2 as the Catalan edition, in the Spanish query's words.
+      ...h2(
+        `¿Cuándo es la Semana Santa de ${EASTER_YEAR} en Cataluña?`,
+        `La Semana Santa de ${EASTER_YEAR} va del **Domingo de Ramos, ${d(E.palmSunday, "es")}**, al **Domingo de Pascua, ${d(E.easterSunday, "es")}**. En Cataluña son festivos el Viernes Santo (${dm(E.goodFriday, "es")}) y el Lunes de Pascua (${dm(E.easterMonday, "es")}); el Jueves Santo (${dm(E.holyThursday, "es")}) es laborable.`,
+      ),
       ...h2(
         "¿Qué días son festivos en Semana Santa de 2027 en Cataluña?",
         `Dos: el **Viernes Santo, ${d(E.goodFriday, "es")}**, y el **Lunes de Pascua, ${d(E.easterMonday, "es")}**. Son dos de los ${b2link("workCalendar", "es", "doce festivos de 2027 en toda Cataluña")}; en Arán, el Lunes de Pascua no es festivo, porque lo sustituye la Fiesta de Arán, el ${d(E.aranDay, "es")}.`,
@@ -891,6 +904,11 @@ export function buildEasterBody(locale: Locale): Block[] {
       "official",
       "Where these dates come from",
       `The holidays come from Order EMT/52/2026 (DOGC, Catalonia's official gazette, 1 April 2026), listed again in the BOE's national list of 2027 holidays on 13 October 2026; the school holidays from Order EDF/66/2026 (DOGC, 27 April 2026). We re-read them on ${dateYear(EASTER_DATES_REREAD, "en")}.`,
+    ),
+    // 25 Nov 2026 (ci-demanda): same H2 as the Catalan edition, in English.
+    ...h2(
+      `When is Holy Week ${EASTER_YEAR} in Catalonia?`,
+      `Holy Week ${EASTER_YEAR} runs from **Palm Sunday, ${d(E.palmSunday, "en")}**, to **Easter Sunday, ${d(E.easterSunday, "en")}**. In Catalonia, Good Friday (${dm(E.goodFriday, "en")}) and Easter Monday (${dm(E.easterMonday, "en")}) are public holidays; Maundy Thursday (${dm(E.holyThursday, "en")}) is a working day.`,
     ),
     ...h2(
       "Which days are public holidays over Easter 2027 in Catalonia?",
