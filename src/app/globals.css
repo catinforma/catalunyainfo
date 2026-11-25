@@ -513,7 +513,10 @@
 
   .ci-facts {
     display: grid;
-    grid-template-columns: minmax(5rem, max-content) minmax(0, 1fr);
+    /* fit-content(45%), not max-content: a long label (e.g. a strike's full
+       name) took the whole row and squeezed the value to one letter per line
+       (26N page, 25 Nov 2026). */
+    grid-template-columns: fit-content(45%) minmax(0, 1fr);
     gap: 0.45rem 1rem;
     margin: 0;
     font-size: var(--text-sm);

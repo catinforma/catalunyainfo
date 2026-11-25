@@ -293,3 +293,8 @@ test("placement on a small viewport (360x640 phone): same rules, tighter pixels"
   assert.ok(planInArticle({ headings: [200, 400, 900], units: [], viewport, budget: 3 }).length <= 2);
   assert.deepEqual(planInArticle({ headings: [100, 250], units: [], viewport, budget: 3 }), []);
 });
+
+test("key-facts grid caps the label column so a long label cannot squeeze the value (25 Nov 2026)", () => {
+  const css = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.ci-facts \{\s*display: grid;[\s\S]{0,300}grid-template-columns: fit-content\(45%\) minmax\(0, 1fr\);/);
+});
