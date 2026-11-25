@@ -491,6 +491,22 @@ test("25 Nov 2026: fairs found in the largest towns, with the organiser's own da
   }
 });
 
+/** 25 Nov 2026, second re-read: Maçanet de la Selva's council gives the hours the calendar lacks. */
+test("25 Nov 2026: Maçanet de la Selva's council news gives the hours; the calendar keeps the place", () => {
+  const f = FAIRS.find((x) => x.id === "vm32:24033619")!;
+  assert.ok(f);
+  assert.equal(`${f.start}..${f.end}`, "2026-11-28..2026-11-29");
+  assert.equal(f.checked?.readOn, "2026-11-25");
+  assert.equal(f.place, "Avinguda Catalunya i Plaça Església", "the page names no place: the calendar's stays");
+  assert.equal(f.source, "fairs");
+  assert.equal(FAIRS.filter((x) => x.name === "Mercat de Nadal" && x.ine === "17103").length, 1, "listed once");
+  assert.match(f.checked!.quote, /Dissabte 28 de novembre 10 a 20 h/);
+  assert.match(f.checked!.quote, /Diumenge 29 de novembre 10 a 18 h/);
+  assert.equal(f.hours!.ca, "dissabte 28, de 10 a 20 h; diumenge 29, de 10 a 18 h");
+  assert.match(f.hours!.es, /sábado 28/);
+  assert.match(f.hours!.en, /Saturday 28/);
+});
+
 test("date guard: unconfirmed fairs re-read within 10 days while still to come", () => {
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
   const tenDaysAgo = new Date(Date.parse(`${today}T12:00:00Z`) - 10 * 86_400_000).toISOString().slice(0, 10);

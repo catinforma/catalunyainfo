@@ -13869,3 +13869,21 @@ Skipped tonight as briefed (listed so nobody re-runs them): strikes (26 Nov vs e
 **Baseline for the three proposals** (14 d to 24 Nov): CA parking 25 / 2,521 / 1.0 % / 5.6; ES parking 8,412 impr / 0.4 % / 7.5 (31 clicks); CA Carnival 30 / 2,356 / 1.3 % / 5.4. **Dated follow-ups:** 1 Dec ES parking description, 4 Dec CA parking description, 8 Dec free-days title, 11 Dec Carnival titles. Each reviewed 28 days after it ships.
 
 **Tests / build.** None run: no code, title or body touched. **Publish groups** (when applied): `parking` (both parking pages), `carnaval` (Carnival ca/es/en), `lliure-disposicio-links` or `lliure-disposicio` (free-days page).
+## 2026-11-25 (late morning) — Christmas fairs of 27 Nov – 8 Dec: second re-read of the rows with no organiser reading (Maçanet de la Selva gets the council's hours; group `christmas`)
+
+**Ticket.** List every fair running 27 Nov – 8 Dec whose `readOn` is before 24 Nov, by impressions, and re-read each organiser page. **Finding:** none of the 31 rows of the window had one: all organiser rows were re-read on 24-25 Nov (the 00:55 CET reading of this morning, and the 24 Nov one; tests already require `readOn >= 2026-11-24` for the window). The rows without any reading of their own were three: Maçanet de la Selva and Aiguafreda (calendar / agenda rows with no organiser entry) and Sitges (pending, 30 Oct).
+
+**Read 25 Nov 2026, 09:30 UTC (curl, browser user agent, words grepped):**
+- **Maçanet de la Selva** (https://www.xn--maanetdelaselva-fmb.cat/mercat-de-nadal-2026, council news dated 19/11/2026): "Mercat de Nadal: 28 i 29 de novembre … Dissabte 28 de novembre 10 a 20 h - Parades, tallers i actuacions … Diumenge 29 de novembre 10 a 18 h - Parades, tallers i actuacions." Dates agree with the calendar; the page names no square, so the calendar's place ("Avinguda Catalunya i Plaça Església") stays. **Changed:** new entry in `organisers.ts` (`replaces: "vm32:24033619"`, hours ca/es/en, quote, readOn 25 Nov); the page now says "confirmed by the council" and prints the hours. No date or place changed.
+- **Aiguafreda:** the Generalitat agenda (https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300047, last updated 3/11/2026): "El dissabte 28 de novembre els carrers d'Aiguafreda s'omplen d'ambient festiu i nadalenc amb la Fira d'Artesans i de Nadal"; it points to the council web, whose home, agenda and news pages (aiguafreda.cat) give no fair page, place or hours. Unchanged; no organiser entry (no place published).
+- **Lleida** (Paeria, mercat-de-nadal page): still only the 2025-2026 calendar; **Sant Cugat** (santcugat.cat/nadal): no fair; both unchanged.
+- **Not readable, rows kept with their old readOn:** Sitges (login form; stays 30 Oct), Terrassa (403), Reus (404 on the page tried; no fair on file).
+- No cancellation, date or place change on any row.
+
+**Impressions (GSC 12-25 Nov, `snapshot.py page`):** `mercados-navidad` pages ~650-2,000 impressions/day, position 6.7-8.2, clicks 9-44/day; top fair queries are Canyelles (past), Espinelves, Caldes, Arbúcies, Barcelona, Olot (all re-read 25 Nov 00:55). Maçanet: no queries about the fair (the page carries 6 impressions on "dia maçanet de la selva"), so no baseline beyond that.
+
+**Tests.** `tests/christmas-fairs.test.ts` +1 (Maçanet: dates, readOn, calendar place kept, quote words, hours ca/es/en, listed once); the existing window guard (`readOn >= 2026-11-24`) covers it. christmas-fairs 44, christmas-facts, christmas-markets green; `tsc --noEmit`; `seo:body-dates`. Title, description, H1 and lead untouched (Maçanet's lead keeps its dates sentence).
+
+**Go-live.** Deploy, publish group `christmas`. IndexNow `/ca/fires-de-nadal/macanet-de-la-selva/ /es/mercados-navidad/macanet-de-la-selva/`.
+
+**Baseline** (14 d to 25 Nov): `/ca/fires-de-nadal/` 175 clicks / 6,745 impressions / position 6.6; `/es/mercados-navidad/` 239 / 11,374 / 7.5; `/en/christmas-markets/` 17 / 536 / 10.6. **Review 2026-12-09** (after the 8 Dec bridge): `snapshot.py page mercat 14`, `page fira 14`, `page mercados-navidad 14`, `page christmas-markets 14`; then move every fair that has ended out of the re-read list.

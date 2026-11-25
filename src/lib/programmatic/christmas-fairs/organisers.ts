@@ -49,6 +49,15 @@ import type { FairDetails, OrganiserFair, PendingMarket, UnconfirmedFair } from 
  *     d'Artesania). Hospitalet (Fira de Nadal i Reis from 11 Dec), Rubí (from 11 Dec)
  *     start after 8 Dec; Cornellà and Sant Boi publish nothing for the window.
  *
+ * Second re-read on 25 Nov 2026 (09:30 UTC, curl with a browser user agent), of the rows of
+ * 27 Nov - 8 Dec that had no organiser reading of their own:
+ *   - Maçanet de la Selva: the council's news of 19 Nov gives 28 Nov 10-20 h and 29 Nov
+ *     10-18 h (the calendar gives the days and the place only): now an entry here;
+ *   - Aiguafreda: the Generalitat's agenda (updated 3 Nov) still says "El dissabte 28 de
+ *     novembre"; the council's pages give no fair page or place, nothing to add;
+ *   - Lleida (Paeria: the 2025-2026 calendar only) and Sant Cugat (no fair page): unchanged;
+ *   - not readable: Sitges (login form), Terrassa (403), Reus (404 on the page tried).
+ *
  * 13 Nov 2026 (season push: the 30 towns with the most search impressions,
  * each organiser page opened with a browser user agent and grepped):
  *   - every quote below from 30 Oct / 3 Nov is still on its page;
@@ -1436,6 +1445,29 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     },
   },
   {
+    // Council news of 19 Nov 2026, read 25 Nov 2026 (curl, browser user agent):
+    // "Mercat de Nadal: 28 i 29 de novembre … Dissabte 28 de novembre 10 a 20 h - Parades,
+    // tallers i actuacions … Diumenge 29 de novembre 10 a 18 h - Parades, tallers i
+    // actuacions". The page names no square: the place stays the calendar's.
+    id: "org:macanet-de-la-selva-mercat-de-nadal",
+    ine: "17103",
+    name: "Mercat de Nadal",
+    start: "2026-11-28",
+    end: "2026-11-29",
+    place: null,
+    url: "https://www.xn--maanetdelaselva-fmb.cat/mercat-de-nadal-2026",
+    publisher: "Ajuntament de Maçanet de la Selva",
+    readOn: "2026-11-25",
+    quote:
+      "Mercat de Nadal: 28 i 29 de novembre … Dissabte 28 de novembre 10 a 20 h - Parades, tallers i actuacions. … Diumenge 29 de novembre 10 a 18 h - Parades, tallers i actuacions.",
+    replaces: "vm32:24033619",
+    hours: {
+      ca: "dissabte 28, de 10 a 20 h; diumenge 29, de 10 a 18 h",
+      es: "sábado 28, de 10 a 20 h; domingo 29, de 10 a 18 h",
+      en: "Saturday 28, 10:00 to 20:00; Sunday 29, 10:00 to 18:00",
+    },
+  },
+  {
     id: "org:manresa-fira-de-santa-llucia",
     ine: "08113",
     name: "Fira de Santa Llúcia",
@@ -1674,7 +1706,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Nadal a Sitges",
     url: "https://www.sitges.cat/serveis/nadal-a-sitges",
     publisher: "Ajuntament de Sitges",
-    // 3, 13, 24 and 25 Nov 2026: the page answered with a login form, so this stays the 30 Oct reading.
+    // 3, 13, 24 and 25 Nov 2026 (again at 09:30 UTC): the page answered with a login form, so this stays the 30 Oct reading.
     readOn: "2026-10-30",
     shows: {
       ca: "La pàgina de Nadal de l'Ajuntament encara no anuncia cap fira ni mercat del 2026.",
