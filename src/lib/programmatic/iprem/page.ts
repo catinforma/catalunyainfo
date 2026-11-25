@@ -175,7 +175,7 @@ export function unemploymentRows() {
 }
 
 /** Common multiples, both bases: the "¿cuánto es x veces el IPREM?" table. */
-export const COMMON_MULTIPLES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6] as const;
+export const COMMON_MULTIPLES = [0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6] as const;
 
 export function multiplesTable() {
   return COMMON_MULTIPLES.map((m) => {

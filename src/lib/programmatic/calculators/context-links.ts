@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
+import { headline } from "@/lib/programmatic/bono-social/page";
 import { money, percent } from "@/lib/programmatic/net-salary/copy";
 import { REVALUATION_2026 } from "@/lib/programmatic/pensions-2027/rules";
 import {
@@ -41,6 +42,10 @@ import {
 const subsidyLink = (locale: Locale, label: Record<Locale, string>) => `[${label[locale]}](${calcPath("unemployment-subsidy", locale)})`;
 const pensionLink = (locale: Locale, label: Record<Locale, string>) => `[${label[locale]}](${calcPath("pensions-2027", locale)})`;
 
+/** "IPREM de 2026" as a link to the IPREM page (anchor in the query's words: "IPREM 2026"). */
+const ipremLink = (locale: Locale) =>
+  `[${{ es: `IPREM de ${RULES_YEAR}`, ca: `IPREM del ${RULES_YEAR}`, en: `${RULES_YEAR} IPREM` }[locale]}](${calcPath("iprem", locale)})`;
+
 const SUBSIDY_CHECK: Record<Locale, string> = {
   es: "Comprueba si te corresponde el subsidio por desempleo",
   ca: "Comprova si et correspon el subsidi d'atur",
@@ -64,10 +69,11 @@ export function subsidyAmountsLine(locale: Locale): string {
   const euros = AMOUNT_BANDS.map((band) => money(monthlyAmount(band.share), locale, 0));
   const shares = AMOUNT_BANDS.map((band) => percent(band.share * 100, locale, 0));
   const link = subsidyLink(locale, SUBSIDY_CHECK);
+  const iprem = ipremLink(locale);
   return {
-    es: `Si no llegas a los 360 días cotizados o se te acaba el paro, puede quedarte el subsidio por desempleo: ${euros[0]} al mes los 6 primeros meses (${shares[0]} del IPREM de ${RULES_YEAR}), ${euros[1]} hasta el mes 12 (${shares[1]}) y ${euros[2]} después (${shares[2]}). ${link}.`,
-    ca: `Si no arribes als 360 dies cotitzats o se't acaba l'atur, et pot quedar el subsidi per desocupació: ${euros[0]} al mes els 6 primers mesos (${shares[0]} de l'IPREM del ${RULES_YEAR}), ${euros[1]} fins al mes 12 (${shares[1]}) i ${euros[2]} després (${shares[2]}). ${link}.`,
-    en: `If you fall short of 360 days contributed or your unemployment benefit runs out, the unemployment subsidy may be left: ${euros[0]} a month for the first 6 months (${shares[0]} of the ${RULES_YEAR} IPREM), ${euros[1]} up to month 12 (${shares[1]}) and ${euros[2]} after that (${shares[2]}). ${link}.`,
+    es: `Si no llegas a los 360 días cotizados o se te acaba el paro, puede quedarte el subsidio por desempleo: ${euros[0]} al mes los 6 primeros meses (${shares[0]} del ${iprem}), ${euros[1]} hasta el mes 12 (${shares[1]}) y ${euros[2]} después (${shares[2]}). ${link}.`,
+    ca: `Si no arribes als 360 dies cotitzats o se't acaba l'atur, et pot quedar el subsidi per desocupació: ${euros[0]} al mes els 6 primers mesos (${shares[0]} de l'${iprem}), ${euros[1]} fins al mes 12 (${shares[1]}) i ${euros[2]} després (${shares[2]}). ${link}.`,
+    en: `If you fall short of 360 days contributed or your unemployment benefit runs out, the unemployment subsidy may be left: ${euros[0]} a month for the first 6 months (${shares[0]} of the ${iprem}), ${euros[1]} up to month 12 (${shares[1]}) and ${euros[2]} after that (${shares[2]}). ${link}.`,
   }[locale];
 }
 
@@ -76,10 +82,51 @@ export function subsidyOver52Line(locale: Locale): string {
   const amount = money(monthlyAmount(OVER52_SHARE), locale, 0);
   const share = percent(OVER52_SHARE * 100, locale, 0);
   const link = subsidyLink(locale, SUBSIDY_CHECK);
+  const iprem = ipremLink(locale);
   return {
-    es: `Desde los ${OVER52_AGE} años ese subsidio es de ${amount} al mes (el ${share} del IPREM de ${RULES_YEAR}). ${link}.`,
-    ca: `Des dels ${OVER52_AGE} anys aquest subsidi és de ${amount} al mes (el ${share} de l'IPREM del ${RULES_YEAR}). ${link}.`,
-    en: `From age ${OVER52_AGE} that subsidy is ${amount} a month (${share} of the ${RULES_YEAR} IPREM). ${link}.`,
+    es: `Desde los ${OVER52_AGE} años ese subsidio es de ${amount} al mes (el ${share} del ${iprem}). ${link}.`,
+    ca: `Des dels ${OVER52_AGE} anys aquest subsidi és de ${amount} al mes (el ${share} de l'${iprem}). ${link}.`,
+    en: `From age ${OVER52_AGE} that subsidy is ${amount} a month (${share} of the ${iprem}). ${link}.`,
+  }[locale];
+}
+
+export type BonoSocialKind = "smi" | "subsidy" | "non-contributory";
+
+/**
+ * Subsidy, SMI and non-contributory pension pages: the bono social's income
+ * limit for one person alone (RD 897/2017 art. 3.2.a: 1.5 × the 14-payment
+ * IPREM) with the extras per adult and per minor, from the bono social
+ * module's own headline() (the same numbers as the bono social page's lead).
+ * No discount percentage here: the 2026 rate ends on 31 Dec 2026 and the
+ * bono social page (date-guarded) is where it is stated.
+ */
+export function bonoSocialLimitLine(locale: Locale, kind: BonoSocialKind): string {
+  const h = headline();
+  const alone = money(h.alone.vulnerable, locale, 0);
+  const adult = money(h.perAdult, locale, 0);
+  const minor = money(h.perMinor, locale, 0);
+  const link = `[${{ es: "bono social eléctrico", ca: "bo social elèctric", en: "bono social for electricity" }[locale]}](${calcPath("bono-social", locale)})`;
+  const lead: Record<BonoSocialKind, Record<Locale, string>> = {
+    smi: {
+      es: `Otro límite de ingresos que usa el IPREM, no el SMI: el ${link}.`,
+      ca: `Un altre límit d'ingressos que fa servir l'IPREM, no l'SMI: el ${link}.`,
+      en: `Another income limit that runs on the IPREM, not the SMI: the ${link}.`,
+    },
+    subsidy: {
+      es: `Con estos ingresos puedes mirar también el ${link}.`,
+      ca: `Amb aquests ingressos pots mirar també el ${link}.`,
+      en: `On an income like this you can also check the ${link}.`,
+    },
+    "non-contributory": {
+      es: `Si tus ingresos son bajos, comprueba también el ${link}.`,
+      ca: `Si els teus ingressos són baixos, comprova també el ${link}.`,
+      en: `If your income is low, also check the ${link}.`,
+    },
+  };
+  return {
+    es: `${lead[kind].es} El límite de ingresos del bono social para una persona sola es de ${alone} al año (1,5 veces el IPREM de 14 pagas), más ${adult} por cada adulto más y ${minor} por cada menor.`,
+    ca: `${lead[kind].ca} El límit d'ingressos del bo social per a una persona sola és de ${alone} l'any (1,5 vegades l'IPREM de 14 pagues), més ${adult} per cada adult més i ${minor} per cada menor.`,
+    en: `${lead[kind].en} The bono social income limit for one person alone is ${alone} a year (1.5 times the 14-payment IPREM), plus ${adult} for each further adult and ${minor} for each minor.`,
   }[locale];
 }
 

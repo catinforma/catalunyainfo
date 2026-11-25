@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { pensionRevaluationLine, subsidyAmountsLine, subsidyIncomeLimitLine, subsidyOver52Line } from "../src/lib/programmatic/calculators/context-links.ts";
+import { bonoSocialLimitLine, pensionRevaluationLine, subsidyAmountsLine, subsidyIncomeLimitLine, subsidyOver52Line } from "../src/lib/programmatic/calculators/context-links.ts";
 import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { REVALUATION_2026 } from "../src/lib/programmatic/pensions-2027/rules.ts";
 import { INCOME_LIMIT, SEPE_AMOUNTS_2026, SEPE_INCOME_LIMIT_2026 } from "../src/lib/programmatic/unemployment-subsidy/rules.ts";
@@ -43,6 +43,37 @@ test("subsidy sentences link the checker in each language with the subsidy words
     assert.ok(plain(subsidyIncomeLimitLine(locale)).includes(limit), `${locale}: income ceiling ${limit}`);
   }
   assert.equal(INCOME_LIMIT, SEPE_INCOME_LIMIT_2026);
+});
+
+test("IPREM and bono social inlinks (25 Nov): query-word anchors in each language, figures from the shared modules, rendered on the pages", () => {
+  const ipremWords = { es: /^IPREM de 2026$/, ca: /^IPREM del 2026$/, en: /^2026 IPREM$/ };
+  const bonoWords = { es: /^bono social eléctrico$/, ca: /^bo social elèctric$/, en: /^bono social for electricity$/ };
+  for (const locale of LOCALES) {
+    for (const line of [subsidyAmountsLine(locale), subsidyOver52Line(locale)]) {
+      const a = anchor(line, calcPath("iprem", locale));
+      assert.ok(a, `${locale}: no IPREM link in "${line}"`);
+      assert.match(a, ipremWords[locale]);
+    }
+    for (const kind of ["smi", "subsidy", "non-contributory"] as const) {
+      const line = plain(bonoSocialLimitLine(locale, kind));
+      const a = anchor(line, calcPath("bono-social", locale));
+      assert.ok(a, `${locale} ${kind}: no bono social link`);
+      assert.match(a, bonoWords[locale]);
+      // 1,5 × 8.400 = 12.600; +0,3 × 8.400 = 2.520; +0,5 × 8.400 = 4.200 (RD 897/2017 art. 3.2.a, IPREM of 14 payments)
+      for (const x of ["12.600", "2.520", "4.200"]) assert.ok(line.includes(locale === "en" ? `€${x.replace(".", ",")}` : `${x} €`), `${locale} ${kind}: ${x}`);
+      assert.doesNotMatch(line, /42,5|57,5|42\.5|57\.5/, "no 2026-only discount rate on other pages");
+    }
+  }
+  const smi = read("src/components/programmatic/smi/SmiPage.tsx");
+  const subsidy = read("src/components/programmatic/unemployment-subsidy/SubsidyPage.tsx");
+  const nc = read("src/components/programmatic/non-contributory-pension/NcPensionPage.tsx");
+  assert.match(smi, /bonoSocialLimitLine\(locale, "smi"\)/);
+  assert.match(subsidy, /bonoSocialLimitLine\(locale, "subsidy"\)/);
+  assert.match(nc, /bonoSocialLimitLine\(locale, "non-contributory"\)/);
+  // The paro page links the IPREM page; the dismissal and retirement-age pages already render the two lines above.
+  assert.match(read("src/components/programmatic/employment/UnemploymentPage.tsx"), /calcPath\("iprem", locale\)/);
+  assert.match(read("src/components/programmatic/employment/DismissalPage.tsx"), /subsidyAmountsLine/);
+  assert.match(read("src/components/programmatic/retirement-age/RetirementAgePage.tsx"), /subsidyOver52Line/);
 });
 
 test("pension sentences link the 2027 calculator, quote the 2026 percentage and never a 2027 one", () => {

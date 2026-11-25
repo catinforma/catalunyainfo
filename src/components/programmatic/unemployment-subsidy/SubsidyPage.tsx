@@ -38,6 +38,8 @@ import {
   imvGuaranteed,
   monthlyAmount,
 } from "@/lib/programmatic/unemployment-subsidy/rules";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
+import { bonoSocialLimitLine } from "@/lib/programmatic/calculators/context-links";
 import { ipremPath } from "@/lib/programmatic/iprem/copy";
 import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { absoluteUrl } from "@/lib/site";
@@ -476,6 +478,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
                 })}{" "}
                 <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
               </p>
+              <p>{mdLinks(bonoSocialLimitLine(locale, "subsidy"))}</p>
 
               <h2 id="tipos">{h.kinds}</h2>
               <Table head={kindsHead} rows={kindsRows} />

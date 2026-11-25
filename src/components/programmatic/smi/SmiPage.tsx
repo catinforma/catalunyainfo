@@ -12,7 +12,7 @@ import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
-import { subsidyIncomeLimitLine } from "@/lib/programmatic/calculators/context-links";
+import { bonoSocialLimitLine, subsidyIncomeLimitLine } from "@/lib/programmatic/calculators/context-links";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, money, netSalaryPreset, pct, smiEditions, smiPath, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/programmatic/smi/engine";
@@ -529,6 +529,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                 <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
               </p>
               <p>{mdLinks(subsidyIncomeLimitLine(locale))}</p>
+              <p>{mdLinks(bonoSocialLimitLine(locale, "smi"))}</p>
 
               <h2 id="irpf">{h.irpf}</h2>
               <p>{irpf[0]}</p>

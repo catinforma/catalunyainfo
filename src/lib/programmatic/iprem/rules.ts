@@ -169,6 +169,30 @@ export const STATUS_2027 = {
 } as const;
 
 /* -------------------------------------------------------------------------- */
+/* Catalonia's own indicator (IRSC), read 25 Nov 2026                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The IPREM is the same in every region (a State budget act sets it); the
+ * Generalitat uses its own indicator for its own benefits. Read on 25 Nov 2026
+ * (curl + pdftotext of the DOGC PDF https://portaldogc.gencat.cat/utilsEADOP/PDF/9706/2161184.pdf,
+ * DOGC 9706 of 13.7.2026, Llei 10/2026, de 9 de juliol, de pressupostos de la
+ * Generalitat per al 2026, disposició addicional 17 apartat 1: «Per a l'exercici
+ * del 2026, l'indicador de renda de suficiència de Catalunya, establert per
+ * l'article 15.2 de la Llei 13/2006, de 27 de juliol, de prestacions socials de
+ * caràcter econòmic, es fixa en dotze mensualitats de 801,85 euros i en 9.622,18
+ * euros anuals.»; apartat 2: «La Generalitat ha d'utilitzar com a índex o
+ * referència de renda l'indicador de renda de suficiència»); and the
+ * Generalitat's indicators page (web.gencat.cat …/estadistiques-indicadors/economia):
+ * «From 1 January 2026 the value of the IRSC is 801.85 euros per month, which is
+ * equivalent to 9,622.18 euros per year». Verbatim passage in
+ * tests/fixtures/dogc-irsc-2026.json. Re-read with the IPREM (IPREM_RECHECK_FROM).
+ */
+export const IRSC_2026 = { year: 2026, monthly: 801.85, annual: 9622.18, norm: "Llei 10/2026, de 9 de juliol, de pressupostos de la Generalitat de Catalunya per al 2026", provision: "disposició addicional 17", dogc: "DOGC 9706, 13.7.2026" } as const;
+export const IRSC_QUOTE =
+  "Per a l'exercici del 2026, l'indicador de renda de suficiència de Catalunya, establert per l'article 15.2 de la Llei 13/2006, de 27 de juliol, de prestacions socials de caràcter econòmic, es fixa en dotze mensualitats de 801,85 euros i en 9.622,18 euros anuals.";
+
+/* -------------------------------------------------------------------------- */
 /* Quotes (verbatim, Spanish, as published; tests check them)                 */
 /* -------------------------------------------------------------------------- */
 
@@ -265,5 +289,6 @@ export const SOURCES = {
   gencatAjg: { name: "Assistència jurídica gratuïta (tràmit)", url: "https://tramits.gencat.cat/es/tramits/tramits-temes/Assistencia-juridica-gratuita-00001", publisher: "Generalitat de Catalunya", ref: "actualizado el 10.02.2026" },
   rd326: { name: "Real Decreto 326/2026, de 22 de abril, Plan Estatal de Vivienda 2026-2030, arts. 8.2.b y 116.1.c", url: doc("BOE-A-2026-8872"), publisher: "BOE", ref: "BOE-A-2026-8872" },
   lgss: { name: "Ley General de la Seguridad Social (RDL 8/2015), arts. 270.3, 275.1, 278 y 280.4, texto consolidado", url: act("BOE-A-2015-11724"), publisher: "BOE", ref: "BOE-A-2015-11724, última actualización publicada el 11/11/2026" },
+  dogcIrsc: { name: "Llei 10/2026, de 9 de juliol, de pressupostos de la Generalitat de Catalunya per al 2026, disposició addicional 17 (IRSC)", url: "https://portaldogc.gencat.cat/utilsEADOP/PDF/9706/2161184.pdf", publisher: "DOGC", ref: "DOGC 9706, 13.7.2026" },
   rd897: { name: "Real Decreto 897/2017 (bono social eléctrico), art. 3", url: `${act("BOE-A-2017-11505")}#a3`, publisher: "BOE", ref: "BOE-A-2017-11505, texto consolidado" },
 } as const satisfies Record<string, IpremSource>;

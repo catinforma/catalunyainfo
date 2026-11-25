@@ -15,7 +15,7 @@ import { getMessages } from "@/lib/i18n";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { ipremPath } from "@/lib/programmatic/iprem/copy";
-import { pensionRevaluationLine } from "@/lib/programmatic/calculators/context-links";
+import { bonoSocialLimitLine, pensionRevaluationLine } from "@/lib/programmatic/calculators/context-links";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
 import { subsidyPath } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { elDay, euros, ncEditions, ncPath, perMonth, perYear, whole, type NcLocale } from "@/lib/programmatic/non-contributory-pension/copy";
@@ -579,6 +579,7 @@ export function NcPensionRoute({ locale }: { locale: NcLocale }) {
               <p>
                 <Link href={ipremPath(locale)}>{links.iprem}</Link>
               </p>
+              <p>{mdLinks(bonoSocialLimitLine(locale, "non-contributory"))}</p>
 
               <h2 id="alquiler">{hd.rent}</h2>
               <p>{rentText}</p>

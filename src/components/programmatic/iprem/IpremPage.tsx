@@ -17,7 +17,7 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, euros, ipremEditions, ipremPath, money, times, type IpremLocale } from "@/lib/programmatic/iprem/copy";
 import { freshnessText, historyNote, historyRows, housingRows, ipremFaq, ipremMeta, leadText, legalAidRows, bonoSocialRows, multiplesTable, unemploymentRows } from "@/lib/programmatic/iprem/page";
-import { IPREM_14, IPREM_ANNUAL, IPREM_DAILY, IPREM_MONTHLY, IPREM_RULES_AS_OF, IPREM_YEAR, LAW_2023, QUOTE, SOURCES, STATUS_2027, IPREM_LAWS, lawUrl } from "@/lib/programmatic/iprem/rules";
+import { IPREM_14, IPREM_ANNUAL, IPREM_DAILY, IPREM_MONTHLY, IPREM_RULES_AS_OF, IPREM_YEAR, IRSC_2026, IRSC_QUOTE, LAW_2023, QUOTE, SOURCES, STATUS_2027, IPREM_LAWS, lawUrl } from "@/lib/programmatic/iprem/rules";
 import { pct } from "@/lib/programmatic/rent-update/copy";
 import { smiPath } from "@/lib/programmatic/smi/copy";
 import { subsidyPath } from "@/lib/programmatic/unemployment-subsidy/copy";
@@ -58,9 +58,9 @@ function A({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-function Quote({ text, href, label }: { text: string; href: string; label: string }) {
+function Quote({ text, href, label, lang = "es" }: { text: string; href: string; label: string; lang?: "es" | "ca" }) {
   return (
-    <blockquote lang="es">
+    <blockquote lang={lang}>
       <p>«{text}»</p>
       <footer className="text-sm">
         <A href={href}>{label}</A>
@@ -117,9 +117,9 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
   const y = IPREM_YEAR;
 
   const hd = L(locale, {
-    es: { now: `IPREM ${y}: todas las cuantías`, why: `¿Por qué sigue el IPREM de 2023?`, pays: "¿IPREM de 12 o de 14 pagas?", next: `IPREM ${y + 1}: qué pasa el 1 de enero`, limits: "Límites habituales en veces el IPREM", bono: "Bono social eléctrico", aid: "Justicia gratuita", housing: "Ayuda al alquiler (Plan Estatal de Vivienda 2026-2030)", dole: "Subsidio por desempleo y paro", multiples: "¿Cuánto es 1, 1,5, 2 o 3 veces el IPREM?", history: "Historia del IPREM de 2004 a 2026", what: "Qué es el IPREM", faq: "Preguntas frecuentes", sources: "Fuentes", limitsOf: "Lo que esta página no hace" },
-    ca: { now: `IPREM ${y}: totes les quanties`, why: "Per què continua l'IPREM del 2023?", pays: "IPREM de 12 o de 14 pagues?", next: `IPREM ${y + 1}: què passa l'1 de gener`, limits: "Límits habituals en vegades l'IPREM", bono: "Bo social elèctric", aid: "Justícia gratuïta", housing: "Ajut al lloguer (Pla Estatal d'Habitatge 2026-2030)", dole: "Subsidi per desocupació i atur", multiples: "Quant és 1, 1,5, 2 o 3 vegades l'IPREM?", history: "Història de l'IPREM del 2004 al 2026", what: "Què és l'IPREM", faq: "Preguntes freqüents", sources: "Fonts", limitsOf: "El que aquesta pàgina no fa" },
-    en: { now: `IPREM ${y}: every amount`, why: "Why is the 2023 IPREM still in force?", pays: "12-payment or 14-payment IPREM?", next: `IPREM ${y + 1}: what happens on 1 January`, limits: "Common limits in IPREM multiples", bono: "Bono social for electricity", aid: "Free legal aid (justicia gratuita)", housing: "Rent aid (State Housing Plan 2026-2030)", dole: "Unemployment subsidy and benefit", multiples: "How much is 1, 1.5, 2 or 3 times the IPREM?", history: "Spain's IPREM from 2004 to 2026", what: "What the IPREM is", faq: "Questions", sources: "Sources", limitsOf: "What this page does not do" },
+    es: { now: `IPREM ${y}: todas las cuantías`, why: `¿Por qué sigue el IPREM de 2023?`, pays: "¿IPREM de 12 o de 14 pagas?", region: `IPREM ${y} en Cataluña, Andalucía y el resto de comunidades`, next: `IPREM ${y + 1}: qué pasa el 1 de enero`, limits: "Límites habituales en veces el IPREM", bono: "Bono social eléctrico", aid: "Justicia gratuita", housing: "Ayuda al alquiler (Plan Estatal de Vivienda 2026-2030)", dole: "Subsidio por desempleo y paro", multiples: "¿Cuánto es 1, 1,5, 2 o 3 veces el IPREM?", history: "Historia del IPREM de 2004 a 2026", what: "Qué es el IPREM", faq: "Preguntas frecuentes", sources: "Fuentes", limitsOf: "Lo que esta página no hace" },
+    ca: { now: `IPREM ${y}: totes les quanties`, why: "Per què continua l'IPREM del 2023?", pays: "IPREM de 12 o de 14 pagues?", region: `IPREM ${y} a Catalunya, Andalusia i la resta de comunitats`, next: `IPREM ${y + 1}: què passa l'1 de gener`, limits: "Límits habituals en vegades l'IPREM", bono: "Bo social elèctric", aid: "Justícia gratuïta", housing: "Ajut al lloguer (Pla Estatal d'Habitatge 2026-2030)", dole: "Subsidi per desocupació i atur", multiples: "Quant és 1, 1,5, 2 o 3 vegades l'IPREM?", history: "Història de l'IPREM del 2004 al 2026", what: "Què és l'IPREM", faq: "Preguntes freqüents", sources: "Fonts", limitsOf: "El que aquesta pàgina no fa" },
+    en: { now: `IPREM ${y}: every amount`, why: "Why is the 2023 IPREM still in force?", pays: "12-payment or 14-payment IPREM?", region: `IPREM ${y} in Catalonia, Andalusia and the rest of Spain`, next: `IPREM ${y + 1}: what happens on 1 January`, limits: "Common limits in IPREM multiples", bono: "Bono social for electricity", aid: "Free legal aid (justicia gratuita)", housing: "Rent aid (State Housing Plan 2026-2030)", dole: "Unemployment subsidy and benefit", multiples: "How much is 1, 1.5, 2 or 3 times the IPREM?", history: "Spain's IPREM from 2004 to 2026", what: "What the IPREM is", faq: "Questions", sources: "Sources", limitsOf: "What this page does not do" },
   });
 
   const law = LAW_2023;
@@ -184,6 +184,31 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
       `Where the rule says so: the bono social for electricity («IPREM de 14 pagas», Royal Decree 897/2017) or the State Housing Plan 2026-2030 («referido a 14 pagas», Royal Decree 326/2026, art. 8.2.b).`,
       `Where a rule from before July 2004 referred to the minimum wage «en cómputo anual»: since Royal Decree-law 3/2004 those references are to the IPREM, and letter d) gives them the 14-payment amount unless they left out the extra payments.`,
       `Free legal aid, for example, uses the 12-payment yearly figure: the Generalitat's own page puts it that way (${M(legalAidRows()[0].amount)} for a person with no family unit, twice ${M(IPREM_ANNUAL)}).`,
+    ],
+  });
+
+  const irsc = IRSC_2026;
+  const m75 = multiplesTable().find((r) => r.multiple === 0.75)!;
+  const pctText = L(locale, {
+    es: `Un porcentaje del IPREM se calcula igual: el 75 % del IPREM de ${y} son ${M(m75.monthly)} al mes y ${M(m75.annual12)} al año (${M(m75.annual14)} en 14 pagas); el 80 %, el 90 % y el 95 % del IPREM que fijan el subsidio por desempleo están en el apartado del subsidio. Ojo: el 75 % que fija el tope de rentas del subsidio es el del SMI, no el del IPREM.`,
+    ca: `Un percentatge de l'IPREM es calcula igual: el 75 % de l'IPREM del ${y} són ${M(m75.monthly)} al mes i ${M(m75.annual12)} l'any (${M(m75.annual14)} en 14 pagues); el 80 %, el 90 % i el 95 % de l'IPREM que fixen el subsidi per desocupació són a l'apartat del subsidi. Compte: el 75 % que fixa el topall de rendes del subsidi és el de l'SMI, no el de l'IPREM.`,
+    en: `A percentage of the IPREM works the same way: 75% of the ${y} IPREM is ${M(m75.monthly)} a month and ${M(m75.annual12)} a year (${M(m75.annual14)} in 14 payments); the 80%, 90% and 95% of the IPREM that set the unemployment subsidy are in the subsidy section. Note: the 75% that sets the subsidy's income ceiling is 75% of the SMI, not of the IPREM.`,
+  });
+  const regionText = L(locale, {
+    es: [
+      `El IPREM es el mismo en toda España: lo fija una ley estatal y vale igual en Cataluña, en Andalucía o en cualquier otra comunidad, ${M(IPREM_MONTHLY)} al mes y ${M(IPREM_ANNUAL)} al año en ${y}. No existe un IPREM de Cataluña ni uno de Andalucía.`,
+      `Lo que sí tienen algunas comunidades es un indicador propio para sus ayudas. El de Cataluña es el IRSC (indicador de renta de suficiencia de Cataluña), que la Generalitat usa como referencia de renta en sus prestaciones: ${M(irsc.monthly)} al mes en 12 pagas y ${M(irsc.annual)} al año en ${irsc.year} (${irsc.norm}, ${irsc.provision}; ${irsc.dogc}):`,
+      `Las normas estatales de esta página (subsidio por desempleo, bono social, justicia gratuita) siguen usando el IPREM en Cataluña y en el resto de comunidades; las ayudas de cada comunidad pueden usar su propio indicador, así que mira la convocatoria.`,
+    ],
+    ca: [
+      `L'IPREM és el mateix a tot Espanya: el fixa una llei estatal i val igual a Catalunya, a Andalusia o a qualsevol altra comunitat, ${M(IPREM_MONTHLY)} al mes i ${M(IPREM_ANNUAL)} l'any el ${y}. No hi ha un IPREM de Catalunya ni un d'Andalusia.`,
+      `El que sí tenen algunes comunitats és un indicador propi per als seus ajuts. El de Catalunya és l'IRSC (indicador de renda de suficiència de Catalunya), que la Generalitat fa servir com a referència de renda en les seves prestacions: ${M(irsc.monthly)} al mes en 12 pagues i ${M(irsc.annual)} l'any el ${irsc.year} (${irsc.norm}, ${irsc.provision}; ${irsc.dogc}):`,
+      `Les normes estatals d'aquesta pàgina (subsidi per desocupació, bo social, justícia gratuïta) continuen usant l'IPREM a Catalunya i a la resta de comunitats; els ajuts de cada comunitat poden usar el seu propi indicador, així que mira la convocatòria.`,
+    ],
+    en: [
+      `The IPREM is the same across Spain: a national law sets it, and it is worth the same in Catalonia, Andalusia or any other region, ${M(IPREM_MONTHLY)} a month and ${M(IPREM_ANNUAL)} a year in ${y}. There is no Catalan IPREM and no Andalusian one.`,
+      `What some regions do have is an indicator of their own for their own aid. Catalonia's is the IRSC (indicador de renda de suficiència de Catalunya), which the Generalitat uses as its income yardstick for its benefits: ${M(irsc.monthly)} a month in 12 payments and ${M(irsc.annual)} a year in ${irsc.year} (${irsc.norm}, ${irsc.provision}; ${irsc.dogc}, official text in Catalan):`,
+      `The national rules on this page (unemployment subsidy, bono social, free legal aid) keep using the IPREM in Catalonia and in every other region; each region's own aid may use its own indicator, so check the call.`,
     ],
   });
 
@@ -360,9 +385,9 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
   const sepeLink = L(locale, { es: "Cuantías oficiales del SEPE", ca: "Quanties oficials del SEPE (en castellà)", en: "SEPE's official amounts (in Spanish)" });
 
   const limits = L(locale, {
-    es: ["No decide si tienes derecho a una ayuda: compara tus ingresos con un múltiplo del IPREM; cada norma pide más requisitos.", "No da cuantías del IPREM de 2019, 2020, 2024 ni 2025: ningún texto oficial que tengamos las fija para esos años (presupuestos prorrogados).", "No recoge los indicadores propios de las comunidades autónomas (como el IRSC de Cataluña) ni los límites de cada convocatoria autonómica o municipal.", `No da ninguna cifra del IPREM de ${y + 1} hasta que la publique el BOE.`],
-    ca: ["No decideix si tens dret a un ajut: compara els teus ingressos amb un múltiple de l'IPREM; cada norma demana més requisits.", "No dona quanties de l'IPREM del 2019, el 2020, el 2024 ni el 2025: cap text oficial que tinguem no les fixa per a aquells anys (pressupostos prorrogats).", "No recull els indicadors propis de les comunitats autònomes (com l'IRSC de Catalunya) ni els límits de cada convocatòria autonòmica o municipal.", `No dona cap xifra de l'IPREM del ${y + 1} fins que la publiqui el BOE.`],
-    en: ["It does not decide whether you qualify: it compares your income with a multiple of the IPREM; each rule asks for more.", "It gives no IPREM amounts for 2019, 2020, 2024 or 2025: no official text we hold sets them for those years (budgets extended).", "It does not cover the regions' own indicators (such as Catalonia's IRSC) or the limits of each regional or local call.", `It gives no ${y + 1} IPREM figure until the BOE publishes one.`],
+    es: ["No decide si tienes derecho a una ayuda: compara tus ingresos con un múltiplo del IPREM; cada norma pide más requisitos.", "No da cuantías del IPREM de 2019, 2020, 2024 ni 2025: ningún texto oficial que tengamos las fija para esos años (presupuestos prorrogados).", "De los indicadores propios de las comunidades autónomas solo recoge el IRSC de Cataluña, y no los límites de cada convocatoria autonómica o municipal.", `No da ninguna cifra del IPREM de ${y + 1} hasta que la publique el BOE.`],
+    ca: ["No decideix si tens dret a un ajut: compara els teus ingressos amb un múltiple de l'IPREM; cada norma demana més requisits.", "No dona quanties de l'IPREM del 2019, el 2020, el 2024 ni el 2025: cap text oficial que tinguem no les fixa per a aquells anys (pressupostos prorrogats).", "Dels indicadors propis de les comunitats autònomes només recull l'IRSC de Catalunya, i no els límits de cada convocatòria autonòmica o municipal.", `No dona cap xifra de l'IPREM del ${y + 1} fins que la publiqui el BOE.`],
+    en: ["It does not decide whether you qualify: it compares your income with a multiple of the IPREM; each rule asks for more.", "It gives no IPREM amounts for 2019, 2020, 2024 or 2025: no official text we hold sets them for those years (budgets extended).", "Of the regions' own indicators it covers only Catalonia's IRSC, and not the limits of each regional or local call.", `It gives no ${y + 1} IPREM figure until the BOE publishes one.`],
   });
 
   const lbl = {
@@ -447,6 +472,12 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
               <Quote text={QUOTE.replacesSmi} href={SOURCES.rdl3_2004.url} label={lbl.rdl3("2.3")} />
               <p>{paysText[3]}</p>
 
+              <h2 id="comunidades">{hd.region}</h2>
+              <p>{regionText[0]}</p>
+              <p>{regionText[1]}</p>
+              <Quote text={IRSC_QUOTE} href={SOURCES.dogcIrsc.url} label={`${irsc.norm}, ${irsc.provision}`} lang="ca" />
+              <p>{regionText[2]}</p>
+
               <h2 id="iprem-2027">{hd.next}</h2>
               <p>{nextText[0]}</p>
               <Quote text={QUOTE.yearly} href={SOURCES.rdl3_2004.url} label={lbl.rdl3("2.2")} />
@@ -510,6 +541,8 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
 
               <h2 id="veces-iprem">{hd.multiples}</h2>
               <Table cols={multCols} rows={multRows} caption={L(locale, { es: `Con el IPREM de ${y}: ${M(IPREM_MONTHLY)} al mes, ${M(IPREM_ANNUAL)} o ${M(IPREM_14)} al año.`, ca: `Amb l'IPREM del ${y}: ${M(IPREM_MONTHLY)} al mes, ${M(IPREM_ANNUAL)} o ${M(IPREM_14)} l'any.`, en: `With the ${y} IPREM: ${M(IPREM_MONTHLY)} a month, ${M(IPREM_ANNUAL)} or ${M(IPREM_14)} a year.` })} />
+
+              <p>{pctText}</p>
 
               <h2 id="historia">{hd.history}</h2>
               <div className="ci-table-scroll mt-4">

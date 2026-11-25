@@ -366,7 +366,7 @@ test("page: titles, descriptions and lead carry the figures; FAQ of seven in eve
     for (const f of faq) assert.doesNotMatch(f.q + f.a, /undefined|NaN|\[object/, `${l}: ${f.q}`);
     assert.ok(faq.some((f) => f.a.includes("806/2026")), `${l}: 2027 answer`);
   }
-  assert.equal(multiplesTable().length, 10);
+  assert.equal(multiplesTable().length, 11);
 });
 
 test("page: one static route per language, a 404 in the others, server-rendered tables, FAQ JSON-LD, YMYL pieces", () => {
@@ -394,6 +394,27 @@ test("page: one static route per language, a 404 in the others, server-rendered 
   for (const e of entries) assert.equal(Object.keys(e.alternates?.languages ?? {}).length, 4);
   assert.match(read("src/app/sitemap.ts"), /\.\.\.ipremSitemapEntries\(\)/);
   assert.ok(JSON.stringify(liveTools()).includes("/es/calculadoras/iprem/"));
+});
+
+test("IRSC (Catalonia): the figure and quote are verbatim in the DOGC text; the page answers 'IPREM Catalunya/Andalucía' and '75 % del IPREM'", async () => {
+  const fix = JSON.parse(read("tests/fixtures/dogc-irsc-2026.json")) as { da17_1: string; gencatPage: string };
+  const { IRSC_2026, IRSC_QUOTE } = await import("../src/lib/programmatic/iprem/rules.ts");
+  assert.equal(IRSC_QUOTE, fix.da17_1);
+  assert.ok(IRSC_QUOTE.includes(boeEuros(IRSC_2026.monthly)) && IRSC_QUOTE.includes(boeEuros(IRSC_2026.annual)));
+  assert.ok(fix.gencatPage.includes(String(IRSC_2026.monthly)) && fix.gencatPage.includes("9,622.18"));
+  assert.equal(IRSC_2026.year, 2026);
+  assert.equal(SOURCES.dogcIrsc.url, "https://portaldogc.gencat.cat/utilsEADOP/PDF/9706/2161184.pdf");
+  // The IRSC is re-read with the IPREM: the same date guard (IPREM_RECHECK_FROM) covers it.
+  const page = read("src/components/programmatic/iprem/IpremPage.tsx");
+  assert.match(page, /<h2 id="comunidades">\{hd\.region\}<\/h2>/);
+  assert.match(page, /IRSC_QUOTE/);
+  assert.match(page, /Cataluña, Andalucía/);
+  assert.match(page, /Catalunya, Andalusia/);
+  assert.match(page, /Catalonia, Andalusia/);
+  // 75 % of the IPREM: 0,75 × 600 = 450 a month, 5.400 / 6.300 a year.
+  const m75 = multiplesTable().find((r) => r.multiple === 0.75)!;
+  assert.deepEqual([m75.monthly, m75.annual12, m75.annual14], [450, 5400, 6300]);
+  assert.match(page, /el 75 % del IPREM de \$\{y\}/);
 });
 
 test("links: the bono social, subsidy and SMI pages link the IPREM page", () => {

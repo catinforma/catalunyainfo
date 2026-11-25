@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PAY_DATES_PATH, dateWords, money, num, pct } from "@/lib/programmatic/employment/paths";
 import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { BENEFIT_SS_RATE, DURATION_SCALE, IPREM_PLUS_SIXTH, MAX_CONTRIBUTION_BASE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
-import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
+import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 import { HOWTO_LINKS, unemploymentHowTo } from "@/lib/programmatic/employment/unemployment-howto";
 import { daysRows, exampleCopy } from "@/lib/programmatic/employment/unemployment-examples";
@@ -234,6 +234,14 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
         </table>
       </div>
       <p className="text-sm text-[var(--color-muted)]">{copy.amtNote}</p>
+      <p>
+        {locale === "es"
+          ? `El IPREM de este cálculo no ha cambiado desde 2023: `
+          : locale === "ca"
+            ? `L'IPREM d'aquest càlcul no ha canviat des del 2023: `
+            : `The IPREM behind this calculation has not changed since 2023: `}
+        <Link href={calcPath("iprem", locale)}>{locale === "es" ? `IPREM ${IPREM_YEAR}: 12 o 14 pagas y por qué no sube` : locale === "ca" ? `IPREM ${IPREM_YEAR}: 12 o 14 pagues i per què no puja` : `IPREM ${IPREM_YEAR}: 12 or 14 payments and why it has not gone up`}</Link>.
+      </p>
 
       <h2 id="como-se-calcula">{howTo.heading}</h2>
       <ol>
