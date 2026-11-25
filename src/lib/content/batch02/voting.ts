@@ -4,7 +4,9 @@ import { datePath } from "@/lib/programmatic/holidays/paths";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
 
+import type { Block } from "@/lib/content/blocks";
 import { phased } from "./election-after";
+import { handinPastCallout } from "./postal-handin";
 import { VOTING_AFTER } from "./voting-after";
 import {
   b2link,
@@ -810,6 +812,34 @@ const POLLS_LABEL: Record<Locale, string> = {
  * only made sense before the vote (voting-after.ts). Each stretch is an `electionPhased` block whose `pre` is the text
  * that was live; title, description and lead are untouched.
  */
+/**
+ * 25 Nov 2026 (body only): from Thu 26 Nov 14:00 (content/election-phased.ts, `handin` variant) the postal hand-in
+ * deadline is past. The same callout as the postal guide (postal-handin.ts) replaces the "hand it in by" warning and
+ * the postal section; the three FAQ answers that said "hand it in / must be handed in by 26 Nov" read in the past.
+ * Pairs [was, becomes] per language; each must match exactly one answer (checked in body()).
+ */
+const HANDIN_FAQ: Record<Locale, [string, string][]> = {
+  en: [
+    ["and must be handed in by 26 November, 14:00 at the latest (extended by the Central Electoral Board)", "and had to be handed in by 26 November, 14:00 (extended by the Central Electoral Board; that deadline has passed)"],
+    ["the vote must be handed in at Correos by Thursday 26 November, 14:00 at the latest (Central Electoral Board, Agreement 418/2026).", "the vote had to be handed in at Correos by Thursday 26 November, 14:00 (Central Electoral Board, Agreement 418/2026); that deadline has passed."],
+  ],
+  es: [["Quien lo pidió entrega el voto en Correos hasta el jueves 26 de noviembre, como máximo a las 14 h (Junta Electoral Central, Acuerdo 418/2026).", "Quien lo pidió tenía que entregar el voto en Correos hasta el jueves 26 de noviembre a las 14 h (Junta Electoral Central, Acuerdo 418/2026); ese plazo ya ha terminado."]],
+  ca: [["Qui el va demanar lliura el vot a Correus fins al dijous 26 de novembre, com a molt a les 14 h (Junta Electoral Central, Acord 418/2026).", "Qui el va demanar havia de lliurar el vot a Correus fins al dijous 26 de novembre a les 14 h (Junta Electoral Central, Acord 418/2026); aquest termini ja s'ha acabat."]],
+};
+
+function handinFaq(locale: Locale, items: { question: string; answer: string }[]) {
+  let out = items;
+  for (const [was, becomes] of HANDIN_FAQ[locale]) {
+    const hits = out.filter((item) => item.answer.includes(was)).length;
+    if (hits !== 1) throw new Error(`voting FAQ (${locale}) no longer holds the hand-in sentence handin needs to correct (${hits} matches): ${was.slice(0, 50)}`);
+    out = out.map((item) => (item.answer.includes(was) ? { ...item, answer: item.answer.replace(was, becomes) } : item));
+  }
+  return out;
+}
+
+/** The block with a `handin` variant: what it reads from Thu 26 Nov 14:00 until the `after` phase. */
+const withHandin = (block: Block, handin: Block[]): Block => ({ ...block, handin }) as Block;
+
 function body(locale: Locale) {
   const t = COPY[locale];
   const x = VOTING_AFTER[locale];
@@ -819,7 +849,7 @@ function body(locale: Locale) {
   const nextAfter = [...h2(x.nextTitle, x.nextLead, ...t.next.slice(1)), table(x.nextCaption, t.nextHeaders, x.nextRows, x.nextNote)];
   const next = [phased(nextPre, nextAfter)];
   const wherePre = [...h2(t.whereTitle), list(...t.where), callout("warning", t.warnTitle, t.warn)];
-  const where = [phased(wherePre, [])];
+  const where = [withHandin(phased(wherePre, []), [...h2(t.whereTitle), list(...t.where)])];
   // After the vote the "missing from the list on the day" paragraph (the census office's election-day line) is dropped.
   const registerAfter = t.register
     .filter((paragraph) => !paragraph.includes("900 343 232"))
@@ -837,8 +867,8 @@ function body(locale: Locale) {
   // (what the Catalan and Spanish queries ask first) moves down. ca/es keep it first and get registration after "where".
   const order =
     locale === "en"
-      ? [...register, ...where, ...day, ...calendar, phased(h2(t.postTitle, ...t.post), []), ...next]
-      : [...next, ...where, ...register, ...calendar, ...day, phased(h2(t.postTitle, ...t.post), [])];
+      ? [...register, ...where, ...day, ...calendar, withHandin(phased(h2(t.postTitle, ...t.post), []), [...h2(t.postTitle), handinPastCallout(locale, null)]), ...next]
+      : [...next, ...where, ...register, ...calendar, ...day, withHandin(phased(h2(t.postTitle, ...t.post), []), [...h2(t.postTitle), handinPastCallout(locale, null)])];
   return [
     // The lead's one false clause from 30 Nov (voting-after.ts): "the next election is on 29 November".
     phased([lead(t.lead)], [lead(leadAfter)]),
@@ -855,7 +885,7 @@ function body(locale: Locale) {
       `${POLLS_LINK[locale]}[${POLLS_LABEL[locale]}](${pollsPath(locale)}).`,
     ),
     ...h2(t.muniTitle, ...t.muni),
-    phased([faq(t.faq)], [faq(t.faq.flatMap((item, index) => (x.faqReplace[index] ? [{ ...item, answer: x.faqReplace[index] }] : x.faqKeep.includes(index) ? [item] : [])))]),
+    withHandin(phased([faq(t.faq)], [faq(t.faq.flatMap((item, index) => (x.faqReplace[index] ? [{ ...item, answer: x.faqReplace[index] }] : x.faqKeep.includes(index) ? [item] : [])))]), [faq(handinFaq(locale, t.faq))]),
     ...b2Related(["postalVote", "mesa", "electionNight", "congressResults", "parliamentResults", "municipalResults"], locale),
   ];
 }

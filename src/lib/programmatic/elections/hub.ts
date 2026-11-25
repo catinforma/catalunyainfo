@@ -43,8 +43,8 @@ export interface HubCopy {
 }
 
 export function hubCopy(locale: Locale, phase: ElectionDayPhase = "before"): HubCopy {
-  // Once the vote is over (Mon 30 Nov on) the "if you have to vote" guides go; the results line goes past tense.
-  const voted = phase === "after" || phase === "over";
+  // Once the polls close (29 Nov 20:00, the `count` phase) the "if you have to vote" guides go; from Mon 30 Nov the results line goes past tense.
+  const voted = phase === "count" || phase === "after" || phase === "over";
   const read = longDate(latestDataDate(), locale);
   const g = SNAPSHOT.general2026;
   const year = SNAPSHOT.sources.population.period.slice(0, 4);

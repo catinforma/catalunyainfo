@@ -508,8 +508,8 @@ export function townElectionDay(
 const POLLING_FACT_LABEL: Record<Locale, string> = { ca: "Locals electorals del 29N", es: "Locales electorales del 29N", en: "29 Nov polling places" };
 
 function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot, phase: ElectionDayPhase): Omit<ElectionPageModel, "polling" | "mesa"> {
-  // From Mon 30 Nov the vote is over: the "if you have to vote" guides leave the 29N slot (and the results line is in the past tense).
-  const voted = phase === "after" || phase === "over";
+  // From 20:00 on 29 Nov (`count`) the vote is over: the "if you have to vote" guides leave the 29N slot (from Mon 30 Nov the results line is also in the past tense).
+  const voted = phase === "count" || phase === "after" || phase === "over";
   const f = formats(locale);
   const place = placeName(m, locale);
   const Place = place.charAt(0).toLocaleUpperCase(locale) + place.slice(1);

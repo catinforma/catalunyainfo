@@ -1,3 +1,4 @@
+import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath } from "@/lib/programmatic/elections/paths";
 
@@ -659,11 +660,55 @@ const COPY: Record<Locale, T> = {
   },
 };
 
+/**
+ * 25 Nov 2026 (body only): two callouts under the lead that the page switches by the clock (`electionPhased`, variants
+ * `late` from Thu 26 Nov 08:00 and `held` from Sun 29 Nov 08:00, content/election-phased.ts), so the static text below
+ * is not the last word once the window it describes has closed. Read 25 Nov 2026 on the LOREG consolidated text
+ * (BOE-A-1985-11672):
+ *  - art. 27.4: "debe comunicarlo a la Junta de Zona, al menos setenta y dos horas antes del acto al que debiera
+ *    concurrir ... Si el impedimento sobreviene después de ese plazo, el aviso a la Junta habrá de realizarse de manera
+ *    inmediata y, en todo caso, antes de la hora de constitución de la mesa. En tales casos, la Junta comunica la
+ *    sustitución al correspondiente suplente, si hay tiempo para hacerlo";
+ *  - art. 80.1: "El Presidente, los dos Vocales de cada Mesa Electoral y los respectivos suplentes, si los hubiera, se
+ *    reúnen a las ocho horas del día fijado para la votación en el local correspondiente."
+ */
+const LOREG_27 = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#aveintisiete";
+const LOREG_80 = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#aochenta";
+const CLOCK: Record<Locale, { lateTitle: string; late: string; heldTitle: string; held: string }> = {
+  ca: {
+    lateTitle: "El termini de 72 hores per avisar d'un impediment ja ha passat: avisa de seguida",
+    late: `Des del dijous 26 de novembre a les 8.00 ja no val l'avís ordinari, d'almenys 72 hores abans de la constitució de la mesa. Si et surt un impediment, la llei mana avisar la Junta Electoral de Zona «de manera inmediata y, en todo caso, antes de la hora de constitución de la mesa», que són les 8.00 del diumenge 29 de novembre; la Junta comunica la substitució al suplent només «si hay tiempo para hacerlo» ([LOREG, articles 27.4 i 80.1](${LOREG_27})).`,
+    heldTitle: "Les meses es van constituir a les 8.00 del diumenge 29 de novembre",
+    held: `Els membres titulars i els suplents es van reunir a les 8.00 al local de la seva mesa ([LOREG, article 80.1](${LOREG_80})), i amb la constitució de la mesa va acabar el termini per avisar d'un impediment. El que hi ha més avall és el que valia abans del 29 de novembre.`,
+  },
+  es: {
+    lateTitle: "El plazo de 72 horas para avisar de un impedimento ya ha pasado: avisa de inmediato",
+    late: `Desde el jueves 26 de noviembre a las 8:00 ya no vale el aviso ordinario, de al menos 72 horas antes de la constitución de la mesa. Si te surge un impedimento, la ley manda avisar a la Junta Electoral de Zona «de manera inmediata y, en todo caso, antes de la hora de constitución de la mesa», que son las 8:00 del domingo 29 de noviembre; la Junta comunica la sustitución al suplente solo «si hay tiempo para hacerlo» ([LOREG, artículos 27.4 y 80.1](${LOREG_27})).`,
+    heldTitle: "Las mesas se constituyeron a las 8:00 del domingo 29 de noviembre",
+    held: `Los miembros titulares y los suplentes se reunieron a las 8:00 en el local de su mesa ([LOREG, artículo 80.1](${LOREG_80})), y con la constitución de la mesa terminó el plazo para avisar de un impedimento. Lo que sigue más abajo es lo que valía antes del 29 de noviembre.`,
+  },
+  en: {
+    lateTitle: "The 72-hour window to report an impediment has passed: report it immediately",
+    late: `Since Thursday 26 November at 08:00 the ordinary notice, at least 72 hours before the table is set up, no longer applies. If something comes up, the law says to tell the zone electoral board "de manera inmediata y, en todo caso, antes de la hora de constitución de la mesa" (immediately and, in any case, before the table is set up), which is 08:00 on Sunday 29 November; the board passes the substitution to the substitute only "si hay tiempo para hacerlo" (if there is time) ([LOREG, articles 27.4 and 80.1](${LOREG_27}); quotes in Spanish, our translation in brackets).`,
+    heldTitle: "The tables were set up at 08:00 on Sunday 29 November",
+    held: `The regular members and the substitutes met at their table's polling place at 08:00 ([LOREG, article 80.1](${LOREG_80})), and the window to report an impediment closed when the table was set up. What follows below is what applied before 29 November.`,
+  },
+};
+
 function body(locale: Locale) {
   const t = COPY[locale];
+  const c = CLOCK[locale];
   return [
     lead(t.lead),
     keyFacts(t.nowTitle, t.now),
+    // After the key facts (tests/batch02.test.ts keeps them right under the lead). Nothing before Thu 26 Nov 08:00; "late" until polling day 08:00; "held" from then, and from 30 Nov (`after`) on.
+    {
+      type: "electionPhased",
+      pre: [],
+      late: [callout("warning", c.lateTitle, c.late)],
+      held: [callout("info", c.heldTitle, c.held)],
+      after: [callout("info", c.heldTitle, c.held)],
+    } as Block,
     // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
     languageLinks(),
     callout("official", verifiedLine(locale, VERIFIED), t.note),

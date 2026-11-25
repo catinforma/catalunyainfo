@@ -576,6 +576,10 @@ export const electionPhasedBlock = z.object({
   over: rawBlocks.optional(),
   /** Optional: read from Thu 26 Nov 14:00 Madrid (postal-vote hand-in closed) until `after` starts; else `pre`. */
   handin: rawBlocks.optional(),
+  /** Optional: read from Thu 26 Nov 08:00 Madrid (the 72-hour notice window of the mesa duty has passed); else the earlier variant. */
+  late: rawBlocks.optional(),
+  /** Optional: read from Sun 29 Nov 08:00 Madrid (the tables were set up) until `after` starts; else the earlier variant. */
+  held: rawBlocks.optional(),
 });
 
 export const blockSchema = z.discriminatedUnion("type", [

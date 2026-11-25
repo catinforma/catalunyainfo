@@ -97,6 +97,13 @@ export const ELECTION_ALERT_FROM = NEXT_ALERTS_FROM;
  */
 export const POSTAL_ALERT_FROM = "2026-11-13";
 
+/**
+ * 20:00 on polling day, in minutes after midnight. Kept here rather than imported from
+ * elections/election-day.ts, which pulls the 947-town snapshot into every page's header
+ * (tests/news-alerts.test.ts holds the two equal).
+ */
+export const POLLS_CLOSE_MINUTES = 20 * 60;
+
 /** The civil date before `isoDate`. */
 function previousDay(isoDate: string): string {
   return new Date(Date.parse(`${isoDate}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
@@ -156,6 +163,17 @@ export function madridMidnight(isoDate: string): string {
 /** The civil date after `isoDate`. */
 export function nextDay(isoDate: string): string {
   return new Date(Date.parse(`${isoDate}T12:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
+}
+
+/**
+ * A wall-clock time on a civil date in Catalonia, as ISO 8601 with its offset:
+ * ("2026-11-26", 14 * 60) -> "2026-11-26T14:00:00+01:00". The offset is the one
+ * at midnight, right for any time after the 02:00/03:00 clock change of that day
+ * (the lines that use it end in the afternoon).
+ */
+export function madridAt(isoDate: string, minutes: number): string {
+  const offset = madridMidnight(isoDate).slice(-6);
+  return `${isoDate}T${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}:00${offset}`;
 }
 
 /** The end of a civil date in Catalonia: midnight at the start of the next one. */
@@ -244,7 +262,7 @@ function chained(lines: NewsAlert[]): NewsAlert[] {
 export function buildNewsAlerts(
   strikes: readonly Strike[] = STRIKES,
   electionDay: string = GENERAL_ELECTION_DAY,
-  postal: { requestBy: string; deliverBy: string } = POSTAL_29N,
+  postal: { requestBy: string; deliverBy: string; deliverUntilMinutes?: number } = POSTAL_29N,
   calledOff: readonly CalledOffStrike[] = STRIKES_CALLED_OFF,
 ): NewsAlert[] {
   const next = madridMidnight(NEXT_ALERTS_FROM);
@@ -305,7 +323,8 @@ export function buildNewsAlerts(
     {
       id: "postal-vote-deliver",
       start: madridMidnight(POSTAL_ALERT_FROM),
-      end: endOfMadridDay(postal.deliverBy),
+      // 25 Nov 2026 (ci-revisio): the hand-in closes at 14:00 (JEC Acuerdo 418/2026), not at midnight: from then the strip must not send readers to a closed action.
+      end: postal.deliverUntilMinutes === undefined ? endOfMadridDay(postal.deliverBy) : madridAt(postal.deliverBy, postal.deliverUntilMinutes),
       target: "postalVote",
       text: {
         ca: `Vot per correu: es lliura a Correus fins ${daysPhrase([postal.deliverBy], "ca").replace(/^el /, "al ")}`,
@@ -316,7 +335,8 @@ export function buildNewsAlerts(
     {
       id: "election-29n",
       start: madridMidnight(ELECTION_ALERT_FROM),
-      end: endOfMadridDay(electionDay),
+      // 25 Nov 2026: "where and how to vote" is over when the polls close (20:00); from then the results line (next) carries the strip.
+      end: madridAt(electionDay, POLLS_CLOSE_MINUTES),
       target: "voting",
       text: {
         ca: `Eleccions generals ${daysPhrase([electionDay], "ca")}: on i com votar`,

@@ -9,6 +9,7 @@ import {
   EXPIRED_STYLE_ID,
   NEWS_ALERTS,
   NEWS_ALERTS_LABEL,
+  POLLS_CLOSE_MINUTES,
   STRIKE_11N_ID,
   STRIKE_EDUCATION_ID,
   STRIKE_RAIL_ID,
@@ -19,11 +20,14 @@ import {
   buildNewsAlerts,
   daysPhrase,
   endOfMadridDay,
+  madridAt,
   madridMidnight,
   newsAlertsExpiryScript,
   nextDateLinks,
   type NewsAlert,
 } from "../src/lib/alerts/news-alerts.ts";
+import { HANDIN_CLOSES } from "../src/lib/content/election-phased.ts";
+import { POLLS_CLOSE_MINUTES as ELECTION_POLLS_CLOSE_MINUTES } from "../src/lib/programmatic/elections/election-day.ts";
 import { DECEMBER_BRIDGE_SPAIN, SPAIN_DAYS } from "../src/lib/content/batch02/december-bridge-spain.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { POSTAL_29N, POSTAL_VOTE } from "../src/lib/content/batch02/postal-vote.ts";
@@ -89,8 +93,10 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       // 13 Nov 2026: the postal vote's two deadlines, one after the other (same guide).
       ["postal-vote-request", "postalVote", "2026-11-13T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
       // 20 Nov 2026: JEC Acuerdo 418/2026 moved the hand-in day to Thursday 26 Nov (POSTAL_29N.deliverBy).
-      ["postal-vote-deliver", "postalVote", "2026-11-20T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
-      ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
+      // 25 Nov 2026: the hand-in closes at 14:00 on the 26th, so the line ends then, not at midnight.
+      ["postal-vote-deliver", "postalVote", "2026-11-20T00:00:00+01:00", "2026-11-26T14:00:00+01:00"],
+      // 25 Nov 2026: "where and how to vote" ends when the polls close (29 Nov 20:00).
+      ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-29T20:00:00+01:00"],
       // 13 Nov 2026: results, from the day of reflection to the end of the day after the vote.
       ["election-results-29n", "electionNight", "2026-11-28T00:00:00+01:00", "2026-12-01T00:00:00+01:00"],
       // 12 Nov 2026: the day after the election, the December bridge until the end of the 8th.
@@ -110,7 +116,8 @@ test("the ends are derived from the source modules, not typed in", () => {
   assert.equal(byId("strike-renfe-23n-off").end, endOfMadridDay(off.day));
   assert.ok(!STRIKES.some((s) => s.id === "vaga-renfe-2026-11-23"), "the called-off strike is not in STRIKES");
   assert.equal(byId("strike-education-26n").end, endOfMadridDay(lastDay(strike(STRIKE_EDUCATION_ID))));
-  assert.equal(byId("election-29n").end, endOfMadridDay(GENERAL_ELECTION_DAY));
+  assert.equal(byId("election-29n").end, madridAt(GENERAL_ELECTION_DAY, POLLS_CLOSE_MINUTES));
+  assert.equal(POLLS_CLOSE_MINUTES, ELECTION_POLLS_CLOSE_MINUTES, "the banner and the election-day layer close the polls together");
   assert.equal(byId("december-bridge").start, endOfMadridDay(GENERAL_ELECTION_DAY));
   assert.equal(DECEMBER_BRIDGE_MONDAY, SPAIN_DAYS.monday);
   assert.equal(DECEMBER_BRIDGE_LAST_DAY, SPAIN_DAYS.immaculada);
@@ -120,7 +127,9 @@ test("the ends are derived from the source modules, not typed in", () => {
 test("13 Nov 2026: the postal and results lines take their days from postal-vote.ts and elections/today.ts", () => {
   assert.equal(byId("postal-vote-request").end, endOfMadridDay(POSTAL_29N.requestBy));
   assert.equal(byId("postal-vote-deliver").start, byId("postal-vote-request").end, "the hand-in line follows the request line");
-  assert.equal(byId("postal-vote-deliver").end, endOfMadridDay(POSTAL_29N.deliverBy));
+  assert.equal(byId("postal-vote-deliver").end, "2026-11-26T14:00:00+01:00");
+  assert.equal(byId("postal-vote-deliver").end, madridAt(POSTAL_29N.deliverBy, POSTAL_29N.deliverUntilMinutes));
+  assert.equal(Date.parse(byId("postal-vote-deliver").end), HANDIN_CLOSES.getTime());
   // Postal deadlines moved by the board: the lines and their wording follow.
   const moved = buildNewsAlerts(STRIKES, GENERAL_ELECTION_DAY, { requestBy: "2026-11-18", deliverBy: "2026-11-24" });
   assert.equal(byId("postal-vote-request", moved).end, "2026-11-19T00:00:00+01:00");
@@ -153,7 +162,7 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
   assert.ok(!buildNewsAlerts(early).some((a) => a.id === "strike-education-26n"));
 
   const moved = byId("election-29n", buildNewsAlerts(STRIKES, "2026-12-06"));
-  assert.equal(moved.end, "2026-12-07T00:00:00+01:00");
+  assert.equal(moved.end, "2026-12-06T20:00:00+01:00");
   assert.match(moved.text.ca, /el diumenge 6 de desembre/);
 });
 
@@ -183,9 +192,14 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-25T23:59:59+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-26T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-26T13:59:59+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-26T14:00:00+01:00"), ["strike-education-26n", "election-29n"], "the hand-in line is gone at 14:00");
   assert.deepEqual(ids("2026-11-27T00:00:00+01:00"), ["election-29n"]);
   assert.deepEqual(ids("2026-11-28T00:00:00+01:00"), ["election-29n", "election-results-29n"]);
-  assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n", "election-results-29n"]);
+  assert.deepEqual(ids("2026-11-29T19:59:59+01:00"), ["election-29n", "election-results-29n"]);
+  // No gap and no overlap at 20:00: the how-to-vote line ends, the results line (from 28 Nov) carries the strip until the bridge.
+  assert.deepEqual(ids("2026-11-29T20:00:00+01:00"), ["election-results-29n"]);
+  assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-results-29n"]);
   assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), ["election-results-29n", "december-bridge"]);
   assert.deepEqual(ids("2026-11-30T23:59:59+01:00"), ["election-results-29n", "december-bridge"]);
   assert.deepEqual(ids("2026-12-01T00:00:00+01:00"), ["december-bridge"]);

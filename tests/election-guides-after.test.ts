@@ -78,10 +78,13 @@ test("until 23:59 on 29 Nov each guide reads exactly as it did before (the pre t
       const stored = edition(key, locale);
       const resolved = resolveElectionPhased(stored, NIGHT_BEFORE);
       assert.ok(!resolved.some((b) => b.type === "electionPhased"), `${key}/${locale}`);
-      // The reading before the vote is the stored pre variants in place.
+      // The reading before the vote is the stored pre variants in place; from Thu 26 Nov 14:00 a block with a `handin` variant reads that one.
       const expected = stored.flatMap((b) => (b.type === "electionPhased" ? parseBody(b.pre) : [b]));
-      assert.deepEqual(resolved, expected, `${key}/${locale}: pre`);
+      const expectedHandin = stored.flatMap((b) => (b.type === "electionPhased" ? parseBody(b.handin ?? b.pre) : [b]));
+      assert.deepEqual(resolved, expectedHandin, `${key}/${locale}: pre (handin variant where there is one)`);
       assert.deepEqual(resolveElectionPhased(stored, new Date("2026-11-24T10:00:00Z")), expected, `${key}/${locale}: 24 Nov`);
+      assert.deepEqual(resolveElectionPhased(stored, new Date("2026-11-26T12:59:59Z")), expected, `${key}/${locale}: 26 Nov 13:59`);
+      assert.deepEqual(resolveElectionPhased(stored, new Date("2026-11-26T13:00:00Z")), expectedHandin, `${key}/${locale}: 26 Nov 14:00`);
     }
   }
   // The election-night guide still says what it said: the pending results site and the announcement promise.

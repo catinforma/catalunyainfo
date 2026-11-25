@@ -29,18 +29,40 @@ export function electionVariant(phase: ElectionDayPhase): "pre" | "after" | "ove
  */
 export const HANDIN_CLOSES = new Date("2026-11-26T14:00:00+01:00");
 
+/**
+ * Thu 26 Nov 2026, 08:00 Madrid: 72 hours before the tables are set up (LOREG art. 27.4: an impediment is reported "al
+ * menos setenta y dos horas antes del acto"; later, "de manera inmediata y, en todo caso, antes de la hora de
+ * constitución de la mesa"). A block with a `late` variant reads it from here. Equal to MESA_72H in mesa-duty.ts
+ * (a test holds both; this file must not import that one, it carries the 947-town JEZ file).
+ */
+export const MESA_NOTICE_CLOSES = new Date("2026-11-26T08:00:00+01:00");
+
+/** Sun 29 Nov 2026, 08:00 Madrid: the tables are set up (LOREG art. 80.1). A block with a `held` variant reads it from here until `after`. Equal to MESA_HELD_FROM. */
+export const MESA_TABLES_SET = new Date("2026-11-29T08:00:00+01:00");
+
+/**
+ * Which variant of a block a render at `now` reads: from the pre-vote phases, the latest of `late` (26 Nov 08:00),
+ * `handin` (26 Nov 14:00) and `held` (29 Nov 08:00) that has passed and that the block has, else `pre`.
+ */
+function preVariant(block: Extract<Block, { type: "electionPhased" }>, now: Date): typeof block.pre {
+  const t = now.getTime();
+  if (block.held && t >= MESA_TABLES_SET.getTime()) return block.held;
+  if (block.handin && t >= HANDIN_CLOSES.getTime()) return block.handin;
+  if (block.late && t >= MESA_NOTICE_CLOSES.getTime()) return block.late;
+  return block.pre;
+}
+
 /** The body as it reads at `now`: every `electionPhased` block replaced by the blocks of its variant. */
 export function resolveElectionPhased(body: Body, now: Date = new Date()): Body {
   if (!body.some((block) => block.type === "electionPhased")) return body;
   const variant = electionVariant(electionPhase(now));
-  const handinClosed = now.getTime() >= HANDIN_CLOSES.getTime();
   const out: Block[] = [];
   for (const block of body) {
     if (block.type !== "electionPhased") {
       out.push(block);
       continue;
     }
-    const picked = variant === "over" ? (block.over ?? block.after) : variant === "pre" && handinClosed && block.handin ? block.handin : block[variant];
+    const picked = variant === "over" ? (block.over ?? block.after) : variant === "pre" ? preVariant(block, now) : block.after;
     out.push(...parseBody(picked));
   }
   return out;
