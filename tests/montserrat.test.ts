@@ -25,7 +25,7 @@ const text = (locale: Locale) => bodyToPlainText(MONTSERRAT_FREE.editions[locale
 const links = (locale: Locale) => [...JSON.stringify(MONTSERRAT_FREE.editions[locale].blocks).matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]!);
 
 /** Operators and the Abbey only: FGC (incl. Turistren and its shop), the Aeri, Montserrat Visita, the museum, the BOE never needed. */
-const OFFICIAL = /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.museudemontserrat\.cat)$/;
+const OFFICIAL = /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.escolania\.cat|www\.museudemontserrat\.cat)$/;
 
 test("montserrat: same URLs and titles (inside the 28 Oct window), three valid editions with the same shape", () => {
   assert.equal(MONTSERRAT_FREE.editions.en.path, "day-trips/montserrat-without-a-tour-from-barcelona");
@@ -101,7 +101,7 @@ test("montserrat: external links are the operators' and the Abbey's own sites, n
     }
   }
   for (const source of MONTSERRAT_FREE.sources) {
-    assert.match(new URL(source.url).hostname, /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.museudemontserrat\.cat|www\.tmb\.cat)$/, source.url);
+    assert.match(new URL(source.url).hostname, /^(turistren\.cat|www\.cremallerademontserrat\.cat|www\.fgc\.cat|aeridemontserrat\.com|vol\.cremallerademontserrat\.cat|www\.montserratvisita\.com|www\.escolania\.cat|www\.museudemontserrat\.cat|www\.tmb\.cat)$/, source.url);
   }
   assert.equal(new Set(MONTSERRAT_FREE.sources.map((s) => s.url)).size, MONTSERRAT_FREE.sources.length, "no duplicate source URL (it breaks the publish)");
 });
