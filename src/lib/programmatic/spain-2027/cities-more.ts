@@ -65,10 +65,11 @@ export const LIST_READ_ON: Partial<Record<Region, string>> = { CB: "2026-11-20",
  * Read again on 18 Nov 2026 and on 20 Nov 2026 (`PENDING_CHECKS`,
  * sources.ts): Cantabria's list came out on the 20th and the Valencian ones
  * were found in the three provincial bulletins (their towns are rows now);
- * the other four still none. Next by 27 Nov: the BOA is past its 2026
+ * the other four still none; read again on 25 Nov 2026 (BOA 228, DOCM 226,
+ * BOCM 283, BON 235): still none. Next by 2 Dec: the BOA is past its 2026
  * precedent (20 Nov), the BON's is 2 Dec, the BOCM's and DOCM's 12 Dec.
  */
-export const WAITING_RECHECK_BY = "2026-11-27";
+export const WAITING_RECHECK_BY = "2026-12-02";
 export const MORE_MIN_POPULATION = 20_000;
 
 /** Smaller municipalities selected by a real Search Console query (rule 2): 1 Aug – 12 Nov 2026, impressions summed over pages. */

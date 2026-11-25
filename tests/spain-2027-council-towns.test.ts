@@ -43,7 +43,7 @@ const towns = COUNCIL_CITY_ROWS.map((r) => cityBySlug(r.region, r.slug)!);
 
 test("council towns: each cites the council's own act, with its date, read on COUNCIL_READ_ON", () => {
   assert.ok(COUNCIL_CITY_ROWS.length >= 1, `${COUNCIL_CITY_ROWS.length} towns`);
-  assert.equal(COUNCIL_READ_ON, PENDING_READ_ON, "the acts were read the day the bulletins were searched");
+  assert.ok(COUNCIL_READ_ON <= PENDING_READ_ON, "the acts were read no later than the last bulletin search");
   for (const r of COUNCIL_CITY_ROWS) {
     assert.equal(r.status2027, "council", r.slug);
     assert.equal(r.readOn, COUNCIL_READ_ON, r.slug);

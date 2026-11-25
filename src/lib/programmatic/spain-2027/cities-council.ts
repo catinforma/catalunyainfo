@@ -7,8 +7,9 @@ import type { OfficialText } from "./sources";
  * The 20,000+ towns whose two 2027 local days are fixed by the council's own
  * official act while their community's list is still unpublished (20 Nov
  * 2026: Aragón, Castilla-La Mancha, Madrid, Navarra; read through BOA 225,
- * DOCM 223, BOCM 279 and BON 232, all of 20.11.2026, `PENDING_CHECKS` in
- * sources.ts). On 20 Nov 2026 Cantabria's list (BOC núm. 224) and the
+ * DOCM 223, BOCM 279 and BON 232, all of 20.11.2026; the bulletins were read
+ * again through 25.11.2026, `PENDING_CHECKS` in sources.ts, and the acts on
+ * `COUNCIL_READ_ON`). On 20 Nov 2026 Cantabria's list (BOC núm. 224) and the
  * Comunitat Valenciana's three provincial lists (BOP de Alicante 210, de
  * Castellón 136, de Valencia 224) were read: the 10 Valencian towns that were
  * here are rows of `cities-more.ts` now, every bulletin day the council's.

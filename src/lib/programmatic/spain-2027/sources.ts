@@ -19,10 +19,13 @@ import { NEXT_YEAR, SNAPSHOT, regionalDays } from "@/lib/programmatic/holidays/d
 
 export const SOURCES_READ_ON = "2026-11-06";
 /** A test fails after this date until every `local` status is read again. */
-export const STATUS_RECHECK_BY = "2026-11-27";
+export const STATUS_RECHECK_BY = "2026-12-02";
 
 /**
- * The lists still pending, read again on 20 Nov 2026: every issue of each
+ * The lists still pending, read again on 25 Nov 2026 (the issues of 21 to 25
+ * Nov: BOA 226-228, DOCM 224-226, BOCM 280-283 and BON 233-235, none with the
+ * 2027 list; the DOGC, núm. 9802 of 25 Nov, has no 2027 local order either),
+ * after the 20 Nov reading: every issue of each
  * bulletin since the 18 Nov reading (that one went back to 13 Nov, and to
  * 1 Oct for the BOCM and the BOC, 26 Oct for the BOA, 30 Oct for the BON,
  * 2 Nov for the DOCM) through that day's, by each bulletin's own summary
@@ -41,13 +44,13 @@ export const STATUS_RECHECK_BY = "2026-11-27";
  * but in the three provincial bulletins, 4, 10 and 20 Nov 2026
  * (`VALENCIANA.local.parts`).
  */
-export const PENDING_READ_ON = "2026-11-20";
+export const PENDING_READ_ON = "2026-11-25";
 
 export const PENDING_CHECKS = {
-  AR: { through: "BOA núm. 225, de 20.11.2026", date: PENDING_READ_ON },
-  CM: { through: "DOCM núm. 223, de 20.11.2026", date: PENDING_READ_ON },
-  MD: { through: "BOCM núm. 279, de 20.11.2026", date: PENDING_READ_ON },
-  NC: { through: "BON núm. 232, de 20.11.2026", date: PENDING_READ_ON },
+  AR: { through: "BOA núm. 228, de 25.11.2026", date: PENDING_READ_ON },
+  CM: { through: "DOCM núm. 226, de 25.11.2026", date: PENDING_READ_ON },
+  MD: { through: "BOCM núm. 283, de 25.11.2026", date: PENDING_READ_ON },
+  NC: { through: "BON núm. 235, de 25.11.2026", date: PENDING_READ_ON },
 } as const satisfies Record<string, PendingCheck>;
 
 /** The last issue of a bulletin read without the 2027 list, and the day it was read. */
