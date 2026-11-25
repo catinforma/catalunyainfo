@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -14,6 +15,7 @@ import { getMessages } from "@/lib/i18n";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { ipremPath } from "@/lib/programmatic/iprem/copy";
+import { pensionRevaluationLine } from "@/lib/programmatic/calculators/context-links";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
 import { subsidyPath } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { elDay, euros, ncEditions, ncPath, perMonth, perYear, whole, type NcLocale } from "@/lib/programmatic/non-contributory-pension/copy";
@@ -86,7 +88,7 @@ function Quote({ text, href, label, lang = "es" }: { text: string; href: string;
   );
 }
 
-const md = (text: string) => text.split(/\*\*/).map((p, i) => (i % 2 ? <strong key={i}>{p}</strong> : p));
+const md = mdLinks;
 
 function exampleLabel(id: ExampleId, locale: NcLocale): string {
   const labels: Record<ExampleId, Record<NcLocale, string>> = {
@@ -520,7 +522,7 @@ export function NcPensionRoute({ locale }: { locale: NcLocale }) {
                 amountRows.map(([label, annual]) => [label, <strong key="m">{M(monthly(annual))}</strong>, Y(annual)]),
                 amountCaption,
               )}
-              {amountText.map((p) => (
+              {[...amountText, pensionRevaluationLine(locale, "non-contributory")].map((p) => (
                 <p key={p}>{md(p)}</p>
               ))}
               <Quote text={QUOTE.rdl3} href={SOURCES.rdl3.url} label={L(locale, { es: "Real Decreto-ley 3/2026, art. 2.5", ca: "Reial decret llei 3/2026, art. 2.5", en: "Royal Decree-law 3/2026, art. 2.5" })} />

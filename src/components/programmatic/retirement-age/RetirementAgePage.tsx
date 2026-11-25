@@ -7,11 +7,13 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
+import { subsidyOver52Line } from "@/lib/programmatic/calculators/context-links";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
@@ -89,7 +91,7 @@ function Quote({ text, href, label }: { text: string; href: string; label: strin
   );
 }
 
-const md = (text: string) => text.split(/\*\*/).map((p, i) => (i % 2 ? <strong key={i}>{p}</strong> : p));
+const md = mdLinks;
 
 /** The DT 7ª cells: verbatim in Spanish, the same numbers in Catalan and English. */
 function phaseInCells(row: PhaseInRow, locale: RaLocale): [string, string, string, string, string] {
@@ -236,21 +238,21 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
       `**${Y(h.voluntaryMin)} cotizados de forma efectiva**, sin la parte de pagas extra; del servicio militar o la prestación social solo cuenta un año.`,
       "**Estar de alta o en situación asimilada** cuando la pides.",
       "**La pensión que te quede tiene que superar la pensión mínima** que te correspondería a los 65 por tu situación familiar; si no, no puedes jubilarte así.",
-      `Si cobras el **subsidio por desempleo** desde hace al menos ${SUBSIDY_MONTHS} meses, se aplican los coeficientes de la anticipada involuntaria (más suaves).`,
+      `Si cobras el **subsidio por desempleo** desde hace al menos ${SUBSIDY_MONTHS} meses, se aplican los coeficientes de la anticipada involuntaria (más suaves). ${subsidyOver52Line(locale)}`,
     ],
     ca: [
       `Fins a **2 anys abans** de la teva edat ordinària (${EARLY_MAX_MONTHS.voluntary} mesos), en qualsevol règim, també com a autònom.`,
       `**${Y(h.voluntaryMin)} cotitzats de manera efectiva**, sense la part de pagues extra; del servei militar o la prestació social només compta un any.`,
       "**Estar d'alta o en situació assimilada** quan la demanes.",
       "**La pensió que et quedi ha de superar la pensió mínima** que et correspondria als 65 per la teva situació familiar; si no, no et pots jubilar així.",
-      `Si cobres el **subsidi per desocupació** des de fa com a mínim ${SUBSIDY_MONTHS} mesos, s'apliquen els coeficients de l'anticipada involuntària (més suaus).`,
+      `Si cobres el **subsidi per desocupació** des de fa com a mínim ${SUBSIDY_MONTHS} mesos, s'apliquen els coeficients de l'anticipada involuntària (més suaus). ${subsidyOver52Line(locale)}`,
     ],
     en: [
       `Up to **2 years before** your ordinary age (${EARLY_MAX_MONTHS.voluntary} months), in any regime, the self-employed included.`,
       `**${Y(h.voluntaryMin)} of effective contributions**, without the extra-payment share; only one year of military or social service counts.`,
       "**Being registered (alta) or in an equivalent situation** when you apply.",
       "**The pension left must be above the minimum pension** you would get at 65 for your family situation; otherwise you cannot retire this way.",
-      `If you have been on the **unemployment subsidy** for at least ${SUBSIDY_MONTHS} months, the involuntary coefficients (lower) apply.`,
+      `If you have been on the **unemployment subsidy** for at least ${SUBSIDY_MONTHS} months, the involuntary coefficients (lower) apply. ${subsidyOver52Line(locale)}`,
     ],
   });
 

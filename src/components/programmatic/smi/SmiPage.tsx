@@ -7,10 +7,12 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
+import { subsidyIncomeLimitLine } from "@/lib/programmatic/calculators/context-links";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, money, netSalaryPreset, pct, smiEditions, smiPath, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/programmatic/smi/engine";
@@ -526,6 +528,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                 })}{" "}
                 <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
               </p>
+              <p>{mdLinks(subsidyIncomeLimitLine(locale))}</p>
 
               <h2 id="irpf">{h.irpf}</h2>
               <p>{irpf[0]}</p>

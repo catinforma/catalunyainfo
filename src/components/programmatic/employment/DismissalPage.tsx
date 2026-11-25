@@ -15,6 +15,8 @@ import {
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { DismissalCalculator, type DismissalInitial } from "./DismissalCalculator";
 import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
+import { subsidyAmountsLine } from "@/lib/programmatic/calculators/context-links";
 
 /**
  * "Calculadora de indemnización por despido" (es primary, ca, en). Every
@@ -100,7 +102,7 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       faqTitle: "Preguntas frecuentes",
       faq: [
         ["¿Cuánto tiempo tengo para reclamar un despido?", "20 días hábiles desde el día siguiente al despido (ET art. 59.3). Antes de ir al juzgado hay que presentar la papeleta de conciliación."],
-        ["¿Cobro el paro si me despiden?", <>Sí, si has cotizado al menos 360 días en los últimos seis años: el despido y el fin de contrato son situación legal de desempleo. <Link href={paro}>Calcula cuánto paro te corresponde</Link>.</>],
+        ["¿Cobro el paro si me despiden?", <>Sí, si has cotizado al menos 360 días en los últimos seis años: el despido y el fin de contrato son situación legal de desempleo. <Link href={paro}>Calcula cuánto paro te corresponde</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
         ["¿La baja voluntaria tiene indemnización?", "No. El Estatuto no prevé indemnización cuando te vas tú (salvo en los casos de los artículos 40, 41 y 50: traslado, modificación sustancial o incumplimiento grave de la empresa). Sí cobras el finiquito."],
       ],
     },
@@ -140,7 +142,7 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       faqTitle: "Preguntes freqüents",
       faq: [
         ["Quant de temps tinc per reclamar un acomiadament?", "20 dies hàbils des de l'endemà de l'acomiadament (ET art. 59.3). Abans d'anar al jutjat cal presentar la papereta de conciliació."],
-        ["Cobro l'atur si m'acomiaden?", <>Sí, si has cotitzat almenys 360 dies en els últims sis anys: l&apos;acomiadament i la fi de contracte són situació legal de desocupació. <Link href={paro}>Calcula quant d&apos;atur et correspon</Link>.</>],
+        ["Cobro l'atur si m'acomiaden?", <>Sí, si has cotitzat almenys 360 dies en els últims sis anys: l&apos;acomiadament i la fi de contracte són situació legal de desocupació. <Link href={paro}>Calcula quant d&apos;atur et correspon</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
         ["La baixa voluntària té indemnització?", "No. L'Estatut no preveu indemnització quan te'n vas tu (tret dels casos dels articles 40, 41 i 50: trasllat, modificació substancial o incompliment greu de l'empresa). Sí que cobres la quitança."],
       ],
     },
@@ -180,7 +182,7 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       faqTitle: "Frequently asked questions",
       faq: [
         ["How long do I have to challenge a dismissal?", "20 working days from the day after the dismissal (ET art. 59.3). A conciliation claim (papeleta de conciliación) must be filed before going to court."],
-        ["Do I get unemployment benefit if I am dismissed?", <>Yes, if you have contributed for at least 360 days in the last six years: dismissal and the end of a contract count as legal unemployment. <Link href={paro}>Work out your unemployment benefit</Link>.</>],
+        ["Do I get unemployment benefit if I am dismissed?", <>Yes, if you have contributed for at least 360 days in the last six years: dismissal and the end of a contract count as legal unemployment. <Link href={paro}>Work out your unemployment benefit</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
         ["Is there severance pay if I resign?", "No. The Statute gives none when you leave (except under articles 40, 41 and 50: relocation, substantial change or a serious breach by the employer). You still get the final settlement."],
       ],
     },

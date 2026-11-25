@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -15,6 +16,7 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
+import { pensionRevaluationLine } from "@/lib/programmatic/calculators/context-links";
 import { pensionPath } from "@/lib/programmatic/pensions-2027/copy";
 import { MIN_LABEL, day, elDay, euros, perMonth, perYear, whole, widowEditions, widowPath, type WpLocale } from "@/lib/programmatic/widow-pension/copy";
 import type { WidowResult } from "@/lib/programmatic/widow-pension/engine";
@@ -92,7 +94,7 @@ function Quote({ text, href, label }: { text: string; href: string; label: strin
   );
 }
 
-const md = (text: string) => text.split(/\*\*/).map((p, i) => (i % 2 ? <strong key={i}>{p}</strong> : p));
+const md = mdLinks;
 
 function exampleLabel(id: ExampleId, locale: WpLocale): string {
   const labels: Record<ExampleId, Record<WpLocale, string>> = {
@@ -612,7 +614,7 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
                 WIDOW_MINIMUM_IDS.map((id) => [MIN_LABEL[locale][id], <strong key="m">{M(round2(WIDOW_MINIMUMS[id] / PAYMENTS_ORDINARY))}</strong>, Y(WIDOW_MINIMUMS[id])]),
                 minCaption,
               )}
-              {minText.map((p) => (
+              {[...minText, pensionRevaluationLine(locale, "widow")].map((p) => (
                 <p key={p}>{md(p)}</p>
               ))}
               <Quote text={QUOTE.rd241partial} href={SOURCES.rd241.url} label={rd241("art. 9.2")} />
