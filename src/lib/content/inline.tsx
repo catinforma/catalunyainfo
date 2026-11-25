@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 
 import { isExternalHref, safeHref } from "./links";
+import { tokenize } from "./inline-text";
 
 /**
  * A minimal, safe inline formatter.
@@ -12,48 +13,6 @@ import { isExternalHref, safeHref } from "./links";
  * Links are validated: only http(s) and mailto survive, and anything pointing
  * off-site gets `rel="noopener"` plus an external marker.
  */
-
-type Token =
-  | { kind: "text"; value: string }
-  | { kind: "bold"; value: string }
-  | { kind: "italic"; value: string }
-  | { kind: "code"; value: string }
-  | { kind: "link"; label: string; href: string };
-
-const PATTERN =
-  /(\*\*[^*]+\*\*)|(_[^_]+_)|(`[^`]+`)|(\[[^\]]+\]\((?:https?:\/\/|mailto:|\/)[^)\s]+\))/g;
-
-function tokenize(input: string): Token[] {
-  const tokens: Token[] = [];
-  let lastIndex = 0;
-
-  for (const match of input.matchAll(PATTERN)) {
-    const index = match.index ?? 0;
-    if (index > lastIndex) {
-      tokens.push({ kind: "text", value: input.slice(lastIndex, index) });
-    }
-    const raw = match[0];
-
-    if (raw.startsWith("**")) {
-      tokens.push({ kind: "bold", value: raw.slice(2, -2) });
-    } else if (raw.startsWith("_")) {
-      tokens.push({ kind: "italic", value: raw.slice(1, -1) });
-    } else if (raw.startsWith("`")) {
-      tokens.push({ kind: "code", value: raw.slice(1, -1) });
-    } else {
-      const split = raw.indexOf("](");
-      const label = raw.slice(1, split);
-      const href = raw.slice(split + 2, -1);
-      tokens.push({ kind: "link", label, href });
-    }
-    lastIndex = index + raw.length;
-  }
-
-  if (lastIndex < input.length) {
-    tokens.push({ kind: "text", value: input.slice(lastIndex) });
-  }
-  return tokens;
-}
 
 export function renderInline(input: string | undefined | null): ReactNode {
   if (!input) return null;

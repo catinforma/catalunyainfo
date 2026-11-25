@@ -2,6 +2,7 @@ import { SITE, absoluteUrl } from "@/lib/site";
 import { HTML_LANG, type Locale } from "@/lib/i18n/config";
 import { sectionPath } from "@/lib/i18n/routes";
 import type { Block } from "@/lib/content/blocks";
+import { plainInline } from "@/lib/content/inline-text";
 import type { AuthorView, EntryDetail } from "@/lib/content/types";
 import { OWNER } from "@/lib/content/pages/institutional";
 import {
@@ -109,7 +110,7 @@ export function siteAuthorProfileSchema(locale: Locale): Json {
     mainEntity: {
       ...sitePersonNode(locale),
       description: SITE_AUTHOR_SUMMARY[locale],
-      worksFor: publisherNode(),
+      worksFor: publisherNode(locale),
     },
   };
 }
@@ -216,14 +217,13 @@ export function articleImage(entry: EntryDetail): Json | Json[] | undefined {
   }));
 }
 
-function publisherNode(): Json {
-  return {
-    "@type": "Organization",
-    "@id": ORGANIZATION_ID,
-    name: SITE.name,
-    url: SITE.productionOrigin,
-    logo: { "@type": "ImageObject", url: `${SITE.productionOrigin}/logo.png`, width: 512, height: 512 },
-  };
+/**
+ * The publisher, as the Organization the layout declares (same `@id`, same
+ * properties): a second, shorter node under that `@id` contradicted it on
+ * every article (`url` with and without the slash).
+ */
+function publisherNode(locale: Locale): Json {
+  return organizationSchema(locale);
 }
 
 /**
@@ -257,10 +257,10 @@ export function articleSchema(entry: EntryDetail): Json {
     // Inline rather than a bare @id: the Organization lives in another
     // script block, and a reference that does not resolve leaves Article
     // without a publisher for parsers that read one graph at a time.
-    publisher: publisherNode(),
+    publisher: publisherNode(entry.locale),
     // The byline the page shows (lib/content/author.ts). Only a piece with
     // no byline at all falls back to the Organization.
-    author: author ? personNode(author, entry.locale) : publisherNode(),
+    author: author ? personNode(author, entry.locale) : publisherNode(entry.locale),
     ...(image ? { image } : {}),
     ...(citations(entry) ? { citation: citations(entry) } : {}),
     ...(entry.tags.length > 0 ? { keywords: entry.tags.map((t) => t.name).join(", ") } : {}),
@@ -335,16 +335,21 @@ export function eventSchema(entry: EntryDetail): Json | null {
   };
 }
 
-/** Emitted only when the body actually contains a FAQ block. */
+/**
+ * Emitted only when the body actually contains a FAQ block. A page has one
+ * FAQPage: when the body shows several FAQ blocks, their questions are
+ * merged into it, so every question the page prints is in the markup.
+ */
 export function faqSchema(body: Block[]): Json | null {
-  const faq = body.find((b) => b.type === "faq");
-  if (!faq || faq.type !== "faq") return null;
+  const items = body.flatMap((b) => (b.type === "faq" ? b.items : []));
+  if (items.length === 0) return null;
   return {
     "@type": "FAQPage",
-    mainEntity: faq.items.map((item) => ({
+    mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.question,
-      acceptedAnswer: { "@type": "Answer", text: stripInline(item.answer) },
+      // The text the page shows for the answer (inline-text.ts), not a regex's guess at it.
+      acceptedAnswer: { "@type": "Answer", text: plainInline(item.answer).trim() },
     })),
   };
 }
@@ -360,7 +365,7 @@ export function howToSchema(entry: EntryDetail): Json | null {
       "@type": "HowToStep",
       position: index + 1,
       name: item.title,
-      ...(item.text ? { text: stripInline(item.text) } : {}),
+      ...(item.text ? { text: plainInline(item.text).trim() } : {}),
     })),
   };
 }
@@ -494,15 +499,39 @@ export function townEventSchema(input: TownEventInput): Json {
   };
 }
 
-function stripInline(text: string): string {
-  return text
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*_`]/g, "")
-    .trim();
-}
-
-/** Wraps nodes in a single `@graph` document, dropping nulls. */
+/**
+ * Wraps nodes in a single `@graph` document, dropping nulls and keeping the
+ * page's structured data to one of each kind Google reads once: FAQPage
+ * nodes are merged into the first (a question printed once), a second
+ * BreadcrumbList is dropped, and so is a node identical to an earlier one.
+ */
 export function graph(nodes: (Json | null | undefined)[]): string {
-  const filtered = nodes.filter((n): n is Json => Boolean(n));
-  return JSON.stringify({ "@context": "https://schema.org", "@graph": filtered });
+  const out: Json[] = [];
+  const seen = new Set<string>();
+  let faq: Json | null = null;
+  let breadcrumb = false;
+  for (const node of nodes) {
+    if (!node) continue;
+    const key = JSON.stringify(node);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (node["@type"] === "FAQPage") {
+      const questions = (node.mainEntity as Json[] | undefined) ?? [];
+      if (!faq) {
+        faq = { ...node, mainEntity: [...questions] };
+        out.push(faq);
+      } else {
+        const merged = faq.mainEntity as Json[];
+        const have = new Set(merged.map((q) => q.name));
+        for (const q of questions) if (!have.has(q.name)) merged.push(q);
+      }
+      continue;
+    }
+    if (node["@type"] === "BreadcrumbList") {
+      if (breadcrumb) continue;
+      breadcrumb = true;
+    }
+    out.push(node);
+  }
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": out });
 }

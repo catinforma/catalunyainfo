@@ -281,6 +281,15 @@ function walkJsonLd(node: Record<string, unknown>, path: string, out: JsonLdNode
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
 
+/** JSON with the keys sorted at every level, to compare two nodes by content. */
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((k) => `${JSON.stringify(k)}:${stableJson((value as Record<string, unknown>)[k])}`).join(",")}}`;
+  }
+  return JSON.stringify(value) ?? "null";
+}
+
 function asArray(value: unknown): unknown[] {
   if (value === undefined || value === null) return [];
   return Array.isArray(value) ? value : [value];
@@ -322,6 +331,43 @@ export function checkJsonLd(parsed: Pick<ParsedPage, "jsonLd" | "visibleText" | 
   const types = parsed.jsonLd.map((n) => n.type);
   const breadcrumbLists = parsed.jsonLd.filter((n) => n.type === "BreadcrumbList");
   if (breadcrumbLists.length > 1) add("warn", "jsonld-breadcrumb-multiple", `${breadcrumbLists.length} BreadcrumbList`);
+  // One FAQPage per page: two describe the same visible questions twice (and Google reads one).
+  const faqPages = parsed.jsonLd.filter((n) => n.type === "FAQPage");
+  if (faqPages.length > 1) add("error", "jsonld-faq-multiple", `${faqPages.length} FAQPage`);
+  // Two nodes with one @id contradict each other when a property they both carry differs. One that
+  // only says more (the author page's Person with its description) or the same thing again (the
+  // town's Place in two events) is fine.
+  const byId = new Map<string, Record<string, string>>();
+  const conflicting = new Set<string>();
+  for (const { node } of parsed.jsonLd) {
+    const id = str(node["@id"]);
+    if (!id) continue;
+    const seen = byId.get(id) ?? {};
+    for (const [k, v] of Object.entries(node)) {
+      if (k === "@id") continue;
+      const body = stableJson(v);
+      if (seen[k] !== undefined && seen[k] !== body) conflicting.add(id);
+      seen[k] = body;
+    }
+    byId.set(id, seen);
+  }
+  for (const id of conflicting) add("error", "jsonld-id-conflict", id);
+  // Places, datasets and events print what the source gives; an empty field is a gap in a template.
+  for (const { type, node, path } of parsed.jsonLd) {
+    if (!["Dataset", "Place", "Event", "PostalAddress", "Organization"].includes(type)) continue;
+    const empty = Object.entries(node).filter(([k, v]) => !k.startsWith("@") && (v === "" || v === null || (Array.isArray(v) && v.length === 0) || (typeof v === "object" && v !== null && !Array.isArray(v) && Object.keys(v).length === 0) || (typeof v === "string" && v.trim() === "")));
+    if (empty.length > 0) add("error", "jsonld-empty-field", `${type} at ${path}: ${empty.map(([k]) => k).join(", ")}`);
+  }
+  // The trail printed above the title is the trail in the markup (names, not only the count).
+  const squash = (s: string) => normalizeText(decodeEntities(s)).replace(/\s+/g, "");
+  if (breadcrumbLists.length > 0 && parsed.breadcrumbTrail.length > 0) {
+    const names = (asArray(breadcrumbLists[0]!.node.itemListElement) as Record<string, unknown>[]).map((i) => squash(str(i.name) || str((i.item as Record<string, unknown> | undefined)?.name)));
+    const shown = parsed.breadcrumbTrail.map(squash);
+    if (names.length === shown.length && names.some((n, i) => n !== shown[i] && !(shown[i]!.endsWith("…") && n.startsWith(shown[i]!.slice(0, -1))))) {
+      add("warn", "breadcrumb-names-differ", `visible ${parsed.breadcrumbTrail.join(" > ")} | JSON-LD ${names.join(" > ")}`.slice(0, 300));
+    }
+  }
+  const visibleSquashed = squash(parsed.visibleText);
 
   for (const { type, node, path } of parsed.jsonLd) {
     const where = `${type} at ${path}`;
@@ -347,6 +393,7 @@ export function checkJsonLd(parsed: Pick<ParsedPage, "jsonLd" | "visibleText" | 
           add("error", "jsonld-article-modified-before-published", where);
         }
         if (Number.isFinite(published) && published > Date.now() + 36e5) add("error", "jsonld-article-published-in-future", `${where}: ${node.datePublished}`);
+        if (Number.isFinite(modified) && modified > Date.now() + 36e5) add("error", "jsonld-article-modified-in-future", `${where}: ${node.dateModified}`);
         for (const image of asArray(node.image)) {
           const u = urlOf(image);
           if (u && !/^https:\/\//.test(u)) add("error", "jsonld-article-image-not-absolute", `${where}: ${u}`);
@@ -400,6 +447,18 @@ export function checkJsonLd(parsed: Pick<ParsedPage, "jsonLd" | "visibleText" | 
           }
         }
         if (hidden > 0) add("error", "jsonld-faq-not-visible", `${where}: ${hidden}/${questions.length} questions not in the page text, e.g. "${firstHidden}"`);
+        // The answer too: the markup carries the text the page shows, not another wording.
+        let wrong = 0;
+        let firstWrong = "";
+        for (const q of questions) {
+          const name = str(q.name);
+          const answer = str((q.acceptedAnswer as Record<string, unknown> | undefined)?.text);
+          if (name && answer && visible.includes(normalizeText(decodeEntities(name))) && !visibleSquashed.includes(squash(answer))) {
+            wrong += 1;
+            firstWrong ||= name.slice(0, 80);
+          }
+        }
+        if (wrong > 0) add("error", "jsonld-faq-answer-not-visible", `${where}: ${wrong}/${questions.length} answers differ from the page text, e.g. "${firstWrong}"`);
         break;
       }
       case "Event": {
@@ -417,6 +476,12 @@ export function checkJsonLd(parsed: Pick<ParsedPage, "jsonLd" | "visibleText" | 
         const start = Date.parse(str(node.startDate));
         const end = Date.parse(str(node.endDate));
         if (Number.isFinite(start) && Number.isFinite(end) && end < start) add("error", "jsonld-event-ends-before-start", where);
+        // An event that has ended is not an error (EventScheduled also means "took place as scheduled"), but the
+        // page that still lists it should say it is over: reported so a calendar page does not keep a past fair as news.
+        const over = Number.isFinite(end) ? end : Number.isFinite(start) && !str(node.endDate) ? start + 864e5 : NaN;
+        if (Number.isFinite(over) && over < Date.now() && /Scheduled$/.test(str(node.eventStatus) || "EventScheduled")) {
+          add("info", "jsonld-event-past", `${where}: ends ${str(node.endDate) || str(node.startDate)}`);
+        }
         const status = str(node.eventStatus);
         if (status && !/^https:\/\/schema\.org\/Event(Scheduled|Cancelled|Postponed|Rescheduled|MovedOnline)$/.test(status)) {
           add("error", "jsonld-event-bad-status", `${where}: ${status}`);

@@ -162,3 +162,64 @@ test("JSON-LD in a script element: every < is escaped and the JSON still parses"
   assert.ok(!safe.includes("\u2028"));
   assert.deepEqual(JSON.parse(safe), JSON.parse(json));
 });
+
+// ---- Structured-data audit of 25 Nov 2026: one test per rule ------------------------------------
+
+const jsonLdCodes = (body: string) => checkJsonLd(parseHtml(page({ head: GOOD_HEAD, body: `<h1>h</h1>${body}` }), URL_ES, ORIGIN), URL_ES, ORIGIN);
+const faqNode = (...qa: [string, string][]) => ({ "@type": "FAQPage", mainEntity: qa.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
+const graphOf = (...nodes: unknown[]) => ld({ "@context": "https://schema.org", "@graph": nodes });
+
+test("JSON-LD rule: at most one FAQPage per page", () => {
+  const html = `<h2>¿A?</h2><p>Sí A.</p><h2>¿B?</h2><p>Sí B.</p>`;
+  assert.ok(!jsonLdCodes(html + graphOf(faqNode(["¿A?", "Sí A."], ["¿B?", "Sí B."]))).some((i) => i.code === "jsonld-faq-multiple"));
+  const two = jsonLdCodes(html + graphOf(faqNode(["¿A?", "Sí A."]), faqNode(["¿B?", "Sí B."])));
+  assert.ok(two.some((i) => i.code === "jsonld-faq-multiple" && i.severity === "error"));
+});
+
+test("JSON-LD rule: the FAQ answer is the text the page shows, not only the question", () => {
+  const body = `<h2>¿Hay clase?</h2><p>Sí, con <a href="/x/">el calendario</a>, de 9 a 14 h.</p>`;
+  const ok = jsonLdCodes(body + graphOf(faqNode(["¿Hay clase?", "Sí, con el calendario, de 9 a 14 h."])));
+  assert.ok(!ok.some((i) => i.code.startsWith("jsonld-faq")), JSON.stringify(ok));
+  const other = jsonLdCodes(body + graphOf(faqNode(["¿Hay clase?", "No, ese día no hay clase en ningún colegio."])));
+  assert.ok(other.some((i) => i.code === "jsonld-faq-answer-not-visible" && i.severity === "error"));
+});
+
+test("JSON-LD rule: Article dateModified is neither before datePublished nor in the future", () => {
+  const article = (published: string, modified: string) => graphOf({ "@type": "Article", headline: "T", image: ["https://www.catalunyainfo.com/a.jpg"], datePublished: published, dateModified: modified, author: { "@type": "Person", name: "A" } });
+  const future = new Date(Date.now() + 3 * 864e5).toISOString();
+  assert.ok(!jsonLdCodes(article("2026-11-10T08:00:00Z", "2026-11-12T08:00:00Z")).some((i) => i.severity === "error"));
+  assert.ok(jsonLdCodes(article("2026-11-10T08:00:00Z", "2026-11-09T08:00:00Z")).some((i) => i.code === "jsonld-article-modified-before-published"));
+  assert.ok(jsonLdCodes(article("2026-11-10T08:00:00Z", future)).some((i) => i.code === "jsonld-article-modified-in-future"));
+});
+
+test("JSON-LD rule: an Event has name, startDate and a located place; an ended one is reported, an upcoming one is not", () => {
+  const place = { "@type": "Place", name: "Vic", address: { "@type": "PostalAddress", addressLocality: "Vic", addressCountry: "ES" } };
+  const event = (extra: Record<string, unknown>) => graphOf({ "@type": "Event", name: "Fira", location: place, eventStatus: "https://schema.org/EventScheduled", ...extra });
+  assert.ok(jsonLdCodes(event({})).some((i) => i.code === "jsonld-event-missing" && /startDate/.test(i.detail ?? "")));
+  assert.ok(!jsonLdCodes(event({ startDate: "2999-12-05", endDate: "2999-12-06" })).some((i) => i.code === "jsonld-event-past"));
+  assert.ok(jsonLdCodes(event({ startDate: "2020-12-05", endDate: "2020-12-06" })).some((i) => i.code === "jsonld-event-past"));
+  assert.ok(!jsonLdCodes(event({ startDate: "2020-12-05", endDate: "2020-12-06", eventStatus: "https://schema.org/EventCancelled" })).some((i) => i.code === "jsonld-event-past"));
+});
+
+test("JSON-LD rule: the breadcrumb markup names what the visible trail names", () => {
+  const crumbs = (second: string) =>
+    graphOf({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Inicio", item: `${ORIGIN}/es/` }, { "@type": "ListItem", position: 2, name: second, item: URL_ES }] });
+  const nav = `<nav aria-label="Ruta de navegación"><ol><li><a href="/es/">Inicio</a> /</li><li><span>Calculadoras</span></li></ol></nav>`;
+  assert.ok(!jsonLdCodes(nav + crumbs("Calculadoras")).some((i) => i.code.startsWith("breadcrumb")));
+  assert.ok(jsonLdCodes(nav + crumbs("Guías")).some((i) => i.code === "breadcrumb-names-differ"));
+});
+
+test("JSON-LD rule: Dataset, Place and Event carry no empty field", () => {
+  const dataset = (extra: Record<string, unknown>) => graphOf({ "@type": "Dataset", name: "Festivos", description: "x".repeat(60), spatialCoverage: { "@type": "Place", name: "Vic" }, ...extra });
+  assert.ok(!jsonLdCodes(dataset({})).some((i) => i.code === "jsonld-empty-field"));
+  assert.ok(jsonLdCodes(dataset({ creator: "", license: [] })).some((i) => i.code === "jsonld-empty-field" && /creator, license/.test(i.detail ?? "")));
+  assert.ok(jsonLdCodes(dataset({ spatialCoverage: { "@type": "Place", name: "" } })).some((i) => i.code === "jsonld-empty-field"));
+});
+
+test("JSON-LD rule: one @id, one entity (a node may say more or the same again, never a different value)", () => {
+  const org = { "@type": "Organization", "@id": `${ORIGIN}/#organization`, name: "Catalunya Info", url: `${ORIGIN}/` };
+  assert.ok(!jsonLdCodes(graphOf(org, { ...org, email: "a@b.cat" }, { ...org })).some((i) => i.code === "jsonld-id-conflict"));
+  assert.ok(jsonLdCodes(graphOf(org, { ...org, url: ORIGIN })).some((i) => i.code === "jsonld-id-conflict" && i.severity === "error"));
+  // Nested too: an Article's publisher against the layout's Organization.
+  assert.ok(jsonLdCodes(graphOf(org) + graphOf({ "@type": "Article", headline: "T", publisher: { ...org, url: ORIGIN } })).some((i) => i.code === "jsonld-id-conflict"));
+});
