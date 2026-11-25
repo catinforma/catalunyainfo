@@ -21,11 +21,13 @@ import {
   shippedZones,
   widerZone,
 } from "@/lib/programmatic/weekend/data";
+import { zoneFacts } from "@/lib/programmatic/weekend/facts";
 import { weekendHubPath, zonePath } from "@/lib/programmatic/weekend/paths";
 import type { ProvinceCode } from "@/lib/programmatic/weekend/types";
 import { MIN_EVENTS, zoneFilter, type WeekendLocale, type ZoneDef } from "@/lib/programmatic/weekend/zones";
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
+import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
 import { CarSection, FairList, Guidance, LinkList, Sources, TrainSection, WeatherSection, comarcaList, fuelLinks, townName } from "./parts";
 
 const WIDER_HEADING: Record<WeekendLocale, (name: string) => string> = {
@@ -80,6 +82,7 @@ export function ZonePage({ zone, locale, window, agendas }: { zone: ZoneDef; loc
   const widerItems = short && widerFilter ? gencat.filter((i) => inPlace(i, widerFilter) && !zoneIds.has(i.id)) : [];
   const christmas = christmasFairsThisWeekend(window, agendas.today, locale, filter);
   const longNote = longWeekendNote(window, locale);
+  const facts = zoneFacts(zone, locale, agendas, zone.in[locale]);
   const brandNames = (zone.brands ?? []).map((b) => BRAND_NAMES[locale][b] ?? b).join(locale === "es" ? " y " : " i ");
 
   const others = shippedZones()
@@ -108,7 +111,9 @@ export function ZonePage({ zone, locale, window, agendas }: { zone: ZoneDef; loc
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
-          <p className="!mt-0">
+          <WeekendFactsTable facts={facts} />
+
+          <p>
             {zoneScope(zone, locale, {
               towns: towns.length,
               comarques: comarcaList(comarques, locale),
@@ -161,6 +166,7 @@ export function ZonePage({ zone, locale, window, agendas }: { zone: ZoneDef; loc
           <CarSection links={fuelLinks(zone, locale, provinces, comarques)} locale={locale} />
           <WeatherSection zone={zone} locale={locale} />
           <Guidance locale={locale} zone={zone} widerName={widerText} />
+          <WeekendFaq facts={facts} />
         </div>
 
         <LinkList title={t.guides} id="ci-weekend-guides" links={guides} />

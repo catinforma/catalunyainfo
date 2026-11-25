@@ -1252,11 +1252,11 @@ test("portaventura: the standard price leads, no ended promotion, the winter clo
   }
 });
 
-test("portaventura EN: the snippet leads with the 2026-27 opening dates (feed re-read 30 Oct)", () => {
+test("portaventura EN: the snippet leads with the 2026-27 opening dates (feed re-read 30 Oct, corrected 25 Nov: closed to 18 Feb, reopens 19 Feb)", () => {
   const en = PORTAVENTURA.editions.en;
   assert.match(en.seoTitle, /^PortAventura opening dates 2026-27/);
   assert.ok(en.seoDescription.length <= 155, en.seoDescription);
-  assert.match(en.seoDescription, /6 Jan.*7 Jan-19 Feb 2027.*20 Feb.*18 Mar/);
+  assert.match(en.seoDescription, /6 Jan.*7 Jan-18 Feb 2027.*19 Feb.*18 Mar/);
   assert.match(JSON.stringify(en.blocks), /Is PortAventura open in January 2027\?/);
 });
 

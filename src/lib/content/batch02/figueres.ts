@@ -13,6 +13,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * Figueres and the Dalí Theatre-Museum from Barcelona.
@@ -410,7 +411,7 @@ function body(locale: Locale) {
   ];
 }
 
-export const FIGUERES: B2Article = {
+const FIGUERES_BASE: B2Article = {
   key: "figueres",
   entryKey: "daytrip-figueres-dali-from-barcelona",
   categoryKey: "culture",
@@ -445,3 +446,6 @@ export const FIGUERES: B2Article = {
 };
 
 export { META as FIGUERES_META };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const FIGUERES: B2Article = withGlance(FIGUERES_BASE, "figueres");

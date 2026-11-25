@@ -33,12 +33,23 @@ import {
  * to it, which is where the timetables live. On 26 Oct 2026 the Girona R11
  * range was re-read from the same planner for 27 and 28 Oct: 1 h 19 to
  * 1 h 41 (the 7:16 from Sants takes 1 h 41), not 1 h 19 to 1 h 31.
+ *
+ * 25 Nov 2026: every row of the overview table re-read from the Rodalies
+ * planner (Sitges 31-37 min 5.50 EUR; Girona 1 h 19-1 h 41, 8.95 / 12 EUR;
+ * Tarragona 69 min 8.60; Figueres 1 h 50-2 h 18, 12.80 / 17.10; Vilanova
+ * 32-44 min 5.50; Mataró 46-50 min 5.50; Sant Pol 1 h 06 6.60; Vilafranca
+ * 1 h 06 6.60; Sant Sadurní 54 min 5.50; Manresa 1 h 25-1 h 29 8.25;
+ * Terrassa Estació del Nord 51-53 min 5.50) and Renfe's GTFS: all as printed,
+ * except two factual corrections: Figueres high-speed is 53-65 min (the cell
+ * said 42, which no train in the file runs; the Figueres guide already says
+ * 53) and Terrassa is 51-53 min (the cell said 52). Vic: the planner returns
+ * an error today, so its dash stays.
  */
 
 const TABLE_NOTE = {
-  ca: "Durada de Barcelona-Sants i bitllet senzill de Rodalies segons el cercador oficial de Rodalies per al dimarts 27 d'octubre de 2026; alta velocitat segons les dades obertes de Renfe. Comprova el servei del dia: algun trajecte pot requerir transbordament.",
-  es: "Duración desde Barcelona-Sants y billete sencillo de Rodalies según el planificador oficial de Rodalies para el martes 27 de octubre de 2026; alta velocidad según los datos abiertos de Renfe. Comprueba el servicio del día: algún trayecto puede requerir transbordo.",
-  en: "Journey time from Barcelona-Sants and Rodalies single fare from the official Rodalies journey planner for Tuesday 27 October 2026; high-speed times from Renfe's open data. Check the service on the day: some journeys may involve a change.",
+  ca: "Durada de Barcelona-Sants i bitllet senzill de Rodalies segons el cercador oficial de Rodalies, llegit de nou el 25 de novembre de 2026 (primer, el 27 d'octubre); alta velocitat segons les dades obertes de Renfe, també del 25 de novembre. Comprova el servei del dia: algun trajecte pot requerir transbordament.",
+  es: "Duración desde Barcelona-Sants y billete sencillo de Rodalies según el planificador oficial de Rodalies, leído de nuevo el 25 de noviembre de 2026 (antes, el 27 de octubre); alta velocidad según los datos abiertos de Renfe, también del 25 de noviembre. Comprueba el servicio del día: algún trayecto puede requerir transbordo.",
+  en: "Journey time from Barcelona-Sants and Rodalies single fare from the official Rodalies journey planner, re-read on 25 November 2026 (first on 27 October); high-speed times from Renfe's open data, also of 25 November. Check the service on the day: some journeys may involve a change.",
 };
 
 const VIC_R3 = {
@@ -72,14 +83,14 @@ function ca(): Block[] {
         ["Girona", "R11 o alta velocitat", "1 h 19–1 h 41 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
         ["Tarragona", "Regionals R14–R17", "69 min", "8,60 €", "Patrimoni romà i Mediterrani"],
         ["Vic", "R3 (tallada entre Barcelona i Sant Martí de Centelles)", "—", "—", "Plaça Major, mercat i art medieval"],
-        ["Figueres", "R11 o alta velocitat", "1 h 50–2 h 18 (R11), 42–65 min (alta velocitat a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
+        ["Figueres", "R11 o alta velocitat", "1 h 50–2 h 18 (R11), 53–65 min (alta velocitat a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
         ["Vilanova i la Geltrú", "R2 Sud i regionals", "32–44 min", "5,50 €", "Platja i Museu del Ferrocarril"],
         ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí i façana marítima"],
         ["Sant Pol de Mar", "R1", "1 h 06", "6,60 €", "Poble de costa tranquil"],
         ["Vilafranca del Penedès", "R4", "1 h 06", "6,60 €", "Cultura del vi i VINSEUM"],
         ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
         ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu i patrimoni ignasià"],
-        ["Terrassa", "R4 (Estació del Nord) o FGC", "52 min (R4)", "5,50 € (R4)", "Modernisme industrial"],
+        ["Terrassa", "R4 (Estació del Nord) o FGC", "51–53 min (R4)", "5,50 € (R4)", "Modernisme industrial"],
       ],
       TABLE_NOTE.ca,
     ),
@@ -190,14 +201,14 @@ function es(): Block[] {
         ["Girona", "R11 o alta velocidad", "1 h 19–1 h 41 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
         ["Tarragona", "Regionales R14–R17", "69 min", "8,60 €", "Patrimonio romano y Mediterráneo"],
         ["Vic", "R3 (cortada entre Barcelona y Sant Martí de Centelles)", "—", "—", "Plaça Major, mercado y arte medieval"],
-        ["Figueres", "R11 o alta velocidad", "1 h 50–2 h 18 (R11), 42–65 min (alta velocidad a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
+        ["Figueres", "R11 o alta velocidad", "1 h 50–2 h 18 (R11), 53–65 min (alta velocidad a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
         ["Vilanova i la Geltrú", "R2 Sud y regionales", "32–44 min", "5,50 €", "Playa y Museo del Ferrocarril"],
         ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí y fachada marítima"],
         ["Sant Pol de Mar", "R1", "1 h 06", "6,60 €", "Pueblo costero tranquilo"],
         ["Vilafranca del Penedès", "R4", "1 h 06", "6,60 €", "Cultura del vino y VINSEUM"],
         ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
         ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu y patrimonio ignaciano"],
-        ["Terrassa", "R4 (Estació del Nord) o FGC", "52 min (R4)", "5,50 € (R4)", "Modernismo industrial"],
+        ["Terrassa", "R4 (Estació del Nord) o FGC", "51–53 min (R4)", "5,50 € (R4)", "Modernismo industrial"],
       ],
       TABLE_NOTE.es,
     ),
@@ -306,14 +317,14 @@ function en(): Block[] {
         ["Girona", "R11 or high-speed", "1 h 19–1 h 41 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
         ["Tarragona", "Regional R14–R17", "69 min", "€8.60", "Roman heritage and the Mediterranean"],
         ["Vic", "R3 (cut between Barcelona and Sant Martí de Centelles)", "—", "—", "Main square, market, medieval art"],
-        ["Figueres", "R11 or high-speed", "1 h 50–2 h 18 (R11), 42–65 min (high-speed to Figueres-Vilafant)", "€12.80–17.10 (R11)", "Dalí Theatre-Museum"],
+        ["Figueres", "R11 or high-speed", "1 h 50–2 h 18 (R11), 53–65 min (high-speed to Figueres-Vilafant)", "€12.80–17.10 (R11)", "Dalí Theatre-Museum"],
         ["Vilanova i la Geltrú", "R2 Sud and regionals", "32–44 min", "€5.50", "Beach and the railway museum"],
         ["Mataró", "R1", "46–50 min", "€5.50", "Nau Gaudí and the seafront"],
         ["Sant Pol de Mar", "R1", "1 h 06", "€6.60", "A quiet coastal village"],
         ["Vilafranca del Penedès", "R4", "1 h 06", "€6.60", "Wine culture and VINSEUM"],
         ["Sant Sadurní d'Anoia", "R4", "54 min", "€5.50", "Cava country"],
         ["Manresa", "R4", "1 h 25–1 h 29", "€8.25", "La Seu and Ignatian heritage"],
-        ["Terrassa", "R4 (Estació del Nord) or FGC", "52 min (R4)", "€5.50 (R4)", "Industrial Modernisme"],
+        ["Terrassa", "R4 (Estació del Nord) or FGC", "51–53 min (R4)", "€5.50 (R4)", "Industrial Modernisme"],
       ],
       TABLE_NOTE.en,
     ),

@@ -13,6 +13,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * PortAventura from Barcelona: when each park opens, ticket "from" prices,
@@ -66,6 +67,22 @@ import {
  * 37 EUR (junior/senior 39 -> 33), two parks 55 -> 44, Ferrari Land 19 / 17;
  * the discount is the site's current online promotion, so it is printed
  * with its date and no name or end date.
+ *
+ * 25 Nov 2026 (factual correction, docs/SEO_EXPERIMENTS.md): the calendar feed
+ * (api/club/calendar/influx/portaventura/MM/YYYY) now carries hours for 2027:
+ * Friday 19 Feb is open 16:00-21:00 (so the closure ends on 18 Feb, not 19),
+ * Fridays 26 Feb, 5 and 12 Mar and Wednesday 17 Mar 16:00-21:00, weekends
+ * 10:30-18:00, then daily from 18 Mar (18:00 on 18-19 Mar, 20:00 on 20 Mar and
+ * 25-28 Mar, 19:00 on 21-24 and 29-31 Mar; April and May also have hours).
+ * Ferrari Land (closed 7 Jan - 18 Mar, opens 19 Mar) and Caribe (opens 22 May)
+ * unchanged; Nov-Jan hours unchanged. R17 (8:33, 10:33, 12:33; back 11:11,
+ * 13:11, 21:41; 9.35 EUR; 1 h 24 out, the planner now says 1 h 26 back where
+ * the PDF said 1 h 28, so the return time is not printed in the glance
+ * table) and RT2 (13 min, 2.70 EUR) re-read from the Rodalies planner; day
+ * tickets from 43 EUR, 37 EUR online (junior 39 / 33, two parks 55 / 44).
+ * Not re-read: "10 EUR more at the ticket office" (the tickets page now shows
+ * a separate ticket-booth price, "from 30 EUR" for the one-day ticket, that
+ * this page does not explain).
  */
 
 const VERIFIED = "2026-10-30";
@@ -89,7 +106,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "PortAventura des de Barcelona: horaris i calendari 2026-2027, entrades i com anar-hi en tren",
     seoTitle: "PortAventura des de Barcelona: horaris i calendari 2026",
     seoDescription:
-      "PortAventura obre cada dia fins al 6 de gener i tanca del 7 de gener al 19 de febrer de 2027. Entrades des de 43 €; tren R17 directe des de Sants.",
+      "PortAventura obre cada dia fins al 6 de gener i tanca del 7 de gener al 18 de febrer de 2027. Entrades des de 43 €; tren R17 directe des de Sants.",
     excerpt: "Horaris i calendari de PortAventura Park, Ferrari Land i Caribe aquesta tardor i hivern, quant costen les entrades i quins trens hi arriben des de Barcelona.",
   },
   es: {
@@ -97,7 +114,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "PortAventura desde Barcelona: horarios y calendario 2026-2027, entradas y cómo ir en tren",
     seoTitle: "PortAventura desde Barcelona: horarios y calendario 2026",
     seoDescription:
-      "PortAventura abre cada día hasta el 6 de enero y cierra del 7 de enero al 19 de febrero de 2027. Entradas desde 43 €; tren R17 directo desde Sants.",
+      "PortAventura abre cada día hasta el 6 de enero y cierra del 7 de enero al 18 de febrero de 2027. Entradas desde 43 €; tren R17 directo desde Sants.",
     excerpt: "Horarios y calendario de PortAventura Park, Ferrari Land y Caribe este otoño e invierno, cuánto cuestan las entradas y qué trenes llegan desde Barcelona.",
   },
   en: {
@@ -105,7 +122,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "PortAventura from Barcelona: opening times, calendar, tickets and the train",
     seoTitle: "PortAventura opening dates 2026-27 and train from Barcelona",
     seoDescription:
-      "Open daily to 6 Jan, closed 7 Jan-19 Feb 2027, weekends from 20 Feb, daily from 18 Mar. Tickets from €43; direct R17 train from Sants, 1 h 24.",
+      "Open daily to 6 Jan, closed 7 Jan-18 Feb 2027, reopens 19 Feb, daily from 18 Mar. Tickets from €43; direct R17 train from Sants, 1 h 24.",
     excerpt: "Opening times and calendar for PortAventura Park, Ferrari Land and Caribe this autumn and winter, ticket prices, and the trains from Barcelona.",
   },
 };
@@ -125,17 +142,17 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "**PortAventura Park** opens **every day until 6 January 2027**, usually **10:30 to 18:00**, and until 19:00 on some Christmas days, with the **Christmas season from 20 November to 6 January**. It is **closed from 7 January to 19 February 2027**; its calendar marks it open at weekends from 20 February and daily from 18 March, hours not yet published. One-day tickets start **from €43**, and three **direct R17 trains** a day run from Barcelona-Sants to the park's station, a 10-minute walk from the park, in 1 h 24.",
+    lead: "**PortAventura Park** opens **every day until 6 January 2027**, usually **10:30 to 18:00**, and until 19:00 on some Christmas days, with the **Christmas season from 20 November to 6 January**. It is **closed from 7 January to 18 February 2027**; its calendar then shows it open on Friday evenings (16:00 to 21:00) and weekends (10:30 to 18:00) from 19 February, and daily from 18 March. One-day tickets start **from €43**, and three **direct R17 trains** a day run from Barcelona-Sants to the park's station, a 10-minute walk from the park, in 1 h 24.",
     calTitle: "PortAventura opening times and calendar 2026-2027",
     calCaption: "PortAventura Park opening times, November 2026 to March 2027",
     calHeaders: ["Dates", "Opening times"],
     calRows: [
       ["16 Nov – 6 Jan (Christmas from 20 Nov)", "Daily 10:30–18:00; until 19:00 on 5–7 Dec, 27–30 Dec and 1–4 Jan"],
-      ["7 Jan – 19 Feb 2027", "Closed"],
-      ["20 Feb – 17 Mar 2027", "Weekends only (20–21 and 27–28 Feb, 6–7 and 13–14 Mar); hours not yet published"],
-      ["From 18 Mar 2027", "Daily; hours not yet published"],
+      ["7 Jan – 18 Feb 2027", "Closed"],
+      ["19 Feb – 17 Mar 2027", "Friday evenings 16:00–21:00 (19 and 26 Feb, 5 and 12 Mar) and Wednesday 17 Mar 16:00–21:00; weekends 10:30–18:00 (20–21 and 27–28 Feb, 6–7 and 13–14 Mar)"],
+      ["From 18 Mar 2027", "Daily from 10:30; closing 18:00 on 18–19 Mar, 20:00 on 20 Mar and 25–28 Mar, 19:00 on 21–24 and 29–31 Mar (April and May are in the calendar too)"],
     ],
-    calNote: "From PortAventura World's official opening calendar, read on 30 October and re-read on 23 November 2026 (November to January).",
+    calNote: "From PortAventura World's official opening calendar, read on 30 October and re-read on 23 November 2026 (November to January); on 25 November it also lists the hours for February to May 2027.",
     otherCaption: "Ferrari Land and Caribe Aquatic Park",
     otherHeaders: ["Park", "When it opens"],
     otherRows: [
@@ -170,10 +187,10 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "What are PortAventura's opening hours?", answer: "PortAventura Park opens every day until 6 January 2027, 10:30 to 18:00, and until 19:00 on 5–7 December, 27–30 December and 1–4 January." },
-      { question: "When does PortAventura close for the winter?", answer: "After 6 January 2027. PortAventura Park is closed from 7 January to 19 February 2027." },
-      { question: "When does PortAventura reopen in 2027?", answer: "Its official calendar marks PortAventura Park open at weekends from 20 February 2027 and daily from 18 March, with hours not yet published. Ferrari Land is marked open from 19 March and Caribe Aquatic Park from 22 May 2027." },
-      { question: "Is PortAventura open in winter?", answer: "Yes until 6 January 2027, every day. It is closed from 7 January to 19 February 2027." },
-      { question: "Is PortAventura open in January 2027?", answer: "Only from 1 to 6 January (10:30 to 19:00 on 1-4 January, to 18:00 on 5 and 6 January). From 7 January it is closed until it reopens at weekends on 20 February 2027." },
+      { question: "When does PortAventura close for the winter?", answer: "After 6 January 2027. PortAventura Park is closed from 7 January to 18 February 2027." },
+      { question: "When does PortAventura reopen in 2027?", answer: "Its official calendar, read on 25 November 2026, shows PortAventura Park open from 19 February 2027: Friday evenings 16:00 to 21:00 and weekends 10:30 to 18:00 until 17 March, then daily from 18 March. Ferrari Land is marked open from 19 March and Caribe Aquatic Park from 22 May 2027." },
+      { question: "Is PortAventura open in winter?", answer: "Yes until 6 January 2027, every day. It is closed from 7 January to 18 February 2027." },
+      { question: "Is PortAventura open in January 2027?", answer: "Only from 1 to 6 January (10:30 to 19:00 on 1-4 January, to 18:00 on 5 and 6 January). From 7 January it is closed until it reopens on Friday 19 February 2027 (evening only)." },
       { question: "How much is a PortAventura ticket?", answer: "From €43 for an adult one-day ticket and €39 for children 4 to 10 and over-60s, depending on the date (online discounts can lower it: €37 and €33 on 23 November 2026); €10 more at the ticket office." },
       { question: "How far is the station from PortAventura?", answer: "Salou-Port Aventura station is about a 10-minute walk from the park, according to Renfe." },
       { question: "How do I get to PortAventura by train from Barcelona?", answer: "On one of the three direct R17 trains from Sants (8:33, 10:33 or 12:33, 1 h 24), or by regional train to Tarragona and the RT2 shuttle to Salou-Port Aventura." },
@@ -182,17 +199,17 @@ const COPY: Record<Locale, T> = {
     note: "Park calendars and train services change: check PortAventura and Rodalies for your date.",
   },
   es: {
-    lead: "**PortAventura Park** abre **cada día hasta el 6 de enero de 2027**, normalmente **de 10:30 a 18:00**, y hasta las 19:00 algunos días de Navidad, con la **temporada de Navidad del 20 de noviembre al 6 de enero**. Después **cierra del 7 de enero al 19 de febrero de 2027**; su calendario lo marca abierto los fines de semana desde el 20 de febrero y cada día desde el 18 de marzo, aún sin horario. Las entradas de un día van **desde 43 €**, y tres **trenes R17 directos** al día van de Barcelona-Sants a la estación del parque, a 10 minutos a pie, en 1 h 24.",
+    lead: "**PortAventura Park** abre **cada día hasta el 6 de enero de 2027**, normalmente **de 10:30 a 18:00**, y hasta las 19:00 algunos días de Navidad, con la **temporada de Navidad del 20 de noviembre al 6 de enero**. Después **cierra del 7 de enero al 18 de febrero de 2027**; su calendario lo muestra abierto desde el 19 de febrero los viernes por la tarde (de 16:00 a 21:00) y los fines de semana (de 10:30 a 18:00), y cada día desde el 18 de marzo. Las entradas de un día van **desde 43 €**, y tres **trenes R17 directos** al día van de Barcelona-Sants a la estación del parque, a 10 minutos a pie, en 1 h 24.",
     calTitle: "Horarios y calendario de PortAventura 2026-2027",
     calCaption: "Horarios de PortAventura Park, de noviembre de 2026 a marzo de 2027",
     calHeaders: ["Fechas", "Horario"],
     calRows: [
       ["16 nov – 6 ene (Navidad desde el 20 nov)", "Cada día de 10:30 a 18:00; hasta las 19:00 el 5–7 dic, el 27–30 dic y el 1–4 ene"],
-      ["7 ene – 19 feb 2027", "Cerrado"],
-      ["20 feb – 17 mar 2027", "Solo fines de semana (20–21 y 27–28 feb, 6–7 y 13–14 mar); horario aún no publicado"],
-      ["Desde el 18 mar 2027", "Cada día; horario aún no publicado"],
+      ["7 ene – 18 feb 2027", "Cerrado"],
+      ["19 feb – 17 mar 2027", "Viernes por la tarde de 16:00 a 21:00 (19 y 26 feb, 5 y 12 mar) y miércoles 17 mar de 16:00 a 21:00; fines de semana de 10:30 a 18:00 (20–21 y 27–28 feb, 6–7 y 13–14 mar)"],
+      ["Desde el 18 mar 2027", "Cada día desde las 10:30; cierre a las 18:00 el 18–19 mar, a las 20:00 el 20 mar y el 25–28 mar, a las 19:00 el 21–24 y el 29–31 mar (abril y mayo también figuran en el calendario)"],
     ],
-    calNote: "Del calendario oficial de apertura de PortAventura World, consultado el 30 de octubre y de nuevo el 23 de noviembre de 2026 (de noviembre a enero).",
+    calNote: "Del calendario oficial de apertura de PortAventura World, consultado el 30 de octubre y de nuevo el 23 de noviembre de 2026 (de noviembre a enero); el 25 de noviembre incluye también los horarios de febrero a mayo de 2027.",
     otherCaption: "Ferrari Land y Caribe Aquatic Park",
     otherHeaders: ["Parque", "Cuándo abre"],
     otherRows: [
@@ -227,9 +244,9 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "¿Qué horario tiene PortAventura?", answer: "PortAventura Park abre todos los días hasta el 6 de enero de 2027, de 10:30 a 18:00, y hasta las 19:00 el 5, 6 y 7 de diciembre, del 27 al 30 de diciembre y del 1 al 4 de enero." },
-      { question: "¿Cuándo cierra PortAventura?", answer: "Después del 6 de enero de 2027. PortAventura Park está cerrado del 7 de enero al 19 de febrero de 2027." },
-      { question: "¿Cuándo abre PortAventura en 2027?", answer: "Su calendario oficial marca PortAventura Park abierto los fines de semana desde el 20 de febrero de 2027 y cada día desde el 18 de marzo, aún sin horario publicado. Ferrari Land figura abierto desde el 19 de marzo y Caribe Aquatic Park, desde el 22 de mayo de 2027." },
-      { question: "¿Abre PortAventura en invierno?", answer: "Sí hasta el 6 de enero de 2027, todos los días. Cierra del 7 de enero al 19 de febrero de 2027." },
+      { question: "¿Cuándo cierra PortAventura?", answer: "Después del 6 de enero de 2027. PortAventura Park está cerrado del 7 de enero al 18 de febrero de 2027." },
+      { question: "¿Cuándo abre PortAventura en 2027?", answer: "Su calendario oficial, consultado el 25 de noviembre de 2026, muestra PortAventura Park abierto desde el 19 de febrero de 2027: viernes por la tarde de 16:00 a 21:00 y fines de semana de 10:30 a 18:00 hasta el 17 de marzo, y cada día desde el 18 de marzo. Ferrari Land figura abierto desde el 19 de marzo y Caribe Aquatic Park, desde el 22 de mayo de 2027." },
+      { question: "¿Abre PortAventura en invierno?", answer: "Sí hasta el 6 de enero de 2027, todos los días. Cierra del 7 de enero al 18 de febrero de 2027." },
       { question: "¿Cuánto cuesta la entrada a PortAventura?", answer: "Desde 43 € la entrada de adulto de un día y 39 € para niños de 4 a 10 años y mayores de 60, según la fecha (los descuentos en línea pueden bajarlo: 37 € y 33 € el 23 de noviembre de 2026); 10 € más en taquilla." },
       { question: "¿A qué distancia está la estación de PortAventura?", answer: "La estación de Salou-Port Aventura está a unos 10 minutos a pie del parque, según Renfe." },
       { question: "¿Cómo se va a PortAventura en tren desde Barcelona?", answer: "En uno de los tres R17 directos desde Sants (8:33, 10:33 o 12:33, 1 h 24), o en regional hasta Tarragona y la lanzadera RT2 hasta Salou-Port Aventura." },
@@ -238,17 +255,17 @@ const COPY: Record<Locale, T> = {
     note: "Los calendarios de los parques y los trenes cambian: consulta PortAventura y Rodalies para tu fecha.",
   },
   ca: {
-    lead: "**PortAventura Park** obre **cada dia fins al 6 de gener de 2027**, normalment **de 10:30 a 18:00**, i fins a les 19:00 alguns dies de Nadal, amb la **temporada de Nadal del 20 de novembre al 6 de gener**. Després **tanca del 7 de gener al 19 de febrer de 2027**; el seu calendari el marca obert els caps de setmana des del 20 de febrer i cada dia des del 18 de març, encara sense horari. Les entrades d'un dia van **des de 43 €**, i tres **trens R17 directes** al dia van de Barcelona-Sants a l'estació del parc, a 10 minuts a peu, en 1 h 24.",
+    lead: "**PortAventura Park** obre **cada dia fins al 6 de gener de 2027**, normalment **de 10:30 a 18:00**, i fins a les 19:00 alguns dies de Nadal, amb la **temporada de Nadal del 20 de novembre al 6 de gener**. Després **tanca del 7 de gener al 18 de febrer de 2027**; el seu calendari el mostra obert des del 19 de febrer els divendres a la tarda (de 16:00 a 21:00) i els caps de setmana (de 10:30 a 18:00), i cada dia des del 18 de març. Les entrades d'un dia van **des de 43 €**, i tres **trens R17 directes** al dia van de Barcelona-Sants a l'estació del parc, a 10 minuts a peu, en 1 h 24.",
     calTitle: "Horaris i calendari de PortAventura 2026-2027",
     calCaption: "Horaris de PortAventura Park, de novembre de 2026 a març de 2027",
     calHeaders: ["Dates", "Horari"],
     calRows: [
       ["16 nov – 6 gen (Nadal des del 20 nov)", "Cada dia de 10:30 a 18:00; fins a les 19:00 el 5–7 des, el 27–30 des i l'1–4 gen"],
-      ["7 gen – 19 febr 2027", "Tancat"],
-      ["20 febr – 17 març 2027", "Només caps de setmana (20–21 i 27–28 febr, 6–7 i 13–14 març); horari encara no publicat"],
-      ["Des del 18 març 2027", "Cada dia; horari encara no publicat"],
+      ["7 gen – 18 febr 2027", "Tancat"],
+      ["19 febr – 17 març 2027", "Divendres a la tarda de 16:00 a 21:00 (19 i 26 febr, 5 i 12 març) i dimecres 17 març de 16:00 a 21:00; caps de setmana de 10:30 a 18:00 (20–21 i 27–28 febr, 6–7 i 13–14 març)"],
+      ["Des del 18 març 2027", "Cada dia des de les 10:30; tancament a les 18:00 el 18–19 març, a les 20:00 el 20 març i el 25–28 març, a les 19:00 el 21–24 i el 29–31 març (abril i maig també hi són al calendari)"],
     ],
-    calNote: "Del calendari oficial d'obertura de PortAventura World, consultat el 30 d'octubre i de nou el 23 de novembre de 2026 (de novembre a gener).",
+    calNote: "Del calendari oficial d'obertura de PortAventura World, consultat el 30 d'octubre i de nou el 23 de novembre de 2026 (de novembre a gener); el 25 de novembre inclou també els horaris de febrer a maig de 2027.",
     otherCaption: "Ferrari Land i Caribe Aquatic Park",
     otherHeaders: ["Parc", "Quan obre"],
     otherRows: [
@@ -283,9 +300,9 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "Quin horari té PortAventura?", answer: "PortAventura Park obre cada dia fins al 6 de gener de 2027, de 10:30 a 18:00, i fins a les 19:00 el 5, 6 i 7 de desembre, del 27 al 30 de desembre i de l'1 al 4 de gener." },
-      { question: "Quan tanca PortAventura?", answer: "Després del 6 de gener de 2027. PortAventura Park és tancat del 7 de gener al 19 de febrer de 2027." },
-      { question: "Quan obre PortAventura el 2027?", answer: "El seu calendari oficial marca PortAventura Park obert els caps de setmana des del 20 de febrer de 2027 i cada dia des del 18 de març, encara sense horari publicat. Ferrari Land hi figura obert des del 19 de març i Caribe Aquatic Park, des del 22 de maig de 2027." },
-      { question: "Obre PortAventura a l'hivern?", answer: "Sí fins al 6 de gener de 2027, cada dia. Tanca del 7 de gener al 19 de febrer de 2027." },
+      { question: "Quan tanca PortAventura?", answer: "Després del 6 de gener de 2027. PortAventura Park és tancat del 7 de gener al 18 de febrer de 2027." },
+      { question: "Quan obre PortAventura el 2027?", answer: "El seu calendari oficial, consultat el 25 de novembre de 2026, mostra PortAventura Park obert des del 19 de febrer de 2027: divendres a la tarda de 16:00 a 21:00 i caps de setmana de 10:30 a 18:00 fins al 17 de març, i cada dia des del 18 de març. Ferrari Land hi figura obert des del 19 de març i Caribe Aquatic Park, des del 22 de maig de 2027." },
+      { question: "Obre PortAventura a l'hivern?", answer: "Sí fins al 6 de gener de 2027, cada dia. Tanca del 7 de gener al 18 de febrer de 2027." },
       { question: "Quant costa l'entrada a PortAventura?", answer: "Des de 43 € l'entrada d'adult d'un dia i 39 € per a infants de 4 a 10 anys i majors de 60, segons la data (els descomptes en línia el poden abaixar: 37 € i 33 € el 23 de novembre de 2026); 10 € més a taquilla." },
       { question: "A quina distància és l'estació de PortAventura?", answer: "L'estació de Salou-Port Aventura és a uns 10 minuts a peu del parc, segons Renfe." },
       { question: "Com s'hi va a PortAventura en tren des de Barcelona?", answer: "Amb un dels tres R17 directes des de Sants (8:33, 10:33 o 12:33, 1 h 24), o amb regional fins a Tarragona i la llançadora RT2 fins a Salou-Port Aventura." },
@@ -320,7 +337,7 @@ function body(locale: Locale) {
   ];
 }
 
-export const PORTAVENTURA: B2Article = {
+const PORTAVENTURA_BASE: B2Article = {
   key: "portaventura",
   entryKey: "daytrip-portaventura-from-barcelona",
   categoryKey: "coast",
@@ -355,3 +372,6 @@ export const PORTAVENTURA: B2Article = {
 };
 
 export { META as PORTAVENTURA_META };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const PORTAVENTURA: B2Article = withGlance(PORTAVENTURA_BASE, "portaventura");

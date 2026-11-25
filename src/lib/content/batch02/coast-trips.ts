@@ -17,6 +17,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * Two day trips south of Barcelona by train: Sitges and Tarragona.
@@ -652,7 +653,7 @@ function tarragonaBody(locale: Locale) {
   ];
 }
 
-export const TARRAGONA: B2Article = {
+const TARRAGONA_BASE: B2Article = {
   key: "tarragona",
   entryKey: "daytrip-tarragona-from-barcelona",
   categoryKey: "cities",
@@ -687,3 +688,6 @@ export const TARRAGONA: B2Article = {
 };
 
 export { SITGES_META, TARRAGONA_META };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const TARRAGONA: B2Article = withGlance(TARRAGONA_BASE, "tarragona");

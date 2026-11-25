@@ -13,10 +13,12 @@ import type { WeekendAgendas } from "@/lib/programmatic/weekend/agenda-server";
 import { christmasFairsThisWeekend } from "@/lib/programmatic/weekend/christmas-weekend";
 import { HUB_CRUMB, fullDate, hubMeta, longWeekendNote, rangeLong, sectionTitles } from "@/lib/programmatic/weekend/copy";
 import { SNAPSHOT, listedFairs, shippedZones } from "@/lib/programmatic/weekend/data";
+import { hubFacts } from "@/lib/programmatic/weekend/facts";
 import { weekendHubPath, zonePath } from "@/lib/programmatic/weekend/paths";
 import { zoneById, type WeekendLocale } from "@/lib/programmatic/weekend/zones";
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
+import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
 import { FairList, Guidance, LinkList, Sources } from "./parts";
 
 export function hubCrumbs(locale: WeekendLocale): Crumb[] {
@@ -41,6 +43,9 @@ const COPY: Record<WeekendLocale, { lead: string; barcelona: (n: number | null) 
   },
 };
 
+/** How a sentence places the Catalonia-wide page. */
+export const HUB_WHERE: Record<WeekendLocale, string> = { ca: "a Catalunya", es: "en Cataluña" };
+
 const BARCELONA = zoneById("barcelona");
 const BARCELONA_LINK: Record<WeekendLocale, string> = { ca: "Què fer a Barcelona aquest cap de setmana", es: "Qué hacer en Barcelona este fin de semana" };
 
@@ -54,6 +59,7 @@ export function HubPage({ locale, window, agendas }: { locale: WeekendLocale; wi
   const barcelonaCount = agendas.bcn.read ? mergeBarcelona(agendas.bcn.read.items, items).length : null;
   const christmas = christmasFairsThisWeekend(window, agendas.today, locale);
   const longNote = longWeekendNote(window, locale);
+  const facts = hubFacts(locale, agendas, HUB_WHERE[locale]);
   const zones = shippedZones().map((z) => ({ label: z.name[locale], href: zonePath(locale, z) }));
 
   return (
@@ -73,9 +79,9 @@ export function HubPage({ locale, window, agendas }: { locale: WeekendLocale; wi
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
-          <h2 id="fires" className="!mt-0">
-            {t.fairsNow}
-          </h2>
+          <WeekendFactsTable facts={facts} />
+
+          <h2 id="fires">{t.fairsNow}</h2>
           {now.length > 0 ? (
             <>
               <FairList fairs={now} locale={locale} />
@@ -105,6 +111,7 @@ export function HubPage({ locale, window, agendas }: { locale: WeekendLocale; wi
           <h2 id="properes-fires">{t.fairsNext}</h2>
           {next.length > 0 ? <FairList fairs={next} locale={locale} /> : <p>{t.noFairsAfter(fullDate(SNAPSHOT.readOn, locale))}</p>}
           <Guidance locale={locale} zone={null} widerName={null} />
+          <WeekendFaq facts={facts} />
         </div>
 
         <LinkList

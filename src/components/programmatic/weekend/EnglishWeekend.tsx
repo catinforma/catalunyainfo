@@ -16,13 +16,16 @@ import { inPlace, mergeBarcelona, type AgendaItem } from "@/lib/programmatic/wee
 import { loadWeekendAgendas, type WeekendAgendas } from "@/lib/programmatic/weekend/agenda-server";
 import { christmasFairsThisWeekend } from "@/lib/programmatic/weekend/christmas-weekend";
 import { SNAPSHOT, listedFairs, shippedZones } from "@/lib/programmatic/weekend/data";
+import { hubFacts, zoneFacts } from "@/lib/programmatic/weekend/facts";
 import { englishHubPath, englishZonePath, hubTranslations, zonePath, zoneTranslations } from "@/lib/programmatic/weekend/paths";
+import { weekendFaqNode } from "@/lib/programmatic/weekend/structured";
 import type { SnapshotFair } from "@/lib/programmatic/weekend/types";
 import { zoneById, zoneFilter } from "@/lib/programmatic/weekend/zones";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { AgendaList, AgendaSources, ChristmasThisWeekend } from "./AgendaList";
+import { WeekendFactsTable, WeekendFaq } from "./WeekendFacts";
 
 /**
  * The English weekend pages: /en/weekend/ (Catalonia) and
@@ -111,6 +114,7 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
   const bcnCount = data.bcn.read ? mergeBarcelona(data.bcn.read.items, items).length : null;
   const zones = shippedZones().map((z) => ({ label: z.name.es, href: englishZonePath(z) ?? zonePath("es", z), en: Boolean(englishZonePath(z)) }));
   const sources = [{ source: "gencat" as const, view: data.gencat }];
+  const facts = hubFacts("en", data, "in Catalonia");
 
   return (
     <>
@@ -132,7 +136,9 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
-              <p className="!mt-0">
+              <WeekendFactsTable facts={facts} />
+
+              <p>
                 <Link href={englishZonePath(BARCELONA)!}>Things to do in Barcelona this weekend</Link>
                 {bcnCount ? ` — ${bcnCount} activities from the City Council's agenda and the Generalitat's, by day.` : " — from the City Council's agenda, by day."}
               </p>
@@ -143,6 +149,7 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
               <ChristmasThisWeekend locale="en" towns={christmas} id="christmas-markets" />
 
               <AgendaList locale="en" id="agenda" window={window} today={today} items={items} sources={sources} more="gencat" showTown />
+              <WeekendFaq facts={facts} />
             </div>
 
             <section className="mt-10" aria-labelledby="ci-weekend-zones">
@@ -170,7 +177,7 @@ export async function EnglishHubRoute({ agendas }: { agendas?: WeekendAgendas } 
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs())])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs()), weekendFaqNode(facts.faq)])} />
       <SiteFooter locale="en" />
     </>
   );
@@ -199,6 +206,7 @@ export async function EnglishBarcelonaRoute({ agendas }: { agendas?: WeekendAgen
     { source: "gencat" as const, view: data.gencat },
   ];
   const guides = BARCELONA.guides.map((key) => ({ label: B2_TITLES[key].en, href: b2href(key, "en") }));
+  const facts = zoneFacts(BARCELONA, "en", data, "in Barcelona");
 
   return (
     <>
@@ -220,6 +228,8 @@ export async function EnglishBarcelonaRoute({ agendas }: { agendas?: WeekendAgen
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
+              <WeekendFactsTable facts={facts} />
+
               <ChristmasThisWeekend locale="en" towns={christmas} id="christmas-markets" />
 
               <AgendaList locale="en" id="agenda" window={window} today={today} items={items} sources={sources} more="bcn" showTown={false} />
@@ -230,6 +240,7 @@ export async function EnglishBarcelonaRoute({ agendas }: { agendas?: WeekendAgen
                   <FairsNow fairs={fairsNow} />
                 </>
               ) : null}
+              <WeekendFaq facts={facts} />
             </div>
 
             <section className="mt-10" aria-labelledby="ci-weekend-guides">
@@ -252,7 +263,7 @@ export async function EnglishBarcelonaRoute({ agendas }: { agendas?: WeekendAgen
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(barcelonaCrumbs())])} />
+      <JsonLd json={graph([breadcrumbSchema(barcelonaCrumbs()), weekendFaqNode(facts.faq)])} />
       <SiteFooter locale="en" />
     </>
   );

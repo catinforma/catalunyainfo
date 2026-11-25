@@ -10,7 +10,8 @@
  * the browser after load, so no markup describes them.
  */
 
-import { townEventSchema } from "@/lib/seo/jsonld";
+import type { Block } from "@/lib/content/blocks";
+import { faqSchema, townEventSchema } from "@/lib/seo/jsonld";
 import { esName } from "@/lib/programmatic/holidays/names";
 
 import type { ProvinceCode, SnapshotFair } from "./types";
@@ -40,4 +41,12 @@ export function fairEvents(listed: { now: readonly SnapshotFair[]; next: readonl
         url: f.web,
       }),
     );
+}
+
+/**
+ * FAQPage JSON-LD from the same items the page shows in its visible FAQ
+ * (`facts.ts`); null when the page has none. One per page.
+ */
+export function weekendFaqNode(items: readonly { question: string; answer: string }[]) {
+  return items.length > 0 ? faqSchema([{ type: "faq", items: [...items] } as Block]) : null;
 }

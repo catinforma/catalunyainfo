@@ -13,6 +13,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * Vall de Núria from Barcelona: the Cremallera, fares, the R3 and the valley.
@@ -356,7 +357,7 @@ function body(locale: Locale) {
   ];
 }
 
-export const NURIA: B2Article = {
+const NURIA_BASE: B2Article = {
   key: "nuria",
   entryKey: "daytrip-vall-de-nuria-rack-railway",
   categoryKey: "mountain",
@@ -391,3 +392,6 @@ export const NURIA: B2Article = {
 };
 
 export { META as NURIA_META };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const NURIA: B2Article = withGlance(NURIA_BASE, "nuria");

@@ -9,12 +9,13 @@ import { loadWeekendAgendas } from "@/lib/programmatic/weekend/agenda-server";
 import { hubMeta, zoneDescription, zoneTitle } from "@/lib/programmatic/weekend/copy";
 import { listedFairs } from "@/lib/programmatic/weekend/data";
 import { hubTranslations, weekendHubPath, zonePath, zoneTranslations } from "@/lib/programmatic/weekend/paths";
-import { fairEvents } from "@/lib/programmatic/weekend/structured";
+import { zoneFacts, hubFacts } from "@/lib/programmatic/weekend/facts";
+import { fairEvents, weekendFaqNode } from "@/lib/programmatic/weekend/structured";
 import type { WeekendLocale, ZoneDef } from "@/lib/programmatic/weekend/zones";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-import { HubPage, hubCrumbs } from "./HubPage";
+import { HUB_WHERE, HubPage, hubCrumbs } from "./HubPage";
 import { ZonePage, zoneCrumbs } from "./ZonePage";
 
 /**
@@ -53,7 +54,7 @@ export async function HubRoute({ locale }: { locale: WeekendLocale }) {
         <HubPage locale={locale} window={window} agendas={agendas} />
       </main>
       {/* The fairs the page lists for this weekend: the same call HubPage makes. */}
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), ...fairEvents(listedFairs(null, window), weekendHubPath(locale), locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), ...fairEvents(listedFairs(null, window), weekendHubPath(locale), locale), weekendFaqNode(hubFacts(locale, agendas, HUB_WHERE[locale]).faq)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -79,7 +80,7 @@ export async function ZoneRoute({ locale, zone }: { locale: WeekendLocale; zone:
         <ZonePage zone={zone} locale={locale} window={window} agendas={agendas} />
       </main>
       {/* The fairs the page lists for this weekend: the same call ZonePage makes. */}
-      <JsonLd json={graph([breadcrumbSchema(zoneCrumbs(zone, locale)), ...fairEvents(listedFairs(zone, window), zonePath(locale, zone), locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(zoneCrumbs(zone, locale)), ...fairEvents(listedFairs(zone, window), zonePath(locale, zone), locale), weekendFaqNode(zoneFacts(zone, locale, agendas, zone.in[locale]).faq)])} />
       <SiteFooter locale={locale} />
     </>
   );

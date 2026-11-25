@@ -15,6 +15,7 @@ import {
   verifiedLine,
   type B2Article,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * Day trips from Barcelona: Girona by train, Montserrat without a tour, and
@@ -155,7 +156,7 @@ function gironaHighSpeed(locale: "ca" | "es" | "en") {
   return [...h2(g.title, g.intro), table(g.caption, g.headers, g.rows, g.note)];
 }
 
-export const GIRONA: B2Article = {
+const GIRONA_BASE: B2Article = {
   key: "girona",
   entryKey: "daytrip-girona-from-barcelona",
   categoryKey: "coast",
@@ -1736,3 +1737,6 @@ export const CERDANYA: B2Article = {
     },
   },
 };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const GIRONA: B2Article = withGlance(GIRONA_BASE, "girona");

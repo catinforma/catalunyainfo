@@ -12,6 +12,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { withGlance } from "./day-trip-glance";
 
 /**
  * Andorra from Barcelona by bus, and what to know at the border.
@@ -288,7 +289,7 @@ function body(locale: Locale) {
   ];
 }
 
-export const ANDORRA: B2Article = {
+const ANDORRA_BASE: B2Article = {
   key: "andorra",
   entryKey: "daytrip-andorra-from-barcelona-bus",
   categoryKey: "mountain",
@@ -323,3 +324,6 @@ export const ANDORRA: B2Article = {
 };
 
 export { META as ANDORRA_META };
+
+/** With the dated transport re-read of 25 Nov 2026 under the first callout (day-trip-glance.ts). */
+export const ANDORRA: B2Article = withGlance(ANDORRA_BASE, "andorra");
