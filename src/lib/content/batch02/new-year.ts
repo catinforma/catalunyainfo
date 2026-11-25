@@ -347,7 +347,7 @@ function moreFaq(locale: Locale, facts: Announcements): { question: string; answ
 
 const NYE_METRO_DAYS = [DAYS.newYearsEve, DAYS.newYear, DAYS.reisEve, DAYS.reis] as const;
 
-const RELATED = ["christmasBarcelona", "hours", "shops", "winterSales", "montjuic", "workCalendar", "christmas", "barcelonaHub"] as const;
+const RELATED = ["christmasBarcelona", "hours", "shops", "winterSales", "barcelonaWinter", "montjuic", "workCalendar", "christmas", "barcelonaHub"] as const;
 
 export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCED_2026) {
   if (locale === "ca") {

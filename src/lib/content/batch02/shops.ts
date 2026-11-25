@@ -827,7 +827,7 @@ function body(locale: Locale) {
     ...h2(t.salesTitle, ...t.sales),
     ...paras(christmas[locale]),
     faq(t.faq),
-    ...b2Related(["christmas", "barcelonaHub", "markets", "hours"], locale),
+    ...b2Related(["christmas", "barcelonaHub", "markets", "hours", "barcelonaWinter"], locale),
   ];
 }
 

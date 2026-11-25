@@ -331,7 +331,7 @@ export function buildWinterSalesBody(L: Locale): Block[] {
     ...h2(t.faqH),
     faq(t.faq),
     callout("official", verifiedLine(L, W.asOf), t.callout),
-    ...b2Related(["shops", "shopsSpainDecember", "barcelonaDecember", "newYear", "reis", "holidayToday"], L),
+    ...b2Related(["shops", "barcelonaWinter", "shopsSpainDecember", "barcelonaDecember", "newYear", "reis", "holidayToday"], L),
   ];
 }
 

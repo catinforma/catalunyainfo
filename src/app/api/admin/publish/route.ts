@@ -347,9 +347,9 @@ export async function POST(request: Request) {
       published.push(await publishB2Article(SHOPS), await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(NEW_YEAR), await publishB2Article(REIS), await publishHolidayTodayGuide());
     }
     // 25 Nov 2026: Barcelona in January and February 2027 (ca/es/en), on its own.
-    // `barcelona-gener-febrer-links` republishes what gained a link to it: Barcelona in December and the weather guide.
+    // `barcelona-gener-febrer-links` republishes what gained a link to it: Barcelona in December, the weather guide, the Barcelona hub, winter sales, shops, New Year and Reis.
     if (wants("barcelona-gener-febrer")) published.push(await publishB2Article(BARCELONA_WINTER_GUIDE));
-    if (wants("barcelona-gener-febrer-links")) published.push(await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(CLIMATE));
+    if (wants("barcelona-gener-febrer-links")) published.push(await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(CLIMATE), await publishB2Article(BARCELONA_HUB), await publishB2Article(WINTER_SALES_GUIDE), await publishB2Article(SHOPS), await publishB2Article(NEW_YEAR), await publishB2Article(REIS));
     // 13 Nov 2026: the TSI health card (ca, es, en), on its own. The padró guide
     // and the Barcelona hub gained a link to it (the hub also got the English
     // Montserrat anchor in the query's words): `tsi-links`.
