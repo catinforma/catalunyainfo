@@ -14037,3 +14037,45 @@ The English line pages had 0 editorial inlinks (`/en/rodalies/r2/`, `r4/`, `r1/`
 **Tests.** `tests/llms-and-metadata.test.ts` (+1, 12 pass): each added URL is in the file, none is on the low-demand list, no URL appears twice with the strike guides also given as guides; the existing sitemap-membership test covers the new hubs. `tsc --noEmit` clean.
 
 **Go-live.** Code route: deploy only. No publish group (the file revalidates daily, `revalidate = 86400`; the next request after a deploy rebuilds it). No IndexNow.
+
+## 2026-11-25 (ci-analitica + ci-demanda) — Spain 2027 holidays family: where the demand is not captured (analysis only, no page changed; review 2026-12-10)
+
+Method: GSC query x page, queries containing "2027" and festiv/calendari/puente/pont/laboral/holiday (1,496 queries, 14,780 impressions, 220 clicks; anonymised queries are not in the API). Page status from `holidayFamilyPaths()` + `CITIES` + `isLowDemandPath` (25 Nov), live curl 25 Nov. Click estimate at position 5 uses the family's own CTR (holiday queries, 28 d): pos 5 = 4.3 % (pos 1 5.6, 3 8.5, 8 0.8, 10 0.4); the whole site's curve gives 6.05 % at pos 5, so read the numbers as the low case.
+
+### Findings
+1. "No page at all": none. Every place named in a 2027 festivos/calendario laboral query (258 places) already has an indexable ES page (2027 city page or Catalan town page); 143 residual place words, 1,548 impressions, all matched a page ranking 5-10.
+2. "Noindex page": nothing to unblock. 19 noindex ca/en 2027 pages had 37 impressions and 0 clicks in 28 d (served before the 17-18 Nov rule); 20 queries have a now-noindex page as best page: 96 impressions, 0 clicks, each has an ES twin ranking about the same (Vigo ca 43 impr at 10 vs ES 10.9; Yecla 12; Extremadura/Galicia/Murcia region ca pages 5-9). Leave low-demand.ts as is for 10 Dec.
+3. "Weak page" is the whole gap: 236 of 258 places sit at position > 5 (177 at 5-10 = 8,883 impressions; 59 at > 10 = 1,391). Clicks 189 / 10,843 impressions = 1.7 %. At pos 5 everywhere: +319 clicks / 28 d (low case; not reachable everywhere).
+4. Unranked (best page > 20 or none): 114 queries, 290 impressions: big cities and Spain-wide head terms. GSC understates their real volume because we sit on page 3-5.
+5. Spain "puentes" page (/es/festivos/2027/puentes/, ca, en): indexable, in the sitemap, linked from every city page, 0 impressions in 28 d. "puentes 2027" (22 impr, pos 19.7) is served by the Catalonia work-calendar guide, not by it.
+6. "Date" queries ("17 de mayo 2027 es festivo", 82 queries, 646 impr, pos 4-7) have 0 clicks: answered on the SERP; no work.
+7. "cuantos festivos hay en 2027": 0 impressions (12 impr for the whole "dias festivos" family). No page.
+
+### By region (ES 2027 city pages + Catalan town pages)
+| cluster | places | impr | clicks | pos | clicks more at pos 5 |
+|---|---|---|---|---|---|
+| Andalucia | 43 | 1,704 | 11 | 8.2 | +64 |
+| Madrid (community) | 21 | 1,959 | 22 | 9.1 | +63 |
+| Catalonia town pages | 39 | 3,375 | 118 | 7.1 | +61 |
+| Comunidad Valenciana | 43 | 1,367 | 22 | 8.9 | +39 |
+| Galicia | 22 | 535 | 1 | 10.0 | +22 |
+| Canarias, Murcia, Asturias, Cantabria, CyL, P. Vasco | 67 | 1,648 | 17 | 8-10 | +59 |
+
+### Top 10 actions
+| # | Action | Page(s) | Evidence (28 d) | +clicks at pos 5 |
+|---|---|---|---|---|
+| 1 | Strengthen (template: answer first screen, official list link) | 21 Madrid-community cities: Alcobendas, Pinto, Parla, Valdemoro, S.S. de los Reyes, Alcorcon, Coslada, Collado Villalba, Las Rozas | Alcobendas 382 impr / 4 clicks / pos 9.2 (festivos 106, calendario laboral 96, locales 58); cluster 1,959 / 22 / 9.1 | +63 (Alcobendas +12) |
+| 2 | Strengthen | Marbella, Jerez, Chiclana, El Ejido, Dos Hermanas, Fuengirola | Marbella 349 / 1 / 8.1 (calendario laboral marbella 131 at 8.8, EN "marbella bank holiday 2027" 60 at 5.0); cluster 1,704 / 11 | +64 (Marbella +14) |
+| 3 | Strengthen, Catalan towns | /es/festivos/ badalona, lleida, vilanova-i-la-geltru, terrassa, granollers | Badalona 373 / 5 / 8.6; Lleida 190 / 1 / 9.0; Vilanova 140 / 0 / 8.0; Terrassa 126 / 0 / 9.5 | +33 of the +61 |
+| 4 | Strengthen | Paterna, Sagunto, San Vicente, Benidorm, Gandia, Alicante, Valencia | Paterna 192 / 1 / 7.2; Sagunto 147 / 1 / 7.0; San Vicente 124 / 1 / 8.3 | +39 |
+| 5 | Strengthen the Spain hub + regions | /es/festivos/2027/, madrid/, comunidad-valenciana/, andalucia/ | hub 117 impr pos 34; "calendario laboral 2027" 131 at 34.8; "festivos nacionales 2027" pos 34.7; Madrid region 44 at 38.8, Valencia 34 at 40.5 | unmeasured: volume hidden below pos 30 |
+| 6 | Link: Catalonia puentes + work-calendar guides to the Spain puentes page | /es/guias/puentes-2027-cataluna/, /es/guias/calendario-laboral-cataluna/ (neither links /es/festivos/2027/puentes/; checked live) | "puentes 2027" 22 at 19.7 on the Catalonia guide; Spain page 0 impr | head-term test, +5 to +10 |
+| 7 | Strengthen: big cities (Madrid, Valencia, Zaragoza, Alicante, Malaga, Sevilla) | /es/festivos/2027/<ccaa>/<city>/ | calendario laboral madrid 2027 13 impr pos 37; zaragoza 14 at 25; alicante 13 at 29; valencia 12 at 31 | volume hidden; biggest cities |
+| 8 | Strengthen Barcelona | /es/festivos/barcelona/ | 267 impr / 2 clicks / pos 12.4; "festivos barcelona 2027" 17 at 23.6; "calendario laboral barcelona 2027" 23 at 25 (ca page at 4) | +10 |
+| 9 | Strengthen Vigo (ES; ca twin noindex stays) | /es/festivos/2027/galicia/vigo/ | 232 / 0 clicks / pos 10.9 ("festivos vigo 2027" 137) ; Galicia 535 / 1 | +10 (Galicia +22) |
+| 10 | Catalonia region queries, body only (title/description inside the 28 d window) | /es/guias/calendario-laboral-cataluna/ | "calendario 2027 catalunya con festivos" 54 at 8.8, "calendario laboral 2027 catalunya" 40 at 10.0; region cluster 404 / 2 clicks | +15 |
+
+Not recommended: new pages (none missing), unblocking noindex (no demand lost), date pages (0 clicks at pos 4-7), "cuantos festivos" page (0 demand).
+Caveat: Dec-Jan is the peak; the local orders (Madrid, Andalucia, Valencia) appear in December, so re-pull on 9 Dec before spending effort on 1-4.
+
+**Baseline for the review (28 d to 23 Nov):** 14,780 impressions / 220 clicks on 1,496 queries with 2027 + festivos/calendario/puentes; 258 places, 10,843 impressions, 189 clicks, 236 places below position 5. Skills used: growth-snapshot (curve, page), content-strategy and programmatic-seo (cluster and template-level actions). **Review 2026-12-10:** re-pull the same query x page table; after the December local orders check actions 1-4 against the clusters above. No code changed; low-demand.ts untouched.
