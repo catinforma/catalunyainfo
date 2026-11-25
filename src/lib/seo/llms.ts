@@ -77,6 +77,7 @@ import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
 import { FAIRS as CHRISTMAS_FAIRS, englishTowns as christmasEnglishTowns, towns as christmasTowns } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { hubPath as electionsHub, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
+import { electionDescription, electionTitle, electionTranslations, municipalitiesFor } from "@/lib/programmatic/elections/pages";
 import { STATIONS, selectPages } from "@/lib/programmatic/fuel/data";
 import { fuelHubPath, spainHubTranslations } from "@/lib/programmatic/fuel/paths";
 import { spainProvinces } from "@/lib/programmatic/fuel/spain";
@@ -85,7 +86,8 @@ import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { reportEditions } from "@/lib/programmatic/holidays/report-copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
-import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
+import { pvpcPath, pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
+import { PUBLISH_DEADLINE as PVPC_PUBLISH_DEADLINE } from "@/lib/programmatic/pvpc/view";
 import { butaneTranslations } from "@/lib/programmatic/butane/paths";
 import { warningsTranslations } from "@/lib/programmatic/warnings/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
@@ -191,7 +193,20 @@ const WEEKEND_ZONES_LISTED: readonly { slug: string; english: string }[] = [
   { slug: "barcelona", english: "Barcelona city" },
   { slug: "girona", english: "Girona and its comarques" },
   { slug: "costa-brava", english: "the Costa Brava" },
+  // 25 Nov 2026 (GA4 "AI Assistant", 28 days, 3 or more sessions): Spanish editions.
+  { slug: "lleida", english: "Lleida and its comarques" },
+  { slug: "baix-emporda", english: "the Baix Empordà" },
+  { slug: "valles-occidental", english: "the Vallès Occidental" },
 ];
+
+/**
+ * Town election pages (slug in the Catalan edition) that drew 3 or more
+ * "AI Assistant" sessions in the 28 days to 25 Nov 2026: Badalona 3, El
+ * Masnou 3, Martorell 3, Mollet del Vallès 4. Each line reuses the page's own
+ * title and description, so it cannot drift from the page (the pages' wording
+ * changes after the 29 Nov vote). The other 940 towns stay behind the hub.
+ */
+const ELECTION_TOWNS_LISTED: readonly string[] = ["mollet-del-valles", "badalona", "el-masnou", "martorell"];
 
 /**
  * Pages assistants send readers to (GA4 "AI Assistant" channel, 28 days to 25
@@ -230,6 +245,19 @@ function topLandingTools(): LiveTool[] {
     name: "Official polls for Spain's 29 November general election in Catalonia (CIS and CEO)",
     hubs: pollsTranslations(),
     description: "the vote and Congress seat estimates for Catalonia from the two public pollsters, the CIS and the CEO, with each poll's technical sheet and no private or media polls; during the legal ban on publishing polls around polling day (LOREG art. 69.7) the page shows no figures.",
+  });
+  const towns = municipalitiesFor("ca");
+  for (const slug of ELECTION_TOWNS_LISTED) {
+    const town = towns.find((m) => m.slug === slug);
+    if (!town) continue;
+    const hubs = electionTranslations(town);
+    const main: Locale = hubs.en ? "en" : "ca";
+    out.push({ name: electionTitle(main, town), hubs, description: electionDescription(main, town) });
+  }
+  out.push({
+    name: "Electricity price in Spain tomorrow (PVPC), hour by hour",
+    hubs: pvpcTranslations("tomorrow"),
+    description: `the regulated PVPC 2.0TD price for each hour of tomorrow, with the cheapest and dearest hours and the daily average, as soon as Red Eléctrica publishes it (every day before ${PVPC_PUBLISH_DEADLINE}); until then the page says it is not yet published, read from REE's open REData API every 15 minutes.`,
   });
   out.push({
     name: "Low-emission zones (ZBE) in Spain by city",
@@ -596,9 +624,14 @@ export function buildLlmsTxt(origin: string, siteName: string, guides: Partial<R
   parts.push(`- [WhatsApp channel](${WHATSAPP_CHANNEL}): The site's own channel, a daily post in Catalan with what to know today.`);
   parts.push("");
 
+  // A page already named above (a strike or weekend guide is both a live tool
+  // and a guide) is not listed a second time.
+  const named = new Set<string>();
+  for (const entry of [...liveTools(today), ...trustPages()]) for (const hub of Object.values(entry.hubs)) named.add(hub);
+
   for (const locale of LOCALES) {
     const entries = [...(guides[locale] ?? [])]
-      .filter((e) => !isLowDemandPath(e.href, today))
+      .filter((e) => !isLowDemandPath(e.href, today) && !named.has(e.href))
       .sort((a, b) => (a.href < b.href ? -1 : a.href > b.href ? 1 : 0));
     if (entries.length === 0) continue;
     parts.push(`## ${GUIDE_HEADINGS[locale]}`, "");

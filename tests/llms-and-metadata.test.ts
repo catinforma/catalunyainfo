@@ -374,6 +374,39 @@ test("llms.txt names the top AI-landing pages and the family hubs it lacked, and
   }
 });
 
+/** 25 Nov 2026 pass: AI-landed pages with 3 or more sessions in 28 days that the file did not name, and no URL twice. */
+test("llms.txt names the weekend zones, town election pages and tomorrow's PVPC page that AI assistants landed on, and lists no URL twice", async () => {
+  const { isLowDemandPath } = await import("../src/lib/seo/low-demand.ts");
+  const guide = (href: string) => ({ title: `Guide ${href}`, href, excerpt: "A guide." });
+  // Pages that are both a live tool and a published guide, as the database returns them.
+  const strikes = Object.values(GUIDES.strikes).map(guide);
+  const text = buildLlmsTxt(ORIGIN, "CatalunyaInfo", { ca: strikes, es: strikes, en: strikes });
+  const wanted = [
+    "/es/fin-de-semana/lleida/", "/ca/cap-de-setmana/lleida/",
+    "/es/fin-de-semana/baix-emporda/", "/ca/cap-de-setmana/baix-emporda/",
+    "/es/fin-de-semana/valles-occidental/", "/ca/cap-de-setmana/valles-occidental/",
+    "/es/precio-luz/manana/", "/ca/preu-llum/dema/", "/en/electricity-price-spain/tomorrow/",
+    "/ca/eleccions/mollet-del-valles/", "/es/elecciones/mollet-del-valles/",
+    "/en/elections/badalona/", "/ca/eleccions/badalona/", "/es/elecciones/badalona/",
+    "/ca/eleccions/el-masnou/", "/es/elecciones/el-masnou/",
+    "/ca/eleccions/martorell/", "/es/elecciones/martorell/",
+  ];
+  for (const href of wanted) {
+    assert.ok(text.includes(`](${ORIGIN}${href})`), `llms.txt does not link ${href}`);
+    assert.ok(!isLowDemandPath(href), `${href} is noindex`);
+  }
+  // Every URL appears once, whatever the section.
+  const seen = new Map<string, number>();
+  for (const m of text.matchAll(/\]\((https:\/\/[^)]+)\)/g)) seen.set(m[1]!, (seen.get(m[1]!) ?? 0) + 1);
+  const twice = [...seen].filter(([, n]) => n > 1).map(([u]) => u);
+  assert.deepEqual(twice, []);
+  // The strike guides are still there, once, as tools.
+  for (const href of Object.values(GUIDES.strikes)) assert.equal(seen.get(`${ORIGIN}${href}`), 1, href);
+  // The tool lines of the new entries are one line of the page's own language: the election lines carry the page's description.
+  assert.ok(/Badalona elections: where to vote/.test(text));
+  assert.ok(/\[Eleccions el Masnou: on votar/.test(text));
+});
+
 /**
  * The polls line names the 29 November 2026 general election and the LOREG art. 69.7 ban on publishing polls (src/lib/seo/llms.ts,
  * `topLandingTools`). It is true until the election: after 30 Nov 2026 re-read what the polls page says and reword the line
