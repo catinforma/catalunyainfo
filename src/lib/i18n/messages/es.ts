@@ -246,6 +246,7 @@ const es: Messages = {
     readingTime: "{minutes} min de lectura",
     by: "Por",
     sources: "Fuentes",
+    accessedOn: "consultado el",
     sourcesNote:
       "Esta página cita fuentes oficiales y primarias. Si detectas un error, avísanos.",
     relatedContent: "Contenido relacionado",

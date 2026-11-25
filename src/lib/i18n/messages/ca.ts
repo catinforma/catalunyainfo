@@ -245,6 +245,7 @@ const ca = {
     readingTime: "{minutes} min de lectura",
     by: "Per",
     sources: "Fonts",
+    accessedOn: "consultat el",
     sourcesNote:
       "Aquesta pàgina cita fonts oficials i primàries. Si hi detectes un error, avisa'ns.",
     relatedContent: "Contingut relacionat",

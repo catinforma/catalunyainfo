@@ -41,6 +41,13 @@ export interface SourceSpec {
   name: string;
   url: string;
   publisher?: string | null;
+  /**
+   * Where and when the text was published ("DOGC núm. 9551, 27.11.2025"),
+   * kept on the entry's link row (`entry_sources.note`) and printed after the
+   * publisher. Not the read date: that is `lastVerifiedAt`, printed as
+   * "consultat el".
+   */
+  ref?: string | null;
   type?: "official" | "primary" | "press" | "academic" | "own_reporting" | "other";
 }
 
@@ -166,6 +173,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
 
   /* ---- Sources ---------------------------------------------------------- */
   const sourceIds: string[] = [];
+  const sourceRefs: (string | null)[] = [];
   for (const source of spec.sources ?? []) {
     const existing = await db
       .select({ id: schema.sources.id })
@@ -175,6 +183,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
 
     if (existing[0]) {
       sourceIds.push(existing[0].id);
+      sourceRefs.push(source.ref ?? null);
       continue;
     }
     const inserted = await db
@@ -186,7 +195,10 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
         type: source.type ?? "official",
       })
       .returning({ id: schema.sources.id });
-    if (inserted[0]) sourceIds.push(inserted[0].id);
+    if (inserted[0]) {
+      sourceIds.push(inserted[0].id);
+      sourceRefs.push(source.ref ?? null);
+    }
   }
 
   /* ---- Category --------------------------------------------------------- */
@@ -231,11 +243,13 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
 
   if (entryId) {
     const previousSources = await db
-      .select({ sourceId: schema.entrySources.sourceId })
+      .select({ sourceId: schema.entrySources.sourceId, note: schema.entrySources.note })
       .from(schema.entrySources)
       .where(eq(schema.entrySources.entryId, entryId))
       .orderBy(schema.entrySources.sortOrder);
     if (previousSources.map((row) => row.sourceId).join() !== sourceIds.join()) readerVisibleChange = true;
+    // The printed reference ("DOGC núm. 9551, 27.11.2025") is part of the list.
+    if (previousSources.map((row) => row.note ?? "").join("|") !== sourceRefs.map((ref) => (ref ? fitColumn(ref, 300) : "")).join("|")) readerVisibleChange = true;
     await db.update(schema.entries).set(entryValues).where(eq(schema.entries.id, entryId));
   } else {
     const inserted = await db
@@ -253,6 +267,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
       sourceIds.map((sourceId, index) => ({
         entryId,
         sourceId,
+        note: sourceRefs[index] ? fitColumn(sourceRefs[index], 300) : null,
         accessedAt: spec.lastVerifiedAt,
         sortOrder: index,
       })),

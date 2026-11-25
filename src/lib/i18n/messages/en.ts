@@ -246,6 +246,7 @@ const en: Messages = {
     readingTime: "{minutes} min read",
     by: "By",
     sources: "Sources",
+    accessedOn: "accessed on",
     sourcesNote:
       "This page cites official and primary sources. If you spot an error, let us know.",
     relatedContent: "Related content",

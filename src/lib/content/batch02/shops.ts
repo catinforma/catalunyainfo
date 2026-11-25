@@ -20,6 +20,7 @@ import {
 } from "./shared";
 import { CHRISTMAS_SHOPS_CHECKED, compactDays, windowDaysFromDiff, type ChristmasSourceKey } from "./shops-christmas";
 import { christmasSundaysParagraph } from "./shops-spain-december";
+import { TOWNS_NOV_DEC, closedOn, extraOn } from "./shops-towns-nov-dec";
 
 /**
  * Shops open on Sundays and holidays in Catalonia: the yearly calendar.
@@ -133,14 +134,20 @@ import { christmasSundaysParagraph } from "./shops-spain-december";
 
 const VERIFIED = CHRISTMAS_SHOPS_CHECKED;
 
+/**
+ * `ref` = bulletin number and publication date, read on 25 Nov 2026 in the
+ * footer of each DOGC PDF ("Núm. 9551 - 27.11.2025"); the template prints it
+ * after the publisher and, apart, "consultat el 25/11/2026" for the read date.
+ * A test holds them to CHRISTMAS_SOURCES (shops-christmas.ts).
+ */
 const SOURCES: B2Source[] = [
-  { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC" },
-  { name: "Resolució EMT/4342/2025, dies festius d'obertura comercial dels municipis per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1030324&type=01&language=ca_ES", publisher: "DOGC" },
-  { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1045357&type=01&language=ca_ES", publisher: "DOGC" },
+  { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC", ref: "núm. 9421, 27.5.2025" },
+  { name: "Resolució EMT/4342/2025, dies festius d'obertura comercial dels municipis per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1030324&type=01&language=ca_ES", publisher: "DOGC", ref: "núm. 9551, 27.11.2025" },
+  { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1045357&type=01&language=ca_ES", publisher: "DOGC", ref: "núm. 9674, 28.5.2026" },
   { name: "Llei 18/2017, de comerç, serveis i fires (text consolidat, articles 36 i 37)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320", publisher: "BOE" },
   { name: "Llei 3/2023, de mesures fiscals, financeres, administratives i del sector públic per al 2023 (article 83: lletres j i k de l'article 37.1 de la Llei 18/2017)", url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2023-10344", publisher: "BOE" },
-  { name: "Ordre EMT/66/2025, calendari oficial de festes laborals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1013204&type=01&language=ca_ES", publisher: "DOGC" },
-  { name: "Ordre EMT/52/2026, calendari oficial de festes laborals a Catalunya per a l'any 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=ca_ES", publisher: "DOGC" },
+  { name: "Ordre EMT/66/2025, calendari oficial de festes laborals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1013204&type=01&language=ca_ES", publisher: "DOGC", ref: "núm. 9406, 6.5.2025" },
+  { name: "Ordre EMT/52/2026, calendari oficial de festes laborals a Catalunya per a l'any 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=ca_ES", publisher: "DOGC", ref: "núm. 9637, 1.4.2026" },
   { name: "Real Decreto 605/1999, de regulación complementaria de los procesos electorales (artículo 13: horas para votar)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1999-8583", publisher: "BOE" },
   { name: "Horaris comercials", url: "https://ajuntament.barcelona.cat/comerc/ca/el-comerc-barcelona/horaris-comercials", publisher: "Ajuntament de Barcelona" },
   { name: "Calendari de festius (festes locals 2026 i 2027)", url: "https://ajuntament.barcelona.cat/calendarifestius/ca/", publisher: "Ajuntament de Barcelona" },
@@ -252,50 +259,7 @@ export const OPENING_2027 = {
   municipalDefault: ["2027-01-10", "2027-12-05"],
 } as const;
 
-/**
- * Every municipality in Resolució EMT/4342/2025 whose shop opening days from
- * 1 November to 31 December 2026 differ from the default (29 Nov; 6, 8, 13,
- * 20 and 27 Dec): `closed` = default days it does not open, `extra` = days it
- * adds. Transcribed from the DOGC text on 30 Oct 2026.
- */
-export const TOWNS_NOV_DEC: { town: string; closed: string[]; extra: string[] }[] = [
-  { town: "L'Ametlla del Vallès", closed: [], extra: ["2026-11-01"] },
-  { town: "Argentona", closed: ["2026-12-08"], extra: [] },
-  { town: "Artés", closed: ["2026-12-08"], extra: [] },
-  { town: "Badalona", closed: ["2026-12-08"], extra: [] },
-  { town: "Caldes de Montbui", closed: ["2026-12-08"], extra: [] },
-  { town: "Cardedeu", closed: ["2026-12-08"], extra: [] },
-  { town: "Cassà de la Selva", closed: ["2026-12-08"], extra: [] },
-  { town: "Celrà", closed: ["2026-12-08"], extra: [] },
-  { town: "Centelles", closed: ["2026-12-08"], extra: ["2026-12-31"] },
-  { town: "Gavà", closed: ["2026-12-08"], extra: ["2026-12-14"] },
-  { town: "Gironella", closed: ["2026-11-29", "2026-12-27"], extra: [] },
-  { town: "Manlleu", closed: ["2026-12-08"], extra: [] },
-  { town: "Manresa", closed: ["2026-12-08"], extra: [] },
-  { town: "Martorell", closed: ["2026-11-29"], extra: [] },
-  { town: "Mollet del Vallès", closed: ["2026-12-08"], extra: ["2026-11-01"] },
-  { town: "Montcada i Reixac", closed: ["2026-12-08"], extra: [] },
-  { town: "Olèrdola", closed: ["2026-12-08"], extra: [] },
-  { town: "Olot", closed: ["2026-12-13"], extra: [] },
-  { town: "Riells i Viabrea", closed: ["2026-12-06"], extra: ["2026-11-09"] },
-  { town: "Sallent", closed: ["2026-12-08"], extra: [] },
-  { town: "Salt", closed: ["2026-11-29"], extra: [] },
-  { town: "Sant Andreu de la Barca", closed: [], extra: ["2026-11-30"] },
-  { town: "Sant Boi de Llobregat", closed: [], extra: ["2026-12-07"] },
-  { town: "Sant Esteve Sesrovires", closed: ["2026-12-08"], extra: [] },
-  { town: "Sant Jordi Desvalls", closed: ["2026-12-08"], extra: [] },
-  { town: "Sant Vicenç de Castellet", closed: ["2026-12-08"], extra: [] },
-  { town: "Santa Coloma de Gramenet", closed: ["2026-12-08"], extra: [] },
-  { town: "La Selva del Camp", closed: ["2026-12-08"], extra: [] },
-  { town: "Terrassa", closed: ["2026-12-06"], extra: [] },
-  { town: "Ulldecona", closed: ["2026-12-08"], extra: [] },
-];
-
-/** The towns of TOWNS_NOV_DEC that do not open on a default day. */
-export const closedOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t.closed.includes(iso)).map((t) => t.town);
-
-/** The towns of TOWNS_NOV_DEC that add a day which is not an opening day elsewhere. */
-const extraOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t.extra.includes(iso)).map((t) => t.town);
+export { TOWNS_NOV_DEC, closedOn };
 
 /** The towns that do not open on Tuesday 8 December, for the lead and the FAQ. */
 const NO_8_DEC = closedOn("2026-12-08");

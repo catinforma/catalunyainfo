@@ -111,7 +111,7 @@ test("each community and each note has a Catalan and an English form; weekdays a
     const murcia = tables(locale)[0]!.rows![13]![4]!;
     for (const [d, w] of [[6, 0], [7, 1], [8, 2]] as const) assert.ok(murcia.includes(`${WEEKDAY_NAMES[locale][w]} ${d}`), `${locale}: ${murcia}`);
   }
-  assert.match(json("ca"), /a l'Aragó, Astúries, Castella i Lleó, Múrcia, a diverses illes de Canàries/);
+  assert.match(json("ca"), /a l'Aragó, Astúries, Castella i Lleó, Catalunya \(a Barcelona i a la majoria de municipis\), Múrcia, a diverses illes de Canàries/);
   assert.match(json("ca"), /a Andalusia, Cantàbria, Extremadura, Múrcia i la Rioja/);
   assert.match(json("en"), /in Andalusia, Cantabria, Extremadura, Murcia and La Rioja/);
   assert.match(json("en"), /in Aragon, the Balearic Islands, Castile-La Mancha, Catalonia, Galicia, Murcia and on some of the islands/);

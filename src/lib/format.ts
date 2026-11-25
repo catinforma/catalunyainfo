@@ -12,6 +12,19 @@ export function formatDate(date: Date, locale: Locale, style: "long" | "short" =
   }).format(date);
 }
 
+/**
+ * "25/11/2026": day, month and year in numbers, the same order in ca, es and
+ * en (en-GB), for a read date that must not be taken for a publication date.
+ */
+export function formatDateNumeric(date: Date, locale: Locale) {
+  return new Intl.DateTimeFormat(INTL_LOCALE[locale], {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: SITE_TIMEZONE,
+  }).format(date);
+}
+
 export function formatDateTime(date: Date, locale: Locale) {
   return new Intl.DateTimeFormat(INTL_LOCALE[locale], {
     day: "numeric",

@@ -3,6 +3,7 @@ import { WEEKDAY_NAMES } from "@/lib/content/holidays/calendar";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { joinList } from "@/lib/programmatic/holidays/names";
 
+import { closedOn, extraOn } from "./shops-towns-nov-dec";
 import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, type B2Edition, type B2Source } from "./shared";
 
 /**
@@ -20,6 +21,14 @@ import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, 
  * Re-read 23 Nov 2026: the PDF is byte-identical to the 9 Nov copy; the
  * 29 November column (NOVEMBER_29_2026) was added from it.
  *
+ * 25 Nov 2026 (factual correction, docs/SEO_EXPERIMENTS.md): the Catalonia row
+ * said "Mar. 8: No" and the lead left Catalonia out of the places where shops
+ * may open on the 8th, against the Catalan guide (Barcelona and most towns: yes).
+ * The row now reads from the Catalan guide's own town table
+ * (shops-towns-nov-dec.ts, Resolució EMT/4342/2025, DOGC núm. 9551,
+ * 27.11.2025, re-read in the PDF on 25 Nov). The Ministry PDF was not re-read:
+ * SHOPS_SPAIN_AS_OF stays 23 Nov.
+ *
  * Three editions since 10 Nov 2026 (owner rule: every page in ca, es and en).
  * The days come from the same two tables in the three languages; only the
  * words differ. One body builder, so no edition can gain or lose a section.
@@ -27,6 +36,27 @@ import { B2_PATHS, b2link, callout, faq, h2, lead, list, table, type B2Article, 
 export const SHOPS_SPAIN_AS_OF = "2026-11-23";
 const PDF = "https://comercio.gob.es/ComercioInterior/EjercicioActividadComercial/Documents/CALENDARIO_DOMINGOS_FESTIVOS_APERTURA_COMERCIAL_2026.pdf";
 const LAW = "https://www.boe.es/buscar/act.php?id=BOE-A-2004-21421";
+/**
+ * Catalonia on Tuesday 8 December 2026 comes from the Catalan guide's own table
+ * (shops-towns-nov-dec.ts, Resolució EMT/4342/2025, DOGC núm. 9551, 27.11.2025,
+ * re-read 25 Nov 2026): the 8th is a default municipal day (Ordre EMT/77/2025,
+ * art. 6) and Barcelona's list has it ("6, 8, 13, 20 i 27 de desembre"), so
+ * shops may open there and in every town the resolution does not list, except
+ * in the towns that chose other days. Before 25 Nov the table said "No".
+ */
+export const CATALONIA_NO_8_DEC = closedOn("2026-12-08").length;
+
+/**
+ * Catalonia's Sunday 6 and Monday 7 cells, from the same table: Terrassa and
+ * Riells i Viabrea do not open on the 6th ("8, 13, 20 i 27 de desembre"), and
+ * Sant Boi de Llobregat adds the 7th ("6, 7, 8, 13, 20 i 27 de desembre").
+ * Read in the PDF on 25 Nov 2026.
+ */
+export const CATALONIA_TOWNS = {
+  closed: { 6: closedOn("2026-12-06").length, 8: CATALONIA_NO_8_DEC },
+  extra: { 7: extraOn("2026-12-07").length },
+} as const;
+
 const link = (href: string, label: string) => `[${label}](${href})`;
 
 type Row = { name: string; days: number[]; note?: string };
@@ -144,6 +174,17 @@ const proseName = (r: Row, L: Locale) => (L === "es" ? r.name : (COMMUNITY_I18N[
 const noteOf = (r: Row, L: Locale) => (L === "es" ? r.note : r.note ? (COMMUNITY_I18N[r.name]?.[L].note ?? r.note) : undefined);
 
 const day = (d: number, L: Locale) => `${WEEKDAY_NAMES[L][new Date(Date.UTC(2026, 11, d)).getUTCDay()]} ${d}`;
+/**
+ * Where shops may open on Tuesday 8: the regions whose calendar has it, plus
+ * Catalonia (the 8th is a municipal day there, see CATALONIA_NO_8_DEC).
+ */
+const CATALONIA_8_WHERE: Record<Locale, string> = {
+  es: "en Barcelona y en la mayoría de municipios",
+  ca: "a Barcelona i a la majoria de municipis",
+  en: "in Barcelona and most towns",
+};
+const whereOpen8 = (L: Locale) =>
+  DECEMBER_2026.filter((r) => r.days.includes(8) || r.name === "Cataluña").map((r) => (r.name === "Cataluña" ? `${proseName(r, L)} (${CATALONIA_8_WHERE[L]})` : proseName(r, L)));
 const whereOpen = (d: number, L: Locale) => DECEMBER_2026.filter((r) => r.days.includes(d)).map((r) => proseName(r, L));
 
 /**
@@ -207,6 +248,9 @@ interface ShopsCopy {
   yes: string;
   yesFree: string;
   no: string;
+  /** Catalonia's cells: "Sí, salvo en 21 municipios" / "No, salvo en 1 municipio". */
+  yesExcept: (towns: number) => string;
+  noExcept: (towns: number) => string;
   /** on6, on7 and on8 arrive comma-joined, as the Spanish sentences want them; `and7` ends with "i"/"and". */
   lead: (on: { on6: string; on7: string; on8: string; and7: string }) => string;
   table: { caption: string; headers: string[]; note: string };
@@ -224,6 +268,8 @@ const COPY: Record<Locale, ShopsCopy> = {
     yes: "Sí",
     yesFree: "Sí (libertad)",
     no: "No",
+    yesExcept: (n) => `Sí, salvo en ${n} ${n === 1 ? "municipio" : "municipios"}`,
+    noExcept: (n) => `No, salvo en ${n} ${n === 1 ? "municipio" : "municipios"}`,
     lead: ({ on6, on7, on8 }) =>
       `**El puente de diciembre de 2026 no abre igual en toda España.** El **martes 8** (Inmaculada) las tiendas pueden abrir en ${on8}, en varias islas de Canarias y, como cualquier día, en Madrid. El **lunes 7** pueden abrir en ${on7}. El **domingo 6**, en ${on6} y algunas islas. Son días de apertura **autorizada**: cada comercio decide si abre.`,
     table: {
@@ -268,6 +314,8 @@ const COPY: Record<Locale, ShopsCopy> = {
     yes: "Sí",
     yesFree: "Sí (llibertat)",
     no: "No",
+    yesExcept: (n) => `Sí, excepte a ${n} ${n === 1 ? "municipi" : "municipis"}`,
+    noExcept: (n) => `No, excepte a ${n} ${n === 1 ? "municipi" : "municipis"}`,
     lead: ({ on6, on8, and7 }) =>
       `**Pel pont de desembre de 2026, les botigues no obren igual a tot Espanya.** El **dimarts 8** (la Immaculada) poden obrir a ${on8}, a diverses illes de Canàries i, com qualsevol dia, a Madrid. El **dilluns 7** poden obrir a ${and7}. El **diumenge 6**, a ${on6} i algunes illes. Són dies d'obertura **autoritzada**: cada comerç decideix si obre.`,
     table: {
@@ -312,6 +360,8 @@ const COPY: Record<Locale, ShopsCopy> = {
     yes: "Yes",
     yesFree: "Yes (free hours)",
     no: "No",
+    yesExcept: (n) => `Yes, except in ${n} ${n === 1 ? "town" : "towns"}`,
+    noExcept: (n) => `No, except in ${n} ${n === 1 ? "town" : "towns"}`,
     lead: ({ on6, on8, and7 }) =>
       `**Shops in Spain do not all open on the same days over the December 2026 long weekend.** On **Tuesday 8** (Immaculate Conception) they may open in ${on8}, on several of the Canary Islands and, as on any day, in Madrid. On **Monday 7** they may open in ${and7}. On **Sunday 6**, in ${on6} and on some of the islands. These are days of **authorised** opening: each shop decides whether to open.`,
     table: {
@@ -357,7 +407,7 @@ const COPY: Record<Locale, ShopsCopy> = {
 export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   const L = locale;
   const t = COPY[L];
-  const yes = (r: Row, d: number) => (r.days.includes(d) ? t.yes : r.name === "Madrid" ? t.yesFree : r.days.length ? t.no : "—");
+  const yes = (r: Row, d: number) => (r.name === "Cataluña" && d === 8 ? t.yesExcept(CATALONIA_NO_8_DEC) : r.name === "Cataluña" && d === 6 ? t.yesExcept(CATALONIA_TOWNS.closed[6]) : r.name === "Cataluña" && d === 7 ? t.noExcept(CATALONIA_TOWNS.extra[7]) : r.days.includes(d) ? t.yes : r.name === "Madrid" ? t.yesFree : r.days.length ? t.no : "—");
   const days = (r: Row) => r.days.map((d) => day(d, L)).join(", ");
   const rows = DECEMBER_2026.map((r) => {
     const note = noteOf(r, L);
@@ -367,7 +417,7 @@ export function buildShopsSpainBody(locale: Locale = "es"): Block[] {
   const on = {
     on6: whereOpen(6, L).join(", "),
     on7: whereOpen(7, L).join(", "),
-    on8: whereOpen(8, L).join(", "),
+    on8: whereOpen8(L).join(", "),
     and7: joinList(whereOpen(7, L), L),
   };
   return [

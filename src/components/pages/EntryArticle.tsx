@@ -23,7 +23,8 @@ import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
 import { usefulNow } from "@/lib/engagement/useful-now";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
 import { HERO_SIZES } from "@/lib/layout/hero-image";
-import { formatDate, formatDateAndTime, formatDistance, formatDuration, isoDate } from "@/lib/format";
+import { publicSourceRef } from "@/lib/content/source-ref";
+import { formatDate, formatDateAndTime, formatDateNumeric, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { SECTION_KEYS, sectionPath, type SectionKey } from "@/lib/i18n/routes";
@@ -274,11 +275,16 @@ export function EntryArticle({
                         {source.publisher ? (
                           <span className="text-[var(--color-muted)]"> — {source.publisher}</span>
                         ) : null}
+                        {/* Bulletin and publication date ("DOGC núm. 9551, 27.11.2025"), only in the pipeline's form: the note is free text in the admin editor. */}
+                        {publicSourceRef(source.note) ? <span className="text-[var(--color-muted)]">{source.publisher ? " " : " — "}{publicSourceRef(source.note)}</span> : null}
+                        {/* The read date is labelled as such: bare, it looked like the publication date of the text (25 Nov 2026 next to a 2025 order). */}
                         {source.accessedAt ? (
                           <span className="ml-1 text-xs text-[var(--color-faint)]">
+                            ({t.meta.accessedOn}{" "}
                             <time dateTime={isoDate(source.accessedAt)}>
-                              {formatDate(source.accessedAt, locale, "short")}
+                              {formatDateNumeric(source.accessedAt, locale)}
                             </time>
+                            )
                           </span>
                         ) : null}
                       </span>

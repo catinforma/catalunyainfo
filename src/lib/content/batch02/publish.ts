@@ -124,6 +124,7 @@ async function publishEditions(article: B2ArticleBase, editions: [Locale, B2Edit
       name: source.name,
       url: source.url,
       publisher: source.publisher ?? null,
+      ref: source.ref ?? null,
       type: "official" as const,
     })),
     publishedAt: new Date(article.publishedAt),

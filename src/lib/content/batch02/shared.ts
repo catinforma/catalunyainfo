@@ -1178,6 +1178,8 @@ export interface B2Source {
   name: string;
   url: string;
   publisher?: string | null;
+  /** Bulletin and publication date, e.g. "DOGC núm. 9551, 27.11.2025": printed after the publisher, never the read date. */
+  ref?: string | null;
 }
 
 export interface B2Edition {
