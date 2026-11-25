@@ -152,7 +152,7 @@ function spainStrikeStep(locale: Locale, self: string, today: string): ReturnSte
 export function returnStepForElectionTown(slug: string, locale: Locale, self: string, today: string): ReturnStep {
   const calendar = townCalendarLink(slug, locale);
   return build("elections", "after_answer", locale, self, today, [
-    calendar ? { href: calendar.href, label: calendar.label, target: "town_calendar" } : null,
+    calendar ? { href: calendar.href, label: SHORT.townCalendar[locale], target: "town_calendar" } : null,
     holidayToday(locale),
     strikesCatalonia(locale),
   ]);
