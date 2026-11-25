@@ -88,6 +88,11 @@ export interface SpainStrike {
    * moved or deleted.
    */
   rereadBy?: string;
+  /**
+   * 25 Nov 2026. Prepared but not published: `SPAIN_STRIKES` leaves it out, so no page, table, answer or
+   * sitemap date shows it. It lives in `SPAIN_STRIKES_DRAFTS` until the flag is removed.
+   */
+  draft?: boolean;
 }
 
 /**

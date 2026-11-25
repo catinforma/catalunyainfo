@@ -447,7 +447,10 @@ const SRC = {
 /* Dated strikes                                                              */
 /* -------------------------------------------------------------------------- */
 
-export const SPAIN_STRIKES: SpainStrike[] = [
+const ROAD_CALL = "https://carreteraylogistica.fsc.ccoo.es/noticia:772725--CCOO_convoca_huelga_estatal_en_el_transporte_por_carretera_el_23_y_24_de_diciembre_por_el_bloqueo_de_la_jubilacion_anticipada";
+const ROAD_SIMA = "https://carreteraylogistica.fsc.ccoo.es/noticia:773023--Finaliza_sin_acuerdo_la_mediacion_previa_a_la_huelga_del_transporte_profesional_para_el_23_y_24_de_diciembre";
+
+const SPAIN_STRIKES_ALL: SpainStrike[] = [
   {
     id: "huelga-renfe-2026-10-29",
     dates: ["2026-10-29"],
@@ -1236,7 +1239,64 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "CSIF lleva a los tribunales los servicios mínimos abusivos impuestos por la Consejería de Educación (21 de noviembre de 2026)", url: U.csifMadridAppeal, publisher: "CSIF Educación Madrid" },
     ],
   },
+  /*
+   * DRAFT, `draft: true`: NOT published on any page (SPAIN_STRIKES below drops it). Prepared 25 Nov 2026 (18:50-19:10 CET) for the runbook
+   * "Road-transport strike 23-24 Dec" in docs/SEO_EXPERIMENTS.md. Read today: FSC-CCOO Carretera y Logistica notice of 16 Nov ("CCOO convoca huelga
+   * estatal en el transporte por carretera el 23 y 24 de diciembre por el bloqueo de la jubilacion anticipada"; "profesionales del transporte de
+   * mercancias y transporte de viajeros por carretera") and of 19 Nov ("Hoy han tenido lugar los actos de mediacion ante el SIMA ... previa a la huelga
+   * convocada por CCOO a nivel estatal en el sector de transporte de mercancias por carretera y transporte de viajeros en autobus para el 23 y 24 de
+   * diciembre ... han finalizado sin acuerdo"). Not found: the preaviso itself, a Ministry of Transport entry, UGT joining ("UGT todavia no ha
+   * anunciado si secundara la huelga", democrata.es 16 Nov). Hours and regions: not published by the caller. To publish: remove `draft`, set the
+   * minimum-services status from the Ministry's land list, add the Catalan entry (`catalanEntry`) if the Generalitat sets its own, bump AS_OF.
+   */
+  {
+    id: "huelga-transporte-carretera-2026-12-23",
+    draft: true,
+    dates: ["2026-12-23", "2026-12-24"],
+    sector: "services",
+    status: "called",
+    rereadBy: "2026-12-19",
+    title: {
+      ca: "vaga estatal del transport per carretera (CCOO): mercaderies i viatgers en autobús",
+      es: "huelga estatal del transporte por carretera (CCOO): mercancías y viajeros en autobús",
+      en: "Spain-wide road-transport strike (CCOO): freight and bus passengers",
+    },
+    label: { ca: "transport per carretera", es: "transporte por carretera", en: "road transport" },
+    scope: {
+      ca: "Segons CCOO, a tot Espanya, al transport de mercaderies per carretera i al transport de viatgers en autobús; no ha publicat les hores ni quins serveis urbans, interurbans o discrecionals hi entren.",
+      es: "Según CCOO, en toda España, en el transporte de mercancías por carretera y el transporte de viajeros en autobús; no ha publicado las horas ni qué servicios urbanos, interurbanos o discrecionales entran.",
+      en: "According to CCOO, across Spain, in road freight and bus passenger transport; it has not published the hours or which urban, intercity or charter services are covered.",
+    },
+    calledBy: {
+      ca: `CCOO (FSC-CCOO, sector de Carretera i Logística), ${link(ROAD_CALL, "avís de 16 de novembre")}. UGT no ha anunciat si s'hi suma.`,
+      es: `CCOO (FSC-CCOO, sector de Carretera y Logística), ${link(ROAD_CALL, "aviso de 16 de noviembre")}. UGT no ha anunciado si se suma.`,
+      en: `CCOO (FSC-CCOO, Road and Logistics sector), ${link(ROAD_CALL, "notice of 16 November")}. UGT has not said whether it joins.`,
+    },
+    basis: {
+      ca: `Convocatòria de l'organitzador; segons CCOO, la mediació prèvia davant el SIMA del 19 de novembre va acabar sense acord (${link(ROAD_SIMA, "avís")}). No s'ha trobat el preavís ni cap resolució oficial.`,
+      es: `Convocatoria del organizador; según CCOO, la mediación previa ante el SIMA del 19 de noviembre terminó sin acuerdo (${link(ROAD_SIMA, "aviso")}). No se ha encontrado el preaviso ni ninguna resolución oficial.`,
+      en: `The organiser's call; according to CCOO, the mandatory SIMA mediation of 19 November ended without agreement (${link(ROAD_SIMA, "notice")}). The notice of strike and any official order were not found.`,
+    },
+    minimumServices: {
+      status: "pending",
+      short: { ca: "Pendents de resolució oficial", es: "Pendientes de resolución oficial", en: "Pending an official resolution" },
+      text: {
+        ca: "Pendents de resolució oficial: encara no n'hi ha cap de publicada el {checked}.",
+        es: "Pendientes de resolución oficial: el {checked} todavía no hay ninguna publicada.",
+        en: "Pending an official resolution: none was published on {checked}.",
+      },
+    },
+    sources: [
+      { name: "CCOO convoca huelga estatal en el transporte por carretera el 23 y 24 de diciembre por el bloqueo de la jubilación anticipada (16 de noviembre de 2026)", url: ROAD_CALL, publisher: "FSC-CCOO Carretera y Logística" },
+      { name: "Finaliza sin acuerdo la mediación previa a la huelga del transporte profesional para el 23 y 24 de diciembre (19 de noviembre de 2026)", url: ROAD_SIMA, publisher: "FSC-CCOO Carretera y Logística" },
+    ],
+  },
 ];
+
+/** Entries with `draft: true` are prepared but never shown: every page and answer reads SPAIN_STRIKES. */
+export const SPAIN_STRIKES_DRAFTS: SpainStrike[] = SPAIN_STRIKES_ALL.filter((strike) => strike.draft === true);
+export const SPAIN_STRIKES: SpainStrike[] = SPAIN_STRIKES_ALL.filter((strike) => strike.draft !== true);
+
 
 /* -------------------------------------------------------------------------- */
 /* Open-ended strikes at airports                                             */
