@@ -36,6 +36,16 @@ export const GUIDES = {
 
 export type GuideKey = keyof typeof GUIDES;
 
+/**
+ * "Is it a holiday today or tomorrow?" is one question about a date, owned by
+ * `GUIDES.holidayToday`; 41 town and date pages shared its 526 impressions
+ * (audit of 25 Nov 2026). Every guide rail on the holiday pages therefore
+ * carries that guide, first, whatever the page's own list says.
+ */
+export function withHolidayHub(keys: readonly GuideKey[]): GuideKey[] {
+  return ["holidayToday", ...keys.filter((key) => key !== "holidayToday")];
+}
+
 /** Where the official local-holiday order will appear (the Generalitat's calendar page and the DOGC). */
 export const OFFICIAL = {
   treballCalendar: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/",

@@ -189,7 +189,7 @@ test("4. Everything that should send 'es festivo hoy' readers to the daily guide
   }
   // The views that draw the "related guides" list lead with it (first key), in the query's words.
   const labels = read("src/components/programmatic/holidays/parts.tsx");
-  assert.match(labels, /holidayToday: \{ ca: "És festiu avui a Catalunya\?", es: "¿Es festivo hoy en Cataluña\?", en: "Is today a public holiday in Catalonia\?" \}/);
+  assert.match(labels, /holidayToday: \{ ca: "És festiu avui o demà a Catalunya\?", es: "¿Es festivo hoy o mañana en Cataluña\?", en: "Is today or tomorrow a holiday in Catalonia\?" \}/);
   for (const file of [
     "src/components/programmatic/holidays/HubPage.tsx",
     "src/components/programmatic/holidays/EnglishHubPage.tsx",

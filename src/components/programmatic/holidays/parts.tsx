@@ -9,7 +9,7 @@ import { DATE_PAGES, datePath } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/question";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
-import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
+import { GUIDES, OFFICIAL, withHolidayHub, type GuideKey } from "@/lib/programmatic/holidays/links";
 
 /** Shared pieces of the holiday pages, all server-rendered. */
 
@@ -20,7 +20,8 @@ const SCHOOL_LABEL = (SCHOOL_YEARS.find((y) => todayInCatalonia() <= y.end) ?? S
 
 const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   workCalendar: { ca: `Calendari laboral ${PLANNER_YEAR} de Catalunya`, es: `Calendario laboral ${PLANNER_YEAR} de Cataluña`, en: `Catalonia public holidays ${PLANNER_YEAR}` },
-  holidayToday: { ca: "És festiu avui a Catalunya?", es: "¿Es festivo hoy en Cataluña?", en: "Is today a public holiday in Catalonia?" },
+  // 25 Nov 2026: the query's words ("mañana es festivo", "hoy es festivo"); the guide owns the date question, not a place.
+  holidayToday: { ca: "És festiu avui o demà a Catalunya?", es: "¿Es festivo hoy o mañana en Cataluña?", en: "Is today or tomorrow a holiday in Catalonia?" },
   localHolidays: { ca: "Festius locals de tots els municipis", es: "Festivos locales de todos los municipios", en: "Local holidays in every town" },
   shops: { ca: "Botigues obertes en diumenges i festius", es: "Tiendas abiertas en domingos y festivos", en: "Shops open on Sundays and holidays" },
   school: { ca: `Calendari escolar ${SCHOOL_LABEL}`, es: `Calendario escolar ${SCHOOL_LABEL}`, en: `Catalonia school calendar ${SCHOOL_LABEL}` },
@@ -78,7 +79,7 @@ export function GuideLinks({ keys, locale, title }: { keys: readonly GuideKey[];
     <section className="mt-12" aria-labelledby="ci-hol-guides">
       <h2 id="ci-hol-guides">{title}</h2>
       <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
-        {keys.map((key) => (
+        {withHolidayHub(keys).map((key) => (
           <li key={key}>
             <Link href={GUIDES[key][locale]}>{GUIDE_LABEL[key][locale]}</Link>
           </li>

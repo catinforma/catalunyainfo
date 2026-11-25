@@ -12,10 +12,12 @@ import {
 import Link from "next/link";
 
 import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn, type LocalHolidayPlace } from "@/lib/content/holidays/local";
+import { summariseLocalDay, tomorrowLocalPlaces } from "@/lib/content/holidays/local-today";
 import { todayAnswer } from "@/lib/content/holidays/today-answer";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
+import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
 import { aranSwap, municipalities, municipalityForCode } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
@@ -44,6 +46,57 @@ function PlaceList({ places, locale, limit }: { places: LocalHolidayPlace[]; loc
         );
       })}
       {limit && places.length > limit ? "…" : ""}
+    </>
+  );
+}
+
+type HolidayTodayMessages = ReturnType<typeof getMessages>["holidayToday"];
+
+/**
+ * One day's local holidays: the count, the largest towns first (each linked),
+ * the day's own page when there is one, and everyone else behind a disclosure
+ * (the HTML keeps the full list).
+ */
+function LocalDay({
+  places,
+  iso,
+  locale,
+  t,
+  heading,
+  none,
+}: {
+  places: LocalHolidayPlace[];
+  iso: string;
+  locale: Locale;
+  t: HolidayTodayMessages;
+  heading: string;
+  none: string;
+}) {
+  if (places.length === 0) return <p className="ci-today-local-title">{none}</p>;
+  const { largest, rest } = summariseLocalDay(places);
+  const dayPage = LOCAL_DATE_PAGES[iso];
+  return (
+    <>
+      <p className="ci-today-local-title">{heading.replace("{n}", String(places.length))}</p>
+      {largest.length > 0 ? (
+        <p className="ci-today-local-list">
+          {t.localLargest} <PlaceList places={largest} locale={locale} />
+          {dayPage ? (
+            <>
+              {" · "}
+              <Link href={datePath(locale, dayPage)}>{t.localDayPage}</Link>
+            </>
+          ) : null}
+        </p>
+      ) : null}
+      {rest.length > 0 ? (
+        <details className="ci-today-local-list">
+          <summary>{t.localAll.replace("{n}", String(rest.length))}</summary>
+          <p>
+            <PlaceList places={rest} locale={locale} />
+          </p>
+        </details>
+      ) : null}
     </>
   );
 }
@@ -91,7 +144,11 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
   // council by council late in the year and are never guessed.
   const local = await loadLocalCalendar(Number(today.slice(0, 4)));
   const localToday = placesWithHolidayOn(local, today);
-  const localTomorrow = placesWithHolidayOn(local, tomorrow);
+  // Across New Year (31 Dec) tomorrow belongs to the next year's calendar: read that one, and say nothing about
+  // tomorrow's local days when it is not published (never "none" without data).
+  const tomorrowYear = Number(tomorrow.slice(0, 4));
+  const localNextYear = tomorrowYear === local.year ? null : await loadLocalCalendar(tomorrowYear);
+  const localTomorrow = tomorrowLocalPlaces(tomorrow, local, localNextYear);
 
   const weekend = weekdayIndex(today) === 0 || weekdayIndex(today) === 6;
 
@@ -131,32 +188,18 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         </div>
       </dl>
 
+      {local.error ? null : (
+        <div className="ci-today-local">
+          <h3 className="ci-today-subtitle">{t.whereTitle}</h3>
+          <LocalDay places={localToday} iso={today} locale={locale} t={t} heading={t.localToday} none={t.localTodayNone} />
+          {localTomorrow ? <LocalDay places={localTomorrow} iso={tomorrow} locale={locale} t={t} heading={t.localTomorrow} none={t.localTomorrowNone} /> : null}
+        </div>
+      )}
+
       {/* The year planner, for whoever came to plan rather than to check today. */}
       <p className="ci-today-find">
         {t.plannerLead} <Link href={GUIDES.workCalendar[locale]}>{t.plannerLink}</Link>.
       </p>
-
-      {local.error ? null : (
-        <div className="ci-today-local">
-          <h3 className="ci-today-subtitle">{t.whereTitle}</h3>
-          <p className="ci-today-local-title">
-            {localToday.length > 0
-              ? t.localToday.replace("{n}", String(localToday.length))
-              : t.localTodayNone}
-          </p>
-          {localToday.length > 0 ? (
-            <p className="ci-today-local-list">
-              <PlaceList places={localToday} locale={locale} />
-            </p>
-          ) : null}
-          {localTomorrow.length > 0 ? (
-            <p className="ci-today-note">
-              {t.localTomorrow.replace("{n}", String(localTomorrow.length))}{" "}
-              <PlaceList places={localTomorrow} locale={locale} limit={40} />
-            </p>
-          ) : null}
-        </div>
-      )}
 
       {/* Local questions go to the town pages (ca/es) or the all-towns guide (en). */}
       <p className="ci-today-find">
