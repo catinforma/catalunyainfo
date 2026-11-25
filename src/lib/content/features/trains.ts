@@ -26,8 +26,10 @@ import {
  * Rodalies single fare, both read that day from the official Rodalies
  * journey planner (the API behind rodalies.gencat.cat/horaris) for Tuesday
  * 27 Oct 2026, and high-speed times from Renfe's open GTFS. Vic has no time:
- * the R3 is cut between Barcelona and La Garriga (Rodalies notice of 6 Jul
- * 2026, still in force on 24 Oct). Each destination with its own guide links
+ * the R3 has no trains between Barcelona and Sant Martí de Centelles (Rodalies
+ * notice and sheet "La Garriga - Figaró", read 25 Nov 2026: the La Garriga -
+ * Figaró cut runs 16 Nov - 14 Dec 2026, Barcelona - La Garriga had no end
+ * date; tests/r3-works-25nov.test.ts guards it). Each destination with its own guide links
  * to it, which is where the timetables live. On 26 Oct 2026 the Girona R11
  * range was re-read from the same planner for 27 and 28 Oct: 1 h 19 to
  * 1 h 41 (the 7:16 from Sants takes 1 h 41), not 1 h 19 to 1 h 31.
@@ -40,9 +42,9 @@ const TABLE_NOTE = {
 };
 
 const VIC_R3 = {
-  ca: "Ara mateix, però, no hi ha trens de l'R3 entre Barcelona i la Garriga: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís de Rodalies del 6 de juliol de 2026, vigent el 24 d'octubre).",
-  es: "Ahora mismo, sin embargo, no hay trenes de la R3 entre Barcelona y La Garriga: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso de Rodalies del 6 de julio de 2026, vigente el 24 de octubre).",
-  en: "Right now, though, no R3 trains run between Barcelona and La Garriga: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice of 6 July 2026, still in force on 24 October).",
+  ca: "Ara mateix, però, no hi ha trens de l'R3 entre Barcelona i Sant Martí de Centelles: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís i horaris de Rodalies llegits el 25 de novembre de 2026; la interrupció entre la Garriga i Figaró dura fins al 14 de desembre).",
+  es: "Ahora mismo, sin embargo, no hay trenes de la R3 entre Barcelona y Sant Martí de Centelles: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso y horarios de Rodalies leídos el 25 de noviembre de 2026; la interrupción entre La Garriga y Figaró dura hasta el 14 de diciembre).",
+  en: "Right now, though, no R3 trains run between Barcelona and Sant Martí de Centelles: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice and timetables read on 25 November 2026; the cut between La Garriga and Figaró lasts until 14 December).",
 };
 
 const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
@@ -69,7 +71,7 @@ function ca(): Block[] {
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, nucli antic i museus"],
         ["Girona", "R11 o alta velocitat", "1 h 19–1 h 41 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
         ["Tarragona", "Regionals R14–R17", "69 min", "8,60 €", "Patrimoni romà i Mediterrani"],
-        ["Vic", "R3 (tallada entre Barcelona i la Garriga)", "—", "—", "Plaça Major, mercat i art medieval"],
+        ["Vic", "R3 (tallada entre Barcelona i Sant Martí de Centelles)", "—", "—", "Plaça Major, mercat i art medieval"],
         ["Figueres", "R11 o alta velocitat", "1 h 50–2 h 18 (R11), 42–65 min (alta velocitat a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
         ["Vilanova i la Geltrú", "R2 Sud i regionals", "32–44 min", "5,50 €", "Platja i Museu del Ferrocarril"],
         ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí i façana marítima"],
@@ -187,7 +189,7 @@ function es(): Block[] {
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, casco antiguo y museos"],
         ["Girona", "R11 o alta velocidad", "1 h 19–1 h 41 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
         ["Tarragona", "Regionales R14–R17", "69 min", "8,60 €", "Patrimonio romano y Mediterráneo"],
-        ["Vic", "R3 (cortada entre Barcelona y La Garriga)", "—", "—", "Plaça Major, mercado y arte medieval"],
+        ["Vic", "R3 (cortada entre Barcelona y Sant Martí de Centelles)", "—", "—", "Plaça Major, mercado y arte medieval"],
         ["Figueres", "R11 o alta velocidad", "1 h 50–2 h 18 (R11), 42–65 min (alta velocidad a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
         ["Vilanova i la Geltrú", "R2 Sud y regionales", "32–44 min", "5,50 €", "Playa y Museo del Ferrocarril"],
         ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí y fachada marítima"],
@@ -303,7 +305,7 @@ function en(): Block[] {
         ["Sitges", "R2 Sud", "31–37 min", "€5.50", "Beaches, old town, museums"],
         ["Girona", "R11 or high-speed", "1 h 19–1 h 41 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
         ["Tarragona", "Regional R14–R17", "69 min", "€8.60", "Roman heritage and the Mediterranean"],
-        ["Vic", "R3 (cut between Barcelona and La Garriga)", "—", "—", "Main square, market, medieval art"],
+        ["Vic", "R3 (cut between Barcelona and Sant Martí de Centelles)", "—", "—", "Main square, market, medieval art"],
         ["Figueres", "R11 or high-speed", "1 h 50–2 h 18 (R11), 42–65 min (high-speed to Figueres-Vilafant)", "€12.80–17.10 (R11)", "Dalí Theatre-Museum"],
         ["Vilanova i la Geltrú", "R2 Sud and regionals", "32–44 min", "€5.50", "Beach and the railway museum"],
         ["Mataró", "R1", "46–50 min", "€5.50", "Nau Gaudí and the seafront"],

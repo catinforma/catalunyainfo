@@ -43,6 +43,13 @@ import {
  * - PIRINEU365 activity and transport pages for the six FGC resorts, Guils
  *   for Tot Nòrdic, TEISA's line list.
  *
+ * 25 Nov 2026: the R3 text (Ripollès table, facts panel, FAQ; Setcases access
+ * paragraph) follows the Rodalies sheet "La Garriga - Figaró" of 16/11/2026
+ * and the notice's rail list "Sant Martí de Centelles - Puigcerdà/La Tor de
+ * Querol", in force until 7.00 on 14 Dec 2026 (see day-trips.ts, R3_FIGARO_WORKS,
+ * and tests/r3-works-25nov.test.ts). RIPOLLES_VERIFIED and SETCASES_VERIFIED
+ * stay at 28 Oct: nothing else on these pages was re-read.
+ *
  * Removed because they could not be re-checked today: the Sant Joan de les
  * Abadesses entry price (its site did not answer), the "three free car parks"
  * line on the Núria rack railway (not on the operator's page; the Núria guide
@@ -75,8 +82,13 @@ const RIPOLLES_SOURCES = [
   { name: "Horaris", url: "https://www.teisa-bus.com/ca/horaris", publisher: "TEISA" },
   { name: "R3: avís de servei", url: "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3", publisher: "Rodalies de Catalunya" },
   {
-    name: "R3: horaris de tren fins a la Tor de Querol a partir del 06.07",
-    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/02_02_PAT_R3/R3-Horaris-tren-fins-La-Tor-de-Querol-a-partir-06.07_V7.pdf",
+    name: "R3: modificació del servei entre La Garriga i Figaró (16 de novembre - 14 de desembre de 2026)",
+    url: "https://rodalies.gencat.cat/ca/detalls/article/11_11_R3_La-Garriga-Figaro",
+    publisher: "Rodalies de Catalunya",
+  },
+  {
+    name: "R3 La Garriga - Figaró: horaris de tren (full del 16/11/2026)",
+    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/11_11_R3_La-Garriga-Figaro/PAT_399-26-LA-GARRIGA-FIGARO.pdf",
     publisher: "Rodalies de Catalunya",
   },
 ];
@@ -131,24 +143,34 @@ const RIPOLL_PRICES: Record<"ca" | "es" | "en", string[][]> = {
   ],
 };
 
+// R3 rows re-read on 25 Nov 2026 from the Rodalies sheet "La Garriga - Figaró"
+// (PAT_399-26, 16/11/2026; in force 5.00 on 16 Nov to 7.00 on 14 Dec 2026): its
+// train rows start and end at Sant Martí de Centelles. Counted row by row:
+// 15 trains a day each way reach Ripoll (first up 6.56, Ripoll 8.10; last up
+// 18.56, Ripoll 20.10; first down from Ripoll 6.15, last 18.41, Sant Martí
+// 19.55); Sant Martí - Ripoll takes 1 h 9 min to 1 h 18 min. The Ripoll
+// times are those the 6 July sheet printed (the La Garriga leg is now by bus).
+// The GTFS feed the Rodalies line pages use (21 Nov) agrees: 17 departures a
+// day from Sant Martí, two of them ending at Vic. The 28 Oct wording ("13 a
+// day" up from La Garriga) is replaced.
 const RIPOLL_TRAINS: Record<"ca" | "es" | "en", string[][]> = {
   ca: [
-    ["Trens de la Garriga a Ripoll", "13 al dia; el primer surt a les 6.46 (arriba a Ripoll a les 8.10) i l'últim a les 18.46 (arriba a les 20.10)"],
-    ["Trens de Ripoll a la Garriga", "15 al dia; el primer surt a les 6.15 i l'últim a les 18.41 (arriba a la Garriga a les 20.06)"],
-    ["Durada la Garriga – Ripoll", "Entre 1 h 19 min i 1 h 28 min"],
-    ["Barcelona – la Garriga", "Sense trens: bus directe de Rodalies a la Garriga o a Vic"],
+    ["Trens de Sant Martí de Centelles a Ripoll", "15 al dia; el primer surt a les 6.56 (arriba a Ripoll a les 8.10) i l'últim a les 18.56 (arriba a les 20.10)"],
+    ["Trens de Ripoll a Sant Martí de Centelles", "15 al dia; el primer surt a les 6.15 i l'últim a les 18.41 (arriba a Sant Martí de Centelles a les 19.55)"],
+    ["Durada Sant Martí de Centelles – Ripoll", "Entre 1 h 9 min i 1 h 18 min"],
+    ["Barcelona – Sant Martí de Centelles", "Sense trens: autobusos de Rodalies (la Garriga – Figaró, del 16 de novembre al 14 de desembre de 2026; Barcelona – la Garriga, sense data de final)"],
   ],
   es: [
-    ["Trenes de La Garriga a Ripoll", "13 al día; el primero sale a las 6:46 (llega a Ripoll a las 8:10) y el último a las 18:46 (llega a las 20:10)"],
-    ["Trenes de Ripoll a La Garriga", "15 al día; el primero sale a las 6:15 y el último a las 18:41 (llega a La Garriga a las 20:06)"],
-    ["Duración La Garriga – Ripoll", "Entre 1 h 19 min y 1 h 28 min"],
-    ["Barcelona – La Garriga", "Sin trenes: bus directo de Rodalies a La Garriga o a Vic"],
+    ["Trenes de Sant Martí de Centelles a Ripoll", "15 al día; el primero sale a las 6:56 (llega a Ripoll a las 8:10) y el último a las 18:56 (llega a las 20:10)"],
+    ["Trenes de Ripoll a Sant Martí de Centelles", "15 al día; el primero sale a las 6:15 y el último a las 18:41 (llega a Sant Martí de Centelles a las 19:55)"],
+    ["Duración Sant Martí de Centelles – Ripoll", "Entre 1 h 9 min y 1 h 18 min"],
+    ["Barcelona – Sant Martí de Centelles", "Sin trenes: autobuses de Rodalies (La Garriga – Figaró, del 16 de noviembre al 14 de diciembre de 2026; Barcelona – La Garriga, sin fecha de fin)"],
   ],
   en: [
-    ["Trains from La Garriga to Ripoll", "13 a day; the first leaves at 6:46 (arrives in Ripoll 8:10), the last at 18:46 (arrives 20:10)"],
-    ["Trains from Ripoll to La Garriga", "15 a day; the first leaves at 6:15, the last at 18:41 (arrives in La Garriga 20:06)"],
-    ["La Garriga – Ripoll journey", "Between 1 h 19 min and 1 h 28 min"],
-    ["Barcelona – La Garriga", "No trains: Rodalies direct bus to La Garriga or Vic"],
+    ["Trains from Sant Martí de Centelles to Ripoll", "15 a day; the first leaves at 6:56 (arrives in Ripoll 8:10), the last at 18:56 (arrives 20:10)"],
+    ["Trains from Ripoll to Sant Martí de Centelles", "15 a day; the first leaves at 6:15, the last at 18:41 (arrives in Sant Martí de Centelles 19:55)"],
+    ["Sant Martí de Centelles – Ripoll journey", "Between 1 h 9 min and 1 h 18 min"],
+    ["Barcelona – Sant Martí de Centelles", "No trains: Rodalies buses (La Garriga – Figaró, 16 November to 14 December 2026; Barcelona – La Garriga, no end date)"],
   ],
 };
 
@@ -199,7 +221,7 @@ export const RIPOLLES: B2Article = {
           { label: "Altitud de Ripoll", value: "691 m" },
           { label: "Comarca del Ripollès", value: "19 municipis, 956,6 km², 25.914 habitants" },
           { label: "Monestir de Ripoll", value: "Entrada general 7,50 €" },
-          { label: "Tren", value: "R3: 13 trens al dia de la Garriga a Ripoll" },
+          { label: "Tren", value: "R3: 15 trens al dia de Sant Martí de Centelles a Ripoll" },
           { label: "Última verificació", value: "28 d'octubre de 2026" },
         ]),
         ...h2(
@@ -232,9 +254,9 @@ export const RIPOLLES: B2Article = {
         ),
         ...h2("Com arribar a Ripoll en tren (R3)"),
         ...paras(
-          "Ripoll té estació de l'**R3**, però per les obres d'Adif no hi ha trens entre Barcelona i la Garriga: aquest tram es fa amb els autobusos directes de Rodalies fins a la Garriga o Vic, i des de la Garriga l'R3 puja cap a Ripoll i Puigcerdà amb la meitat dels trens d'abans del 20 de gener.",
+          "Ripoll té estació de l'**R3**, però per les obres d'Adif no hi ha trens entre Barcelona i Sant Martí de Centelles (entre la Garriga i Figaró, del 16 de novembre al 14 de desembre de 2026): aquest tram es fa amb autobusos de Rodalies, i des de Sant Martí de Centelles l'R3 puja cap a Ripoll i Puigcerdà amb la meitat dels trens d'abans del 20 de gener.",
         ),
-        table("Trens R3 entre la Garriga i Ripoll", ["", "Horari"], RIPOLL_TRAINS.ca, "Horari de tren vigent des del 6 de juliol de 2026 (full actualitzat el 16/09/2026), cada dia. Consultat el 28/10/2026: comprova'l a rodalies.gencat.cat el dia que viatgis."),
+        table("Trens R3 entre Sant Martí de Centelles i Ripoll", ["", "Horari"], RIPOLL_TRAINS.ca, "Horari de tren de Rodalies «La Garriga - Figaró» del 16/11/2026, vigent fins a les 7.00 h del 14 de desembre de 2026, cada dia. Consultat el 25/11/2026: comprova'l a rodalies.gencat.cat el dia que viatgis."),
         ...paras(
           "En autobús, TEISA uneix Barcelona amb Ripoll i Camprodon passant per Vic, i també hi té línies des de Girona i Olot. En cotxe, des de Barcelona per la C-17 (direcció Vic–Puigcerdà), i des de Girona per l'A-26 cap a Olot i la N-260 cap a Ripoll.",
         ),
@@ -280,7 +302,7 @@ export const RIPOLLES: B2Article = {
         faq([
           { question: "Què veure a Ripoll?", answer: "El monestir de Santa Maria, amb la portalada romànica del segle XII, i el Museu Etnogràfic, a la mateixa plaça. Amb una tarda més, la via verda fins a Sant Joan de les Abadesses." },
           { question: "Quant costa entrar al monestir de Ripoll?", answer: "L'entrada general costa 7,50 €; 5,50 € per a majors de 65 anys i joves fins a 25; 3,50 € de 5 a 18 anys; gratuït per a menors de 5 anys i residents (preus consultats el 28/10/2026)." },
-          { question: "Com s'arriba a Ripoll en tren des de Barcelona?", answer: "Amb l'R3. Mentre durin les obres, de Barcelona a la Garriga o Vic es va amb el bus directe de Rodalies i d'allà amb el tren; de la Garriga a Ripoll hi ha 13 trens al dia." },
+          { question: "Com s'arriba a Ripoll en tren des de Barcelona?", answer: "Amb l'R3. Mentre durin les obres, de Barcelona a Sant Martí de Centelles es va amb els autobusos de Rodalies i d'allà amb el tren; de Sant Martí de Centelles a Ripoll hi ha 15 trens al dia (horari de Rodalies del 16 de novembre al 14 de desembre de 2026)." },
           { question: "Quina altitud té Ripoll?", answer: "691 metres, segons l'Idescat." },
           { question: "Quina és la capital del Ripollès i quants municipis té?", answer: "La capital és Ripoll. La comarca té 19 municipis, 956,6 km² i 25.914 habitants, segons l'Idescat (2025)." },
           { question: "Quins pobles bonics hi ha a prop de Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs i Ribes de Freser, d'on surt el cremallera de Núria." },
@@ -307,7 +329,7 @@ export const RIPOLLES: B2Article = {
           { label: "Altitud de Ripoll", value: "691 m" },
           { label: "Comarca del Ripollès", value: "19 municipios, 956,6 km², 25.914 habitantes" },
           { label: "Monasterio de Ripoll", value: "Entrada general 7,50 €" },
-          { label: "Tren", value: "R3: 13 trenes al día de La Garriga a Ripoll" },
+          { label: "Tren", value: "R3: 15 trenes al día de Sant Martí de Centelles a Ripoll" },
           { label: "Última verificación", value: "28 de octubre de 2026" },
         ]),
         ...h2(
@@ -340,9 +362,9 @@ export const RIPOLLES: B2Article = {
         ),
         ...h2("Cómo llegar a Ripoll en tren (R3)"),
         ...paras(
-          "Ripoll tiene estación de la **R3**, pero por las obras de Adif no hay trenes entre Barcelona y La Garriga: ese tramo se hace con los autobuses directos de Rodalies hasta La Garriga o Vic, y desde La Garriga la R3 sube hacia Ripoll y Puigcerdà con la mitad de los trenes que había antes del 20 de enero.",
+          "Ripoll tiene estación de la **R3**, pero por las obras de Adif no hay trenes entre Barcelona y Sant Martí de Centelles (entre La Garriga y Figaró, del 16 de noviembre al 14 de diciembre de 2026): ese tramo se hace con autobuses de Rodalies, y desde Sant Martí de Centelles la R3 sube hacia Ripoll y Puigcerdà con la mitad de los trenes que había antes del 20 de enero.",
         ),
-        table("Trenes R3 entre La Garriga y Ripoll", ["", "Horario"], RIPOLL_TRAINS.es, "Horario de tren vigente desde el 6 de julio de 2026 (hoja actualizada el 16/09/2026), todos los días. Consultado el 28/10/2026: compruébalo en rodalies.gencat.cat el día que viajes."),
+        table("Trenes R3 entre Sant Martí de Centelles y Ripoll", ["", "Horario"], RIPOLL_TRAINS.es, "Horario de tren de Rodalies «La Garriga - Figaró» del 16/11/2026, vigente hasta las 7.00 h del 14 de diciembre de 2026, todos los días. Consultado el 25/11/2026: compruébalo en rodalies.gencat.cat el día que viajes."),
         ...paras(
           "En autobús, TEISA une Barcelona con Ripoll y Camprodon pasando por Vic, y tiene líneas desde Girona y Olot. En coche, desde Barcelona por la C-17 (dirección Vic–Puigcerdà), y desde Girona por la A-26 hacia Olot y la N-260 hacia Ripoll.",
         ),
@@ -387,7 +409,7 @@ export const RIPOLLES: B2Article = {
         faq([
           { question: "¿Qué ver en Ripoll?", answer: "El monasterio de Santa Maria, con la portada románica del siglo XII, y el Museu Etnogràfic, en la misma plaza. Con una tarde más, la vía verde hasta Sant Joan de les Abadesses." },
           { question: "¿Cuánto cuesta entrar al monasterio de Ripoll?", answer: "La entrada general cuesta 7,50 €; 5,50 € para mayores de 65 y jóvenes hasta 25; 3,50 € de 5 a 18 años; gratis para menores de 5 y residentes (precios consultados el 28/10/2026)." },
-          { question: "¿Cómo se llega a Ripoll en tren desde Barcelona?", answer: "Con la R3. Mientras duren las obras, de Barcelona a La Garriga o Vic se va en el bus directo de Rodalies y de allí en tren; de La Garriga a Ripoll hay 13 trenes al día." },
+          { question: "¿Cómo se llega a Ripoll en tren desde Barcelona?", answer: "Con la R3. Mientras duren las obras, de Barcelona a Sant Martí de Centelles se va en autobuses de Rodalies y de allí en tren; de Sant Martí de Centelles a Ripoll hay 15 trenes al día (horario de Rodalies del 16 de noviembre al 14 de diciembre de 2026)." },
           { question: "¿Dónde está Ripoll?", answer: "En la provincia de Girona, en el Pirineo catalán: es la capital de la comarca del Ripollès, a 691 metros de altitud." },
           { question: "¿Cuántos municipios tiene la comarca del Ripollès?", answer: "19, con Ripoll como capital: 956,6 km² y 25.914 habitantes, según el Idescat (2025)." },
           { question: "¿Qué pueblos bonitos hay cerca de Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs y Ribes de Freser, de donde sale el cremallera de Núria." },
@@ -414,7 +436,7 @@ export const RIPOLLES: B2Article = {
           { label: "Ripoll altitude", value: "691 m" },
           { label: "Ripollès district", value: "19 municipalities, 956.6 km², 25,914 people" },
           { label: "Monastery of Ripoll", value: "General admission €7.50" },
-          { label: "Train", value: "R3: 13 trains a day from La Garriga to Ripoll" },
+          { label: "Train", value: "R3: 15 trains a day from Sant Martí de Centelles to Ripoll" },
           { label: "Last verified", value: "28 October 2026" },
         ]),
         ...h2(
@@ -447,9 +469,9 @@ export const RIPOLLES: B2Article = {
         ),
         ...h2("Getting to Ripoll by train (R3)"),
         ...paras(
-          "Ripoll is on the **R3** line, but because of Adif works no trains run between Barcelona and La Garriga: that stretch is covered by Rodalies direct buses to La Garriga or Vic, and from La Garriga R3 trains run up to Ripoll and Puigcerdà at half the frequency they had before 20 January.",
+          "Ripoll is on the **R3** line, but because of Adif works no trains run between Barcelona and Sant Martí de Centelles (between La Garriga and Figaró, 16 November to 14 December 2026): that stretch is covered by Rodalies buses, and from Sant Martí de Centelles R3 trains run up to Ripoll and Puigcerdà at half the frequency they had before 20 January.",
         ),
-        table("R3 trains between La Garriga and Ripoll", ["", "Times"], RIPOLL_TRAINS.en, "Train timetable in force since 6 July 2026 (sheet updated 16/09/2026), daily. Checked 28/10/2026: confirm on rodalies.gencat.cat for your travel date."),
+        table("R3 trains between Sant Martí de Centelles and Ripoll", ["", "Times"], RIPOLL_TRAINS.en, "Rodalies train timetable \"La Garriga - Figaró\" of 16/11/2026, in force until 7.00 on 14 December 2026, daily. Read 25/11/2026: confirm on rodalies.gencat.cat for your travel date."),
         ...paras(
           "By bus, TEISA links Barcelona with Ripoll and Camprodon via Vic, and also runs lines from Girona and Olot. By car, take the C-17 from Barcelona (towards Vic and Puigcerdà); from Girona, the A-26 towards Olot and then the N-260 to Ripoll.",
         ),
@@ -494,7 +516,7 @@ export const RIPOLLES: B2Article = {
         faq([
           { question: "What is there to see in Ripoll?", answer: "The monastery of Santa Maria, with its 12th-century Romanesque doorway, and the Ethnographic Museum on the same square. With an extra afternoon, the greenway to Sant Joan de les Abadesses." },
           { question: "How much does the monastery of Ripoll cost?", answer: "General admission is €7.50; €5.50 for over-65s and under-26s; €3.50 for ages 5 to 18; free for under-5s and residents (checked 28/10/2026)." },
-          { question: "How do you get to Ripoll from Barcelona by train?", answer: "On the R3. While the works last, take the Rodalies direct bus from Barcelona to La Garriga or Vic and the train from there; 13 trains a day run from La Garriga to Ripoll." },
+          { question: "How do you get to Ripoll from Barcelona by train?", answer: "On the R3. While the works last, take the Rodalies buses from Barcelona to Sant Martí de Centelles and the train from there; 15 trains a day run from Sant Martí de Centelles to Ripoll (Rodalies timetable, 16 November to 14 December 2026)." },
           { question: "Where is Ripoll, Spain?", answer: "In the Catalan Pyrenees, in the province of Girona: it is the capital of the Ripollès district, at 691 metres." },
           { question: "Which villages are worth seeing near Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs and Ribes de Freser, where the Núria rack railway starts." },
         ]),
@@ -655,7 +677,7 @@ export const SETCASES: B2Article = {
         ...h2(
           "Com arribar a Setcases en transport públic",
           "El tren no arriba a Setcases. TEISA opera la línia d'autobús Setcases – Camprodon – Ripoll – Campdevànol, però la majoria d'expedicions comencen i acaben a Camprodon, i només unes poques pugen fins a Setcases. A l'hivern, TEISA també publica un bus d'esquí Girona – Olot – Camprodon – Setcases – Vallter els caps de setmana i festius de gener a març. Mira l'horari vigent al web de TEISA abans de sortir.",
-          "Ripoll té estació de la R3, però els trens circulen només entre la Garriga i Puigcerdà, amb menys freqüència. Entre Barcelona i la Garriga o Vic, Rodalies hi posa un servei per carretera. Consulta l'avís de Rodalies per al dia que viatges.",
+          "Ripoll té estació de la R3, però els trens circulen només entre Sant Martí de Centelles i Puigcerdà (fins al 14 de desembre de 2026; abans, des de la Garriga), amb menys freqüència. Entre Barcelona i Sant Martí de Centelles, Rodalies hi posa un servei per carretera. Consulta l'avís de Rodalies per al dia que viatges.",
         ),
         faq([
           { question: "Què veure a Setcases en un dia?", answer: "El nucli i l'església de Sant Miquel al matí, el passeig a la Creueta, i a la tarda un mirador o una ruta curta com el camí dels Socarrats i dels Beduïs. Si hi ha temps, Vallter i el circ d'Ulldeter." },
@@ -750,7 +772,7 @@ export const SETCASES: B2Article = {
         ...h2(
           "Cómo llegar a Setcases en transporte público",
           "El tren no llega a Setcases. TEISA opera la línea de autobús Setcases – Camprodon – Ripoll – Campdevànol, pero la mayoría de las expediciones empiezan y terminan en Camprodon, y solo unas pocas suben hasta Setcases. En invierno, TEISA también publica un bus de esquí Girona – Olot – Camprodon – Setcases – Vallter los fines de semana y festivos de enero a marzo. Mira el horario vigente en la web de TEISA antes de salir.",
-          "Ripoll tiene estación de la R3, pero los trenes solo circulan entre La Garriga y Puigcerdà, con menos frecuencia. Entre Barcelona y La Garriga o Vic, Rodalies pone un servicio por carretera. Consulta el aviso de Rodalies para el día del viaje.",
+          "Ripoll tiene estación de la R3, pero los trenes solo circulan entre Sant Martí de Centelles y Puigcerdà (hasta el 14 de diciembre de 2026; antes, desde La Garriga), con menos frecuencia. Entre Barcelona y Sant Martí de Centelles, Rodalies pone un servicio por carretera. Consulta el aviso de Rodalies para el día del viaje.",
         ),
         faq([
           { question: "¿Qué ver en Setcases en un día?", answer: "El casco y la iglesia de Sant Miquel por la mañana, el paseo a la Creueta, y por la tarde un mirador o una ruta corta como el camí dels Socarrats i dels Beduïs. Si hay tiempo, Vallter y el circo de Ulldeter." },
@@ -846,7 +868,7 @@ export const SETCASES: B2Article = {
         ...h2(
           "Getting to Setcases by public transport",
           "The train does not reach Setcases. TEISA runs a Setcases – Camprodon – Ripoll – Campdevànol bus, but most journeys start and end in Camprodon and only a few go up to Setcases. In winter TEISA also publishes a ski bus Girona – Olot – Camprodon – Setcases – Vallter at weekends and on holidays from January to March. Check the current timetable on TEISA's website first.",
-          "Ripoll is on the R3 rail line, but R3 trains run only between La Garriga and Puigcerdà, with a reduced service, and Rodalies operates a road service between Barcelona and La Garriga or Vic. Check the Rodalies notice for your travel date.",
+          "Ripoll is on the R3 rail line, but R3 trains run only between Sant Martí de Centelles and Puigcerdà (until 14 December 2026; before that, from La Garriga), with a reduced service, and Rodalies operates a road service between Barcelona and Sant Martí de Centelles. Check the Rodalies notice for your travel date.",
         ),
         faq([
           { question: "What is there to see in Setcases?", answer: "The stone village and the church of Sant Miquel, the short walk to La Creueta, four lookouts, and the natural park's walks, including the Ulldeter cirque near Vallter." },

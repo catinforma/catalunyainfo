@@ -1416,8 +1416,18 @@ const CERDANYA_SOURCES = [
     publisher: "Rodalies de Catalunya",
   },
   {
-    name: "R3: horaris de tren fins a la Tor de Querol a partir del 06.07",
-    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/02_02_PAT_R3/R3-Horaris-tren-fins-La-Tor-de-Querol-a-partir-06.07_V7.pdf",
+    name: "R3: modificació del servei entre La Garriga i Figaró (16 de novembre - 14 de desembre de 2026)",
+    url: "https://rodalies.gencat.cat/ca/detalls/article/11_11_R3_La-Garriga-Figaro",
+    publisher: "Rodalies de Catalunya",
+  },
+  {
+    name: "R3 La Garriga - Figaró: horaris de tren (full del 16/11/2026)",
+    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/11_11_R3_La-Garriga-Figaro/PAT_399-26-LA-GARRIGA-FIGARO.pdf",
+    publisher: "Rodalies de Catalunya",
+  },
+  {
+    name: "R3 La Garriga - Figaró: horaris de bus + tren (full del 16/11/2026)",
+    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/11_11_R3_La-Garriga-Figaro/PAT_399-26-LA-GARRIGA-FIGARO-BUS-I-TREN.pdf",
     publisher: "Rodalies de Catalunya",
   },
   { name: "Cercador d'horaris de Rodalies", url: "https://rodalies.gencat.cat/ca/horaris/", publisher: "Rodalies de Catalunya" },
@@ -1438,66 +1448,87 @@ const CERDANYA_SOURCES = [
   },
 ];
 
-// R3 notice and train timetable re-checked on 26 Oct 2026: notice updated
-// 06.07.2026 (plus a Balenyà-Els Hostalets stop change from 22/10), train
-// sheet "a partir del 06.07" V7, last updated 16/09/2026. The two tables
-// below list the rows that sheet marks as R3 trains running through to
-// Puigcerdà; none of them carries the weekday-only shading. Until 26 Oct the
-// up table missed the 18:16 from La Garriga (Puigcerdà 20:51) and the page
-// said four trains up: the sheet, R3.pdf and the official planner
-// (serveisgrs.rodalies.gencat.cat/api/timetables, La Garriga 77102 →
-// Puigcerdà 77309, for 28 and 31 Oct and 4 Nov) all give five each way,
-// single fare "REG" 9.70 €. The old "Adif planned to keep the cut until
-// January 2027" line is gone: the notice no longer says it.
-const CERDANYA_VERIFIED = "2026-10-26";
+// R3 re-read on 25 Nov 2026 (curl, 01:06-01:20 UTC; fact pack in the scratch
+// dir, not committed). Rodalies' notice 02_02_PAT_R3 (page date still
+// 06.07.2026) now says "A partir del 16 de novembre: Degut als treballs que
+// Adif realitzarà entre La Garriga i Figaró ... s'interromp la circulació en
+// aquest tram", and its rail list reads "L'Hospitalet de Llobregat - Fabra i
+// Puig / Montcada Bifurcació: línia R4" and "Sant Martí de Centelles -
+// Puicerdà/La Tor de Querol: línia R3" (the Spanish page still prints "La
+// Garriga-Puigcerdà"; the Catalan one and the sheet below are the newer).
+// The sheet PAT_399-26 "LA GARRIGA - FIGARÓ" (16/11/2026): "De les 5.00 h del
+// 16 de novembre fins les 7.00 h del 14 de desembre"; its R3 train rows start
+// at Sant Martí de Centelles (6.56, 10.26, 13.26, 16.26 and 18.26 go through
+// to Puigcerdà; Ripoll, Ribes, La Molina and Puigcerdà times are the ones the
+// 6 July sheet printed for the same trains, ten minutes after La Garriga).
+// The official planner (serveisgrs.rodalies.gencat.cat/api/timetables,
+// Sant Martí de Centelles 77104 -> Puigcerdà 77309, 27 and 28 Nov and 15 Dec)
+// gives the same five trains (06:56>09:21 10:26>12:53 13:26>15:53 16:26>18:53
+// 18:26>20:51, 2 h 25 min to 2 h 27 min), single "REG" 8.95 EUR; down on 28
+// Nov 05:53, 07:51, 10:22, 14:21, 17:20 arrive 08:24-19:54 (the sheet prints
+// the departure from Sant Martí one minute later); La Garriga -> Puigcerdà
+// returns "Dades no disponibles". The notice gives no service after 14 Dec.
+// Poster "Servei alternatiu per carretera" (changed 16 Nov): "Servei d'enllaç
+// amb Centelles" with stops "La Garriga - Figaró - St. Martí de Centelles -
+// Centelles". Ski Tren: pirineu365.cat/lamolina/estacio/informacio-practica/,
+// read 25 Nov, "SKI TREN LA MOLINA Adult/Jove 53,00 € Infantil 41,50 €",
+// "Bitllet de tren d'anada i tornada des de les principals estacions de
+// Rodalies de Catalunya (Línia R3 Renfe) fins a La Molina", no season label.
+// Bus urbà prices re-read the same day (1,50 € and 9 €); cerdanya.org and the
+// Bus Blanc PDF answered 403, so their text keeps saying what is known.
+// Until 25 Nov the page said the 6 July timetable ran from La Garriga.
+// REREAD_BY: the works end at 7.00 on 14 Dec; the notice says nothing about
+// what follows, so the page must be re-read before then (tests/r3-works-25nov).
+export const R3_FIGARO_WORKS = { from: "2026-11-16", to: "2026-12-14", rereadBy: "2026-12-11" } as const;
+const CERDANYA_VERIFIED = "2026-11-25";
 
 const CERDANYA_R3: Record<"ca" | "es" | "en", [title: string, body: string]> = {
   ca: [
     "L'R3, ara mateix",
-    "Segons l'avís de Rodalies (actualitzat el 6 de juliol de 2026 i vigent el 26 d'octubre), l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener i no hi ha trens entre Barcelona i la Garriga: entre l'Hospitalet i Fabra i Puig o Montcada Bifurcació hi ha l'R4, i fins a la Garriga o Vic, autobusos directes de Rodalies. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà. Mira els horaris a rodalies.gencat.cat abans de sortir.",
+    "Segons l'avís de Rodalies (llegit el 25 de novembre de 2026), l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener. Per obres d'Adif entre la Garriga i Figaró, **del 16 de novembre al 14 de desembre de 2026** no hi ha trens en aquest tram, i els trens cap a la Molina i Puigcerdà surten de **Sant Martí de Centelles**, no de la Garriga. De Barcelona fins allà hi ha autobusos de Rodalies, i entre l'Hospitalet i Fabra i Puig o Montcada Bifurcació hi ha l'R4. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà. L'avís no diu quin serà el servei després del 14 de desembre: mira els horaris a rodalies.gencat.cat abans de sortir.",
   ],
   es: [
     "La R3, ahora mismo",
-    "Según el aviso de Rodalies (actualizado el 6 de julio de 2026 y vigente el 26 de octubre), la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero y no hay trenes entre Barcelona y La Garriga: entre L'Hospitalet y Fabra i Puig o Montcada Bifurcació está la R4, y hasta La Garriga o Vic, autobuses directos de Rodalies. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà. Mira los horarios en rodalies.gencat.cat antes de salir.",
+    "Según el aviso de Rodalies (leído el 25 de noviembre de 2026), la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero. Por obras de Adif entre La Garriga y Figaró, **del 16 de noviembre al 14 de diciembre de 2026** no hay trenes en ese tramo, y los trenes hacia La Molina y Puigcerdà salen de **Sant Martí de Centelles**, no de La Garriga. De Barcelona hasta allí hay autobuses de Rodalies, y entre L'Hospitalet y Fabra i Puig o Montcada Bifurcació está la R4. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà. El aviso no dice cuál será el servicio después del 14 de diciembre: mira los horarios en rodalies.gencat.cat antes de salir.",
   ],
   en: [
     "The R3 right now",
-    "According to Rodalies' notice (last updated 6 July 2026 and still in force on 26 October), the R3 is running 50% of the trains it had before 20 January, and no trains run between Barcelona and La Garriga: the R4 covers L'Hospitalet to Fabra i Puig or Montcada Bifurcació, and Rodalies direct buses run to La Garriga or Vic. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà. Check the timetables at rodalies.gencat.cat before you go.",
+    "According to Rodalies' notice (read on 25 November 2026), the R3 is running 50% of the trains it had before 20 January. Because of Adif works between La Garriga and Figaró, **from 16 November to 14 December 2026** no trains run on that stretch, and the trains to La Molina and Puigcerdà start at **Sant Martí de Centelles**, not La Garriga. Rodalies buses cover the way there from Barcelona, and the R4 runs from L'Hospitalet to Fabra i Puig or Montcada Bifurcació. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà. The notice does not say what service follows after 14 December: check rodalies.gencat.cat before you go.",
   ],
 };
 
-/** Through trains only, from the Rodalies sheet valid since 6 July 2026. */
+/** Through trains only, from the Rodalies sheet "La Garriga - Figaró" (16 Nov - 14 Dec 2026). */
 const CERDANYA_UP: string[][] = [
-  ["6:46", "8:10", "8:29", "9:00", "9:21", "—"],
-  ["10:16", "11:40", "12:01", "12:32", "12:54", "13:00"],
-  ["13:16", "14:40", "14:59", "15:32", "15:54", "16:00"],
-  ["16:16", "17:40", "17:59", "18:32", "18:54", "19:00"],
-  ["18:16", "19:40", "19:59", "20:30", "20:51", "—"],
+  ["6:56", "8:10", "8:29", "9:00", "9:21", "—"],
+  ["10:26", "11:40", "12:01", "12:32", "12:54", "13:00"],
+  ["13:26", "14:40", "14:59", "15:32", "15:54", "16:00"],
+  ["16:26", "17:40", "17:59", "18:32", "18:54", "19:00"],
+  ["18:26", "19:40", "19:59", "20:30", "20:51", "—"],
 ];
 
 const CERDANYA_DOWN: string[][] = [
-  ["—", "5:53", "6:17", "6:51", "7:12", "8:36"],
-  ["—", "7:51", "8:15", "8:49", "9:11", "10:36"],
-  ["—", "10:22", "10:46", "11:20", "11:41", "13:06"],
-  ["14:14", "14:21", "14:45", "15:19", "15:41", "17:06"],
-  ["17:13", "17:20", "17:44", "18:19", "18:41", "20:06"],
+  ["—", "5:53", "6:17", "6:51", "7:12", "8:25"],
+  ["—", "7:51", "8:15", "8:49", "9:11", "10:25"],
+  ["—", "10:22", "10:46", "11:20", "11:41", "12:55"],
+  ["14:14", "14:21", "14:45", "15:19", "15:41", "16:55"],
+  ["17:13", "17:20", "17:44", "18:19", "18:41", "19:55"],
 ];
 
 const CERDANYA_TT: Record<"ca" | "es" | "en", { up: [string, string[]]; down: [string, string[]]; note: string }> = {
   ca: {
-    up: ["Trens R3 de pujada: la Garriga → Puigcerdà (cada dia)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
-    down: ["Trens R3 de baixada: Puigcerdà → la Garriga (cada dia)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
-    note: "Font: Rodalies, horari de tren R3 vigent des del 6 de juliol de 2026 (full actualitzat el 16/09/2026). Només els trens que fan tot el recorregut; la resta acaba a Ripoll o a Ribes. Consultat el 26/10/2026: pot canviar, comprova'l el dia que viatgis.",
+    up: ["Trens R3 de pujada: Sant Martí de Centelles → Puigcerdà (cada dia)", ["Sant Martí de Centelles", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["Trens R3 de baixada: Puigcerdà → Sant Martí de Centelles (cada dia)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "Sant Martí de Centelles"]],
+    note: "Font: Rodalies, full «La Garriga - Figaró» del 16/11/2026, vigent de les 5.00 h del 16 de novembre fins a les 7.00 h del 14 de desembre de 2026. Només els trens que fan tot el recorregut; la resta acaba a Ripoll o a Ribes. Consultat el 25/11/2026 i contrastat amb el cercador d'horaris de Rodalies (27 i 28/11): comprova'l el dia que viatgis.",
   },
   es: {
-    up: ["Trenes R3 de subida: La Garriga → Puigcerdà (todos los días)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
-    down: ["Trenes R3 de bajada: Puigcerdà → La Garriga (todos los días)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
-    note: "Fuente: Rodalies, horario de tren R3 vigente desde el 6 de julio de 2026 (hoja actualizada el 16/09/2026). Solo los trenes que hacen todo el recorrido; el resto termina en Ripoll o en Ribes. Consultado el 26/10/2026: puede cambiar, compruébalo el día que viajes.",
+    up: ["Trenes R3 de subida: Sant Martí de Centelles → Puigcerdà (todos los días)", ["Sant Martí de Centelles", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["Trenes R3 de bajada: Puigcerdà → Sant Martí de Centelles (todos los días)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "Sant Martí de Centelles"]],
+    note: "Fuente: Rodalies, hoja «La Garriga - Figaró» del 16/11/2026, vigente de las 5.00 h del 16 de noviembre hasta las 7.00 h del 14 de diciembre de 2026. Solo los trenes que hacen todo el recorrido; el resto termina en Ripoll o en Ribes. Consultado el 25/11/2026 y contrastado con el buscador de horarios de Rodalies (27 y 28/11): puede cambiar, compruébalo el día que viajes.",
   },
   en: {
-    up: ["R3 trains up: La Garriga → Puigcerdà (daily)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
-    down: ["R3 trains down: Puigcerdà → La Garriga (daily)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
-    note: "Source: Rodalies, R3 train timetable in force since 6 July 2026 (sheet updated 16/09/2026). Only trains that run the whole way; the rest terminate at Ripoll or Ribes. Checked 26/10/2026: it can change, so confirm on the day you travel.",
+    up: ["R3 trains up: Sant Martí de Centelles → Puigcerdà (daily)", ["Sant Martí de Centelles", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["R3 trains down: Puigcerdà → Sant Martí de Centelles (daily)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "Sant Martí de Centelles"]],
+    note: "Source: Rodalies, sheet \"La Garriga - Figaró\" of 16/11/2026, in force from 5.00 on 16 November to 7.00 on 14 December 2026. Only trains that run the whole way; the rest terminate at Ripoll or Ribes. Read on 25/11/2026 and cross-checked with the Rodalies journey planner (27 and 28/11): it can change, so confirm on the day you travel.",
   },
 };
 
@@ -1541,18 +1572,18 @@ export const CERDANYA: B2Article = {
       title: "Cerdanya sense cotxe: horaris del tren R3 a Puigcerdà, busos i què és realista",
       seoTitle: "Cerdanya sense cotxe: horaris R3 a Puigcerdà i busos",
       seoDescription:
-        "Cerdanya sense cotxe: horaris dels trens R3 directes a la Molina i Puigcerdà, com fer el tram Barcelona–la Garriga, el bus urbà i el Bus Blanc d'hivern.",
+        "Cerdanya sense cotxe: horaris dels trens R3 directes a la Molina i Puigcerdà, el tram en autobús des de Barcelona mentre duren les obres, el bus urbà i el Bus Blanc.",
       excerpt:
         "Els trens R3 que arriben a Puigcerdà, com sortir de Barcelona mentre duren les obres, i què és realista sense cotxe.",
       blocks: [
         lead(
-          "Sí, es pot anar a la Cerdanya sense cotxe: amb la línia **R3**, que puja per Vic i Ripoll fins a la Molina, Puigcerdà i la Tor de Querol. Mentre duren les obres no hi ha trens entre Barcelona i la Garriga (el tram es fa amb autobusos de Rodalies), i de la Garriga a Puigcerdà hi ha **cinc trens directes al dia en cada sentit**, amb un trajecte d'entre 2 h 35 min i 2 h 46 min. Un cop allà, Puigcerdà és la base més pràctica.",
+          "Sí, es pot anar a la Cerdanya sense cotxe: amb la línia **R3**, que puja per Vic i Ripoll fins a la Molina, Puigcerdà i la Tor de Querol. Mentre duren les obres no hi ha trens entre Barcelona i Sant Martí de Centelles (el tram es fa amb autobusos de Rodalies, almenys fins al 14 de desembre de 2026), i de Sant Martí de Centelles a Puigcerdà hi ha **cinc trens directes al dia en cada sentit**, amb un trajecte d'entre 2 h 25 min i 2 h 35 min. Un cop allà, Puigcerdà és la base més pràctica.",
         ),
         callout("warning", ...CERDANYA_R3.ca),
         ...h2("Horaris de l'R3 a la Molina i Puigcerdà"),
         ...cerdanyaTimetable("ca"),
         ...paras(
-          "El bitllet senzill de la Garriga a Puigcerdà costa 9,70 €. La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser, i entre la Garriga i Puigcerdà també circulen els autobusos complementaris de Rodalies. També hi ha línies regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida (ALSA) i des de Girona per Olot i Ripoll (TEISA).",
+          "El bitllet senzill de Sant Martí de Centelles a Puigcerdà costa 8,95 € (cercador de Rodalies, 25 de novembre de 2026). La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser, i entre la Garriga i Puigcerdà també circulen els autobusos complementaris de Rodalies. També hi ha línies regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida (ALSA) i des de Girona per Olot i Ripoll (TEISA).",
         ),
         ...h2(
           "Puigcerdà és la base més fàcil",
@@ -1561,11 +1592,11 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "La Molina en tren",
-          "La Molina té estació pròpia a l'R3, i des de l'estació un autobús intern puja fins al peu de pistes. El web de l'estació anuncia també el **Ski Tren**, que es compra a Renfe/Rodalies i combina el tren d'anada i tornada, el bus intern i el forfet d'un dia.",
+          "La Molina té estació pròpia a l'R3, i des de l'estació un autobús intern puja fins al peu de pistes. El web de l'estació anuncia també el **Ski Tren**, que es compra a Renfe/Rodalies i inclou el tren d'anada i tornada des de les principals estacions de Rodalies, el bus intern i el forfet i l'assegurança d'un dia: 53 € adult o jove i 41,50 € infantil, segons el web de l'estació el 25 de novembre de 2026 (sense indicar temporada). El forfet es recull a l'atenció al client de la Molina, amb un suport PIRINEU365 de 2 €. Mentre duri el tall de l'R3 entre la Garriga i Figaró, el tram de Barcelona fins a Sant Martí de Centelles es fa en autobús.",
         ),
         ...h2(
           "Temporada de neu: el Bus Blanc",
-          "El Consell Comarcal de la Cerdanya ofereix el **Bus Blanc** cap a la Molina i Masella, amb dues rutes: una per Llívia, Puigcerdà i Urtx, i l'altra per Martinet, Bellver i Alp. La temporada 2025-26 va començar el cap de setmana del 6 de desembre de 2025 i circulava tots els caps de setmana i festius escolars, excepte el dia de Nadal, a 2 €. El servei de la temporada 2026-2027 encara no s'ha publicat: comprova-ho abans de comptar-hi.",
+          "El Consell Comarcal de la Cerdanya ofereix el **Bus Blanc** cap a la Molina i Masella, amb dues rutes: una per Llívia, Puigcerdà i Urtx, i l'altra per Martinet, Bellver i Alp. La temporada 2025-26 va començar el cap de setmana del 6 de desembre de 2025 i circulava tots els caps de setmana i festius escolars, excepte el dia de Nadal, a 2 €. El servei de la temporada 2026-2027 no estava publicat el 26 d'octubre de 2026: comprova-ho abans de comptar-hi.",
           `Per triar estació, mira ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
         ),
         callout(
@@ -1582,10 +1613,10 @@ export const CERDANYA: B2Article = {
           "Combinar la Cerdanya i Núria en un mateix viatge és possible perquè comparteixen línia; només cal mirar els horaris de tots dos trens el dia que hi vagis.",
         ),
         faq([
-          { question: "Quants trens hi ha de la Garriga a Puigcerdà?", answer: "Cinc trens directes al dia en cada sentit, també els caps de setmana, segons l'horari vigent des del 6 de juliol de 2026. La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser." },
-          { question: "Es pot anar en tren de Barcelona a Puigcerdà?", answer: "No directament mentre duren les obres: de Barcelona a la Garriga hi ha autobusos de Rodalies, i de la Garriga a Puigcerdà, el tren R3." },
-          { question: "Quant dura el trajecte de la Garriga a Puigcerdà?", answer: "Entre 2 h 35 min i 2 h 46 min, segons el tren." },
-          { question: "Hi ha bus a les pistes des de Puigcerdà?", answer: "La temporada 2025-26, el Bus Blanc va unir la Cerdanya amb la Molina i Masella els caps de setmana i festius escolars, a 2 €. El de 2026-27 encara no s'ha publicat." },
+          { question: "Quants trens hi ha de Sant Martí de Centelles a Puigcerdà?", answer: "Cinc trens directes al dia en cada sentit, també els caps de setmana, segons l'horari de Rodalies vigent del 16 de novembre al 14 de desembre de 2026. La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser." },
+          { question: "Es pot anar en tren de Barcelona a Puigcerdà?", answer: "No directament mentre duren les obres: de Barcelona a Sant Martí de Centelles hi ha autobusos de Rodalies, i de Sant Martí de Centelles a Puigcerdà, el tren R3. Fins ara els trens sortien de la Garriga; des del 16 de novembre i fins al 14 de desembre de 2026, de Sant Martí de Centelles." },
+          { question: "Quant dura el trajecte de Sant Martí de Centelles a Puigcerdà?", answer: "Entre 2 h 25 min i 2 h 35 min, segons el tren i el sentit." },
+          { question: "Hi ha bus a les pistes des de Puigcerdà?", answer: "La temporada 2025-26, el Bus Blanc va unir la Cerdanya amb la Molina i Masella els caps de setmana i festius escolars, a 2 €. El de 2026-27 no estava publicat el 26 d'octubre de 2026." },
         ]),
         ...paras(verifiedLine("ca", CERDANYA_VERIFIED)),
         ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "ca"),
@@ -1597,18 +1628,18 @@ export const CERDANYA: B2Article = {
       title: "Cerdanya sin coche: horarios del tren R3 a Puigcerdà, autobuses y qué es realista",
       seoTitle: "Cerdanya sin coche: horarios del tren R3 a Puigcerdà",
       seoDescription:
-        "Cerdanya sin coche: horarios de los trenes R3 directos a La Molina y Puigcerdà, cómo hacer el tramo Barcelona–La Garriga, el bus urbano y el Bus Blanc.",
+        "Cerdanya sin coche: horarios de los trenes R3 a La Molina y Puigcerdà, el tramo en autobús desde Barcelona durante las obras, el bus urbano y el Bus Blanc.",
       excerpt:
         "Los trenes R3 que llegan a Puigcerdà, cómo salir de Barcelona mientras duran las obras y qué es realista sin coche.",
       blocks: [
         lead(
-          "Sí, se puede ir a la Cerdanya sin coche: con la línea **R3**, que sube por Vic y Ripoll hasta La Molina, Puigcerdà y La Tor de Querol. Mientras duran las obras no hay trenes entre Barcelona y La Garriga (el tramo se hace en autobuses de Rodalies), y de La Garriga a Puigcerdà hay **cinco trenes directos al día en cada sentido**, con un trayecto de entre 2 h 35 min y 2 h 46 min. Una vez allí, Puigcerdà es la base más práctica.",
+          "Sí, se puede ir a la Cerdanya sin coche: con la línea **R3**, que sube por Vic y Ripoll hasta La Molina, Puigcerdà y La Tor de Querol. Mientras duran las obras no hay trenes entre Barcelona y Sant Martí de Centelles (el tramo se hace en autobuses de Rodalies, al menos hasta el 14 de diciembre de 2026), y de Sant Martí de Centelles a Puigcerdà hay **cinco trenes directos al día en cada sentido**, con un trayecto de entre 2 h 25 min y 2 h 35 min. Una vez allí, Puigcerdà es la base más práctica.",
         ),
         callout("warning", ...CERDANYA_R3.es),
         ...h2("Horarios de la R3 a La Molina y Puigcerdà"),
         ...cerdanyaTimetable("es"),
         ...paras(
-          "El billete sencillo de La Garriga a Puigcerdà cuesta 9,70 €. El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser, y entre La Garriga y Puigcerdà también circulan los autobuses complementarios de Rodalies. Hay además líneas regulares de autobús desde Barcelona, La Seu d'Urgell y Lleida (ALSA) y desde Girona por Olot y Ripoll (TEISA).",
+          "El billete sencillo de Sant Martí de Centelles a Puigcerdà cuesta 8,95 € (buscador de Rodalies, 25 de noviembre de 2026). El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser, y entre La Garriga y Puigcerdà también circulan los autobuses complementarios de Rodalies. Hay además líneas regulares de autobús desde Barcelona, La Seu d'Urgell y Lleida (ALSA) y desde Girona por Olot y Ripoll (TEISA).",
         ),
         ...h2(
           "Puigcerdà, la base más sencilla",
@@ -1617,11 +1648,11 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "La Molina en tren",
-          "La Molina tiene estación propia en la R3, y desde la estación un autobús interno sube hasta el pie de pistas. La web de la estación anuncia también el **Ski Tren**, que se compra en Renfe/Rodalies y combina el tren de ida y vuelta, el bus interno y el forfait de un día.",
+          "La Molina tiene estación propia en la R3, y desde la estación un autobús interno sube hasta el pie de pistas. La web de la estación anuncia también el **Ski Tren**, que se compra en Renfe/Rodalies e incluye el tren de ida y vuelta desde las principales estaciones de Rodalies, el bus interno y el forfait y el seguro de un día: 53 € adulto o joven y 41,50 € infantil, según la web de la estación el 25 de noviembre de 2026 (sin indicar temporada). El forfait se recoge en la atención al cliente de La Molina, con un soporte PIRINEU365 de 2 €. Mientras dure el corte de la R3 entre La Garriga y Figaró, el tramo de Barcelona hasta Sant Martí de Centelles se hace en autobús.",
         ),
         ...h2(
           "Temporada de nieve: el Bus Blanc",
-          "El Consell Comarcal de la Cerdanya ofrece el **Bus Blanc** hacia La Molina y Masella, con dos rutas: una por Llívia, Puigcerdà y Urtx, y otra por Martinet, Bellver y Alp. La temporada 2025-26 empezó el fin de semana del 6 de diciembre de 2025 y circulaba todos los fines de semana y festivos escolares, salvo el día de Navidad, a 2 €. El servicio de la temporada 2026-2027 aún no se ha publicado: compruébalo antes de contar con él.",
+          "El Consell Comarcal de la Cerdanya ofrece el **Bus Blanc** hacia La Molina y Masella, con dos rutas: una por Llívia, Puigcerdà y Urtx, y otra por Martinet, Bellver y Alp. La temporada 2025-26 empezó el fin de semana del 6 de diciembre de 2025 y circulaba todos los fines de semana y festivos escolares, salvo el día de Navidad, a 2 €. El servicio de la temporada 2026-2027 no estaba publicado el 26 de octubre de 2026: compruébalo antes de contar con él.",
           `Para elegir estación, mira ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
         ),
         callout(
@@ -1638,10 +1669,10 @@ export const CERDANYA: B2Article = {
           "Combinar la Cerdanya y Núria en un mismo viaje es posible porque comparten línea; solo hay que mirar los horarios de los dos trenes el día que vayas.",
         ),
         faq([
-          { question: "¿Cuántos trenes hay de La Garriga a Puigcerdà?", answer: "Cinco trenes directos al día en cada sentido, también los fines de semana, según el horario vigente desde el 6 de julio de 2026. El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser." },
-          { question: "¿Se puede ir en tren de Barcelona a Puigcerdà?", answer: "No directamente mientras duran las obras: de Barcelona a La Garriga hay autobuses de Rodalies, y de La Garriga a Puigcerdà, el tren R3." },
-          { question: "¿Cuánto dura el trayecto de La Garriga a Puigcerdà?", answer: "Entre 2 h 35 min y 2 h 46 min, según el tren." },
-          { question: "¿Hay autobús a las pistas desde Puigcerdà?", answer: "En la temporada 2025-26, el Bus Blanc unió la Cerdanya con La Molina y Masella los fines de semana y festivos escolares, a 2 €. El de 2026-27 aún no se ha publicado." },
+          { question: "¿Cuántos trenes hay de Sant Martí de Centelles a Puigcerdà?", answer: "Cinco trenes directos al día en cada sentido, también los fines de semana, según el horario de Rodalies vigente del 16 de noviembre al 14 de diciembre de 2026. El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser." },
+          { question: "¿Se puede ir en tren de Barcelona a Puigcerdà?", answer: "No directamente mientras duran las obras: de Barcelona a Sant Martí de Centelles hay autobuses de Rodalies, y de Sant Martí de Centelles a Puigcerdà, el tren R3. Hasta ahora los trenes salían de La Garriga; desde el 16 de noviembre y hasta el 14 de diciembre de 2026, de Sant Martí de Centelles." },
+          { question: "¿Cuánto dura el trayecto de Sant Martí de Centelles a Puigcerdà?", answer: "Entre 2 h 25 min y 2 h 35 min, según el tren y el sentido." },
+          { question: "¿Hay autobús a las pistas desde Puigcerdà?", answer: "En la temporada 2025-26, el Bus Blanc unió la Cerdanya con La Molina y Masella los fines de semana y festivos escolares, a 2 €. El de 2026-27 no estaba publicado el 26 de octubre de 2026." },
         ]),
         ...paras(verifiedLine("es", CERDANYA_VERIFIED)),
         ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "es"),
@@ -1653,18 +1684,18 @@ export const CERDANYA: B2Article = {
       title: "Cerdanya without a car: R3 train times to Puigcerdà, buses and what is realistic",
       seoTitle: "Cerdanya without a car: R3 train times to Puigcerdà",
       seoDescription:
-        "Cerdanya without a car: times of the through R3 trains to La Molina and Puigcerdà, the Barcelona–La Garriga bus link, the town bus and the Bus Blanc.",
+        "Cerdanya without a car: times of the through R3 trains to La Molina and Puigcerdà, the bus link from Barcelona while the works last, the town bus and the Bus Blanc.",
       excerpt:
         "The R3 trains that reach Puigcerdà, how to leave Barcelona while the works last, and what is realistic without a car.",
       blocks: [
         lead(
-          "Yes, you can reach Cerdanya without a car: on Rodalies line **R3**, which climbs via Vic and Ripoll to La Molina, Puigcerdà and La Tor de Querol. While the works last there are no trains between Barcelona and La Garriga (that stretch is by Rodalies bus), and **five through trains a day each way** run between La Garriga and Puigcerdà, taking between 2 h 35 min and 2 h 46 min. Once there, Puigcerdà is the practical base.",
+          "Yes, you can reach Cerdanya without a car: on Rodalies line **R3**, which climbs via Vic and Ripoll to La Molina, Puigcerdà and La Tor de Querol. While the works last there are no trains between Barcelona and Sant Martí de Centelles (that stretch is by Rodalies bus, at least until 14 December 2026), and **five through trains a day each way** run between Sant Martí de Centelles and Puigcerdà, taking between 2 h 25 min and 2 h 35 min. Once there, Puigcerdà is the practical base.",
         ),
         callout("warning", ...CERDANYA_R3.en),
         ...h2("R3 train times to La Molina and Puigcerdà"),
         ...cerdanyaTimetable("en"),
         ...paras(
-          "A single from La Garriga to Puigcerdà costs €9.70. Other R3 trains terminate at Ripoll or Ribes de Freser, and Rodalies also runs complementary buses between La Garriga and Puigcerdà. Regular coaches link the area with Barcelona, La Seu d'Urgell and Lleida (ALSA) and with Girona via Olot and Ripoll (TEISA).",
+          "A single from Sant Martí de Centelles to Puigcerdà costs €8.95 (Rodalies journey planner, 25 November 2026). Other R3 trains terminate at Ripoll or Ribes de Freser, and Rodalies also runs complementary buses between La Garriga and Puigcerdà. Regular coaches link the area with Barcelona, La Seu d'Urgell and Lleida (ALSA) and with Girona via Olot and Ripoll (TEISA).",
         ),
         ...h2(
           "Puigcerdà is the practical base",
@@ -1673,11 +1704,11 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "La Molina by train",
-          "La Molina has its own R3 station, and a resort shuttle bus runs from the station up to the slopes. The resort's website also lists the **Ski Tren**, sold by Renfe/Rodalies, which bundles the return train, the shuttle and a one-day lift pass.",
+          "La Molina has its own R3 station, and a resort shuttle bus runs from the station up to the slopes. The resort's website also lists the **Ski Tren**, sold by Renfe/Rodalies, which bundles the return train from the main Rodalies stations, the shuttle and a one-day lift pass with insurance: €53 adult or youth and €41.50 child, on the station's website on 25 November 2026 (no season stated). The pass is collected at La Molina customer service, with a €2 PIRINEU365 card. While the R3 is cut between La Garriga and Figaró, the stretch from Barcelona to Sant Martí de Centelles is by bus.",
         ),
         ...h2(
           "Snow season: the Bus Blanc",
-          "The Cerdanya county council runs the **Bus Blanc** to La Molina and Masella on two routes: one via Llívia, Puigcerdà and Urtx, the other via Martinet, Bellver and Alp. In 2025-26 it started on the weekend of 6 December 2025 and ran every weekend and school holiday except Christmas Day, for €2. The 2026-27 service has not been published yet, so check before relying on it.",
+          "The Cerdanya county council runs the **Bus Blanc** to La Molina and Masella on two routes: one via Llívia, Puigcerdà and Urtx, the other via Martinet, Bellver and Alp. In 2025-26 it started on the weekend of 6 December 2025 and ran every weekend and school holiday except Christmas Day, for €2. The 2026-27 service had not been published on 26 October 2026, so check before relying on it.",
           `To pick a resort, see ${b2link("ski", "en", "Catalonia's ski resorts compared")}.`,
         ),
         callout(
@@ -1694,10 +1725,10 @@ export const CERDANYA: B2Article = {
           "Combining Cerdanya and Núria on one trip works because they share the line; just check both timetables for the day you travel.",
         ),
         faq([
-          { question: "How many trains run from La Garriga to Puigcerdà?", answer: "Five through trains a day each way, weekends included, on the timetable in force since 6 July 2026. Other R3 trains terminate at Ripoll or Ribes de Freser." },
-          { question: "Can you take the train from Barcelona to Puigcerdà?", answer: "Not directly while the works last: Rodalies buses run from Barcelona to La Garriga, and the R3 train from La Garriga to Puigcerdà." },
-          { question: "How long is the R3 from La Garriga to Puigcerdà?", answer: "Between 2 h 35 min and 2 h 46 min, depending on the train." },
-          { question: "Is there a bus to the slopes from Puigcerdà?", answer: "In 2025-26 the Bus Blanc linked Cerdanya with La Molina and Masella at weekends and in school holidays, for €2. The 2026-27 service has not been published yet." },
+          { question: "How many trains run from Sant Martí de Centelles to Puigcerdà?", answer: "Five through trains a day each way, weekends included, on the Rodalies timetable in force from 16 November to 14 December 2026. Other R3 trains terminate at Ripoll or Ribes de Freser." },
+          { question: "Can you take the train from Barcelona to Puigcerdà?", answer: "Not directly while the works last: Rodalies buses run from Barcelona to Sant Martí de Centelles, and the R3 train from Sant Martí de Centelles to Puigcerdà. Until now the trains started at La Garriga; from 16 November to 14 December 2026 they start at Sant Martí de Centelles." },
+          { question: "How long is the R3 from Sant Martí de Centelles to Puigcerdà?", answer: "Between 2 h 25 min and 2 h 35 min, depending on the train and direction." },
+          { question: "Is there a bus to the slopes from Puigcerdà?", answer: "In 2025-26 the Bus Blanc linked Cerdanya with La Molina and Masella at weekends and in school holidays, for €2. The 2026-27 service had not been published on 26 October 2026." },
         ]),
         ...paras(verifiedLine("en", CERDANYA_VERIFIED)),
         ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "en"),

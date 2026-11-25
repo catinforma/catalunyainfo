@@ -89,7 +89,7 @@ function ca(): Block[] {
     ...h2(
       "3. Vic",
       "Una ciutat amb vida pròpia i molt menys turisme internacional que altres destinacions d'aquesta llista. La Plaça Major, el centre històric, la catedral i el Museu d'Art Medieval s'encadenen a peu. Si coincideix amb dia de mercat, la visita canvia completament de caràcter.",
-      "S'hi va en tren (R3), però ara mateix l'R3 no circula entre Barcelona i la Garriga: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís de Rodalies vigent el 24 d'octubre de 2026).",
+      "S'hi va en tren (R3), però ara mateix l'R3 no circula entre Barcelona i Sant Martí de Centelles: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís i horaris de Rodalies llegits el 25 de novembre de 2026; la interrupció entre la Garriga i Figaró dura fins al 14 de desembre).",
     ),
     ...h2(
       "4. Cardona: castell i Muntanya de Sal",
@@ -183,7 +183,7 @@ function es(): Block[] {
     ...h2(
       "3. Vic",
       "Una ciudad con vida propia y mucho menos turismo internacional. Plaça Major, casco histórico, catedral y Museu d'Art Medieval se encadenan a pie. Si coincide con día de mercado, la visita cambia por completo.",
-      "Se va en tren (R3), pero ahora mismo la R3 no circula entre Barcelona y La Garriga: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso de Rodalies vigente el 24 de octubre de 2026).",
+      "Se va en tren (R3), pero ahora mismo la R3 no circula entre Barcelona y Sant Martí de Centelles: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso y horarios de Rodalies leídos el 25 de noviembre de 2026; la interrupción entre La Garriga y Figaró dura hasta el 14 de diciembre).",
     ),
     ...h2(
       "4. Cardona: castillo y Montaña de Sal",
@@ -277,7 +277,7 @@ function en(): Block[] {
     ...h2(
       "3. Vic",
       "A working Catalan city with far fewer international visitors. The enormous main square, the historic centre, the cathedral and the medieval art museum all connect on foot. If your visit lands on a market day, it becomes a different trip entirely.",
-      "By train on the R3, but right now no R3 trains run between Barcelona and La Garriga: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice in force on 24 October 2026).",
+      "By train on the R3, but right now no R3 trains run between Barcelona and Sant Martí de Centelles: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice and timetables read on 25 November 2026; the cut between La Garriga and Figaró lasts until 14 December).",
     ),
     ...h2(
       "4. Cardona: castle and Salt Mountain",
