@@ -45,6 +45,7 @@ import { KIND_LABEL, compactDates, dayName, runLine, weekdayDate } from "@/lib/p
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
 
+import { CityGlance } from "./CityGlance";
 import { Header, SourceList, communityCrumbs } from "./pages";
 
 /** One city's 2027 page (Spanish only): its local days with their source, the full calendar, the bridges, the FAQ. */
@@ -120,6 +121,8 @@ export function CityPage({ c }: { c: City }) {
             <strong>{answer.strong}</strong>
             {answer.rest}
           </p>
+          {/* Count, local days or their pending status, feed link: one glance (26 Nov 2026, docs/SEO_EXPERIMENTS.md). */}
+          <CityGlance c={c} locale="es" />
           {/* Every 2027 day by who fixes it, each layer with its text and date (18 Nov 2026). */}
           <ul className="mt-3" data-layers aria-label={`Festivos de ${YEAR} en ${c.name}, por origen`}>
             {layers.map((l) => (

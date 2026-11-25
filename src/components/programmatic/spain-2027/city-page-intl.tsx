@@ -59,6 +59,7 @@ import {
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
 import { CITY_NOTE, SOURCE_PROSE, placeName } from "@/lib/programmatic/spain-2027/sources-intl";
 
+import { CityGlance } from "./CityGlance";
 import { Header, SourceList, communityCrumbsIntl } from "./pages-intl";
 
 /** One city's 2027 page in Catalan or English: the Spanish edition's sections (city-page.tsx), the same facts and sources. */
@@ -149,6 +150,8 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             <strong>{answer.strong}</strong>
             {answer.rest}
           </p>
+          {/* Count, local days or their pending status, feed link: one glance (26 Nov 2026, docs/SEO_EXPERIMENTS.md). */}
+          <CityGlance c={c} locale={locale} />
           {/* Every 2027 day by who fixes it, each layer with its text and date (18 Nov 2026). */}
           <ul className="mt-3" data-layers aria-label={tr(locale, `Festius del ${YEAR} ${caIn(name)}, per origen`, `${Name}'s ${YEAR} holidays, by who sets them`)}>
             {layers.map((l) => (
