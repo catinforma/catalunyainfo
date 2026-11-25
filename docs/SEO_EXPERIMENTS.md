@@ -14694,3 +14694,38 @@ By intent (all festivo/festiu queries with manana/hoy/avui/dema, 28 d): generic 
 **Baseline** (GSC 90 d to 25 Nov): 1,416 impressions, 24 clicks, position 14.5 on the es page. **Prediction:** "cuando abre la molina / baqueira" queries reach top 5 and the guide's position moves under 10 as demand peaks 28 Nov - 8 Dec. **Review 2026-12-23:** `snapshot.py page estaciones-esqui 28` and ca/en equivalents. Re-read each resort weekly (next by 2 Dec; Baqueira's new date is the likeliest change; bump `SKI_OPENING_READ`, `VERIFIED` and the "25/11" in the table headers).
 
 Tests: `ski-opening-table` (new), `ski-reread-25nov`, `ski-reread-23nov`, `batch02`, `snow-trips`, `december-pages`, `revive-ranking-nov`, `december-bridge-23nov`, `barcelona-december` pass; `tsc --noEmit` clean; `seo:body-dates` run. Baqueira's pages returned 403 to a default curl UA; read with a browser UA.
+## 2026-11-25 (ci-enginyeria) - Mobile layout shift with ads: lab reproduction on guide and shops templates, consent accepted and denied, no-ads control (analysis only; no code, text or ad change) (review 2026-12-08)
+
+**Question (owner plan item 5).** Is the mobile CLS of about 0.40 caused by our reserved ad box (449 px), by Google's anchor overlay, by in-article insertion, or by something else, and what can the template fix?
+
+**Method.** `scripts/ads-cls-lab.mjs` (summary: `scripts/ads-cls-sum.mjs`): one headless Chromium (mobile emulation, Pixel UA, DPR 2.625), production URLs on www, no scrolling for the first 20 s after navigation (>= 15 s after the ad), then a scroll through the page. `PerformanceObserver('layout-shift')` with sources (selector, previous and current rect), a MutationObserver on `<body>` / `<html>` (style, children) and `data-anchor-status` / `data-ad-status`. **Consent:** from this server Google's CMP (Funding Choices, TCF) shows its dialog 2.5-5 s after load (`.fc-consent-root`); the script clicks `.fc-cta-consent` (accepted) or `.fc-cta-do-not-consent` (denied), which writes the `FCCDCF` cookie. No cookie was set by hand. In 2 of 12 consent runs the dialog never appeared within 20 s (shops 412 accepted, Barcelona 412 denied): those cells are "no choice recorded", and give the same anchor shift. **Control:** `Network.setBlockedURLs` on `*googlesyndication.com*`, `*googleads*`, `*adservice*`, `*fundingchoices*`, `*doubleclick*`, `*googletagservices*`.
+
+**Result (CLS = sum of shifts without recent input; "dialog" = Google's own consent popover resizing).**
+
+| Template (URL) | Consent | 360x800 | 412x915 | Culprit |
+|---|---|---|---|---|
+| Guide, strike 26 Nov (`/es/guias/huelga-26-noviembre/`) | accepted | 0.409 | 0.405 | anchor 0.383 / 0.382 + dialog 0.023-0.026 |
+| same | denied | 0.383 | 0.405 | same |
+| same | ads blocked | 0 | 0 | none |
+| Shops guide (`/es/guias/tiendas-abiertas-festivos-cataluna/`) | accepted | 0.409 | 0.382 | anchor (+ dialog 0.026 at 360) |
+| same | denied | 0.409 | 0.405 | same |
+| same | ads blocked | 0 | 0 | none |
+| Town holidays (`/ca/festius/barcelona/`) | accepted | 0.409 | 0.405 | same |
+| same | denied | 0.409 | 0.382 | same |
+| same | ads blocked | 0 | 0 | none |
+
+**Attribution.**
+- **(a) Our reserved box: 0.** The top box measured 397 px (360) and 449 px (412), the same before and after Google fills or leaves it unfilled; no layout-shift source is inside it. On the shops and town pages it stays `unfilled` in every run (an empty 449 px box under the first answer: an owner choice since 24 Nov, "the top boxes keep their space").
+- **(b) Anchor overlay: 0.382-0.383 in every run with ads, whatever the consent answer.** 6-10 s after load Google inserts a mobile anchor on top of the page (`ins.adsbygoogle[data-anchor-status=displayed]`, a creative with a collapse chevron) and sets `body{padding-top:330px}` (360 wide) or `373px` (412 wide); `nav.ci-alerts` (y 57 -> 387/430) and `main#main` (111 -> 441/484) move down by exactly that. One shift of nearly the whole viewport is 0.38. It comes after the dialog answer but is not caused by it (it also happens with no click).
+- **(c) In-article insertion: 0.** The `.ci-ad-middle` boxes are placed below the fold with reserved height; the scroll phase added 0.001-0.016 in total.
+- **(d) Other: 0.01-0.026** at 2.5-5 s, all inside Google's consent dialog (`fc-dialog-container`, `fc-header`, `fc-stacks`); about 0.003 per step at 40-70 s from Google rewriting `body{top:...}` (anchor scroll compensation). No font or image shift on any of the three templates (control = 0).
+
+**What the template can fix: nothing safely.** The shifted elements are every in-flow element, because Google pads `<body>`. Reserving 330-373 px up front would leave a blank band for visitors without the anchor; overriding Google's `body` padding with `!important` would stop the shift but let the anchor cover the first 373 px, which is the practical answer, and changes Google's ad layout (AdSense program policy risk). Both were rejected. No CSS or component was changed.
+
+**For the owner (AdSense dashboard only).**
+- **Format:** Auto ads, mobile **anchor** (the tab with the "^" chevron at the top of the page; the owner enabled the bottom anchor on 24 Nov, but what loads here is at the top and pushes the page down).
+- **One reversible test, 7 days:** AdSense > Ads > By site > catalunyainfo.com > Edit > Ad formats: switch **Anchor ads** off (leave vignette and our manual units as they are), save; to reverse, switch it back on. Suggested window 26 Nov - 2 Dec against the 7 days before (19-25 Nov).
+- **Revenue impact:** AdSense > Reports, date range both weeks, dimensions Date and **Ad format** (and Ad unit), metrics estimated earnings, impressions, page views, page RPM; compare the anchor row's earnings (and total) before vs after. Earnings are paid on impressions and clicks, and the 13 clicks of the first sample are too few to attribute a share, so use total estimated earnings per 1,000 page views for the same days, and say so with the sample size. Experience impact: re-run the lab (same script, expected 0 to 0.03) the day after the switch and read the CrUX / Search Console "Core Web Vitals" mobile report when it has data.
+- **Field target:** CLS p75 <= 0.10. **There is no field data yet** (the site is new; CrUX needs enough Chrome visits and 28 days). The lab 0.38-0.41 is a worst case from a server IP that gets the consent dialog; visitors who get no anchor (unfilled, capped, desktop) measure 0.
+
+**Review 2026-12-08.** Re-run `CONSENT=accept node scripts/ads-cls-lab.mjs <url> 412 915` on the three URLs; read the owner's AdSense by-format report; read CrUX / Search Console mobile CLS for the origin if it exists. Decide then whether to keep anchors off.
