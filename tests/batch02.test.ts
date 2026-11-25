@@ -586,8 +586,8 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
   const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
   assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");
   assert.ok(caFaq?.items[0]?.answer.includes(` ${TOWNS_NOV_DEC.length} municipis`), "ca: FAQ counts the towns from the table");
-  // 23 Nov 2026: every source re-read (CHRISTMAS_SHOPS_CHECKED).
-  assert.equal(SHOPS.verifiedAt, "2026-11-23");
+  // 25 Nov 2026: every source re-read again (CHRISTMAS_SHOPS_CHECKED; EMT/4342/2025, EMT/89/2026).
+  assert.equal(SHOPS.verifiedAt, "2026-11-25");
 });
 
 /**
