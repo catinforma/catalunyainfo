@@ -116,6 +116,9 @@ const ca = {
     coverageNote: "Aquesta pàgina només respon per als anys amb calendari oficial publicat: {years}. La Generalitat l'aprova any per any.",
     sourceLine: "Dates del calendari oficial de festes laborals de la",
     verified: "Verificades el {date}.",
+    scopeNote: "Aquí parlem de festes laborals (el calendari oficial de la Generalitat). Si el que vols saber és si obren les botigues, és una altra pregunta:",
+    scopeShopsLink: "botigues obertes en festius i diumenges",
+    source2027Link: "Calendari de festes laborals del 2027",
   },
   weekendAgenda: {
     title: "Agenda d'aquest cap de setmana",

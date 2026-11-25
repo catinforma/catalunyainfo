@@ -10,6 +10,7 @@ import { dateQuestion } from "@/lib/programmatic/holidays/question";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { GUIDES, OFFICIAL, withHolidayHub, type GuideKey } from "@/lib/programmatic/holidays/links";
+import { caA, caDe } from "@/lib/programmatic/holidays/names";
 
 /** Shared pieces of the holiday pages, all server-rendered. */
 
@@ -163,12 +164,36 @@ export function DateList({ dates, locale }: { dates: string[]; locale: DateLocal
   );
 }
 
+/**
+ * Two same-page jumps under a town page's first screen (25 Nov 2026, "Festius" item of the 90-day plan).
+ *
+ * The first-screen answer is date-free (the page is cached until the nightly rebuild after each of its holidays), so the
+ * exact "today / tomorrow" answer, computed in the browser with the Europe/Madrid clock, sits further down in its own
+ * box; and the town's calendar (.ics) was in the 2027 section. One line offers both where the reader already is.
+ * Plain anchors: no script, no layout shift, nothing the crawler cannot read.
+ */
+export function TownQuickLinks({ place, locale }: { place: string; locale: DateLocale }) {
+  const text = {
+    ca: { today: `Avui i demà ${caA(place)} (hora de Catalunya)`, feed: `Afegeix els festius ${caDe(place)} al teu calendari (.ics)`, todayId: "avui" },
+    es: { today: `Hoy y mañana en ${place} (hora de Cataluña)`, feed: `Añade los festivos de ${place} a tu calendario (.ics)`, todayId: "avui" },
+    en: { today: `Today and tomorrow in ${place} (Catalonia time)`, feed: `Add ${place}'s holidays to your calendar (.ics)`, todayId: "today" },
+  }[locale];
+  return (
+    <p className="ci-town-step mt-3 text-sm">
+      <a href={`#${text.todayId}`}>{text.today}</a>
+      {" · "}
+      <a href="#afegeix-calendari">{text.feed}</a>
+    </p>
+  );
+}
+
 type SourceKey =
   | "localOrder"
   | "amendment"
   | "openData"
   | "regional2026"
   | "regional2027"
+  | "treball2027"
   | "shops"
   | "shopsOrder"
   | "shopsOrder2027"
@@ -182,6 +207,8 @@ const SCHOOL = { name: "Ordre EDF/66/2026, de 22 d'abril, calendari escolar dels
 const RETAIL = { name: "Llei 18/2017, de l'1 d'agost, de comerç, serveis i fires (text consolidat)", ref: "BOE-A-2017-11320", url: OFFICIAL.llei18_2017 };
 const BOE = { name: "Resolución de 17 de octubre de 2025, relación de fiestas laborales para el año 2026", ref: "BOE-A-2025-21667", url: OFFICIAL.boe2026 };
 const BOE27 = { name: BOE_2027.name, ref: BOE_2027.ref, url: BOE_2027.url };
+/** The Generalitat's own 2027 work-holiday page (read 25 Nov 2026; quote in links.ts), listed after the DOGC order wherever that is cited. */
+const TREBALL27 = { name: "Calendari oficial de festes laborals a Catalunya 2027", ref: "Departament d'Empresa i Treball", url: OFFICIAL.treballCalendar2027 };
 const SHOPS27 = { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", ref: "DOGC de 28.5.2026", url: OFFICIAL.shopsOrder2027 };
 
 function source(key: SourceKey) {
@@ -197,6 +224,8 @@ function source(key: SourceKey) {
       return s.regional["2026"] ?? null;
     case "regional2027":
       return s.regional["2027"] ?? null;
+    case "treball2027":
+      return TREBALL27;
     case "shops":
       return s.shops;
     case "shopsOrder":
@@ -258,7 +287,7 @@ export function Sources({
         <time dateTime={readOn}>{readLine}</time>
       </p>
       <ol className="ci-sources mt-3">
-        {[...keys.map((key) => ({ key, item: source(key) })), ...extra.map((item) => ({ key: item.url, item }))].map(({ key, item }) => {
+        {[...keys.flatMap((key) => (key === "regional2027" ? [key, "treball2027" as const] : [key])).map((key) => ({ key, item: source(key) })), ...extra.map((item) => ({ key: item.url, item }))].map(({ key, item }) => {
           if (!item) return null;
           return (
             <li key={key}>

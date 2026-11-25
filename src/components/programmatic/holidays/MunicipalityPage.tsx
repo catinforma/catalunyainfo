@@ -49,7 +49,7 @@ import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { ChristmasShops } from "./ChristmasShops";
 import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
+import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources, TownQuickLinks } from "./parts";
 
 const STATUS_LABELS: Record<MuniLocale, StatusLabels> = {
   ca: {
@@ -191,6 +191,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             ),
           )}
 
+          <TownQuickLinks place={name} locale={locale} />
           {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair. */}
           <NextStep step={townNextStep(m.slug, name, locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
@@ -266,7 +267,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
                 <HolidayTable rows={rows2027} locale={locale} caption={`${t.tableCaption.replace(String(YEAR), String(NEXT))}`} />
               ) : null}
               <p>
-                <a href={OFFICIAL.treballCalendar} rel="noopener" target="_blank">
+                <a href={OFFICIAL.treballCalendar2027} rel="noopener" target="_blank">
                   {locale === "ca" ? "Calendari laboral al web del Departament d'Empresa i Treball" : "Calendario laboral en la web del Departament d'Empresa i Treball"}
                 </a>
                 {" · "}

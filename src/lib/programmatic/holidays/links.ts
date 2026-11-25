@@ -49,6 +49,13 @@ export function withHolidayHub(keys: readonly GuideKey[]): GuideKey[] {
 /** Where the official local-holiday order will appear (the Generalitat's calendar page and the DOGC). */
 export const OFFICIAL = {
   treballCalendar: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/",
+  /**
+   * The Generalitat's own page for the 2027 work holidays. Read 25 Nov 2026 (curl, HTTP 200): "S'ha aprovat el calendari de
+   * festes laborals per a 2027, a les quals els ajuntaments poden afegir-hi dues festes locals, retribuïdes i no recuperables."
+   * and the twelve dates 1 Jan, 6 Jan, 26 Mar, 29 Mar, 1 May, 24 Jun, 11 Sep, 12 Oct, 1 Nov, 6 Dec, 8 Dec, 25 Dec; "Al territori
+   * d'Aran, la festa del dia 29 de març (Pasqua Florida) queda substituïda per la de 17 de juny". Same dates as dates-2027.ts.
+   */
+  treballCalendar2027: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2027/",
   treballNormativa: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/normativa/",
   dogc: "https://dogc.gencat.cat/ca/",
   boe2026: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21667",

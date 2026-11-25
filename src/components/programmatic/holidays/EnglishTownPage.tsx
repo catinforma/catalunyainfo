@@ -29,7 +29,7 @@ import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { EnglishChristmasShops } from "./ChristmasShops";
 import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
+import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources, TownQuickLinks } from "./parts";
 
 /**
  * `/en/holidays/<slug>/`: one town of the English selection. Server-rendered
@@ -108,6 +108,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           <p className="ci-lead">
             {t.lead} {t.source}
           </p>
+          <TownQuickLinks place={name} locale="en" />
           {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair
               (no date passed: the fair counts by the day the fairs were last read, so this page stays clock-free). */}
           <NextStep step={townNextStep(m.slug, name, "en", crumbPath(englishTownCrumbs(m)))} locale="en" />
@@ -165,7 +166,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           <HolidayTable rows={yearRows(m, NEXT, "en", { council: true })} locale="en" caption={t.nextCaption} />
           {next ? null : (
             <p>
-              <a href={OFFICIAL.treballCalendar} rel="noopener" target="_blank">
+              <a href={OFFICIAL.treballCalendar2027} rel="noopener" target="_blank">
                 Work calendar on the Department of Enterprise and Labour website (in Catalan)
               </a>
               {" · "}

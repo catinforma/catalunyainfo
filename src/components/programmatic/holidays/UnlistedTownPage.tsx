@@ -60,7 +60,7 @@ export function UnlistedTownPage({ u, locale }: { u: UnlistedTown; locale: MuniL
           <h2 id="festius-2027">{t.tableTitle}</h2>
           <HolidayTable rows={unlistedYearRows(u, locale)} locale={locale} caption={t.tableCaption} />
           <p>
-            <a href={OFFICIAL.treballCalendar} rel="noopener" target="_blank">
+            <a href={OFFICIAL.treballCalendar2027} rel="noopener" target="_blank">
               {ca ? "Calendari laboral al web del Departament d'Empresa i Treball" : "Calendario laboral en la web del Departament d'Empresa i Treball"}
             </a>
             {" · "}

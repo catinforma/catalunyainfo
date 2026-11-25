@@ -117,6 +117,9 @@ const en: Messages = {
     coverageNote: "This page only answers for years with a published official calendar: {years}. Catalonia approves it one year at a time.",
     sourceLine: "Dates from the official calendar of work holidays published by the",
     verified: "Verified on {date}.",
+    scopeNote: "This page is about public holidays for work (the Catalan government's official calendar). Whether shops are open is a different question:",
+    scopeShopsLink: "shops open on holidays and Sundays",
+    source2027Link: "2027 work holiday calendar",
   },
   weekendAgenda: {
     title: "What's on this weekend",

@@ -117,6 +117,9 @@ const es: Messages = {
     coverageNote: "Esta página solo responde para los años con calendario oficial publicado: {years}. La Generalitat lo aprueba año a año.",
     sourceLine: "Fechas del calendario oficial de fiestas laborales del",
     verified: "Verificadas el {date}.",
+    scopeNote: "Aquí hablamos de festivos laborales (el calendario oficial de la Generalitat). Si lo que quieres saber es si abren las tiendas, es otra pregunta:",
+    scopeShopsLink: "tiendas abiertas en festivos y domingos",
+    source2027Link: "Calendario de fiestas laborales de 2027",
   },
   weekendAgenda: {
     title: "Agenda de este fin de semana",

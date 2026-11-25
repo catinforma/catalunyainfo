@@ -19,7 +19,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
 import { aranSwap, municipalities, municipalityForCode } from "@/lib/programmatic/holidays/data";
-import { GUIDES } from "@/lib/programmatic/holidays/links";
+import { GUIDES, OFFICIAL } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 
 /**
@@ -188,6 +188,11 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         </div>
       </dl>
 
+      {/* Which question this is: work holidays, not shop opening (the shops guide answers that one). */}
+      <p className="ci-today-note ci-today-scope">
+        {t.scopeNote} <Link href={GUIDES.shops[locale]}>{t.scopeShopsLink}</Link>.
+      </p>
+
       {local.error ? null : (
         <div className="ci-today-local">
           <h3 className="ci-today-subtitle">{t.whereTitle}</h3>
@@ -196,12 +201,7 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         </div>
       )}
 
-      {/* The year planner, for whoever came to plan rather than to check today. */}
-      <p className="ci-today-find">
-        {t.plannerLead} <Link href={GUIDES.workCalendar[locale]}>{t.plannerLink}</Link>.
-      </p>
-
-      {/* Local questions go to the town pages (ca/es) or the all-towns guide (en). */}
+      {/* Local questions go to the town pages (ca/es) or the all-towns guide (en): the next step after "no" or "yes in Catalonia". */}
       <p className="ci-today-find">
         {t.findTown}{" "}
         <Link href={locale === "en" ? GUIDES.localHolidays.en : hubPath(locale)}>{t.findTownLink.replace("{n}", String(municipalities().length))}</Link>
@@ -212,6 +212,11 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
           </>
         )}
         .
+      </p>
+
+      {/* The year planner, for whoever came to plan rather than to check today. */}
+      <p className="ci-today-find">
+        {t.plannerLead} <Link href={GUIDES.workCalendar[locale]}>{t.plannerLink}</Link>.
       </p>
 
       <h3 className="ci-today-subtitle">{t.upcomingTitle.replace("{year}", String(COVERED_YEARS.at(-1)))}</h3>
@@ -291,7 +296,12 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         <a href={HOLIDAY_SOURCE.url} rel="noopener" target="_blank">
           {HOLIDAY_SOURCE.publisher}
         </a>
-        . {t.verified.replace("{date}", CALENDAR_VERIFIED_AT)}
+        . {t.verified.replace("{date}", CALENDAR_VERIFIED_AT)}{" "}
+        {/* 2027 is mentioned in the table and the planner line above: cite the Generalitat's own 2027 page. */}
+        <a href={OFFICIAL.treballCalendar2027} rel="noopener" target="_blank">
+          {t.source2027Link}
+        </a>
+        .
       </p>
     </section>
   );

@@ -8,13 +8,13 @@
    "files": 14
   },
   "block:electionHistory": {
-   "date": "2026-11-03T17:28:47.000Z",
-   "fingerprint": "v1:e82b82eb86164717ace036ef01565241",
+   "date": "2026-11-25T16:13:40.240Z",
+   "fingerprint": "v1:6b9d1be4f3db718a810c2362a049c247",
    "files": 4
   },
   "block:localHolidays": {
-   "date": "2026-11-19T13:13:35.000Z",
-   "fingerprint": "v1:48f70796e323d62883989e13795a6222",
+   "date": "2026-11-25T16:13:40.240Z",
+   "fingerprint": "v1:7b33886557f842813512873c9a92d3a8",
    "files": 6
   },
   "block:municipalElections": {
