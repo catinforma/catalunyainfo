@@ -1089,6 +1089,39 @@
     visibility: hidden;
   }
 
+  /* --- Calculator right rail (components/AdsRuntime.tsx, lib/ads/placement.ts) ---
+     New classes only (owner, 25 Nov 2026: the calculators have empty space on
+     desktop). The text column is 38rem; from 68.75rem (1100px) there are 300px
+     free beside it. Each .ci-rail is absolutely placed over the host's right
+     edge, so it takes no room in the text flow (no layout shift, nothing
+     covered: 38rem + 300px + the gutter always fit), and its box sticks under
+     the header inside it. Hidden below that width. */
+  .ci-rail {
+    display: none;
+  }
+  @media (min-width: 68.75rem) {
+    .ci-rail-host {
+      position: relative;
+    }
+    .ci-rail {
+      display: block;
+      position: absolute;
+      right: var(--spacing-gutter);
+      width: 300px;
+    }
+    .ci-rail-unit {
+      position: sticky;
+      top: 6rem;
+      width: 300px;
+      margin: 0;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--color-rule);
+    }
+    .ci-rail-unit:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+      display: none;
+    }
+  }
+
   /* --- Calculator and calendar blocks ------------------------------------ */
   .ci-calc,
   .ci-calendar {

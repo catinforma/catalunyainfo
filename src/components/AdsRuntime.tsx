@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import { AD_FEED_LAYOUT_KEY, AD_SLOTS, ADSENSE_SCRIPT, allowsAdUnits, isAdFreePath } from "@/lib/ads/config";
 import { adsQueue, fcQueue } from "@/lib/ads/client";
-import { planInArticle, unitBudget } from "@/lib/ads/placement";
+import { MAX_UNITS_WITH_RAIL, RAIL_MIN_VIEWPORT, RAIL_WIDTH, isCalculatorToolPath, planInArticle, railCount, railUnitHeight, unitBudget } from "@/lib/ads/placement";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -25,8 +25,12 @@ import type { Locale } from "@/lib/i18n/config";
  *   sources sit inside it, and only on pages with something to read;
  * - the sidebar unit (desktops) only where the sticky sidebar still fits on
  *   screen with it;
+ * - calculator pages (no sidebar of their own) get one or two sticky units
+ *   in the empty right side of the page on desktops (>= 1100 px, owner 25
+ *   Nov); they sit out of the text flow, so they never cover the form or
+ *   the results, and they lift the page cap from five to six;
  * - at most five units per page in all (server box, in-article, end,
- *   sidebar); every unit reserves its height before it loads (no jump) and
+ *   sidebar; six with the calculator rail); every unit reserves its height before it loads (no jump) and
  *   hides itself if Google has nothing to fill it with
  *   (data-ad-status="unfilled", support.google.com/adsense/answer/10762946).
  *
@@ -63,6 +67,59 @@ function unit(kind: "middle" | "end" | "side", client: string, slot: string, lab
   }
   box.append(caption, ins);
   return box;
+}
+
+/**
+ * The right rail of a calculator page: `count` sticky boxes stacked down the
+ * empty right side of the text column (each sticks within its own half, so
+ * two never meet). The column is the one next to .ci-prose; every box is
+ * absolutely placed, so nothing in the text flow moves. Its top and bottom
+ * follow the text column and its host (ResizeObserver, window resize), so a
+ * rewrapped H1 or a late font or image cannot make it drift; below 1100 px CSS
+ * hides it (placeUnits removes it and places it again when the window grows).
+ */
+function railUnits(prose: HTMLElement, client: string, slot: string, label: string, count: 1 | 2, height: number): { boxes: HTMLElement[]; stop: () => void } | null {
+  const host = prose.parentElement;
+  if (!host) return null;
+  host.classList.add("ci-rail-host");
+  const rails: HTMLElement[] = [];
+  const units: HTMLElement[] = [];
+  for (let i = 0; i < count; i++) {
+    const rail = document.createElement("div");
+    rail.className = "ci-rail";
+    const box = unit("side", client, slot, label, height);
+    box.className = "ci-rail-unit";
+    const ins = box.querySelector<HTMLElement>("ins");
+    if (ins) ins.style.cssText = `display:block;width:${RAIL_WIDTH}px;height:${height}px`;
+    rail.append(box);
+    host.append(rail);
+    rails.push(rail);
+    units.push(box);
+  }
+  const layout = () => {
+    const top = prose.offsetTop;
+    const h = prose.offsetHeight;
+    const slice = h / rails.length;
+    rails.forEach((rail, i) => {
+      rail.style.top = `${Math.round(top + i * slice)}px`;
+      rail.style.height = `${Math.round(slice)}px`;
+    });
+  };
+  layout();
+  const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(layout);
+  // The text column, and its host: the H1 and lead above it rewrap and move it.
+  ro?.observe(prose);
+  ro?.observe(host);
+  window.addEventListener("resize", layout);
+  return {
+    boxes: units,
+    stop: () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", layout);
+      for (const r of rails) r.remove();
+      host.classList.remove("ci-rail-host");
+    },
+  };
 }
 
 function topOf(el: Element): number {
@@ -105,7 +162,7 @@ function fillSlots(main: HTMLElement, client: string): HTMLElement[] {
   return filled;
 }
 
-function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[] {
+function placeUnits(client: string, locale: Locale, home: boolean, path: string, cleanup: Array<() => void>): HTMLElement[] {
   const main = document.getElementById("main") ?? document.querySelector("main");
   if (!main) return [];
   const slots = fillSlots(main, client);
@@ -138,6 +195,42 @@ function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[
     if (room >= 250) sideBox = unit("side", client, sideSlot, label, Math.min(600, room));
   }
 
+  // Calculator pages: the sticky right rail (desktops only; nothing is requested below 1100 px).
+  // Placed now if the window is wide enough; placed later if it grows past 1100 px, removed if it shrinks below.
+  let rails: HTMLElement[] = [];
+  let railStop: (() => void) | null = null;
+  if (sideSlot && !aside && isCalculatorToolPath(path)) {
+    const wide = window.matchMedia(`(min-width: ${RAIL_MIN_VIEWPORT / 16}rem)`);
+    const placeRail = (room: number): HTMLElement[] => {
+      const height = railUnitHeight(window.innerHeight);
+      const count = Math.min(railCount(prose.offsetHeight), room);
+      if (!height || (count !== 1 && count !== 2)) return [];
+      const made = railUnits(prose, client, sideSlot, label, count, height);
+      if (!made) return [];
+      railStop = made.stop;
+      return made.boxes;
+    };
+    if (wide.matches) rails = placeRail(MAX_UNITS_WITH_RAIL);
+    const onChange = () => {
+      if (!wide.matches) {
+        railStop?.();
+        railStop = null;
+        return;
+      }
+      if (railStop) return;
+      // Late: the page already carries its units; the rail only takes what is left under the cap of six.
+      const used = main.querySelectorAll("aside.ci-ad ins.adsbygoogle").length;
+      const late = placeRail(MAX_UNITS_WITH_RAIL - used);
+      for (let i = 0; i < late.length; i++) adsQueue().push({});
+    };
+    wide.addEventListener("change", onChange);
+    cleanup.push(() => {
+      wide.removeEventListener("change", onChange);
+      railStop?.();
+      railStop = null;
+    });
+  }
+
   // End of the article.
   let endBox: HTMLElement | null = null;
   if (chars >= 1500) {
@@ -154,7 +247,7 @@ function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[
   // screens (lib/ads/placement.ts), up to five units on the page in all.
   const boxes: HTMLElement[] = [...slots.map((ins) => ins.parentElement ?? ins), ...(endBox ? [endBox] : [])];
   const body = (sources ? h2s.slice(0, h2s.indexOf(sources)) : h2s).filter((h) => !h.closest("table, ul, ol, details"));
-  const budget = unitBudget(boxes.length + (sideBox ? 1 : 0));
+  const budget = unitBudget(boxes.length + (sideBox ? 1 : 0) + rails.length, rails.length ? MAX_UNITS_WITH_RAIL : undefined);
   if (chars >= 2000 && body.length >= 2) {
     const units = boxes.map((b) => ({ top: topOf(b), bottom: topOf(b) + b.offsetHeight }));
     const picks = planInArticle({ headings: body.map(topOf), units, viewport, budget });
@@ -174,6 +267,8 @@ function placeUnits(client: string, locale: Locale, home: boolean): HTMLElement[
     aside.append(sideBox);
     placed.push(sideBox);
   }
+  // The rail boxes are already in the page; they only need their ad request.
+  placed.push(...rails);
 
   return pushAll(placed);
 }
@@ -210,12 +305,14 @@ export function AdsRuntime({ client, locale }: { client: string; locale: Locale 
     const home = /^\/(ca|es|en)\/?$/.test(pathname);
 
     let placed: HTMLElement[] = [];
+    const cleanup: Array<() => void> = [];
     const timer = window.setTimeout(() => {
-      placed = placeUnits(client, locale, home);
+      placed = placeUnits(client, locale, home, pathname, cleanup);
     }, 400);
     return () => {
       window.clearTimeout(timer);
       for (const el of placed) el.remove();
+      for (const stop of cleanup) stop();
     };
   }, [pathname, client, locale]);
 

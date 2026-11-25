@@ -12,9 +12,27 @@
  *   (the caller passes only the headings above it);
  * - the first one after the first section and past half a screen, so the
  *   answer is read first.
+ *
+ * Calculators (owner, 25 Nov 2026: "a les calculadores hi ha molt espai
+ * lliure en ordinador, posali mes anuncis"): on desktop their text column
+ * (38rem) leaves ~600 px empty on the right, so one or two sticky 300-px
+ * rail units go there (CALCULATOR_RAIL_*, .ci-rail* in globals.css). They are
+ * out of the text flow, so they never push or cover the calculator or the
+ * text, and the page cap is 6 instead of 5 while they are on.
  */
 
 export const MAX_UNITS_PER_PAGE = 5;
+/** The cap on a desktop calculator page that carries the right rail. */
+export const MAX_UNITS_WITH_RAIL = 6;
+/** Rail width in px (the 300x600 "ci-lateral" creative). */
+export const RAIL_WIDTH = 300;
+/** The rail unit's own label line, padding and rule (px), above its creative. */
+export const RAIL_CHROME = 36;
+/** Text column height (px) from which a calculator gets one rail unit, and two. */
+export const RAIL_MIN_TEXT = 1200;
+export const RAIL_TWO_MIN_TEXT = 3200;
+/** Viewport width (px) from which the rail fits beside the 38rem column (matches .ci-rail in globals.css, 68.75rem). */
+export const RAIL_MIN_VIEWPORT = 1100;
 /** Least text between a unit and the next one, in screens. */
 export const MIN_GAP_SCREENS = 0.75;
 /** Target distance between two in-article units, top to top, in screens. */
@@ -67,6 +85,25 @@ export function planInArticle({
 }
 
 /** Units the page can still take after the ones it already has. */
-export function unitBudget(alreadyOnPage: number): number {
-  return Math.max(0, MAX_UNITS_PER_PAGE - alreadyOnPage);
+export function unitBudget(alreadyOnPage: number, max: number = MAX_UNITS_PER_PAGE): number {
+  return Math.max(0, max - alreadyOnPage);
+}
+
+/** A calculator tool page (not the hub): /es/calculadoras/<slug>/, /ca/calculadores/<slug>/, /en/calculators/<slug>/. */
+export function isCalculatorToolPath(path: string): boolean {
+  const clean = path.split(/[?#]/)[0] || "/";
+  return /^\/(es\/calculadoras|ca\/calculadores|en\/calculators)\/[^/]+\/?$/.test(clean);
+}
+
+/** How many right-rail units a calculator page of this text height gets (0, 1 or 2). */
+export function railCount(textHeight: number): 0 | 1 | 2 {
+  if (textHeight >= RAIL_TWO_MIN_TEXT) return 2;
+  if (textHeight >= RAIL_MIN_TEXT) return 1;
+  return 0;
+}
+
+/** Height of a rail unit: the 600 px creative, or what the screen leaves under the sticky header (96 px), the unit's label and padding (RAIL_CHROME) and a 24 px margin; null if under 250 px. */
+export function railUnitHeight(viewport: number): number | null {
+  const room = Math.min(600, viewport - 96 - 24 - RAIL_CHROME);
+  return room >= 250 ? room : null;
 }

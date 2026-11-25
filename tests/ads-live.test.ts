@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { AD_FEED_LAYOUT_KEY, AD_FREE_PATHS, AD_SLOTS, ADS_LIVE, adClient, allowsAdUnits, isAdFreePath } from "../src/lib/ads/config.ts";
-import { MAX_UNITS_PER_PAGE, UNIT_HEIGHT, planInArticle, unitBudget } from "../src/lib/ads/placement.ts";
+import { MAX_UNITS_PER_PAGE, MAX_UNITS_WITH_RAIL, RAIL_CHROME, RAIL_MIN_TEXT, RAIL_MIN_VIEWPORT, RAIL_TWO_MIN_TEXT, UNIT_HEIGHT, isCalculatorToolPath, planInArticle, railCount, railUnitHeight, unitBudget } from "../src/lib/ads/placement.ts";
 import { contentSecurityPolicy } from "../src/lib/security-headers.ts";
 
 /*
@@ -67,7 +67,7 @@ test("the runtime follows the placement rules", () => {
   const src = readFileSync(new URL("../src/components/AdsRuntime.tsx", import.meta.url), "utf8");
   // In-article units: planned by lib/ads/placement.ts, after the first section, every ~2 screens, five units at most.
   assert.match(src, /planInArticle\(\{ headings: body\.map\(topOf\), units, viewport, budget \}\)/);
-  assert.match(src, /unitBudget\(boxes\.length \+ \(sideBox \? 1 : 0\)\)/);
+  assert.match(src, /unitBudget\(boxes\.length \+ \(sideBox \? 1 : 0\) \+ rails\.length, rails\.length \? MAX_UNITS_WITH_RAIL : undefined\)/);
   assert.match(src, /const slot = i === picks\[0\] \? AD_SLOTS\.middle : AD_SLOTS\.middle2/);
   // Never inside a table, list or block; never before the sources heading (only the headings above it are candidates).
   assert.match(src, /h2s\.slice\(0, h2s\.indexOf\(sources\)\)/);
@@ -297,4 +297,76 @@ test("placement on a small viewport (360x640 phone): same rules, tighter pixels"
 test("key-facts grid caps the label column so a long label cannot squeeze the value (25 Nov 2026)", () => {
   const css = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.ci-facts \{\s*display: grid;[\s\S]{0,300}grid-template-columns: fit-content\(45%\) minmax\(0, 1fr\);/);
+});
+
+/* --- 25 Nov 2026, owner: "a les calculadores hi ha molt espai lliure en ordinador, posali mes anuncis" --- */
+
+test("calculator right rail: only on calculator tool pages, never on REE or legal pages, hub excluded", () => {
+  for (const p of ["/es/calculadoras/premios-loteria/", "/ca/calculadores/sou-net/", "/en/calculators/net-salary-spain/", "/es/calculadoras/paro"]) {
+    assert.ok(isCalculatorToolPath(p), p);
+    assert.ok(allowsAdUnits(p), p);
+  }
+  for (const p of ["/es/calculadoras/", "/ca/calculadores/", "/en/calculators/", "/es/guias/huelgas-espana/", "/es/precio-luz/", "/es/calculadoras/a/b/", "/es/legal/cookies/"]) assert.ok(!isCalculatorToolPath(p), p);
+  // The rail is placed only after allowsAdUnits (REE and legal pages return before placeUnits).
+  for (const p of AD_FREE_PATHS) assert.ok(!isCalculatorToolPath(p) || !allowsAdUnits(p), p);
+  const src = read("components/AdsRuntime.tsx");
+  assert.match(src, /if \(!allowsAdUnits\(pathname\)\) return;[^]*placeUnits\(client, locale, home, pathname, cleanup\)/);
+});
+
+test("calculator right rail: one unit on a long text column, two on a very long one, the page cap stays 5 (6 with the rail)", () => {
+  assert.equal(railCount(RAIL_MIN_TEXT - 1), 0);
+  assert.equal(railCount(RAIL_MIN_TEXT), 1);
+  assert.equal(railCount(RAIL_TWO_MIN_TEXT - 1), 1);
+  assert.equal(railCount(RAIL_TWO_MIN_TEXT), 2);
+  assert.equal(MAX_UNITS_PER_PAGE, 5);
+  assert.equal(MAX_UNITS_WITH_RAIL, 6);
+  // Top box + end + two rails leaves two in-article units; never more than six in all.
+  assert.equal(unitBudget(4, MAX_UNITS_WITH_RAIL), 2);
+  assert.equal(unitBudget(6, MAX_UNITS_WITH_RAIL), 0);
+  assert.equal(unitBudget(5), 0);
+  // 300x600 on a normal screen; shorter on a small one; none under 250 px of room.
+  assert.equal(railUnitHeight(900), 600);
+  // The label and padding (36 px) are subtracted too, so the sticky box fits short viewports.
+  assert.equal(RAIL_CHROME, 36);
+  assert.equal(railUnitHeight(600), 600 - 96 - 24 - 36);
+  assert.equal(railUnitHeight(406), 250);
+  assert.equal(railUnitHeight(405), null);
+  assert.equal(railUnitHeight(300), null);
+  for (const vh of [500, 600, 700, 768, 900, 1200]) {
+    const h = railUnitHeight(vh);
+    if (h) assert.ok(96 + RAIL_CHROME + h <= vh, `a ${h} px rail unit fits a ${vh} px viewport`);
+  }
+});
+
+test("calculator right rail: existing slot only, desktop only, out of the text flow, new CSS classes", () => {
+  const src = read("components/AdsRuntime.tsx");
+  // The "ci-lateral" slot, no new id; nothing is requested below the breakpoint.
+  assert.match(src, /railUnits\(prose, client, sideSlot, label, count, height\)/);
+  assert.match(src, /window\.matchMedia\(`\(min-width: \$\{RAIL_MIN_VIEWPORT \/ 16\}rem\)`\);[^]*if \(wide\.matches\) rails = placeRail/);
+  assert.equal(RAIL_MIN_VIEWPORT, 1100);
+  // Not on pages that already have the article sidebar.
+  assert.match(src, /sideSlot && !aside && isCalculatorToolPath\(path\)/);
+  const css = read("app/globals.css");
+  assert.match(css, /\.ci-rail \{\s*display: none;\s*\}/);
+  assert.match(css, /@media \(min-width: 68\.75rem\) \{\s*\.ci-rail-host \{\s*position: relative;/);
+  assert.match(css, /\.ci-rail \{\s*display: block;\s*position: absolute;[^}]*width: 300px/);
+  assert.match(css, /\.ci-rail-unit \{\s*position: sticky;\s*top: 6rem;/);
+  assert.match(css, /\.ci-rail-unit:has\(ins\.adsbygoogle\[data-ad-status="unfilled"\]\)/);
+  // 38rem column + 300px + two gutters fit in 68.75rem (1100px).
+  assert.ok(38 * 16 + 300 + 2 * 20 <= 1100);
+});
+
+test("calculator right rail: follows the layout (host, window resize) and is placed or removed when the window crosses 1100 px", () => {
+  const src = read("components/AdsRuntime.tsx");
+  // Drift: the host is observed as well as the text column, the window resize re-lays the rail, and stop() cleans both up.
+  assert.match(src, /ro\?\.observe\(prose\);\s*ro\?\.observe\(host\);/);
+  assert.match(src, /window\.addEventListener\("resize", layout\)/);
+  assert.match(src, /window\.removeEventListener\("resize", layout\)/);
+  // Crossing 1100 px: a change listener places a missing rail (within the cap of six) or removes it; it is removed on navigation.
+  assert.match(src, /wide\.addEventListener\("change", onChange\)/);
+  assert.match(src, /placeRail\(MAX_UNITS_WITH_RAIL - used\)/);
+  assert.match(src, /if \(!wide\.matches\) \{\s*railStop\?\.\(\);/);
+  assert.match(src, /wide\.removeEventListener\("change", onChange\)/);
+  // A late rail asks for its ads, one request per unit.
+  assert.match(src, /for \(let i = 0; i < late\.length; i\+\+\) adsQueue\(\)\.push\(\{\}\)/);
 });
