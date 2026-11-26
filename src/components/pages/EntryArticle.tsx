@@ -10,6 +10,7 @@ import { NextStep } from "@/components/NextStep";
 import { ReturnStep } from "@/components/ReturnStep";
 import { UsefulNow } from "@/components/UsefulNow";
 import { ElectionLine } from "@/components/ElectionLine";
+import { CalculatorLine } from "@/components/CalculatorLine";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
@@ -21,6 +22,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
+import { entryCalculatorLine } from "@/lib/engagement/calculator-line";
 import { entryElectionLine } from "@/lib/engagement/election-line";
 import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
 import { returnStepForEntry } from "@/lib/engagement/return-step";
@@ -99,6 +101,8 @@ export function EntryArticle({
       ? { at: stepInsert.at, node: <>{stepInsert.node}{electionNode}</> }
       : { at: nextStepIndex(body), node: electionNode }
     : stepInsert;
+  // One calculator line after the body (holiday, election, shops, lottery, pay-dates and death guides), unless the page already links it.
+  const calculatorLine = entryCalculatorLine({ href: entry.href, locale, body: entry.body }, step, todayInCatalonia());
 
   // Phones never see the sidebar index; long pages get it collapsed, without
   // JavaScript. On answer-first pages it sits under the summary, closed.
@@ -272,6 +276,9 @@ export function EntryArticle({
             <AdSlot kind="top" locale={locale} path={entry.href} />
 
             <BlockRenderer body={body} context={context} insert={bodyInsert} />
+
+            {/* The calculator its readers need next (lib/engagement/calculator-line.ts, 26 Nov 2026), right after the body. */}
+            <CalculatorLine line={calculatorLine} className="mt-8" />
 
             {/* Answer-first pages: the boxes that used to stand between the
                 answer and the first section ("Próximas huelgas y fechas",

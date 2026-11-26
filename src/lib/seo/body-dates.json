@@ -48,9 +48,9 @@
    "files": 10
   },
   "calculators": {
-   "date": "2026-11-20T17:46:20.000Z",
-   "fingerprint": "v1:f2649cffa6b5d9607e8cb2fd9ddf9de0",
-   "files": 6
+   "date": "2026-11-26T18:15:32.384Z",
+   "fingerprint": "v1:bafd4a3e2cf5857f2febbdbeb5aff65a",
+   "files": 7
   },
   "christmas-fairs": {
    "date": "2026-11-26T17:28:35.955Z",
@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-26T17:34:30.852Z",
-   "fingerprint": "v1:36afdd61abde5af6790946f32a379bc7",
+   "date": "2026-11-26T18:15:32.384Z",
+   "fingerprint": "v1:aa79443f00ee2147e2a9cd19f4df28ca",
    "files": 52
   },
   "holidays-report": {
@@ -228,8 +228,8 @@
    "files": 13
   },
   "reservoirs": {
-   "date": "2026-11-25T17:43:49.000Z",
-   "fingerprint": "v1:01e018cca65ae97341a2fd12e93b93f2",
+   "date": "2026-11-26T18:15:32.384Z",
+   "fingerprint": "v1:1bb71715ccab4e082fa3f721fd23f36c",
    "files": 24
   },
   "retirement-age": {
@@ -273,8 +273,8 @@
    "files": 37
   },
   "today": {
-   "date": "2026-11-25T09:04:38.638Z",
-   "fingerprint": "v1:befca4e037c85134752e0b682f7da646",
+   "date": "2026-11-26T18:15:32.384Z",
+   "fingerprint": "v1:1d2351ca5483d0dd17ae5e05ba4c911f",
    "files": 13
   },
   "traffic-fines": {

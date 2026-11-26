@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { Fragment } from "react";
 
+import { IntentLink } from "@/components/nav/IntentLink";
+import { calculatorsHubPath } from "@/lib/programmatic/calculators/paths";
 import { daysBetween, holidayOn, isCovered, nextHolidayAfter, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { READ_AT } from "@/lib/content/mushrooms/conditions";
 import { holidayLiveHref } from "@/lib/content/home-holiday-link";
-import { TOP_TOOLS, type ToolKey } from "@/lib/content/home-tools";
+import { HOME_CALCULATORS_COPY, TOP_TOOLS, homeCalculatorLinks, type ToolKey } from "@/lib/content/home-tools";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -30,6 +33,31 @@ function liveLine(key: ToolKey, locale: Locale): string | null {
   }
   if (key === "mushrooms") return t.mushroomsRead.replace("{date}", shortDate(READ_AT, locale));
   return null;
+}
+
+/**
+ * One line under the homepage search: the edition's five most-searched
+ * calculators, then the hub (lib/content/home-tools.ts HOME_CALCULATORS, 26
+ * Nov 2026). Text links, server-rendered, so the hero keeps its height on a
+ * phone; prefetch on intent (IntentLink). `data-ci-placement="home_calculators"`:
+ * clicks are `related_content_click` with that `link_context`.
+ */
+export function HomeCalculators({ locale }: { locale: Locale }) {
+  const t = HOME_CALCULATORS_COPY[locale];
+  return (
+    <nav aria-label={t.lead.replace(/:$/, "")} className="ci-measure mt-6 text-sm" data-ci-placement="home_calculators">
+      <p className="m-0">
+        <strong>{t.lead}</strong>{" "}
+        {homeCalculatorLinks(locale).map((link) => (
+          <Fragment key={link.href}>
+            <IntentLink href={link.href}>{link.label}</IntentLink>
+            {" · "}
+          </Fragment>
+        ))}
+        <IntentLink href={calculatorsHubPath(locale)}>{t.all}</IntentLink>
+      </p>
+    </nav>
+  );
 }
 
 /**

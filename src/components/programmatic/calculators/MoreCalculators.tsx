@@ -1,19 +1,30 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
-import { calculatorNextStep, type NextToolKey } from "@/lib/engagement/next-step-calculators";
+import { CALCULATOR_NEXT, calculatorNextStep, type NextToolKey } from "@/lib/engagement/next-step-calculators";
 import { calculatorCard } from "@/lib/programmatic/calculators/hub";
+import { RELATED_TITLE, byPopularity, relatedCalculators } from "@/lib/programmatic/calculators/related";
 import { CALCULATOR_IDS, calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "@/lib/programmatic/calculators/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 
 import { Year2027Status } from "./Year2027Status";
 
 /**
- * "Más calculadoras", at the bottom of every calculator page: the other tools
- * of the registry (never the page itself), each with its hub one-liner, then
- * the hub. `extra` adds page-specific links at the end of the list (the
+ * At the bottom of every calculator page: first "Calculadoras relacionadas",
+ * the 3 or 4 tools on the same topic (lib/programmatic/calculators/related.ts,
+ * 26 Nov 2026), then "Más calculadoras", the other tools of the registry
+ * (never the page itself nor a related one), each with its hub one-liner,
+ * then the hub. `extra` adds page-specific links at the end of the list (the
  * pay-dates guide on the unemployment calculator).
+ *
+ * Server-rendered, no state: nothing moves after the first paint. The related
+ * block is `data-ci-placement="related_calculators"`, which the click
+ * listener reports as `related_content_click` with that `link_context`
+ * (lib/analytics/clicks.ts). Every link prefetches on intent (IntentLink): a
+ * plain Link sent one uncached RSC prefetch per target as the 40-link list
+ * scrolled into view.
  */
 
 const T = {
@@ -22,24 +33,56 @@ const T = {
   en: { title: "More calculators", all: "All calculators and tools" },
 } as const;
 
-export function MoreCalculators({ current, locale, extra }: { current: CalculatorId; locale: CalcLocale; extra?: ReactNode }) {
-  const t = T[locale];
-  const siblings = CALCULATOR_IDS.filter((id) => id !== current).map(calculatorCard);
+/** The keys the page's "next useful step" box links (CalculatorNextStep): the related block uses them only as a last resort. */
+function nextStepKeys(current: CalculatorId): readonly string[] {
+  return current === "lottery-tax" ? [] : (CALCULATOR_NEXT[current] ?? []);
+}
+
+export function RelatedCalculators({ current, locale }: { current: CalculatorId; locale: CalcLocale }) {
+  const links = relatedCalculators(current, locale, nextStepKeys(current));
+  if (links.length === 0) return null;
   return (
-    <section aria-labelledby="mas-calculadoras">
-      <h2 id="mas-calculadoras">{t.title}</h2>
-      <ul>
-        {siblings.map((card) => (
-          <li key={card.key}>
-            <Link href={card.href[locale]}>{card.title[locale]}</Link>: {card.answers[locale]}
+    <nav aria-labelledby="calculadoras-relacionadas" className="ci-callout ci-callout-tip ci-next-step mb-8" data-ci-placement="related_calculators">
+      <h2 id="calculadoras-relacionadas" className="ci-next-step-title">
+        {RELATED_TITLE[locale]}
+      </h2>
+      <ul className="ci-next-step-list">
+        {links.map((link) => (
+          <li key={link.key}>
+            <IntentLink href={link.href}>{link.label}</IntentLink>
+            <span className="ci-next-step-note">{link.note}</span>
           </li>
         ))}
-        {extra}
-        <li>
-          <Link href={calculatorsHubPath(locale)}>{t.all}</Link>
-        </li>
       </ul>
-    </section>
+    </nav>
+  );
+}
+
+export function MoreCalculators({ current, locale, extra }: { current: CalculatorId; locale: CalcLocale; extra?: ReactNode }) {
+  const t = T[locale];
+  const related = new Set<string>(relatedCalculators(current, locale, nextStepKeys(current)).map((link) => link.key));
+  // Most-searched first (related.ts POPULARITY), as on the hub.
+  const siblings = byPopularity(CALCULATOR_IDS.filter((id) => id !== current))
+    .filter((id) => !related.has(id))
+    .map(calculatorCard);
+  return (
+    <>
+      <RelatedCalculators current={current} locale={locale} />
+      <section aria-labelledby="mas-calculadoras">
+        <h2 id="mas-calculadoras">{t.title}</h2>
+        <ul>
+          {siblings.map((card) => (
+            <li key={card.key}>
+              <IntentLink href={card.href[locale]}>{card.title[locale]}</IntentLink>: {card.answers[locale]}
+            </li>
+          ))}
+          {extra}
+          <li>
+            <IntentLink href={calculatorsHubPath(locale)}>{t.all}</IntentLink>
+          </li>
+        </ul>
+      </section>
+    </>
   );
 }
 

@@ -95,9 +95,9 @@ export type TownSelectTool = (typeof TOWN_SELECT_TOOLS)[number];
 export type OfficialLinkContext = "sources" | "calculator" | "content";
 /** The end-of-article box, the "every morning" box of daily pages, the footer line. */
 export type ChannelLinkContext = "article_box" | "daily_box" | "footer" | "return_step" | "other";
-/** The box an internal onward link sits in (`data-ci-placement`): the "next useful step" box, a town's list of its other pages (TownHub.tsx), the strike pages' "useful now" list (UsefulNow.tsx), or the 29N election line (ElectionLine.tsx, 26 Nov to 7 Dec 2026). */
-export type RelatedLinkContext = "next_step" | "town_hub" | "useful_now" | "election_line";
-export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step", "town_hub", "useful_now", "election_line"];
+/** The box an internal onward link sits in (`data-ci-placement`): the "next useful step" box, a town's list of its other pages (TownHub.tsx), the strike pages' "useful now" list (UsefulNow.tsx), the 29N election line (ElectionLine.tsx, 26 Nov to 7 Dec 2026), and since 26 Nov 2026 the calculators' "related calculators" block (MoreCalculators.tsx), the one-line calculator link on guides and date pages (CalculatorLine.tsx) and the homepage's most-used calculators line (HomeCalculators.tsx). */
+export type RelatedLinkContext = "next_step" | "town_hub" | "useful_now" | "election_line" | "related_calculators" | "calculator_line" | "home_calculators";
+export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step", "town_hub", "useful_now", "election_line", "related_calculators", "calculator_line", "home_calculators"];
 /** `data-ci-placement` of the strike and election pages' "keep it" block (components/ReturnStep.tsx). */
 export const RETURN_STEP_PLACEMENT = "return_step";
 /** Where the block sits: right after the page's answer, or after the intro of a hub page. */

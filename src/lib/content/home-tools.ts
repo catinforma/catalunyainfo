@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { calcPath, type CalculatorId } from "@/lib/programmatic/calculators/paths";
 
 /**
  * The homepage utilities strip: which pages, and in what order per edition.
@@ -185,4 +186,52 @@ export function toolsFor(locale: Locale, today: string): ToolKey[] {
   const monthDay = today.slice(5, 10);
   const season = SEASONAL.filter((s) => inWindow(monthDay, s.from, s.to)).map((s) => s.key);
   return [...season, ...ORDER[locale]];
+}
+
+/*
+ * 26 Nov 2026 (batch 6C): the five most-searched calculators of each edition,
+ * one text line under the homepage search (components/HomeTools.tsx
+ * HomeCalculators), then the calculators hub. A line of links, not a card
+ * grid (owner, 12 Nov 2026: nothing between the tiles and the articles that
+ * pushes them a screen down). Order: Search Console impressions of each
+ * edition's page, 30 Oct-26 Nov 2026 (`snapshot.py pages 28 6000`):
+ *  es: premios-loteria 3,774 · letras-del-tesoro 2,359 · salario-minimo-2027 1,111 · dias-habiles 1,082 · permisos-laborales 691
+ *  ca: pujada-pensions-2027 444 · dies-habils 368 · ipc 336 · permisos-laborals 295 · atur 293
+ *  en: spain-pension-increase-2027 189 · spain-minimum-wage-2027 164 · spain-inflation-cpi 152 · spain-unemployment-subsidy 119 · itv-spain 102
+ * Re-read with calculators/related.ts POPULARITY (RANKING_REREAD_BY).
+ */
+export type HomeCalculatorId = Extract<
+  CalculatorId,
+  "lottery-tax" | "treasury-bills" | "smi-2027" | "working-days" | "paid-leave" | "pensions-2027" | "ipc" | "unemployment" | "unemployment-subsidy" | "itv"
+>;
+
+export const HOME_CALCULATORS: Record<Locale, readonly HomeCalculatorId[]> = {
+  es: ["lottery-tax", "treasury-bills", "smi-2027", "working-days", "paid-leave"],
+  ca: ["pensions-2027", "working-days", "ipc", "paid-leave", "unemployment"],
+  en: ["pensions-2027", "smi-2027", "ipc", "unemployment-subsidy", "itv"],
+};
+
+/** Short names for the line (the hub cards' titles are longer). */
+export const HOME_CALCULATOR_LABEL: Record<HomeCalculatorId, Record<Locale, string>> = {
+  "lottery-tax": { es: "Premios de lotería", ca: "Premis de loteria", en: "Lottery prize tax" },
+  "treasury-bills": { es: "Letras del Tesoro", ca: "Lletres del Tresor", en: "Treasury bills" },
+  "smi-2027": { es: "Salario mínimo 2027", ca: "Salari mínim 2027", en: "Minimum wage 2027" },
+  "working-days": { es: "Días hábiles", ca: "Dies hàbils", en: "Working days" },
+  "paid-leave": { es: "Permisos laborales", ca: "Permisos laborals", en: "Paid leave" },
+  "pensions-2027": { es: "Subida de las pensiones 2027", ca: "Pujada de les pensions 2027", en: "Pension increase 2027" },
+  ipc: { es: "IPC", ca: "IPC", en: "Inflation (CPI)" },
+  unemployment: { es: "Paro", ca: "Atur", en: "Unemployment benefit" },
+  "unemployment-subsidy": { es: "Subsidio por desempleo", ca: "Subsidi d'atur", en: "Unemployment subsidy" },
+  itv: { es: "ITV", ca: "ITV", en: "ITV (vehicle inspection)" },
+};
+
+export const HOME_CALCULATORS_COPY: Record<Locale, { lead: string; all: string }> = {
+  es: { lead: "Calculadoras más usadas:", all: "todas las calculadoras" },
+  ca: { lead: "Calculadores més usades:", all: "totes les calculadores" },
+  en: { lead: "Most-used calculators:", all: "all calculators" },
+};
+
+/** The line's links for one edition: each tool's page (the component adds the hub). */
+export function homeCalculatorLinks(locale: Locale): { href: string; label: string }[] {
+  return HOME_CALCULATORS[locale].map((id) => ({ href: calcPath(id, locale), label: HOME_CALCULATOR_LABEL[id][locale] }));
 }

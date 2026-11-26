@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
 import { AdSlot } from "@/components/AdSlot";
-import { HomeTopTools } from "@/components/HomeTools";
+import { HomeCalculators, HomeTopTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -119,6 +119,8 @@ export default async function HomePage({
               <div className="mt-8 max-w-xl">
                 <SearchBox locale={locale} size="hero" />
               </div>
+              {/* 26 Nov 2026: the five most-searched calculators, one text line (lib/content/home-tools.ts). */}
+              <HomeCalculators locale={locale} />
             </div>
 
             {/* The lead item sits beside the question rather than above it: it

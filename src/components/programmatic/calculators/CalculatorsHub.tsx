@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
+import { IntentLink } from "@/components/nav/IntentLink";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -11,14 +12,17 @@ import { HTML_LANG } from "@/lib/i18n/config";
 import { legalPath } from "@/lib/i18n/routes";
 import { HUB_COPY, HUB_GROUPS, SCOPE_LABEL, hubCrumb, type HubCard } from "@/lib/programmatic/calculators/hub";
 import { calculatorsHubEditions, calculatorsHubPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
+import { HUB_QUESTIONS_TITLE, byPopularity, hubQuestions } from "@/lib/programmatic/calculators/related";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 /**
  * The calculators hub: /es/calculadoras/, /ca/calculadores/, /en/calculators/.
- * A short answer-first lead, then one card per tool (lib/programmatic/calculators/hub.ts),
- * grouped by topic, each with the question it answers and its official
- * basis. Server-rendered, no client code; breadcrumb JSON-LD only, like the
+ * A short answer-first lead, the ten most-searched questions as links to
+ * their tools (26 Nov 2026), then one card per tool (lib/programmatic/calculators/hub.ts),
+ * grouped by topic, most-searched first within each group
+ * (calculators/related.ts POPULARITY), each with the question it answers and
+ * its official basis. Server-rendered, no client code; breadcrumb JSON-LD only, like the
  * calculators themselves.
  */
 
@@ -60,6 +64,7 @@ function Card({ card, locale }: { card: HubCard; locale: CalcLocale }) {
 export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
   const c = HUB_COPY[locale];
   const crumbs = calculatorsHubCrumbs(locale);
+  const questions = hubQuestions(locale);
   return (
     <>
       <SiteHeader locale={locale} translations={calculatorsHubEditions()} />
@@ -73,6 +78,20 @@ export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
         </header>
 
         <div className="ci-shell py-10">
+          {/* 26 Nov 2026: the most-searched questions first, each a link to the tool that answers it (calculators/related.ts). */}
+          <section aria-labelledby="preguntas-mas-buscadas" className="ci-measure mb-10">
+            <h2 id="preguntas-mas-buscadas">{HUB_QUESTIONS_TITLE[locale]}</h2>
+            <ul>
+              {questions.map((q) => (
+                <li key={q.id}>
+                  <IntentLink href={q.href}>
+                    {q.question}
+                  </IntentLink>
+                </li>
+              ))}
+            </ul>
+          </section>
+
           {HUB_GROUPS.map((group) => (
             <section key={group.id} aria-labelledby={`grupo-${group.id}`} className="mb-10">
               <div className="ci-section-head">
@@ -82,7 +101,7 @@ export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
               </div>
               {group.intro ? <p className="ci-measure mb-4">{group.intro[locale]}</p> : null}
               <ul className="ci-tools">
-                {group.cards.map((card) => (
+                {byPopularity(group.cards.map((card) => card.key)).map((key) => group.cards.find((card) => card.key === key)!).map((card) => (
                   <Card key={card.key} card={card} locale={locale} />
                 ))}
               </ul>

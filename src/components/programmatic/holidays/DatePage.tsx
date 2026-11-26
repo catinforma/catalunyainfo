@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { CalculatorLine } from "@/components/CalculatorLine";
 import { ElectionLine } from "@/components/ElectionLine";
 import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { dateCalculatorLine } from "@/lib/engagement/calculator-line";
 import { dateElectionLine } from "@/lib/engagement/election-line";
 import { holidayDateNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
@@ -60,6 +62,8 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
   // Only a 2027 twin that is indexable: no link to a noindex page.
   const twin2027 = sameDayIn2027(iso);
   const sameDay2027 = twin2027 && !isLowDemandPath(datePath(locale, twin2027)) ? twin2027 : null;
+  // The next-step box below, for the calculator line (which never repeats a link the box has).
+  const step = holidayDateNextStep(iso, locale, datePath(locale, iso), todayInCatalonia());
   const sources: SourceKey[] = tranche4
     ? ["regional2027", "boe2027", "shopsOrder2027", "retailLaw", "school"]
     : year === "2026"
@@ -181,6 +185,8 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
             </ul>
           ) : null}
           {content.local.note ? <p className="text-sm">{content.local.note}</p> : null}
+          {/* 26 Nov 2026 (lib/engagement/calculator-line.ts): a deadline over these holidays, in the working-days calculator. */}
+          <CalculatorLine line={dateCalculatorLine(locale, step, todayInCatalonia())} className="my-6" />
 
           {content.sections.slice(content.sectionsBeforeLocal ?? 0).map((section) => (
             <section key={section.title}>

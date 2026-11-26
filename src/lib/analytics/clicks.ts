@@ -24,8 +24,10 @@ import {
  *  - an official or primary source    -> outbound_official_source_click
  *  - one of our pages, from the "next useful step" box
  *    (`data-ci-placement="next_step"`), a town's list of its other pages
- *    (`"town_hub"`) or the strike pages' "useful now" list
- *    (`"useful_now"`)                  -> related_content_click
+ *    (`"town_hub"`), the strike pages' "useful now" list
+ *    (`"useful_now"`) or any other box of RELATED_LINK_CONTEXTS (the
+ *    election line, the calculators' related block, the calculator line
+ *    on guides, the homepage calculators line) -> related_content_click
  *
  * Every other click is left to GA4's enhanced measurement (`click` for any
  * outbound link), so nothing is counted twice under our names; other
