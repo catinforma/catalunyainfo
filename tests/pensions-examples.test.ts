@@ -23,6 +23,9 @@ import { RENT_SNAPSHOT } from "../src/lib/programmatic/rent-update/data.ts";
  */
 
 const IPC = RENT_SNAPSHOT.series.ipc;
+// 26 Nov 2026 (head, batch 6A added two questions): find answers by what they answer, not by position.
+const minimumsFaq = (faq: { q: string; a: string }[]) => faq.find((f) => /no contributiv|non-contributory/i.test(f.q))!;
+const thousandFaq = (faq: { q: string; a: string }[]) => faq.find((f) => /1\.000|1,000/.test(f.q))!;
 const FLASH: FlashFigure = { month: "2026-11", value: 3.1, published: "2026-11-27", url: "https://www.ine.es/" };
 const OFFICIAL: Official2027 = { percent: 3.4, norm: "Real Decreto-ley 1/2027", boeId: "BOE-A-2027-1", published: "2027-01-10", url: "https://www.boe.es/", minimums: null, pncAnnual: null };
 
@@ -49,7 +52,7 @@ test("the 2026 figures in the minimums and non-contributory answer are the BOE's
   const status = statusOn(IPC, "2026-11-25");
   for (const locale of PENSION_LOCALES) {
     const c = exampleCopy(locale, status);
-    const min = c.faq[2]!.a;
+    const min = minimumsFaq(c.faq).a;
     for (const x of [13_106.8, 936.2, 8803.2, 628.8]) assert.ok(min.includes(euros(x, locale)), `${locale}: ${euros(x, locale)}`);
     // No 2027 amount is printed for the minimums: no euro figure with "2027" next to it.
     assert.doesNotMatch(min, /2027[^.]{0,20}\d\.\d{3},\d{2}/);
@@ -76,18 +79,18 @@ test("the first answer follows the state of the figure: provisional, flash, fina
   assert.equal(INE_FINAL_DAY, "2026-12-15");
 });
 
-test("five questions per language, the 1.000 € answer equals the table's row, every locale is complete", () => {
+test("seven questions per language, the 1.000 € answer equals the table's row, every locale is complete", () => {
   const status = statusOn(IPC, "2026-11-25")!;
   const rows = exampleRows(status.percent);
   for (const locale of PENSION_LOCALES) {
     const c = exampleCopy(locale, status);
-    assert.equal(c.faq.length, 5);
-    assert.equal(new Set(c.faq.map((f) => f.q)).size, 5);
+    assert.equal(c.faq.length, 7);
+    assert.equal(new Set(c.faq.map((f) => f.q)).size, 7);
     assert.ok(c.title && c.intro && c.caption && c.note && c.faqTitle);
     assert.equal(c.cols.length, 4);
     const thousand = rows.find((r) => r.monthly2026 === 1000)!;
     const fmt = (x: number) => euros(x, locale);
-    assert.ok(c.faq[4]!.a.includes(fmt(thousand.monthly2027)), `${locale}: ${fmt(thousand.monthly2027)} in ${c.faq[4]!.a}`);
+    assert.ok(thousandFaq(c.faq).a.includes(fmt(thousand.monthly2027)), `${locale}: ${fmt(thousand.monthly2027)} in ${thousandFaq(c.faq).a}`);
     for (const f of c.faq) assert.ok(f.q.length > 20 && f.a.length > 60, `${locale}: ${f.q}`);
   }
 });
@@ -104,8 +107,8 @@ test("review fixes: the minimum is the decree's «unidad económica unipersonal�
   assert.equal(prov.kind, "provisional");
   for (const locale of PENSION_LOCALES) {
     const c = exampleCopy(locale, prov);
-    assert.match(c.faq[2]!.a, /unipersonal|single-person economic unit/);
-    assert.doesNotMatch(c.faq[2]!.a, /cónyuge a cargo|cònjuge a càrrec|dependent spouse/);
+    assert.match(minimumsFaq(c.faq).a, /unipersonal|single-person economic unit/);
+    assert.doesNotMatch(minimumsFaq(c.faq).a, /cónyuge a cargo|cònjuge a càrrec|dependent spouse/);
     assert.match(c.intro, /expresado con un decimal/);
   }
   const flash = revaluationStatus(IPC, "2026-11-27", FLASH, null)!;
