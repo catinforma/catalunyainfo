@@ -461,17 +461,67 @@ export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHO
 }
 
 
+/**
+ * 26 Nov 2026 (batch 5A): "censo electoral <town>" still drew impressions with no clicks (Mataró 42 at 9.0,
+ * Viladecans 19 at 7.5, Ripollet, Reus, Rubí, Santa Coloma; GSC 13-26 Nov) while the census section sits ninth on the
+ * page. The figure goes up into the facts block (first screen) and the "how do I check it" answer into the FAQ (and its
+ * FAQPage markup). Same official data as the census section: INE cid=1700, re-read 26 Nov 2026: "Para realizar la
+ * consulta, se exige identificarse por el sistema Cl@ve. Quien no pueda identificarse por este sistema podrá consultar
+ * sus datos en su Ayuntamiento, ... en la Delegación Provincial de la Oficina del Censo Electoral o llamando al teléfono
+ * 900.343.232"; the Cl@ve lookup also gives "la mesa y el local electoral que les corresponden"; the tarjeta censal
+ * carries "la mesa y el local electoral asignados"; phone on polling day: "El día 29 de noviembre, día de la votación,
+ * el horario será de 8:00 a 20:00". Once the polls close, the polling-day hours drop out of the answer.
+ */
+export function censusFactAndFaq(
+  m: Municipality,
+  locale: Locale,
+  snapshot: ElectionsSnapshot = SNAPSHOT,
+  phase: ElectionDayPhase = "before",
+): { fact: { label: string; value: string }; faq: { question: string; answer: string } } {
+  const f = formats(locale);
+  const place = placeName(m, locale);
+  const n = f.n(m.congress.electorate);
+  const when = f.date(snapshot.elections.congress.date);
+  const voting = phase === "before" || phase === "eve" || phase === "polling";
+  if (locale === "ca") {
+    return {
+      fact: { label: "Cens electoral", value: `${n} persones (generals del ${when})` },
+      faq: {
+        question: `Com consulto el cens electoral ${ofCa(place)} i on em toca votar?`,
+        answer: `Amb Cl@ve, a la consulta del cens electoral de l'INE (sede.ine.gob.es), que també dona la teva mesa i el teu local electoral. Sense Cl@ve, a l'Ajuntament ${ofCa(place)}, a la delegació provincial de l'Oficina del Cens Electoral o al telèfon gratuït 900 343 232${voting ? " (el diumenge 29 de novembre, de 8.00 a 20.00)" : ""}. La targeta censal que envia l'Oficina del Cens Electoral indica la mesa i el local assignats. A les generals del ${when}, el cens ${ofCa(place)} era de ${n} persones.`,
+      },
+    };
+  }
+  if (locale === "es") {
+    return {
+      fact: { label: "Censo electoral", value: `${n} personas (generales del ${when})` },
+      faq: {
+        question: `¿Cómo consulto el censo electoral de ${place} y dónde me toca votar?`,
+        answer: `Con Cl@ve, en la consulta del censo electoral del INE (sede.ine.gob.es), que también da tu mesa y tu local electoral. Sin Cl@ve, en el Ayuntamiento de ${place}, en la delegación provincial de la Oficina del Censo Electoral o en el teléfono gratuito 900 343 232${voting ? " (el domingo 29 de noviembre, de 8.00 a 20.00)" : ""}. La tarjeta censal que envía la Oficina del Censo Electoral indica la mesa y el local asignados. En las generales del ${when}, el censo de ${place} era de ${n} personas.`,
+      },
+    };
+  }
+  return {
+    fact: { label: "Electoral roll", value: `${n} people (general election of ${when})` },
+    faq: {
+      question: `How do I check the electoral roll in ${place} and where I vote?`,
+      answer: `With Cl@ve, on the INE's electoral-roll lookup (sede.ine.gob.es, in Spanish), which also gives your polling table and polling station. Without Cl@ve, at ${place} town hall, at the census office's provincial branch or on its free line, 900 343 232${voting ? " (on Sunday 29 November, 8:00 to 20:00)" : ""}. The census card the census office sends shows your assigned table and polling station. At the general election of ${when}, ${place}'s electoral roll had ${n} people.`,
+    },
+  };
+}
+
 export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT, phase: ElectionDayPhase = "before", now?: Date): ElectionPageModel {
   const base = buildResults(m, locale, snapshot, phase);
   const date = (iso: string) => longDate(iso, locale);
   const polling = buildPolling(m, locale, date);
   const mesa = buildMesaDuty(m, locale, date, now);
+  const census = censusFactAndFaq(m, locale, snapshot, phase);
   const fact = polling.fact ? [{ label: POLLING_FACT_LABEL[locale], value: polling.fact }] : [];
-  // The polling and mesa facts go after the town's size facts; their FAQ items close the questions.
+  // The polling, census and mesa facts go after the town's size facts; their FAQ items close the questions.
   return {
     ...base,
-    facts: [...base.facts, ...fact, ...(mesa ? [mesa.fact] : [])],
-    faq: [...base.faq, polling.faq, ...(mesa ? [mesa.faq] : [])],
+    facts: [...base.facts, ...fact, census.fact, ...(mesa ? [mesa.fact] : [])],
+    faq: [...base.faq, polling.faq, census.faq, ...(mesa ? [mesa.faq] : [])],
     polling,
     mesa,
   };

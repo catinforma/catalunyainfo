@@ -1,9 +1,11 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ElectionLine } from "@/components/ElectionLine";
 import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { dateElectionLine } from "@/lib/engagement/election-line";
 import { holidayDateNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import { BOE_2027 } from "@/lib/programmatic/holidays/boe-2027";
@@ -140,6 +142,8 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
 
           {/* The next useful step (lib/engagement/next-step.ts): the December bridge or the 2027 bridges, and the 2027 leave planner. */}
           <NextStep step={holidayDateNextStep(iso, locale, datePath(locale, iso), todayInCatalonia())} locale={locale} />
+          {/* 29N election line (lib/engagement/election-line.ts): the 27 Nov-8 Dec 2026 date pages, to 7 Dec. */}
+          <ElectionLine line={dateElectionLine(iso, locale)} className="my-6" />
 
           <h2 id="local">{content.local.title ?? ui.localTitle}</h2>
           <p>{content.local.text}</p>

@@ -9,6 +9,7 @@ import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
 import { ReturnStep } from "@/components/ReturnStep";
 import { UsefulNow } from "@/components/UsefulNow";
+import { ElectionLine } from "@/components/ElectionLine";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
@@ -20,6 +21,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
+import { entryElectionLine } from "@/lib/engagement/election-line";
 import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
 import { returnStepForEntry } from "@/lib/engagement/return-step";
 import { usefulNow } from "@/lib/engagement/useful-now";
@@ -80,13 +82,23 @@ export function EntryArticle({
   // "Útil ahora" (lib/engagement/useful-now.ts): strike pages hand on to the
   // evergreen pages their readers need next, after the body.
   const useful = usefulNow({ href: entry.href, key: entry.key, locale }, step);
-  const bodyInsert = ret
+  const stepInsert = ret
     ? returnInSummary
       ? undefined
       : { at: nextStepIndex(body), node: <ReturnStep step={ret} locale={locale} /> }
     : step && !nextStepInSummary
       ? { at: nextStepIndex(body), node: <NextStep step={step} locale={locale} /> }
       : undefined;
+  // 29N election line (lib/engagement/election-line.ts, 26 Nov-7 Dec 2026): the strike pages and the December
+  // bridge guide hand on to the election pages, right under the summary or after the box in the body.
+  const electionLine = entryElectionLine({ href: entry.href, key: entry.key, locale });
+  const electionInSummary = Boolean(electionLine && layout?.summary);
+  const electionNode = electionLine && !electionInSummary ? <ElectionLine line={electionLine} className="my-6" /> : null;
+  const bodyInsert = electionNode
+    ? stepInsert
+      ? { at: stepInsert.at, node: <>{stepInsert.node}{electionNode}</> }
+      : { at: nextStepIndex(body), node: electionNode }
+    : stepInsert;
 
   // Phones never see the sidebar index; long pages get it collapsed, without
   // JavaScript. On answer-first pages it sits under the summary, closed.
@@ -233,6 +245,7 @@ export function EntryArticle({
             ) : nextStepInSummary ? (
               <NextStep step={step} locale={locale} className="mt-3" />
             ) : null}
+            {electionInSummary ? <ElectionLine line={electionLine} className="mt-3" /> : null}
             {phoneToc}
           </div>
         </div>
