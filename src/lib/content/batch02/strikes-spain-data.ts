@@ -264,6 +264,19 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * SCF (SCFCOM 40), ALFERRO (newest 83/2026); Basque list (newest 17 Nov); CESM (still postponed). SMU: medicosunidos.es did not resolve (DNS) from
  * the server, so its notice PDF was not re-fetched; huelgamedica.es (the campaign's own site, read) still says "16 AL 27 DE NOVIEMBRE" and its feed's newest
  * item is 20 Nov; the notice itself was read at 00:40 the same day ("hasta las 08:00 horas del sábado 28 de noviembre de 2026").
+ *
+ * 26 Nov 2026 (06:20-07:00 CET, Thursday): re-read (docs/SEO_EXPERIMENTS.md, "2026-11-26 — Strikes re-read on the 26N strike day (ci-fonts)").
+ * Nothing changed. SMU: notice PDF re-fetched (cdn.medicosunidos.es resolves again): "hasta las 08:00 horas del sábado 28 de noviembre de 2026";
+ * medicosunidos.es home and manifestations: no call-off. Correos: Orden INT/1239/2026 (BOE-A-2026-24259) unchanged ("los días 23 a 27 de
+ * noviembre de 2026 en Madrid y de 23 a 25 [...] Cádiz, Córdoba, Huelva, Málaga y Sevilla"); Correos' press room: nothing on the strike; JEC
+ * Acuerdo 418/2026 (curl gets Akamai 403; read through WebFetch: "hasta el 26 de noviembre de 2026", "como máximo hasta las 14:00 horas") and
+ * Correos' postal-vote page ("hasta el 26 de noviembre de 2026 a las 14:00h"). CSIF Madrid: call page 97107 unchanged ("24, 26 y 30 de noviembre
+ * de 2026"), newest items 25 Nov (career scheme; it will challenge the Viceconsejería's neutrality instructions): no change to the stoppages;
+ * Orden 4252/2026 and 4977/2026 as cited. Perfumery 27 Nov: CCOO de Catalunya, CCOO de Industria (home and news) and UGT FICA nº 3861: strike kept,
+ * no agreement. Ministry air list: newest still the Serveo resolution (PDF: "vigente hasta el día 31 de enero de 2027"); rail list newest 12 Nov;
+ * SEMAF (newest item on Renfe's 4th agreement, no strike); CESM (newest 23 Nov, nothing new); Basque list (newest 17 Nov).
+ * Not out at read time: BOE of 26 Nov (API 404 at 06:52) and BOCM of 26 Nov (newest on its home núm. 283); BOE núm. 293 and BOCM núm. 283 (25 Nov)
+ * had no strike order.
  */
 export const STRIKES_SPAIN_AS_OF: string = "2026-11-26";
 
@@ -272,7 +285,7 @@ export const STRIKES_SPAIN_AS_OF: string = "2026-11-26";
  * Typed as string (not the literal) so a test comparing it with the as-of
  * day never narrows it to `never` when the two differ.
  */
-export const STRIKES_SPAIN_VERIFIED: string = "2026-11-25";
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-26";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";

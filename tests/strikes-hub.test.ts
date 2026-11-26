@@ -694,7 +694,10 @@ test("the lead answers 'is there a strike today' first, then what is coming and 
     assert.match(oct30, city[locale], locale);
     // Up to the general strike, only it touches the metro, bus and FGC.
     if (STRIKES_AS_OF <= "2026-11-11") assert.match(leadText, city[locale], locale);
-    assert.match(leadText, /Properes vagues:|Próximas huelgas:|Coming up:/, locale);
+    // 26 Nov 2026: "coming up" only while a listed strike has a day after the as-of day (on 26 Nov every listed strike is on that day).
+    const coming = upcomingStrikes(STRIKES_AS_OF).some((s) => !isOnDay(s, STRIKES_AS_OF));
+    if (coming) assert.match(leadText, /Properes vagues:|Próximas huelgas:|Coming up:/, locale);
+    else assert.doesNotMatch(leadText, /Properes vagues:|Próximas huelgas:|Coming up:/, locale);
   }
   // Monday 2 November (checked that evening): the doctors' strike and Ouigo's second all-day strike are both under way.
   assert.match(
