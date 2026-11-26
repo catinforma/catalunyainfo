@@ -81,6 +81,7 @@ import { PADRO } from "@/lib/content/batch02/padro";
 import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { WINTER_SALES_GUIDE } from "@/lib/content/batch02/winter-sales";
 import { BARCELONA_WINTER_GUIDE } from "@/lib/content/batch02/barcelona-winter";
+import { WINTER_START_GUIDE } from "@/lib/content/batch02/winter-start";
 import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
 import { FARMERS_MARKETS } from "@/lib/content/batch02/farmers-markets";
@@ -349,6 +350,10 @@ export async function POST(request: Request) {
     // 25 Nov 2026: Barcelona in January and February 2027 (ca/es/en), on its own.
     // `barcelona-gener-febrer-links` republishes what gained a link to it: Barcelona in December, the weather guide, the Barcelona hub, winter sales, shops, New Year and Reis.
     if (wants("barcelona-gener-febrer")) published.push(await publishB2Article(BARCELONA_WINTER_GUIDE));
+    // 27 Nov 2026: when winter starts (IGN), the shortest day, the Geminids and the winter sky (ca/es/en), on its own.
+    // `hivern-links` republishes what gained a link to it: the weather guide, the clock-change guide, Barcelona in December and Barcelona in January-February.
+    if (wants("hivern")) published.push(await publishB2Article(WINTER_START_GUIDE));
+    if (wants("hivern-links")) published.push(await publishB2Article(CLIMATE), await publishB2Article(CLOCK_CHANGE), await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(BARCELONA_WINTER_GUIDE));
     if (wants("barcelona-gener-febrer-links")) published.push(await publishB2Article(BARCELONA_DECEMBER), await publishB2Article(CLIMATE), await publishB2Article(BARCELONA_HUB), await publishB2Article(WINTER_SALES_GUIDE), await publishB2Article(SHOPS), await publishB2Article(NEW_YEAR), await publishB2Article(REIS));
     // 13 Nov 2026: the TSI health card (ca, es, en), on its own. The padró guide
     // and the Barcelona hub gained a link to it (the hub also got the English

@@ -536,7 +536,7 @@ export function buildBarcelonaWinterBody(L: Locale): Block[] {
     faq(t.faq),
     callout("official", t.calloutTitle, t.callout),
     paragraph(verifiedLine(L, W.asOf)),
-    ...b2Related(["barcelonaDecember", "climate", "winterSales", "shops", "reis", "carnival", "christmasTransport", "transport"], L),
+    ...b2Related(["barcelonaDecember", "climate", "winterStart", "winterSales", "shops", "reis", "carnival", "christmasTransport", "transport"], L),
   ];
 }
 

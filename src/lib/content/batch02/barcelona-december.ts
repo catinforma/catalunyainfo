@@ -866,7 +866,7 @@ function agendaList(locale: Locale): Block {
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
-const RELATED = ["christmasBarcelona", "decemberBridge", "christmas", "newYear", "shops", "winterSales", "barcelonaWinter", "climate", "marato", "grossa", "pessebres", "montserratFree"] as const;
+const RELATED = ["christmasBarcelona", "decemberBridge", "christmas", "newYear", "shops", "winterSales", "barcelonaWinter", "climate", "winterStart", "marato", "grossa", "pessebres", "montserratFree"] as const;
 
 export function buildBarcelonaDecemberBody(
   locale: Locale,

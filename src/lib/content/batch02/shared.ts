@@ -140,7 +140,9 @@ export type B2Key =
   // 21 Nov 2026: income tax (IRPF) brackets 2026, State + Catalonia, for residents and newcomers (income-tax.ts).
   | "incomeTax"
   // 21 Nov 2026: the Beckham law (art. 93 LIRPF): who qualifies, modelo 149, deadlines (beckham-law.ts).
-  | "beckhamLaw";
+  | "beckhamLaw"
+  // 27 Nov 2026: when winter starts (IGN), the shortest day and the winter sky, Spain-wide with Catalonia's capitals (winter-start.ts).
+  | "winterStart";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -578,6 +580,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/barcelona-gener-febrer",
     es: "guias/barcelona-enero-febrero",
     en: "guides/barcelona-in-january-february",
+  },
+  // No year in the path: next winter's IGN dates roll onto the same URLs.
+  winterStart: {
+    ca: "guies/quan-comenca-l-hivern",
+    es: "guias/cuando-empieza-el-invierno",
+    en: "guides/when-does-winter-start-spain",
   },
   // Evergreen: no year in the path.
   tsi: {
@@ -1073,6 +1081,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Barcelona al gener i al febrer del 2027: temps, festius i Carnaval",
     es: "Barcelona en enero y febrero de 2027: tiempo, festivos y Carnaval",
     en: "Barcelona in January and February 2027: weather, holidays and Carnival",
+  },
+  winterStart: {
+    ca: "Quan comença l'hivern 2026: el 21 de desembre a les 21:50 i el dia més curt",
+    es: "Cuándo empieza el invierno 2026: el 21 de diciembre a las 21:50 y el día más corto",
+    en: "When winter starts in 2026: 21 December at 21:50, and the shortest day",
   },
   tsi: {
     ca: "Com demanar la targeta sanitària (TSI) a Catalunya",
