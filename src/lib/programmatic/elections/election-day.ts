@@ -190,6 +190,21 @@ const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
+/**
+ * "the polling places and tables" with its article, singular when the BOP lists one: 708 of the 947
+ * towns vote in a single polling place, and "els 1 local electoral" / "los 1 local electoral" /
+ * "the 1 polling place" were printed on the eve and polling-day block (26 Nov 2026).
+ */
+export function placesAndTables(locale: Locale, places: number, tables: number): string {
+  if (locale === "ca") {
+    return `${places === 1 ? "el local electoral" : `els ${places} locals electorals`} i ${tables === 1 ? "la mesa" : `les ${tables} meses`}`;
+  }
+  if (locale === "es") {
+    return `${places === 1 ? "el local electoral" : `los ${places} locales electorales`} y ${tables === 1 ? "la mesa" : `las ${tables} mesas`}`;
+  }
+  return `${places === 1 ? "the polling place" : `the ${places} polling places`} and ${tables === 1 ? "its table" : plural(tables, "table", "tables")}`;
+}
+
 /** The block for a phase, or null before 28 Nov and after the general count. */
 export function electionDayBlock(locale: Locale, phase: ElectionDayPhase, ctx: DayContext = {}): ElectionDayBlock | null {
   if (phase === "before" || phase === "over") return null;
@@ -231,7 +246,7 @@ const COPY: Record<Locale, Copy> = {
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
       const where = town
-        ? `**On votes ${town.where}:** ${town.places !== null && town.tables !== null ? `[els ${plural(town.places, "local electoral", "locals electorals")} i les ${plural(town.tables, "mesa", "meses")}](${town.anchor}), de la llista oficial del BOP, més avall` : `[els locals electorals](${town.anchor}), més avall`}. La teva mesa te la diu la [consulta oficial de l'INE](${INE_MESA_URL}) amb la província, el municipi i la inicial del primer cognom, sense identificar-te, i la targeta censal.`
+        ? `**On votes ${town.where}:** ${town.places !== null && town.tables !== null ? `[${placesAndTables("ca", town.places, town.tables)}](${town.anchor}), de la llista oficial del BOP, més avall` : `[els locals electorals](${town.anchor}), més avall`}. La teva mesa te la diu la [consulta oficial de l'INE](${INE_MESA_URL}) amb la província, el municipi i la inicial del primer cognom, sense identificar-te, i la targeta censal.`
         : `**On votes:** la [consulta oficial de l'INE](${INE_MESA_URL}) et diu la mesa i el local amb la província, el municipi i la inicial del primer cognom, sense identificar-te; també ho diu la targeta censal, enviada per correu del 2 al 10 de novembre.`;
       const results = url
         ? `**Resultats:** el Ministeri de l'Interior publica l'escrutini provisional quan acaba la votació, a les 20:00 (a les Canàries, a les 21:00 hora peninsular), al seu [web oficial de resultats](${url}).`
@@ -284,7 +299,7 @@ const COPY: Record<Locale, Copy> = {
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
       const where = town
-        ? `**Dónde votas ${town.where}:** ${town.places !== null && town.tables !== null ? `[los ${plural(town.places, "local electoral", "locales electorales")} y las ${plural(town.tables, "mesa", "mesas")}](${town.anchor}), de la lista oficial del BOP, más abajo` : `[los locales electorales](${town.anchor}), más abajo`}. Tu mesa te la dice la [consulta oficial del INE](${INE_MESA_URL}) con la provincia, el municipio y la inicial del primer apellido, sin identificarte, y la tarjeta censal.`
+        ? `**Dónde votas ${town.where}:** ${town.places !== null && town.tables !== null ? `[${placesAndTables("es", town.places, town.tables)}](${town.anchor}), de la lista oficial del BOP, más abajo` : `[los locales electorales](${town.anchor}), más abajo`}. Tu mesa te la dice la [consulta oficial del INE](${INE_MESA_URL}) con la provincia, el municipio y la inicial del primer apellido, sin identificarte, y la tarjeta censal.`
         : `**Dónde votas:** la [consulta oficial del INE](${INE_MESA_URL}) te dice la mesa y el local con la provincia, el municipio y la inicial del primer apellido, sin identificarte; también lo dice la tarjeta censal, enviada por correo del 2 al 10 de noviembre.`;
       const results = url
         ? `**Resultados:** el Ministerio del Interior publica el escrutinio provisional cuando termina la votación, a las 20:00 (en Canarias, a las 21:00 hora peninsular), en su [web oficial de resultados](${url}).`
@@ -337,7 +352,7 @@ const COPY: Record<Locale, Copy> = {
     lines: (phase, { url, checked, town, hasResults }) => {
       const tomorrow = phase === "eve";
       const where = town
-        ? `**Where you vote ${town.where}:** ${town.places !== null && town.tables !== null ? `[the ${plural(town.places, "polling place", "polling places")} and ${plural(town.tables, "table", "tables")}](${town.anchor}) from the official BOP list, below` : `[the polling places](${town.anchor}), below`}. Your own table is on your census card and in the [INE's official lookup](${INE_MESA_URL}) (in Spanish), from your province, town and the first letter of your first surname, with no login.`
+        ? `**Where you vote ${town.where}:** ${town.places !== null && town.tables !== null ? `[${placesAndTables("en", town.places, town.tables)}](${town.anchor}) from the official BOP list, below` : `[the polling places](${town.anchor}), below`}. Your own table is on your census card and in the [INE's official lookup](${INE_MESA_URL}) (in Spanish), from your province, town and the first letter of your first surname, with no login.`
         : `**Where you vote:** the [INE's official lookup](${INE_MESA_URL}) (in Spanish) gives your table and polling place from your province, town and the first letter of your first surname, with no login; so does the census card posted from 2 to 10 November.`;
       const results = url
         ? `**Results:** the Spanish Interior Ministry publishes the provisional count once voting ends at 20:00 (21:00 peninsular time in the Canary Islands), on its [official results site](${url}).`

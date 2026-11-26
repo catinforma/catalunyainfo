@@ -14924,3 +14924,45 @@ URLs: `/ca|es|en` weekly markets (hub, Vic, Mataró), winter sales guide, Barcel
 **Go-live.** Deploy, then publish `strikes` (it includes the Spain calendar and the day pages) before Sat 28 Nov 00:00 Madrid, then `parking`, `setmana-santa-2027`, `carnaval`. IndexNow: `/ca/guies/vaga-avui-catalunya/ /es/guias/huelga-hoy-cataluna/ /en/guides/strike-barcelona-catalonia-today/ /ca/guies/vagues-espanya/ /es/guias/huelgas-espana/ /en/guides/strikes-spain/ /ca/guies/aparcar-barcelona-zona-blava-verda/ /es/guias/aparcar-barcelona-zona-azul-verde/ /en/guides/parking-in-barcelona-blue-green-zones/ /ca/guies/setmana-santa-2027-catalunya/ /es/guias/semana-santa-2027-cataluna/ /en/guides/easter-2027-catalonia/ /ca/tradicions/carnaval-catalunya/ /es/tradiciones/carnaval-cataluna/ /en/traditions/carnival-catalonia/`.
 
 **Review 2026-12-10 and 2026-12-24** (14 and 28 days): `snapshot.py page aparcar-barcelona 14`, `page setmana-santa-2027 14`, `page semana-santa-2027 14`, `page carnaval 14`; the queries named above against these baselines. 28-29 Nov: the SMU entry drops off after the 28th; re-read SMU for a second-phase notice.
+## 2026-11-26 — 29N town pages: warm the top 150 after a deploy; "el local electoral" in the singular on the eve / polling-day block (ci-enginyeria; ops + body of the 28 Nov - 7 Dec block only; ca/es/en; no title, description, H1 or lead touched; deploy only, no publish group)
+
+**Measured today (≤ 1.5 req/s).** Production through Cloudflare, 10 town pages (Barcelona, L'Hospitalet, Gavà, Amposta,
+Santa Coloma de Cervelló, Linyola, Massanes, Colomers; en Barcelona, Castelló d'Empúries), 3 requests each: Cloudflare
+HIT 0.08-0.15 s; first request with Cloudflare MISS and a Next MISS (rendered on the request) 0.20-0.68 s. Local origin
+(127.0.0.1:3000, release 20261126T061611Z-414d877): MISS 0.09-0.17 s, STALE 0.04-0.27 s, HIT 0.01-0.06 s. A copy of the
+live build on port 3199 (clock shifted to 29 Nov, no database), fresh process: first town page 3.4 s, next MISSes
+0.16-0.42 s, STALE 0.02-0.03 s. Route already at `revalidate = 60` (the 18 Nov layer; Cloudflare `s-maxage=60`), not 300.
+HTML 175-320 KB, two thirds of it the RSC payload (normal for the tree; no oversized prop). App code per page
+(`buildElectionPage` + `townElectionDay`) 1.5-3.4 ms mean over 947 towns: nothing to memoise. The 8-11 s of 23 Nov were a
+fresh process plus a whole-zone purge plus a 2 req/s crawl on one Node thread (~4-5 renders/s), as logged that day.
+A release starts with an empty ISR cache (production had rendered 189 ca + 282 es + 32 en town pages in the 5 h since
+the 06:16 deploy), so after each purge every town page renders on its first request.
+
+**What changed.**
+1. `ops/vps/warm-elections.sh` + `ops/vps/warm-elections.txt`: the 150 town pages with most GSC impressions
+   (13-26 Nov: 12,647 of 25,101 town-page impressions, 50 %; 87 es, 62 ca, 1 en) requested one at a time on the local
+   origin, 0.1 s apart, capped at 60 s, loopback only, always exit 0. `deploy.sh` `warm_routes` runs it after its eight
+   routes, before `purge_cdn`. On the copy: 150 pages in 57 s cold, 43 s on a second pass. Not run against production.
+2. Eve / polling-day block (`election-day.ts`, `placesAndTables`): 708 of 947 towns vote in one polling place and the
+   block printed "els 1 local electoral" / "los 1 local electoral" / "the 1 polling place" (4 en pages). Now
+   "el local electoral i les 20 meses", "el local electoral y la mesa", "the polling place and its table". Shows only
+   28 Nov - 7 Dec; today's HTML is unchanged.
+
+**Not changed.** Prerendering all 1,924 town pages: ~0.6 MB of ISR files each (~1.2 GB per release) and stale 60 s after
+go-live anyway. `revalidate`: the 60 s and the phase edges of election-day.ts / results-night.ts untouched.
+
+**First screen on a phone (390 × 844, 29 Nov 10:30 clock, Badalona es / Sant Pere de Ribes ca).** Hours: yes (block
+title and first line, ~y 440-560). What to bring: yes (~y 570-720). Where you vote: the third line, starts ~y 745 — at the
+fold on Chrome Android, below it on iOS Safari (~660 px visible). Postal vote status: not in the block (the postal guide's
+own "tense" finding stays a known todo in election-29n-flow). About 400 px go to header, strike/29N bar, breadcrumbs, H1,
+date line and share bar before the block. Gaps reported to the head, not redesigned.
+
+**Ops after deploy.** `sudo bash /srv/catalunyainfo/current/ops/vps/provision.sh --files-only` installs the new
+`/usr/local/bin/catalunyainfo-deploy`; until then deploys warm only the eight routes. Each deploy gets ~1 min longer
+(before the purge).
+
+**Tests.** election-warm (new, 5), election-* + elections + weekend-election-29n + cdn-purge + results-night: 217 pass,
+3 todo, 0 fail; `tsc --noEmit` clean.
+
+**Review.** 30 Nov: deploy log `warm-elections:` line (pages, seconds, slow count); Caddy log share of responses > 3 s
+on 28-29 Nov against 23 Nov.

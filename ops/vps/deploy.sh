@@ -155,6 +155,12 @@ warm_routes() {
     out=$(curl -s -o /dev/null -w '%{http_code} %{time_total}s' --max-time 60 -H "Host: $CANONICAL_HOST" "$APP_URL$path" || true)
     echo "  warm $path ${out:-000}"
   done
+  # Then the town pages searched most (26 Nov 2026, ops/vps/warm-elections.txt): a release starts with
+  # an empty ISR cache, so after the purge each of them would render on its first request (0.16-0.42 s
+  # on the one thread); warmed, they answer from the cache. Sequential, ~1 min, capped by WARM_BUDGET_S.
+  if [[ -r $DIR/ops/vps/warm-elections.sh ]]; then
+    APP_URL=$APP_URL CANONICAL_HOST=$CANONICAL_HOST bash "$DIR/ops/vps/warm-elections.sh" "$DIR/ops/vps/warm-elections.txt" || true
+  fi
 }
 
 # ---------------------------------------------------------------------------
