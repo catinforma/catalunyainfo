@@ -103,8 +103,10 @@ test("29 Nov morning: today's essentials lead, results promised from 20:00, the 
     assert.match(off.title, TODAY[locale], `${locale}: title says today`);
     const all = text(off);
     assert.match(off.md[0]!, /9:00.*20:00/, `${locale}: hours first`);
-    assert.match(off.md[1]!, /DNI/, `${locale}: then what to bring`);
-    assert.ok(off.md[2]!.includes(INE_MESA_URL), `${locale}: then where (INE lookup)`);
+    // 26 Nov 2026: where you vote moved before what to bring (it fell below the fold on phones), then the postal vote.
+    assert.ok(off.md[1]!.includes(INE_MESA_URL), `${locale}: then where (INE lookup)`);
+    assert.match(off.md[2]!, /DNI/, `${locale}: then what to bring`);
+    assert.match(off.md[3]!, /26 (de )?(novembre|noviembre|November) (a les|a las|at) 14:00/, `${locale}: then the postal vote, past its hand-in`);
     assert.match(all, /8:00 (a|to) 20:00/, `${locale}: help line hours on the day`);
     assert.match(all, /21:00/, `${locale}: Canary Islands`);
     assert.match(all, PENDING[locale], `${locale}: says the site is not announced yet, with the date checked`);

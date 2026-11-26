@@ -42,15 +42,18 @@ const PHASES: PostalPhase[] = ["open", "closed", "over"];
 const AT: Record<PostalPhase, string> = { open: "2026-11-05", closed: "2026-11-20", over: "2026-11-30" };
 
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
-const body = (locale: Locale, article = POSTAL_VOTE) => text(article.editions[locale].blocks);
-const json = (locale: Locale, article = POSTAL_VOTE) => JSON.stringify(article.editions[locale].blocks);
+// 26 Nov 2026: the closed copy stores its hand-in stretches as `electionPhased` blocks (postal-vote.ts HANDIN_PAST_COPY);
+// these helpers read the page as it was live before the 26 Nov 14:00 hand-in (tests/pre-vote.ts, 24 Nov).
+const stored = (locale: Locale, article = POSTAL_VOTE) => preVote(article.editions[locale].blocks);
+const body = (locale: Locale, article = POSTAL_VOTE) => text(stored(locale, article));
+const json = (locale: Locale, article = POSTAL_VOTE) => JSON.stringify(stored(locale, article));
 const plain = (value: string) => value.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*/g, "");
-const leadOf = (locale: Locale, article = POSTAL_VOTE) => plain(String((article.editions[locale].blocks[0] as { text?: string }).text ?? ""));
+const leadOf = (locale: Locale, article = POSTAL_VOTE) => plain(String((stored(locale, article)[0] as { text?: string }).text ?? ""));
 
 /** Each paragraph, list item, step, callout and FAQ question with its answer. */
 function units(locale: Locale, article = POSTAL_VOTE): string[] {
   const out: string[] = [];
-  for (const block of article.editions[locale].blocks as unknown as Record<string, unknown>[]) {
+  for (const block of stored(locale, article) as unknown as Record<string, unknown>[]) {
     if (block.type === "paragraph" || block.type === "callout") out.push(plain(String(block.text)));
     if (block.type === "list") out.push(...(block.items as string[]).map(plain));
     if (block.type === "steps") out.push(...(block.items as { title: string; text: string }[]).map((i) => plain(`${i.title}: ${i.text}`)));
@@ -174,7 +177,7 @@ test("answer first: the lead gives the request deadline and the hand-in deadline
     assert.ok(lead.slice(0, 80).includes(request[locale]), `${locale}: ${lead.slice(0, 100)}`);
     assert.match(lead, handIn[locale], `${locale}: hand-in deadline in the lead`);
     assert.match(lead, /Corre[uo]s/, `${locale}: where`);
-    const blocks = (POSTAL_VOTE.editions[locale].blocks as unknown as { type: string; items?: unknown[] }[]).filter((b) => b.type !== "electionPhased"); // the 26 Nov 14:00 callout sits between the lead and the steps
+    const blocks = stored(locale) as unknown as { type: string; items?: unknown[] }[]; // the 26 Nov 14:00 callout sits between the lead and the steps
     assert.equal(blocks[0]?.type, "paragraph");
     assert.equal(blocks[1]?.type, "steps", `${locale}: the steps right under the lead`);
     assert.ok((blocks[1]?.items?.length ?? 0) >= 5, `${locale}: five steps`);
@@ -195,7 +198,7 @@ test("the copy moves with the dates: open to 19 Nov, closed to 29 Nov, over afte
       const article = buildPostalVote(AT[phase]);
       assert.doesNotMatch(leadOf(locale, article), asksToApply[locale], `${phase}/${locale}: still asks people to apply`);
       assert.match(leadOf(locale, article), phase === "closed" ? closed[locale] : over[locale], `${phase}/${locale}`);
-      const firstFaq = (article.editions[locale].blocks.find((b) => b.type === "faq") as { items: { answer: string }[] }).items[0]!.answer;
+      const firstFaq = (stored(locale, article).find((b) => b.type === "faq") as { items: { answer: string }[] }).items[0]!.answer;
       assert.match(firstFaq, phase === "closed" ? /tancat|cerrado|closed/ : /29N|29 November/, `${phase}/${locale}: the deadline FAQ`);
     }
   }
@@ -224,7 +227,7 @@ test("'already applied, can I vote in person?' is answered no, with the census '
   for (const locale of LOCALES) {
     assert.match(leadOf(locale), no[locale], `${locale}: in the lead`);
     assert.match(body(locale), /«C»|"C"/, `${locale}: the census mark`);
-    const faqs = (POSTAL_VOTE.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    const faqs = (stored(locale).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
     const inPerson = faqs.find((f) => /en persona|in person/.test(f.question));
     assert.ok(inPerson, `${locale}: FAQ on voting in person`);
     assert.match(inPerson!.answer, /^No\b/, `${locale}: ${inPerson!.answer}`);
@@ -323,7 +326,7 @@ test("closed (20 Nov): hand in by Thursday 26 Nov at 14:00 (JEC 418/2026), the C
     assert.doesNotMatch(body(locale, article), /dimecres 25|miércoles 25|Wednesday 25/, `${locale}: the old hand-in day as the deadline`);
     assert.ok(json(locale, article).includes(`](${POSTAL_URL.jecExtension})`), `${locale}: links the JEC agreement`);
     assert.ok(json(locale, article).includes(`](${POSTAL_URL.correosStrike})`), `${locale}: links the strike order`);
-    const faqs = (article.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    const faqs = (stored(locale, article).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
     assert.match(faqs[1]!.question, missing[locale], `${locale}: second FAQ is the missing papers`);
     assert.match(faqs[1]!.answer, /900 343 232/);
   }
@@ -419,7 +422,8 @@ test("hand-in callout: nothing before Thu 26 Nov 14:00, the callout from 14:00 t
     const stored = parseBody(POSTAL_VOTE.editions[locale].blocks);
     assert.ok(bodySchema.safeParse(stored).success, `${locale}: stored body parses`);
     const phased = stored.filter((b) => b.type === "electionPhased");
-    assert.equal(phased.length, 1, `${locale}: one phased block`);
+    // The callout plus, since 26 Nov, the lead, steps, hand-in list and FAQ in their past-tense variants.
+    assert.equal(phased.length, 5, `${locale}: five phased blocks`);
     assert.equal(stored[1]?.type, "electionPhased", `${locale}: right under the lead`);
     const read = (iso: string) => resolveElectionPhased(stored, new Date(iso)).filter((b) => b.type === "callout" && b.tone === "warning");
     assert.equal(read("2026-11-25T10:00:00+01:00").length, 0, `${locale}: before`);

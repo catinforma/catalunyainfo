@@ -292,9 +292,9 @@ function sentences(text: string): string[] {
 }
 
 /** Findings the head must see; asserted as `todo` so the suite stays green and lists them. */
-const KNOWN_FAILURES = new Set<string>([
-  "hand-in the postal vote is an instruction after Thu 26 Nov 14:00",
-]);
+// 26 Nov 2026: "hand-in the postal vote is an instruction after Thu 26 Nov 14:00" fixed (postal-vote.ts
+// HANDIN_PAST_COPY, voting.ts HANDIN_LEAD); it is an ordinary assertion again.
+const KNOWN_FAILURES = new Set<string>([]);
 
 function violations(rule: Rule): string[] {
   // One line per surface, language and sentence, with the first instant it shows at.
@@ -340,6 +340,30 @@ test("postal guide carries the past-tense hand-in callout from 26 Nov 14:00, not
     assert.match(after, PASTHAND[l], l);
   }
   assert.equal(HANDIN_CLOSES.getTime(), HANDIN);
+});
+
+test("postal guide: the 14:01:30 publish of vot-correu renders the past-tense lead, step, hand-in line and FAQ", () => {
+  // ci-votcorreu-1401 re-renders the guide at 14:01:30 on 26 Nov; POSTAL_AS_OF keeps the "closed" copy to 29 Nov,
+  // so the switch is the `handin` variant of its electionPhased blocks (content/election-phased.ts).
+  const PUBLISH = new Date("2026-11-26T14:01:30+01:00");
+  const INSTRUCTION: Record<Locale, RegExp> = {
+    ca: /Lliura'l|has de lliurar|ha de lliurar|s'ha de lliurar/,
+    es: /Entrégalo|tienes que entregar|tiene que entregar|se entrega en Correos hasta/,
+    en: /Hand it in|you must \*?\*?hand|must hand|must be handed in/,
+  };
+  const ENDED: Record<Locale, RegExp> = { ca: /va acabar el dijous 26 de novembre a les 14 h/, es: /terminó el jueves 26 de noviembre a las 14 h/, en: /ended on Thursday 26 November at 14:00/ };
+  for (const l of LOCALES) {
+    const before = guideTexts(POSTAL_VOTE, INSTANTS["26 Nov 13:59"]!, l).join(" ");
+    const published = guideTexts(POSTAL_VOTE, PUBLISH, l).join(" ");
+    const monday = guideTexts(POSTAL_VOTE, INSTANTS["30 Nov 00:00"]!, l).join(" ");
+    assert.match(before, INSTRUCTION[l], `${l}: before 14:00 the guide still says how to hand it in`);
+    assert.doesNotMatch(published, INSTRUCTION[l], `${l}: at the 14:01:30 publish`);
+    assert.match(published, ENDED[l], `${l}: the lead says the hand-in ended`);
+    assert.doesNotMatch(monday, INSTRUCTION[l], `${l}: 30 Nov, before POSTAL_AS_OF moves to "over"`);
+    // The first block the reader sees is still a lead, in every variant.
+    const first = resolveElectionPhased(parseBody(POSTAL_VOTE.editions[l].blocks), PUBLISH)[0];
+    assert.ok(first?.type === "paragraph" && first.lead, l);
+  }
 });
 
 test("mesa stage: held from 29 Nov 08:00 to the second, and its text is in the past tense", () => {

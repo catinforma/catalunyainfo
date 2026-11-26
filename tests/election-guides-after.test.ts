@@ -264,7 +264,13 @@ test("the how-to-vote lead: only the 'next election is 29 Nov' clause changes fr
     assert.notEqual(after.text, pre.text);
     // Everything after the first sentence-length clause is byte for byte the same.
     const tailOf = (t: string) => t.slice(t.indexOf("Key dates") >= 0 ? t.indexOf("Key dates") : t.indexOf("Se vota") >= 0 ? t.indexOf("Se vota") : t.indexOf("Es vota"));
-    assert.equal(tailOf(after.text), tailOf(pre.text), `${locale}: only the opening clause moves`);
+    // 26 Nov 2026: from the hand-in (26 Nov 14:00) the lead's postal deadlines read in the past (voting.ts HANDIN_LEAD);
+    // from 30 Nov the tail is that hand-in lead's, byte for byte.
+    const handin = parseBody(first.handin ?? [])[0];
+    assert.ok(handin?.type === "paragraph" && handin.lead, `${locale}: hand-in lead`);
+    if (handin?.type !== "paragraph") continue;
+    assert.equal(tailOf(after.text), tailOf(handin.text), `${locale}: only the opening clause moves`);
+    assert.equal(handin.text.slice(0, 120), pre.text.slice(0, 120), `${locale}: the hand-in lead opens as before`);
     assert.doesNotMatch(after.text, /next election is|Les properes eleccions a Catalunya són les \*\*generals|Las próximas elecciones en Cataluña son las \*\*generales|general election is on/i, `${locale}`);
     assert.match(after.text, /was held|van ser|fueron/, `${locale}: past tense`);
     assert.equal(VOTING.editions[locale].seoTitle.length > 0, true);

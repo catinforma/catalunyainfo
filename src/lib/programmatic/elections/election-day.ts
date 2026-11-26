@@ -1,6 +1,8 @@
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 
+import { HANDIN_URL } from "@/lib/content/batch02/postal-handin";
+
 import { INE_MESA_URL } from "./polling";
 import { ELECTION_NIGHT_RESULTS_URL, INFOELECTORAL, OFFICIAL_ELECTION_SITE, RESULTS_SITE_CHECKED, checkedDay, pendingSiteLine } from "./results-night";
 
@@ -205,6 +207,34 @@ export function placesAndTables(locale: Locale, places: number, tables: number):
   return `${places === 1 ? "the polling place" : `the ${places} polling places`} and ${tables === 1 ? "its table" : plural(tables, "table", "tables")}`;
 }
 
+/**
+ * Postal vote on the eve and polling day (the block only shows from 28 Nov, after the hand-in closed on
+ * 26 Nov at 14:00). Re-read 26 Nov 2026 (curl, quotes in the original):
+ *  - Correos' postal-vote page: "El solicitante tiene de plazo para depositar el sobre con su voto hasta el 26 de
+ *    noviembre de 2026 a las 14:00h"; "si es aceptada por la Oficina del Censo Electoral, no podrá votar en la mesa
+ *    electoral el día de la votación";
+ *  - Interior's 29N postal page: "la persona que solicita el voto por correo, una vez ha sido admitida su solicitud,
+ *    ya no puede votar de forma presencial"; "(Ampliado hasta el día 26 de noviembre de 2026 por Acuerdo JEC
+ *    418/2026, de 19 de noviembre)" (the JEC's own page answers 403 to the server);
+ *  - INE cid=1700: "Los electores que soliciten el voto por correo no podrán votar personalmente en la mesa
+ *    electoral";
+ *  - LOREG art. 73.1 (consolidated text, last update 02/07/2026): the census is annotated "a fin de que el día de las
+ *    elecciones no se realice el voto personalmente".
+ * None gives an exception for a requester who did not hand the vote in, so the line says that and no more (the same
+ * reading as the postal guide's callout, content/batch02/postal-handin.ts).
+ */
+const CORREOS_POSTAL = "https://www.correos.es/es/es/particulares/para-el-ciudadano/voto-por-correo";
+
+export function postalLine(locale: Locale): string {
+  if (locale === "ca") {
+    return `**Si vas demanar el vot per correu:** el termini per lliurar-lo a Correus va acabar el dijous 26 de novembre a les 14:00 ([Correus](${CORREOS_POSTAL})). Un cop admesa la sol·licitud, «ya no puede votar de forma presencial» ([Ministeri de l'Interior](${HANDIN_URL.interior})), i les fonts oficials no donen cap excepció per a qui no l'ha lliurat.`;
+  }
+  if (locale === "es") {
+    return `**Si pediste el voto por correo:** el plazo para entregarlo en Correos terminó el jueves 26 de noviembre a las 14:00 ([Correos](${CORREOS_POSTAL})). Una vez admitida la solicitud, «ya no puede votar de forma presencial» ([Ministerio del Interior](${HANDIN_URL.interior})), y las fuentes oficiales no dan ninguna excepción para quien no lo entregó.`;
+  }
+  return `**If you asked for a postal vote:** the deadline to hand it in at Correos ended on Thursday 26 November at 14:00 ([Correos](${CORREOS_POSTAL})). Once the request is accepted, "the person can no longer vote in person" ([Interior Ministry](${HANDIN_URL.interior}), our translation), and the official sources give no exception for anyone who did not hand it in.`;
+}
+
 /** The block for a phase, or null before 28 Nov and after the general count. */
 export function electionDayBlock(locale: Locale, phase: ElectionDayPhase, ctx: DayContext = {}): ElectionDayBlock | null {
   if (phase === "before" || phase === "over") return null;
@@ -254,8 +284,9 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Horari:** de 9:00 a 20:00. Si a les 20:00 ets dins del local o a l'entrada, encara pots votar ([LOREG, articles 84 i 88](${LOREG})).`,
-          `**Què cal portar:** el DNI, el passaport o el carnet de conduir originals, amb foto; valen encara que estiguin caducats, però no fotocòpies ([Ministeri de l'Interior](${PRESENCIAL})). També val l'app **MiDNI**: la mesa en comprova el codi QR ([Junta Electoral Central, 5 de novembre de 2026](${JEC_334})). L'app MiDGT no val.`,
           where,
+          `**Què cal portar:** el DNI, el passaport o el carnet de conduir originals, amb foto; valen encara que estiguin caducats, però no fotocòpies ([Ministeri de l'Interior](${PRESENCIAL})). També val l'app **MiDNI**: la mesa en comprova el codi QR ([Junta Electoral Central, 5 de novembre de 2026](${JEC_334})). L'app MiDGT no val.`,
+          postalLine("ca"),
           `**Si no surts a la llista o tens dubtes:** l'Oficina del Cens Electoral atén gratis al 900 343 232, el diumenge 29 de 8:00 a 20:00, i fins al mateix dia la seva delegació provincial pot expedir una certificació censal específica, que acredita que ets al cens encara que no figuris a la llista de la mesa ([INE](${INE_29N})).`,
           `**Si treballes ${tomorrow ? "demà" : "avui"}:** tens dret a fins a quatre hores retribuïdes per votar: quatre si la jornada coincideix quatre hores o més amb l'horari de votació, dues si en coincideix més de dues i menys de quatre, cap si en coincideix dues o menys; l'empresa tria el moment ([Ordre EMT/232/2026](${EMT_232})). **Membres de mesa:** a les 8:00 al local, amb la notificació ([LOREG, article 80](${LOREG})); [què fer si t'ha tocat](${b2href("mesa", "ca")}).`,
           ...(tomorrow ? ["**Avui, dissabte 28, és la jornada de reflexió:** la campanya va acabar a mitjanit i ja no s'hi poden fer actes ni difondre propaganda (LOREG, article 53)."] : []),
@@ -307,8 +338,9 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Horario:** de 9:00 a 20:00. Si a las 20:00 estás dentro del local o en el acceso, todavía puedes votar ([LOREG, artículos 84 y 88](${LOREG})).`,
-          `**Qué llevar:** el DNI, el pasaporte o el carné de conducir originales, con foto; valen aunque estén caducados, pero no fotocopias ([Ministerio del Interior](${PRESENCIAL})). También vale la app **MiDNI**: la mesa comprueba su código QR ([Junta Electoral Central, 5 de noviembre de 2026](${JEC_334})). La app MiDGT no vale.`,
           where,
+          `**Qué llevar:** el DNI, el pasaporte o el carné de conducir originales, con foto; valen aunque estén caducados, pero no fotocopias ([Ministerio del Interior](${PRESENCIAL})). También vale la app **MiDNI**: la mesa comprueba su código QR ([Junta Electoral Central, 5 de noviembre de 2026](${JEC_334})). La app MiDGT no vale.`,
+          postalLine("es"),
           `**Si no apareces en la lista o tienes dudas:** la Oficina del Censo Electoral atiende gratis en el 900 343 232, el domingo 29 de 8:00 a 20:00, y hasta el mismo día su delegación provincial puede expedir una certificación censal específica, que acredita que estás en el censo aunque no figures en la lista de la mesa ([INE](${INE_29N})).`,
           `**Si trabajas ${tomorrow ? "mañana" : "hoy"}:** tienes derecho a hasta cuatro horas retribuidas para votar: cuatro si tu jornada coincide cuatro horas o más con el horario de votación, dos si coincide más de dos y menos de cuatro, ninguna si coincide dos o menos; la empresa elige el momento ([Ordre EMT/232/2026](${EMT_232})). **Miembros de mesa:** a las 8:00 en el local, con la notificación ([LOREG, artículo 80](${LOREG})); [qué hacer si te ha tocado](${b2href("mesa", "es")}).`,
           ...(tomorrow ? ["**Hoy, sábado 28, es la jornada de reflexión:** la campaña terminó a medianoche y ya no se pueden hacer actos ni difundir propaganda (LOREG, artículo 53)."] : []),
@@ -360,8 +392,9 @@ const COPY: Record<Locale, Copy> = {
       if (phase === "eve" || phase === "polling") {
         return [
           `**Hours:** 9:00 to 20:00. If you are inside the polling place or at its entrance at 20:00, you can still vote ([electoral law, articles 84 and 88](${LOREG})).`,
-          `**What to bring:** your original DNI, passport or driving licence, with a photo; they are valid even if expired, but photocopies are not ([Interior Ministry](${PRESENCIAL})). The **MiDNI** app is accepted too: the table checks its QR code ([Central Electoral Board, 5 November 2026](${JEC_334})). The MiDGT app is not. Only Spanish citizens on the electoral roll can vote.`,
           where,
+          `**What to bring:** your original DNI, passport or driving licence, with a photo; they are valid even if expired, but photocopies are not ([Interior Ministry](${PRESENCIAL})). The **MiDNI** app is accepted too: the table checks its QR code ([Central Electoral Board, 5 November 2026](${JEC_334})). The MiDGT app is not. Only Spanish citizens on the electoral roll can vote.`,
+          postalLine("en"),
           `**Not on the list, or unsure?** The census office's free line, 900 343 232, is open from 8:00 to 20:00 on Sunday 29 November, and until that day its provincial office can issue a specific census certificate (certificación censal específica), which proves you are on the roll even if you are missing from your table's list ([INE](${INE_29N})).`,
           `**Working ${tomorrow ? "tomorrow" : "today"}?** You are entitled to up to four paid hours to vote: four if your shift overlaps polling hours by four hours or more, two if by more than two and less than four, none if by two or less; your employer picks the time ([Ordre EMT/232/2026](${EMT_232})). **Polling-station members:** at the polling place at 8:00 with your notice ([electoral law, article 80](${LOREG})); [what to do if you were drawn](${b2href("mesa", "en")}).`,
           ...(tomorrow ? ["**Today, Saturday 28, is the day of reflection:** the campaign ended at midnight and no campaign event or material is allowed (electoral law, article 53)."] : []),

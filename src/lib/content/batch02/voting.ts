@@ -840,6 +840,32 @@ function handinFaq(locale: Locale, items: { question: string; answer: string }[]
   return out;
 }
 
+/**
+ * 26 Nov 2026 (factual correction, logged in docs/SEO_EXPERIMENTS.md): the lead's "key dates" clause still told
+ * readers to request and hand in the postal vote after both deadlines had passed. Same dates (Correos and JEC
+ * Acuerdo 418/2026: request by 19 Nov, hand-in by 26 Nov 14:00), past tense; nothing else in the lead changes.
+ */
+const HANDIN_LEAD: Record<Locale, [string, string]> = {
+  ca: [
+    "el vot per correu es demana a Correus **fins al 19 de novembre** i es lliura fins al 26 a les 14 h",
+    "el vot per correu es demanava a Correus **fins al 19 de novembre** i es lliurava fins al 26 a les 14 h (tots dos terminis ja s'han tancat)",
+  ],
+  es: [
+    "el voto por correo se pide en Correos **hasta el 19 de noviembre** y se entrega hasta el 26 a las 14 h",
+    "el voto por correo se pedía en Correos **hasta el 19 de noviembre** y se entregaba hasta el 26 a las 14 h (los dos plazos ya han cerrado)",
+  ],
+  en: [
+    "request a postal vote at Correos **by 19 November** and hand it in by 26 November at 14:00",
+    "postal votes were requested at Correos **by 19 November** and handed in by 26 November at 14:00 (both deadlines have passed)",
+  ],
+};
+
+function handinLead(locale: Locale, text: string): string {
+  const [was, becomes] = HANDIN_LEAD[locale];
+  if (!text.includes(was)) throw new Error(`voting lead (${locale}) no longer holds the postal deadlines HANDIN_LEAD corrects`);
+  return text.replace(was, becomes);
+}
+
 /** The block with a `handin` variant: what it reads from Thu 26 Nov 14:00 until the `after` phase. */
 const withHandin = (block: Block, handin: Block[]): Block => ({ ...block, handin }) as Block;
 
@@ -874,7 +900,8 @@ function body(locale: Locale) {
       : [...next, ...where, ...register, ...calendar, ...day, withHandin(phased(h2(t.postTitle, ...t.post), []), [...h2(t.postTitle), handinPastCallout(locale, null)])];
   return [
     // The lead's one false clause from 30 Nov (voting-after.ts): "the next election is on 29 November".
-    phased([lead(t.lead)], [lead(leadAfter)]),
+    // From 26 Nov 14:00 the lead's postal deadlines read in the past (HANDIN_LEAD); from 30 Nov the after lead.
+    withHandin(phased([lead(t.lead)], [lead(handinLead(locale, leadAfter))]), [lead(handinLead(locale, t.lead))]),
     // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
     languageLinks(),
     phased([], [callout("info", x.calloutTitle, x.callout)]),

@@ -292,9 +292,9 @@ const COPY: Record<Locale, Copy> = {
           "Fins al dijous 19 de novembre del 2026, el desè dia abans de la votació (LOREG, article 72): a qualsevol oficina de Correus, en persona amb el document d'identitat original, o per internet al web de Correus amb certificat digital o DNI electrònic.",
       },
       closed: {
-        seoTitle: "Vot per correu 29N: lliura'l fins al 26 de novembre",
+        seoTitle: "Vot per correu 29N: lliurament fins al 26 de novembre, 14 h",
         seoDescription:
-          "Es podia demanar fins al 19 de novembre. Si el vas demanar, lliura el vot a Correus fins al dijous 26 a les 14 h (termini ampliat). Paperetes fins al 22.",
+          "Demanar-lo: fins al 19 de novembre. Lliurar-lo a Correus: fins al dijous 26 a les 14 h (ampliat per la JEC). Si el vas demanar, no pots votar en persona.",
         lead: `**El termini per demanar el vot per correu es va tancar el dijous 19 de novembre.** Si el vas demanar, les paperetes arriben per correu certificat fins al 22 de novembre i has de **lliurar el vot a Correus fins al dijous 26 de novembre, com a molt a les 14 h**: la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} ha allargat un dia el termini, que era el 25. Cal identificar-se i no costa res; si no eres a casa quan van arribar les paperetes, les has de recollir a l'oficina de Correus. Si el vas demanar, **ja no pots votar en persona** el diumenge 29; si no, vota a la teva mesa de 9 a 20 h.`,
         stepsTitle: "Si el vas demanar: què has de fer ara",
         firstStep: {
@@ -436,9 +436,9 @@ const COPY: Record<Locale, Copy> = {
           "Hasta el jueves 19 de noviembre de 2026, el décimo día antes de la votación (LOREG, artículo 72): en cualquier oficina de Correos, en persona con el documento de identidad original, o por internet en la web de Correos con certificado digital o DNI electrónico.",
       },
       closed: {
-        seoTitle: "Voto por correo 29N: entrégalo hasta el 26 de noviembre",
+        seoTitle: "Voto por correo 29N: entrega hasta el 26 de noviembre, 14 h",
         seoDescription:
-          "El plazo para pedirlo cerró el 19 de noviembre. Si lo pediste, entrega el voto en Correos hasta el jueves 26 a las 14 h (plazo ampliado por la JEC).",
+          "Pedirlo: hasta el 19 de noviembre. Entregarlo en Correos: hasta el jueves 26 a las 14 h (ampliado por la JEC). Si lo pediste, no puedes votar en persona.",
         lead: `**El plazo para pedir el voto por correo cerró el jueves 19 de noviembre.** Si lo pediste, la documentación llega por correo certificado hasta el 22 de noviembre y tienes que **entregar el voto en Correos hasta el jueves 26 de noviembre, como máximo a las 14 h**: la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} ha ampliado un día el plazo, que era el 25. Hay que identificarse y no cuesta nada; si no estabas en casa cuando llegó la documentación, tienes que recogerla en la oficina de Correos. Si lo pediste, **ya no puedes votar en persona** el domingo 29; si no, vota en tu mesa de 9 a 20 h.`,
         stepsTitle: "Si lo pediste: qué tienes que hacer ahora",
         firstStep: {
@@ -580,9 +580,9 @@ const COPY: Record<Locale, Copy> = {
           "Until Thursday 19 November 2026, the tenth day before polling day (electoral law, article 72): at any Correos post office, in person with your original ID, or online on the Correos website with a digital certificate or electronic DNI.",
       },
       closed: {
-        seoTitle: "Postal vote, Spain 29 Nov election: hand it in by 26 Nov",
+        seoTitle: "Postal vote, Spain 29N election: hand-in by 26 Nov, 14:00",
         seoDescription:
-          "Applications closed on 19 November. If you applied, hand your vote in at Correos by Thursday 26 November, 14:00 at the latest (deadline extended).",
+          "Applications: until 19 November. Hand-in at Correos: until Thursday 26 November, 14:00 (extended by the JEC). If you applied, you cannot vote in person.",
         lead: `**Applications for a postal vote closed on Thursday 19 November.** If you applied, the papers arrive by registered post by 22 November and you must **hand your vote in at Correos by Thursday 26 November, 14:00 at the latest**: the ${a("Central Electoral Board", POSTAL_URL.jecExtension)} has added one day to the deadline, which was the 25th. Show ID; it is free. If you were out when the papers came, collect them at the post office. If you applied, you **can no longer vote in person** on Sunday 29 November; if you did not, vote at your polling station from 9:00 to 20:00.`,
         stepsTitle: "If you applied: what to do now",
         firstStep: {
@@ -724,16 +724,127 @@ const ABROAD_LINK: Record<Locale, string> = {
   en: `Every deadline for voters abroad is on the ${a("INE's page for 29 November", POSTAL_URL.ine)} (in Spanish).`,
 };
 
+/**
+ * 26 Nov 2026 (factual correction, logged in docs/SEO_EXPERIMENTS.md, "postal guide past its hand-in"): the "closed"
+ * copy runs to 29 Nov (POSTAL_AS_OF), but from Thu 26 Nov 14:00 its lead, hand-in step, hand-in line and two FAQ
+ * answers were still instructions ("lliura'l fins al dijous 26"). In the closed phase each of those blocks is an
+ * `electionPhased` block: `pre` is the text as it was live, `handin` and `after` the same facts in the past tense
+ * (JEC Acuerdo 418/2026; Correos "hasta el 26 de noviembre de 2026 a las 14:00h", re-read 26 Nov). The 14:01:30
+ * publish of `vot-correu` re-renders the page after the instant, so it reads the `handin` text. Each `was` must
+ * match exactly one item (checked in body()); title and description are untouched.
+ */
+type HandinPast = {
+  lead: string;
+  /** The hand-in step of `steps`, by its title. */
+  step: { was: string; title: string; text: string };
+  /** The hand-in item of `send`, by its opening words. */
+  send: { was: string; text: string };
+  deadlineAnswer: string;
+  /** FAQ answers by their opening words: [was, becomes]. */
+  faq: [string, string][];
+};
+
+const HANDIN_PAST_COPY: Record<Locale, HandinPast> = {
+  ca: {
+    lead: `**El termini per demanar el vot per correu es va tancar el dijous 19 de novembre, i el de lliurar-lo a Correus va acabar el dijous 26 de novembre a les 14 h** (la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} l'havia allargat un dia, des del 25). Si el vas demanar, **ja no pots votar en persona** el diumenge 29; si no, vota a la teva mesa de 9 a 20 h.`,
+    step: {
+      was: "Lliura'l a Correus fins al dijous 26 de novembre, a les 14 h",
+      title: "Es lliurava a Correus fins al dijous 26 de novembre, a les 14 h",
+      text: "El termini va acabar a les 14 h del dijous 26 (la Junta Electoral Central l'havia allargat un dia, des del 25).",
+    },
+    send: {
+      was: "**Lliura'l fins al dijous 26 de novembre",
+      text: `**El termini per lliurar-lo va acabar el dijous 26 de novembre a les 14 h:** la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} l'havia allargat el 19 de novembre (la llei el fixava el 25).`,
+    },
+    deadlineAnswer:
+      "Fins al dijous 19 de novembre del 2026, el desè dia abans de la votació (LOREG, article 72), i la Junta Electoral Central no el va allargar. El termini per lliurar el vot a Correus també ha acabat: va ser el dijous 26 de novembre a les 14 h.",
+    faq: [
+      ["Si la sol·licitud es va acceptar, la mesa no et deixarà votar en persona, i el vot s'ha de lliurar a Correus fins al dijous 26 a les 14 h.", "Si la sol·licitud es va acceptar, la mesa no et deixarà votar en persona; el termini per lliurar el vot a Correus va acabar el dijous 26 a les 14 h."],
+      ["Fins al dijous 26 de novembre de 2026, com a molt a les 14 h, en una oficina de Correus i en l'horari habitual, identificant-te.", "Fins al dijous 26 de novembre de 2026 a les 14 h, i aquest termini ja ha acabat."],
+    ],
+  },
+  es: {
+    lead: `**El plazo para pedir el voto por correo cerró el jueves 19 de noviembre, y el de entregarlo en Correos terminó el jueves 26 de noviembre a las 14 h** (la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} lo había ampliado un día, desde el 25). Si lo pediste, **ya no puedes votar en persona** el domingo 29; si no, vota en tu mesa de 9 a 20 h.`,
+    step: {
+      was: "Entrégalo en Correos hasta el jueves 26 de noviembre, a las 14 h",
+      title: "Se entregaba en Correos hasta el jueves 26 de noviembre, a las 14 h",
+      text: "El plazo terminó a las 14 h del jueves 26 (la Junta Electoral Central lo había ampliado un día, desde el 25).",
+    },
+    send: {
+      was: "**Entrégalo hasta el jueves 26 de noviembre",
+      text: `**El plazo para entregarlo terminó el jueves 26 de noviembre a las 14 h:** lo acordó la ${a("Junta Electoral Central", POSTAL_URL.jecExtension)} el 19 de noviembre (la ley lo fijaba el 25).`,
+    },
+    deadlineAnswer:
+      "Hasta el jueves 19 de noviembre de 2026, el décimo día antes de la votación (LOREG, artículo 72), y la Junta Electoral Central no lo amplió. El plazo para entregar el voto en Correos también ha terminado: fue el jueves 26 de noviembre a las 14 h.",
+    faq: [
+      ["Si la solicitud se aceptó, la mesa no te dejará votar en persona, y el voto se entrega en Correos hasta el jueves 26 a las 14 h.", "Si la solicitud se aceptó, la mesa no te dejará votar en persona; el plazo para entregar el voto en Correos terminó el jueves 26 a las 14 h."],
+      ["Hasta el jueves 26 de noviembre de 2026, como máximo a las 14 h, en una oficina de Correos y en el horario habitual, identificándote.", "Hasta el jueves 26 de noviembre de 2026 a las 14 h, y ese plazo ya ha terminado."],
+    ],
+  },
+  en: {
+    lead: `**Applications for a postal vote closed on Thursday 19 November, and the deadline to hand the vote in at Correos ended on Thursday 26 November at 14:00** (the ${a("Central Electoral Board", POSTAL_URL.jecExtension)} had added one day to it, from the 25th). If you applied, you **can no longer vote in person** on Sunday 29 November; if you did not, vote at your polling station from 9:00 to 20:00.`,
+    step: {
+      was: "Hand it in at Correos by Thursday 26 November, 14:00",
+      title: "Hand-in at Correos ended on Thursday 26 November, 14:00",
+      text: "The deadline ended at 14:00 on Thursday 26 November (the Central Electoral Board had added one day to it, from the 25th).",
+    },
+    send: {
+      was: "**Hand it in by Thursday 26 November",
+      text: `**The deadline to hand it in ended on Thursday 26 November at 14:00:** the ${a("Central Electoral Board", POSTAL_URL.jecExtension)} set it on 19 November (the law said the 25th).`,
+    },
+    deadlineAnswer:
+      "Until Thursday 19 November 2026, the tenth day before polling day (electoral law, article 72), and the Central Electoral Board did not extend it. The deadline to hand the vote in at Correos has passed too: it was Thursday 26 November at 14:00.",
+    faq: [
+      ["If your application was accepted, the polling table will not let you vote in person, and the vote must be handed in at Correos by Thursday 26 November, 14:00.", "If your application was accepted, the polling table will not let you vote in person; the deadline to hand the vote in at Correos ended on Thursday 26 November at 14:00."],
+      ["Thursday 26 November 2026, by 14:00 at the latest, at a Correos post office during normal opening hours, showing ID.", "Thursday 26 November 2026 at 14:00, and that deadline has passed."],
+    ],
+  },
+};
+
+/** One block that reads `pre` until 26 Nov 14:00 and `past` from then on (content/election-phased.ts). */
+const handinPhased = (pre: Block, past: Block): Block => ({ type: "electionPhased", pre: [pre], handin: [past], after: [past] }) as Block;
+
+function replaceOnce<T>(items: T[], match: (item: T) => boolean, by: (item: T) => T, what: string): T[] {
+  const hits = items.filter(match).length;
+  if (hits !== 1) throw new Error(`postal guide: the hand-in ${what} the past-tense copy corrects matched ${hits} items`);
+  return items.map((item) => (match(item) ? by(item) : item));
+}
+
 function body(locale: Locale, phase: PostalPhase): Block[] {
   const t = COPY[locale];
   const p = t.phases[phase];
+  const stepList = [p.firstStep, ...t.steps];
+  const sendList = [...t.send, ...(p.sendExtra ?? [])];
+  const faqItems = [{ question: DEADLINE_QUESTION[locale], answer: p.deadlineAnswer }, ...(p.extraFaq ?? []), ...t.faq];
+  if (phase !== "closed") {
+    return bodyBlocks(locale, phase, lead(p.lead), steps(p.stepsTitle, stepList), list(...sendList), faq(faqItems));
+  }
+  const x = HANDIN_PAST_COPY[locale];
+  const pastSteps = replaceOnce(stepList, (s) => s.title === x.step.was, () => ({ title: x.step.title, text: x.step.text }), "step");
+  const pastSend = replaceOnce(sendList, (s) => s.startsWith(x.send.was), () => x.send.text, "send line");
+  let pastFaq = replaceOnce(faqItems, (f) => f.answer === p.deadlineAnswer, (f) => ({ ...f, answer: x.deadlineAnswer }), "deadline answer");
+  for (const [was, becomes] of x.faq) {
+    pastFaq = replaceOnce(pastFaq, (f) => f.answer.includes(was), (f) => ({ ...f, answer: f.answer.replace(was, becomes) }), "FAQ answer");
+  }
+  return bodyBlocks(
+    locale,
+    phase,
+    handinPhased(lead(p.lead), lead(x.lead)),
+    handinPhased(steps(p.stepsTitle, stepList), steps(p.stepsTitle, pastSteps)),
+    handinPhased(list(...sendList), list(...pastSend)),
+    handinPhased(faq(faqItems), faq(pastFaq)),
+  );
+}
+
+function bodyBlocks(locale: Locale, phase: PostalPhase, leadBlock: Block, stepsBlock: Block, sendBlock: Block, faqBlock: Block): Block[] {
+  const t = COPY[locale];
   return [
-    lead(p.lead),
+    leadBlock,
     // Closed phase only: from Thu 26 Nov 14:00 the callout appears (nothing before, nothing after 29 Nov).
     ...(phase === "closed"
       ? [{ type: "electionPhased", pre: [], handin: [handinPastCallout(locale, VOTING_LABEL[locale])], after: [] } as Block]
       : []),
-    steps(p.stepsTitle, [p.firstStep, ...t.steps]),
+    stepsBlock,
     languageLinks(),
     callout("official", verifiedLine(locale, POSTAL_AS_OF), t.note),
     ...h2(t.inPersonTitle, ...t.inPerson),
@@ -743,14 +854,14 @@ function body(locale: Locale, phase: PostalPhase): Block[] {
     ...h2(t.arriveTitle),
     list(...t.arrive),
     ...h2(t.sendTitle),
-    list(...t.send, ...(p.sendExtra ?? [])),
+    sendBlock,
     ...h2(t.calTitle),
     table(t.calCaption, t.calHeaders, t.calRows, t.calNote),
     ...h2(t.whoTitle, ...t.who),
     ...h2(t.abroadTitle),
     list(...t.abroad),
     ...paras(ABROAD_LINK[locale], t.relatedLine + b2link("voting", locale, VOTING_LABEL[locale]) + "."),
-    faq([{ question: DEADLINE_QUESTION[locale], answer: p.deadlineAnswer }, ...(p.extraFaq ?? []), ...t.faq]),
+    faqBlock,
     ...b2Related(["voting", "mesa", "candidates", "electionNight", "congressResults"], locale),
   ];
 }

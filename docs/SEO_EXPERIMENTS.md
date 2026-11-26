@@ -14994,3 +14994,38 @@ on 28-29 Nov against 23 Nov.
 **Go-live.** Deploy (date pages are programmatic), then `publish.sh pont-desembre shops`. IndexNow: `/es/festivos/dia/7-diciembre-2026/ /ca/festius/dia/7-desembre-2026/ /en/holidays/day/7-december-2026/ /ca/guies/pont-desembre-catalunya/ /es/guias/puente-diciembre-cataluna/ /en/guides/december-long-weekend-catalonia/ /es/guias/tiendas-abiertas-festivos-cataluna/ /ca/guies/botigues-obertes-festius-catalunya/ /en/guides/shops-open-sundays-holidays-catalonia/`.
 
 **Review 2026-12-09** (with the 25 Nov Purísima H2 review): `snapshot.py page puente-diciembre-cataluna 14`, `page pont-desembre-catalunya 14`, `page /es/festivos/dia/7-diciembre-2026/ 14`, `page tiendas-abiertas-festivos-cataluna 14`, each filtered for "barcelona", "se pasa al lunes", "centros comerciales", "lunes 7". The titles become free on 4 Dec (7 Dec page) and 9 Dec (bridge, ES shops): after the peak, so any retitle is for the 2027 season.
+
+## 2026-11-26 — 29N: "where you vote" before "what to bring" on the eve/polling-day block; one verified postal-vote line; postal and how-to-vote guides past their hand-in (ci-enginyeria; body only + factual correction of two leads; ca/es/en; deploy, then groups `vot-correu` and `voting`)
+
+**Why.** The first-screen check of the morning entry: on a 390 × 844 phone "where you vote" started at ~y 745 (below the
+fold on iOS Safari) and the block said nothing on the postal vote. And the postal guide's "closed" copy (POSTAL_AS_OF,
+to 29 Nov) kept telling readers to hand the vote in "fins al dijous 26 / hasta el jueves 26 / by Thursday 26" after
+14:00 on the 26th: the 14:01:30 `vot-correu` publish (ci-votcorreu-1401) only added the 25 Nov callout, because the
+lead, steps, hand-in line and FAQ were not phased (todo "hand-in the postal vote is an instruction after Thu 26 Nov
+14:00" in election-29n-flow). The how-to-vote lead's "key dates" clause had the same problem.
+
+**What changed.**
+1. `election-day.ts`, eve and polling phases (28-29 Nov), every page with the block: lines now hours, **where**, what
+   to bring, **postal vote**, help line, work, (reflection day), results. New `postalLine`: hand-in ended Thu 26 Nov
+   14:00 (Correos); "una vez ha sido admitida su solicitud, ya no puede votar de forma presencial" (Interior); the
+   official sources give no exception for anyone who did not hand it in. Re-read 26 Nov with curl: Correos ("hasta
+   el 26 de noviembre de 2026 a las 14:00h"; "si es aceptada por la Oficina del Censo Electoral, no podrá votar en la
+   mesa electoral el día de la votación"), Interior 29N postal page (quote above; "Ampliado hasta el día 26 de
+   noviembre de 2026 por Acuerdo JEC 418/2026"), INE cid=1700 ("Los electores que soliciten el voto por correo no
+   podrán votar personalmente en la mesa electoral"), LOREG art. 73.1 consolidated (last update 02/07/2026: "a fin de
+   que el día de las elecciones no se realice el voto personalmente"). The JEC's Acuerdo 418/2026 page answers 403
+   to the server; its content is quoted by Interior and INE.
+2. `postal-vote.ts` closed copy: lead, steps, hand-in list and FAQ are `electionPhased` (`pre` = live text; `handin`
+   and `after` = the same facts in the past tense). Factual correction of the lead inside its window (logged here).
+   Title and description untouched: they still say "lliura'l fins al 26" / "hand it in by 26 Nov" (the existing todo
+   in election-29n-flow; head's decision).
+3. `voting.ts` lead: `handin` variant with the key-dates clause in the past (and the 30 Nov lead the same).
+
+**Tests.** election-29n-flow (new 14:01:30 publish test; the hand-in rule is no longer a todo), election-day (new line
+order), election-guides-after, postal-vote (helpers read the pre-hand-in page): all election + postal + guide tests
+pass, 2 todo (metadata finding, one other pre-existing).
+
+**Review.** 27 Nov: the live postal guide reads the past tense; 28 Nov 00:05 a town page's block order.
+
+## 2026-11-26 — Postal-vote guide: closed-phase title/meta made tense-neutral (head, factual correction inside the window)
+- URLs: /ca/guies/vot-per-correu/, /es/guias/voto-por-correo/ (and en twin). From 26 Nov 14:00 the closed-phase title "lliura'l fins al 26" / "entrégalo hasta el 26" / "hand it in by 26 Nov" was an instruction past its deadline. Now: "Vot per correu 29N: lliurament fins al 26 de novembre, 14 h" / "Voto por correo 29N: entrega hasta el 26 de noviembre, 14 h" / "Postal vote, Spain 29N election: hand-in by 26 Nov, 14:00"; descriptions give both deadlines and "if you applied you cannot vote in person" (Interior: «una vez ha sido admitida su solicitud, ya no puede votar de forma presencial», read 26 Nov by the B4-B worker). Factual correction, not a CTR test; the 'over' phase (29 Nov) is unchanged. Review 3 Dec.
