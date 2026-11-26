@@ -45,9 +45,15 @@ export const TARGET_YEAR = 2027;
 export const WINDOW_FROM = "2025-12";
 export const WINDOW_TO = "2026-11";
 
-/** INE release calendar (PUBLICACIONFECHA_PUBLICACION/8, read 13 Nov 2026): flash ("Avance") and final November 2026 CPI. */
+/** INE release calendar (PUBLICACIONFECHA_PUBLICACION/8, read 13 Nov 2026; re-read 26 Nov 2026: "Índice de Precios de Consumo. Avance. Noviembre 2026" 27 Nov 2026 09:00 Madrid, "Índice de Precios de Consumo. Noviembre 2026" 15 Dec 2026 09:00): flash ("Avance") and final November 2026 CPI. */
 export const INE_FLASH_DAY = "2026-11-27";
 export const INE_FINAL_DAY = "2026-12-15";
+/**
+ * The flash release instant (INE calendar, 09:00 Madrid = 08:00 UTC) plus one
+ * hour of grace: from this instant tests/pensions-2027.test.ts fails while
+ * NOVEMBER_FLASH is null, so nothing ships on 27 Nov without the figure.
+ */
+export const INE_FLASH_ENTER_BY = "2026-11-27T09:00:00Z";
 
 export interface FlashFigure {
   /** "2026-11". */
@@ -60,7 +66,16 @@ export interface FlashFigure {
   url: string;
 }
 
-/** Fill on 27 Nov 2026 from the INE's press release (indicador adelantado del IPC, noviembre 2026). */
+/**
+ * THE ONE CONSTANT TO FILL ON 27 NOV 2026 (after 09:00, INE press release
+ * "Indicador adelantado del IPC", noviembre 2026; linked from the INE's CPI
+ * page OFFICIAL_LINKS.ineIpc). Copy the all-items national ANNUAL rate as
+ * printed, one decimal, e.g.:
+ *   { month: "2026-11", value: 3.1, published: "2026-11-27", url: "https://www.ine.es/…" }
+ * Nothing else changes: the engine adds it to the 11 final months, and the
+ * title, lead, table, how-to, examples and FAQ of the three editions switch
+ * to "flash". Never type a forecast here. Then run tests/pensions-2027.test.ts.
+ */
 export const NOVEMBER_FLASH: FlashFigure | null = null;
 
 export interface OfficialMinimum {

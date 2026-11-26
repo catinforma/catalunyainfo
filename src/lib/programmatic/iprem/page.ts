@@ -174,8 +174,8 @@ export function unemploymentRows() {
   };
 }
 
-/** Common multiples, both bases: the "¿cuánto es x veces el IPREM?" table. */
-export const COMMON_MULTIPLES = [0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6] as const;
+/** Common multiples, both bases: the "¿cuánto es x veces el IPREM?" table (4,5 added 26 Nov 2026: GSC "cuanto es 4.5 veces el iprem"). */
+export const COMMON_MULTIPLES = [0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6] as const;
 
 export function multiplesTable() {
   return COMMON_MULTIPLES.map((m) => {

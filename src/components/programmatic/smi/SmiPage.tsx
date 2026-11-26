@@ -16,6 +16,7 @@ import { bonoSocialLimitLine, subsidyIncomeLimitLine } from "@/lib/programmatic/
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { bareDay, elDay, money, netSalaryPreset, pct, smiEditions, smiPath, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/programmatic/smi/engine";
+import { smiFaq } from "@/lib/programmatic/smi/faq";
 import { smiHowTo } from "@/lib/programmatic/smi/howto";
 import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/smi/page";
 import { DRAFT_2027, NORMS, OFFICIAL_2027_READ, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
@@ -349,6 +350,10 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
     ],
   });
 
+  // Questions in the searchers' words (GSC 29 Oct-25 Nov 2026), answered from the decree rows and the net salary engine.
+  const faq = smiFaq(locale, official27, net14.net.perPayment);
+  const faqTitle = L(locale, { es: "Preguntas frecuentes sobre el SMI 2027", ca: "Preguntes freqüents sobre l'SMI 2027", en: "Questions on the 2027 minimum wage" });
+
   // The 2027 figures were read in the decree on OFFICIAL_2027_READ, after the rest (SMI_RULES_AS_OF).
   const amountsRead = decree27 ? OFFICIAL_2027_READ : SMI_RULES_AS_OF;
   const disclaimer = L(locale, {
@@ -569,6 +574,14 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                 </p>
               ) : null}
 
+              <h2 id="preguntas">{faqTitle}</h2>
+              {faq.map((f) => (
+                <section key={f.q}>
+                  <h3>{f.q}</h3>
+                  <p>{f.a}</p>
+                </section>
+              ))}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 {(official27 ? [...SMI_HISTORY, official27] : SMI_HISTORY)
@@ -600,7 +613,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: smiPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: smiPath(locale), description: meta.description, locale, category: "FinanceApplication" }), { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }])} />
       <SiteFooter locale={locale} />
     </>
   );

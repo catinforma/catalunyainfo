@@ -12,6 +12,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { CALENDAR_2026_PDF, CALENDAR_2027, CALENDAR_PAGE_URL, nextAuctionOf, upcoming } from "@/lib/programmatic/treasury-bills/calendar";
+import { letrasFaq, nextAuctionLines } from "@/lib/programmatic/treasury-bills/faq";
 import { bareDay, euros, letrasEditions, letrasPath, millions, pct, price3, rate3, shortDay, termName, weekdayDay, wholeEuros, type LetrasLocale } from "@/lib/programmatic/treasury-bills/copy";
 import { computeBill, taeFromRate } from "@/lib/programmatic/treasury-bills/engine";
 import { freshnessText, leadText, letrasMeta } from "@/lib/programmatic/treasury-bills/page";
@@ -93,6 +94,14 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
   const known = TERMS.map((t) => top[t]).filter((r): r is AuctionResult => Boolean(r));
   const day = (iso: string) => bareDay(iso, locale);
   const next = upcoming(data.today);
+  // First screen: the next three auctions with the Banco de España deadline (calendar queries lead the page's GSC set).
+  const nextLines = nextAuctionLines(data.today, locale, 3);
+  const faq = letrasFaq(locale, { results: data.results, today: data.today, calendar2027Pdf: data.calendar2027Pdf });
+  const box = L(locale, {
+    es: { title: "Próximas subastas de Letras del Tesoro", all: "Calendario completo", pdf: "PDF oficial del Tesoro 2026", faq: "Preguntas frecuentes" },
+    ca: { title: "Properes subhastes de lletres del Tresor", all: "Calendari complet", pdf: "PDF oficial del Tresor 2026", faq: "Preguntes freqüents" },
+    en: { title: "Next Spanish Treasury bill auctions", all: "Full calendar", pdf: "Treasury's official 2026 PDF", faq: "Questions" },
+  });
 
   const options: TermOption[] = known.map((r) => {
     const n = nextAuctionOf(r.term, data.today);
@@ -336,6 +345,21 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
+              {nextLines.length ? (
+                <aside className="ci-callout ci-callout-info" aria-labelledby="letras-next-title">
+                  <p id="letras-next-title">
+                    <strong>{box.title}</strong>
+                  </p>
+                  <ul>
+                    {nextLines.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                  <p className="text-sm">
+                    <a href="#proximas-subastas">{box.all}</a> · <A href={CALENDAR_2026_PDF}>{box.pdf}</A>
+                  </p>
+                </aside>
+              ) : null}
               {options.length ? <LetrasCalculator locale={locale} options={options} initialTerm={12} initialAmount={10_000} /> : null}
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="treasury-bills" locale={locale} />
@@ -547,6 +571,14 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
                 })}
               </p>
 
+              <h2 id="preguntas">{box.faq}</h2>
+              {faq.map((f) => (
+                <section key={f.q}>
+                  <h3>{f.q}</h3>
+                  <p>{f.a}</p>
+                </section>
+              ))}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 {sources.map(([name, url]) => (
@@ -562,7 +594,7 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: letrasPath(locale), description: meta.description, locale, category: "FinanceApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: letrasPath(locale), description: meta.description, locale, category: "FinanceApplication" }), { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }])} />
       <SiteFooter locale={locale} />
     </>
   );

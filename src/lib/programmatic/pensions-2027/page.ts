@@ -99,7 +99,8 @@ export function leadText(locale: PensionLocale, status: RateStatus | null, today
   const from = euros(DEFAULT_INPUT.monthly, locale);
   const to = example === null ? "" : euros(example, locale);
   const { missing, finalDay } = edges(status);
-  const flashOut = today >= INE_FLASH_DAY;
+  // The flash comes out at 09:00 on INE_FLASH_DAY: only from the next day can the page say it is out (on the day itself NOVEMBER_FLASH is typed in).
+  const flashOut = today > INE_FLASH_DAY;
   switch (status.kind) {
     case "provisional":
       return [

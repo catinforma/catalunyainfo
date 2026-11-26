@@ -97,6 +97,8 @@ export function exampleCopy(locale: PensionLocale, status: RateStatus | null): E
   const p = status ? percentText(status, locale) : "";
   const ex = status ? revaluePension({ monthly: 1000, payments: 14 }, status.percent) : null;
   const one = ex && ex.status === "ok" ? ex : null;
+  /** The 2026 gender-gap supplement × (1 + the page's percentage), as the page body does. */
+  const gap = status ? Math.round(GENDER_GAP_2026 * (1 + status.percent / 100) * 100) / 100 : null;
   const kindWord = status
     ? L(locale, {
         es: { provisional: "provisional", flash: "con el IPC adelantado", final: "con el IPC definitivo", official: "oficial" },
@@ -154,6 +156,15 @@ export function exampleCopy(locale: PensionLocale, status: RateStatus | null): E
         }),
       },
       {
+        // GSC 29 Oct-25 Nov: "quan pujaran les pensions el 2027" (15 impr, pos 9.7), "quan pujaran les pensions 2027".
+        q: L(locale, { es: "¿Cuándo suben las pensiones en 2027?", ca: "Quan pujaran les pensions el 2027?", en: "When do pensions go up in 2027?" }),
+        a: L(locale, {
+          es: `En enero: la ley dice que se revalorizan «al comienzo de cada año» (LGSS, art. 58.2), sobre lo que cobrabas a 31 de diciembre, como hizo el Real Decreto-ley 3/2026 para 2026 («${QUOTE.rdl3_2026}»). El porcentaje lo aprueba el Gobierno en el BOE: para 2026, el Real Decreto-ley 16/2025 salió el 24 de diciembre de 2025 y, al no convalidarse, el 3/2026 el 4 de febrero de 2026, con efectos desde el 1 de enero.`,
+          ca: `Al gener: la llei diu que es revaloritzen «al comienzo de cada año» (LGSS, art. 58.2), sobre el que cobraves a 31 de desembre, com va fer el Reial decret llei 3/2026 per al 2026 («${QUOTE.rdl3_2026}»). El percentatge l'aprova el Govern al BOE: per al 2026, el Reial decret llei 16/2025 va sortir el 24 de desembre de 2025 i, com que no es va convalidar, el 3/2026 el 4 de febrer de 2026, amb efectes des de l'1 de gener.`,
+          en: `In January: the law says they are revalued "al comienzo de cada año" (at the start of each year, LGSS art. 58.2), on what you were paid on 31 December, as Royal Decree-law 3/2026 did for 2026 ("${QUOTE.rdl3_2026}"). The government approves the percentage in the BOE: for 2026, Royal Decree-law 16/2025 came out on 24 December 2025 and, as it was not validated, 3/2026 on 4 February 2026, with effect from 1 January.`,
+        }),
+      },
+      {
         q: L(locale, { es: "¿Suben la pensión mínima y las pensiones no contributivas en 2027?", ca: "Pugen la pensió mínima i les pensions no contributives el 2027?", en: "Do the minimum and non-contributory pensions rise in 2027?" }),
         a: pncFaq,
       },
@@ -164,6 +175,21 @@ export function exampleCopy(locale: PensionLocale, status: RateStatus | null): E
           ca: `Sí, totes les pensions contributives amb el mateix percentatge (LGSS, art. 58.2): jubilació, incapacitat permanent, viduïtat, orfandat i a favor de familiars, a més del complement de bretxa de gènere, que el 2026 és de ${eur(GENDER_GAP_2026)} al mes.`,
           en: `Yes, every contributory pension rises by the same percentage (LGSS art. 58.2): retirement, permanent disability, widow's, orphan's and family-member pensions, plus the gender-gap supplement, ${eur(GENDER_GAP_2026)} a month in 2026.`,
         }),
+      },
+      {
+        // GSC: "cuanto sube la brecha de genero en 2027" (4 impr, pos 10.0). Same rate as the pensions (art. 58.2 names the supplement).
+        q: L(locale, { es: "¿Cuánto sube el complemento de brecha de género en 2027?", ca: "Quant puja el complement de bretxa de gènere el 2027?", en: "How much does the gender-gap supplement rise in 2027?" }),
+        a: gap
+          ? L(locale, {
+              es: `Lo mismo que las pensiones: el artículo 58.2 de la LGSS lo nombra («incluido el complemento de brecha de género»). En 2026 es de ${eur(GENDER_GAP_2026)} al mes (RDL 3/2026); con el ${p} (${kindWord}) serían ${eur(gap)}. La cifra de 2027 la fija la norma que publique el BOE.`,
+              ca: `El mateix que les pensions: l'article 58.2 de la LGSS l'esmenta («incluido el complemento de brecha de género»). El 2026 és de ${eur(GENDER_GAP_2026)} al mes (RDL 3/2026); amb el ${p} (${kindWord}) serien ${eur(gap)}. La xifra del 2027 la fixa la norma que publiqui el BOE.`,
+              en: `The same as pensions: LGSS art. 58.2 names it ("incluido el complemento de brecha de género"). In 2026 it is ${eur(GENDER_GAP_2026)} a month (RDL 3/2026); at ${p} (${kindWord}) it would be ${eur(gap)}. The 2027 figure is set by the rule the BOE publishes.`,
+            })
+          : L(locale, {
+              es: `Lo mismo que las pensiones (LGSS, art. 58.2, «incluido el complemento de brecha de género»). En 2026 es de ${eur(GENDER_GAP_2026)} al mes (RDL 3/2026).`,
+              ca: `El mateix que les pensions (LGSS, art. 58.2, «incluido el complemento de brecha de género»). El 2026 és de ${eur(GENDER_GAP_2026)} al mes (RDL 3/2026).`,
+              en: `The same as pensions (LGSS art. 58.2, "incluido el complemento de brecha de género"). In 2026 it is ${eur(GENDER_GAP_2026)} a month (RDL 3/2026).`,
+            }),
       },
       {
         q: L(locale, { es: "¿Cuánto sube una pensión de 1.000 euros?", ca: "Quant puja una pensió de 1.000 euros?", en: "How much does a €1,000 pension rise?" }),

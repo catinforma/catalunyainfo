@@ -78,9 +78,9 @@
    "files": 11
   },
   "extra-pay": {
-   "date": "2026-11-18T10:43:24.000Z",
-   "fingerprint": "v1:6288ddb28358662e57e681ac9256abdc",
-   "files": 8
+   "date": "2026-11-26T17:49:56.518Z",
+   "fingerprint": "v1:de33c80783281dda83dce475f88db047",
+   "files": 9
   },
   "fuel": {
    "date": "2026-11-21T11:33:05.000Z",
@@ -143,8 +143,8 @@
    "files": 11
   },
   "iprem": {
-   "date": "2026-11-25T12:12:03.000Z",
-   "fingerprint": "v1:22a235d230ed3451725aec0a49212305",
+   "date": "2026-11-26T17:49:56.518Z",
+   "fingerprint": "v1:7b01ba00fb642a2f89ebef92ab6dda83",
    "files": 9
   },
   "itv": {
@@ -198,8 +198,8 @@
    "files": 9
   },
   "pensions-2027": {
-   "date": "2026-11-24T23:22:32.000Z",
-   "fingerprint": "v1:ca123d66d374ca473631b7771834048e",
+   "date": "2026-11-26T17:49:56.518Z",
+   "fingerprint": "v1:e85f6c25f709b7c8a74f16a73c2a1d08",
    "files": 12
   },
   "plusvalia": {
@@ -253,9 +253,9 @@
    "files": 8
   },
   "smi": {
-   "date": "2026-11-25T12:05:57.586Z",
-   "fingerprint": "v1:98fb4d73aeb73297340c00400b569a08",
-   "files": 11
+   "date": "2026-11-26T17:49:56.518Z",
+   "fingerprint": "v1:293f6014810999d23d0a2ec734a59862",
+   "files": 12
   },
   "spain-2027": {
    "date": "2026-11-25T19:11:42.450Z",
@@ -283,9 +283,9 @@
    "files": 10
   },
   "treasury-bills": {
-   "date": "2026-11-19T22:39:00.000Z",
-   "fingerprint": "v1:708cdc16703dec07940b9d4917ff5d77",
-   "files": 14
+   "date": "2026-11-26T17:49:56.518Z",
+   "fingerprint": "v1:c8a4b940e804314452c22f60d0d067cd",
+   "files": 15
   },
   "unemployment-subsidy": {
    "date": "2026-11-25T12:05:57.586Z",

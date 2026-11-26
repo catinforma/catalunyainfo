@@ -15,6 +15,7 @@ import {
   HOWTO_READ,
   HOWTO_REREAD_BY,
   INE_FLASH_DAY,
+  INE_FLASH_ENTER_BY,
   MINIMUMS_2026,
   NORMS,
   NOVEMBER_FLASH,
@@ -56,8 +57,9 @@ function withMonths(extra: Record<string, number>, published = "2026-12-15"): Se
 /* Date guards                                                                */
 /* -------------------------------------------------------------------------- */
 
-test("date guard: from 28 Nov 2026 the INE's flash CPI for November is typed in (rules.ts NOVEMBER_FLASH)", () => {
-  if (today() <= INE_FLASH_DAY) return;
+test("date guard: from 27 Nov 2026 10:00 Madrid the INE's flash CPI for November is typed in (rules.ts NOVEMBER_FLASH)", () => {
+  assert.ok(INE_FLASH_ENTER_BY.startsWith(INE_FLASH_DAY));
+  if (Date.now() < Date.parse(INE_FLASH_ENTER_BY)) return;
   assert.ok(
     NOVEMBER_FLASH !== null || RENT_SNAPSHOT.series.ipc.points.some((p) => p.month === WINDOW_TO && p.value !== null),
     `The INE published the flash CPI for November 2026 on ${INE_FLASH_DAY}: copy the all-items annual rate from the INE press release (indicador adelantado del IPC) into NOVEMBER_FLASH in src/lib/programmatic/pensions-2027/rules.ts, with its day and URL.`,
@@ -279,6 +281,8 @@ test("page: the lead states the rule, the provisional mean, the example and the 
   assert.match(en, /flash estimate on 27 November 2026 and the final figure on 15 December 2026/);
   // After the flash day (and before it is typed in) the lead says it is out.
   assert.match(leadText("es", PROV, "2026-11-28"), /cuyo dato adelantado publicó el INE el 27 de noviembre de 2026/);
+  // On the flash day itself (09:00 release; a render before it must not say "published") it keeps the future tense.
+  assert.match(leadText("es", PROV, "2026-11-27"), /que el INE publica adelantado el 27 de noviembre de 2026/);
 
   const flash = revaluationStatus(IPC, "2026-11-27", { month: "2026-11", value: 4.5, published: "2026-11-27", url: "https://www.ine.es/x" }, null)!;
   assert.match(leadText("es", flash, "2026-11-27"), /adelantado de noviembre \(4,5 %, INE, 27 de noviembre de 2026\).*subida del 3,6 %/);

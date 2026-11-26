@@ -16,6 +16,7 @@ import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { EXTRA_META, extraPayEditions, extraPayPath, type EpLocale } from "@/lib/programmatic/extra-pay/copy";
 import { DEFAULT_INPUT, EXAMPLE_START, pageExamples } from "@/lib/programmatic/extra-pay/engine";
 import { EXTRA_PAY_RULES_AS_OF, EXTRA_PAY_YEAR, OFFICIAL_LINKS, QUOTE, SOURCES } from "@/lib/programmatic/extra-pay/rules";
+import { LEY33_URL, whenBox, whenFaq } from "@/lib/programmatic/extra-pay/when";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { money, netSalaryPath, percent } from "@/lib/programmatic/net-salary/copy";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
@@ -290,6 +291,11 @@ export function ExtraPayRoute({ locale }: { locale: EpLocale }) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };
+  // The civil servants' question (Ley 33/1987 art. 33), after the page's own.
+  faq.push(...whenFaq(locale));
+  const when0 = whenBox(locale);
+  const ley33 = L(locale, { es: "Ley 33/1987, art. 33 (BOE)", ca: "Llei 33/1987, art. 33 (BOE)", en: "Law 33/1987, art. 33 (BOE)" });
+
   const faqSchema = {
     "@type": "FAQPage",
     mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
@@ -310,6 +316,24 @@ export function ExtraPayRoute({ locale }: { locale: EpLocale }) {
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
+              <aside className="ci-callout ci-callout-info" aria-labelledby="extra-when-title">
+                <p id="extra-when-title">
+                  <strong>{when0.title}</strong>
+                </p>
+                <ul>
+                  {when0.items.map((i) => (
+                    <li key={i.who}>
+                      <strong>{i.who}:</strong> {i.text}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-sm">
+                  <a href="#cuando">{h.when}</a> ·{" "}
+                  <a href={LEY33_URL} rel="noopener" target="_blank">
+                    {ley33}
+                  </a>
+                </p>
+              </aside>
               <ExtraPayCalculator locale={locale} initial={DEFAULT_INPUT} />
               <CalculatorNextStep current="extra-pay" locale={locale} />
 

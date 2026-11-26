@@ -366,7 +366,11 @@ test("page: titles, descriptions and lead carry the figures; FAQ of seven in eve
     for (const f of faq) assert.doesNotMatch(f.q + f.a, /undefined|NaN|\[object/, `${l}: ${f.q}`);
     assert.ok(faq.some((f) => f.a.includes("806/2026")), `${l}: 2027 answer`);
   }
-  assert.equal(multiplesTable().length, 11);
+  assert.equal(multiplesTable().length, 12);
+  const m45 = multiplesTable().find((r) => r.multiple === 4.5)!;
+  assert.equal(m45.monthly, 2700);
+  assert.equal(m45.annual12, 32_400);
+  assert.equal(m45.annual14, 37_800);
 });
 
 test("page: one static route per language, a 404 in the others, server-rendered tables, FAQ JSON-LD, YMYL pieces", () => {
