@@ -453,7 +453,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Abans d'anar-hi",
-        `Els organitzadors canvien dates i emplaçaments d'un any a l'altre: comprova-ho al seu web el dia que hi vagis. Si vas a comprar un diumenge o festiu de desembre, mira ${b2link("shops", "ca", "quins dies poden obrir les botigues")}: el 2026 ho poden fer els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8. Per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}.`,
+        `Els organitzadors canvien dates i emplaçaments d'un any a l'altre: comprova-ho al seu web el dia que hi vagis. Si vas a comprar un diumenge o festiu de desembre, mira ${b2link("shops", "ca", "quan obren les botigues els diumenges de desembre")}: el 2026 ho poden fer els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8. Per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}.`,
         `Per a la resta del Nadal a la ciutat, mira ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}, amb el pessebre de Sant Jaume i què obre els festius, i tot el mes dia a dia a ${b2link("barcelonaDecember", "ca", "Barcelona al desembre del 2026")}. Per al 5 de gener, ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
         `Per saber quines fires i mercats hi ha cada cap de setmana a la teva zona, segons el calendari oficial de fires, mira [les fires i mercats d'aquest cap de setmana](${weekendHubPath("ca")}).`,
       ),
@@ -537,7 +537,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Antes de ir",
-        `Los organizadores cambian fechas y emplazamientos de un año a otro: compruébalo en su web el día que vayas. Si vas a comprar un domingo o festivo de diciembre, mira ${b2link("shops", "es", "qué días pueden abrir las tiendas")}: en 2026 pueden hacerlo los domingos 6, 13, 20 y 27 de diciembre y el martes 8. Para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}.`,
+        `Los organizadores cambian fechas y emplazamientos de un año a otro: compruébalo en su web el día que vayas. Si vas a comprar un domingo o festivo de diciembre, mira ${b2link("shops", "es", "cuándo abren las tiendas los domingos de diciembre")}: en 2026 pueden hacerlo los domingos 6, 13, 20 y 27 de diciembre y el martes 8. Para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}.`,
         `Para el resto de la Navidad en la ciudad, mira ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}, con el belén de Sant Jaume y qué abre los festivos, y todo el mes día a día en ${b2link("barcelonaDecember", "es", "Barcelona en diciembre de 2026")}. Para el 5 de enero, ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
         `Para saber qué ferias y mercados hay cada fin de semana en tu zona, según el calendario oficial de ferias, mira [las ferias y mercados de este fin de semana](${weekendHubPath("es")}).`,
       ),
@@ -620,7 +620,7 @@ function body(locale: Locale) {
     ),
     ...h2(
       "Before you go",
-      `Organisers change dates and venues from year to year, so check their website for your day. If you plan to shop on a December Sunday or holiday, see ${b2link("shops", "en", "which days shops may open")}: in 2026 they may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December. For long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}.`,
+      `Organisers change dates and venues from year to year, so check their website for your day. If you plan to shop on a December Sunday or holiday, see ${b2link("shops", "en", "when shops open on Sundays in December")}: in 2026 they may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December. For long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}.`,
       `For the rest of Christmas in the city, see ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}, with the Plaça Sant Jaume nativity scene and what is open on the holidays, and the whole month day by day in ${b2link("barcelonaDecember", "en", "Barcelona in December 2026")}. For 5 January, ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     faq([

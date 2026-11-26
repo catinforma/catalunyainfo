@@ -7,6 +7,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { liveSchoolDescription, liveSchoolTitle } from "@/lib/content/school/snippet";
 import { liveTodayDescription, liveTodayTitle } from "@/lib/content/holidays/today-snippet";
 import { liveSpainSchoolDescription, liveSpainSchoolTitle, spainSchoolRegionOf } from "@/lib/content/school-spain/live";
+import { liveShopsDescription, liveShopsTitle } from "@/lib/content/batch02/shops-snippet";
 
 /**
  * A page title computed at render time, for pages whose answer is a live
@@ -32,6 +33,8 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
   }
   const spain = spainSchoolRegionOf(body);
   if (spain) return liveSpainSchoolTitle(spain, todayInCatalonia(), locale);
+  // 27 Nov 2026: the shops guide (the only page with `shopsToday`) drops polling day from its CA title from 30 Nov.
+  if (body.some((block) => block.type === "shopsToday")) return liveShopsTitle(locale);
   return null;
 }
 
@@ -50,6 +53,8 @@ export function liveEntryDescription(body: Body, locale: Locale): string | null 
   }
   const spain = spainSchoolRegionOf(body);
   if (spain) return liveSpainSchoolDescription(spain, todayInCatalonia(), locale);
+  // 27 Nov 2026: the shops guide's descriptions drop polling day from 30 Nov (batch02/shops-snippet.ts).
+  if (body.some((block) => block.type === "shopsToday")) return liveShopsDescription(locale);
   return null;
 }
 

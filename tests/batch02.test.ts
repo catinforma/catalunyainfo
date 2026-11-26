@@ -222,7 +222,8 @@ test("every internal link ends in a trailing slash", () => {
     for (const locale of LOCALES) {
       const text = JSON.stringify(article.editions[locale].blocks);
       for (const match of text.matchAll(/\]\((\/[a-z]{2}\/[^)]*)\)/g)) {
-        assert.match(match[1] ?? "", /\/$/, `${article.key}/${locale}: ${match[1]}`);
+        // 27 Nov 2026: a jump to a heading of the same page keeps the slash before the "#" (shops.ts ownAnchor).
+        assert.match(match[1] ?? "", /\/(#[a-z0-9-]+)?$/, `${article.key}/${locale}: ${match[1]}`);
       }
     }
   }
@@ -570,7 +571,8 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
   // The leads count the towns that do not open on 8 December in words.
   const no8 = TOWNS_NOV_DEC.filter((t) => t.closed.includes("2026-12-08")).length;
   for (const locale of ["ca", "es", "en"] as const) {
-    const first = SHOPS.editions[locale].blocks.find((b) => b.type === "paragraph") as { text: string };
+    // 27 Nov 2026: the lead is an `electionPhased` block; read the guide as it was before the vote.
+    const first = preVote(SHOPS.editions[locale].blocks).find((b) => b.type === "paragraph") as { text: string };
     assert.ok(first.text.includes(` ${no8} `), `${locale}: lead says ${no8} towns`);
     assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
   }
@@ -583,11 +585,11 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
   // 18 Nov 2026 (day-7 rule): CA back to its 3 Nov title; ES and EN keep the 11 Nov ones.
   assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes a Barcelona: diumenge 29 nov i desembre");
   for (const locale of ["ca", "es", "en"] as const) assert.match(SHOPS.editions[locale].seoDescription, /29 (de )?(novembre|noviembre|November)/, `${locale}: 29N in the snippet`);
-  const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
+  const caFaq = preVote(SHOPS.editions.ca.blocks).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
   assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");
   assert.ok(caFaq?.items[0]?.answer.includes(` ${TOWNS_NOV_DEC.length} municipis`), "ca: FAQ counts the towns from the table");
-  // 25 Nov 2026: every source re-read again (CHRISTMAS_SHOPS_CHECKED; EMT/4342/2025, EMT/89/2026).
-  assert.equal(SHOPS.verifiedAt, "2026-11-25");
+  // 25 Nov 2026: every source re-read again (CHRISTMAS_SHOPS_CHECKED; EMT/4342/2025, EMT/89/2026). Again 27 Nov 2026.
+  assert.equal(SHOPS.verifiedAt, "2026-11-27");
 });
 
 /**
@@ -602,7 +604,7 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
 test("shops: the date table answers 29N, Christmas and Reis from the DOGC and the retail law", () => {
   const towns = new Set(TOWNS_NOV_DEC.map((t) => t.town));
   for (const locale of ["ca", "es", "en"] as const) {
-    const blocks = SHOPS.editions[locale].blocks;
+    const blocks = preVote(SHOPS.editions[locale].blocks);
     const dates = blocks.filter((b) => b.type === "table")[0] as { headers: string[]; rows: string[][]; caption: string };
     assert.equal(dates.headers.length, 4, `${locale}: date, Catalonia, Barcelona, basis`);
     const row = (re: RegExp) => {

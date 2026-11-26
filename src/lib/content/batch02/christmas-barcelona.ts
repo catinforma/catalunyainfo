@@ -634,7 +634,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Què obre a Barcelona el dia de Nadal?",
         "Una part. **El 25 de desembre (divendres, el 2026) i el 26, Sant Esteve (dissabte), són festius a tot Catalunya**, igual que l'1 i el 6 de gener de 2027 (divendres i dimecres). A l'Aran, el 26 de desembre és feiner: el substitueix la Festa d'Aran, el 17 de juny.",
-        `Aquests quatre dies, la llei catalana de comerç obliga a tancar les botigues amb horari general. Poden obrir, perquè en queden excloses, els forns i pastisseries, les floristeries, les botigues de conveniència, les farmàcies, les botigues de dins de les estacions i les de fins a 300 m² d'alimentació o de petites i mitjanes empreses. Abans de Nadal, a Barcelona les botigues poden obrir els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
+        `Aquests quatre dies, la llei catalana de comerç obliga a tancar les botigues amb horari general. Poden obrir, perquè en queden excloses, els forns i pastisseries, les floristeries, les botigues de conveniència, les farmàcies, les botigues de dins de les estacions i les de fins a 300 m² d'alimentació o de petites i mitjanes empreses. Abans de Nadal, a Barcelona les botigues poden obrir els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8: ho detallem a ${b2link("shops", "ca", "quins diumenges obren les botigues a Barcelona i a Catalunya")}.`,
       ),
       sightTable("ca"),
       ...paras(
@@ -752,7 +752,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "¿Qué abre en Barcelona el día de Navidad?",
         "Una parte. **El 25 de diciembre (viernes, en 2026) y el 26, San Esteban (sábado), son festivos en toda Cataluña**, igual que el 1 y el 6 de enero de 2027 (viernes y miércoles). En Arán, el 26 de diciembre es laborable: lo sustituye la Fiesta de Arán, el 17 de junio.",
-        `Esos cuatro días, la ley catalana de comercio obliga a cerrar a las tiendas con horario general. Pueden abrir, porque quedan excluidas, las panaderías y pastelerías, las floristerías, las tiendas de conveniencia, las farmacias, las tiendas del interior de las estaciones y las de hasta 300 m² de alimentación o de pequeñas y medianas empresas. Antes de Navidad, en Barcelona las tiendas pueden abrir los domingos 6, 13, 20 y 27 de diciembre y el martes 8: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
+        `Esos cuatro días, la ley catalana de comercio obliga a cerrar a las tiendas con horario general. Pueden abrir, porque quedan excluidas, las panaderías y pastelerías, las floristerías, las tiendas de conveniencia, las farmacias, las tiendas del interior de las estaciones y las de hasta 300 m² de alimentación o de pequeñas y medianas empresas. Antes de Navidad, en Barcelona las tiendas pueden abrir los domingos 6, 13, 20 y 27 de diciembre y el martes 8: lo detallamos en ${b2link("shops", "es", "qué domingos abren las tiendas en Barcelona y en Cataluña")}.`,
       ),
       sightTable("es"),
       ...paras(
@@ -869,7 +869,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "Is Barcelona open on Christmas Day?",
       "Partly. **25 December (a Friday in 2026) and 26 December, Sant Esteve (a Saturday), are both public holidays across Catalonia**, as are 1 and 6 January 2027 (Friday and Wednesday). In Aran, 26 December is a working day: the Festa d'Aran on 17 June replaces it.",
-      `On those four days Catalan retail law keeps shops on the general timetable closed. Exempt, and so free to open, are bakeries and cake shops, florists, convenience stores, pharmacies, shops inside stations, and shops of up to 300 m² that sell everyday food or are run by small and medium-sized businesses. Before Christmas, shops in Barcelona may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
+      `On those four days Catalan retail law keeps shops on the general timetable closed. Exempt, and so free to open, are bakeries and cake shops, florists, convenience stores, pharmacies, shops inside stations, and shops of up to 300 m² that sell everyday food or are run by small and medium-sized businesses. Before Christmas, shops in Barcelona may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December: details in ${b2link("shops", "en", "which Sundays shops open in Barcelona and Catalonia")}.`,
     ),
     sightTable("en"),
     ...paras(

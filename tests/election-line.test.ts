@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -77,7 +78,8 @@ test("before the polls close: hours, the town finder and how to vote; the shops'
 
 test("the shops anchor is the id of the shops guide's own Sunday 29 heading", () => {
   for (const locale of LOCALES) {
-    const heading = SHOPS.editions[locale].blocks.find((block) => block.type === "heading" && block.text === SHOPS_29N_HEADING[locale]);
+    // 27 Nov 2026: the 29N section is `electionPhased` in the shops guide (gone from 30 Nov, when this link is gone too).
+    const heading = preVote(SHOPS.editions[locale].blocks).find((block) => block.type === "heading" && block.text === SHOPS_29N_HEADING[locale]);
     assert.ok(heading && heading.type === "heading", `${locale}: heading "${SHOPS_29N_HEADING[locale]}" in the shops guide`);
     const line = electionLineFor(locale, "before", { shops: true })!;
     assert.equal(line.links[2]!.href, `${b2href("shops", locale)}#${headingId(heading)}`);

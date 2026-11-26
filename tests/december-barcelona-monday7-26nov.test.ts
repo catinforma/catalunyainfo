@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -97,7 +98,7 @@ test("shops guide: Monday 7 December row after the 6th, FAQ entry, line linking 
   assert.match(row.bcn("ca"), /^Laborable: horari habitual de cada botiga \(a Barcelona no és festa local\)$/);
   assert.match(row.basis.en, /Ordre EMT\/208\/2025/);
   for (const locale of LOCALES) {
-    const blocks = SHOPS.editions[locale].blocks;
+    const blocks = preVote(SHOPS.editions[locale].blocks);
     const faq = faqOf(blocks);
     assert.ok(faq.some((f) => /(dilluns|lunes|Monday) 7 de(sembre| diciembre)?|Monday 7 December/.test(f.question) && /43/.test(f.answer)), `${locale}: Monday FAQ`);
     const text = bodyToPlainText(blocks);

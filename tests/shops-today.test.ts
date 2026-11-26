@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -109,10 +110,12 @@ test("shopsToday is a configuration-free, day-dependent block, rendered on the s
 
 test("guide: Sundays first (16 Nov H2 kept), then today, then the date table; titles and leads untouched", () => {
   for (const locale of LOCALES) {
-    const blocks = SHOPS.editions[locale].blocks;
+    const blocks = preVote(SHOPS.editions[locale].blocks);
     const h2 = blocks.filter((b) => b.type === "heading") as { text: string }[];
     assert.match(h2[0]!.text, /diumenges per Nadal|domingos en Navidad|Sundays for Christmas/, locale);
-    assert.match(h2[1]!.text, /^(Obren avui les botigues a Barcelona\?|¿Abren hoy las tiendas en Barcelona\?|Are shops open today in Barcelona\?)/, locale);
+    // 27 Nov 2026: the general "when are shops open on Sundays" section sits between the Christmas Sundays and today.
+    assert.match(h2[1]!.text, /^(Quan obren les botigues els diumenges\?|¿Cuándo abren las tiendas los domingos\?|When are shops open on Sundays\?)/, locale);
+    assert.match(h2[2]!.text, /^(Obren avui les botigues a Barcelona\?|¿Abren hoy las tiendas en Barcelona\?|Are shops open today in Barcelona\?)/, locale);
     const today = blocks.findIndex((b) => b.type === "shopsToday");
     const firstTable = blocks.findIndex((b) => b.type === "table");
     assert.ok(today > 0 && today < firstTable, `${locale}: the today block sits before the date table`);
@@ -123,9 +126,9 @@ test("guide: Sundays first (16 Nov H2 kept), then today, then the date table; ti
     const spain = (shopsSundaysBlocks("2026-11-26", locale, "spainRest")[0] as { text: string }).text;
     assert.match(spain, /Castilla y León|Castella i Lleó|Castile and León/, `${locale}: rest of Spain answered`);
     assert.ok(spain.includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: links the Spain page`);
-    // The DOGC 2027 list and Barcelona's 2027 days, re-checked on 25 Nov 2026.
+    // The DOGC 2027 list and Barcelona's 2027 days, re-checked on 25 Nov 2026 and again on 27 Nov.
     assert.doesNotMatch(text, /(a|As of) 5 (de )?(novembre|noviembre|November)/, `${locale}: stale "as of 5 Nov"`);
-    assert.match(text, /25 (de )?(novembre|noviembre|November)/, locale);
+    assert.match(text, /27 (de )?(novembre|noviembre|November)/, locale);
   }
 });
 

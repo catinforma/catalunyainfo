@@ -1,3 +1,4 @@
+import { preVote } from "./pre-vote.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -87,7 +88,7 @@ test("shops: 'domingos abiertos 2026' and 'cuándo abren las tiendas los domingo
     en: ["Which Sundays can shops open in 2026?", "When are shops open on Sundays in Catalonia?"],
   };
   for (const locale of LOCALES) {
-    const items = (SHOPS.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    const items = (preVote(SHOPS.editions[locale].blocks).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
     for (const q of questions[locale]) assert.ok(items.some((i) => i.question === q), `${locale}: ${q}`);
     const year = items.find((i) => i.question === questions[locale][0])!.answer;
     // Ordre EMT/77/2025 art. 1 (4 Jan, 15 Aug, 12 Oct, 29 Nov, 6, 13, 20, 27 Dec) and art. 6 (11 Jan, 8 Dec).

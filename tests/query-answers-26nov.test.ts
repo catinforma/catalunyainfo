@@ -61,7 +61,7 @@ test("Spain bridge: '¿Dónde es festivo el 7 de diciembre de 2026?' opens with 
   }
 });
 
-test("shops: '¿Cuándo abren las tiendas los domingos?' lists every 2026 and 2027 opening day, after the town table", () => {
+test("shops: '¿Cuándo abren las tiendas los domingos?' lists every 2026 and 2027 opening day, right after the Christmas Sundays answer", () => {
   // Ordre EMT/89/2026 art. 1 and 5, Resolució EMT/4342/2025 (Barcelona): read 26 Nov 2026 in the DOGC PDFs.
   const want = {
     es: ["4 y 11 ene. · 15 ago. · 12 oct. · 29 nov. · 6, 8, 13, 20 y 27 dic.", "3 ene. · 27 jun. · 1 y 28 nov. · 6, 8, 12 y 19 dic.", "10 ene. · 5 dic."],
@@ -70,14 +70,23 @@ test("shops: '¿Cuándo abren las tiendas los domingos?' lists every 2026 and 20
     const blocks = SHOPS.editions[locale].blocks;
     const title = SUNDAYS_YEAR_TITLE[locale];
     const at = blocks.findIndex((b) => b.type === "heading" && (b as B).text === title);
-    const town = blocks.findIndex((b) => b.type === "shopsChristmas");
-    assert.ok(town > 0 && at === town + 1, `${locale}: right after the town selector`);
+    // 27 Nov 2026 (ci-numero1): moved up from after the 947-town selector to right after the Christmas Sundays answer.
+    const sundays = blocks.map((b) => b.type).lastIndexOf("shopsSundays");
+    assert.ok(sundays > 0 && at === sundays + 1, `${locale}: right after the Christmas Sundays answer`);
+    assert.ok(at < blocks.findIndex((b) => b.type === "shopsChristmas"), `${locale}: before the town selector`);
     const section = after(blocks, title);
     assert.match(section[0]!.text!, /\*\*(deu|diez|ten) /, `${locale}: the ten-days rule`);
     const items = section.find((b) => b.type === "list")!.items!;
     assert.equal(items.length, 3, locale);
     assert.match(items[0]!, /^\*\*2026, Barcelona:\*\*/);
-    for (const link of section.at(-1)!.text!.match(/\(#[^)]+\)/g) ?? []) assert.ok(anchors(blocks).has(link.slice(2, -1)), `${locale}: ${link}`);
+    // 27 Nov 2026: the jumps carry the page's own path ("(#x)" printed raw markdown).
+    const jumps = section.at(-1)!.text!.match(/\(\/[^)#]+\/#[^)]+\)/g) ?? [];
+    assert.equal(jumps.length, 2, `${locale}: two jumps`);
+    for (const link of jumps) {
+      assert.ok(link.startsWith(`(/${locale}/`), `${locale}: ${link}`);
+      assert.ok(anchors(blocks).has(link.slice(link.indexOf("#") + 1, -1)), `${locale}: ${link}`);
+    }
+    assert.doesNotMatch(section.at(-1)!.text!, /\]\(#/, `${locale}: no bare #anchor link`);
   }
   const es = after(SHOPS.editions.es.blocks, SUNDAYS_YEAR_TITLE.es).find((b) => b.type === "list")!.items!;
   want.es.forEach((days, i) => assert.ok(es[i]!.includes(days), es[i]));

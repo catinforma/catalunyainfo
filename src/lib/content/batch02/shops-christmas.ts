@@ -35,8 +35,24 @@ import type { Locale } from "@/lib/i18n/config";
  * Barcelona's commerce page (ajuntament.barcelona.cat/comerc, "Horaris
  * comercials") lists only the 2026 resolution and the ZGAT (15 May-15 Sep),
  * no 2027 days. Before that: 23 Nov (DOGC 9786-9800), 5 Nov.
+ *
+ * 27 Nov 2026 (ci-numero1, 00:20-00:40 CET): all seven re-read again. DOGC
+ * issues 9803 (26 Nov) and 9804 (27 Nov) hold no title on "obertura
+ * comercial" (summary API): the 2027 municipal list is still not out. PDFs
+ * (pdftotext): Ordre EMT/77/2025 art. 1 "4 de gener." ... "29 de novembre."
+ * "6, 13, 20 i 27 de desembre.", art. 6 "el dia 11 de gener i el dia 8";
+ * Resolució EMT/4342/2025, Barcelona "4 i 11 de gener. / 15 d'agost. / 12
+ * d'octubre. / 29 de novembre. / 6, 8, 13, 20 i 27 de desembre."; Ordre
+ * EMT/89/2026 "3 de gener", "27 de juny", "6, 8, 12 i 19 de desembre", art. 5
+ * "el dia 10 de gener i el dia 5 de"; Ordre EMT/66/2025 "25 de desembre,
+ * divendres", "26 de desembre, dissabte"; Ordre EMT/52/2026 "1 de gener,
+ * divendres", "6 de gener, dimecres". BOE Llei 18/2017 "Última actualización
+ * publicada el 31/12/2025", art. 36.2.c "es de ocho al año. Cada ayuntamiento
+ * debe fijar dos festivos más", 36.2.d as quoted. Barcelona's "Horaris
+ * comercials" page: ZGAT "de 12 a 20 hores, entre el 15 de maig i el 15 de
+ * setembre"; no 2027 days.
  */
-export const CHRISTMAS_SHOPS_CHECKED = "2026-11-25";
+export const CHRISTMAS_SHOPS_CHECKED = "2026-11-27";
 
 /** From this day the 2027 municipal list must have been read: a test fails. */
 export const CHRISTMAS_SHOPS_STALE_FROM = "2027-01-01";

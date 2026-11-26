@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { table } from "../src/lib/content/batch02/shared.ts";
+import { B2_PATHS, table } from "../src/lib/content/batch02/shared.ts";
 import { bodySchema, headingId, slugifyAnchor, type Block } from "../src/lib/content/blocks.ts";
 import { CHRISTMAS_SHOPS_LAST_DAY, christmasDays } from "../src/lib/content/batch02/shops-christmas.ts";
 import { christmasTownRows } from "../src/lib/content/batch02/shops-christmas-towns.ts";
@@ -89,7 +89,11 @@ test("the Spain guide's link lands on the town search heading of the Catalan gui
     const after = (SHOPS.editions[locale].blocks as Block[]).slice(i + 1, i + 4).map((b) => b.type);
     assert.ok(after.includes("shopsChristmas" as never), `${locale}: the search follows its heading (${after.join(",")})`);
     // The guide's own summary links to the same search, on the page.
-    assert.ok(JSON.stringify(SHOPS.editions[locale].blocks.slice(0, 3)).includes(FIND_YOUR_TOWN[locale].match(/\(#([^)]+)\)/)![1]!));
+    // 27 Nov 2026: the summary's jump carries the page's own path ("(#x)" printed raw markdown).
+    const jump = FIND_YOUR_TOWN[locale].match(/\((\/[^)#]+\/)#([^)]+)\)/)!;
+    assert.equal(jump[1], `/${locale}/${B2_PATHS.shops[locale]}/`);
+    assert.equal(jump[2], anchor);
+    assert.ok(JSON.stringify(SHOPS.editions[locale].blocks.slice(0, 3)).includes(jump[2]!));
   }
 });
 
