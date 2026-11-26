@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
+import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { absoluteUrl } from "@/lib/site";
 
 import { LT_LOCALES, lotteryTaxEditions, money, type LtLocale } from "./copy";
 import { calculateOk, type LotteryInput } from "./engine";
-import { DRAWS, EXEMPT_PER_TICKET, PRESETS, RULES_AS_OF, presetOf, type PresetId } from "./rules";
+import { DRAWS, EXEMPT_PER_TICKET, PRESETS, RULES_AS_OF, SELAE_READ, presetOf, type PresetId } from "./rules";
 
 /**
  * Pure pieces of the lottery prize tax page: titles, the default input, the
@@ -98,6 +99,23 @@ export function amountsLead(locale: LtLocale): string {
   }[locale];
 }
 
+/**
+ * What a participación of El Gordo pays by the euros it plays of the 20 € décimo
+ * ("cuánto te toca del Gordo si juegas 4 euros", "si tengo un décimo del Gordo cuánto
+ * me toca": GSC, 12-25 Nov 2026). DA 33ª.2 splits the 40,000 € exempt part by the
+ * same share, so a small share pays tax even though it collects less than 40,000 €.
+ */
+export const GORDO_STAKES = [1, 2, 3, 4, 5, 10, 20] as const;
+
+export function stakesTable() {
+  return GORDO_STAKES.map((played) => ({ played, result: calculateOk(presetInput("gordo", played)) }));
+}
+
+/** The Christmas prizes per whole décimo, in the programme's order (no El Niño, no Grossa). */
+function christmasPrizes() {
+  return PRESETS.filter((p) => p.draw === "navidad-2026").map((p) => ({ id: p.id, prize: p.prize, net: calculateOk(presetInput(p.id)).total.net }));
+}
+
 export type ExampleId = "one-gordo" | "share-5" | "half-second" | "two-gordo" | "third" | "grossa" | "aeat";
 
 /** The worked examples, in the page's order. */
@@ -142,6 +160,23 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
   const fourth = presetInput("cuarto").prize;
   const fifth = presetInput("quinto").prize;
   const ex = M(EXEMPT_PER_TICKET);
+  // 26 Nov 2026: "cuánto toca por décimo", "cuánto es el segundo premio" and "si juegas 4 euros" (GSC 12-25 Nov).
+  const draw = dayMonthYear(DRAWS["navidad-2026"].date, locale);
+  const read = dayMonthYear(SELAE_READ, locale);
+  const cp = new Map(christmasPrizes().map((p) => [p.id, p]));
+  const pair = (id: PresetId) => {
+    const p = cp.get(id)!;
+    return p.net === p.prize ? M(p.prize) : `${M(p.prize)} (${M(p.net)})`;
+  };
+  const st = new Map(stakesTable().map((r) => [r.played, r.result.total]));
+  const s4 = st.get(4)!;
+  const s2 = st.get(2)!;
+  const s10 = st.get(10)!;
+  const perTicket = {
+    es: `En el sorteo del ${draw}, por décimo de 20 € y con lo que cobras entre paréntesis: el Gordo, ${pair("gordo")}; el segundo, ${pair("segundo")}; el tercero, ${pair("tercero")}; el cuarto, ${pair("cuarto")}; el quinto, ${pair("quinto")}; la pedrea, ${pair("pedrea")}, y el reintegro, ${pair("reintegro")}. Hasta ${ex} no hay retención. Premios del programa de SELAE, leído el ${read}.`,
+    ca: `Al sorteig del ${draw}, per dècim de 20 € i amb el que cobres entre parèntesis: el Gordo, ${pair("gordo")}; el segon, ${pair("segundo")}; el tercer, ${pair("tercero")}; el quart, ${pair("cuarto")}; el cinquè, ${pair("quinto")}; la pedrea, ${pair("pedrea")}, i el reintegrament, ${pair("reintegro")}. Fins a ${ex} no hi ha retenció. Premis del programa de SELAE, llegit el ${read}.`,
+    en: `In the draw on ${draw}, per €20 décimo, with what you collect in brackets: El Gordo ${pair("gordo")}; second prize ${pair("segundo")}; third ${pair("tercero")}; fourth ${pair("cuarto")}; fifth ${pair("quinto")}; the pedrea ${pair("pedrea")} and the reintegro ${pair("reintegro")}. Nothing is withheld up to ${ex}. Prizes from SELAE's programme, read on ${read}.`,
+  }[locale];
   return {
     es: [
       { q: "¿Cuánto se queda Hacienda del Gordo?", a: `${M(g.withholding)} por décimo: el 20 % de lo que pasa de ${ex} (${M(g.gross)} − ${ex} = ${M(g.base)}). Del décimo del Gordo cobras ${M(g.net)}.` },
@@ -152,6 +187,8 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "Si tengo varios décimos premiados, ¿se suman?", a: `No: cada décimo tiene sus propios ${ex} exentos. Dos décimos del Gordo cobran ${M(two.net)} en total y Hacienda retiene ${M(two.withholding)}.` },
       { q: "¿La Grossa de Cap d'Any paga a Hacienda?", a: `Sí, igual: es una lotería de la Generalitat y la ley incluye las de las comunidades autónomas. El primer premio, ${M(gr.gross)} por billete de 10 €, paga ${M(gr.withholding)} y deja ${M(gr.net)}.` },
       { q: "¿Cuánto se queda Hacienda del Niño?", a: `Lo mismo que en Navidad: el 20 % de lo que pasa de ${ex} por décimo. El primer premio del Niño 2027, ${M(nino.gross)} por décimo de 20 €, paga ${M(nino.withholding)} y deja ${M(nino.net)}.` },
+      { q: "¿Cuánto toca por décimo en la Lotería de Navidad?", a: perTicket },
+      { q: "¿Cuánto te toca del Gordo si juegas 4 €?", a: `${M(s4.gross)}: 4 € es la quinta parte de un décimo de 20 €. También te corresponde la quinta parte de los ${ex} exentos (${M(s4.exempt)}), así que te retienen ${M(s4.withholding)} y te quedan ${M(s4.net)}. Con 2 € te quedan ${M(s2.net)} y con 10 €, ${M(s10.net)}: aunque cobres menos de ${ex}, una participación paga, porque la exención se reparte en la misma proporción.` },
     ],
     ca: [
       { q: "Quant se'n queda Hisenda del Gordo?", a: `${M(g.withholding)} per dècim: el 20 % del que passa de ${ex} (${M(g.gross)} − ${ex} = ${M(g.base)}). Del dècim del Gordo en cobres ${M(g.net)}.` },
@@ -162,6 +199,8 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "Si tinc diversos dècims premiats, se sumen?", a: `No: cada dècim té els seus propis ${ex} exempts. Dos dècims del Gordo cobren ${M(two.net)} en total i Hisenda en reté ${M(two.withholding)}.` },
       { q: "La Grossa de Cap d'Any paga a Hisenda?", a: `Sí, igual: és una loteria de la Generalitat i la llei hi inclou les de les comunitats autònomes. El primer premi, ${M(gr.gross)} per bitllet de 10 €, paga ${M(gr.withholding)} i en deixa ${M(gr.net)}.` },
       { q: "Quant se'n queda Hisenda del Nen (El Niño)?", a: `El mateix que a Nadal: el 20 % del que passa de ${ex} per dècim. El primer premi del Nen 2027, ${M(nino.gross)} per dècim de 20 €, paga ${M(nino.withholding)} i en deixa ${M(nino.net)}.` },
+      { q: "Quant toca per dècim a la Loteria de Nadal?", a: perTicket },
+      { q: "Quant et toca del Gordo si jugues 4 €?", a: `${M(s4.gross)}: 4 € és la cinquena part d'un dècim de 20 €. També et correspon la cinquena part dels ${ex} exempts (${M(s4.exempt)}), així que et retenen ${M(s4.withholding)} i et queden ${M(s4.net)}. Amb 2 € et queden ${M(s2.net)} i amb 10 €, ${M(s10.net)}: encara que cobris menys de ${ex}, una participació paga, perquè l'exempció es reparteix en la mateixa proporció.` },
     ],
     en: [
       { q: "How much tax is taken from El Gordo?", a: `${M(g.withholding)} per décimo: 20% of the part above ${ex} (${M(g.gross)} − ${ex} = ${M(g.base)}). You keep ${M(g.net)} from an El Gordo décimo.` },
@@ -172,6 +211,8 @@ export function lotteryTaxFaq(locale: LtLocale): { q: string; a: string }[] {
       { q: "If I have several winning décimos, are they added up?", a: `No: each décimo has its own ${ex} tax-free. Two El Gordo décimos pay ${M(two.net)} in all, with ${M(two.withholding)} withheld.` },
       { q: "Is La Grossa de Cap d'Any taxed the same way?", a: `Yes: it is the Catalan government's lottery, and the law covers the regions' lotteries. Its first prize, ${M(gr.gross)} per €10 ticket, pays ${M(gr.withholding)} and leaves ${M(gr.net)}.` },
       { q: "How much tax is taken from El Niño's first prize?", a: `The same as at Christmas: 20% of the part above ${ex} per décimo. El Niño 2027's first prize, ${M(nino.gross)} per €20 décimo, pays ${M(nino.withholding)} and leaves ${M(nino.net)}.` },
+      { q: "How much does each Christmas lottery prize pay per décimo?", a: perTicket },
+      { q: "How much do I get from El Gordo if my share is €4?", a: `${M(s4.gross)}: €4 is a fifth of a €20 décimo. You also get a fifth of the ${ex} tax-free amount (${M(s4.exempt)}), so ${M(s4.withholding)} is withheld and you keep ${M(s4.net)}. A €2 share keeps ${M(s2.net)} and a €10 share ${M(s10.net)}: even when you collect less than ${ex}, a share pays tax, because the tax-free amount is split in the same proportion.` },
     ],
   }[locale];
 }

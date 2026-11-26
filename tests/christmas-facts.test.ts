@@ -254,3 +254,48 @@ test("hub FAQ: the count does not claim every fair has an official date; it says
     assert.match(answer, /calendari oficial|calendario oficial|official calendar/);
   }
 });
+
+/**
+ * 26 Nov 2026 (ci-edicio, batch 5C): the first screen of the most-searched town pages
+ * answers dates, hours and place. Espinelves had its hours only in the programme and
+ * Cardedeu only Friday's opening: both now have an "Hours" row and an hours FAQ.
+ */
+test("26 Nov 2026: Espinelves and Cardedeu show their hours on the first screen and in the FAQ (ca/es/en)", () => {
+  const expected: Record<string, Record<FairsLocale, RegExp>> = {
+    espinelves: { ca: /dilluns 7 de desembre, de 10 a 20 h.*de 10 a 18 h/, es: /lunes 7 de diciembre, de 10 a 20 h.*de 10 a 18 h/, en: /Monday 7 December, 10:00 to 20:00.*10:00 to 18:00/ },
+    cardedeu: { ca: /dissabte 12 i diumenge 13, obertura a les 10 h/, es: /sábado 12 y domingo 13, apertura a las 10 h/, en: /Saturday 12 and Sunday 13, open from 10:00/ },
+  };
+  for (const [slug, byLocale] of Object.entries(expected)) {
+    const town = towns().find((t) => t.slug === slug)!;
+    assert.ok(town, slug);
+    for (const locale of FAIRS_LOCALES) {
+      const rows: { key: string; value: string }[] = townFacts(town.fairs, factsContextFor(town), locale)[0]!.rows;
+      const hours = rows.find((r) => r.key === "hours");
+      assert.ok(hours, `${slug} ${locale}: hours row`);
+      assert.match(hours.value, byLocale[locale], `${slug} ${locale}`);
+      assert.equal(rows[0]!.key, "dates", `${slug} ${locale}: dates first`);
+      assert.ok(townFaqFor(town, locale).some((i) => byLocale[locale].test(i.answer)), `${slug} ${locale}: hours FAQ`);
+    }
+  }
+});
+
+/**
+ * Date guard (26 Nov 2026). The ten fair pages with most impressions (GSC, 14 days to 26 Nov)
+ * must have their organiser's page re-read at least every 10 days until the fair opens:
+ * organisers add hours and programmes through the season. Re-read, then move `readOn`.
+ */
+const MOST_SEARCHED = ["canyelles", "espinelves", "barcelona", "caldes-de-montbui", "girona", "vic", "cardedeu", "manresa", "olot", "banyoles"];
+test("date guard: the ten most-searched fair pages are re-read within 10 days while still to come", () => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  const tenDaysAgo = new Date(Date.parse(`${today}T12:00:00Z`) - 10 * 86_400_000).toISOString().slice(0, 10);
+  for (const slug of MOST_SEARCHED) {
+    const town = towns().find((t) => t.slug === slug);
+    assert.ok(town, slug);
+    for (const f of town.fairs) {
+      if (f.start <= today) continue;
+      const readOn = f.checked?.readOn ?? f.unconfirmed?.readOn ?? null;
+      assert.ok(readOn, `${slug}: ${f.id} has no organiser page read`);
+      assert.ok(readOn >= tenDaysAgo, `${slug}: ${f.id} (${f.checked?.publisher ?? f.unconfirmed?.publisher}) last read ${readOn}: re-read it`);
+    }
+  }
+});

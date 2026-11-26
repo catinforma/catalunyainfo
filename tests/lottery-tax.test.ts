@@ -9,7 +9,7 @@ import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { hubBlocks, hubFaq } from "../src/lib/programmatic/gordo/copy.ts";
 import { CALC_COPY, LT_LOCALES, PRESET_LABEL, lotteryTaxEditions, money } from "../src/lib/programmatic/lottery-tax/copy.ts";
 import { MAX_TICKETS, breakdown, calculate, calculateOk, exemptForStake } from "../src/lib/programmatic/lottery-tax/engine.ts";
-import { amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, lotteryTaxSitemapEntries, presetInput, prizeTable } from "../src/lib/programmatic/lottery-tax/page.ts";
+import { amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, lotteryTaxSitemapEntries, presetInput, prizeTable, stakesTable } from "../src/lib/programmatic/lottery-tax/page.ts";
 import { DRAWS, EXEMPT_PER_TICKET, MIN_STAKE_FULL_EXEMPTION, PRESETS, QUOTE, RATE, RULES_AS_OF, RULES_UNTIL, SELAE_READ, SOURCES } from "../src/lib/programmatic/lottery-tax/rules.ts";
 
 /**
@@ -204,7 +204,7 @@ test("page: one static route per language, a 404 in the others, server-rendered 
   assert.equal(h.share5.total.net, 82_000);
 });
 
-test("FAQ: eight questions per language, the real queries, every figure from the engine", () => {
+test("FAQ: ten questions per language, the real queries, every figure from the engine", () => {
   const es = lotteryTaxFaq("es");
   assert.deepEqual(es.map((f) => f.q).slice(0, 3), ["¿Cuánto se queda Hacienda del Gordo?", "¿Cuánto cobra un décimo del Gordo?", "¿Cuánto paga a Hacienda una participación de 5 €?"]);
   // 20 Nov 2026: El Niño (6 Jan), from the nino-primero preset: 200,000 € a décimo, 32,000 € withheld.
@@ -212,12 +212,42 @@ test("FAQ: eight questions per language, the real queries, every figure from the
   assert.match(es[7]!.a, /200\.000 € por décimo de 20 €, paga 32\.000 € y deja 168\.000 €/);
   for (const l of LT_LOCALES) {
     const faq = lotteryTaxFaq(l);
-    assert.equal(faq.length, 8, l);
-    assert.equal(new Set(faq.map((f) => f.q)).size, 8, l);
+    assert.equal(faq.length, 10, l);
+    assert.equal(new Set(faq.map((f) => f.q)).size, 10, l);
     const all = faq.map((f) => f.a).join(" ");
     for (const n of [72_000, 328_000, 82_000, 3_280_000, 656_000, 168_000]) assert.ok(all.includes(money(n, l)), `${l}: ${n}`);
     assert.doesNotMatch(all, /undefined|NaN/, l);
   }
+});
+
+/**
+ * 26 Nov 2026 (ci-edicio, batch 5C): "cuánto toca por décimo" and "cuánto te toca del Gordo si
+ * juegas 4 euros" (GSC 12-25 Nov). By hand: a 4 € share is 1/5 of the 20 € décimo, so 80,000 €
+ * gross, 8,000 € exempt (DA 33ª.2 split), 20 % of 72,000 € = 14,400 € withheld, 65,600 € kept.
+ */
+test("per décimo and by stake: every Christmas prize with its net; a 4 € share of El Gordo keeps 65,600 € (ca/es/en)", () => {
+  const rows = new Map(stakesTable().map((r) => [r.played, r.result.total]));
+  assert.deepEqual([...rows.keys()], [1, 2, 3, 4, 5, 10, 20]);
+  assert.deepEqual(rows.get(4), { gross: 80_000, exempt: 8_000, base: 72_000, withholding: 14_400, net: 65_600 });
+  assert.equal(rows.get(1)!.net, 16_400);
+  assert.equal(rows.get(2)!.net, 32_800);
+  assert.equal(rows.get(10)!.net, 164_000);
+  assert.equal(rows.get(5)!.net, headline().share5.total.net);
+  assert.equal(rows.get(20)!.net, 328_000);
+  const draw = { es: "22 de diciembre de 2026", ca: "22 de desembre de 2026", en: "22 December 2026" } as const;
+  for (const l of LT_LOCALES) {
+    const faq = lotteryTaxFaq(l);
+    const perTicket = faq[8]!.a;
+    assert.ok(perTicket.includes(draw[l]), `${l}: draw date`);
+    assert.equal(DRAWS["navidad-2026"].date, "2026-12-22");
+    for (const n of [400_000, 328_000, 125_000, 108_000, 50_000, 48_000, 20_000, 6_000]) assert.ok(perTicket.includes(money(n, l)), `${l}: ${n}`);
+    assert.ok(perTicket.includes(money(100, l)) && perTicket.includes(money(20, l)), `${l}: pedrea and reintegro`);
+    const share = faq[9]!.a;
+    for (const n of [80_000, 8_000, 14_400, 65_600, 32_800, 164_000]) assert.ok(share.includes(money(n, l)), `${l}: ${n}`);
+    assert.match(faq[9]!.q, /4 €|€4/);
+  }
+  const page = read("src/components/programmatic/lottery-tax/LotteryTaxPage.tsx");
+  assert.match(page, /stakesTable\(\)\.map/);
 });
 
 test("by amount: 6,000 / 20,000 / 30,000 pay nothing, 50,000 leaves 48,000, 100,000 is the AEAT's 12,000 / 88,000; the lead says it in ca/es/en (25 Nov 2026)", () => {

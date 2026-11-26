@@ -366,8 +366,8 @@ const SAGRADA_FAMILIA_DETAILS: FairDetails = {
  * advice is published; the station section below comes from the Rodalies data.
  */
 const CARDEDEU_DETAILS: FairDetails = {
-  // 24 Nov 2026: the programme PDF re-fetched: same file (created 16 Nov 2026).
-  readOn: "2026-11-24",
+  // 24 and 26 Nov 2026: the programme PDF re-fetched: same file (created 16 Nov 2026).
+  readOn: "2026-11-26",
   why: {
     ca: "Divendres, el web i el llibret de la fira diuen que el recinte obre a les 19 h, i el programa del 16 de novembre, a les 18 h.",
     es: "El viernes, la web y el librito de la feria dicen que el recinto abre a las 19 h, y el programa del 16 de noviembre, a las 18 h.",
@@ -541,7 +541,8 @@ const CALDES_DETAILS: FairDetails = {
  * programme (third programme line corrected, see below).
  */
 const ESPINELVES_DETAILS: FairDetails = {
-  readOn: "2026-11-25",
+  // 26 Nov 2026: firadelavet.cat re-read, still "modified 12 Nov 2026", hours and programme unchanged.
+  readOn: "2026-11-26",
   organizer: { name: "Ajuntament d'Espinelves (Fira de l'Avet)", url: "https://www.firadelavet.cat/" },
   programme: [
     {
@@ -1073,10 +1074,20 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/",
     publisher: "Ajuntament d'Espinelves",
-    // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-25",
+    // Re-read 24 and 26 Nov 2026: the quoted text is unchanged.
+    readOn: "2026-11-26",
     quote: "A aquesta notícia trobareu tota la informació relacionada amb la 45a Fira de l’Avet any 2026 – Del 28 de novembre al 8 de desembre de 2026.",
     replaces: "vm32:24032308",
+    // 26 Nov 2026: the hours were only a programme line, so the first screen's key facts and the
+    // FAQ had no "Horario". The fair's own site (firadelavet.cat, "ORGANITZA: Ajuntament
+    // d'Espinelves", modified 12 Nov 2026), read 26 Nov 2026 (curl, grepped): "MAPA I HORARIS del 28
+    // de novembre al 8 de desembre de 2026 Dissabtes, festius i dilluns 7 de desembre: de 10h a 20h
+    // Feiners: de 10h a 18h".
+    hours: {
+      ca: "dissabtes, festius i el dilluns 7 de desembre, de 10 a 20 h; la resta de dies feiners, de 10 a 18 h",
+      es: "sábados, festivos y el lunes 7 de diciembre, de 10 a 20 h; el resto de días laborables, de 10 a 18 h",
+      en: "Saturdays, holidays and Monday 7 December, 10:00 to 20:00; other weekdays, 10:00 to 18:00",
+    },
   },
   {
     id: "org:caldes-de-montbui-mercat-de-nadal",
@@ -1256,11 +1267,19 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     // rejected by browsers: rows.ts WEB_REPLACEMENTS), so it is linked as http.
     url: "http://www.firadenadal.cat/",
     publisher: "Associació de Veïns del Centre de la Vila de Cardedeu",
-    // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-24",
+    // Re-read 24 and 26 Nov 2026: the quoted text is unchanged.
+    readOn: "2026-11-26",
     quote: "DIES 11 (19:00 h), 12 i 13 DE DESEMBRE DEL 2026",
     replaces: "vm32:24033117",
-    hours: { ca: "comença el divendres 11 a les 19 h", es: "empieza el viernes 11 a las 19 h", en: "opens on Friday 11 at 19:00" },
+    // 26 Nov 2026: Saturday and Sunday added. The programme PDF (http://www.firadenadal.cat/programa.pdf,
+    // same file, created 16 Nov 2026), read 26 Nov 2026 (pdftotext, grepped): "Dissabte 12 de desembre
+    // 10:00 h Obertura del recinte firal" and, under Sunday 13, "10:00 h Obertura del recinte firal".
+    // No closing time is published. Friday keeps the home page's 19 h (the programme's 18 h is in `why`).
+    hours: {
+      ca: "divendres 11, obertura a les 19 h; dissabte 12 i diumenge 13, obertura a les 10 h",
+      es: "viernes 11, apertura a las 19 h; sábado 12 y domingo 13, apertura a las 10 h",
+      en: "Friday 11, opens at 19:00; Saturday 12 and Sunday 13, open from 10:00",
+    },
   },
   {
     id: "org:tarrega-fira-d-artistes",
@@ -1284,8 +1303,9 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://seu.banyoles.cat/Categories-de-tr%C3%A0mits/Promoci%C3%B3-econ%C3%B2mica/Fira-de-Nadal",
     publisher: "Ajuntament de Banyoles",
-    // Re-read 24 Nov 2026: the quoted text is unchanged.
-    readOn: "2026-11-24",
+    // Re-read 24 and 26 Nov 2026: the quoted text is unchanged (no programme or hours yet; www.banyoles.cat
+    // did not answer on 26 Nov, so its agenda could not be checked).
+    readOn: "2026-11-26",
     quote: "Fira de Nadal Dates: 12 i 13 de desembre de 2026 (diumenge només matí)",
     replaces: "vm32:24033492",
     hours: { ca: "el diumenge, només al matí", es: "el domingo, solo por la mañana", en: "Sunday: mornings only" },

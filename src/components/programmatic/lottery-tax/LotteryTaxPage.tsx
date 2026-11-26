@@ -20,7 +20,7 @@ import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { DRAW_SHORT, PRESET_LABEL, elDay, lotteryTaxEditions, lotteryTaxPath, money, type LtLocale } from "@/lib/programmatic/lottery-tax/copy";
 import { calculateOk, type Breakdown } from "@/lib/programmatic/lottery-tax/engine";
-import { DEFAULT_PRESET, amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, presetInput, prizeTable, type ExampleId } from "@/lib/programmatic/lottery-tax/page";
+import { DEFAULT_PRESET, amountsLead, amountsTable, examples, headline, lotteryTaxFaq, lotteryTaxMeta, presetInput, prizeTable, stakesTable, type ExampleId } from "@/lib/programmatic/lottery-tax/page";
 import { DRAWS, EXEMPT_PER_TICKET, QUOTE, RULES_AS_OF, SELAE_READ, SOURCES } from "@/lib/programmatic/lottery-tax/rules";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
@@ -102,6 +102,7 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
   const ex = M(EXEMPT_PER_TICKET);
   const g = h.gordo.total;
   const s5 = h.share5.total;
+  const stakes4 = calculateOk(presetInput("gordo", 4)).total;
   const half = calculateOk(presetInput("segundo", 10)).total;
   const two = calculateOk(presetInput("gordo", 20, 2)).total;
   const gr = h.grossa.total;
@@ -369,6 +370,36 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
 
               <h2 id="compartidos">{hd.shared}</h2>
               <p>{sharedText[0]}</p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table ci-stack-table">
+                  <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+                    {L(locale, {
+                      es: `El Gordo (${M(g.gross)} por décimo de 20 €) según lo que juegas en tu participación: con 4 € cobras ${M(stakes4.gross)} y te quedan ${M(stakes4.net)}.`,
+                      ca: `El Gordo (${M(g.gross)} per dècim de 20 €) segons el que jugues a la teva participació: amb 4 € cobres ${M(stakes4.gross)} i et queden ${M(stakes4.net)}.`,
+                      en: `El Gordo (${M(g.gross)} per €20 décimo) by what your share plays: with €4 you win ${M(stakes4.gross)} and keep ${M(stakes4.net)}.`,
+                    })}
+                  </caption>
+                  <thead>
+                    <tr>
+                      {cols.map((c, i) => (
+                        <th key={c} scope="col">
+                          {i === 0 ? L(locale, { es: "Juegas", ca: "Jugues", en: "Your stake" }) : c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stakesTable().map(({ played, result }) => (
+                      <tr key={played}>
+                        <th scope="row" className="font-normal">
+                          {played === 20 ? L(locale, { es: "20 € (décimo entero)", ca: "20 € (dècim sencer)", en: "€20 (whole décimo)" }) : M(played)}
+                        </th>
+                        <BreakdownCells b={result.total} locale={locale} cols={cols} />
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <Quote text={QUOTE.shared} href={SOURCES.lirpf.url} label={da("2")} />
               <p>{sharedText[1]}</p>
               <Quote text={QUOTE.aeatShared} href={SOURCES.aeatNotice.url} label={aeatNotice} />
