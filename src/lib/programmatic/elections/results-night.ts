@@ -55,6 +55,13 @@ import type { ElectionDayPhase } from "./election-day";
  * (the sites it could read), not a read of Interior's own notes.
  * resultados.29neleccionesgenerales.es answers 401 (Basic auth): not public,
  * not announced, not linked.
+ * Checked 26 Nov 2026, ~07:20 CET (curl, head): 29neleccionesgenerales.es home
+ * page and /es/sitemap.xml 200, no "resultad" anywhere, sitemap newest lastmod
+ * still 2026-11-03; lamoncloa.gob.es Interior press list 200, newest note 24 Nov
+ * (police operation for 29N), nothing on a results site;
+ * resultados.29neleccionesgenerales.es still 401 (Basic auth); interior.gob.es
+ * and infoelectoral.interior.gob.es still 403 (bot challenge): Interior's own
+ * notes still need a browser read (owner) before 29 Nov. Re-read again 27-28 Nov.
  * The election-day layer (election-day.ts) prints this switch as a button
  * from 20:00 on 29 Nov.
  */
@@ -64,7 +71,7 @@ export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 export const ELECTION_NIGHT_RESULTS_SOURCE: string | null = null;
 
 /** When the official sites were last read for it. */
-export const RESULTS_SITE_CHECKED = "2026-11-24";
+export const RESULTS_SITE_CHECKED = "2026-11-26";
 
 /** Hosts an announcement may come from (the results site itself may be on another domain). */
 export const RESULTS_ANNOUNCEMENT_HOSTS = ["lamoncloa.gob.es", "interior.gob.es", "29neleccionesgenerales.es"] as const;

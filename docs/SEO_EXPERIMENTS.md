@@ -14902,3 +14902,7 @@ URLs: `/ca|es|en` weekly markets (hub, Vic, Mataró), winter sales guide, Barcel
 **Tests.** strike-citable 8, strike-days-1920n 8, strike-days-2326n 8, strike-guides 26, strike-11n 27, strike-11n-cities 28, strikes-hub 34, strikes-spain 29, strikes-spain-today-25nov 3, rail-strike-next 14, strike-rail-17n 9, strikes-draft-road-23d 3: all pass. `seo:body-dates`: no change to `body-dates.json`.
 
 **Review.** 27 Nov: the 26N pages and the education guide switch to the past tense (FAQ `pastFaq`); re-read BOE/BOCM/DOGC of 26-27 Nov, SMU (first phase ends 08:00 Sat 28; a second-phase notice?), Correos Madrid (27th), perfumery (27th), CSIF Madrid (30 Nov, 1 Dec).
+
+## 2026-11-26 — Results-night site re-check + most-read refresh (head)
+- `RESULTS_SITE_CHECKED` 24 → 26 Nov (src/lib/programmatic/elections/results-night.ts): 29neleccionesgenerales.es + sitemap, La Moncloa Interior notes (newest 24 Nov) read: no public results site announced; interior.gob.es/infoelectoral 403 (owner browser read still due before 29 Nov). Switch stays off; pages print "checked 26 Nov". Groups: election-night election-results voting. Review 28 Nov.
+- `src/lib/content/most-read.json` refreshed from GA4 (last 7 days to 25 Nov); weekly refresh. No title/meta/H1/lead change.
