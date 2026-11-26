@@ -51,7 +51,8 @@ export function HomeCalculators({ locale }: { locale: Locale }) {
         {homeCalculatorLinks(locale).map((link) => (
           <Fragment key={link.href}>
             <IntentLink href={link.href}>{link.label}</IntentLink>
-            {" · "}
+            {/* No-break space: the dot ends a line, never starts one (27 Nov 2026). */}
+            {"\u00a0· "}
           </Fragment>
         ))}
         <IntentLink href={calculatorsHubPath(locale)}>{t.all}</IntentLink>

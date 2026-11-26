@@ -15222,5 +15222,31 @@ The live pages said "2 días (4 con desplazamiento)" and "19 semanas" (paid-leav
 **Review 2026-12-23** (`snapshot.py page cuando-empieza-el-invierno 28`, `page quan-comenca-l-hivern 28`, `page when-does-winter-start 28`; queries "invierno", "dia mas corto", "geminidas"; weather guide "cuando empieza el invierno en barcelona") **and 2027-01-08**.
 
 **Skills used.** content-strategy (information-gain gate: the earliest-sunset/latest-sunrise finding and per-capital official times are what the usual "el invierno empieza el 21" articles lack; searchable, not shareable), seo-aeo-best-practices / ai-seo (answer in the first sentence with source and time, FAQ in the searched words, extractable tables, verified line), programmatic-seo (one page, not one per city or per phenomenon: the city rows share a table; no thin Geminids page without a Catalonia-specific official datum).
+## 2026-11-27 — Design pass: shared layer only (ci-disseny, batch 7A). Box spacing, list markers, calculator result, external-link arrow, alert strip rule, footer on phones (all templates; CSS + three separator characters; no text, title, meta, ad or consent change) (review 2026-12-10)
+
+**Why.** Owner, 26 Nov: "inspect the aesthetics of the whole site and dedicate one agent only to improving it". Live inspection before any edit: 13 templates (home ca/es, guides 26N and puente, guides hub, calculators sueldo neto and premios lotería, calculators hub, elecciones Mataró, festius Mataró, date page 7 Dec, Christmas fair Barcelona, 404), 412×915 (DPR 2.625 and 1) and 1280×800, light and dark, mobile menu, desktop "Más", footer; ads and analytics blocked in the lab (no impressions). DOM audit on 11 templates × 2 themes: WCAG AA text contrast 0 failures, horizontal overflow 0, boxes with a heading margin inside their padding 2 (calculator card, "de un vistazo" box).
+
+**What changed (src/app/globals.css unless named).**
+1. Boxes in the article column (`.ci-calc`, `.ci-calendar`, `.ci-margin-block`, `.ci-callout`, `.ci-today`, `.ci-subscribe`, `.ci-follow`, `.ci-return`, `.ci-table-wrap`): first child `margin-top: 0`. Before, the first heading took `.ci-prose h2` (2.4em): a 41-46 px empty band at the top of all 40 calculator cards and of every guide's "at a glance" box.
+2. The column's first block (`.ci-prose > :first-child:not(.ci-ad)`, and `.ci-today` on the date pages, which is unlayered) sits at the shell padding (2.5rem), not padding + 2rem: the calculator card and the "¿Es festivo…?" answer box start 32 px higher. Ads keep their margins.
+3. Running-text lists (`.ci-prose ul/ol` without a class) get bullets / numbers again (Tailwind preflight had removed them: lists read as indented paragraphs; numbered methods lost their numbers). Component lists all carry a class and are untouched. Markers in `--color-muted`. Callout children get 0.6em between them.
+4. Calculator main figure (`.ci-calc-total dd`): display face at `--text-2xl` in ink (was body face 1.19rem): the answer is the largest thing in the card.
+5. External-link marker: a north-east arrow (inline SVG mask, no request, link colour) instead of a rotated corner that read as ">" next to « » and " · ".
+6. Alert strip: the rule between lines is a 1 px flex gap on the list background (content-box) instead of an `li + li` border, which drew a stray hairline above the only visible line on every page once the expiry script hid the ended 26N line. Same heights.
+7. Footer below 40rem: each link list in two columns (contact e-mail on its own row); footer list links without underline (back on hover/focus). Mobile footer about 220-240 px shorter. Desktop layout unchanged.
+8. Left rule of the WhatsApp / subscribe boxes 4 px → 3 px, like every callout.
+9. `ElectionLine.tsx`, `CalculatorLine.tsx`, `HomeTools.tsx` (home calculators line): the " · " separator is now no-break space + "· ", so a line never starts with a dot.
+
+**Not touched.** Ad boxes, reserves and positions (`tests/design-pass-27nov.test.ts` pins them), consent banner and its footer button, AdSense code, verification, fonts (no new font, no new request), any text, title, meta, H1 or lead, the answer-first experiment layout.
+
+**Measured (lab: the stylesheet compiled from this branch served in place of the live one from first paint, ads blocked, 412 px light + dark).** CLS before → after on 11 templates: 0 → 0 on ten, 0.0015 → 0.0015 on the fair page dark (pre-existing). No horizontal overflow at 412 or 1280. Contrast failures 0 → 0. Page height at 412 px: −218 to −317 px per page (footer and box spacing). No JS change.
+
+**Screenshots** (scratch, not committed): `/tmp/claude-1003/-home-claude/66f5ed46-c07a-4181-b990-f92071877662/scratchpad/disseny/before/` and `.../disseny/after/` (same file names). Pairs worth opening: `m-light-calc-sueldo-0/1`, `m-hi-calc-loteria-result`, `m-hi-facts`, `m-light-guide-huelga-1`, `m-hi-external`, `m-hi-list`, `m-top-alerts-0`, `m-footer`, `m-dark-footer`, `m-light-date-7dic-0`.
+
+**Tests.** New `tests/design-pass-27nov.test.ts` (8). Green: news-alerts, a11y-fixes, ads-live, christmas-facts, return-step, site-nav-share, fonts, shops-8dec-regression, structured-data, lottery-live, ics-feeds, hub-thumbnails, december-bridge-23nov, election-line, related-calculators, town-hub; `npx tsc --noEmit -p .` exit 0; eslint clean on the three components. No body text changed: body-dates not regenerated.
+
+**Go-live.** Deploy only (CSS and components; no publish group, no IndexNow).
+
+**Review 2026-12-10.** GSC Core Web Vitals (mobile CLS / LCP: no URL group moving to "needs improvement"); GA4 mobile engagement rate and average engagement time, 27 Nov-9 Dec vs 13 days before deploy, calculators (`/calculadoras/`, `/calculadores/`, `/calculators/`) and guides families. Revert rule: any CLS group regressing, or calculator mobile engagement down ≥ 3 points with a flat traffic mix.
 
 **Outcome:** _pending_

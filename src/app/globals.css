@@ -611,7 +611,7 @@
   /* WhatsApp channel: end-of-article box and footer link (FollowChannel.tsx). */
   .ci-follow {
     border: 1px solid var(--color-rule);
-    border-left: 4px solid #25d366;
+    border-left: 3px solid #25d366;
     border-radius: var(--radius-sm);
     background: var(--color-surface);
     padding: 1rem 1.25rem;
@@ -657,7 +657,7 @@
     margin: 0.75rem 0;
     padding: 0.4rem 0.75rem;
     border: 1px solid var(--color-rule);
-    border-left: 4px solid #25d366;
+    border-left: 3px solid #25d366;
     border-radius: var(--radius-sm);
     background: var(--color-surface);
   }
@@ -719,7 +719,7 @@
   .ci-subscribe {
     margin: 1.25rem 0;
     border: 1px solid var(--color-rule);
-    border-left: 4px solid var(--color-sea);
+    border-left: 3px solid var(--color-sea);
     border-radius: var(--radius-sm);
     background: var(--color-surface);
     padding: 1rem 1.25rem;
@@ -883,6 +883,51 @@
   .ci-prose li + li {
     margin-top: 0.4em;
   }
+  /* Bullets and numbers back on running-text lists (27 Nov 2026). Tailwind's
+     preflight sets `list-style: none` on every list, so a list in an article
+     or a callout read as a block of indented paragraphs, and a numbered
+     method ("how it is calculated") lost its numbers. Only lists without a
+     class: every component list (menus, link lists, steps boxes) has one and
+     keeps its own look. The 1.25rem indent above was already sized for it. */
+  .ci-prose ul:not([class]) {
+    list-style: disc;
+  }
+  .ci-prose ol:not([class]) {
+    list-style: decimal;
+  }
+  .ci-prose :is(ul, ol):not([class]) > li::marker {
+    color: var(--color-muted);
+  }
+  /* A box inside the article column starts at its own padding. Its first
+     heading was taking the prose heading margin (2.4em, `.ci-prose h2`), a
+     40-45 px empty band at the top of every calculator card and of the
+     "at a glance" box of the guides (27 Nov 2026). */
+  .ci-prose
+    :is(
+      .ci-calc,
+      .ci-calendar,
+      .ci-margin-block,
+      .ci-callout,
+      .ci-today,
+      .ci-subscribe,
+      .ci-follow,
+      .ci-return,
+      .ci-table-wrap
+    )
+    > :first-child {
+    margin-top: 0;
+  }
+  /* The column's first block sits under the page header at the shell's own
+     padding (2.5rem), not that plus its 2rem margin (a 72 px gap above the
+     calculators and the date answer box). Ads keep their margins. */
+  .ci-prose > :first-child:not(.ci-ad) {
+    margin-top: 0;
+  }
+  /* Paragraphs, lists and subheadings inside a callout were set solid, with
+     no space between them ("Ya oficial para 2027" on every calculator). */
+  .ci-prose .ci-callout > * + * {
+    margin-top: 0.6em;
+  }
   .ci-prose .ci-lead {
     font-size: var(--text-lg);
     line-height: 1.55;
@@ -898,16 +943,21 @@
   }
 
   /* Mark outbound links so readers know they are leaving. */
+  /* A small north-east arrow, the usual "opens another site" sign. It was a
+     rotated corner that read as ">" and, next to the « » quotes and the " · "
+     separators of the source lines, as stray punctuation (27 Nov 2026). An
+     inline SVG mask: no request, takes the link's colour in both themes. */
   .ci-prose a[data-external]::after {
     content: "";
     display: inline-block;
-    width: 0.5em;
-    height: 0.5em;
-    margin-left: 0.28em;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
-    transform: translateY(-0.12em) rotate(45deg);
-    opacity: 0.6;
+    width: 0.62em;
+    height: 0.62em;
+    margin-left: 0.2em;
+    vertical-align: 0.02em;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3.5 1.5h5v5M8.5 1.5 1.5 8.5' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3.5 1.5h5v5M8.5 1.5 1.5 8.5' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    opacity: 0.7;
   }
 
   /* --- Data table ------------------------------------------------------- */
@@ -1363,9 +1413,17 @@
   }
   .ci-calc-total {
     font-weight: 600;
+    align-items: baseline;
   }
+  /* The figure the reader came for is the largest thing in the card: display
+     face at the h3 size, ink colour (27 Nov 2026; it was the body face at
+     1.19rem, one step above the rows under it). */
   .ci-calc-total dd {
-    font-size: var(--text-lg);
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
   }
   .ci-calc-note,
   .ci-calendar-source {
@@ -2142,9 +2200,19 @@
   }
   .ci-alerts li {
     padding-block: 0.45rem;
+    background: var(--color-sea-wash);
   }
-  .ci-alerts li + li {
-    border-top: 1px solid var(--color-rule);
+  /* The rule between two lines is the 1px flex gap showing the list's own
+     background (clipped to the content box, so not the shell's gutters).
+     It was `li + li { border-top }`, which also drew a stray rule above the
+     only visible line once the expiry script had hidden the one before it
+     (every page, 27 Nov 2026: the ended 26N line). A hidden item makes no
+     gap. Same height for every visible line as before. */
+  .ci-alerts ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1px;
+    background: var(--color-rule) content-box;
   }
   .ci-alerts a {
     color: var(--color-sea-deep);
@@ -2347,6 +2415,12 @@
   border-radius: var(--radius-md);
   padding: 1.5rem 1.25rem;
   background: var(--color-surface);
+}
+/* First thing on the page (date pages): the shell's padding is the gap, as
+   for the layered blocks (`.ci-prose > :first-child`, 27 Nov 2026). This
+   block is unlayered, so that rule cannot reach it. */
+.ci-prose > .ci-today:first-child {
+  margin-top: 0;
 }
 .ci-today-answer {
   margin: 0;
@@ -2726,3 +2800,30 @@
 .ci-report-figures div { border: 1px solid var(--color-rule); border-radius: 6px; padding: 0.6rem 0.8rem; }
 .ci-report-figures dt { font-size: 0.8rem; color: var(--color-muted); }
 .ci-report-figures dd { margin: 0.2rem 0 0; font-size: 1.35rem; font-weight: 600; color: var(--color-ink); font-variant-numeric: tabular-nums; }
+
+/* ---- Footer on a phone (27 Nov 2026) ----------------------------------------
+   Five one-column link lists made the footer about 1,100 px tall at 412 px,
+   two and a half screens of underlined links. Below 40rem each list runs in
+   two columns. Unlayered, like the blocks above, because the lists carry
+   Tailwind's `flex flex-col` utilities, which win over the components layer.
+   The links lose the underline (a list of links in the footer reads as
+   navigation without it; hover and focus bring it back), not their colour. */
+@media (max-width: 39.99rem) {
+  .ci-footer nav > ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1.25rem;
+    line-height: 1.35;
+  }
+  /* The contact address is wider than one column: it takes the row. */
+  .ci-footer nav > ul > li:has(> a[href^="mailto:"]) {
+    grid-column: 1 / -1;
+  }
+}
+.ci-footer nav li > a {
+  text-decoration-line: none;
+}
+.ci-footer nav li > a:hover,
+.ci-footer nav li > a:focus-visible {
+  text-decoration-line: underline;
+}

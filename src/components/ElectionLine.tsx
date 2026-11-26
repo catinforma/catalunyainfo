@@ -26,7 +26,8 @@ export function ElectionLine({ line, className }: { line: ElectionLineData | nul
         <strong>{line.text}</strong>{" "}
         {line.links.map((link, i) => (
           <Fragment key={link.href}>
-            {i > 0 ? " · " : null}
+            {/* No-break space: the dot ends a line, never starts one (27 Nov 2026). */}
+            {i > 0 ? "\u00a0· " : null}
             <IntentLink href={link.href}>{link.label}</IntentLink>
           </Fragment>
         ))}
