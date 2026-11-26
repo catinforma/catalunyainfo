@@ -48,8 +48,8 @@
    "files": 10
   },
   "calculators": {
-   "date": "2026-11-26T18:15:32.384Z",
-   "fingerprint": "v1:bafd4a3e2cf5857f2febbdbeb5aff65a",
+   "date": "2026-11-26T23:40:48.000Z",
+   "fingerprint": "v1:29a9848d45053eff456448a4bd527b1a",
    "files": 7
   },
   "christmas-fairs": {
@@ -178,9 +178,9 @@
    "files": 10
   },
   "net-salary": {
-   "date": "2026-11-21T13:56:05.031Z",
-   "fingerprint": "v1:57714881bcd3c04bc94278c4b37d0aed",
-   "files": 12
+   "date": "2026-11-26T23:52:28.356Z",
+   "fingerprint": "v1:b96f430c879739fad89c912895409d9f",
+   "files": 13
   },
   "nino-check": {
    "date": "2026-11-24T21:32:58.000Z",
@@ -228,9 +228,9 @@
    "files": 13
   },
   "reservoirs": {
-   "date": "2026-11-26T18:15:32.384Z",
-   "fingerprint": "v1:1bb71715ccab4e082fa3f721fd23f36c",
-   "files": 24
+   "date": "2026-11-25T17:43:49.000Z",
+   "fingerprint": "v1:e6a4d8878a4ede99580b7f3cf925bf00",
+   "files": 23
   },
   "retirement-age": {
    "date": "2026-11-25T11:43:28.287Z",
@@ -273,9 +273,9 @@
    "files": 37
   },
   "today": {
-   "date": "2026-11-26T18:15:32.384Z",
-   "fingerprint": "v1:1d2351ca5483d0dd17ae5e05ba4c911f",
-   "files": 13
+   "date": "2026-11-25T09:06:23.000Z",
+   "fingerprint": "v1:3f95375d0ff76231bfd1e4a4e041883d",
+   "files": 12
   },
   "traffic-fines": {
    "date": "2026-11-18T16:27:04.000Z",

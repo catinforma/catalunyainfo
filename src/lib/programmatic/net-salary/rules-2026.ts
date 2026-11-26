@@ -263,6 +263,21 @@ export const SOCIAL_SECURITY = {
     intergenerationalEquityTotal: 0.9,
   },
   /**
+   * Employer's share, in % (for the FAQ "how much does my employer pay"). Consolidated text re-read on 27 Nov 2026:
+   * art. 4.a «el 28,30 por ciento, del que el 23,60 por ciento será a cargo de la empresa»; art. 33.2.a.1º «el 7,05
+   * por ciento, del que el 5,50 por ciento será a cargo de la empresa»; art. 33.2.b «Fondo de Garantía Salarial: el
+   * 0,20 por ciento, a cargo de la empresa»; art. 33.2.c «el 0,70 por ciento, del que el 0,60 por ciento será a cargo
+   * de la empresa»; art. 16 «el tipo del 0,90 por ciento [...] del que el 0,75 por ciento será a cargo del
+   * empleador». Work accidents and occupational illness (AT/EP) depend on the activity: not a single figure.
+   */
+  employerRates: {
+    commonContingencies: 23.6,
+    unemploymentOpenEnded: 5.5,
+    wageGuaranteeFund: 0.2,
+    vocationalTraining: 0.6,
+    intergenerationalEquity: 0.75,
+  },
+  /**
    * Art. 17: cotización adicional de solidaridad on the monthly pay above the
    * maximum base; worker's share per band. [band upper limit in €/month, worker rate %].
    * 5,101.21–5,611.32: 0.19; 5,611.33–7,651.80: 0.21; above 7,651.80: 0.24.

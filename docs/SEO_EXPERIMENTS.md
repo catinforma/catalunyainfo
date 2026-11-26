@@ -15272,3 +15272,29 @@ The live pages said "2 días (4 con desplazamiento)" and "19 semanas" (paid-leav
 **Review 2026-12-10.** GSC Core Web Vitals mobile CLS (no group worse); GA4, if 404 views can be told apart (their page title is the layout default): share of 404 sessions that continue to a second page, 27 Nov-9 Dec vs the 13 days before.
 
 **Outcome:** _pending_
+
+## 2026-11-27 — Net salary calculator: "X € brutos = Y € netos" sentences, Catalonia vs Madrid in the annual return, four FAQs in the searchers' words (ci-edicio, batch 8B; ca/es/en; body, FAQ and sources only: title, description, H1 and lead untouched, inside the 13 Nov launch window; deploy only, no publish group) (review 2026-12-16 and 2027-01-15)
+
+**URLs.** `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`, `/en/calculators/net-salary-spain/`.
+
+**Why.** GSC 28 days to 26 Nov: es 1 click / 161 impressions (head's figure to 25 Nov: 148, position 9.0), ca 1 / 250 (head: 240, position 7.2), en 0. Visible queries are "calcular sueldo neto cataluña" (pos 28), "calculadora salario neto cataluña" (54), "calculadora sueldo neto cataluña" (48), "bruto neto catalunya" (93), "salari net i brut" (44): Catalonia-worded and far down. What ranks (talent.com, guiafiscal.es, hacecuentas.com, searched 27 Nov) prints one page per amount and a **lower net for Catalonia** than Madrid: they model the final tax with the regional scale, while our page said only "same withholding everywhere". The net-by-gross table (every 1,000 € from 15k to 60k, 12 and 14 payments, `#neto-<gross>` rows, already tested) was already there, so (a) became one-sentence answers on top of it, not a second table.
+
+**What changed** (`src/lib/programmatic/net-salary/renta-compare.ts`, rendered in `NetSalaryPage.tsx`):
+1. Above the table: eight sentences "30.000 € brutos al año son 1.628,50 € netos al mes en 14 pagas, más dos pagas extra de 1.791,00 €, o 1.927,00 € al mes en 12 pagas (23.124,00 € netos al año)" for 20k, 25k, 30k, 35k, 40k, 45k, 50k, 60k; each links to its table row (`#neto-30000`); every figure from the engine. No new URL.
+2. New H2 `#cataluna-madrid` "¿Se paga más IRPF en Cataluña que en Madrid?" / "Es paga més IRPF a Catalunya que a Madrid?" / "Do you pay more income tax in Catalonia than in Madrid?": same payslip, different Renta. Table for 25k–60k: withholding (both), final tax Catalonia (State + Catalan cuota, the income-tax guide's `taxExample`), final tax Madrid, difference, Renta in Catalonia (to pay / refund), before deductions. 30k: 4.958,75 € vs 4.598,01 € (+360,74 €), withheld 4.926 €. Link to the IRPF brackets guide.
+   Sources read with curl + grep on 27 Nov: Madrid, DLeg 1/2010 arts. 1 and 2, BOE consolidated `BOCM-m-2010-90068` ("Última actualización publicada el 10/07/2026"; art. 1 in the wording of Ley 13/2023: 8,50 / 10,70 / 12,80 / 17,40 / 20,50, cuota column 1.135,79 / 1.739,53 / 3.841,42 / 7.651,10 rebuilt by test; art. 2 minimum 5.956,65 €); Catalonia, DL 5/2025 (BOE-A-2025-10270) cuota column re-found. Both added to the sources list.
+3. FAQ (FAQPage JSON-LD and visible): new first entry "¿Cuánto es 30.000 € brutos en neto al mes?"; after the existing ones "¿Cuánto se cotiza a la Seguridad Social en 2026?" (6,50 % / 6,55 % with MEI 0,15 %, base cap, solidarity, and the employer's 30,65 % + AT/EP: Orden PJC/297/2026 arts. 4, 16, 33 re-read 27 Nov, `SOCIAL_SECURITY.employerRates` added to rules-2026.ts with the quotes), "¿Cuál es la retención mínima de IRPF en la nómina?" (Tabla 1 thresholds, 2 % under one year, 43 % limit), "Soy autónomo: ¿me sirve esta calculadora?" (link to the self-employed calculator under the answer). Existing "¿Cobro lo mismo al año en 12 que en 14 pagas?" now says "(pagas extra prorrateadas)"; "¿Cambia algo si vivo en Madrid o en Cataluña?" gets one sentence on the Renta difference. "What it leaves out" line updated (only Catalonia and Madrid compared).
+
+**Not done.** Other regions' scales (not read today: Andalusia, Valencia, etc.); deductions; employer AT/EP rate (depends on activity); no per-amount pages (thin).
+
+**Prediction.** By 16 Dec: impressions for "X brutos cuánto es neto" / "X bruts en net" variants and "salario neto cataluña" on the es/ca pages; es+ca impressions ×1.5 over the same-length window; Catalonia-worded queries move above position 20. Wrong if, at equal indexing, the Catalonia queries stay below 30 by 15 Jan.
+
+**Confounders.** 13 Nov launch window (titles to 11 Dec), 18 Nov Beckham sections, 19-21 Nov calculator entries (2027 box), 26 Nov related-calculators box and design passes; January pay season; the 2027 rules flip on 1 Jan.
+
+**Tests.** New `tests/net-salary-renta-compare.test.ts` (8): sentences carry the engine figures and link to existing rows; 12 vs 14 payments (same year, extras without contributions, monotonic over the whole table); Madrid cuota column rebuilt; same withholding in Madrid and Catalonia, Catalan total = income-tax guide, gap grows; copy in three languages; FAQ figures; page wiring; date guard `REGIONAL_TAX_REREAD_BY` = 15 Jan 2027 (next to `SALARY_RULES_UNTIL` 1 Jan 2027 for the 2027 algorithm).
+
+**Measure.** 16 Dec and 15 Jan 2027: `snapshot.py page sueldo-neto 28`, `page sou-net 28`, `page net-salary-spain 28` (queries with brutos/bruts/neto/net and cataluña/catalunya/madrid).
+
+**Go-live.** Deploy only (static). IndexNow: `/es/calculadoras/sueldo-neto/ /ca/calculadores/sou-net/ /en/calculators/net-salary-spain/`.
+
+**Outcome:** _pending_

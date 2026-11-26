@@ -16,6 +16,7 @@ import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { TABLE_SALARIES, money, netSalaryEditions, netSalaryPath, percent, type NetLocale } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
+import { REGIONAL_SOURCES, quickAnswers, quickAnswersIntro, regionalCopy, regionalRows, rentaText, searcherFaq, type FaqEntry } from "@/lib/programmatic/net-salary/renta-compare";
 import { specialRegimeFaq, specialRegimeLimit } from "@/lib/programmatic/net-salary/special-copy";
 import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
 import { wagePath } from "@/lib/programmatic/average-salary/copy";
@@ -254,36 +255,42 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     en: ["Base from", "Tax up to that point", "Band rate"],
   });
 
-  const faq = L(locale, {
+  // Catalonia vs Madrid in the annual return, quick "X brutos" answers, FAQ in the searchers' words (renta-compare.ts).
+  const rc = regionalCopy(locale);
+  const rRows = regionalRows();
+  const quick = quickAnswers(locale);
+  const sFaq = searcherFaq(locale);
+  const faq: FaqEntry[] = L(locale, {
     es: [
-      { q: "¿Cobro lo mismo al año en 12 que en 14 pagas?", a: `Sí. El bruto y el neto anual son los mismos; en 14 pagas se reparte en 12 nóminas y dos pagas extra, y como la Seguridad Social se cotiza cada mes con las extras prorrateadas, las pagas extra no llevan cotización. Con ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes y ${m(ex.net.extraPayment ?? 0)} en cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagas.` },
+      { q: "¿Cobro lo mismo al año en 12 pagas (pagas extra prorrateadas) que en 14?", a: `Sí. El bruto y el neto anual son los mismos; en 14 pagas se reparte en 12 nóminas y dos pagas extra, y como la Seguridad Social se cotiza cada mes con las extras prorrateadas, las pagas extra no llevan cotización. Con ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes y ${m(ex.net.extraPayment ?? 0)} en cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagas.` },
       { q: "¿La retención es lo que pago de IRPF?", a: "No: es un pago a cuenta. El impuesto final se calcula en la declaración de la Renta, con la escala de tu comunidad, tus deducciones y el resto de ingresos del año. Si te retuvieron más de lo que toca, Hacienda te devuelve la diferencia; si fue menos, pagas." },
       { q: "¿Cobrando el salario mínimo me retienen IRPF?", a: `Sí, algo: con ${m(D.fullUpTo, 0)} al año, soltero y sin hijos, el ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} al año), porque la nómina no aplica la deducción de ${m(D.full)} de la disposición adicional 61.ª de la Ley del IRPF (Real Decreto-ley 5/2026). Esa deducción entra en la Renta y busca que quien cobra el SMI no pague IRPF: presentando la declaración se recupera la retención. En las situaciones familiares 1 (monoparental) y 2 (cónyuge que no gana más de 1.500 € al año) el SMI no lleva retención. En neto: ${m(smiEx.net.perPayment)} al mes en 14 pagas.` },
       { q: "¿Por qué mi nómina no coincide con la calculadora?", a: "Lo habitual: pluses, horas extra o retribución en especie que no son parte del bruto que has puesto; una regularización del tipo a mitad de año (cambio de sueldo o de familia); datos del modelo 145 distintos de los que has marcado; o un tipo más alto pedido por escrito a la empresa, que se puede solicitar." },
-      { q: "¿Cambia algo si vivo en Madrid o en Cataluña?", a: regionsText[0]! },
+      { q: "¿Cambia algo si vivo en Madrid o en Cataluña?", a: `${regionsText[0]!} ${rc.faqTail}` },
       { q: "¿Qué es el MEI que aparece en la nómina?", a: `El mecanismo de equidad intergeneracional, una cotización adicional para el fondo de reserva de las pensiones: en ${Y} es el ${pc(S.rates.intergenerationalEquityTotal)} de la base, del que tú pagas el ${pc(S.rates.intergenerationalEquity)} y la empresa el resto (Orden PJC/297/2026, art. 16).` },
     ],
     ca: [
-      { q: "Cobro el mateix l'any en 12 que en 14 pagues?", a: `Sí. El brut i el net anual són els mateixos; en 14 pagues es reparteix en 12 nòmines i dues pagues extra, i com que la Seguretat Social es cotitza cada mes amb les extres prorratejades, les pagues extra no porten cotització. Amb ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes i ${m(ex.net.extraPayment ?? 0)} a cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagues.` },
+      { q: "Cobro el mateix l'any en 12 pagues (pagues extra prorratejades) que en 14?", a: `Sí. El brut i el net anual són els mateixos; en 14 pagues es reparteix en 12 nòmines i dues pagues extra, i com que la Seguretat Social es cotitza cada mes amb les extres prorratejades, les pagues extra no porten cotització. Amb ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes i ${m(ex.net.extraPayment ?? 0)} a cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagues.` },
       { q: "La retenció és el que pago d'IRPF?", a: "No: és un pagament a compte. L'impost final es calcula a la declaració de la renda, amb l'escala de la teva comunitat, les teves deduccions i la resta d'ingressos de l'any. Si t'han retingut més del que toca, Hisenda et retorna la diferència; si ha estat menys, pagues." },
       { q: "Cobrant el salari mínim em retenen IRPF?", a: `Sí, una mica: amb ${m(D.fullUpTo, 0)} l'any, solter i sense fills, el ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} l'any), perquè la nòmina no aplica la deducció de ${m(D.full)} de la disposició addicional 61a de la Llei de l'IRPF (Reial decret llei 5/2026). Aquesta deducció entra a la renda i vol que qui cobra l'SMI no pagui IRPF: presentant la declaració es recupera la retenció. A les situacions familiars 1 (monoparental) i 2 (cònjuge que no guanya més de 1.500 € l'any) l'SMI no porta retenció. En net: ${m(smiEx.net.perPayment)} al mes en 14 pagues.` },
       { q: "Per què la meva nòmina no coincideix amb la calculadora?", a: "El més habitual: plusos, hores extra o retribució en espècie que no formen part del brut que has posat; una regularització del tipus a mitjan any (canvi de sou o de família); dades del model 145 diferents de les que has marcat; o un tipus més alt demanat per escrit a l'empresa, que es pot sol·licitar." },
-      { q: "Canvia res si visc a Madrid o a Catalunya?", a: regionsText[0]! },
+      { q: "Canvia res si visc a Madrid o a Catalunya?", a: `${regionsText[0]!} ${rc.faqTail}` },
       { q: "Què és l'MEI que surt a la nòmina?", a: `El mecanisme d'equitat intergeneracional, una cotització addicional per al fons de reserva de les pensions: el ${Y} és el ${pc(S.rates.intergenerationalEquityTotal)} de la base, del qual tu pagues el ${pc(S.rates.intergenerationalEquity)} i l'empresa la resta (Ordre PJC/297/2026, art. 16).` },
     ],
     en: [
-      { q: "Do I earn the same in a year on 12 or 14 payments?", a: `Yes. Gross and net annual pay are the same; 14 payments split it into 12 payslips and two extra payments, and since Social Security is paid monthly with the extras spread over the year, the extra payments carry no contributions. On ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} a month and ${m(ex.net.extraPayment ?? 0)} in each extra, or ${m(ex.net.monthlyAverage)} on 12 payments.` },
+      { q: "Do I earn the same in a year on 12 payments (extra pay prorated) or 14?", a: `Yes. Gross and net annual pay are the same; 14 payments split it into 12 payslips and two extra payments, and since Social Security is paid monthly with the extras spread over the year, the extra payments carry no contributions. On ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} a month and ${m(ex.net.extraPayment ?? 0)} in each extra, or ${m(ex.net.monthlyAverage)} on 12 payments.` },
       { q: "Is withholding the income tax I pay?", a: "No: it is a payment on account. The final tax is worked out in the annual return (Renta), with your region's scale, your deductions and the rest of the year's income. If more was withheld than you owe, the Tax Agency refunds the difference; if less, you pay it." },
       { q: "Is IRPF withheld from the minimum wage?", a: `Yes, a little: on ${m(D.fullUpTo, 0)} a year, single, no children, ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} a year), because payroll does not apply the ${m(D.full)} deduction in additional provision 61 of the IRPF Law (Royal Decree-law 5/2026). That deduction comes in with the annual return and aims for minimum-wage earners to pay no IRPF: filing the return gets the withholding back. In family situations 1 (single parent) and 2 (spouse earning no more than €1,500 a year) nothing is withheld on the minimum wage. Net: ${m(smiEx.net.perPayment)} a month in 14 payments.` },
       { q: "Why does my payslip differ from the calculator?", a: "Usually: bonuses, overtime or benefits in kind that are not in the gross you entered; a mid-year rate adjustment (a pay or family change); form 145 details that differ from what you ticked; or a higher rate you asked your employer for in writing, which you are allowed to do." },
-      { q: "Does it matter whether I live in Madrid or Catalonia?", a: regionsText[0]! },
+      { q: "Does it matter whether I live in Madrid or Catalonia?", a: `${regionsText[0]!} ${rc.faqTail}` },
       { q: "What is the MEI on my payslip?", a: `The intergenerational equity mechanism, an extra contribution to the pensions reserve fund: in ${Y} it is ${pc(S.rates.intergenerationalEquityTotal)} of the base, of which you pay ${pc(S.rates.intergenerationalEquity)} and your employer the rest (Orden PJC/297/2026, art. 16).` },
     ],
   });
 
   // The special regime for posted workers ("Beckham law"), residence and paperwork (SpecialRegimeSections.tsx).
   const expatFaq = specialRegimeFaq(locale);
-  const allFaq = locale === "en" ? [...expatFaq, ...faq] : [...faq, ...expatFaq];
+  const ownFaq: FaqEntry[] = [sFaq.first, ...faq, ...sFaq.rest];
+  const allFaq: FaqEntry[] = locale === "en" ? [...expatFaq, ...ownFaq] : [...ownFaq, ...expatFaq];
   // English readers come for "Spain income tax", "salary after tax", "Beckham law": those sections go first for them.
   const expatFirst = locale === "en";
   const expatSections = (
@@ -300,7 +307,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     ca: `Fonts oficials, llegides el ${asOf}. Comprovació: el ${validated} vam enviar ${AEAT_VALIDATION.cases} casos diferents (sous de 12.000 a 350.000 €, les tres situacions familiars, fills, edat, discapacitat, contractes temporals, Ceuta, Melilla i La Palma, mobilitat, hipoteca) al servei de càlcul de retencions de l'Agència Tributària: el tipus i l'import de la retenció coincideixen en tots.`,
     en: `Official sources, read on ${asOf}. Check: on ${validated} we sent ${AEAT_VALIDATION.cases} different cases (salaries from €12,000 to €350,000, all three family situations, children, age, disability, fixed-term contracts, Ceuta, Melilla and La Palma, mobility, mortgage) to the Tax Agency's withholding calculation service: the rate and the amount withheld match in every one.`,
   });
-  const sourceList = [SOURCES.algorithm, SOURCES.algorithmJanuary, SOURCES.contributions, SOURCES.laPalma, SOURCES.lirpfDa61, SOURCES.rdl5];
+  const sourceList = [SOURCES.algorithm, SOURCES.algorithmJanuary, SOURCES.contributions, SOURCES.laPalma, SOURCES.lirpfDa61, SOURCES.rdl5, REGIONAL_SOURCES.catalonia, REGIONAL_SOURCES.madrid];
   const sourceNote = L(locale, {
     es: `La Agencia Tributaria publicó en ${Y} dos versiones del algoritmo: la del 10 de septiembre solo añade la isla de La Palma (Real Decreto-ley 23/2026). Para el resto de España las cifras son las mismas todo el año.`,
     ca: `L'Agència Tributària va publicar el ${Y} dues versions de l'algoritme: la del 10 de setembre només hi afegeix l'illa de La Palma (Reial decret llei 23/2026). Per a la resta d'Espanya les xifres són les mateixes tot l'any.`,
@@ -312,21 +319,21 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
       "Ascendientes a cargo, hijos con discapacidad e hijos de 25 años o más.",
       "Rendimientos irregulares, atrasos, pensión compensatoria y anualidades por alimentos.",
       "Regularizaciones a mitad de año, varios pagadores, pensionistas y relaciones laborales especiales.",
-      "La declaración de la Renta: escalas y deducciones autonómicas.",
+      "La declaración de la Renta completa: deducciones y escalas de las demás comunidades (solo comparamos Cataluña y Madrid, antes de deducciones).",
     ],
     ca: [
       "Navarra i el País Basc (taules forals).",
       "Ascendents a càrrec, fills amb discapacitat i fills de 25 anys o més.",
       "Rendiments irregulars, endarreriments, pensió compensatòria i anualitats per aliments.",
       "Regularitzacions a mitjan any, diversos pagadors, pensionistes i relacions laborals especials.",
-      "La declaració de la renda: escales i deduccions autonòmiques.",
+      "La declaració de la renda completa: deduccions i escales de les altres comunitats (només comparem Catalunya i Madrid, abans de deduccions).",
     ],
     en: [
       "Navarre and the Basque Country (foral tables).",
       "Dependent parents, children with a disability and children aged 25 or over.",
       "Irregular income, back pay, compensatory and child maintenance payments.",
       "Mid-year adjustments, several payers, pensioners and special employment relations.",
-      "The annual return: regional scales and deductions.",
+      "The full annual return: deductions and the other regions' scales (only Catalonia and Madrid are compared, before deductions).",
     ],
   });
 
@@ -369,6 +376,14 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
               <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="tabla">{h.table}</h2>
               <p>{tableLead}</p>
+              <p>{quickAnswersIntro(locale)}</p>
+              <ul>
+                {quick.map((q) => (
+                  <li key={q.gross}>
+                    <a href={`#${q.anchor}`}>{q.text}</a>
+                  </li>
+                ))}
+              </ul>
               <div className="ci-table-scroll mt-4">
                 <table className="ci-local-table">
                   <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{caption}</caption>
@@ -454,6 +469,43 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                 ))}
               </ul>
 
+              <h2 id="cataluna-madrid">{rc.h2}</h2>
+              {rc.paras.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table">
+                  <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{rc.caption}</caption>
+                  <thead>
+                    <tr>
+                      {rc.cols.map((c, k) => (
+                        <th key={c} scope="col" className={k > 0 ? "text-right" : undefined}>
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rRows.map((row) => (
+                      <tr key={row.gross}>
+                        <th scope="row" className="whitespace-nowrap font-normal">
+                          {m(row.gross, 0)}
+                        </th>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(row.withheld)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(row.totalCatalonia)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(row.totalMadrid)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(row.difference)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{rentaText(row.rentaCatalonia, locale)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-sm">{rc.note}</p>
+              <p>
+                <Link href={rc.guideHref}>{rc.guideLabel}</Link>.
+              </p>
+
               {expatFirst ? null : expatSections}
 
               <h2 id="tipos">{h.rates}</h2>
@@ -515,6 +567,11 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                 <section key={f.q}>
                   <h3>{f.q}</h3>
                   <p>{f.a}</p>
+                  {f.link ? (
+                    <p>
+                      <Link href={f.link.href}>{f.link.label}</Link>.
+                    </p>
+                  ) : null}
                 </section>
               ))}
 
