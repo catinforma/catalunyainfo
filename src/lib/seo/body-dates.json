@@ -68,9 +68,9 @@
    "files": 9
   },
   "employment": {
-   "date": "2026-11-25T12:05:57.586Z",
-   "fingerprint": "v1:e532589d2d5e92d87052edc4a7b6ff93",
-   "files": 24
+   "date": "2026-11-26T18:31:53.164Z",
+   "fingerprint": "v1:2af2bdbc3a8e33f5c54e094a169d5a6a",
+   "files": 25
   },
   "euribor": {
    "date": "2026-11-18T10:43:24.000Z",
@@ -93,9 +93,9 @@
    "files": 6
   },
   "gift-tax": {
-   "date": "2026-11-19T19:02:41.000Z",
-   "fingerprint": "v1:a224c625d3063b2f559ada403ec0ef48",
-   "files": 29
+   "date": "2026-11-26T18:31:53.164Z",
+   "fingerprint": "v1:41524d95a51f6c5e5bb45ca978b7201f",
+   "files": 30
   },
   "gordo": {
    "date": "2026-11-25T17:46:57.401Z",
@@ -148,9 +148,9 @@
    "files": 9
   },
   "itv": {
-   "date": "2026-11-19T22:39:00.000Z",
-   "fingerprint": "v1:8abc620428fd5fed62726ce4e8755345",
-   "files": 10
+   "date": "2026-11-26T18:31:53.164Z",
+   "fingerprint": "v1:92f062abb6abb99236d0a329d9587880",
+   "files": 11
   },
   "leave-2027": {
    "date": "2026-11-18T11:42:54.000Z",
@@ -193,8 +193,8 @@
    "files": 9
   },
   "paid-leave": {
-   "date": "2026-11-19T22:39:00.000Z",
-   "fingerprint": "v1:d825c8193b25b086eed9f1ce906fd91d",
+   "date": "2026-11-26T18:17:05.000Z",
+   "fingerprint": "v1:01043dcd1c93252294ce9d974dc01418",
    "files": 9
   },
   "pensions-2027": {
@@ -248,9 +248,9 @@
    "files": 8
   },
   "sick-leave": {
-   "date": "2026-11-21T17:08:47.891Z",
-   "fingerprint": "v1:b00c10a95eadcb0a04f4d9beb6deda57",
-   "files": 8
+   "date": "2026-11-26T18:31:53.164Z",
+   "fingerprint": "v1:c0b4e2f34bab20d19f516326a556d94e",
+   "files": 9
   },
   "smi": {
    "date": "2026-11-26T17:49:56.518Z",
@@ -303,8 +303,8 @@
    "files": 34
   },
   "widow-pension": {
-   "date": "2026-11-25T11:43:28.287Z",
-   "fingerprint": "v1:e715ac7db74b7f49c645f674b6b7435b",
+   "date": "2026-11-26T18:31:53.164Z",
+   "fingerprint": "v1:5c74f42eb8afa6b2dd3408a1be2accd2",
    "files": 9
   },
   "working-days": {

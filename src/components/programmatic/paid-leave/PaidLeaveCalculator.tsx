@@ -5,7 +5,7 @@ import { useEffect, useId, useState } from "react";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { CALC_COPY, DISCLAIMER, EVENT_LABEL, REASON_LABEL, calendarOf, etArticle, eventArticle, fullDate, readHash, writeHash, type PlLocale, type PlPlace } from "@/lib/programmatic/paid-leave/copy";
 import { birthPlan, isShortEvent, shortLeave, validDate, type PaidLeaveInput } from "@/lib/programmatic/paid-leave/engine";
-import { BIRTH, EVENTS, type EventId } from "@/lib/programmatic/paid-leave/rules";
+import { BIRTH, EVENTS, SHORT_RULES, type EventId } from "@/lib/programmatic/paid-leave/rules";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
@@ -107,7 +107,7 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
                 {t.startHint}
               </span>
             </p>
-            {short && short.count === "unspecified" ? (
+            {short && short.count !== "natural" ? (
               <p className="ci-calc-row">
                 <label htmlFor={field("place")}>{t.place}</label>
                 <select id={field("place")} className="ci-field" value={input.place} aria-describedby={field("place-hint")} onChange={(e) => update({ place: e.target.value })}>
@@ -122,7 +122,7 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
                 </span>
               </p>
             ) : null}
-            {input.event === "death" ? (
+            {short && SHORT_RULES[short.event].travelExtra > 0 ? (
               <p className="ci-calc-row ci-calc-wide">
                 <label className="flex items-start gap-2">
                   <input type="checkbox" className="mt-1" checked={input.travel} onChange={(e) => update({ travel: e.target.checked })} />
@@ -141,12 +141,14 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
             <dl className="ci-calc-results">
               <div className="ci-calc-total">
                 <dt>{EVENT_LABEL[locale][short.event].replace(/ \(.*\)$/, "")}</dt>
-                <dd className="ci-numeric">{t.days(short.days, short.count === "natural")}</dd>
+                <dd className="ci-numeric">{t.days(short.days, short.count)}</dd>
               </div>
-              <div>
-                <dt>{t.lastCalendar}</dt>
-                <dd>{d(short.lastCalendar)}</dd>
-              </div>
+              {short.count !== "working" ? (
+                <div>
+                  <dt>{t.lastCalendar}</dt>
+                  <dd>{d(short.lastCalendar)}</dd>
+                </div>
+              ) : null}
               {short.working ? (
                 <>
                   <div>
@@ -169,7 +171,7 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
               ) : null}
             </dl>
             {short.outOfRange ? <p className="ci-calc-note">{t.outOfRange}</p> : null}
-            <p className="ci-calc-note">{short.count === "natural" ? t.naturalNote(short.event) : t.unspecifiedNote}</p>
+            <p className="ci-calc-note">{short.count === "natural" ? t.naturalNote(short.event) : short.count === "working" ? t.workingNote : t.unspecifiedNote}</p>
             <p className="ci-calc-note">
               {t.payer(short.event)} {etArticle(eventArticle(short.event), locale)}.
             </p>
@@ -210,6 +212,7 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
               </div>
             </dl>
             <p className="ci-calc-note">{t.birthPay}</p>
+            <p className="ci-calc-note">{birth.birth >= BIRTH.week20BirthsFrom ? t.birthWeek20 : t.birthBefore}</p>
             <p className="ci-calc-note">
               {t.birthNote} {etArticle(`48.4 (${BIRTH.mandatoryWeeks} + ${birth.flexibleWeeks} + ${birth.childcareWeeks})`, locale)}.
             </p>

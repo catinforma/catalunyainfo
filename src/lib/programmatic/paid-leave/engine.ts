@@ -1,7 +1,7 @@
 import { addDays, addMonths, isIsoDate } from "@/lib/programmatic/employment/dates";
 import { inhabilReason, type Calendar, type DayRules, type Reason } from "@/lib/programmatic/working-days/engine";
 
-import { BIRTH, NURSING, PARENTAL, SHORT_EVENTS, SHORT_RULES, type DayCount, type EventId, type ShortEvent } from "./rules";
+import { BIRTH, NURSING, PARENTAL, SHORT_EVENTS, SHORT_RULES, birthWeeks, type DayCount, type EventId, type ShortEvent } from "./rules";
 
 /**
  * The paid-leave calculator, pure (client-safe, no data): how many days a
@@ -13,11 +13,14 @@ import { BIRTH, NURSING, PARENTAL, SHORT_EVENTS, SHORT_RULES, type DayCount, typ
  *  - Day 1 is the first day of leave the reader enters.
  *  - "natural" leaves (marriage, art. 37.3.a; holidays, art. 38.1) run on
  *    consecutive calendar days, as the ET says.
- *  - For the leaves where the ET only says "días" (arts. 37.3.b, b bis, c)
- *    both counts are given: consecutive calendar days, and Monday-to-Friday
- *    days that are not a holiday of the chosen place (the working-days
- *    engine's holidays), for when a collective agreement counts working days.
- *    The page does not say which one applies.
+ *  - For the leaves where the ET only says "días" (arts. 37.3.b, c) both
+ *    counts are given: consecutive calendar days, and Monday-to-Friday days
+ *    that are not a holiday of the chosen place (the working-days engine's
+ *    holidays), for when a collective agreement counts working days. The
+ *    page does not say which one applies.
+ *  - The bereavement leave (art. 37.3.b bis, RDL 42/2026) says "días
+ *    laborables": the Monday-to-Friday count is the result ("working"); the
+ *    page says that the ET does not define "laborables" further.
  *  - Birth leave: the six mandatory weeks start on the day of birth (day 1).
  */
 
@@ -25,7 +28,7 @@ export interface PaidLeaveInput {
   event: EventId;
   /** First day of leave (short events). */
   start: string;
-  /** Death only: the worker has to travel (art. 37.3.b bis: two more days). */
+  /** Death of a second-degree or in-law relative ("death2"): the worker has to travel (art. 37.3.b bis: two more days). */
   travel: boolean;
   /** Holiday place for the working-day count (a working-days place value). */
   place: string;
@@ -72,13 +75,13 @@ export interface ShortLeaveResult {
   count: DayCount;
   /** Last day counting consecutive calendar days. */
   lastCalendar: string;
-  /** Monday-to-Friday count without the place's holidays; null for "natural" leaves or outside the holiday data. */
+  /** Monday-to-Friday count without the place's holidays (the result itself for "working" leaves); null for "natural" leaves or outside the holiday data. */
   working: WorkingCount | null;
   /** The working-day count ran outside the years the holiday data covers. */
   outOfRange: boolean;
 }
 
-/** Number of days of a short leave (death: two more when travelling). */
+/** Number of days of a short leave ("death2": two more when travelling; the other leaves have no travel extra). */
 export function leaveDays(event: ShortEvent, travel: boolean): number {
   const r = SHORT_RULES[event];
   return r.days + (travel ? r.travelExtra : 0);
@@ -138,9 +141,8 @@ export interface BirthPlan {
 }
 
 export function birthPlan(birth: string, single: boolean): BirthPlan {
-  const flexibleWeeks = single ? BIRTH.single.flexibleWeeks : BIRTH.flexibleWeeks;
-  const childcareWeeks = single ? BIRTH.single.childcareWeeks : BIRTH.childcareWeeks;
-  const totalWeeks = single ? BIRTH.single.totalWeeks : BIRTH.totalWeeks;
+  // RDL 42/2026: 20 weeks (34) for births from 26 Nov 2026; 19 (32) before.
+  const { totalWeeks, flexibleWeeks, childcareWeeks } = birthWeeks(birth, single);
   const mandatoryEnd = addDays(birth, BIRTH.mandatoryWeeks * 7 - 1);
   return {
     birth,

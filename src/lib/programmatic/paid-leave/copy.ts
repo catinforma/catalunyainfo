@@ -6,7 +6,7 @@ import type { Calendar, Reason } from "@/lib/programmatic/working-days/engine";
 import { COVER_FROM, COVER_TO } from "@/lib/programmatic/working-days/rules";
 
 import { validDate, type PaidLeaveInput } from "./engine";
-import { BIRTH, EVENTS, SHORT_RULES, type EventId, type ShortEvent } from "./rules";
+import { BEREAVEMENT_START_WEEKS, BIRTH, EVENTS, SHORT_RULES, type DayCount, type EventId, type ShortEvent } from "./rules";
 
 /**
  * Paths and words of the paid-leave reference and calculator, small enough
@@ -60,7 +60,7 @@ export function writeHash(s: PaidLeaveInput): string {
   } else {
     p.set("d", s.start);
     p.set("p", s.place);
-    if (s.event === "death" && s.travel) p.set("v", "1");
+    if (SHORT_RULES[s.event].travelExtra > 0 && s.travel) p.set("v", "1");
   }
   return `#${p.toString()}`;
 }
@@ -88,27 +88,30 @@ export function readHash(hash: string, base: PaidLeaveInput, places: readonly Pl
 export const EVENT_LABEL: Record<PlLocale, Record<EventId, string>> = {
   es: {
     illness: "Accidente o enfermedad grave, hospitalización o intervención de un familiar (5 días)",
-    death: "Fallecimiento de un familiar (2 días, 4 con desplazamiento)",
+    death: "Fallecimiento del cónyuge, la pareja de hecho, el padre, la madre o un hijo (10 días laborables)",
+    death2: "Fallecimiento de un abuelo, nieto, hermano o familiar político hasta 2.º grado (3 días laborables, 5 con desplazamiento)",
     marriage: "Matrimonio o registro de pareja de hecho (15 días naturales)",
     move: "Mudanza: traslado del domicilio habitual (1 día)",
     vacation: "Vacaciones mínimas (30 días naturales)",
-    birth: "Nacimiento y cuidado del menor (19 semanas)",
+    birth: "Nacimiento y cuidado del menor (20 semanas)",
   },
   ca: {
     illness: "Accident o malaltia greu, hospitalització o intervenció d'un familiar (5 dies)",
-    death: "Defunció d'un familiar (2 dies, 4 amb desplaçament)",
+    death: "Defunció del cònjuge, la parella de fet, el pare, la mare o un fill (10 dies laborables)",
+    death2: "Defunció d'un avi, nét, germà o familiar polític fins al 2n grau (3 dies laborables, 5 amb desplaçament)",
     marriage: "Matrimoni o registre de parella de fet (15 dies naturals)",
     move: "Mudança: trasllat del domicili habitual (1 dia)",
     vacation: "Vacances mínimes (30 dies naturals)",
-    birth: "Naixement i cura del menor (19 setmanes)",
+    birth: "Naixement i cura del menor (20 setmanes)",
   },
   en: {
     illness: "Serious accident or illness, hospitalisation or surgery of a relative (5 days)",
-    death: "Death of a relative (2 days, 4 if you have to travel)",
+    death: "Death of your spouse, partner, parent or child (10 working days)",
+    death2: "Death of a grandparent, grandchild, sibling or in-law up to the 2nd degree (3 working days, 5 if you travel)",
     marriage: "Marriage or registered partnership (15 calendar days)",
     move: "Moving house (1 day)",
     vacation: "Minimum annual holidays (30 calendar days)",
-    birth: "Birth and childcare leave (19 weeks)",
+    birth: "Birth and childcare leave (20 weeks)",
   },
 };
 
@@ -142,7 +145,7 @@ export interface CalcCopy {
   birth: string;
   single: string;
   results: string;
-  days: (n: number, natural: boolean) => string;
+  days: (n: number, count: DayCount) => string;
   lastCalendar: string;
   lastWorking: string;
   firstWorking: string;
@@ -150,6 +153,8 @@ export interface CalcCopy {
   outOfRange: string;
   naturalNote: (event: ShortEvent) => string;
   unspecifiedNote: string;
+  /** The bereavement leave: «días laborables», counted Monday to Friday; it can start within four weeks. */
+  workingNote: string;
   payer: (event: ShortEvent) => string;
   birthRows: { mandatory: string; flexible: string; continuous: string; childcare: string; nursing: string; parental: string };
   birthFlexibleValue: (from: string, until: string, weeks: number) => string;
@@ -158,6 +163,10 @@ export interface CalcCopy {
   birthParentalValue: (until: string) => string;
   birthNote: string;
   birthPay: string;
+  /** Births from 26 Nov 2026 (RDL 42/2026): when the new week can be requested. */
+  birthWeek20: string;
+  /** Births before 26 Nov 2026: the RDL 9/2025 weeks. */
+  birthBefore: string;
   share: string;
 }
 
@@ -171,13 +180,13 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     event: "Motivo del permiso",
     start: "Primer día del permiso",
     startHint: "El Estatuto no fija el día de inicio: pon el día en que empiezas a ausentarte.",
-    travel: "Necesito desplazarme (2 días más, art. 37.3.b bis)",
+    travel: "Necesito desplazarme (2 días laborables más, art. 37.3.b bis)",
     place: "Festivos de",
     placeHint: "Para contar solo días laborables (lunes a viernes sin festivos). No incluye las fiestas locales de tu municipio.",
     birth: "Fecha del nacimiento",
     single: "Familia monoparental (una sola persona progenitora)",
     results: "Resultado",
-    days: (n, natural) => (natural ? `${n} días naturales` : n === 1 ? "1 día" : `${n} días`),
+    days: (n, c) => (c === "natural" ? `${n} días naturales` : c === "working" ? `${n} días laborables` : n === 1 ? "1 día" : `${n} días`),
     lastCalendar: "Último día contando días seguidos",
     lastWorking: "Último día contando solo días laborables",
     firstWorking: "Primer día laborable contado",
@@ -185,6 +194,7 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     outOfRange: "Para contar días laborables solo hay festivos de 2026 y 2027: elige una fecha de esos años.",
     naturalNote: (e) => (e === "marriage" ? "El Estatuto dice «quince días naturales»: se cuentan todos los días seguidos, también sábados, domingos y festivos." : "El Estatuto dice «treinta días naturales» al año como mínimo: se cuentan seguidos. Cómo se reparten y si tu convenio da más (o los cuenta como laborables) depende de tu convenio."),
     unspecifiedNote: "El Estatuto solo dice «días», sin decir si son naturales o laborables. Te damos los dos cómputos: mira qué dice tu convenio colectivo.",
+    workingNote: `Desde el 26 de noviembre de 2026 (Real Decreto-ley 42/2026) el Estatuto dice «días laborables»: contamos de lunes a viernes sin los festivos elegidos; si tu semana de trabajo es otra, cuentan tus días de trabajo según tu calendario y tu convenio. Puedes empezar el permiso cualquier día de las ${BEREAVEMENT_START_WEEKS} semanas siguientes al fallecimiento, y tu convenio puede permitir días sueltos.`,
     payer: () => "Lo paga la empresa: es un permiso retribuido (sigues cobrando tu salario).",
     birthRows: {
       mandatory: "6 semanas obligatorias, a jornada completa",
@@ -199,6 +209,8 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     birthNursingValue: (until, shared) => `hasta que cumpla 9 meses (${until}); hasta los 12 meses (${shared}) si los dos progenitores la ejercen igual`,
     birthParentalValue: (until) => `hasta que cumpla 8 años (${until})`,
     birthNote: "Contamos desde el día del parto como día 1. Cada progenitor tiene su propio permiso y no se puede ceder al otro.",
+    birthWeek20: "Nacimientos desde el 26 de noviembre de 2026: 20 semanas (Real Decreto-ley 42/2026). La semana nueva (la tercera hasta los 8 años; dos en familia monoparental) se puede pedir a partir del 1 de marzo de 2027.",
+    birthBefore: "Nacimientos hasta el 25 de noviembre de 2026: 19 semanas (32 en familia monoparental), las del Real Decreto-ley 9/2025. Las 20 semanas valen para los nacimientos desde el 26 de noviembre de 2026.",
     birthPay: `Lo paga la Seguridad Social (INSS): el ${BIRTH.benefitPct} % de tu base reguladora, exento de IRPF salvo en Navarra. La empresa no paga el salario durante esas semanas.`,
     share: "El enlace de la página guarda lo que has elegido: puedes copiarlo y compartirlo.",
   },
@@ -209,13 +221,13 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     event: "Motiu del permís",
     start: "Primer dia del permís",
     startHint: "L'Estatut no fixa el dia d'inici: posa el dia que comences a absentar-te.",
-    travel: "He de desplaçar-me (2 dies més, art. 37.3.b bis)",
+    travel: "He de desplaçar-me (2 dies laborables més, art. 37.3.b bis)",
     place: "Festius de",
     placeHint: "Per comptar només dies laborables (dilluns a divendres sense festius). No inclou les festes locals del teu municipi.",
     birth: "Data del naixement",
     single: "Família monoparental (una sola persona progenitora)",
     results: "Resultat",
-    days: (n, natural) => (natural ? `${n} dies naturals` : n === 1 ? "1 dia" : `${n} dies`),
+    days: (n, c) => (c === "natural" ? `${n} dies naturals` : c === "working" ? `${n} dies laborables` : n === 1 ? "1 dia" : `${n} dies`),
     lastCalendar: "Últim dia comptant dies seguits",
     lastWorking: "Últim dia comptant només dies laborables",
     firstWorking: "Primer dia laborable comptat",
@@ -223,6 +235,7 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     outOfRange: "Per comptar dies laborables només hi ha festius del 2026 i el 2027: tria una data d'aquests anys.",
     naturalNote: (e) => (e === "marriage" ? "L'Estatut diu «quince días naturales» (quinze dies naturals): es compten tots els dies seguits, també dissabtes, diumenges i festius." : "L'Estatut diu «treinta días naturales» (trenta dies naturals) l'any com a mínim: es compten seguits. Com es reparteixen i si el teu conveni en dona més (o els compta com a laborables) depèn del teu conveni."),
     unspecifiedNote: "L'Estatut només diu «días» (dies), sense dir si són naturals o laborables. Et donem els dos còmputs: mira què diu el teu conveni col·lectiu.",
+    workingNote: `Des del 26 de novembre de 2026 (Reial decret llei 42/2026) l'Estatut diu «días laborables» (dies laborables): comptem de dilluns a divendres sense els festius triats; si la teva setmana de feina és una altra, compten els teus dies de feina segons el teu calendari i el teu conveni. Pots començar el permís qualsevol dia de les ${BEREAVEMENT_START_WEEKS} setmanes posteriors a la defunció, i el teu conveni pot permetre dies solts.`,
     payer: () => "El paga l'empresa: és un permís retribuït (continues cobrant el teu salari).",
     birthRows: {
       mandatory: "6 setmanes obligatòries, a jornada completa",
@@ -237,6 +250,8 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     birthNursingValue: (until, shared) => `fins que faci 9 mesos (${until}); fins als 12 mesos (${shared}) si els dos progenitors l'exerceixen igual`,
     birthParentalValue: (until) => `fins que faci 8 anys (${until})`,
     birthNote: "Comptem des del dia del part com a dia 1. Cada progenitor té el seu propi permís i no es pot cedir a l'altre.",
+    birthWeek20: "Naixements des del 26 de novembre de 2026: 20 setmanes (Reial decret llei 42/2026). La setmana nova (la tercera fins als 8 anys; dues en família monoparental) es pot demanar a partir de l'1 de març de 2027.",
+    birthBefore: "Naixements fins al 25 de novembre de 2026: 19 setmanes (32 en família monoparental), les del Reial decret llei 9/2025. Les 20 setmanes valen per als naixements des del 26 de novembre de 2026.",
     birthPay: `El paga la Seguretat Social (INSS): el ${BIRTH.benefitPct} % de la teva base reguladora, exempt d'IRPF llevat de Navarra. L'empresa no paga el salari durant aquestes setmanes.`,
     share: "L'enllaç de la pàgina guarda el que has triat: el pots copiar i compartir.",
   },
@@ -247,13 +262,13 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     event: "Reason for the leave",
     start: "First day of leave",
     startHint: "The Statute does not set the first day: enter the day you start being off work.",
-    travel: "I have to travel (2 more days, art. 37.3.b bis)",
+    travel: "I have to travel (2 more working days, art. 37.3.b bis)",
     place: "Holidays of",
     placeHint: "To count working days only (Monday to Friday without holidays). Your town's local holidays are not included.",
     birth: "Date of birth",
     single: "Single-parent family (only one parent)",
     results: "Result",
-    days: (n, natural) => (natural ? `${n} calendar days` : n === 1 ? "1 day" : `${n} days`),
+    days: (n, c) => (c === "natural" ? `${n} calendar days` : c === "working" ? `${n} working days` : n === 1 ? "1 day" : `${n} days`),
     lastCalendar: "Last day, counting consecutive days",
     lastWorking: "Last day, counting working days only",
     firstWorking: "First working day counted",
@@ -261,6 +276,7 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     outOfRange: "Working days can only be counted with the 2026 and 2027 holidays: pick a date in those years.",
     naturalNote: (e) => (e === "marriage" ? "The Statute says «quince días naturales» (fifteen calendar days): every consecutive day counts, weekends and holidays included." : "The Statute says «treinta días naturales» (thirty calendar days) a year at least: counted consecutively. How they are split, and whether your agreement gives more (or counts working days), depends on your collective agreement."),
     unspecifiedNote: "The Statute only says «días» (days), without saying whether calendar or working days. You get both counts: check what your collective agreement says.",
+    workingNote: `Since 26 November 2026 (Royal Decree-law 42/2026) the Statute says «días laborables» (working days): we count Monday to Friday without the chosen holidays; if your working week is different, your own working days count, by your schedule and your agreement. You can start the leave on any day in the ${BEREAVEMENT_START_WEEKS} weeks after the death, and your agreement may allow separate days.`,
     payer: () => "Your employer pays it: it is paid leave (you keep your salary).",
     birthRows: {
       mandatory: "6 mandatory weeks, full time",
@@ -275,6 +291,8 @@ export const CALC_COPY: Record<PlLocale, CalcCopy> = {
     birthNursingValue: (until, shared) => `until the child turns 9 months (${until}); until 12 months (${shared}) if both parents take it the same way`,
     birthParentalValue: (until) => `until the child turns 8 (${until})`,
     birthNote: "We count the day of birth as day 1. Each parent has their own leave, and it cannot be passed to the other.",
+    birthWeek20: "Births from 26 November 2026: 20 weeks (Royal Decree-law 42/2026). The new week (the third until age 8; two for a single parent) can be requested from 1 March 2027.",
+    birthBefore: "Births up to 25 November 2026: 19 weeks (32 for a single parent), those of Royal Decree-law 9/2025. The 20 weeks apply to births from 26 November 2026.",
     birthPay: `Social Security (the INSS) pays it: ${BIRTH.benefitPct}% of your daily base (base reguladora), free of income tax except in Navarre. Your employer does not pay your salary during those weeks.`,
     share: "The page's link keeps what you chose: you can copy and share it.",
   },

@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { GIFT_AGENCY, GIFT_REGION_IN, giftCite, giftEditions, giftLawName, giftPath, type GiftLocale } from "@/lib/programmatic/gift-tax/copy";
 import { GIFT_RULES, giftDeadline, giftDefaultInput, giftExample, giftExampleResults, giftFaq, giftMeta } from "@/lib/programmatic/gift-tax/page";
+import { compareCopy, compareRows } from "@/lib/programmatic/gift-tax/compare";
 import { GIFT_PROFILES, type GiftQuoteRef } from "@/lib/programmatic/gift-tax/profiles";
 import { RULES_AS_OF, RULES_UNTIL, type GiftSource } from "@/lib/programmatic/gift-tax/regions/state";
 import type { GiftRegionId } from "@/lib/programmatic/gift-tax/regions/types";
@@ -105,7 +106,9 @@ export function GiftTaxBody({ region, locale, crumbs, nextStep, more }: { region
   const rules = GIFT_RULES[region];
   const profile = GIFT_PROFILES[region];
   const meta = giftMeta(region, locale);
-  const faq = giftFaq(region, locale);
+  // 26 Nov 2026: the Valencia page compares the same gifts with Catalonia (gift-tax/compare.ts); its two questions join the FAQ.
+  const cmp = region === "valencia" ? compareCopy(locale) : null;
+  const faq = [...giftFaq(region, locale), ...(cmp ? cmp.faq : [])];
   const examples = giftExampleResults(region);
   const M = (n: number) => money(n, locale);
   const P = (n: number) => percent(n, locale);
@@ -474,6 +477,14 @@ export function GiftTaxBody({ region, locale, crumbs, nextStep, more }: { region
               {profile.quotes.examples.map((q) => (
                 <Quote key={q.text} q={q} locale={locale} />
               ))}
+
+              {cmp ? (
+                <>
+                  <h2 id="valencia-o-cataluna">{cmp.title}</h2>
+                  <p>{cmp.intro}</p>
+                  <Table cols={cmp.cols} rows={compareRows().map((r) => [r.label[locale], M(r.valencia), M(r.catalonia)])} />
+                </>
+              ) : null}
 
               <h2 id="plazo">{hd.file}</h2>
               <ul>

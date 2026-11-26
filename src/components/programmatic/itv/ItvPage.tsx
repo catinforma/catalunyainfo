@@ -22,6 +22,7 @@ import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { ItvCalculator } from "./ItvCalculator";
+import { GENCAT_ITV_READ, GENCAT_QUOTE, cataloniaPrices, itvCataloniaCopy } from "@/lib/programmatic/itv/catalonia";
 
 /**
  * "¿Cuándo me toca pasar la ITV?" / "Quan em toca passar l'ITV?" / "When is
@@ -114,6 +115,9 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
   const sample = onTimeChain(car, sampleReg, 6);
   const day = (iso: string) => bareDay(iso, locale);
   const priced = REGIONS.filter((r) => r.regime !== "unpublished" && r.prices?.length);
+  // 26 Nov 2026: the Catalonia price on the first screen and the questions in the searchers' words (itv/catalonia.ts).
+  const catCopy = itvCataloniaCopy(locale);
+  const catLinks = cataloniaPrices();
 
   const lead = L(locale, {
     es: `Un turismo particular pasa la primera ITV a los 4 años de su primera matriculación, después cada 2 años y, desde los 10 años, cada año (Real Decreto 920/2017, art. 6). Puedes pasarla en los 30 días antes de que caduque sin perder la fecha. Circular con la ITV caducada es una infracción grave: ${FINE.serious} euros, ${FINE.paidEarly} si pagas en ${FINE.discountDays} días.`,
@@ -267,6 +271,15 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
               <ItvCalculator locale={locale} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <CalculatorNextStep current="itv" locale={locale} />
+
+              <h2 id="precio-cataluna">{catCopy.title}</h2>
+              <p>{catCopy.answer}</p>
+              <p>{catCopy.operators}</p>
+              <Quote lang="ca">{`${GENCAT_QUOTE.max} […] ${GENCAT_QUOTE.retest} […] ${GENCAT_QUOTE.free}`}</Quote>
+              <p className="text-sm text-[var(--color-muted)]">
+                <A href={catLinks.url}>{L(locale, { es: "Generalitat de Catalunya: inspección técnica de vehículos", ca: "Generalitat de Catalunya: inspecció tècnica de vehicles", en: "Generalitat de Catalunya: vehicle inspection (in Catalan)" })}</A> ({bareDay(GENCAT_ITV_READ, locale)}) ·{" "}
+                <A href={catLinks.stationsUrl}>{L(locale, { es: "estaciones ITV de Cataluña", ca: "estacions ITV de Catalunya", en: "ITV stations in Catalonia" })}</A>
+              </p>
 
               <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
               <h2 id="frecuencia">{h.table}</h2>
@@ -433,6 +446,14 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
                 <Link href={calcPath("working-days", locale)}>{L(locale, { es: "Calculadora de días hábiles y plazos", ca: "Calculadora de dies hàbils i terminis", en: "Working days and deadline calculator" })}</Link>.
               </p>
 
+              <h2 id="preguntas">{catCopy.faqTitle}</h2>
+              {catCopy.faq.map((f) => (
+                <section key={f.q}>
+                  <h3>{f.q}</h3>
+                  <p>{f.a}</p>
+                </section>
+              ))}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 <li>
@@ -459,7 +480,7 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: itvPath(locale), description: meta.description, locale, category: "UtilitiesApplication" })])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), calculatorAppSchema({ name: meta.h1, path: itvPath(locale), description: meta.description, locale, category: "UtilitiesApplication" }), { "@type": "FAQPage", mainEntity: catCopy.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }])} />
       <SiteFooter locale={locale} />
     </>
   );

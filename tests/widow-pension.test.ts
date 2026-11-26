@@ -342,11 +342,11 @@ test("examples and FAQ: every figure from the engine and the rules; eight questi
   const h = headline();
   for (const l of WP_LOCALES) {
     const faq = widowFaq(l);
-    assert.equal(faq.length, 8, l);
-    assert.equal(new Set(faq.map((f) => f.q)).size, 8, l);
+    assert.equal(faq.length, 9, l);
+    assert.equal(new Set(faq.map((f) => f.q)).size, 9, l);
     const all = faq.map((f) => f.a).join(" ");
     for (const p of [52, 60, 70]) assert.ok(all.includes(whole(p, l)), `${l}: ${p}`);
-    for (const m of [h.minUnder60, h.minCharges]) assert.ok(all.includes(perMonth(m, l)), `${l}: ${m}`);
+    for (const m of [h.minUnder60, h.min60, h.min65, h.minCharges]) assert.ok(all.includes(perMonth(m, l)), `${l}: ${m}`);
     for (const e of [INCOME_LIMIT, REMARRIAGE_INCOME_LIMIT, burdensCeiling(59)]) assert.ok(all.includes(euros(e, l)), `${l}: ${e}`);
     assert.doesNotMatch(all, /undefined|NaN/, l);
   }

@@ -16,6 +16,7 @@ import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { CALC_COPY, bandDays, money, monthYear, ofMonthYear, payerText, percent, sickLeaveEditions, sickLeavePath, type SlLocale } from "@/lib/programmatic/sick-leave/copy";
 import { DEFAULT_INPUT, calculateSickLeave, referenceMonth, type Band, type Contingency, type SickLeaveResult, type SpecialKind } from "@/lib/programmatic/sick-leave/engine";
 import { DAYS, MAX_BASE_2026, OFFICIAL_LINKS, PCT, QUOTE, RDL31_CHECKED, RDL31_CONVALIDATED, REFORM_FROM, RULES_AS_OF, SOURCES } from "@/lib/programmatic/sick-leave/rules";
+import { CATALONIA, baseRows, sickExampleCopy } from "@/lib/programmatic/sick-leave/examples";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -304,6 +305,10 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
       { q: "How long can sick leave last?", a: durationText },
     ],
   });
+  // 26 Nov 2026: examples by base, the Catalonia block and three questions in the searchers' words (sick-leave/examples.ts).
+  const ex26 = sickExampleCopy(locale);
+  const exRows = baseRows();
+  faq.push(...ex26.faq);
 
   const sourceList = [SOURCES.lgss, SOURCES.rdl31, SOURCES.rdl31Convalidation, SOURCES.d3158, SOURCES.rd53, SOURCES.d1646, SOURCES.orden1967, SOURCES.orden2026, SOURCES.irpf, SOURCES.ssInfo, SOURCES.ssAmount];
   const sourcesLead = L(locale, {
@@ -392,6 +397,36 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
               {quote(QUOTE.lgss173professional, SOURCES.lgss.url, `${lgss("173.1")} (${SOURCES.lgss.ref})`)}
               <p>{pctText[1]}</p>
 
+              <h2 id="ejemplos">{ex26.title}</h2>
+              <p>{ex26.intro}</p>
+              <div className="ci-table-scroll">
+                <table className="ci-local-table ci-stack-table">
+                  <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex26.caption}</caption>
+                  <thead>
+                    <tr>
+                      {ex26.cols.map((c) => (
+                        <th key={c} scope="col">
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {exRows.map((r) => (
+                      <tr key={r.base}>
+                        <th scope="row" className="font-normal">
+                          {m(r.base, 0)}
+                        </th>
+                        <td data-label={ex26.cols[1]}>{m(r.firstMonth)}</td>
+                        <td data-label={ex26.cols[2]}>{m(r.nextMonth)}</td>
+                        <td data-label={ex26.cols[3]}>{m(r.accidentMonth)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-sm text-[var(--color-muted)]">{ex26.note}</p>
+
               <h2 id="cambios-diciembre-2026">{h.reform}</h2>
               <p>{reformText.intro}</p>
               <ul>
@@ -451,6 +486,22 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
               <h2 id="quien-paga">{h.pay}</h2>
               <p>{payText}</p>
               {quote(`${QUOTE.ssPayment} […] ${QUOTE.ssFrom16}`, SOURCES.ssInfo.url, `${SOURCES.ssInfo.name} (${dayMonthYear(SOURCES.ssInfo.date, locale)})`)}
+
+              <h2 id="cataluna">{ex26.catTitle}</h2>
+              <p>{ex26.cat}</p>
+              <blockquote lang="ca">
+                <p>«{CATALONIA.quoteNotice}» […] «{CATALONIA.quoteFollowUp}» […] «{CATALONIA.quoteNoShow}».</p>
+                <footer className="text-sm">
+                  <a href={CATALONIA.notice} rel="noopener" target="_blank">
+                    {ex26.catSources[0]}
+                  </a>
+                  {" · "}
+                  <a href={CATALONIA.followUp} rel="noopener" target="_blank">
+                    {ex26.catSources[1]}
+                  </a>{" "}
+                  ({dayMonthYear(CATALONIA.read, locale)})
+                </footer>
+              </blockquote>
 
               <h2 id="irpf">{h.tax}</h2>
               <p>{taxText}</p>

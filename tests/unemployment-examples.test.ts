@@ -57,8 +57,8 @@ test("the page prints every FAQ question, and the layout emits FAQPage from the 
   assert.match(page, /faq=\{ex2\.faq\}/);
   const layout = readFileSync(new URL("../src/components/programmatic/employment/CalcLayout.tsx", import.meta.url), "utf8");
   assert.match(layout, /"@type": "FAQPage"/);
-  // Only the unemployment page passes questions: the other two employment calculators stay without FAQPage.
-  for (const other of ["DismissalPage", "SettlementPage"]) {
+  // The unemployment page and (26 Nov 2026) the dismissal page pass questions; the settlement calculator stays without FAQPage.
+  for (const other of ["SettlementPage"]) {
     assert.doesNotMatch(readFileSync(new URL(`../src/components/programmatic/employment/${other}.tsx`, import.meta.url), "utf8"), /faq=\{/);
   }
 });

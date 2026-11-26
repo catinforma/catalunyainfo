@@ -166,6 +166,11 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
         a: `El ${P(h.general)} de la base reguladora del fallecido, en 14 pagas. Sube al ${P(h.senior)} si tienes ${h.seniorAge} años o más, no cobras otra pensión pública, no trabajas y tus rentas no pasan de ${E(h.incomeLimit)} al año, y al ${P(h.burdens)} si tienes cargas familiares, la pensión es tu principal ingreso y tus ingresos no pasan de un límite (${E(h.ceilingUnder60)} al año si tienes menos de 60). En 2026 la pensión mínima va de ${M(h.minUnder60)} (menores de 60) a ${M(h.minCharges)} (con cargas familiares), si tus otros ingresos no pasan de ${E(h.incomeLimit)} al año.`,
       },
       {
+        // 26 Nov 2026: "pensión mínima de viudedad" 11 impr at 38.7, "cual es la pension minima de viudedad" 10 at 64.5 (GSC 28 d).
+        q: "¿Cuál es la pensión mínima de viudedad en 2026?",
+        a: `En 14 pagas: ${M(h.minCharges)} con cargas familiares; ${M(h.min65)} con ${h.seniorAge} años o más (o una discapacidad del 65 %); ${M(h.min60)} de 60 a 64 años, y ${M(h.minUnder60)} con menos de 60 (Real Decreto 241/2026, anexo I). La Seguridad Social completa tu pensión hasta ese mínimo si tus otros ingresos no pasan de ${E(h.incomeLimit)} al año; el complemento nunca pasa de ${E(h.complementCap)} al año. Las cifras de 2027 aún no están en el BOE.`,
+      },
+      {
         q: "¿Qué requisitos tiene que cumplir el fallecido?",
         a: `Si estaba de alta o en una situación asimilada (trabajando, en el paro, de baja), ${h.altaDays} días cotizados en los últimos 5 años; si no estaba de alta, ${h.noAltaYears} años cotizados. Si murió por un accidente, laboral o no, o por una enfermedad profesional, no se pide ningún periodo. Si cobraba una pensión de jubilación o de incapacidad permanente, tampoco.`,
       },
@@ -200,6 +205,10 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
         a: `El ${P(h.general)} de la base reguladora de la persona morta, en 14 pagues. Puja al ${P(h.senior)} si tens ${h.seniorAge} anys o més, no cobres cap altra pensió pública, no treballes i les teves rendes no passen de ${E(h.incomeLimit)} l'any, i al ${P(h.burdens)} si tens càrregues familiars, la pensió és el teu ingrés principal i els teus ingressos no passen d'un límit (${E(h.ceilingUnder60)} l'any si tens menys de 60 anys). El 2026 la pensió mínima va de ${M(h.minUnder60)} (menors de 60) a ${M(h.minCharges)} (amb càrregues familiars), si els teus altres ingressos no passen de ${E(h.incomeLimit)} l'any.`,
       },
       {
+        q: "Quina és la pensió mínima de viduïtat el 2026?",
+        a: `En 14 pagues: ${M(h.minCharges)} amb càrregues familiars; ${M(h.min65)} amb ${h.seniorAge} anys o més (o una discapacitat del 65 %); ${M(h.min60)} de 60 a 64 anys, i ${M(h.minUnder60)} amb menys de 60 (Reial decret 241/2026, annex I). La Seguretat Social completa la teva pensió fins a aquest mínim si els teus altres ingressos no passen de ${E(h.incomeLimit)} l'any; el complement mai no passa de ${E(h.complementCap)} l'any. Les xifres del 2027 encara no són al BOE.`,
+      },
+      {
         q: "Quins requisits ha de complir la persona morta?",
         a: `Si estava d'alta o en una situació assimilada (treballant, a l'atur, de baixa), ${h.altaDays} dies cotitzats en els últims 5 anys; si no estava d'alta, ${h.noAltaYears} anys cotitzats. Si va morir per un accident, laboral o no, o per una malaltia professional, no es demana cap període. Si cobrava una pensió de jubilació o d'incapacitat permanent, tampoc.`,
       },
@@ -232,6 +241,10 @@ export function widowFaq(locale: WpLocale): { q: string; a: string }[] {
       {
         q: "How much is Spain's widow's pension?",
         a: `${P(h.general)} of the deceased's base reguladora, in 14 payments. It rises to ${P(h.senior)} if you are ${h.seniorAge} or over, get no other public pension, do not work and have no more than ${E(h.incomeLimit)} a year of other income, and to ${P(h.burdens)} if you have family dependants, the pension is your main income and your income is within a ceiling (${E(h.ceilingUnder60)} a year under 60). In 2026 the minimum pension runs from ${M(h.minUnder60)} (under 60) to ${M(h.minCharges)} (with family dependants), if your other income is no more than ${E(h.incomeLimit)} a year.`,
+      },
+      {
+        q: "What is the minimum widow's pension in Spain in 2026?",
+        a: `In 14 payments: ${M(h.minCharges)} with family dependants; ${M(h.min65)} at ${h.seniorAge} or over (or with a 65% disability); ${M(h.min60)} from 60 to 64, and ${M(h.minUnder60)} under 60 (Royal Decree 241/2026, annex I). Social Security tops your pension up to that minimum if your other income is no more than ${E(h.incomeLimit)} a year; the top-up never exceeds ${E(h.complementCap)} a year. The 2027 figures are not in the BOE yet.`,
       },
       {
         q: "What must the person who died have contributed?",

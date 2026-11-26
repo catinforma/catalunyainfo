@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { compareDismissals, dismissalPay } from "@/lib/programmatic/employment/dismissal";
+import { dismissalExampleCopy, yearsRows } from "@/lib/programmatic/employment/dismissal-examples";
 import { dateWords, money, num } from "@/lib/programmatic/employment/paths";
 import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import {
@@ -53,6 +54,24 @@ export const DISMISSAL_META: Record<CalcLocale, CalcMeta> = {
 
 export const dismissalMetadata = (locale: CalcLocale) => calcMetadata("dismissal", locale, DISMISSAL_META[locale]);
 
+/** The page's older plain-text questions (first and third of each language), for the FAQPage with the new ones. */
+function copy0(locale: CalcLocale): { q: string; a: string }[] {
+  return {
+    es: [
+      { q: "¿Cuánto tiempo tengo para reclamar un despido?", a: "20 días hábiles desde el día siguiente al despido (ET art. 59.3). Antes de ir al juzgado hay que presentar la papeleta de conciliación." },
+      { q: "¿La baja voluntaria tiene indemnización?", a: "No. El Estatuto no prevé indemnización cuando te vas tú (salvo en los casos de los artículos 40, 41 y 50: traslado, modificación sustancial o incumplimiento grave de la empresa). Sí cobras el finiquito." },
+    ],
+    ca: [
+      { q: "Quant de temps tinc per reclamar un acomiadament?", a: "20 dies hàbils des de l'endemà de l'acomiadament (ET art. 59.3). Abans d'anar al jutjat cal presentar la papereta de conciliació." },
+      { q: "La baixa voluntària té indemnització?", a: "No. L'Estatut no preveu indemnització quan te'n vas tu (tret dels casos dels articles 40, 41 i 50: trasllat, modificació substancial o incompliment greu de l'empresa). Sí que cobres la quitança." },
+    ],
+    en: [
+      { q: "How long do I have to challenge a dismissal?", a: "20 working days from the day after the dismissal (ET art. 59.3). A conciliation claim (papeleta de conciliación) must be filed before going to court." },
+      { q: "Is there severance pay if I resign?", a: "No. The Statute gives none when you leave (except under articles 40, 41 and 50: relocation, substantial change or a serious breach by the employer). You still get the final settlement." },
+    ],
+  }[locale];
+}
+
 export function DismissalRoute({ locale }: { locale: CalcLocale }) {
   const ex = DISMISSAL_EXAMPLE;
   const all = compareDismissals({ start: ex.start, end: ex.end, annualSalary: Number(ex.salary) });
@@ -62,7 +81,13 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
   const d = (iso: string) => dateWords(iso, locale);
   const salary = m(Number(ex.salary));
   const months = all.unfair.tranches[0]!.months;
+  const dayWord = { es: "días", ca: "dies", en: "days" }[locale];
   const settlement = calcPath("settlement", locale);
+  // 26 Nov 2026: examples by years worked and the questions in the searchers' words (dismissal-examples.ts).
+  const ex2 = dismissalExampleCopy(locale);
+  const yRows = yearsRows();
+  // FAQPage: the questions whose answer is plain text, exactly as printed (the paro one carries links and stays out).
+  const faqLd = [...ex2.faq, ...copy0(locale)];
   const paro = calcPath("unemployment", locale);
 
   const copy = {
@@ -101,9 +126,9 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       tax: `No, hasta el importe obligatorio que marca el Estatuto: está exenta del IRPF (Ley 35/2006, art. 7.e) con un límite de ${m(IRPF_EXEMPT_CAP)}, y no cotiza a la Seguridad Social (LGSS, art. 147.2.c). Lo que se cobre por encima, por convenio, pacto o contrato, sí tributa. En un despido objetivo o un ERE por causas económicas, técnicas, organizativas o de producción, también está exenta la parte que no supere lo que habría correspondido por despido improcedente.`,
       faqTitle: "Preguntas frecuentes",
       faq: [
-        ["¿Cuánto tiempo tengo para reclamar un despido?", "20 días hábiles desde el día siguiente al despido (ET art. 59.3). Antes de ir al juzgado hay que presentar la papeleta de conciliación."],
+        [copy0(locale)[0]!.q, copy0(locale)[0]!.a],
         ["¿Cobro el paro si me despiden?", <>Sí, si has cotizado al menos 360 días en los últimos seis años: el despido y el fin de contrato son situación legal de desempleo. <Link href={paro}>Calcula cuánto paro te corresponde</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
-        ["¿La baja voluntaria tiene indemnización?", "No. El Estatuto no prevé indemnización cuando te vas tú (salvo en los casos de los artículos 40, 41 y 50: traslado, modificación sustancial o incumplimiento grave de la empresa). Sí cobras el finiquito."],
+        [copy0(locale)[1]!.q, copy0(locale)[1]!.a],
       ],
     },
     ca: {
@@ -141,9 +166,9 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       tax: `No, fins a l'import obligatori que fixa l'Estatut: està exempta de l'IRPF (Llei 35/2006, art. 7.e) amb un límit de ${m(IRPF_EXEMPT_CAP)}, i no cotitza a la Seguretat Social (LGSS, art. 147.2.c). El que es cobri per sobre, per conveni, pacte o contracte, sí que tributa. En un acomiadament objectiu o un ERO per causes econòmiques, tècniques, organitzatives o de producció, també està exempta la part que no superi el que hauria correspost per acomiadament improcedent.`,
       faqTitle: "Preguntes freqüents",
       faq: [
-        ["Quant de temps tinc per reclamar un acomiadament?", "20 dies hàbils des de l'endemà de l'acomiadament (ET art. 59.3). Abans d'anar al jutjat cal presentar la papereta de conciliació."],
+        [copy0(locale)[0]!.q, copy0(locale)[0]!.a],
         ["Cobro l'atur si m'acomiaden?", <>Sí, si has cotitzat almenys 360 dies en els últims sis anys: l&apos;acomiadament i la fi de contracte són situació legal de desocupació. <Link href={paro}>Calcula quant d&apos;atur et correspon</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
-        ["La baixa voluntària té indemnització?", "No. L'Estatut no preveu indemnització quan te'n vas tu (tret dels casos dels articles 40, 41 i 50: trasllat, modificació substancial o incompliment greu de l'empresa). Sí que cobres la quitança."],
+        [copy0(locale)[1]!.q, copy0(locale)[1]!.a],
       ],
     },
     en: {
@@ -181,15 +206,15 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
       tax: `Not up to the statutory amount: it is exempt from income tax (IRPF, Ley 35/2006, art. 7.e) up to ${m(IRPF_EXEMPT_CAP)}, and no Social Security contributions are due on it (LGSS, art. 147.2.c). Anything above it, by agreement or contract, is taxed. In an objective dismissal or an ERE for economic, technical, organisational or production reasons, the part up to what an unfair dismissal would have paid is also exempt.`,
       faqTitle: "Frequently asked questions",
       faq: [
-        ["How long do I have to challenge a dismissal?", "20 working days from the day after the dismissal (ET art. 59.3). A conciliation claim (papeleta de conciliación) must be filed before going to court."],
+        [copy0(locale)[0]!.q, copy0(locale)[0]!.a],
         ["Do I get unemployment benefit if I am dismissed?", <>Yes, if you have contributed for at least 360 days in the last six years: dismissal and the end of a contract count as legal unemployment. <Link href={paro}>Work out your unemployment benefit</Link>. {mdLinks(subsidyAmountsLine(locale))}</>],
-        ["Is there severance pay if I resign?", "No. The Statute gives none when you leave (except under articles 40, 41 and 50: relocation, substantial change or a serious breach by the employer). You still get the final settlement."],
+        [copy0(locale)[1]!.q, copy0(locale)[1]!.a],
       ],
     },
   }[locale];
 
   return (
-    <CalcLayout calcKey="dismissal" locale={locale} meta={DISMISSAL_META[locale]} lead={copy.lead} sources={["etArt56", "etDt11", "etArt53", "etArt49", "irpf", "lgss", "smi2026"]}>
+    <CalcLayout calcKey="dismissal" locale={locale} meta={DISMISSAL_META[locale]} lead={copy.lead} sources={["etArt56", "etDt11", "etArt53", "etArt49", "irpf", "lgss", "smi2026"]} faq={faqLd}>
       <DismissalCalculator locale={locale} initial={DISMISSAL_EXAMPLE} />
       <CalculatorNextStep current="dismissal" locale={locale} />
 
@@ -220,6 +245,39 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
         </table>
       </div>
 
+      <h2 id="por-anos">{ex2.title}</h2>
+      <p>{ex2.intro}</p>
+      <div className="ci-table-scroll">
+        <table className="ci-local-table ci-stack-table">
+          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex2.caption}</caption>
+          <thead>
+            <tr>
+              {ex2.cols.map((c) => (
+                <th key={c} scope="col">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {yRows.map((r) => (
+              <tr key={r.years}>
+                <th scope="row" className="font-normal">
+                  {n(r.years)}
+                </th>
+                <td data-label={ex2.cols[1]}>
+                  {m(r.unfair.amount)} ({n(r.unfair.days)} {dayWord})
+                </td>
+                <td data-label={ex2.cols[2]}>
+                  {m(r.objective.amount)} ({n(r.objective.days)} {dayWord})
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-sm text-[var(--color-muted)]">{ex2.note}</p>
+
       <h2 id="calculo">{copy.howTitle}</h2>
       <ol>
         {copy.how.map((s) => (
@@ -245,6 +303,12 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
         <div key={String(q)}>
           <h3>{q}</h3>
           <p>{a}</p>
+        </div>
+      ))}
+      {ex2.faq.map((f) => (
+        <div key={f.q}>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
         </div>
       ))}
     </CalcLayout>
