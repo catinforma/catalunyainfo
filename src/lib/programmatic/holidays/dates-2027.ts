@@ -1045,6 +1045,8 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
     description: descriptionFor(iso, kind, local, locale, showsRun),
     local: localPart,
     sections,
+    // 26 Nov 2026 ("pasqua 2027" 401 impressions at 9.1 in 28 d, 1 click): the Easter section above the list of towns.
+    ...(easterBlock ? { sectionsBeforeLocal: 1 } : {}),
     guides,
     title: dateTitle2027(iso, locale),
     ...(kind === "local" ? { verdict: L("Festa local", "Fiesta local", "Local holiday") } : {}),

@@ -145,6 +145,16 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
           {/* 29N election line (lib/engagement/election-line.ts): the 27 Nov-8 Dec 2026 date pages, to 7 Dec. */}
           <ElectionLine line={dateElectionLine(iso, locale)} className="my-6" />
 
+          {/* 26 Nov 2026: a section can sit before the local list (Easter Monday 2027: "when is Easter"). */}
+          {content.sections.slice(0, content.sectionsBeforeLocal ?? 0).map((section) => (
+            <section key={section.title}>
+              <h2>{section.title}</h2>
+              {section.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </section>
+          ))}
+
           <h2 id="local">{content.local.title ?? ui.localTitle}</h2>
           <p>{content.local.text}</p>
           {content.local.places.length > 0 ? (
@@ -172,7 +182,7 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
           ) : null}
           {content.local.note ? <p className="text-sm">{content.local.note}</p> : null}
 
-          {content.sections.map((section) => (
+          {content.sections.slice(content.sectionsBeforeLocal ?? 0).map((section) => (
             <section key={section.title}>
               <h2>{section.title}</h2>
               {section.paragraphs.map((p) => (

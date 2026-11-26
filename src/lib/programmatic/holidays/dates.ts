@@ -82,6 +82,12 @@ export interface DateContent {
     title?: string;
   };
   sections: DateSection[];
+  /**
+   * How many of `sections` print before the local-holiday list (default 0, all after it).
+   * 26 Nov 2026: Easter Monday 2027 puts "Quan és Pasqua el 2027?" right under the answer,
+   * where the "pasqua 2027" searcher looks, instead of after the list of towns.
+   */
+  sectionsBeforeLocal?: number;
   guides: GuideKey[];
   /*
    * Tranche 4 (2027 pages, `dates-2027.ts`) only. The 2026 pages and 1 and 6

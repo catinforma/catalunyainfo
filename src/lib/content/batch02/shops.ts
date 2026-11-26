@@ -1,6 +1,7 @@
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { dec7LocalTowns } from "@/lib/programmatic/holidays/barcelona-dec7";
+import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { nameKey } from "@/lib/programmatic/holidays/dogc";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
@@ -849,6 +850,67 @@ export const FIND_YOUR_TOWN: Record<Locale, string> = {
 };
 
 /**
+ * 26 Nov 2026 (ci-demanda, batch 5B): "cuando abren las tiendas los domingos"
+ * (GSC 28 d: 1,840 impressions at 10.4, 1 click; "cuando abren los domingos las
+ * tiendas" 348 at 10.1, "domingos abiertos 2026" 103 at 8.0) asks the general
+ * rule, not only Christmas. The answer sat in the FAQ; the first H2 is about
+ * Christmas and its block changes with the date. Now a section in the query's
+ * words: the ten-days rule and, in a three-line list, every opening day of 2026
+ * (Barcelona, from the holiday snapshot's `shops`, which tests hold to the DOGC
+ * text) and of 2027 (OPENING_2027: Ordre EMT/89/2026, art. 1 and art. 5).
+ * Read 26 Nov 2026 (curl + pdftotext of the DOGC PDFs): Ordre EMT/89/2026 art. 1
+ * "Els vuit dies festius ... l'any 2027 ... 3 de gener / 27 de juny / 1 de
+ * novembre / 28 de novembre / 6, 8, 12 i 19 de desembre", art. 5 "el dia 10 de
+ * gener i el dia 5 de desembre per a l'any 2027"; Resolució EMT/4342/2025,
+ * Barcelona "4 i 11 de gener. 15 d'agost." (rest of the row as BARCELONA_DOGC_ENTRY).
+ * Stale on 1 January 2027 (the 2026 row is past): tests/shops-sundays-year-26nov.
+ */
+export const SUNDAYS_YEAR_TITLE: Record<Locale, string> = {
+  ca: "Quan obren les botigues els diumenges? Els dies del 2026 i el 2027 a Catalunya",
+  es: "¿Cuándo abren las tiendas los domingos? Los días de 2026 y 2027 en Cataluña",
+  en: "When are shops open on Sundays? The 2026 and 2027 days in Catalonia",
+};
+
+const BARCELONA_2026 = (municipalityBySlug("barcelona")?.shops ?? []).filter((d) => d.startsWith("2026-"));
+
+export function sundaysYearBlocks(locale: Locale): Block[] {
+  const t = COPY[locale];
+  const next = `#${slugifyAnchor(t.nextTitle)}`;
+  const town = `#${slugifyAnchor(SELECTOR_TITLE[locale])}`;
+  const copy = {
+    ca: {
+      text: `No cada diumenge. Les botigues amb horari general només poden obrir **deu diumenges o festius l'any**: vuit que fixa la Generalitat per a tot Catalunya i dos que tria cada ajuntament (si no en tria cap, s'apliquen els de l'ordre). Les botigues d'alimentació de fins a 300 m², les fleques, les floristeries o les de conveniència, entre d'altres, poden obrir qualsevol diumenge. Aquests són els dies:`,
+      rows: [
+        ["2026, Barcelona", compactDays(BARCELONA_2026, "ca"), "Resolució EMT/4342/2025"],
+        ["2027, tot Catalunya", compactDays(OPENING_2027.general, "ca"), "Ordre EMT/89/2026, art. 1"],
+        ["2027, municipis que no en triïn d'altres", compactDays(OPENING_2027.municipalDefault, "ca"), "Ordre EMT/89/2026, art. 5"],
+      ],
+      note: `Fins al 31 de desembre, els dies del teu municipi són a [la taula per municipis](${town}); el calendari del 2027, dia a dia, a [Calendari del 2027](${next}).`,
+    },
+    es: {
+      text: `No todos los domingos. Las tiendas con horario general solo pueden abrir **diez domingos o festivos al año**: ocho que fija la Generalitat para toda Cataluña y dos que elige cada ayuntamiento (si no elige ninguno, se aplican los de la orden). Las tiendas de alimentación de hasta 300 m², las panaderías, las floristerías o las de conveniencia, entre otras, pueden abrir cualquier domingo. Estos son los días:`,
+      rows: [
+        ["2026, Barcelona", compactDays(BARCELONA_2026, "es"), "Resolución EMT/4342/2025"],
+        ["2027, toda Cataluña", compactDays(OPENING_2027.general, "es"), "Orden EMT/89/2026, art. 1"],
+        ["2027, municipios que no elijan otros", compactDays(OPENING_2027.municipalDefault, "es"), "Orden EMT/89/2026, art. 5"],
+      ],
+      note: `Hasta el 31 de diciembre, los días de tu municipio están en [la tabla por municipios](${town}); el calendario de 2027, día a día, en [Calendario de 2027](${next}).`,
+    },
+    en: {
+      text: `Not every Sunday. Shops on the general timetable may open on only **ten Sundays or holidays a year**: eight set by the Generalitat for all of Catalonia and two chosen by each council (if it chooses none, the order's two apply). Food shops of up to 300 m², bakeries, florists and convenience stores, among others, may open on any Sunday. These are the days:`,
+      rows: [
+        ["2026, Barcelona", compactDays(BARCELONA_2026, "en"), "Resolució EMT/4342/2025"],
+        ["2027, all of Catalonia", compactDays(OPENING_2027.general, "en"), "Ordre EMT/89/2026, art. 1"],
+        ["2027, towns that choose no other days", compactDays(OPENING_2027.municipalDefault, "en"), "Ordre EMT/89/2026, art. 5"],
+      ],
+      note: `Until 31 December, your town's days are in [the town table](${town}); the 2027 calendar, day by day, in [The 2027 calendar](${next}).`,
+    },
+  }[locale];
+  // A list, not a table: the guide's tables keep their places (tests index them), and three lines read fine on a phone.
+  return [...h2(SUNDAYS_YEAR_TITLE[locale], copy.text), list(...copy.rows.map(([year, days, basis]) => `**${year}:** ${days} (${basis})`)), ...paras(copy.note)];
+}
+
+/**
  * 26 Nov 2026: under the table, the bridge's Monday hands on to the two pages
  * that own it (the 7 December date page lists the towns; the bridge guide has
  * the days to take off). Same facts as the Monday 7 row.
@@ -886,6 +948,7 @@ function body(locale: Locale) {
     ...paras(t.weeksAfter, bridgeMondayLine(locale), t.saintStephen, novemberSundays(locale)),
     ...h2(t.townsChristmasTitle, t.townsChristmasLead),
     { type: "shopsChristmas" } as Block,
+    ...sundaysYearBlocks(locale),
     ...h2(t.electionTitle, ...t.election),
     ...h2(t.townsTitle, t.townsLead),
     table(t.townsCaption, t.townsHeaders, TOWNS_NOV_DEC.map((row) => [row.town, days(row.closed), days(row.extra)]), t.townsNote),

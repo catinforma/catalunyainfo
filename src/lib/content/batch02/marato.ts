@@ -315,6 +315,24 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   },
 };
 
+/**
+ * 26 Nov 2026 (ci-demanda, batch 5B): "marató tv3 2026 data" is the page's top
+ * query (GSC 28 d: 639 impressions at 6.9, 1 click; 13-26 Nov 257 at 8.5, 0
+ * clicks). Title, meta, H1 and lead already carry the date (title window of 18
+ * Nov, free 16 Dec), so only the first H2 changes: it now says "data" / "fecha" /
+ * "date", the word searched. Date re-read 26 Nov 2026 (curl) on 3Cat's 2026 hub
+ * https://www.3cat.cat/tv3/marato/2026/390/ ("El 13 de desembre, La Marató de
+ * 3Cat celebrarà la 35a edició", "El diumenge 13 de desembre La Marató
+ * desplegarà les habituals seus telefòniques") and the La Marató home
+ * https://www.3cat.cat/tv3/marato/ ("La Marató 2026 del 13 de desembre està
+ * dedicada a les malalties neurodegeneratives i neuromusculars").
+ */
+export const MARATO_WHEN_TITLE: Record<Locale, string> = {
+  ca: "Data de La Marató 2026: quan és i a quina hora comença?",
+  es: "Fecha de La Marató 2026: ¿cuándo es y a qué hora empieza?",
+  en: "La Marató 2026 date: when is it and what time does it start?",
+};
+
 const RELATED = ["christmasBarcelona", "decemberBridge", "christmas", "shops", "pessebres", "workCalendar"] as const;
 
 const link = (href: string, label: string) => `[${label}](${href})`;
@@ -350,7 +368,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `Tot el que hi ha en aquesta pàgina surt de 3Cat i de la Fundació La Marató de 3Cat. L'horari, els escenaris i el telèfon de donatius són els que 3Cat va anunciar el 10 de novembre de 2026 (consultat el ${PROGRAMME_CHECKED_TEXT.ca}). No hi posem xifres de cap altra edició com si fossin d'aquesta.`,
       ),
       ...h2(
-        "Quan és La Marató 2026 i a quina hora comença?",
+        MARATO_WHEN_TITLE.ca,
         `El **${day}**. Segons ${link(PROGRAMME.news, "3Cat")}, el programa de televisió començarà a les **${PROGRAMME.tv[0].from}** des de la Torre de Collserola, on s'allargarà fins a les ${PROGRAMME.tv[0].to}, i es reprendrà a les **${PROGRAMME.tv[1].from}** des del Parc Audiovisual de Catalunya, a Terrassa, fins a la ${PROGRAMME.tv[1].to} de la matinada. A Catalunya Ràdio, Roger Escapa presentarà una edició especial d'«El suplement» des de la Universitat de Lleida a partir de les ${PROGRAMME.radioFrom} (consultat el ${PROGRAMME_CHECKED_TEXT.ca}).`,
         "La Torre de Collserola es va inaugurar el 1992, el mateix any que La Marató, i segons 3Cat simbolitza la connexió: com les neurones transmeten informació, la torre fa arribar els senyals de ràdio i televisió al territori.",
         `És el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}. Aquell dia les botigues de Barcelona poden obrir, perquè el 13 de desembre és un dels diumenges d'obertura del calendari comercial del 2026: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
@@ -468,7 +486,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         `Todo lo que hay en esta página sale de 3Cat y de la Fundació La Marató de 3Cat. El horario, los escenarios y el teléfono de donativos son los que 3Cat anunció el 10 de noviembre de 2026 (consultado el ${PROGRAMME_CHECKED_TEXT.es}). No ponemos cifras de ninguna otra edición como si fueran de esta.`,
       ),
       ...h2(
-        "¿Cuándo es La Marató 2026 y a qué hora empieza?",
+        MARATO_WHEN_TITLE.es,
         `El **${day}**. Según ${link(PROGRAMME.news, "3Cat")}, el programa de televisión empezará a las **${hm(PROGRAMME.tv[0].from)}** desde la Torre de Collserola, donde seguirá hasta las ${hm(PROGRAMME.tv[0].to)}, y se reanudará a las **${hm(PROGRAMME.tv[1].from)}** desde el Parc Audiovisual de Catalunya, en Terrassa, hasta la ${hm(PROGRAMME.tv[1].to)} de la madrugada. En Catalunya Ràdio, Roger Escapa presentará una edición especial de «El suplement» desde la Universitat de Lleida a partir de las ${hm(PROGRAMME.radioFrom)} (consultado el ${PROGRAMME_CHECKED_TEXT.es}).`,
         "La Torre de Collserola se inauguró en 1992, el mismo año que La Marató, y según 3Cat simboliza la conexión: como las neuronas transmiten información, la torre hace llegar las señales de radio y televisión al territorio.",
         `Es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}. Ese día las tiendas de Barcelona pueden abrir, porque el 13 de diciembre es uno de los domingos de apertura del calendario comercial de 2026: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
@@ -584,7 +602,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       `Everything on this page comes from 3Cat and the Fundació La Marató de 3Cat. The times, venues and donation phone number are those 3Cat announced on 10 November 2026 (checked on ${PROGRAMME_CHECKED_TEXT.en}). We never give another edition's figures as this year's.`,
     ),
     ...h2(
-      "When is La Marató 2026 and what time does it start?",
+      MARATO_WHEN_TITLE.en,
       `On **${day}**. According to ${link(PROGRAMME.news, "3Cat")}, the TV programme starts at **${hm(PROGRAMME.tv[0].from)}** from the Torre de Collserola, where it runs until ${hm(PROGRAMME.tv[0].to)}, and resumes at **${hm(PROGRAMME.tv[1].from)}** from the Parc Audiovisual de Catalunya in Terrassa, until ${hm(PROGRAMME.tv[1].to)} am. On Catalunya Ràdio, Roger Escapa presents a special edition of "El suplement" from the University of Lleida from ${hm(PROGRAMME.radioFrom)} (checked on ${PROGRAMME_CHECKED_TEXT.en}).`,
       "The Torre de Collserola, Barcelona's telecommunications tower, opened in 1992, the same year as La Marató; for 3Cat it stands for connection: just as neurons pass on information, the tower carries radio and TV signals across the country.",
       `It is the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}. Shops in Barcelona may open that day, because 13 December is one of the Sunday opening days in the 2026 shopping calendar: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,

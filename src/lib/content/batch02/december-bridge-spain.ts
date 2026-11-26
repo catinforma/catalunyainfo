@@ -15,7 +15,7 @@ import { LOCAL_MONDAY_7, runWords, type Run } from "./december-bridge";
 import { SHOPS } from "./shops";
 import { bridgeShopsParagraph } from "./shops-spain-december";
 import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
-import { b2Related, b2href, b2link, callout, faq, h2, keyFacts, lead, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { b2Related, b2href, b2link, callout, faq, h2, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
  * "Puente de diciembre 2026" for the whole of Spain: where Monday 7 December
@@ -601,6 +601,47 @@ function cataloniaDateLine(locale: Locale): string {
 }
 
 /**
+ * 26 Nov 2026 (ci-demanda, batch 5B): "donde es festivo el 7 de diciembre de
+ * 2026" (GSC 13-26 Nov: 249 impressions at 10.5; 28 d: 747 at 6.7) and "donde es
+ * fiesta el 7 de diciembre 2026" (192 at 8.3; 28 d 372 at 5.8), "donde no es
+ * festivo el 7 de diciembre de 2026" (58 at 4.7). The lead and the key facts
+ * said it in a sentence; the region table had the heading "¿Es festivo...?".
+ * Now the section heading asks "¿Dónde...?" and opens with the list, one item
+ * per place, then where it is a working day. Every name comes from the BOE row
+ * (BOE-A-2025-21667, re-read 26 Nov 2026: row "7 Lunes siguiente al Día de la
+ * Constitución Española." marked "**" for Andalucía, Aragón, Asturias,
+ * Cantabria, Castilla y León, Extremadura, Com. Madrid, Región Murcia, La Rioja
+ * and Ciudad de Melilla), via MONDAY_7; nothing is typed twice.
+ */
+export const WHERE_MONDAY_7_TITLE: Record<Locale, string> = {
+  es: "¿Dónde es festivo el 7 de diciembre de 2026? Comunidad por comunidad",
+  ca: "On és festiu el 7 de desembre del 2026? Comunitat per comunitat",
+  en: "Where is 7 December 2026 a public holiday in Spain? Region by region",
+};
+
+export function whereMonday7Blocks(locale: Locale): Block[] {
+  const n7 = countWords(MONDAY_7, locale);
+  const working = proseList(MONDAY_7_WORKING, locale);
+  const d7 = datePath(locale, SPAIN_DAYS.monday);
+  const local = LOCAL_MONDAY_7.municipalities;
+  const intro = {
+    es: `**El lunes 7 de diciembre de 2026 es festivo en ${n7}:**`,
+    ca: `**El dilluns 7 de desembre del 2026 és festiu en ${n7}:**`,
+    en: `**Monday 7 December 2026 is a public holiday in ${n7}:**`,
+  }[locale];
+  const notThere = {
+    es: `**Dónde no es festivo:** en ${working}, el lunes 7 es laborable y el único festivo del puente es el martes 8, la Inmaculada, que lo es en toda España. En Cataluña, el 7 es fiesta local en ${local} municipios: están en [la lista de municipios con fiesta el 7 de diciembre](${d7}).`,
+    ca: `**On no és festiu:** a ${working}, el dilluns 7 és feiner i l'únic festiu del pont és el dimarts 8, la Immaculada, que ho és a tot Espanya. A Catalunya, el 7 és festa local en ${local} municipis: són a [la llista de municipis amb festa el 7 de desembre](${d7}).`,
+    en: `**Where it is not:** in ${working}, Monday the 7th is a working day and the long weekend's only holiday is Tuesday the 8th, the Immaculate Conception, a holiday everywhere in Spain. In Catalonia the 7th is a local holiday in ${local} towns: see [the towns with a holiday on 7 December](${d7}).`,
+  }[locale];
+  return [
+    ...paras(intro),
+    list(...MONDAY_7.map((r) => shortName(r, locale))),
+    ...paras(notThere),
+  ];
+}
+
+/**
  * 20 Nov 2026: the searched questions the FAQ did not ask in their own words
  * (GSC 7-20 Nov, this page): "7 y 8 de diciembre es festivo" 104 impressions
  * at 9.2, "festivos puente diciembre" 530 at 10.6, "que comunidades pasan el 6
@@ -828,8 +869,9 @@ function bodyEs(): Block[] {
       "De la relación de fiestas laborales que el Ministerio de Trabajo publica cada año en el BOE con los calendarios que le envían las comunidades: la de 2026 (BOE del 28 de octubre de 2025) para diciembre y la de 2027 (BOE del 13 de octubre de 2026) para enero. Las hemos vuelto a leer el 20 de noviembre de 2026: ninguna tiene correcciones, y no hemos encontrado ningún decreto autonómico posterior que cambie estos días. Ese mismo día leímos en su boletín el calendario de nueve de los diez lugares que dan fiesta el lunes 7 (el de La Rioja no se pudo consultar): están en la tabla, más abajo.",
     ),
     ...purisimaH2("es"),
-    ...h2(
-      "¿Es festivo el 7 de diciembre? Comunidad por comunidad",
+    ...h2(WHERE_MONDAY_7_TITLE.es),
+    ...whereMonday7Blocks(L),
+    ...paras(
       `El lunes 7 es el día que cambia de una comunidad a otra; el martes 8, el 25 de diciembre, el 1 y el 6 de enero son festivos en todas, y el sábado 26 solo en ${proseList(stStephen, L)}. Busca la tuya en la tabla:`,
     ),
     holidayTable(L),
@@ -940,8 +982,9 @@ function bodyCa(): Block[] {
     ),
     keyFacts("El pont de desembre del 2026, d'un cop d'ull", bridgeSummaryFacts(L)),
     ...purisimaH2("ca"),
-    ...h2(
-      "On és festiu el 7 de desembre? Comunitat per comunitat",
+    ...h2(WHERE_MONDAY_7_TITLE.ca),
+    ...whereMonday7Blocks(L),
+    ...paras(
       `El dilluns 7 és el dia que canvia d'una comunitat a una altra; el dimarts 8, el 25 de desembre, l'1 i el 6 de gener són festius a totes, i el dissabte 26 només a ${proseList(stStephen, L)}.`,
     ),
     holidayTable(L),
@@ -1015,8 +1058,9 @@ function bodyEn(): Block[] {
       "Spain's Ministry of Labour publishes each year's public holidays, region by region, in the BOE (the official state gazette): the 2026 list on 28 October 2025 and the 2027 list on 13 October 2026. We re-read both on 20 November 2026; neither has been corrected, and we found no later regional decree changing these days. The same day we read, in its own bulletin, the calendar of nine of the ten places that give Monday the 7th off (La Rioja's could not be reached): they are in the table below.",
     ),
     ...purisimaH2("en"),
-    ...h2(
-      "Is 7 December a holiday in Spain? Region by region",
+    ...h2(WHERE_MONDAY_7_TITLE.en),
+    ...whereMonday7Blocks(L),
+    ...paras(
       `Monday the 7th is the day that changes from one region to the next; Tuesday the 8th, Christmas Day, New Year's Day and Epiphany are holidays in all of them, and Saturday the 26th only in ${proseList(stStephen, L)}. Find yours in the table:`,
     ),
     holidayTable(L),
