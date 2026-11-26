@@ -1,3 +1,4 @@
+import { barcelonaDec7Sentence } from "./barcelona-dec7";
 import { SNAPSHOT, regionalDays, aranSwap, municipalities } from "./data";
 import { WHIT_MONDAY_2027, dateContent2027, isTranche4, whitMondayNotice } from "./dates-2027";
 import { caDayArticle, capitalize, dayMonth, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
@@ -130,6 +131,18 @@ export const LOCAL_DATE_PAGES: Record<string, DatePage> = {
   [DEC7]: DEC7,
   [DEC24]: DEC24,
   [DEC31]: DEC31,
+};
+
+/** 26 Nov 2026: the 7 December page's shops and school H2s, asked as searchers ask them (and its FAQPage questions). */
+const DEC7_SHOPS_Q: Record<DateLocale, string> = {
+  ca: "Obren les botigues el 7 de desembre?",
+  es: "¿Abren las tiendas el 7 de diciembre?",
+  en: "Are shops open on 7 December?",
+};
+const DEC7_SCHOOL_Q: Record<DateLocale, string> = {
+  ca: "Hi ha escola el 7 de desembre?",
+  es: "¿Hay colegio el 7 de diciembre?",
+  en: "Is there school on 7 December?",
 };
 
 /** What the day is called; the date pages for working days name it in the answer. */
@@ -616,7 +629,7 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
       .map((m) => m.name);
     const pick = (ca: string[], es: string[], en: string[]) => (locale === "ca" ? ca : locale === "es" ? es : en);
     const fitDescription = (options: string[]) => options.find((o) => o.length <= 155) ?? options.at(-1)!;
-    return {
+    const dec7: DateContent = {
       holiday: false,
       answer: L(
         `No. El ${long} és un dia feiner a Catalunya: dels festius del desembre, només ho són el 8, el 25 i el 26 (Ordre EMT/66/2025). Sí que és festa local a ${n}.`,
@@ -624,6 +637,8 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
         `No. ${long} is a working day in Catalonia: the only December holidays are the 8th, 25th and 26th (Order EMT/66/2025). It is a local holiday in ${n}.`,
       ),
       answerNote: [
+        // 26 Nov 2026: "el 7 de diciembre es festivo en barcelona" (~145 impressions in 28 days at 5-8, no click) got its answer only in the town list's absence.
+        barcelonaDec7Sentence(locale),
         L(
           `En altres comunitats sí que és festiu: el BOE el marca com a dilluns següent al Dia de la Constitució a ${joinList(MONDAY_7_REGIONS.ca, "ca")}, però no a Catalunya.`,
           `En otras comunidades sí es festivo: el BOE lo marca como lunes siguiente al Día de la Constitución en ${joinList(MONDAY_7_REGIONS.es, "es")}, pero no en Cataluña.`,
@@ -672,7 +687,7 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
       },
       sections: [
         {
-          title: L("Botigues", "Tiendas", "Shops"),
+          title: DEC7_SHOPS_Q[locale],
           paragraphs: [
             L(
               `És un dia feiner: les botigues obren amb el seu horari habitual. Als municipis on és festa local, només hi poden obrir si el 7 de desembre és un dels seus deu dies d'obertura comercial${sb.length ? `, com passa ${sb.length === 1 ? "a" : "a"} ${names(sb)}` : ""} (Resolució EMT/4342/2025).`,
@@ -682,7 +697,7 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
           ],
         },
         {
-          title: L("Escoles", "Escuelas", "Schools"),
+          title: DEC7_SCHOOL_Q[locale],
           paragraphs: [
             L(
               `No és festiu escolar a tot Catalunya, però sí als municipis on és festa local. A més, cada escola tria quatre dies de lliure disposició i en pot fer servir un aquest dilluns: mira el calendari del teu centre (Ordre EDF/66/2026).`,
@@ -703,6 +718,19 @@ function baseDateContent(iso: DatePage, locale: DateLocale): DateContent {
         },
       ],
       guides: ["schoolFreeDays", "decemberBridge", "decemberBridgeSpain", "shops", "shopsSpainDecember", "school", "metroHours", "localHolidays", "workCalendar"],
+    };
+    // 26 Nov 2026: FAQPage gets the page's three questions, each a heading it
+    // prints (the H1, then the shops and school H2s, now asked as questions
+    // like the 2027 pages' sections) with the text under it. The Barcelona
+    // line is part of the H1's answer. Nothing in the markup is off the page.
+    return {
+      ...dec7,
+      faq: [
+        { question: dateQuestion(iso, locale), answer: [dec7.answer, ...dec7.answerNote].join(" ") },
+        ...dec7.sections
+          .filter((x) => x.title === DEC7_SHOPS_Q[locale] || x.title === DEC7_SCHOOL_Q[locale])
+          .map((x) => ({ question: x.title, answer: x.paragraphs.join(" ") })),
+      ],
     };
   }
 

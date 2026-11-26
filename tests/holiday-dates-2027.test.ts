@@ -441,7 +441,15 @@ test("structured data: FAQPage and Dataset on the 2027 pages, from what the page
     for (const locale of DATE_LOCALES) {
       const c = dateContent(iso, locale);
       const faq = dateFaq(iso, locale) as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] };
-      assert.equal(faq.mainEntity.length, 1, `${iso} ${locale}`);
+      // 26 Nov 2026: 7 December also lists its shops and school H2s, asked as questions (headings on the page).
+      if (iso === "2026-12-07") {
+        assert.equal(faq.mainEntity.length, 3, `${iso} ${locale}`);
+        const headings = c.sections.map((s) => s.title);
+        for (const q of faq.mainEntity.slice(1)) {
+          assert.ok(headings.includes(q.name), `${iso} ${locale}: "${q.name}" is not a heading on the page`);
+          assert.equal(q.acceptedAnswer.text, c.sections.find((s) => s.title === q.name)!.paragraphs.join(" "));
+        }
+      } else assert.equal(faq.mainEntity.length, 1, `${iso} ${locale}`);
       assert.equal(faq.mainEntity[0]!.name, dateQuestion(iso, locale));
       assert.equal(faq.mainEntity[0]!.acceptedAnswer.text, [c.answer, ...c.answerNote].join(" "));
     }

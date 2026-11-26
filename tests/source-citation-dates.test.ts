@@ -154,6 +154,8 @@ const PRINTS: Record<string, boolean> = {
   "núm. 9674, 28.5.2026": true,
   "núm. 9406, 6.5.2025": true,
   "núm. 9637, 1.4.2026": true,
+  // 26 Nov 2026: Ordre EMT/208/2025 (local holidays 2026) in the shops guide, for the Monday 7 December row.
+  "núm. 9565, 17.12.2025": true,
   "DOGC núm. 9421, de 27.5.2025": true,
   "DOGC núm. 9551, de 27.11.2025": true,
   "DOGC núm. 9406, de 6.5.2025": true,

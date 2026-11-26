@@ -3,6 +3,7 @@ import { plansFor } from "@/lib/content/holidays/bridges";
 import { HOLIDAYS_BY_YEAR, addDays, daysBetween, holidayOn, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { barcelonaDec7, barcelonaDec7Answer, barcelonaDec7Question } from "@/lib/programmatic/holidays/barcelona-dec7";
 import { datePath } from "@/lib/programmatic/holidays/paths";
 
 import { dayDate, range, span } from "./festive";
@@ -528,6 +529,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
   const n = LOCAL_MONDAY_7.municipalities;
   const examples = joinList(LOCAL_MONDAY_7.examples, locale, true);
   const bridge = runAround(BRIDGE_DAYS.immaculada, [BRIDGE_DAYS.monday]);
+  // 26 Nov 2026: Barcelona said in the key facts and the FAQ, from the holiday snapshot (barcelona-dec7.ts).
+  const bcnWorking = !barcelonaDec7().holiday;
 
   if (locale === "ca") {
     return [
@@ -537,10 +540,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       keyFacts("El pont de desembre del 2026, d'un cop d'ull", [
         { label: "Festiu a tot Catalunya", value: "Dimarts 8 de desembre (la Puríssima o Immaculada)" },
         { label: "Diumenge 6 de desembre", value: "No és festiu a Catalunya: el Dia de la Constitució cau en diumenge i no es passa al dilluns" },
-        { label: "Dilluns 7 de desembre", value: `Feiner, excepte als ${n} municipis que hi tenen festa local` },
+        { label: "Dilluns 7 de desembre", value: `Feiner${bcnWorking ? ", també a Barcelona," : ""} excepte als ${n} municipis que hi tenen festa local` },
         { label: "Per fer pont", value: `Demanar el dilluns 7: ${bridge.days} dies, ${runWords(bridge, "ca")}` },
         { label: "Escoles", value: "El dia 8 no hi ha classe; el 7 depèn de cada escola" },
-        { label: "Botigues", value: "Poden obrir el diumenge 6 i el dimarts 8 a Barcelona i als municipis sense dies propis" },
+        { label: "Botigues", value: "Poden obrir el diumenge 6 i el dimarts 8 a Barcelona i als municipis sense dies propis; el dilluns 7, horari habitual, llevat dels municipis on és festa local" },
       ]),
       callout(
         "official",
@@ -611,7 +614,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         { question: "Hi ha pont al desembre del 2026 a Catalunya?", answer: `Només si demanes el dilluns 7. L'únic festiu és el dimarts 8; el diumenge 6 no és festiu a Catalunya. Amb el 7 lliure, el pont va ${runWords(bridge, "ca")}.` },
         { question: "Quan és el pont de la Puríssima del 2026?", answer: `La Puríssima (la Immaculada, 8 de desembre) cau en dimarts el 2026 i és festiu a tot Catalunya. Per fer pont cal demanar el dilluns 7, que a Catalunya és feiner llevat de ${n} municipis: així el pont va ${runWords(bridge, "ca")}.` },
         { question: "El 7 de desembre de 2026 és festiu a Catalunya?", answer: `No a tot Catalunya: és dia feiner. És festa local a ${n} municipis, com ${examples}. En canvi, sí que és festiu a Madrid o a Andalusia, que han passat al dilluns el festiu del 6.` },
-        { question: "El 6 de desembre de 2026 és festiu?", answer: "Cau en diumenge. A Catalunya no és festiu i no es passa al dilluns; en nou comunitats autònomes i a Melilla, sí: hi fan festa el dilluns 7." },
+        { question: barcelonaDec7Question("ca"), answer: barcelonaDec7Answer("ca") },
+        { question: "El 6 de desembre de 2026 és festiu? Es passa al dilluns?", answer: "Cau en diumenge. A Catalunya no és festiu i no es passa al dilluns; en nou comunitats autònomes i a Melilla, sí: hi fan festa el dilluns 7." },
         { question: "Quins dies són festius al desembre del 2026 a Catalunya?", answer: "El dimarts 8 (la Immaculada), el divendres 25 (Nadal) i el dissabte 26 (Sant Esteve). A l'Aran, el 26 no és festiu." },
         { question: "Hi ha classe el 7 de desembre?", answer: "Depèn de l'escola: no és festiu escolar a tot Catalunya, però els centres poden fer-hi un dels seus quatre dies festius de lliure disposició. A Barcelona, el Consell d'Educació Municipal proposa que les escoles no facin classe aquell dia." },
         { question: "Obren les botigues el 8 de desembre a Barcelona?", answer: "Poden obrir: el dimarts 8 és un dels dos dies que Barcelona afegeix al calendari comercial del 2026. El diumenge 6 també és dia d'obertura." },
@@ -629,10 +633,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       keyFacts("El puente de diciembre de 2026, de un vistazo", [
         { label: "Festivo en toda Cataluña", value: "Martes 8 de diciembre (la Purísima o Inmaculada)" },
         { label: "Domingo 6 de diciembre", value: "No es festivo en Cataluña: el Día de la Constitución cae en domingo y no se pasa al lunes" },
-        { label: "Lunes 7 de diciembre", value: `Laborable, salvo en los ${n} municipios que tienen fiesta local` },
+        { label: "Lunes 7 de diciembre", value: `Laborable${bcnWorking ? ", también en Barcelona," : ""} salvo en los ${n} municipios que tienen fiesta local` },
         { label: "Para hacer puente", value: `Pedir el lunes 7: ${bridge.days} días, ${runWords(bridge, "es")}` },
         { label: "Colegios", value: "El día 8 no hay clase; el 7 depende de cada centro" },
-        { label: "Tiendas", value: "Pueden abrir el domingo 6 y el martes 8 en Barcelona y en los municipios sin días propios" },
+        { label: "Tiendas", value: "Pueden abrir el domingo 6 y el martes 8 en Barcelona y en los municipios sin días propios; el lunes 7, horario habitual, salvo donde es fiesta local" },
       ]),
       callout(
         "official",
@@ -703,7 +707,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         { question: "¿Hay puente en diciembre de 2026 en Cataluña?", answer: `Solo si pides el lunes 7. El único festivo es el martes 8; el domingo 6 no es festivo en Cataluña. Con el 7 libre, el puente va ${runWords(bridge, "es")}.` },
         { question: "¿Cuándo es el puente de la Purísima de 2026?", answer: `La Purísima (la Inmaculada, 8 de diciembre) cae en martes en 2026 y es festivo en toda Cataluña. Para hacer puente hay que pedir el lunes 7, que en Cataluña es laborable salvo en ${n} municipios: así el puente va ${runWords(bridge, "es")}.` },
         { question: "¿El 7 de diciembre de 2026 es festivo en Cataluña?", answer: `No en toda Cataluña: es laborable. Es fiesta local en ${n} municipios, como ${examples}. En cambio, sí es festivo en Madrid o en Andalucía, que han pasado al lunes el festivo del 6.` },
-        { question: "¿El 6 de diciembre de 2026 es festivo?", answer: "Cae en domingo. En Cataluña no es festivo y no se pasa al lunes; en nueve comunidades autónomas y en Melilla, sí: tienen fiesta el lunes 7." },
+        { question: barcelonaDec7Question("es"), answer: barcelonaDec7Answer("es") },
+        { question: "¿El 6 de diciembre de 2026 es festivo? ¿Se pasa al lunes?", answer: "Cae en domingo. En Cataluña no es festivo y no se pasa al lunes; en nueve comunidades autónomas y en Melilla, sí: tienen fiesta el lunes 7." },
         { question: "¿Qué días son festivos en diciembre de 2026 en Cataluña?", answer: "El martes 8 (la Inmaculada), el viernes 25 (Navidad) y el sábado 26 (San Esteban). En Arán, el 26 no es festivo." },
         { question: "¿Hay clase el 7 de diciembre?", answer: "Depende del centro: no es festivo escolar en toda Cataluña, pero los centros pueden hacer ese día uno de sus cuatro días festivos de libre disposición. En Barcelona, el Consell d'Educació Municipal propone que los colegios no tengan clase ese día." },
         { question: "¿Abren las tiendas el 8 de diciembre en Barcelona?", answer: "Pueden abrir: el martes 8 es uno de los dos días que Barcelona añade al calendario comercial de 2026. El domingo 6 también es día de apertura." },
@@ -720,10 +725,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     keyFacts("The December 2026 bridge at a glance", [
       { label: "Public holiday across Catalonia", value: "Tuesday 8 December (Immaculate Conception, la Puríssima)" },
       { label: "Sunday 6 December", value: "Not a holiday in Catalonia: Constitution Day falls on a Sunday and is not moved to the Monday" },
-      { label: "Monday 7 December", value: `A working day, except in the ${n} towns that have a local holiday` },
+      { label: "Monday 7 December", value: `A working day${bcnWorking ? ", Barcelona included," : ""} except in the ${n} towns that have a local holiday` },
       { label: "For a long weekend", value: `Take Monday the 7th off: ${bridge.days} days, ${runWords(bridge, "en")}` },
       { label: "Schools", value: "No school on the 8th; the 7th depends on each school" },
-      { label: "Shops", value: "May open on Sunday 6 and Tuesday 8 December in Barcelona and in towns without their own days" },
+      { label: "Shops", value: "May open on Sunday 6 and Tuesday 8 December in Barcelona and in towns without their own days; usual hours on Monday the 7th, except where it is a local holiday" },
     ]),
     callout(
       "official",
@@ -792,8 +797,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ),
     faq([
       { question: "Is there a long weekend in December 2026 in Catalonia?", answer: `Only if you take Monday the 7th off. The only holiday is Tuesday the 8th; Sunday the 6th is not a holiday in Catalonia. With the 7th off, the break runs ${runWords(bridge, "en")}.` },
+      { question: "When is the Puríssima long weekend in 2026?", answer: `La Puríssima (the Immaculate Conception, 8 December) falls on a Tuesday in 2026 and is a holiday across Catalonia. For a long weekend you have to take Monday the 7th off, a working day in Catalonia except in ${n} towns: the break then runs ${runWords(bridge, "en")}.` },
       { question: "Is 7 December 2026 a holiday in Catalonia?", answer: `Not across Catalonia: it is a working day. It is a local holiday in ${n} towns, such as ${examples}. It is, however, a holiday in Madrid or Andalusia, which moved the 6th to the Monday.` },
-      { question: "Is 6 December 2026 a public holiday?", answer: "It falls on a Sunday. In Catalonia it is not a holiday and is not moved to the Monday; in nine autonomous communities and Melilla it is, with Monday the 7th off." },
+      { question: barcelonaDec7Question("en"), answer: barcelonaDec7Answer("en") },
+      { question: "Is 6 December 2026 a public holiday? Is it moved to the Monday?", answer: "It falls on a Sunday. In Catalonia it is not a holiday and is not moved to the Monday; in nine autonomous communities and Melilla it is, with Monday the 7th off." },
       { question: "Which days are public holidays in Catalonia in December 2026?", answer: "Tuesday 8 (Immaculate Conception), Friday 25 (Christmas Day) and Saturday 26 (Sant Esteve). In Aran, the 26th is not a holiday." },
       { question: "Is there school on 7 December?", answer: "It depends on the school: it is not a school holiday across Catalonia, but schools may use one of their four free-choice days on it. In Barcelona, the municipal education council recommends that schools take that day off." },
       { question: "Are shops open on 8 December in Barcelona?", answer: "They may open: Tuesday the 8th is one of the two days Barcelona adds to its 2026 shopping calendar. Sunday the 6th is an opening day too." },

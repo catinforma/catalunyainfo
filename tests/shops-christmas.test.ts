@@ -60,7 +60,7 @@ test("every source is official, https, and carries a check date no later than to
 });
 
 test("every row of the December table names its sources, and its basis cites one of them", () => {
-  assert.equal(NEXT_WEEKS.length, 13);
+  assert.equal(NEXT_WEEKS.length, 14);
   for (const row of NEXT_WEEKS) {
     assert.ok(row.sources.length > 0, row.day.en);
     for (const key of row.sources) assert.ok(CHRISTMAS_SOURCES[key], `${row.day.en}: unknown source ${key}`);

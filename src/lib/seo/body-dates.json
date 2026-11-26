@@ -23,9 +23,9 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-25T19:03:08.779Z",
-   "fingerprint": "v1:cfc2d04b5ec045c76a4f45a57b0cad96",
-   "files": 18
+   "date": "2026-11-26T10:32:16.202Z",
+   "fingerprint": "v1:e30e273803dcb3185a1ab706d53c2f7f",
+   "files": 21
   },
   "block:touristTax": {
    "date": "2026-11-25T14:49:33.729Z",
@@ -58,8 +58,8 @@
    "files": 26
   },
   "elections": {
-   "date": "2026-11-26T06:03:50.000Z",
-   "fingerprint": "v1:025be1029c12676759509e506cc6d552",
+   "date": "2026-11-26T10:39:18.000Z",
+   "fingerprint": "v1:16d514a98b39284289d2bc0560027405",
    "files": 35
   },
   "embed-2027": {
@@ -108,9 +108,9 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-25T17:41:20.000Z",
-   "fingerprint": "v1:b29bb90a167cf1bb448827043d4395a8",
-   "files": 51
+   "date": "2026-11-26T10:32:16.202Z",
+   "fingerprint": "v1:a25dc235085723d50c916aca7b17510a",
+   "files": 52
   },
   "holidays-report": {
    "date": "2026-11-25T08:11:30.000Z",
