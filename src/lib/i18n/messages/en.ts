@@ -274,6 +274,7 @@ const en: Messages = {
   notFound: {
     title: "Page not found",
     body: "The address you opened does not exist or has moved.",
+    linksTitle: "You may be looking for",
   },
   consent: {
     title: "Help us improve the site?",

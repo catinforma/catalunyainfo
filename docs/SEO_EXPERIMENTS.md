@@ -15250,3 +15250,25 @@ The live pages said "2 días (4 con desplazamiento)" and "19 semanas" (paid-leav
 **Review 2026-12-10.** GSC Core Web Vitals (mobile CLS / LCP: no URL group moving to "needs improvement"); GA4 mobile engagement rate and average engagement time, 27 Nov-9 Dec vs 13 days before deploy, calculators (`/calculadoras/`, `/calculadores/`, `/calculators/`) and guides families. Revert rule: any CLS group regressing, or calculator mobile engagement down ≥ 3 points with a flat traffic mix.
 
 **Outcome:** _pending_
+
+## 2026-11-27 — Design pass round 2 (ci-disseny, batch 8A): 404 in the visitor's language with header/footer, 44 px language links, phone-menu backdrop + focus trap, calculators-hub questions spacing (all templates; no title, meta, H1, lead, ad or consent change) (review 2026-12-10)
+
+**Why.** Left over from round 1 (screenshots `/tmp/claude-1003/-home-claude/66f5ed46-c07a-4181-b990-f92071877662/scratchpad/disseny/after/`): `/es/no-existe-esta-pagina-xyz/` answered in Catalan, with no header, no footer and one link; the CA/ES/EN links were 21 px tall (WCAG 2.5.8 asks 24); the open phone menu left the page fully visible and tappable behind it.
+
+**What changed.**
+1. `src/app/(public)/[locale]/not-found.tsx`: the language comes from the `[locale]` root param (`next/root-params`, Next 16.3; server-side, no request headers, so routes calling `notFound()` stay static); anything else falls back to `ca` (`src/lib/i18n/not-found.ts`). The page now has the site header (language links to each edition's home) and footer, the search form (plain GET), and five links in the visitor's language: home, guides hub, holidays (work calendar, as the menu), calculators hub, strikes hub, `prefetch={false}`, 44 px rows. Status stays 404 (no `loading.tsx` in the tree, notFound() thrown before any output) and Next keeps adding `noindex` to 404 responses. New copy only: `notFound.linksTitle` (ca "Potser buscaves", es "Quizá buscabas", en "You may be looking for").
+2. `LanguageSwitcher.tsx`: each link is a 44 px tall flex box with the old pill (same classes) inside; width unchanged. 44 px = header row inner height (56 − 2×6) = menu button height, so the header does not grow (no CLS).
+3. Phone menu: `.ci-menu[open] > .ci-menu-button::after` draws a dimmed backdrop (ink at 45 %) below the header row, absolute (out of flow). Being part of the `<summary>`, a tap on it closes the menu natively and does not follow the link underneath. `MenuDisclosure` gets `trapFocus` (phone menu only): Tab/Shift+Tab cycle between the button and the panel links; Escape closes and returns focus (unchanged). About 12 lines of JS in an existing client component; no new component, no new request. Panel gets `overscroll-behavior: contain`.
+4. `CalculatorsHub.tsx`: the "most searched questions" title sat on its first link and the ten links ran together: `mb-3` on the h2, `gap-2` on the list.
+
+**Not touched.** Ads, consent, AdSense, verification, fonts, any title/meta/H1/lead; `global-not-found.tsx` (not enabled: `experimental.globalNotFound` is off).
+
+**Not measured.** No build in a worker: no lab CLS or screenshot of the new 404 / backdrop. Head: after deploy, curl `-o /dev/null -w '%{http_code}'` on `/es/no-existe-esta-pagina-xyz/` (expect 404, Spanish h1, `noindex` meta), `/en/…` and `/ca/…`; open the phone menu once (backdrop, tap closes).
+
+**Tests.** New `tests/design-pass-round2.test.ts` (7).
+
+**Go-live.** Deploy only (no publish group, no IndexNow).
+
+**Review 2026-12-10.** GSC Core Web Vitals mobile CLS (no group worse); GA4, if 404 views can be told apart (their page title is the layout default): share of 404 sessions that continue to a second page, 27 Nov-9 Dec vs the 13 days before.
+
+**Outcome:** _pending_

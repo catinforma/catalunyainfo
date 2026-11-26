@@ -274,6 +274,7 @@ const es: Messages = {
   notFound: {
     title: "Página no encontrada",
     body: "La dirección que has abierto no existe o se ha movido.",
+    linksTitle: "Quizá buscabas",
   },
   consent: {
     title: "¿Nos ayudas a mejorar la web?",

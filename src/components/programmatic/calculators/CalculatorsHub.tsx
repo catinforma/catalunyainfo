@@ -80,8 +80,10 @@ export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
         <div className="ci-shell py-10">
           {/* 26 Nov 2026: the most-searched questions first, each a link to the tool that answers it (calculators/related.ts). */}
           <section aria-labelledby="preguntas-mas-buscadas" className="ci-measure mb-10">
-            <h2 id="preguntas-mas-buscadas">{HUB_QUESTIONS_TITLE[locale]}</h2>
-            <ul>
+            {/* mb-3 / gap-2 (27 Nov 2026): the title sat on its first link and the ten
+                links ran together; now spaced like the groups below. */}
+            <h2 id="preguntas-mas-buscadas" className="mb-3">{HUB_QUESTIONS_TITLE[locale]}</h2>
+            <ul className="grid gap-2">
               {questions.map((q) => (
                 <li key={q.id}>
                   <IntentLink href={q.href}>

@@ -16,7 +16,10 @@ import { useEffect, useRef } from "react";
  *    server rendering, where a fixed "false" would lie to a no-JS reader);
  *  - Escape closes it and returns focus to the button;
  *  - a tap or click outside closes it, and so does focus leaving it;
- *  - following one of its links closes it, as does history navigation.
+ *  - following one of its links closes it, as does history navigation;
+ *  - with `trapFocus` (the phone menu, which dims the page behind it), Tab
+ *    and Shift+Tab cycle between the button and the panel's links instead of
+ *    walking into the dimmed page; Escape or the button closes it.
  */
 export function MenuDisclosure({
   panelId,
@@ -25,9 +28,12 @@ export function MenuDisclosure({
   panelClassName,
   summary,
   children,
+  trapFocus = false,
 }: {
   /** id of the panel, the target of the summary's `aria-controls`. */
   panelId: string;
+  /** Keep keyboard focus inside the open menu (button + panel links). */
+  trapFocus?: boolean;
   className: string;
   summaryClassName?: string;
   panelClassName: string;
@@ -52,6 +58,20 @@ export function MenuDisclosure({
       if (event.key === "Escape" && details.open) {
         event.preventDefault();
         close(true);
+        return;
+      }
+      if (trapFocus && event.key === "Tab" && details.open) {
+        const links = details.querySelectorAll<HTMLElement>(`#${panelId} a[href]`);
+        const last = links[links.length - 1];
+        if (!last) return;
+        const active = document.activeElement;
+        if (event.shiftKey && active === button) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && active === last) {
+          event.preventDefault();
+          button.focus();
+        }
       }
     };
     const onPointer = (event: PointerEvent) => {
@@ -82,7 +102,7 @@ export function MenuDisclosure({
       document.removeEventListener("pointerdown", onPointer);
       window.removeEventListener("popstate", onPopState);
     };
-  }, []);
+  }, [panelId, trapFocus]);
 
   return (
     <details ref={ref} className={className}>

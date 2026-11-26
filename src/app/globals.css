@@ -2061,6 +2061,23 @@
     background: var(--color-paper);
     border-bottom: 1px solid var(--color-rule-strong);
     box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.25);
+    overscroll-behavior: contain;
+  }
+  /* The dimmed page behind the open phone menu. It is part of the <summary>
+     (a pseudo-element, positioned from the sticky header like the panel), so
+     a tap on it is a tap on the menu button: the browser closes the menu with
+     no script, focus lands on the button, and the link that happened to be
+     under the finger is not followed. Drawn before the panel (earlier in the
+     DOM), below the header row, out of flow: nothing moves. */
+  .ci-menu[open] > .ci-menu-button::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: 100vh;
+    height: 100dvh;
+    background: rgb(12 22 28 / 0.45);
+    cursor: default;
   }
   .ci-menu-list {
     margin: 0;

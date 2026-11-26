@@ -120,12 +120,15 @@ export async function SiteHeader({
               label={t.common.changeLanguage}
             />
             {/* Below lg: one button for the whole menu. A <details>, so it
-                opens without JavaScript (components/nav/MenuDisclosure.tsx). */}
+                opens without JavaScript (components/nav/MenuDisclosure.tsx).
+                Open, it dims the page (globals.css, .ci-menu-button::after)
+                and keeps keyboard focus inside until closed. */}
             <MenuDisclosure
               panelId="ci-menu-panel"
               className="ci-menu lg:hidden"
               summaryClassName="ci-menu-button"
               panelClassName="ci-menu-panel"
+              trapFocus
               summary={
                 <>
                   <ShareIcon name="menu" className="ci-icon ci-menu-when-closed" />

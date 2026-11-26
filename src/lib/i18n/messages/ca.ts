@@ -273,6 +273,7 @@ const ca = {
   notFound: {
     title: "Pàgina no trobada",
     body: "L'adreça que has obert no existeix o s'ha mogut.",
+    linksTitle: "Potser buscaves",
   },
   consent: {
     title: "Ens ajudes a millorar el web?",
