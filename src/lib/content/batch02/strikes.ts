@@ -1103,7 +1103,8 @@ export const STRIKES: Strike[] = [
   },
   {
     id: "vaga-metges-smu-2026-11-16",
-    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+    // 26 Nov 2026: the 28th is listed too, until 08:00 (SMU notice: "hasta las 08:00 horas del sábado 28 de noviembre de 2026", re-read 26 Nov); `dayNotes` says so.
+    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27", "2026-11-28"],
     scope: "health",
     affects: ["health"],
     title: {
@@ -1117,6 +1118,13 @@ export const STRIKES: Strike[] = [
       en: "Sindicato Médicos Unidos doctors' strike at the ICS and SISCAT, 16 November to 08:00 on 28 November: A&E and special units keep running",
     },
     label: { ca: "metges (SMU) del 16 al 27 de novembre", es: "médicos (SMU) del 16 al 27 de noviembre", en: "doctors (SMU), 16 to 27 November" },
+    dayNotes: {
+      "2026-11-28": {
+        ca: "vaga de metges del Sindicato Médicos Unidos (ICS i SISCAT), aquest dia fins a les 8.00 h",
+        es: "huelga de médicos del Sindicato Médicos Unidos (ICS y SISCAT), ese día hasta las 8.00 h",
+        en: "Sindicato Médicos Unidos doctors' strike (ICS and SISCAT), that day until 08:00",
+      },
+    },
     facts: {
       ca: [
         `**Convocatòria:** el Sindicato Médicos Unidos (SMU), d'àmbit estatal, en ${link(U.smuNotice, "el seu preavís")}; a Catalunya la va registrar el 5 de novembre de 2026, segons l'ordre de serveis mínims. És una convocatòria diferent de la vaga indefinida de Metges de Catalunya, que també continua.`,

@@ -178,8 +178,9 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
   }
   const smu = SPAIN_STRIKES.find((s) => s.id === STRIKE_DAY_IDS.smu)!;
   assert.equal(smu.dates[0], "2026-11-16");
-  assert.equal(smu.dates.at(-1), "2026-11-27");
-  assert.equal(smu.dates.length, 12);
+  // 26 Nov 2026: the 28th is listed too (until 08:00, the notice's first phase).
+  assert.equal(smu.dates.at(-1), "2026-11-28");
+  assert.equal(smu.dates.length, 13);
   // 19 Nov 2026: the SMU's page no longer lists Zaragoza (20 → 19).
   assert.equal(SMU_MARCHES_19N.length, 19);
   assert.ok(!SMU_MARCHES_19N.some((m) => m.city === "Zaragoza"));

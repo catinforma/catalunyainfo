@@ -755,7 +755,8 @@ const SPAIN_STRIKES_ALL: SpainStrike[] = [
   },
   {
     id: "huelga-medicos-smu-2026-11-16",
-    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+    // 26 Nov 2026: the 28th is a day of action too, until 08:00 (the notice: "hasta las 08:00 horas del sábado 28 de noviembre de 2026", re-read 26 Nov); `dayNotes` says so on that day.
+    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27", "2026-11-28"],
     sector: "health",
     doctors: true,
     status: "official",
@@ -768,6 +769,13 @@ const SPAIN_STRIKES_ALL: SpainStrike[] = [
       en: "doctors' strike in public healthcare (Sindicato Médicos Unidos)",
     },
     label: { ca: "metges (SMU)", es: "médicos (SMU)", en: "doctors (SMU)" },
+    dayNotes: {
+      "2026-11-28": {
+        ca: "vaga de metges a la sanitat pública (Sindicato Médicos Unidos), aquest dia fins a les 8.00 h",
+        es: "huelga de médicos en la sanidad pública (Sindicato Médicos Unidos), ese día hasta las 8.00 h",
+        en: "doctors' strike in public healthcare (Sindicato Médicos Unidos), that day until 08:00",
+      },
+    },
     scope: {
       ca: "Els metges, també els residents en formació (MIR), dels centres sanitaris públics dels serveis de salut de totes les comunitats autònomes i dels que gestiona l'INGESA a Ceuta i Melilla.",
       es: "Los médicos, también los residentes en formación (MIR), de los centros sanitarios públicos de los servicios de salud de todas las comunidades autónomas y de los que gestiona el INGESA en Ceuta y Melilla.",

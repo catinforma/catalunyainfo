@@ -563,11 +563,11 @@ export function buildCarnivalBody(L: Locale): Block[] {
       bcn: [`Comença amb l'Arribo del Rei Carnestoltes, tradicionalment al passeig del Born; les rues es fan als barris, i el Dimecres de Cendra s'enterra la sardina (${a(bcnCulture, "Cultura Popular, Ajuntament de Barcelona")}). ${notYet}`],
       faqH: "Preguntes freqüents",
       faq: [
-        { question: "Quan és el Carnaval 2027?", answer: `Del dijous 4 de febrer (Dijous Gras) al dimecres 10 de febrer de 2027 (Dimecres de Cendra). El cap de setmana de rues és el 6 i el 7 de febrer.` },
+        { question: "Quan és el Carnestoltes (Carnaval) 2027?", answer: `Del dijous 4 de febrer (Dijous Gras) al dimecres 10 de febrer de 2027 (Dimecres de Cendra). El cap de setmana de rues és el 6 i el 7 de febrer.` },
         { question: "És festiu el Carnaval a Catalunya?", answer: `No: cap festiu del calendari laboral del 2027 cau aquella setmana. Però ${localTowns} municipis hi tenen una festa local, com ${biggestLocal("ca")}.` },
         { question: "Hi ha escola el dilluns de Carnaval, 8 de febrer de 2027?", answer: `A molts municipis no: és dia de lliure disposició a ${school.monday.length} dels ${school.total} que tenim recollits${school.barcelonaMonday ? ", Barcelona inclosa" : ""}. Confirma-ho amb la teva escola.` },
         { question: "Quan és la rua de Sitges 2027?", answer: "La Rua de la Disbauxa és el diumenge 7 de febrer i la Rua de l'Extermini, el dimarts 9 de febrer de 2027 (VisitSitges). Els horaris encara no són públics." },
-        { question: "Quan és el Dijous Gras 2027?", answer: "El dijous 4 de febrer de 2027." },
+        { question: "Quan és el Dijous Gras (Dijous Llarder) 2027?", answer: "El dijous 4 de febrer de 2027." },
         { question: "Quan és el Dimecres de Cendra 2027?", answer: "El dimecres 10 de febrer de 2027, 46 dies abans del Diumenge de Pasqua (28 de març)." },
       ],
     },
@@ -626,7 +626,7 @@ export function buildCarnivalBody(L: Locale): Block[] {
       bcn: [`Empieza con el Arribo del Rey Carnestoltes, tradicionalmente en el paseo del Born; las rúas se hacen en los barrios, y el Miércoles de Ceniza se entierra la sardina (${a(bcnCulture, "Cultura Popular, Ayuntamiento de Barcelona")}). ${notYet}`],
       faqH: "Preguntas frecuentes",
       faq: [
-        { question: "¿Cuándo es el Carnaval 2027?", answer: "Del jueves 4 de febrero (Jueves Lardero) al miércoles 10 de febrero de 2027 (Miércoles de Ceniza). El fin de semana de rúas es el 6 y el 7 de febrero." },
+        { question: "¿Cuándo es el Carnaval (Carnestoltes) 2027?", answer: "Del jueves 4 de febrero (Jueves Lardero) al miércoles 10 de febrero de 2027 (Miércoles de Ceniza). El fin de semana de rúas es el 6 y el 7 de febrero." },
         { question: "¿Es festivo el Carnaval en Cataluña?", answer: `No: ningún festivo del calendario laboral de 2027 cae esa semana. Pero ${localTowns} municipios tienen una fiesta local, como ${biggestLocal("es")}.` },
         { question: "¿Hay colegio el lunes de Carnaval, 8 de febrero de 2027?", answer: `En muchos municipios no: es día de libre disposición en ${school.monday.length} de los ${school.total} que tenemos recogidos${school.barcelonaMonday ? ", Barcelona incluida" : ""}. Confírmalo con tu colegio.` },
         { question: "¿Cuándo es la rúa de Sitges 2027?", answer: "La Rua de la Disbauxa es el domingo 7 de febrero y la Rua de l'Extermini, el martes 9 de febrero de 2027 (VisitSitges). Los horarios aún no son públicos." },
@@ -689,7 +689,7 @@ export function buildCarnivalBody(L: Locale): Block[] {
       bcn: [`It opens with the Arribo of King Carnestoltes, traditionally on Passeig del Born; the parades (rues) are held in the neighbourhoods, and on Ash Wednesday the sardine is buried (${a(bcnCulture, "Popular Culture, Barcelona City Council")}). ${notYet}`],
       faqH: "Frequently asked questions",
       faq: [
-        { question: "When is Carnival 2027 in Catalonia?", answer: "From Thursday 4 February (Dijous Gras) to Wednesday 10 February 2027 (Ash Wednesday). The parade weekend is 6 and 7 February." },
+        { question: "When is Carnival (Carnestoltes) 2027 in Catalonia?", answer: "From Thursday 4 February (Dijous Gras) to Wednesday 10 February 2027 (Ash Wednesday). The parade weekend is 6 and 7 February." },
         { question: "Is Carnival a public holiday in Catalonia?", answer: `No: no public holiday in the 2027 work calendar falls that week. But ${localTowns} towns have a local holiday then, among them ${biggestLocal("en")}.` },
         { question: "Is there school on Carnival Monday, 8 February 2027?", answer: `In many towns, no: it is a school free day in ${school.monday.length} of the ${school.total} towns we track${school.barcelonaMonday ? ", Barcelona included" : ""}. Check with your school.` },
         { question: "When is the Sitges Carnival parade in 2027?", answer: "The Rua de la Disbauxa is on Sunday 7 February and the Rua de l'Extermini on Tuesday 9 February 2027 (VisitSitges). Times are not public yet." },
