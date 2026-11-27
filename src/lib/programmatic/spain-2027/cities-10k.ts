@@ -30,7 +30,8 @@ import { SOURCES, type OfficialText } from "./sources";
  *     would be left out too (none in this wave; a test holds it).
  *  4. The towns of the four communities with no 2027 list on
  *     `TEN_K_READ_ON` (Aragón, Castilla-La Mancha, Madrid, Navarra) wait in
- *     `TEN_K_WAITING`, with no page.
+ *     `TEN_K_WAITING`, with no page. Aragón's came out on 27 Nov 2026 (BOA
+ *     núm. 230): its 11 towns are rows, read that day (`TEN_K_LIST_READ_ON`).
  *
  * Oddities kept as printed: Formentera's 25 July 2027 is a Sunday in the
  * BOIB; several towns have a Saturday. The page says so (city-copy.ts,
@@ -57,7 +58,6 @@ export const TEN_K_RECHECK_BY = WAITING_RECHECK_BY;
  * since the one in `PENDING_CHECKS`, sources.ts).
  */
 export const TEN_K_PENDING_READ: Partial<Record<Region, string>> = {
-  AR: "BOA núm. 227, de 24.11.2026",
   CM: "DOCM núm. 225, de 24.11.2026",
   MD: "BOCM núm. 282, de 24.11.2026",
   NC: "BON núm. 234, de 24.11.2026",
@@ -80,8 +80,14 @@ const y27 = (source: OfficialText, days: LocalDay[], more: Partial<LocalList> = 
 
 type Base = Omit<CityRow, "status2027" | "local2027" | "local2026" | "region" | "province" | "readOn">;
 
+/**
+ * Communities whose 2027 list came out after `TEN_K_READ_ON`: the day their
+ * rows were transcribed (Aragón: BOA núm. 230, de 27.11.2026, read that day).
+ */
+export const TEN_K_LIST_READ_ON: Partial<Record<Region, string>> = { AR: "2026-11-27" };
+
 function row(region: Region, province: string, base: Base, local: LocalList): CityRow {
-  return { ...base, region, province, status2027: "published", local2027: local, local2026: null, readOn: TEN_K_READ_ON };
+  return { ...base, region, province, status2027: "published", local2027: local, local2026: null, readOn: TEN_K_LIST_READ_ON[region] ?? TEN_K_READ_ON };
 }
 
 const BOJA = list2027("AN");
@@ -89,6 +95,7 @@ const BOPA = list2027("AS");
 const BOIB = list2027("IB");
 const BOC_CANARIAS = list2027("CN");
 const BOC_CB = list2027("CB");
+const BOA = list2027("AR");
 const BOP_LEON = part("CL", "León");
 const BOP_SALAMANCA = part("CL", "Salamanca");
 const BOP_SEGOVIA = part("CL", "Segovia");
@@ -242,6 +249,35 @@ const ANDALUCIA: CityRow[] = [
   row("AN", "Córdoba", { ine: "14052", slug: "penarroya-pueblonuevo", name: "Peñarroya-Pueblonuevo", ineName: "Peñarroya-Pueblonuevo", population: 10244, ineTable: 2901, capital: false }, y27(BOJA, [d("2027-10-07", null), d("2027-12-04", null)])),
   // BOJA: «JAÉN > ALCAUDETE 16 DE SEPTIEMBRE 17 DE SEPTIEMBRE»
   row("AN", "Jaén", { ine: "23003", slug: "alcaudete", name: "Alcaudete", ineName: "Alcaudete", population: 10129, ineTable: 2876, capital: false }, y27(BOJA, [d("2027-09-16", null), d("2027-09-17", null)])),
+];
+
+/**
+ * BOA núm. 230, de 27.11.2026, read on `TEN_K_LIST_READ_ON.AR`. Names in the days' order when the annex gives one per
+ * day; a single name for both days (Ejea's «San Juan Bautista») is not assigned to either.
+ */
+const ARAGON: CityRow[] = [
+  // BOA: «Utebo. 19 de junio y 26 de julio. San Lamberto y Santa Ana.»
+  row("AR", "Zaragoza", { ine: "50272", slug: "utebo", name: "Utebo", ineName: "Utebo", population: 19116, ineTable: 2907, capital: false }, y27(BOA, [d("2027-06-19", "San Lamberto"), d("2027-07-26", "Santa Ana")])),
+  // BOA: «Monzón. 29 de marzo y 21 de septiembre. Día de la Virgen de la Alegría y San Mateo.»
+  row("AR", "Huesca", { ine: "22158", slug: "monzon", name: "Monzón", ineName: "Monzón", population: 18525, ineTable: 2875, capital: false }, y27(BOA, [d("2027-03-29", "Día de la Virgen de la Alegría"), d("2027-09-21", "San Mateo")])),
+  // BOA: «Barbastro. 21 de junio y 8 de septiembre. San Ramón y Natividad de Nuestra Señora.»
+  row("AR", "Huesca", { ine: "22048", slug: "barbastro", name: "Barbastro", ineName: "Barbastro", population: 17807, ineTable: 2875, capital: false }, y27(BOA, [d("2027-06-21", "San Ramón"), d("2027-09-08", "Natividad de Nuestra Señora")])),
+  // BOA: «Ejea de los Caballeros. 14 de enero y 24 de junio. San Juan Bautista.»
+  row("AR", "Zaragoza", { ine: "50095", slug: "ejea-de-los-caballeros", name: "Ejea de los Caballeros", ineName: "Ejea de los Caballeros", population: 17129, ineTable: 2907, capital: false }, y27(BOA, [d("2027-01-14", null), d("2027-06-24", null)])),
+  // BOA: «Alcañiz. 9 de septiembre y 10 de septiembre.»
+  row("AR", "Teruel", { ine: "44013", slug: "alcaniz", name: "Alcañiz", ineName: "Alcañiz", population: 16505, ineTable: 2899, capital: false }, y27(BOA, [d("2027-09-09", null), d("2027-09-10", null)])),
+  // BOA: «Fraga. 11 de octubre y 13 de octubre.»
+  row("AR", "Huesca", { ine: "22112", slug: "fraga", name: "Fraga", ineName: "Fraga", population: 15576, ineTable: 2875, capital: false }, y27(BOA, [d("2027-10-11", null), d("2027-10-13", null)])),
+  // BOA: «Cuarte de Huerva. 29 de enero y 26 de julio.»
+  row("AR", "Zaragoza", { ine: "50089", slug: "cuarte-de-huerva", name: "Cuarte de Huerva", ineName: "Cuarte de Huerva", population: 15408, ineTable: 2907, capital: false }, y27(BOA, [d("2027-01-29", null), d("2027-07-26", null)])),
+  // BOA: «Jaca. 7 de mayo y 25 de junio. Primer Viernes de Mayo y Santa Orosia.»
+  row("AR", "Huesca", { ine: "22130", slug: "jaca", name: "Jaca", ineName: "Jaca", population: 14024, ineTable: 2875, capital: false }, y27(BOA, [d("2027-05-07", "Primer Viernes de Mayo"), d("2027-06-25", "Santa Orosia")])),
+  // BOA: «Tarazona. 28 de agosto y 5 de octubre. San Agustín y San Atilano.»
+  row("AR", "Zaragoza", { ine: "50251", slug: "tarazona", name: "Tarazona", ineName: "Tarazona", population: 10873, ineTable: 2907, capital: false }, y27(BOA, [d("2027-08-28", "San Agustín"), d("2027-10-05", "San Atilano")])),
+  // BOA: «Caspe. 29 de marzo y 25 de junio.»
+  row("AR", "Zaragoza", { ine: "50074", slug: "caspe", name: "Caspe", ineName: "Caspe", population: 10365, ineTable: 2907, capital: false }, y27(BOA, [d("2027-03-29", null), d("2027-06-25", null)])),
+  // BOA: «Binéfar. 29 de marzo y 14 de septiembre. Lunes de Pascua y Santo Cristo de los Milagros.»
+  row("AR", "Huesca", { ine: "22061", slug: "binefar", name: "Binéfar", ineName: "Binéfar", population: 10235, ineTable: 2875, capital: false }, y27(BOA, [d("2027-03-29", "Lunes de Pascua"), d("2027-09-14", "Santo Cristo de los Milagros")])),
 ];
 
 const ASTURIAS: CityRow[] = [
@@ -603,6 +639,7 @@ const VALENCIANA: CityRow[] = [
 /** The 10,000+ wave, by community in the BOE's order, most populous first. */
 export const TEN_K_CITY_ROWS: readonly CityRow[] = [
   ...ANDALUCIA,
+  ...ARAGON,
   ...ASTURIAS,
   ...BALEARES,
   ...CANARIAS,
@@ -637,17 +674,6 @@ const town = (region: Region, province: string, ine: string, ineName: string, po
  * each: they get a row when the list is published, not before.
  */
 export const TEN_K_WAITING: readonly TenKTown[] = [
-  town("AR", "Zaragoza", "50272", "Utebo", 19116, 2907),
-  town("AR", "Huesca", "22158", "Monzón", 18525, 2875),
-  town("AR", "Huesca", "22048", "Barbastro", 17807, 2875),
-  town("AR", "Zaragoza", "50095", "Ejea de los Caballeros", 17129, 2907),
-  town("AR", "Teruel", "44013", "Alcañiz", 16505, 2899),
-  town("AR", "Huesca", "22112", "Fraga", 15576, 2875),
-  town("AR", "Zaragoza", "50089", "Cuarte de Huerva", 15408, 2907),
-  town("AR", "Huesca", "22130", "Jaca", 14024, 2875),
-  town("AR", "Zaragoza", "50251", "Tarazona", 10873, 2907),
-  town("AR", "Zaragoza", "50074", "Caspe", 10365, 2907),
-  town("AR", "Huesca", "22061", "Binéfar", 10235, 2875),
   town("CM", "Ciudad Real", "13053", "Manzanares", 17728, 2866),
   town("CM", "Ciudad Real", "13039", "Daimiel", 17722, 2866),
   town("CM", "Cuenca", "16203", "Tarancón", 16748, 2869),

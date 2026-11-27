@@ -9,10 +9,10 @@ process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 type Region = import("../src/lib/programmatic/holidays/boe-2027.ts").Region;
 const { SNAPSHOT, municipalities } = await import("../src/lib/programmatic/holidays/data.ts");
 const { communityDays } = await import("../src/lib/programmatic/spain-2027/calendar.ts");
-const { AUTONOMOUS_CITIES, CATALAN_CITIES, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITY_ROWS, CORE_CITY_ROWS, INE_POPULATION, NOT_YET, ineTableUrl } = await import(
+const { AUTONOMOUS_CITIES, CATALAN_CITIES, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITIES_STATUS_READ_ON, CITY_ROWS, CORE_CITY_ROWS, INE_POPULATION, NOT_YET, ineTableUrl } = await import(
   "../src/lib/programmatic/spain-2027/cities-data.ts"
 );
-const { CITIES, CITIES_RECHECK_BY, cityCalendar, cityRuns, commonLocalDays, holidayCount, islandDay, localDays, localOnRegional, localRuns } = await import(
+const { CITIES, CITIES_RECHECK_BY, cityCalendar, cityReadOn, cityRuns, commonLocalDays, holidayCount, islandDay, localDays, localOnRegional, localRuns } = await import(
   "../src/lib/programmatic/spain-2027/cities.ts"
 );
 const { cityDescription, cityFaq, cityH1, cityLead, cityTitle, pendingLine } = await import("../src/lib/programmatic/spain-2027/city-copy.ts");
@@ -53,16 +53,22 @@ const CAPITALS = [
 /* Freshness                                                                  */
 /* -------------------------------------------------------------------------- */
 
-test("the city statuses are re-read within 21 days of CITIES_AS_OF", () => {
+test("the city statuses are re-read within 21 days of CITIES_STATUS_READ_ON", () => {
   // Pending communities publish their 2027 lists from mid-November to January
   // (sources.ts, the 2026 precedents). Fails from CITIES_RECHECK_BY until every
-  // "missing" row and every NOT_YET community is read again, the new days are
-  // transcribed with their source, and CITIES_AS_OF is moved.
+  // "pending" and "missing" row and every NOT_YET community is read again, the
+  // new days are transcribed with their source, and CITIES_STATUS_READ_ON is
+  // moved (CITIES_AS_OF stays the day the older published rows were read).
   assert.equal(CITIES_RECHECK_DAYS, 21);
-  const asOf = new Date(`${CITIES_AS_OF}T12:00:00Z`);
+  assert.ok(CITIES_STATUS_READ_ON >= CITIES_AS_OF);
+  const asOf = new Date(`${CITIES_STATUS_READ_ON}T12:00:00Z`);
   assert.equal(CITIES_RECHECK_BY, new Date(asOf.getTime() + 21 * 86_400_000).toISOString().slice(0, 10));
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
-  assert.ok(today < CITIES_RECHECK_BY, `re-read the pending local-holiday lists (cities-data.ts, read ${CITIES_AS_OF})`);
+  assert.ok(today < CITIES_RECHECK_BY, `re-read the pending local-holiday lists (cities-data.ts, read ${CITIES_STATUS_READ_ON})`);
+  // Every row still waiting was read on that day, not before.
+  const waiting = CITIES.filter((c) => c.status2027 === "pending" || c.status2027 === "missing");
+  assert.ok(waiting.length > 0);
+  for (const c of waiting) assert.ok(cityReadOn(c) >= CITIES_STATUS_READ_ON, `${c.slug}: read ${cityReadOn(c)}`);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -164,6 +170,12 @@ test("rows: a sample transcribed by hand from each bulletin", () => {
   // BOC núm. 224, de 20.11.2026 (Cantabria's list, out that day).
   assert.deepEqual(days("santander"), [["2027-05-17", "Virgen del Mar"], ["2027-08-30", "Santos Mártires Emeterio y Celedonio"]]);
   assert.deepEqual(days("torrelavega"), [["2027-08-16", "San Roque"], ["2027-09-16", "San Cipriano"]]);
+  // BOA núm. 230, de 27.11.2026 (Aragón's list, out that day): «Zaragoza. 29 de enero y 5 de marzo. San Valero y
+  // Cincomarzada.», «Huesca. 22 de enero y 10 de agosto. San Vicente y San Lorenzo.», «Teruel. 30 de marzo y 12 de julio.»
+  assert.deepEqual(days("zaragoza"), [["2027-01-29", "San Valero"], ["2027-03-05", "Cincomarzada"]]);
+  assert.deepEqual(days("huesca"), [["2027-01-22", "San Vicente"], ["2027-08-10", "San Lorenzo"]]);
+  assert.deepEqual(days("teruel"), [["2027-03-30", null], ["2027-07-12", null]]);
+  for (const slug of ["zaragoza", "huesca", "teruel"]) assert.equal(cityReadOn(CITIES.find((c) => c.slug === slug)!), "2026-11-27", slug);
   // The three Valencian BOPs (4, 10 and 20 Nov 2026).
   assert.deepEqual(days("valencia"), [["2027-01-22", "San Vicente Mártir, patrón de la ciudad de València"], ["2027-04-05", "San Vicente Ferrer, patrón de la Comunidad Valenciana"]]);
   assert.deepEqual(days("benidorm"), [["2027-11-15", null], ["2027-11-16", null]]);
@@ -175,7 +187,6 @@ test("rows: a sample transcribed by hand from each bulletin", () => {
   // Pending communities: the 2026 days, from the 2026 lists.
   const days26 = (slug: string) => CITIES.find((c) => c.slug === slug)!.local2026!.days.map((d) => d.date);
   assert.deepEqual(days26("madrid"), ["2026-05-15", "2026-11-09"]);
-  assert.deepEqual(days26("zaragoza"), ["2026-01-29", "2026-03-05"]);
   assert.deepEqual(days26("toledo"), ["2026-01-23", "2026-11-26"]);
   assert.deepEqual(days26("pamplona"), ["2026-11-30", "2026-12-03"]);
   // Navarra's 3 December 2027 is already fixed for every municipality: Pamplona's page counts it.

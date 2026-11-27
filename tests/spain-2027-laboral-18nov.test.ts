@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
+import { addDays } from "../src/lib/programmatic/holidays/format.ts";
 import { COMMON_DATES } from "../src/lib/programmatic/spain-2027/calendar.ts";
 import { CITIES, SEARCHED_CITIES, cityBySlug, cityCalendar, cityLayers, cityReadOn, citiesOf, local2027, searchedCitiesOf } from "../src/lib/programmatic/spain-2027/cities.ts";
 import { WAITING_RECHECK_BY } from "../src/lib/programmatic/spain-2027/cities-more.ts";
@@ -23,11 +24,11 @@ import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
  */
 
 // Cantabria (BOC núm. 224) and the Comunitat Valenciana (three provincial BOPs) left this list on 20 Nov 2026:
-// tests/spain-2027-laboral-20nov.test.ts.
-const PENDING = ["AR", "CM", "MD", "NC"] as const;
-const BULLETIN = { AR: "BOA", CM: "DOCM", MD: "BOCM", NC: "BON" } as const;
-/** PENDING_READ_ON as the bulletins print it: "20.11.2026". */
-const READ_DOTTED = PENDING_READ_ON.split("-").reverse().map(Number).join("\\.");
+// tests/spain-2027-laboral-20nov.test.ts. Aragón (BOA núm. 230) on 27 Nov 2026: tests/spain-2027-laboral-27nov.test.ts.
+const PENDING = ["CM", "MD", "NC"] as const;
+const BULLETIN = { CM: "DOCM", MD: "BOCM", NC: "BON" } as const;
+/** A bulletin's printed date ("26.11.2026") as ISO. */
+const dottedIso = (dotted: string) => dotted.split(".").reverse().map((n) => n.padStart(2, "0")).join("-");
 
 test("pending lists: read again on PENDING_READ_ON, each with the last issue searched", () => {
   for (const r of PENDING) {
@@ -36,7 +37,11 @@ test("pending lists: read again on PENDING_READ_ON, each with the last issue sea
     assert.ok(local.checked, r);
     assert.equal(local.checked, PENDING_CHECKS[r], r);
     assert.equal(local.checked!.date, PENDING_READ_ON, r);
-    assert.match(local.checked!.through, new RegExp(`^${BULLETIN[r]} núm\\. \\d+, de ${READ_DOTTED}$`), r);
+    // The last issue read: that day's, or the day before when that day's was not online yet (BOCM, 27 Nov 2026).
+    const m = local.checked!.through.match(new RegExp(`^${BULLETIN[r]} núm\\. \\d+, de (\\d{1,2}\\.\\d{1,2}\\.2026)$`));
+    assert.ok(m, `${r}: ${local.checked!.through}`);
+    const issued = dottedIso(m![1]!);
+    assert.ok(issued <= PENDING_READ_ON && issued >= addDays(PENDING_READ_ON, -1), `${r}: ${local.checked!.through}`);
     assert.ok(local.y2026 && local.checked!.date > local.y2026.date, r);
   }
   // Only a pending list carries a check; every pending one does (Catalonia's DOGC order has its own engine).

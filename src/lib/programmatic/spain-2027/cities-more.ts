@@ -35,7 +35,7 @@ import { SOURCES, type OfficialText } from "./sources";
  *     Castilla-La Mancha, Madrid, Navarra, Comunitat Valenciana as of
  *     13 Nov 2026, still so on 18 Nov; by 20 Nov Cantabria's list and the
  *     Comunitat Valenciana's three provincial ones were out, and their towns
- *     are rows now), or the published list leaves it out (reason "missing").
+ *     are rows now; Aragón's on 27 Nov, BOA núm. 230), or the published list leaves it out (reason "missing").
  *     Unlike the core rows, a waiting town never gets a page with its 2026
  *     days: no page until its 2027 days are official. The one exception
  *     before the bulletin is the council's own act (the published minutes
@@ -55,19 +55,22 @@ import { SOURCES, type OfficialText } from "./sources";
 export const MORE_READ_ON = "2026-11-13";
 /**
  * Communities whose 2027 list came out after `MORE_READ_ON`: the day their
- * rows were transcribed (Cantabria: BOC núm. 224, de 20.11.2026, read that
- * day; Comunitat Valenciana: the three provincial bulletins of 4, 10 and
- * 20 Nov 2026, read on 20 Nov).
+ * rows were transcribed (Aragón: BOA núm. 230, de 27.11.2026, read that day;
+ * Cantabria: BOC núm. 224, de 20.11.2026, read that day; Comunitat
+ * Valenciana: the three provincial bulletins of 4, 10 and 20 Nov 2026, read
+ * on 20 Nov).
  */
-export const LIST_READ_ON: Partial<Record<Region, string>> = { CB: "2026-11-20", VC: "2026-11-20" };
+export const LIST_READ_ON: Partial<Record<Region, string>> = { AR: "2026-11-27", CB: "2026-11-20", VC: "2026-11-20" };
 /**
  * A test fails from this day until the pending communities are read again.
  * Read again on 18 Nov 2026 and on 20 Nov 2026 (`PENDING_CHECKS`,
  * sources.ts): Cantabria's list came out on the 20th and the Valencian ones
  * were found in the three provincial bulletins (their towns are rows now);
  * the other four still none; read again on 25 Nov 2026 (BOA 228, DOCM 226,
- * BOCM 283, BON 235): still none. Next by 2 Dec: the BOA is past its 2026
- * precedent (20 Nov), the BON's is 2 Dec, the BOCM's and DOCM's 12 Dec.
+ * BOCM 283, BON 235): still none; read again on 27 Nov 2026: Aragón's came
+ * out that day (BOA núm. 230; its towns are rows now), DOCM 228, BOCM 284
+ * and BON 237 still none. Next by 2 Dec: the BON's precedent is 2 Dec, the
+ * BOCM's and DOCM's 12 Dec.
  */
 export const WAITING_RECHECK_BY = "2026-12-02";
 export const MORE_MIN_POPULATION = 20_000;
@@ -107,10 +110,20 @@ const DOG = list2027("GA");
 const BORM = list2027("MC");
 const BOR = list2027("RI");
 const BOC_CB = list2027("CB");
+const BOA = list2027("AR");
 
 /* -------------------------------------------------------------------------- */
 /* The rows: one per town, the bulletin's line above it                       */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * BOA núm. 230, de 27.11.2026, read on `LIST_READ_ON.AR`. Names in the days' order when the annex gives one per
+ * day; a single name for both days (Calatayud's «Virgen de la Peña») is not assigned to either.
+ */
+const ARAGON: CityRow[] = [
+  // BOA: «Calatayud. 7 de septiembre y 8 de septiembre. Virgen de la Peña.»
+  row("AR", "Zaragoza", { ine: "50067", slug: "calatayud", name: "Calatayud", ineName: "Calatayud", population: 20158, ineTable: 2907, capital: false }, y27(BOA, [d("2027-09-07", null), d("2027-09-08", null)])),
+];
 
 const ANDALUCIA: CityRow[] = [
   // BOJA: «SEVILLA > MAIRENA DEL ALJARAFE 23 DE ENERO 25 DE JUNIO»
@@ -578,6 +591,7 @@ const VALENCIANA: CityRow[] = [
 /** The 20,000+ wave, by community in the BOE's order, most populous first. */
 export const MORE_CITY_ROWS: readonly CityRow[] = [
   ...ANDALUCIA,
+  ...ARAGON,
   ...ASTURIAS,
   ...BALEARES,
   ...CANARIAS,
@@ -628,7 +642,6 @@ function missingTown(region: Region, province: string, base: WaitBase, note: str
  * Names and slugs are provisional until the page is built.
  */
 export const WAITING_TOWNS: readonly WaitingTown[] = [
-  wait("AR", "Zaragoza", { ine: "50067", slug: "calatayud", name: "Calatayud", ineName: "Calatayud", population: 20158, ineTable: 2907 }),
   wait("CM", "Ciudad Real", { ine: "13082", slug: "tomelloso", name: "Tomelloso", ineName: "Tomelloso", population: 37060, ineTable: 2866 }),
   wait("CM", "Guadalajara", { ine: "19046", slug: "azuqueca-de-henares", name: "Azuqueca de Henares", ineName: "Azuqueca de Henares", population: 35924, ineTable: 2872 }),
   wait("CM", "Toledo", { ine: "45081", slug: "illescas", name: "Illescas", ineName: "Illescas", population: 33301, ineTable: 2902 }),

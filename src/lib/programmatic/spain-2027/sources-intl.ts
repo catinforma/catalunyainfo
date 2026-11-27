@@ -61,12 +61,12 @@ export const SOURCE_PROSE: Record<Region, Record<IntlLocale, SourceProse>> = {
   AR: {
     ca: {
       how: "A l'Aragó els fixa una resolució del director general de Treball per als municipis d'Osca, Terol i Saragossa, al",
-      note: "Els ajuntaments tenien fins al 15 d'octubre de 2026 per proposar els seus dies (Decreto 163/2026). El 2026 també hi va haver una resolució complementària per als municipis que van arribar tard (BOA núm. 56, de 23.3.2026).",
+      note: "La resolució recull les propostes de «la mayoría de los ayuntamientos» (la majoria d'ajuntaments); el 2026 també hi va haver una resolució complementària per als municipis que van arribar tard (BOA núm. 56, de 23.3.2026).",
       bulletinShort: "el BOA",
     },
     en: {
       how: "In Aragon a resolution of the Director-General for Labour sets them for the municipalities of Huesca, Teruel and Zaragoza, in the",
-      note: "Councils had until 15 October 2026 to put forward their days (Decreto 163/2026). In 2026 there was also a supplementary resolution for the municipalities that were late (BOA núm. 56, de 23.3.2026).",
+      note: "The resolution lists the days put forward by «la mayoría de los ayuntamientos» (most councils); in 2026 there was also a supplementary resolution for the municipalities that were late (BOA núm. 56, de 23.3.2026).",
       bulletinShort: "the BOA",
     },
   },

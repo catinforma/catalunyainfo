@@ -67,12 +67,13 @@ test("Vigo and Marbella: their bulletin lines read again on 20 Nov 2026", () => 
   }
 });
 
-test("pending lists: the four still out read through the issues of 25.11.2026; the council acts read on 20 Nov", () => {
-  assert.ok(PENDING_READ_ON >= "2026-11-20");
-  assert.deepEqual(Object.keys(PENDING_CHECKS).sort(), ["AR", "CM", "MD", "NC"]);
+test("pending lists: the three still out read through the issues of 26-27.11.2026 (Aragón out on the 27th); the council acts read on 20 Nov", () => {
+  assert.ok(PENDING_READ_ON >= "2026-11-27");
+  assert.deepEqual(Object.keys(PENDING_CHECKS).sort(), ["CM", "MD", "NC"]);
+  // The BOCM of 27 Nov was not online yet when the others were read (still 404 at 02:20).
   assert.deepEqual(
     Object.values(PENDING_CHECKS).map((p) => p.through),
-    ["BOA núm. 228, de 25.11.2026", "DOCM núm. 226, de 25.11.2026", "BOCM núm. 283, de 25.11.2026", "BON núm. 235, de 25.11.2026"],
+    ["DOCM núm. 228, de 27.11.2026", "BOCM núm. 284, de 26.11.2026", "BON núm. 237, de 27.11.2026"],
   );
   assert.equal(COUNCIL_READ_ON, "2026-11-20");
   assert.ok(WAITING_RECHECK_BY > PENDING_READ_ON);
@@ -127,7 +128,7 @@ test("Parla and Fuenlabrada: the Pleno's own minutes, labelled pending the BOCM,
     assert.equal(new URL(list.source.url).hostname, host, slug);
     assert.match(list.source.title, /^Acta de la sesión ordinaria del Pleno/, slug);
     assert.equal(bulletinLocal2027(c), null, `${slug}: counted as the bulletin's`);
-    assert.match(cityAnswer(c).rest, /Las aprobó el Pleno del Ayuntamiento el \d{1,2} de octubre de 2026; falta que las publique el BOCM \(consultado hasta el BOCM núm\. 283, de 25\.11\.2026\)\./, slug);
+    assert.match(cityAnswer(c).rest, /Las aprobó el Pleno del Ayuntamiento el \d{1,2} de octubre de 2026; falta que las publique el BOCM \(consultado hasta el BOCM núm\. 284, de 26\.11\.2026\)\./, slug);
     for (const d of list.days) assert.equal(["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"][new Date(`${d.date}T12:00:00Z`).getUTCDay()], d.printedWeekday, `${slug} ${d.date}`);
   }
   // Still pending in Madrid: no act that meets the rule.
@@ -140,16 +141,16 @@ test("pending FAQ: '¿Cuáles son los festivos locales de <ciudad> en 2027?' ans
   assert.equal(es!.question, "¿Cuáles son los festivos locales de Alcobendas en 2027?");
   assert.equal(
     es!.answer,
-    "Aún no son oficiales: el BOCM todavía no ha publicado la lista de 2027 (consultado hasta el BOCM núm. 283, de 25.11.2026). La de 2026 salió el 12 de diciembre de 2025 (BOCM núm. 296, de 12.12.2025). Cuando se publiquen, esta página dará las fechas con su fuente.",
+    "Aún no son oficiales: el BOCM todavía no ha publicado la lista de 2027 (consultado hasta el BOCM núm. 284, de 26.11.2026). La de 2026 salió el 12 de diciembre de 2025 (BOCM núm. 296, de 12.12.2025). Cuando se publiquen, esta página dará las fechas con su fuente.",
   );
   const [ca] = cityFaqIntl(alcobendas, "ca");
   assert.equal(ca!.question, "Quins són els festius locals d'Alcobendas el 2027?");
-  assert.match(ca!.answer, /^Encara no són oficials: .*\(consultat fins al BOCM núm\. 283, de 25\.11\.2026\)\. La del 2026 va sortir el 12 de desembre de 2025 \(BOCM núm\. 296/);
+  assert.match(ca!.answer, /^Encara no són oficials: .*\(consultat fins al BOCM núm\. 284, de 26\.11\.2026\)\. La del 2026 va sortir el 12 de desembre de 2025 \(BOCM núm\. 296/);
   const [en] = cityFaqIntl(alcobendas, "en");
   assert.equal(en!.question, "What are Alcobendas's local holidays in 2027?");
-  assert.match(en!.answer, /^They are not official yet: .*\(read up to BOCM núm\. 283, de 25\.11\.2026\)\. The 2026 list came out on 12 December 2025 \(BOCM núm\. 296/);
+  assert.match(en!.answer, /^They are not official yet: .*\(read up to BOCM núm\. 284, de 26\.11\.2026\)\. The 2026 list came out on 12 December 2025 \(BOCM núm\. 296/);
   // Navarra: 3 December is already fixed for every municipality.
-  assert.match(cityFaq(cityBySlug("NC", "pamplona")!)[0]!.answer, /^Una ya es oficial: el viernes 3 de diciembre .* La otra, la propia de Pamplona, aún no: el BON todavía no ha publicado la lista de 2027 \(consultado hasta el BON núm\. 235, de 25\.11\.2026\)\./);
+  assert.match(cityFaq(cityBySlug("NC", "pamplona")!)[0]!.answer, /^Una ya es oficial: el viernes 3 de diciembre .* La otra, la propia de Pamplona, aún no: el BON todavía no ha publicado la lista de 2027 \(consultado hasta el BON núm\. 237, de 27\.11\.2026\)\./);
   // Burgos: the provincial list is out and leaves the capital out.
   assert.match(cityFaq(cityBySlug("CL", "burgos")!)[0]!.answer, /^La lista oficial de 2027 no las da\./);
   // No pending answer gives a 2027 date.

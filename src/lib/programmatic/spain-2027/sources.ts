@@ -22,10 +22,12 @@ export const SOURCES_READ_ON = "2026-11-06";
 export const STATUS_RECHECK_BY = "2026-12-02";
 
 /**
- * The lists still pending, read again on 25 Nov 2026 (the issues of 21 to 25
- * Nov: BOA 226-228, DOCM 224-226, BOCM 280-283 and BON 233-235, none with the
- * 2027 list; the DOGC, núm. 9802 of 25 Nov, has no 2027 local order either),
- * after the 20 Nov reading: every issue of each
+ * The lists still pending, read again on 27 Nov 2026 (the issues of 26 and
+ * 27 Nov: DOCM 227-228, BOCM 284 and BON 236-237, none with the 2027 list;
+ * the BOCM of 27 Nov was not online yet when read (still 404 at 02:20), so the Madrid
+ * line stops at the 26th; the DOGC, núm. 9804 of 27 Nov, has no 2027 local
+ * order either), after the 25 Nov reading (the issues of 21 to 25 Nov: BOA
+ * 226-228, DOCM 224-226, BOCM 280-283, BON 233-235) and the 20 Nov one: every issue of each
  * bulletin since the 18 Nov reading (that one went back to 13 Nov, and to
  * 1 Oct for the BOCM and the BOC, 26 Oct for the BOA, 30 Oct for the BON,
  * 2 Nov for the DOCM) through that day's, by each bulletin's own summary
@@ -38,19 +40,19 @@ export const STATUS_RECHECK_BY = "2026-12-02";
  * and BOCM 12.12.2025). `through` is the last issue read; none of these has
  * the 2027 list.
  *
- * No longer here, both read on 20 Nov 2026: Cantabria's came out that day
- * (BOC núm. 224, CVE-2026-9104: `CANTABRIA.local.y2027`); the Comunitat
- * Valenciana's is not in the DOGV (searched through núm. 10498, of that day)
- * but in the three provincial bulletins, 4, 10 and 20 Nov 2026
+ * No longer here: Aragón's came out on 27 Nov 2026 (BOA núm. 230, read that
+ * day: `ARAGON.local.y2027`). Both read on 20 Nov 2026: Cantabria's came out
+ * that day (BOC núm. 224, CVE-2026-9104: `CANTABRIA.local.y2027`); the
+ * Comunitat Valenciana's is not in the DOGV (searched through núm. 10498, of
+ * that day) but in the three provincial bulletins, 4, 10 and 20 Nov 2026
  * (`VALENCIANA.local.parts`).
  */
-export const PENDING_READ_ON = "2026-11-25";
+export const PENDING_READ_ON = "2026-11-27";
 
 export const PENDING_CHECKS = {
-  AR: { through: "BOA núm. 228, de 25.11.2026", date: PENDING_READ_ON },
-  CM: { through: "DOCM núm. 226, de 25.11.2026", date: PENDING_READ_ON },
-  MD: { through: "BOCM núm. 283, de 25.11.2026", date: PENDING_READ_ON },
-  NC: { through: "BON núm. 235, de 25.11.2026", date: PENDING_READ_ON },
+  CM: { through: "DOCM núm. 228, de 27.11.2026", date: PENDING_READ_ON },
+  MD: { through: "BOCM núm. 284, de 26.11.2026", date: PENDING_READ_ON },
+  NC: { through: "BON núm. 237, de 27.11.2026", date: PENDING_READ_ON },
 } as const satisfies Record<string, PendingCheck>;
 
 /** The last issue of a bulletin read without the 2027 list, and the day it was read. */
@@ -269,18 +271,22 @@ const ARAGON: CommunitySources = {
     bulletinShort: "el BOA",
     bulletinUrl: "https://www.boa.aragon.es/",
     how: "En Aragón los fija una resolución del Director General de Trabajo para los municipios de Huesca, Teruel y Zaragoza, en el",
-    status: "pending",
-    checked: PENDING_CHECKS.AR,
-    y2027: null,
-    y2026: {
+    status: "published",
+    // Read on 27 Nov 2026, the day it came out (BOA open data `OPENDATABOAJSONAPP`, PUBL-C=20261127, and the PDF,
+    // csv BOA20261127012, 200): «Ordenar la publicación de las fiestas laborales de ámbito local, de carácter
+    // retribuido, no recuperable e inhábil, correspondientes al año 2027, en los municipios de las provincias de
+    // Huesca, Teruel y Zaragoza, que figuran en el anexo de la presente Resolución.» Signed in Zaragoza on
+    // 13.11.2026; the annex lists each municipality as «<Municipio>. <día> y <día>. <nombres>.».
+    y2027: {
       title:
-        "Resolución de 4 de noviembre de 2025, del Director General de Trabajo, por la que se determinan las fiestas laborales, de carácter retribuido, no recuperables e inhábiles, para el año 2026, en los municipios de las provincias de Huesca, Teruel y Zaragoza",
-      ref: "BOA núm. 225, de 20.11.2025",
-      date: "2025-11-20",
-      url: "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1421874360606",
+        "Resolución de 13 de noviembre de 2026, del Director General de Trabajo, por la que se determinan las fiestas laborales, de carácter retribuido, no recuperables e inhábiles, para el año 2027, en los municipios de las provincias de Huesca, Teruel y Zaragoza",
+      ref: "BOA núm. 230, de 27.11.2026",
+      date: "2026-11-27",
+      url: "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1476882940808",
     },
+    y2026: null,
     dataset: null,
-    note: "Los ayuntamientos tenían hasta el 15 de octubre de 2026 para proponer sus días (Decreto 163/2026). En 2026 hubo además una resolución complementaria para los municipios que llegaron tarde (BOA núm. 56, de 23.3.2026).",
+    note: "La resolución recoge «las propuestas presentadas por la mayoría de los ayuntamientos»; en 2026 hubo además una resolución complementaria para los municipios que llegaron tarde (BOA núm. 56, de 23.3.2026).",
   },
   boeNote: null,
   subRegional: null,

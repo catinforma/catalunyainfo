@@ -19,7 +19,7 @@ type Region = import("../src/lib/programmatic/holidays/boe-2027.ts").Region;
 const { CORE_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-data.ts");
 const { COUNCIL_CITY_ROWS } = await import("../src/lib/programmatic/spain-2027/cities-council.ts");
 const { MORE_CITY_ROWS, WAITING_RECHECK_BY, WAITING_TOWNS } = await import("../src/lib/programmatic/spain-2027/cities-more.ts");
-const { TEN_K_CITY_ROWS, TEN_K_LEFT_OUT, TEN_K_MIN_POPULATION, TEN_K_PENDING_READ, TEN_K_READ_ON, TEN_K_RECHECK_BY, TEN_K_WAITING } = await import(
+const { TEN_K_CITY_ROWS, TEN_K_LEFT_OUT, TEN_K_LIST_READ_ON, TEN_K_MIN_POPULATION, TEN_K_PENDING_READ, TEN_K_READ_ON, TEN_K_RECHECK_BY, TEN_K_WAITING } = await import(
   "../src/lib/programmatic/spain-2027/cities-10k.ts"
 );
 const { CITIES, cityBySlug, cityReadOn, localDays, nonLocalDates } = await import("../src/lib/programmatic/spain-2027/cities.ts");
@@ -37,7 +37,8 @@ const PROVINCE_REGION: Record<string, Region> = {
   "37": "CL", "38": "CN", "39": "CB", "40": "CL", "41": "AN", "42": "CL", "44": "AR", "45": "CM", "46": "VC", "47": "CL", "48": "PV",
   "49": "CL", "50": "AR",
 };
-const PENDING: Region[] = ["AR", "CM", "MD", "NC"];
+// Aragón left this list on 27 Nov 2026 (BOA núm. 230): its 11 towns are rows, read that day (TEN_K_LIST_READ_ON).
+const PENDING: Region[] = ["CM", "MD", "NC"];
 const WEEKDAY = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const weekday = (date: string) => WEEKDAY[new Date(`${date}T12:00:00Z`).getUTCDay()]!;
 
@@ -60,7 +61,7 @@ test("selection: 10,000 to 19,999 inhabitants (INE 1 Jan 2025), outside Cataloni
   for (const r of TEN_K_CITY_ROWS) assert.equal(r.capital, false, r.ine);
 });
 
-test("waiting: the four communities with no 2027 list on TEN_K_READ_ON, re-read with the 20,000+ wave", () => {
+test("waiting: the communities with no 2027 list on TEN_K_READ_ON and still none, re-read with the 20,000+ wave", () => {
   assert.equal(TEN_K_RECHECK_BY, WAITING_RECHECK_BY);
   assert.deepEqual([...new Set(TEN_K_WAITING.map((t) => t.region))].sort(), PENDING);
   assert.deepEqual(Object.keys(TEN_K_PENDING_READ).sort(), PENDING);
@@ -81,17 +82,21 @@ test("left out: each with the bulletin's reason; Benissa's printed weekdays cont
   assert.equal(weekday("2027-06-29"), "Martes");
 });
 
-test("rows: each from its community's official 2027 list, read on TEN_K_READ_ON, two days per area off the BOE ones", () => {
+test("rows: each from its community's official 2027 list, read on TEN_K_READ_ON (or the day a later list came out), two days per area off the BOE ones", () => {
   assert.equal(TEN_K_READ_ON, "2026-11-24");
+  assert.deepEqual({ ...TEN_K_LIST_READ_ON }, { AR: "2026-11-27" });
+  assert.equal(TEN_K_LIST_READ_ON.AR, SOURCES.AR.local.y2027?.date);
+  assert.equal(TEN_K_CITY_ROWS.filter((r) => r.region === "AR").length, 11);
   for (const r of TEN_K_CITY_ROWS) {
     const s = SOURCES[r.region].local;
     assert.equal(r.status2027, "published", r.slug);
     assert.equal(s.status, "published", `${r.slug}: the community list must be out`);
     assert.equal(r.local2026, null, r.slug);
-    assert.equal(r.readOn, TEN_K_READ_ON, r.slug);
+    const readOn = TEN_K_LIST_READ_ON[r.region] ?? TEN_K_READ_ON;
+    assert.equal(r.readOn, readOn, r.slug);
     const list = r.local2027!;
     assert.equal(list.year, 2027);
-    assert.ok(list.source.date <= TEN_K_READ_ON, `${r.slug}: read before its bulletin came out`);
+    assert.ok(list.source.date <= readOn, `${r.slug}: read before its bulletin came out`);
     const official = [s.y2027, ...(s.parts ?? []).map((p) => p.text)].filter((t) => t !== null);
     assert.ok(official.some((t) => t.url === list.source.url && t.ref === list.source.ref), `${r.slug}: not the community's 2027 list`);
     assert.match(list.source.url, /^https:\/\//);
@@ -111,7 +116,7 @@ test("rows: each from its community's official 2027 list, read on TEN_K_READ_ON,
     assert.ok(c, "every row has a city");
     const boe = new Set(nonLocalDates(c));
     for (const d of localDays(c)) assert.ok(!boe.has(d.date), `${c.slug}: ${d.date} is already a holiday of ${c.region}`);
-    assert.equal(cityReadOn(c), TEN_K_READ_ON);
+    assert.equal(cityReadOn(c), TEN_K_LIST_READ_ON[c.region] ?? TEN_K_READ_ON);
   }
 });
 

@@ -37,11 +37,22 @@ import { SOURCES, type OfficialText } from "./sources";
  * an official source has them; with neither, it has no page.
  *
  * Statuses change weekly from November to January: a test fails from
- * `CITIES_RECHECK_BY` (21 days after `CITIES_AS_OF`) until the pending rows
- * are read again.
+ * `CITIES_RECHECK_BY` (21 days after `CITIES_STATUS_READ_ON`) until the
+ * pending and missing rows are read again.
  */
 
+/** The day the rows without a `readOn` of their own were transcribed from their bulletins. */
 export const CITIES_AS_OF = "2026-11-06";
+/**
+ * The last day every "pending" and "missing" row was read again (27 Nov
+ * 2026): the pending communities' bulletins (`PENDING_CHECKS`, sources.ts;
+ * Aragón's list came out that day, BOA núm. 230), and, for Burgos and
+ * Valladolid, the Junta de Castilla y León's "Calendario laboral" page, which
+ * still links the same nine provincial lists (BOP de Burgos núm. 145 and BOP
+ * de Valladolid núm. 129) and no later one. Moving it does not move the
+ * day a published row was read.
+ */
+export const CITIES_STATUS_READ_ON = "2026-11-27";
 export const CITIES_RECHECK_DAYS = 21;
 
 /** The official population figures every row's `population` comes from. */
@@ -144,6 +155,7 @@ const DOG = list2027("GA");
 const BORM = list2027("MC");
 const BOR = list2027("RI");
 const BOC_CB = list2027("CB");
+const BOA = list2027("AR");
 
 /** Castilla y León's open data (CC BY 4.0, Junta de Castilla y León): the 2026 days of the cities the 2027 lists leave out. */
 const JCYL_OPEN_DATA: OfficialText = {
@@ -264,6 +276,7 @@ const CASTILLA_Y_LEON: CityRow[] = [
     local2027: null,
     local2026: y26(JCYL_OPEN_DATA, [d("2026-06-12", "Curpillos"), d("2026-06-29", "San Pedro y San Pablo")]),
     note: "La lista de 2027 de la provincia de Burgos (BOP de Burgos núm. 145, de 4.8.2026) no incluye la capital.",
+    readOn: CITIES_STATUS_READ_ON,
   },
   published("CL", "León", { ine: "24089", slug: "leon", name: "León", ineName: "León", population: 123446, ineTable: 2877, capital: true }, y27(part("CL", "León"), [d("2027-06-24", "San Juan", { note: "para todo el municipio" }), d("2027-10-05", "San Froilán", { note: "para todo el municipio" })])),
   published("CL", "León", { ine: "24115", slug: "ponferrada", name: "Ponferrada", ineName: "Ponferrada", population: 63186, ineTable: 2877, capital: false }, y27(part("CL", "León"), [d("2027-09-08", "Nuestra Señora de La Encina"), d("2027-09-09", null)])),
@@ -285,6 +298,7 @@ const CASTILLA_Y_LEON: CityRow[] = [
     local2027: null,
     local2026: y26(JCYL_OPEN_DATA, [d("2026-05-13", "San Pedro Regalado"), d("2026-09-08", "Nuestra Señora de San Lorenzo")]),
     note: "La lista de 2027 de la provincia de Valladolid (BOP de Valladolid núm. 129, de 9.7.2026) da los dos días de la capital como «No comunicada».",
+    readOn: CITIES_STATUS_READ_ON,
   },
   published("CL", "Zamora", { ine: "49275", slug: "zamora", name: "Zamora", ineName: "Zamora", population: 59815, ineTable: 2906, capital: true }, y27(part("CL", "Zamora"), [d("2027-05-17", "La Hiniesta"), d("2027-06-29", "San Pedro")])),
 ];
@@ -366,11 +380,17 @@ function councilCity(region: Region, province: string, base: Base, days: LocalDa
   };
 }
 
+/** Aragón's 2027 list came out on 27 Nov 2026 (BOA núm. 230); its rows were read that day. */
+export const ARAGON_READ_ON = "2026-11-27";
+
 const ARAGON: CityRow[] = [
-  // BOA núm. 225, de 20.11.2025 (the capitals are in the main list, not in the complementary one of 23.3.2026).
-  pending("AR", "Zaragoza", { ine: "50297", slug: "zaragoza", name: "Zaragoza", ineName: "Zaragoza", population: 693091, ineTable: 2907, capital: true }, [d("2026-01-29", "San Valero"), d("2026-03-05", "Cincomarzada")]),
-  pending("AR", "Huesca", { ine: "22125", slug: "huesca", name: "Huesca", ineName: "Huesca", population: 55454, ineTable: 2875, capital: true }, [d("2026-01-22", "San Vicente"), d("2026-08-10", "San Lorenzo")]),
-  pending("AR", "Teruel", { ine: "44216", slug: "teruel", name: "Teruel", ineName: "Teruel", population: 36655, ineTable: 2899, capital: true }, [d("2026-04-07", null), d("2026-07-13", null)]),
+  // BOA núm. 230, de 27.11.2026, annex, one province after another; the two names, when given, in the days' order.
+  // «Zaragoza. 29 de enero y 5 de marzo. San Valero y Cincomarzada.»
+  published("AR", "Zaragoza", { ine: "50297", slug: "zaragoza", name: "Zaragoza", ineName: "Zaragoza", population: 693091, ineTable: 2907, capital: true }, y27(BOA, [d("2027-01-29", "San Valero"), d("2027-03-05", "Cincomarzada")]), { readOn: ARAGON_READ_ON }),
+  // «Huesca. 22 de enero y 10 de agosto. San Vicente y San Lorenzo.»
+  published("AR", "Huesca", { ine: "22125", slug: "huesca", name: "Huesca", ineName: "Huesca", population: 55454, ineTable: 2875, capital: true }, y27(BOA, [d("2027-01-22", "San Vicente"), d("2027-08-10", "San Lorenzo")]), { readOn: ARAGON_READ_ON }),
+  // «Teruel. 30 de marzo y 12 de julio.»
+  published("AR", "Teruel", { ine: "44216", slug: "teruel", name: "Teruel", ineName: "Teruel", population: 36655, ineTable: 2899, capital: true }, y27(BOA, [d("2027-03-30", null), d("2027-07-12", null)]), { readOn: ARAGON_READ_ON }),
 ];
 
 /** Cantabria's 2027 list came out on 20 Nov 2026 (BOC núm. 224); its rows were read that day. */

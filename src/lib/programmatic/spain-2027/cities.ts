@@ -3,7 +3,7 @@ import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 import { addDays } from "@/lib/programmatic/holidays/format";
 
 import { communityDays, weekday, type CommunityDay } from "./calendar";
-import { CITY_ROWS, CITIES_AS_OF, CITIES_RECHECK_DAYS, type CityRow, type CouncilAct, type LocalDay, type LocalList } from "./cities-data";
+import { CITY_ROWS, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITIES_STATUS_READ_ON, type CityRow, type CouncilAct, type LocalDay, type LocalList } from "./cities-data";
 import { names, type CommunityNames } from "./communities";
 import { SOURCES, type PendingCheck } from "./sources";
 
@@ -19,8 +19,8 @@ export interface City extends CityRow {
 
 export const CITIES: readonly City[] = CITY_ROWS.map((row) => ({ ...row, community: names(row.region) }));
 
-/** The date the pending statuses must be read again by: `CITIES_AS_OF` + 21 days. */
-export const CITIES_RECHECK_BY = addDays(CITIES_AS_OF, CITIES_RECHECK_DAYS);
+/** The date the pending and missing statuses must be read again by: `CITIES_STATUS_READ_ON` + 21 days. */
+export const CITIES_RECHECK_BY = addDays(CITIES_STATUS_READ_ON, CITIES_RECHECK_DAYS);
 
 /** The community's cities with a page, most populous first. */
 export function citiesOf(region: Region): City[] {

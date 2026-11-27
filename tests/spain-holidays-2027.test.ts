@@ -299,10 +299,10 @@ test("BOE footnotes: Canarias' island days and Aran are the BOE's own words", ()
   assert.equal(communityTitle(names("CN")), "Festivos 2027 en Canarias: 11 días + 1 insular y puentes");
 });
 
-test("local statuses as read on 5-6 Nov 2026 (Cantabria's and the Comunitat Valenciana's out by 20 Nov), and the local days that apply everywhere", () => {
+test("local statuses as read on 5-6 Nov 2026 (Cantabria's and the Comunitat Valenciana's out by 20 Nov, Aragón's on 27 Nov), and the local days that apply everywhere", () => {
   const published = REGIONS.filter((r) => SOURCES[r].local.status === "published");
-  assert.deepEqual(published, ["AN", "AS", "IB", "CN", "CB", "CL", "EX", "GA", "MC", "PV", "RI", "VC", "CE", "ML"]);
-  assert.deepEqual(REGIONS.filter((r) => SOURCES[r].local.status === "pending"), ["AR", "CM", "CT", "MD", "NC"]);
+  assert.deepEqual(published, ["AN", "AR", "AS", "IB", "CN", "CB", "CL", "EX", "GA", "MC", "PV", "RI", "VC", "CE", "ML"]);
+  assert.deepEqual(REGIONS.filter((r) => SOURCES[r].local.status === "pending"), ["CM", "CT", "MD", "NC"]);
   // The Comunitat Valenciana: three provincial bulletins, the Generalitat's copies.
   assert.deepEqual(SOURCES.VC.local.parts!.map((p) => p.text.ref), ["BOP de Alicante núm. 210, de 4.11.2026", "BOP de Castellón núm. 136, de 10.11.2026", "BOP de Valencia núm. 224, de 20.11.2026"]);
   // Castilla y León: nine provincial bulletins; País Vasco: three.
