@@ -78,6 +78,23 @@ import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, h3
  *    L'Hospitalet (seuelectronica.l-h.cat: OAC appointments for «Padró: altes
  *    i canvis de domicili»).
  *
+ *  - 27 Nov 2026, changing address within Barcelona: Ajuntament de Barcelona,
+ *    "Carta de Servicios de Población y Procesos Electorales" (transparency
+ *    portal, PDF, «Fecha de actualización: 11/02/2025»; only a Spanish version
+ *    was found), "MODALIDAD 3: CAMBIO DE DOMICILIO EN EL PADRÓN MUNICIPAL DE
+ *    HABITANTES": the communication residents make «cuando cambian de domicilio
+ *    dentro de la ciudad»; offers «Fotocopia de la hoja padronal a petición de
+ *    la persona interesada. Volantes de empadronamiento»; «Gratuito»; request
+ *    «Presencial: En las oficinas OAC» or «Telemático» at
+ *    oficinavirtual/es/tramit/20200001403; answer «en el correo electrónico de
+ *    la persona solicitante» or «Correo postal: en el domicilio de
+ *    empadronamiento»; target «Resolver el 90 % de las peticiones en un plazo
+ *    inferior a 10 días, una vez formalizada la documentación necesaria».
+ *    Read 27 Nov 2026 (curl + pdftotext + grep). The Oficina Virtual page of
+ *    that tràmit renders in JavaScript (its API needs a client id), so the
+ *    document list for a change of address could not be read on any official
+ *    page and is not printed; the alta sheet (T135) does not cover changes.
+ *
  * Not printed: opening hours of offices, appointment lead times, any fee for
  * certificates in other towns (they differ and change), how to get a signed
  * certificado (not only the volante) in Barcelona (no readable council page
@@ -135,6 +152,11 @@ export const PADRO_BCN_CHANNELS_AS_OF = "2026-11-27";
 export const PADRO_BCN_CHANNELS_REREAD_BY = "2027-02-27";
 /** The INE's last day for EU citizens to be on the padró and vote on 23 May 2027 (foreign-vote.ts has the same date). */
 export const EU_VOTE_PADRO_DEADLINE = "2026-12-30";
+/** The change-of-address section (Barcelona's padrón service charter): read on, and re-read by. */
+export const PADRO_MOVE_AS_OF = "2026-11-27";
+export const PADRO_MOVE_REREAD_BY = "2027-02-27";
+/** The charter's own «Fecha de actualización»; a newer charter means re-reading the section. */
+export const BCN_CHARTER_UPDATED = "2025-02-11";
 
 export const PADRO_URLS = {
   lbrl: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-5392",
@@ -145,6 +167,9 @@ export const PADRO_URLS = {
   bcnNewsEs: "https://www.barcelona.cat/infobarcelona/es/tienes-que-empadronarte-en-barcelona-te-explicamos-como-hacerlo_1421271.html",
   bcnNovaCa: "https://ajuntament.barcelona.cat/novaciutadania/ca/empadronament",
   bcnNovaEs: "https://ajuntament.barcelona.cat/novaciutadania/es/empadronamiento",
+  bcnCharter: "https://ajuntament.barcelona.cat/transparencia/sites/default/files/2025-11/Poblaci%C3%B3%2020250211%20CaSAB%20-%20Carta%20de%20Servicios.pdf",
+  bcnMoveCa: "https://seuelectronica.ajuntament.barcelona.cat/oficinavirtual/ca/tramit/20200001403",
+  bcnMoveEs: "https://seuelectronica.ajuntament.barcelona.cat/oficinavirtual/es/tramit/20200001403",
   tsi: "https://catsalut.gencat.cat/ca/coneix-catsalut/acces-sistema-salut/la-tsi/obtencio-tsi/",
   ine: "https://www.ine.es/dyngs/CEL/index.htm?cid=383",
   girona: "https://seu-e.cat/ca/web/girona/tramits-i-gestions/-/tramits/tramit/20867494",
@@ -168,6 +193,7 @@ const SOURCES: B2Source[] = [
   { name: "Alta al Padró municipal d'habitants (fitxa del tràmit)", url: PADRO_URLS.bcnSheetCa, publisher: "Ajuntament de Barcelona" },
   { name: "Has d'empadronar-te a Barcelona? T'expliquem com fer-ho", url: PADRO_URLS.bcnNewsCa, publisher: "Ajuntament de Barcelona" },
   { name: "Empadronament (Nova Ciutadania)", url: PADRO_URLS.bcnNovaCa, publisher: "Ajuntament de Barcelona" },
+  { name: "Carta de Servicios de Población y Procesos Electorales (cambio de domicilio en el padrón)", url: PADRO_URLS.bcnCharter, publisher: "Ajuntament de Barcelona" },
   { name: "Obtenció de la primera Targeta Sanitària Individual (TSI)", url: PADRO_URLS.tsi, publisher: "CatSalut" },
   { name: "Formación del censo electoral de extranjeros residentes en España para las elecciones municipales 2027", url: PADRO_URLS.ine, publisher: "INE" },
   { name: "Alta al Padró municipal d'habitants", url: PADRO_URLS.girona, publisher: "Ajuntament de Girona" },
@@ -192,6 +218,7 @@ function bcn(locale: Locale) {
     alta: { ca: PADRO_URLS.iwAltaCa, es: PADRO_URLS.iwAltaEs, en: PADRO_URLS.iwAltaEn }[locale],
     volant: { ca: PADRO_URLS.iwVolantCa, es: PADRO_URLS.iwVolantEs, en: PADRO_URLS.iwVolantEn }[locale],
     cita: es ? PADRO_URLS.citaEs : PADRO_URLS.citaCa,
+    move: es ? PADRO_URLS.bcnMoveEs : PADRO_URLS.bcnMoveCa,
   };
 }
 
@@ -319,6 +346,11 @@ export function buildPadroBody(locale: Locale): Block[] {
       renew: [
         "Si et canvies de pis dins del mateix municipi, és un canvi de domicili, no una alta nova. Si te'n vas a un altre municipi, t'empadrones al nou: l'alta allà dona de baixa l'antic (l'Ajuntament de Girona ho diu així a la seva fitxa).",
       ],
+      moveH: "Canvi de domicili al padró dins de Barcelona",
+      move: [
+        `Si ja estàs empadronat a Barcelona i et mudes a un altre pis de la ciutat, has de comunicar el canvi de domicili a l'Ajuntament. Segons la ${a(PADRO_URLS.bcnCharter, "carta de serveis del padró")} (en castellà, actualitzada l'11 de febrer de 2025 i consultada el 27 de novembre de 2026), es demana presencialment a una Oficina d'Atenció Ciutadana (OAC) o per internet, amb el ${a(B.move, "tràmit de canvi de domicili de l'Oficina Virtual")}, i és gratuït.`,
+        "La resposta arriba al correu electrònic que hagis donat o per correu postal al domicili d'empadronament, i l'objectiu de l'Ajuntament és resoldre el 90 % de les sol·licituds en menys de 10 dies un cop la documentació és completa. Si ho demanes, et donen una còpia del full padronal i volants d'empadronament. Quins documents cal aportar no ho detalla la carta: pregunta-ho al 010 o a l'OAC.",
+      ],
       citiesH: "A Girona, Lleida, Tarragona i L'Hospitalet",
       citiesCaption: "Com es fa l'alta al padró en altres ciutats grans",
       citiesHead: ["Ciutat", "Com es fa", "Fitxa oficial"],
@@ -347,6 +379,7 @@ export function buildPadroBody(locale: Locale): Block[] {
         { question: "Puc empadronar-me amb el passaport?", answer: "Sí. Per a les persones estrangeres, el passaport en vigor és vàlid; els ciutadans de la UE també poden usar el document d'identitat del seu país, i si tenen el certificat de NIE l'han de portar." },
         { question: "Cada quant s'ha de renovar el padró?", answer: "Les persones espanyoles, mai. Els estrangers de fora de la UE sense residència de llarga durada, cada dos anys. Els ciutadans de la UE i els residents de llarga durada confirmen la inscripció cada cinc anys (cada dos si no consten al Registre Central d'Estrangers)." },
         { question: "Quina diferència hi ha entre volant i certificat d'empadronament?", answer: "El volant és informatiu i serveix per a la majoria de gestions; el certificat és un document públic amb plena validesa. El CatSalut, per a la primera TSI, demana un certificat de menys de tres mesos." },
+        { question: "Com faig el canvi de domicili al padró si em mudo dins de Barcelona?", answer: "No és una alta nova, sinó un canvi de domicili: el comuniques a l'Ajuntament a una OAC o per internet, a l'Oficina Virtual. És gratuït, la resposta arriba per correu electrònic o postal, i l'Ajuntament es fixa com a objectiu resoldre el 90 % de les sol·licituds en menys de 10 dies un cop la documentació és completa (carta de serveis del padró, actualitzada l'11 de febrer de 2025)." },
       ],
     },
     es: {
@@ -443,6 +476,11 @@ export function buildPadroBody(locale: Locale): Block[] {
       renew: [
         "Si te cambias de piso dentro del mismo municipio, es un cambio de domicilio, no un alta nueva. Si te vas a otro municipio, te empadronas en el nuevo: el alta allí da de baja la anterior (el Ayuntamiento de Girona lo dice así en su ficha).",
       ],
+      moveH: "Cambio de domicilio en el padrón dentro de Barcelona",
+      move: [
+        `Si ya estás empadronado en Barcelona y te mudas a otro piso de la ciudad, tienes que comunicar el cambio de domicilio al Ayuntamiento. Según su ${a(PADRO_URLS.bcnCharter, "carta de servicios del padrón")} (actualizada el 11 de febrero de 2025 y consultada el 27 de noviembre de 2026), se pide en persona en una Oficina de Atención Ciudadana (OAC) o por internet, con el ${a(B.move, "trámite de cambio de domicilio de la Oficina Virtual")}, y es gratuito.`,
+        "La respuesta llega al correo electrónico que hayas dado o por correo postal al domicilio de empadronamiento, y el objetivo del Ayuntamiento es resolver el 90 % de las solicitudes en menos de 10 días una vez la documentación está completa. Si lo pides, te dan una fotocopia de la hoja padronal y volantes de empadronamiento. Qué documentos hay que aportar no lo detalla la carta: pregúntalo en el 010 o en la OAC.",
+      ],
       citiesH: "En Girona, Lleida, Tarragona y L'Hospitalet",
       citiesCaption: "Cómo se hace el alta en el padrón en otras ciudades grandes",
       citiesHead: ["Ciudad", "Cómo se hace", "Ficha oficial"],
@@ -471,6 +509,7 @@ export function buildPadroBody(locale: Locale): Block[] {
         { question: "¿Puedo empadronarme con el pasaporte?", answer: "Sí. Para las personas extranjeras, el pasaporte en vigor es válido; los ciudadanos de la UE también pueden usar el documento de identidad de su país, y si tienen el certificado de NIE deben llevarlo." },
         { question: "¿Cada cuánto hay que renovar el padrón?", answer: "Las personas españolas, nunca. Los extranjeros de fuera de la UE sin residencia de larga duración, cada dos años. Los ciudadanos de la UE y los residentes de larga duración confirman la inscripción cada cinco años (cada dos si no constan en el Registro Central de Extranjeros)." },
         { question: "¿Qué diferencia hay entre volante y certificado de empadronamiento?", answer: "El volante es informativo y sirve para la mayoría de gestiones; el certificado es un documento público con plena validez. El CatSalut, para la primera TSI, pide un certificado de menos de tres meses." },
+        { question: "¿Cómo hago el cambio de domicilio en el padrón si me mudo dentro de Barcelona?", answer: "No es un alta nueva, sino un cambio de domicilio: lo comunicas al Ayuntamiento en una OAC o por internet, en la Oficina Virtual. Es gratuito, la respuesta llega por correo electrónico o postal, y el Ayuntamiento se fija como objetivo resolver el 90 % de las solicitudes en menos de 10 días una vez la documentación está completa (carta de servicios del padrón, actualizada el 11 de febrero de 2025)." },
       ],
     },
     en: {
@@ -567,6 +606,11 @@ export function buildPadroBody(locale: Locale): Block[] {
       renew: [
         "Moving flat within the same town is a change of address, not a new registration. If you move to another town, register there: the new registration cancels the old one (Girona City Council's procedure page says so).",
       ],
+      moveH: "Changing address within Barcelona (canvi de domicili al padró)",
+      move: [
+        `If you are already on Barcelona's padrón and move to another flat in the city, you must tell the council about the change of address. Under its ${a(PADRO_URLS.bcnCharter, "padrón service charter")} (in Spanish, updated on 11 February 2025 and read on 27 November 2026), you apply in person at a Citizen Service Office (OAC) or online, through the ${a(B.move, "change-of-address procedure on the Oficina Virtual")} (in Catalan; ${a(PADRO_URLS.bcnMoveEs, "Spanish version")}), and it is free.`,
+        "The answer comes to the email address you gave or by post to your registered address, and the council's target is to resolve 90% of requests within 10 days once the paperwork is complete. On request you get a copy of your padrón sheet and volantes. The charter does not list the documents to bring: ask the 010 line or an OAC.",
+      ],
       citiesH: "In Girona, Lleida, Tarragona and L'Hospitalet",
       citiesCaption: "How to register on the padrón in other large cities",
       citiesHead: ["City", "How", "Official page"],
@@ -595,6 +639,7 @@ export function buildPadroBody(locale: Locale): Block[] {
         { question: "Can I register with my passport?", answer: "Yes. For foreign nationals a valid passport is accepted; EU citizens may also use their national ID card, and should bring the NIE certificate if they have one." },
         { question: "How often do I have to renew the padrón?", answer: "Spanish nationals never. Non-EU nationals without long-term residence, every two years. EU citizens and long-term residents confirm every five years (every two if they are not on the Central Register of Foreign Nationals)." },
         { question: "What is the difference between a volante and a certificado de empadronamiento?", answer: "The volante is informative and enough for most errands; the certificado is a public document with full legal value. CatSalut asks for a certificado issued within three months for your first health card." },
+        { question: "How do I change my padrón address if I move within Barcelona?", answer: "It is a change of address, not a new registration: you tell the council at an OAC or online, on the Oficina Virtual. It is free, the answer comes by email or post, and the council's target is to resolve 90% of requests within 10 days once the paperwork is complete (padrón service charter, updated on 11 February 2025)." },
       ],
     },
   }[L];
@@ -615,6 +660,7 @@ export function buildPadroBody(locale: Locale): Block[] {
     ...h2(t.renewH),
     table(t.renewCaption, t.renewHead, t.renewRows),
     ...paras(...t.renew),
+    ...h3(t.moveH, ...t.move),
     ...h2(t.citiesH),
     table(t.citiesCaption, t.citiesHead, t.citiesRows),
     ...paras(...t.cities),
@@ -622,9 +668,9 @@ export function buildPadroBody(locale: Locale): Block[] {
     { type: "heading", level: 2, text: t.faqH } as Block,
     faq(t.faq),
     callout("official", verifiedLine(L, PADRO_AS_OF), {
-      ca: `Llei 7/1985 i ${a(PADRO_URLS.instructions, "instruccions tècniques del padró")} (BOE), fitxa i guia de l'Ajuntament de Barcelona, Barcelona International Welcome (27 de novembre de 2026), CatSalut, INE i les seus electròniques de Girona, Lleida, Tarragona i L'Hospitalet.`,
-      es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha y guía del Ayuntamiento de Barcelona, Barcelona International Welcome (27 de noviembre de 2026), CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
-      en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet and guide, Barcelona International Welcome (27 November 2026), CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
+      ca: `Llei 7/1985 i ${a(PADRO_URLS.instructions, "instruccions tècniques del padró")} (BOE), fitxa, guia i carta de serveis de l'Ajuntament de Barcelona, Barcelona International Welcome (27 de novembre de 2026), CatSalut, INE i les seus electròniques de Girona, Lleida, Tarragona i L'Hospitalet.`,
+      es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha, guía y carta de servicios del Ayuntamiento de Barcelona, Barcelona International Welcome (27 de noviembre de 2026), CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
+      en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet, guide and service charter, Barcelona International Welcome (27 November 2026), CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
     }[L]),
     ...b2Related(["tsi", "nieTie", "foreignVote", "barcelonaHub", "transport", "payDates"], L, [netSalaryRelatedItem(L)]),
   ];

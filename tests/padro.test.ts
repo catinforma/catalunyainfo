@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { FOREIGN_VOTE } from "../src/lib/content/batch02/foreign-vote.ts";
-import { EU_VOTE_PADRO_DEADLINE, PADRO, PADRO_AS_OF, PADRO_BCN_CHANNELS_AS_OF, PADRO_BCN_CHANNELS_REREAD_BY, PADRO_REREAD_BY, PADRO_URLS, buildPadroBody } from "../src/lib/content/batch02/padro.ts";
+import { BCN_CHARTER_UPDATED, EU_VOTE_PADRO_DEADLINE, PADRO, PADRO_AS_OF, PADRO_BCN_CHANNELS_AS_OF, PADRO_BCN_CHANNELS_REREAD_BY, PADRO_MOVE_AS_OF, PADRO_MOVE_REREAD_BY, PADRO_REREAD_BY, PADRO_URLS, buildPadroBody } from "../src/lib/content/batch02/padro.ts";
 import { B2_PATHS, B2_TITLES, b2href } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
@@ -132,6 +132,38 @@ test("padró: the facts were read recently (re-read the Barcelona sheet, BOE and
   assert.ok(Date.now() < Date.parse(`${PADRO_REREAD_BY}T00:00:00Z`), `padró facts last read ${PADRO_AS_OF}: re-read every source in padro.ts, then move PADRO_AS_OF and PADRO_REREAD_BY`);
 });
 
+test("padró: changing address within Barcelona, from the council's padrón service charter (OAC or online, free, 90% in under 10 days), section + FAQ in every language", () => {
+  const heading: Record<Locale, RegExp> = { ca: /^Canvi de domicili al padró dins de Barcelona$/, es: /^Cambio de domicilio en el padrón dentro de Barcelona$/, en: /^Changing address within Barcelona \(canvi de domicili al padró\)$/ };
+  const question: Record<Locale, RegExp> = { ca: /canvi de domicili.*dins de Barcelona/, es: /cambio de domicilio.*dentro de Barcelona/, en: /change my padrón address.*within Barcelona/ };
+  const free: Record<Locale, RegExp> = { ca: /és gratuït/, es: /es gratuito/, en: /it is free/i };
+  for (const locale of LOCALES) {
+    const blocks = PADRO.editions[locale].blocks as unknown as { type: string; level?: number; text?: string; items?: { question: string; answer: string }[] }[];
+    const at = blocks.findIndex((b) => b.type === "heading" && heading[locale].test(b.text ?? ""));
+    assert.ok(at > 0, `${locale}: no change-of-address heading`);
+    assert.equal(blocks[at]!.level, 3, `${locale}: an H3 under the renewal section`);
+    const section = blocks.slice(at + 1, at + 3).map((b) => b.text ?? "").join(" ");
+    assert.match(section, /OAC/, locale);
+    assert.match(section, free[locale], locale);
+    assert.match(section, /90 ?%/, locale);
+    assert.match(section, /\b10 (dies|días|days)\b/, locale);
+    assert.ok(section.includes(PADRO_URLS.bcnCharter), `${locale}: cites the charter`);
+    assert.ok(section.includes(locale === "es" ? PADRO_URLS.bcnMoveEs : PADRO_URLS.bcnMoveCa), `${locale}: links the Oficina Virtual change-of-address procedure`);
+    // No document list: no official page we could read gives one for a change of address.
+    assert.match(section, /no ho detalla la carta|no lo detalla la carta|does not list the documents/, locale);
+    const item = blocks.find((b) => b.type === "faq")!.items!.find((i) => question[locale].test(i.question));
+    assert.ok(item, `${locale}: no change-of-address FAQ`);
+    assert.match(item.answer, /OAC/);
+    assert.match(item.answer, /90 ?%/);
+  }
+  assert.ok(PADRO.sources.some((s) => s.url === PADRO_URLS.bcnCharter), "the charter is a source");
+});
+
+test("padró: the change-of-address facts were read recently (re-read Barcelona's padrón service charter, then move PADRO_MOVE_AS_OF)", () => {
+  assert.equal(BCN_CHARTER_UPDATED, "2025-02-11");
+  assert.ok(PADRO_MOVE_AS_OF < PADRO_MOVE_REREAD_BY);
+  assert.ok(Date.now() < Date.parse(`${PADRO_MOVE_REREAD_BY}T00:00:00Z`), `change-of-address facts last read ${PADRO_MOVE_AS_OF}: re-read the charter (PADRO_URLS.bcnCharter; a newer one replaces "Fecha de actualización: 11/02/2025") and the Oficina Virtual tràmit 20200001403, then move PADRO_MOVE_AS_OF and PADRO_MOVE_REREAD_BY`);
+});
+
 test("padró: the foreign-vote guide and the Barcelona hub link to it in every language", () => {
   for (const locale of LOCALES) {
     const target = `](${b2href("padro", locale)})`;
@@ -182,7 +214,7 @@ test("padró: the FAQ answers the queries of the 27 Nov snapshot (register someo
   for (const locale of LOCALES) {
     const faqBlock = (PADRO.editions[locale].blocks as unknown as { type: string; items?: { question: string }[] }[]).find((b) => b.type === "faq")!;
     const questions = faqBlock.items!.map((i) => i.question);
-    assert.equal(questions.length, 14, `${locale}: 14 questions`);
+    assert.equal(questions.length, 15, `${locale}: 15 questions (10F added the change-of-address one)`);
     assert.match(questions[0]!, /(necessito|necesito|need)/, `${locale}: the requirements question stays first`);
     for (const ask of asks[locale]) assert.ok(questions.some((q) => ask.test(q)), `${locale}: FAQ ${ask}`);
   }

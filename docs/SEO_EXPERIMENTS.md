@@ -16119,5 +16119,34 @@ Title, meta description, H1, lead and verdict untouched (no day page had them ch
 **Go-live.** Deploy (code), then `publish.sh calendario-2027-espana`. IndexNow `/es/festivos/2027/dia/`, `/ca/festius/2027/dia/`, `/en/holidays/2027/day/`.
 
 **Review 2026-12-25:** `snapshot.py page /2027/dia/ 28` and the per-page lines above; success = CTR on the Spanish family above 1 % at the same or better position, and the "se pasa al lunes" / weekday queries getting clicks.
+## 2026-11-27 — Padró: change of address within Barcelona (section + FAQ, ca/es/en; group `padro`)
+
+**URLs.** `/ca/guies/empadronament-padro-barcelona-catalunya/`, `/es/guias/empadronarse-padron-barcelona-cataluna/`, `/en/guides/padron-registration-barcelona-catalonia/`. Title, meta, H1 and lead untouched (13 Nov window runs to 11 Dec): body only.
+
+**Changed.** New H3 under "Renovació, canvis de domicili i baixes": "Canvi de domicili al padró dins de Barcelona" / "Cambio de domicilio en el padrón dentro de Barcelona" / "Changing address within Barcelona (canvi de domicili al padró)", two paragraphs, plus one FAQ (in FAQPage). Facts, all from the Ajuntament de Barcelona's "Carta de Servicios de Población y Procesos Electorales" (transparency portal PDF, «Fecha de actualización: 11/02/2025», read 27 Nov 2026 with curl + pdftotext + grep), "MODALIDAD 3: CAMBIO DE DOMICILIO": «cuando cambian de domicilio dentro de la ciudad»; «Presencial: En las oficinas OAC» or online at Oficina Virtual tràmit 20200001403; «Gratuito»; answer by email or «Correo postal: en el domicilio de empadronamiento»; target «Resolver el 90 % de las peticiones en un plazo inferior a 10 días, una vez formalizada la documentación necesaria»; on request «Fotocopia de la hoja padronal… Volantes de empadronamiento». The charter is a new source. **Left out:** the document list. The Oficina Virtual page renders in JavaScript (its API needs a client id) and the T135 "Alta al Padró" sheet does not cover changes, so no official page we could read lists the documents; the page says so and sends readers to 010 / an OAC.
+
+**Baseline (GSC 13–26 Nov, three editions).** 1,391 impressions, 3 clicks; "que necesito para empadronarme" 27 at 31.7, "padro municipal barcelona" 14 at 9.0. No change-of-address query yet (the page did not answer it).
+
+**Hypothesis.** "cambio de domicilio padron barcelona" / "canvi de domicili padró barcelona" queries start to show for the page within 3 weeks. Wrong if none by the review.
+
+**Tests.** `tests/padro.test.ts` (+2: section/FAQ facts and links in each language; date guard `PADRO_MOVE_REREAD_BY` 2027-02-27).
+
+**Review 2026-12-18:** `snapshot.py page padro 21`, `gaps 21 600 | grep -iE 'domicili|cambio'`.
+
+**Outcome:** _pending_
+
+## 2026-11-27 — Ponts / puentes 2027: the best day of leave links the 7 December 2027 date page (body sentence, ca/es/en; group `ponts-2027`)
+
+**URLs.** `/ca/guies/ponts-2027-catalunya/`, `/es/guias/puentes-2027-cataluna/`, `/en/guides/long-weekends-2027-catalonia/` (B2_PATHS.bridges2027) → `/ca/festius/dia/7-desembre-2027/`, `/es/festivos/dia/7-diciembre-2027/`, `/en/holidays/day/7-december-2027/` (all three 200, `index, follow` on www today).
+
+**Changed.** One sentence after the "biggest jump" paragraph of the leave section (not the lead, key facts or FAQ): "El dimarts 7 de desembre, el dia de vacances que més rendeix, no és cap dels 12 festius de tot Catalunya: fa pont entre el dilluns 6 i el dimecres 8 de desembre ([és festiu el 7 de desembre de 2027?](…))" (es/en the same). Computed from `BEST_ONE_DAY`, `holidaysIn` and `datePath`; no date typed. Only facts the page already prints; no new source.
+
+**Baseline (GSC 28 d).** Guide: "ponts 2027" 39 impressions at 2.6, 5 clicks. ES date page: 1,258 impressions, 12 clicks; "el 7 de diciembre es festivo en cataluña" 144 at 5.3.
+
+**Hypothesis.** An in-body link from a page ranking ~3 helps the date page for "7 de diciembre festivo" queries move from ~5 to ≤ 4. Wrong if its average position for that query is unchanged or worse by the review.
+
+**Tests.** `tests/bridges-2027.test.ts` (+1: each edition links its own-language date page exactly once, in a non-lead paragraph, with the 12 / 6 / 8 facts).
+
+**Review 2026-12-11:** `snapshot.py page 7-diciembre-2027 14`, `page 7-desembre-2027 14`, `page ponts-2027 14`.
 
 **Outcome:** _pending_

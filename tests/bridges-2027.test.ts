@@ -621,3 +621,30 @@ test("the work calendar answers 'Sant Joan 2027' with the day, its one-day bridg
     assert.ok(item.answer.includes(`](${datePage[locale]})`), `${locale}: ${item.answer}`);
   }
 });
+
+/* -------------------------------------------------------------------------- */
+/* 27 Nov 2026: the best day of leave links its date page                     */
+/* -------------------------------------------------------------------------- */
+
+test("the best day of leave (7 December 2027) links its own-language date page once, in a body sentence outside the lead, key facts and FAQ", () => {
+  const expected: Record<Locale, string> = {
+    ca: "/ca/festius/dia/7-desembre-2027/",
+    es: "/es/festivos/dia/7-diciembre-2027/",
+    en: "/en/holidays/day/7-december-2027/",
+  };
+  const opener: Record<Locale, RegExp> = { ca: /^El dimarts 7 de desembre/, es: /^El martes 7 de diciembre/, en: /^Tuesday 7 December/ };
+  for (const locale of LOCALES) {
+    assert.equal(datePath(locale, "2027-12-07"), expected[locale], locale);
+    const blocks = BRIDGES_2027.editions[locale].blocks as unknown as { type: string; lead?: boolean; text?: string }[];
+    const target = `](${expected[locale]})`;
+    assert.equal(json(locale).split(target).length - 1, 1, `${locale}: links ${expected[locale]} exactly once`);
+    const holder = blocks.find((b) => JSON.stringify(b).includes(target));
+    assert.equal(holder?.type, "paragraph", `${locale}: the link sits in a body paragraph (not key facts, FAQ or a table)`);
+    assert.ok(!holder?.lead, `${locale}: not in the lead`);
+    // Only what the page already prints: the leave day, the twelve Catalonia-wide holidays, the 6th and the 8th around it.
+    assert.match(holder?.text ?? "", opener[locale], locale);
+    assert.match(holder?.text ?? "", /\b12\b/, locale);
+    assert.match(holder?.text ?? "", /\b6\b.*\b8\b/, locale);
+    for (const other of LOCALES.filter((l) => l !== locale)) assert.ok(!json(locale).includes(`](${expected[other]})`), `${locale}: links the ${other} date page`);
+  }
+});

@@ -635,6 +635,18 @@ export function buildBridgesBody(locale: Locale): Block[] {
           en: `The biggest jump comes with ${leaveWord(x.jump.leave, "en")}: taking ${dayList(x.jumpRun.take, "en")} off gives ${x.jumpRun.days} days in a row, ${runWords(x.jumpRun, "en")}, ${x.jump.gain} more than with one day fewer.`,
         })
       : "";
+  // 27 Nov 2026: the one day of leave that goes furthest (7 December in 2027) links its "is it a holiday?" page,
+  // in the words the page already prints: not one of the Catalonia-wide days, the bridge between two holidays.
+  const bestDay = x.best && x.best.take.length === 1 && isDatePage(x.best.take[0]!) ? x.best.take[0]! : null;
+  const bestAround = x.best ? holidaysIn(x.best) : [];
+  const bestDayLine =
+    bestDay && bestAround.length === 2
+      ? L(locale, {
+          ca: `El ${dayDate(bestDay, "ca", false)}, el dia de vacances que més rendeix, no és cap dels ${count} festius de tot Catalunya: fa pont entre ${dayList(bestAround, "ca", true)} ([és festiu ${theDay(bestDay, "ca")} de ${YEAR}?](${datePath("ca", bestDay)})).`,
+          es: `El ${dayDate(bestDay, "es", false)}, el día de vacaciones que más rinde, no es ninguno de los ${count} festivos de toda Cataluña: hace puente entre ${dayList(bestAround, "es", true)} ([¿es festivo ${theDay(bestDay, "es")} de ${YEAR}?](${datePath("es", bestDay)})).`,
+          en: `${cap(dayDate(bestDay, "en", false))}, the day of leave that goes furthest, is not one of the ${count} Catalonia-wide public holidays: it bridges ${dayList(bestAround, "en")} ([is ${theDay(bestDay, "en")} ${YEAR} a holiday?](${datePath("en", bestDay)})).`,
+        })
+      : "";
   const bestUseShort = joinSemi(
     BEST_USE.map((u, i) =>
       L(locale, {
@@ -789,6 +801,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       list(...bestUseItems("ca")),
       ...paras(
         ...(jumpLine ? [jumpLine] : []),
+        ...(bestDayLine ? [bestDayLine] : []),
         "És un càlcul, no un dret: les vacances es demanen i es pacten amb l'empresa, i els torns, els convenis i les festes locals ho poden canviar tot.",
         `Si tens més dies o vols comptar-hi les festes del teu municipi, ${planner}: tries el municipi i els dies de vacances, i et diu quins dies demanar per fer més dies de festa seguits.`,
         spainBridges("ca"),
@@ -862,6 +875,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       list(...bestUseItems("es")),
       ...paras(
         ...(jumpLine ? [jumpLine] : []),
+        ...(bestDayLine ? [bestDayLine] : []),
         "Es un cálculo, no un derecho: las vacaciones se piden y se pactan con la empresa, y los turnos, los convenios y las fiestas locales pueden cambiarlo todo.",
         `Si tienes más días o quieres contar las fiestas de tu municipio, ${planner}: eliges el municipio y los días de vacaciones, y te dice qué días pedir para encadenar más días de fiesta.`,
         spainBridges("es"),
@@ -934,6 +948,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
     list(...bestUseItems("en")),
     ...paras(
       ...(jumpLine ? [jumpLine] : []),
+      ...(bestDayLine ? [bestDayLine] : []),
       "This is a calculation, not an entitlement: leave has to be requested and agreed with your employer, and shifts, collective agreements and local holidays can change everything.",
       `With more leave, or to count your town's local holidays, ${planner}: pick the town and the days of leave, and it tells you which days to book for the most days off in a row.`,
       spainBridges("en"),
