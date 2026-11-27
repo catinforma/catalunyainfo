@@ -1,5 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
-import { shortDate } from "@/lib/content/holidays/calendar";
+import { addDays, shortDate } from "@/lib/content/holidays/calendar";
 import { SCHOOL_SOURCE } from "@/lib/content/school/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
@@ -123,6 +123,42 @@ export function monday7Groups(towns: readonly FreeDaysTown[] = FREE_DAYS_TOWNS) 
     local: sorted.filter((t) => monday7(t) === "local"),
     school: sorted.filter((t) => monday7(t) === "school"),
   };
+}
+
+/**
+ * The school days on either side of the Christmas holidays (Ordre EDF/66/2026:
+ * holidays 22 Dec 2026 - 7 Jan 2027): Monday 21 December, the last day of
+ * class, and Friday 8 January, the day back. The order does not bar free days
+ * on them (only inside the holidays), so whether a town chose one is data.
+ */
+export function christmasEdges(): [string, string] {
+  return [addDays(COURSE.christmas[0], -1), addDays(COURSE.christmas[1], 1)];
+}
+
+/** The towns whose set has a free day on 21 December or 8 January, each with that day. */
+export function christmasEdgeTowns(towns: readonly FreeDaysTown[] = FREE_DAYS_TOWNS): { town: FreeDaysTown; day: string }[] {
+  const edges = christmasEdges();
+  return byPopulation(towns).flatMap((town) => town.days.filter((d) => edges.includes(d)).map((day) => ({ town, day })));
+}
+
+/** One sentence on 21 December and 8 January, from the rows. */
+export function christmasEdgesLine(locale: Locale, towns: readonly FreeDaysTown[] = FREE_DAYS_TOWNS): string {
+  const [last, back] = christmasEdges();
+  const n = towns.length;
+  const found = christmasEdgeTowns(towns);
+  if (!found.length) {
+    return {
+      ca: `Cap dels ${n} municipis de la taula no fa dia de lliure disposició el ${freeDay(last, "ca")}, l'últim dia de classe abans de Nadal, ni el ${freeDay(back, "ca")}, el dia de tornada: tots dos són lectius en els dies que han publicat.`,
+      es: `Ninguno de los ${n} municipios de la tabla pone día de libre disposición el ${freeDay(last, "es")}, el último día de clase antes de Navidad, ni el ${freeDay(back, "es")}, el día de vuelta: los dos son lectivos en los días que han publicado.`,
+      en: `None of the ${n} towns in the table puts a free day on ${freeDay(last, "en")}, the last day of class before Christmas, or on ${freeDay(back, "en")}, the day back: both are school days in the sets they have published.`,
+    }[locale];
+  }
+  const names = joinNames(found.map(({ town, day }) => `${nameIn(town.name, locale)} (${freeDay(day, locale)})`), locale);
+  return {
+    ca: `Al voltant de Nadal, fan dia de lliure disposició ${names}; a la resta dels ${n} municipis de la taula, el ${freeDay(last, "ca")} i el ${freeDay(back, "ca")} són lectius.`,
+    es: `Alrededor de Navidad, ponen día de libre disposición ${names}; en el resto de los ${n} municipios de la tabla, el ${freeDay(last, "es")} y el ${freeDay(back, "es")} son lectivos.`,
+    en: `Around Christmas, ${names} ${found.length === 1 ? "has" : "have"} a free day; in the rest of the ${n} towns in the table, ${freeDay(last, "en")} and ${freeDay(back, "en")} are school days.`,
+  }[locale];
 }
 
 /** "als 23 municipis" / "a 20 dels 23 municipis"; "en los 23 municipios" / "en 20 de los 23 municipios"; "in all 23 towns" / "in 20 of the 23 towns". */
@@ -401,6 +437,7 @@ function commonDay(towns: readonly FreeDaysTown[], month: string): { day: string
 function restSection(locale: Locale, towns: readonly FreeDaysTown[]): Block[] {
   const n = towns.length;
   const carnaval = commonDay(towns, "2027-02");
+  const xmas = christmasEdgesLine(locale, towns);
   const school = `[${{ ca: "calendari escolar 2026-2027", es: "calendario escolar 2026-2027", en: "2026-2027 school calendar" }[locale]}](/${locale}/${SIBLING_PATHS.school[locale]}/)`;
   const carnavalLine = carnaval
     ? {
@@ -413,21 +450,21 @@ function restSection(locale: Locale, towns: readonly FreeDaysTown[]): Block[] {
     ca: {
       heading: "La resta del curs: Nadal, Carnaval i Setmana Santa",
       texts: [
-        `Les vacances de Nadal van del 22 de desembre de 2026 al 7 de gener de 2027, i les de Setmana Santa, del 20 al 29 de març de 2027; el curs acaba el 21 de juny de 2027.${carnavalLine} Tot el curs, amb els festius, al ${school}.`,
+        `Les vacances de Nadal van del 22 de desembre de 2026 al 7 de gener de 2027, i les de Setmana Santa, del 20 al 29 de març de 2027; el curs acaba el 21 de juny de 2027. ${xmas}${carnavalLine} Tot el curs, amb els festius, al ${school}.`,
         `Si treballes, el dilluns 7 és feiner a Catalunya llevat dels 43 municipis on és festa local: com fer pont i què obre, a ${b2link("decemberBridge", "ca", "la guia del pont de desembre del 2026")}.`,
       ],
     },
     es: {
       heading: "El resto del curso: Navidad, Carnaval y Semana Santa",
       texts: [
-        `Las vacaciones de Navidad van del 22 de diciembre de 2026 al 7 de enero de 2027, y las de Semana Santa, del 20 al 29 de marzo de 2027; el curso acaba el 21 de junio de 2027.${carnavalLine} Todo el curso, con los festivos, en el ${school}.`,
+        `Las vacaciones de Navidad van del 22 de diciembre de 2026 al 7 de enero de 2027, y las de Semana Santa, del 20 al 29 de marzo de 2027; el curso acaba el 21 de junio de 2027. ${xmas}${carnavalLine} Todo el curso, con los festivos, en el ${school}.`,
         `Si trabajas, el lunes 7 es laborable en Cataluña salvo en los 43 municipios donde es fiesta local: cómo hacer puente y qué abre, en ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}.`,
       ],
     },
     en: {
       heading: "The rest of the year: Christmas, Carnival and Easter",
       texts: [
-        `The Christmas holidays run from 22 December 2026 to 7 January 2027, and Easter from 20 to 29 March 2027; the school year ends on 21 June 2027.${carnavalLine} The whole year, with its holidays, is in the ${school}.`,
+        `The Christmas holidays run from 22 December 2026 to 7 January 2027, and Easter from 20 to 29 March 2027; the school year ends on 21 June 2027. ${xmas}${carnavalLine} The whole year, with its holidays, is in the ${school}.`,
         `For workers, Monday the 7th is a working day in Catalonia except in the 43 towns where it is a local holiday: how to make a long weekend of it and what opens, in ${b2link("decemberBridge", "en", "our December 2026 long weekend guide")}.`,
       ],
     },
@@ -444,6 +481,8 @@ function faqItems(locale: Locale, towns: readonly FreeDaysTown[]): { question: s
   const n = towns.length;
   const bcn = towns.find((t) => t.slug === "barcelona");
   const bcnDays = bcn ? bcn.days.map((d) => freeDay(d, locale)) : [];
+  const xmas = christmasEdgesLine(locale, towns);
+  const [xmasFrom, xmasTo] = COURSE.christmas;
   const localAnswer = local.length ? { ca: ` A ${joinNames(local.map((t) => nameIn(t.name, "ca")), "ca")} és festa local.`, es: ` En ${joinNames(local.map((t) => nameIn(t.name, "es")), "es")} es fiesta local.`, en: ` In ${joinNames(local.map((t) => nameIn(t.name, "en")), "en")} it is a local holiday.` }[locale] : "";
   const schoolAnswer = school.length ? { ca: ` A ${someNames(school, 3, "ca")}, sí que n'hi ha.`, es: ` En ${someNames(school, 3, "es")}, sí que hay.`, en: ` In ${someNames(school, 3, "en")}, there is.` }[locale] : "";
   const copy = {
@@ -451,6 +490,7 @@ function faqItems(locale: Locale, towns: readonly FreeDaysTown[]): { question: s
       { question: "Hi ha escola el 7 de desembre de 2026?", answer: `Depèn del municipi i de l'escola. No és festiu a tot Catalunya, però ${inTowns(free.length, n, "ca")} que han publicat els dies de lliure disposició, com ${someNames(free, 3, "ca")}, és un dels seus dies de lliure disposició.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "Hi ha escola el 7 de desembre a Barcelona?", answer: `No, si l'escola segueix la proposta del Consell d'Educació Municipal de Barcelona, que hi posa un dia de lliure disposició. Els quatre dies que proposa per al curs 2026-2027 són ${joinNames(bcnDays, "ca")}. Cada escola decideix.` }] : []),
       { question: "I el 8 de desembre?", answer: "No hi ha classe: el dimarts 8 de desembre (la Immaculada) és festiu a tot Catalunya." },
+      { question: "Hi ha algun dia de lliure disposició per Nadal?", answer: `Dins de les vacances, no: van del ${freeDay(xmasFrom, "ca")} al ${freeDay(xmasTo, "ca")}, i l'Ordre EDF/66/2026 no hi deixa posar dies de lliure disposició. ${xmas} L'últim dia abans de Nadal l'escola pot fer jornada continuada; ho decideix i ho comunica cada escola.` },
       { question: "Quants dies de lliure disposició hi ha el curs 2026-2027?", answer: "Quatre, repartits entre els tres trimestres, que no poden coincidir amb el primer ni l'últim dia de curs ni amb les vacances de Nadal o Setmana Santa (Ordre EDF/66/2026). Si una festa local cau en un dia sense classe, l'escola la pot afegir." },
       { question: "Qui decideix els dies de lliure disposició?", answer: "Cada escola, a la seva programació general. El consell escolar municipal proposa els dies que convindria que fessin totes les escoles del municipi, però cada escola pot triar-ne d'altres." },
     ],
@@ -458,6 +498,7 @@ function faqItems(locale: Locale, towns: readonly FreeDaysTown[]): { question: s
       { question: "¿Hay colegio el 7 de diciembre de 2026?", answer: `Depende del municipio y del colegio. No es festivo en toda Cataluña, pero ${inTowns(free.length, n, "es")} que han publicado los días de libre disposición, como ${someNames(free, 3, "es")}, es uno de sus días de libre disposición.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "¿Hay colegio el 7 de diciembre en Barcelona?", answer: `No, si el colegio sigue la propuesta del Consell d'Educació Municipal de Barcelona, que pone ahí un día de libre disposición. Los cuatro días que propone para el curso 2026-2027 son ${joinNames(bcnDays, "es")}. Cada colegio decide.` }] : []),
       { question: "¿Y el 8 de diciembre?", answer: "No hay clase: el martes 8 de diciembre (la Purísima) es festivo en toda Cataluña." },
+      { question: "¿Hay algún día de libre disposición en Navidad?", answer: `Dentro de las vacaciones, no: van del ${freeDay(xmasFrom, "es")} al ${freeDay(xmasTo, "es")}, y la Ordre EDF/66/2026 no permite poner ahí días de libre disposición. ${xmas} El último día antes de Navidad el colegio puede hacer jornada continua; lo decide y lo comunica cada colegio.` },
       { question: "¿Cuántos días de libre disposición hay en el curso 2026-2027?", answer: "Cuatro, repartidos entre los tres trimestres, que no pueden coincidir con el primer ni el último día de curso ni con las vacaciones de Navidad o Semana Santa (Ordre EDF/66/2026). Si una fiesta local cae en un día sin clase, el colegio puede añadirla." },
       { question: "¿Quién decide los días de libre disposición?", answer: "Cada colegio, en su programación general. El consejo escolar municipal propone los días que convendría que hicieran todos los colegios del municipio, pero cada colegio puede elegir otros." },
     ],
@@ -465,6 +506,7 @@ function faqItems(locale: Locale, towns: readonly FreeDaysTown[]): { question: s
       { question: "Is there school on 7 December 2026?", answer: `It depends on the town and the school. It is not a holiday across Catalonia, but ${inTowns(free.length, n, "en")} that have published their free days, such as ${someNames(free, 3, "en")}, it is one of their free days.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "Is there school on 7 December in Barcelona?", answer: `No, if the school follows the proposal of Barcelona's municipal education council, which puts a free day there. The four days it proposes for 2026-2027 are ${joinNames(bcnDays, "en")}. Each school decides.` }] : []),
       { question: "And on 8 December?", answer: "No school: Tuesday 8 December (Immaculate Conception) is a public holiday across Catalonia." },
+      { question: "Is there a school free day around Christmas?", answer: `Not inside the holidays: they run from ${freeDay(xmasFrom, "en")} to ${freeDay(xmasTo, "en")}, and Order EDF/66/2026 does not allow free days in them. ${xmas} On the last day before Christmas a school may run a shorter, continuous timetable; each school decides and announces it.` },
       { question: "How many free days are there in 2026-2027?", answer: "Four, spread over the three terms, never on the first or last day of the year or in the Christmas or Easter holidays (Order EDF/66/2026). When a local holiday falls on a day without school, the school may add it." },
       { question: "Who decides the free days?", answer: "Each school, in its annual plan. The municipal school council proposes the days all the town's schools should ideally share, but each school may choose others." },
     ],

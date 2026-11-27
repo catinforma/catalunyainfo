@@ -46,14 +46,15 @@ import { councilApproved2027, municipalityBySlug, nextYearFor } from "@/lib/prog
  */
 
 /** The day every row and pending town below was last read on its official source. */
-export const FREE_DAYS_AS_OF = "2026-11-05";
+export const FREE_DAYS_AS_OF = "2026-11-27";
 
 /**
  * The day the councils must have been re-read by: a test fails from this day
- * until FREE_DAYS_AS_OF moves past it. 1 Dec 2026 leaves time to catch late
- * publications and changes before the Carnaval block (4-9 Feb 2027).
+ * until FREE_DAYS_AS_OF moves past it. 20 Jan 2027 leaves two weeks to catch
+ * late publications and changes before the Carnaval block (4-9 Feb 2027).
+ * (Was 1 Dec 2026; moved on the 27 Nov re-read.)
  */
-export const FREE_DAYS_REREAD_BY = "2026-12-01";
+export const FREE_DAYS_REREAD_BY = "2027-01-20";
 
 /** The school year these days belong to (Ordre EDF/66/2026). */
 export const COURSE = SCHOOL_YEARS.find((y) => y.label === "2026-2027")!;
@@ -107,7 +108,21 @@ export interface FreeDaysPending {
   checked: string;
 }
 
+/** First read of every row and pending town (5 Nov 2026). */
 const READ = "2026-11-05";
+/**
+ * Re-read of 27 Nov 2026 (batch 8T): every row's url fetched again with curl
+ * and its days found in the text (PDF text layer or HTML), or, for the
+ * image-only calendars (Cambrils, Granollers, Lliçà d'Amunt, Montcada i
+ * Reixac, Parets, Salt, Sant Quirze, Tarragona, Tàrrega, Vilanova), rendered
+ * and read visually again: no row changed, and none has a free day on Monday
+ * 21 December or Friday 8 January. Every pending town's watch page fetched
+ * again: none publishes days; Castelldefels and Sabadell now have rows from
+ * pages found by search. Santa Coloma de Gramenet, Terrassa and Viladecans
+ * (403 / Cloudflare challenge) and Sant Feliu de Llobregat (no connection)
+ * could not be read and keep READ.
+ */
+const REREAD = "2026-11-27";
 
 export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
   {
@@ -125,7 +140,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     publisher: "Consell d'Educació Municipal de Barcelona",
     // The City Council's news manager stores its attachments on this bucket (the PDF is linked from its own news item).
     hosts: /^(pro-gestornoticies-dtibcn-cat\.s3\.amazonaws\.com|([a-z0-9-]+\.)*barcelona\.cat)$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "banyoles",
@@ -138,7 +153,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-2027",
     publisher: "Ajuntament de Banyoles, Servei d'Educació",
     hosts: /(^|\.)banyoles\.cat$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "El document diu «7 de desembre 2025», però és el calendari del curs 2026-2027 i la línia és entre l'inici de curs i les vacances de Nadal.", es: "El documento dice «7 de desembre 2025», pero es el calendario del curso 2026-2027 y la línea está entre el inicio de curso y las vacaciones de Navidad.", en: "The document says \"7 de desembre 2025\", but it is the 2026-2027 calendar and the line sits between the start of the year and the Christmas break." },
   },
   {
@@ -152,7 +167,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar per al curs 2026-2027",
     publisher: "Ajuntament de Blanes",
     hosts: /(^|\.)blanes\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "calella",
@@ -165,7 +180,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calella inicia el curs 2026-2027 amb 2.049 alumnes a infantil, primària i ESO",
     publisher: "Ajuntament de Calella",
     hosts: /(^|\.)calella\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "cambrils",
@@ -178,7 +193,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-27",
     publisher: "Ajuntament de Cambrils, Educació",
     hosts: /(^|\.)cambrils\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària, instituts i Escola Municipal de Música.", es: "Infantil, primaria, institutos y Escola Municipal de Música.", en: "Infant and primary schools, secondary schools and the municipal music school." },
   },
   {
@@ -192,7 +207,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar per al curs 2026-2027",
     publisher: "Ajuntament de Canovelles",
     hosts: /(^|\.)canovelles\.cat$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "El calendari diu que «a Canovelles són cinc perquè una festa local és en període no lectiu».", es: "El calendario dice que «a Canovelles són cinc perquè una festa local és en període no lectiu» (son cinco porque una fiesta local cae en periodo no lectivo).", en: "The calendar says \"a Canovelles són cinc perquè una festa local és en període no lectiu\" (five, because a local holiday falls outside the school year)." },
   },
   {
@@ -206,8 +221,24 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar i de festes curs 2026-2027",
     publisher: "Ajuntament de Castellar del Vallès",
     hosts: /(^|\.)castellarvalles\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària, ESO, batxillerat i FP; les escoles bressol municipals tenen dies propis.", es: "Infantil, primaria, ESO, bachillerato y FP; las escuelas infantiles municipales tienen días propios.", en: "Infant, primary and secondary schools, sixth form and vocational training; municipal nurseries have their own days." },
+  },
+  {
+    slug: "castelldefels",
+    name: "Castelldefels",
+    // CALENDARI ESCOLAR CURS 2026-2027 - Ajuntament de Castelldefels (Serveis > Educació > Escolarització), read 27 Nov 2026 with curl:
+    // «Calendari escolar amb les dates claus del curs, vacances i dies de lliure disposició. [...] 📌 Dies de lliure disposició
+    // 13 d’octubre de 2026 2 de novembre de 2026 8 de febrer de 2027 30 d’abril de 2027 17 de maig de 2027». The page does not
+    // say who chose them. Monday 7 December 2026 is a Castelldefels local holiday (DOGC order, holidays snapshot), so it is not in the list.
+    days: ["2026-10-13", "2026-11-02", "2027-02-08", "2027-04-30", "2027-05-17"],
+    kind: "notice",
+    body: { ca: "l'Ajuntament de Castelldefels", es: "el Ayuntamiento de Castelldefels", en: "Castelldefels Town Council" },
+    url: "https://www.castelldefels.org/ca/serveis/educacio/escolaritzacio/calendari-escolar-curs-2026-2027",
+    title: "Calendari escolar curs 2026-2027",
+    publisher: "Ajuntament de Castelldefels",
+    hosts: /(^|\.)castelldefels\.org$/,
+    checked: REREAD,
   },
   {
     slug: "girona",
@@ -220,7 +251,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Acord del Consell Municipal d'Educació de Girona per a la recomanació del calendari del curs 2026-2027 (9 de juny de 2026)",
     publisher: "Ajuntament de Girona",
     hosts: /(^|\.)girona\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Recomanació a tots els centres públics i privats de la ciutat.", es: "Recomendación a todos los centros públicos y privados de la ciudad.", en: "A recommendation to every state and private school in the city." },
     note: { ca: "El 17 de maig de 2027 és «en compensació de la festa local, Sant Jaume el 25 de juliol».", es: "El 17 de mayo de 2027 es «en compensació de la festa local, Sant Jaume el 25 de juliol» (a cambio de la fiesta local de Sant Jaume, el 25 de julio).", en: "17 May 2027 is given \"en compensació de la festa local, Sant Jaume el 25 de juliol\" (in exchange for the Sant Jaume local holiday on 25 July)." },
   },
@@ -235,7 +266,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar de Granollers, curs 2026/27, ensenyaments obligatoris",
     publisher: "Ajuntament de Granollers",
     hosts: /(^|\.)granollers\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i ESO.", es: "Infantil, primaria y ESO.", en: "Infant, primary and secondary schools." },
   },
   {
@@ -249,7 +280,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar del curs 2026-2027",
     publisher: "Ajuntament de la Llagosta",
     hosts: /(^|\.)llagosta\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "lleida",
@@ -262,7 +293,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar (Educació, Ajuntament de Lleida)",
     publisher: "Ajuntament de Lleida",
     hosts: /(^|\.)paeria\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "llica-d-amunt",
@@ -275,7 +306,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-2027",
     publisher: "Ajuntament de Lliçà d'Amunt",
     hosts: /(^|\.)llicamunt\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "manlleu",
@@ -288,7 +319,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027, escoles infantil, primària i secundària",
     publisher: "Ajuntament de Manlleu, Manlleu Educació",
     hosts: /(^|\.)manlleu\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i secundària.", es: "Infantil, primaria y secundaria.", en: "Infant, primary and secondary schools." },
   },
   {
@@ -302,7 +333,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027 de Martorell",
     publisher: "Ajuntament de Martorell, Patronat Municipal de Serveis d'Atenció a les Persones",
     hosts: /(^|\.)martorell\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "L'Escola Oficial d'Idiomes té dies propis.", es: "La Escuela Oficial de Idiomas tiene días propios.", en: "The official language school (EOI) has its own days." },
   },
   {
@@ -316,7 +347,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Proposta calendari escolar curs 2026-2027 primària i secundària",
     publisher: "Ajuntament de Mataró, Servei d'Educació",
     hosts: /(^|\.)mataro\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i ESO.", es: "Infantil, primaria y ESO.", en: "Infant, primary and secondary schools." },
   },
   {
@@ -330,7 +361,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar, Mollet del Vallès, curs 2026/2027",
     publisher: "Ajuntament de Mollet del Vallès",
     hosts: /(^|\.)molletvalles\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Primària i secundària públiques i concertades, escoles municipals i EOI; el Col·legi Lestonnac fa el 2 de novembre en lloc del 30 d'octubre, i l'Escola Municipal de Música i Dansa el 20 de maig en lloc del 17.", es: "Primaria y secundaria públicas y concertadas, escuelas municipales y EOI; el Col·legi Lestonnac hace el 2 de noviembre en lugar del 30 de octubre, y la Escola Municipal de Música i Dansa el 20 de mayo en lugar del 17.", en: "State and state-funded primary and secondary schools, municipal schools and the EOI; Col·legi Lestonnac takes 2 November instead of 30 October, and the municipal music and dance school 20 May instead of the 17th." },
   },
   {
@@ -344,7 +375,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-2027",
     publisher: "Ajuntament de Mont-roig del Camp",
     hosts: /(^|\.)mont-roig\.cat$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "A Miami Platja, també el 3 de maig de 2027, que «substitueix el dia 25 de juliol de 2027».", es: "En Miami Platja, también el 3 de mayo de 2027, que «substitueix el dia 25 de juliol de 2027» (sustituye el 25 de julio).", en: "In Miami Platja, also 3 May 2027, which \"substitueix el dia 25 de juliol de 2027\" (replaces 25 July)." },
   },
   {
@@ -358,7 +389,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar del curs 2026-27 per a educació infantil, primària i secundària",
     publisher: "Ajuntament de Montcada i Reixac",
     hosts: /(^|\.)montcada\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i secundària.", es: "Infantil, primaria y secundaria.", en: "Infant, primary and secondary schools." },
   },
   {
@@ -372,7 +403,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar, curs 2026-2027 (Olot Educació)",
     publisher: "Ajuntament d'Olot, Olot Educació",
     hosts: /(^|\.)(oloteducacio\.cat|olot\.cat)$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "palau-solita-i-plegamans",
@@ -385,7 +416,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Consell Escolar Municipal, sessió ordinària 5/2026 (1 de juliol de 2026): aprovació del calendari escolar",
     publisher: "Ajuntament de Palau-solità i Plegamans, Participa311",
     hosts: /^participa311-palauplegamans\.diba\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "parets-del-valles",
@@ -398,7 +429,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027",
     publisher: "Ajuntament de Parets del Vallès, Educació",
     hosts: /(^|\.)parets\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària, secundària i escola d'adults; les escoles bressol i l'Escola Municipal de Música tenen algun dia diferent.", es: "Infantil, primaria, secundaria y escuela de adultos; las escuelas infantiles y la Escola Municipal de Música tienen algún día distinto.", en: "Infant, primary and secondary schools and the adult school; the nurseries and the municipal music school differ on some days." },
   },
   {
@@ -412,7 +443,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "El nou curs 2026-2027 comença amb una inversió de més de 3.000.000 d’euros en millores als centres educatius",
     publisher: "Ajuntament de Pineda de Mar",
     hosts: /(^|\.)pinedademar\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "el-prat-de-llobregat",
@@ -425,7 +456,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027 (El Prat, juliol 2026)",
     publisher: "Ajuntament del Prat de Llobregat",
     hosts: /(^|\.)elprat\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "ripollet",
@@ -438,8 +469,26 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027",
     publisher: "Ajuntament de Ripollet",
     hosts: /(^|\.)ripollet\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Centres públics i concertats; les escoles bressol municipals tenen dies propis.", es: "Centros públicos y concertados; las escuelas infantiles municipales tienen días propios.", en: "State and state-funded schools; municipal nurseries have their own days." },
+  },
+  {
+    slug: "sabadell",
+    name: "Sabadell",
+    // CALENDARI ESCOLAR DEL CURS 2026-2027 PER ALS CENTRES EDUCATIUS NO UNIVERSITARIS (web.sabadell.cat/images/Educacio/pdf/CEM/2026-27/, PDF modified 7 Jul 2026), read 27 Nov 2026 with curl + pdftotext:
+    // «Dies de lliure disposició aprovats pel Consell Escolar Municipal, per a tots els centres educatius de Sabadell:
+    // 30/10/2026, 7/12/2026, 8/2/2027, 30/4/2027 i 4/6/2027 (Aquest any hi ha un dia de més perquè l'inici escolar no coincideix amb la festa major)».
+    // On 5 Nov the site did not answer from here; it does now.
+    days: ["2026-10-30", "2026-12-07", "2027-02-08", "2027-04-30", "2027-06-04"],
+    kind: "agreement",
+    body: { ca: "el Consell Escolar Municipal de Sabadell", es: "el Consejo Escolar Municipal de Sabadell", en: "Sabadell's municipal school council" },
+    url: "https://web.sabadell.cat/images/Educacio/pdf/CEM/2026-27/Calendari_escolar_2026-2027_CENTRES_EDUCATIUS_NO_UNIVERSITARIS.pdf",
+    title: "Calendari escolar del curs 2026-2027 per als centres educatius no universitaris",
+    publisher: "Ajuntament de Sabadell, Consell Escolar Municipal",
+    hosts: /(^|\.)sabadell\.cat$/,
+    checked: REREAD,
+    scope: { ca: "Tots els centres educatius de la ciutat.", es: "Todos los centros educativos de la ciudad.", en: "Every school in the city." },
+    note: { ca: "El calendari diu que «aquest any hi ha un dia de més perquè l'inici escolar no coincideix amb la festa major».", es: "El calendario dice que «aquest any hi ha un dia de més perquè l'inici escolar no coincideix amb la festa major» (este año hay un día más porque el inicio de curso no coincide con la fiesta mayor).", en: "The calendar says \"aquest any hi ha un dia de més perquè l'inici escolar no coincideix amb la festa major\" (one extra day this year because the start of the year does not fall on the town's festival)." },
   },
   {
     slug: "salou",
@@ -452,7 +501,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027 (Oficina Municipal d'Escolarització)",
     publisher: "Ajuntament de Salou",
     hosts: /(^|\.)salou\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "salt",
@@ -465,7 +514,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar infantil, primària i ESO, curs 2026/2027",
     publisher: "Ajuntament de Salt, Oficina Municipal d'Escolarització",
     hosts: /(^|\.)viladesalt\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i ESO.", es: "Infantil, primaria y ESO.", en: "Infant, primary and secondary schools." },
   },
   {
@@ -479,7 +528,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027",
     publisher: "Ajuntament de Sant Celoni",
     hosts: /(^|\.)santceloni\.cat$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "L'escola bressol El Blauet canvia el 17 de maig pel 25 de juny.", es: "La escuela infantil El Blauet cambia el 17 de mayo por el 25 de junio.", en: "The El Blauet nursery swaps 17 May for 25 June." },
   },
   {
@@ -493,7 +542,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Les escoles inicien un nou curs",
     publisher: "Ajuntament de Sant Just Desvern",
     hosts: /(^|\.)santjust\.net$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Segons l'Ajuntament, els han acordat els centres educatius.", es: "Según el Ayuntamiento, los han acordado los centros educativos.", en: "According to the council, the schools agreed them." },
   },
   {
@@ -507,7 +556,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-2027",
     publisher: "Ajuntament de Sant Quirze del Vallès",
     hosts: /(^|\.)santquirzevalles\.cat$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "El calendari diu «4+1 per caure festiu local fora calendari lectiu»; una notícia de l'Ajuntament del juliol en dona quatre, sense el 8 de febrer: confirma aquest dia amb l'escola.", es: "El calendario dice «4+1 per caure festiu local fora calendari lectiu» (4+1 porque una fiesta local cae fuera del calendario lectivo); una noticia del Ayuntamiento de julio da cuatro, sin el 8 de febrero: confirma ese día con el colegio.", en: "The calendar says \"4+1 per caure festiu local fora calendari lectiu\" (4+1 because a local holiday falls outside the school year); a council news item from July lists four, without 8 February: check that day with the school." },
   },
   {
@@ -521,7 +570,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027",
     publisher: "Ajuntament de Tarragona, Institut Municipal d'Educació",
     hosts: /(^|\.)tarragona\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "tordera",
@@ -534,7 +583,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Gairebé 2500 alumnes de Tordera comencen el curs escolar 2026-27",
     publisher: "Ajuntament de Tordera",
     hosts: /(^|\.)tordera\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "tarrega",
@@ -547,7 +596,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari 2026-2027",
     publisher: "Ajuntament de Tàrrega, Pla Educatiu d'Entorn",
     hosts: /(^|\.)tarrega\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "valls",
@@ -560,7 +609,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar per al curs 2026/2027",
     publisher: "Ajuntament de Valls",
     hosts: /(^|\.)valls\.cat$/,
-    checked: READ,
+    checked: REREAD,
   },
   {
     slug: "el-vendrell",
@@ -573,7 +622,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "L'Ajuntament del Vendrell dona continuïtat al Casal de Conciliació els dies de lliure disposició dels centres educatius",
     publisher: "Ajuntament del Vendrell",
     hosts: /(^|\.)elvendrell\.net$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "L'Ajuntament només n'ha publicat els del primer trimestre, en anunciar el casal de conciliació d'aquests dies.", es: "El Ayuntamiento solo ha publicado los del primer trimestre, al anunciar el casal de conciliación de esos días.", en: "The council has only published the first term's, announcing its childcare service for those days." },
   },
   {
@@ -587,7 +636,7 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar 2026-2027",
     publisher: "Ajuntament de Vic, Regidoria d'Educació",
     hosts: /(^|\.)vic\.cat$/,
-    checked: READ,
+    checked: REREAD,
     note: { ca: "El 8 de febrer de 2027 és «a canvi de la festa local del 5 de juliol».", es: "El 8 de febrero de 2027 es «a canvi de la festa local del 5 de juliol» (a cambio de la fiesta local del 5 de julio).", en: "8 February 2027 is given \"a canvi de la festa local del 5 de juliol\" (in exchange for the 5 July local holiday)." },
   },
   {
@@ -601,140 +650,137 @@ export const FREE_DAYS_TOWNS: readonly FreeDaysTown[] = [
     title: "Calendari escolar curs 2026-2027",
     publisher: "Ajuntament de Vilanova i la Geltrú, Institut Municipal d'Educació i Treball",
     hosts: /(^|\.)(imet\.cat|vilanova\.cat)$/,
-    checked: READ,
+    checked: REREAD,
     scope: { ca: "Infantil, primària i ESO; cada escola els pot variar.", es: "Infantil, primaria y ESO; cada colegio puede variarlos.", en: "Infant, primary and secondary schools; each school may vary them." },
   },
 ];
 
 export const FREE_DAYS_PENDING: readonly FreeDaysPending[] = [
   // Abrera: Council site is ajuntamentabrera.cat. Its education section (escoles, participacio) and the school-year news listing (actualitat-curs-escolar-2025-2027: transport, start-of-year visits, music school, etc.) contain no 2026-27 school calendar or common free days. Web searches found nothing for Abrera.
-  { slug: "abrera", name: "Abrera", watch: "https://www.ajuntamentabrera.cat/serveis/educacio/participacio", hosts: /(^|\.)ajuntamentabrera\.cat$/, checked: READ },
+  { slug: "abrera", name: "Abrera", watch: "https://www.ajuntamentabrera.cat/serveis/educacio/participacio", hosts: /(^|\.)ajuntamentabrera\.cat$/, checked: REREAD },
   // Amposta: Searched web, amposta.cat Educació section and WordPress search ('lliure disposició', 'calendari escolar', 'consell escolar municipal', 'curs escolar 2026-2027'). The 10 Sep 2026 news 'Amposta inicia el curs escolar amb nous estudis de formació professional i millores als centres' gives no free days. No CEM page found. Council news 'El 18 de maig i el 7 de desembre, festes locals del 2026' (ampost
-  { slug: "amposta", name: "Amposta", watch: "https://amposta.cat/la-ciutat/educacio/", hosts: /(^|\.)amposta\.cat$/, checked: READ },
+  { slug: "amposta", name: "Amposta", watch: "https://amposta.cat/la-ciutat/educacio/", hosts: /(^|\.)amposta\.cat$/, checked: REREAD },
   // Arenys de Mar: The council CEM page (Regidories > Educació > Consell Escolar Municipal) lists CEM actes; the newest is Acta_1_CEM_16.12.26.docx.pdf, which is actually the 16 Dec 2025 session (curs 2025-2026) and has no free days. No 2026-27 actes posted yet. Web search only surfaced school-level actes (e.g. a Joan Maragall school comissió permanent of 12 Jun 2026 approving its own 2026-27 calendar; town not conf
-  { slug: "arenys-de-mar", name: "Arenys de Mar", watch: "https://arenysdemar.cat/ambit.php?id=153", hosts: /(^|\.)arenysdemar\.cat$/, checked: READ },
+  { slug: "arenys-de-mar", name: "Arenys de Mar", watch: "https://arenysdemar.cat/ambit.php?id=153", hosts: /(^|\.)arenysdemar\.cat$/, checked: REREAD },
   // Badalona: Searched web (Catalan queries), badalona.cat education section (participacio page only has 'Reglament del CEM'; site search is JS-rendered, education news RSS empty) and participa311-badalona.diba.cat (only the 1989 CEM reglament). Only school-level actes (agora.xtec.cat) mention 2026-27 free days - not accepted. No official Badalona common days found.
-  { slug: "badalona", name: "Badalona", watch: "https://www.badalona.cat/ca/serveis-ajuntament/educacio-i-formacio/participacio", hosts: /(^|\.)badalona\.cat$/, checked: READ },
+  { slug: "badalona", name: "Badalona", watch: "https://www.badalona.cat/ca/serveis-ajuntament/educacio-i-formacio/participacio", hosts: /(^|\.)badalona\.cat$/, checked: REREAD },
   // Badia del Vallès: badiadelvalles.cat Educació area page has no school calendar, free days or CEM content (only labour calendars 2026/2027 and an adult Catalan courses item). Web searches found no official 2026-27 Badia dates; only a school dossier (Escola Elisa Badia, school site) - not accepted.
-  { slug: "badia-del-valles", name: "Badia del Vallès", watch: "https://www.badiadelvalles.cat/area.php?id=19", hosts: /(^|\.)badiadelvalles\.cat$/, checked: READ },
+  { slug: "badia-del-valles", name: "Badia del Vallès", watch: "https://www.badiadelvalles.cat/area.php?id=19", hosts: /(^|\.)badiadelvalles\.cat$/, checked: REREAD },
   // Balaguer: Paeria de Balaguer education section (portal/12, Oferta educativa portal/119, OME) has no 2026-27 school calendar or CEM document; press page has nothing on it. Web searches (incl. site:balaguer.cat) returned only other towns' schools and the Ordre EDF/66/2026.
-  { slug: "balaguer", name: "Balaguer", watch: "https://www.balaguer.cat/portal/12/", hosts: /(^|\.)balaguer\.cat$/, checked: READ },
+  { slug: "balaguer", name: "Balaguer", watch: "https://www.balaguer.cat/portal/12/", hosts: /(^|\.)balaguer\.cat$/, checked: REREAD },
   // Berga: Council education page (ambits/educacio) and the 15 Sep 2026 news 'Berga inicia el nou curs escolar amb millores en el manteniment dels centres educatius...' give no free days; web searches (incl. site:ajberga.cat) found nothing official for 2026-27, only school documents from other or unidentified towns.
-  { slug: "berga", name: "Berga", watch: "https://www.ajberga.cat/ambits/educacio", hosts: /(^|\.)ajberga\.cat$/, checked: READ },
+  { slug: "berga", name: "Berga", watch: "https://www.ajberga.cat/ambits/educacio", hosts: /(^|\.)ajberga\.cat$/, checked: REREAD },
   // Calafell: Council site search (calafell.cat/search?key=) for 'lliure disposició' returns only an e-administration ordinance item; 'calendari escolar 2026' returns only open-days news. Ensenyament pages list schools and a 'Guia educativa del municipi de Calafell 2026-2027' PDF dated Feb 2026 (before the Ordre EDF/66/2026; not checked). No CEM page or 2026-27 free days found.
-  { slug: "calafell", name: "Calafell", watch: "https://calafell.cat/temes-i-serveis/ensenyament/educacio-infantil-i-primaria", hosts: /(^|\.)calafell\.cat$/, checked: READ },
+  { slug: "calafell", name: "Calafell", watch: "https://calafell.cat/temes-i-serveis/ensenyament/educacio-infantil-i-primaria", hosts: /(^|\.)calafell\.cat$/, checked: REREAD },
   // Caldes de Montbui: Council's running page 'Informacions del curs 2026-2027' and the 8 Sep 2026 news 'Caldes de Montbui inicia el curs 2026-2027 marcat per la vaga educativa' give no free days; site search for 'lliure disposició' only returns CEM news from 2019 and 2023, and 'Consell Escolar Municipal' nothing for 2026. Web search found nothing official.
-  { slug: "caldes-de-montbui", name: "Caldes de Montbui", watch: "https://www.caldesdemontbui.cat/actualitat/noticies/informacions-del-curs-2026-2027.html", hosts: /(^|\.)caldesdemontbui\.cat$/, checked: READ },
+  { slug: "caldes-de-montbui", name: "Caldes de Montbui", watch: "https://www.caldesdemontbui.cat/actualitat/noticies/informacions-del-curs-2026-2027.html", hosts: /(^|\.)caldesdemontbui\.cat$/, checked: REREAD },
   // Canet de Mar: canetdemar.cat Consells municipals page lists the Consell Escolar Municipal (Educació) with only its old reglament and a contact; no actes, school calendar or free days. Search surfaced a school acta (Escola El Colomer, May 2026) saying its free days were agreed with the CEM (30 Oct, 7 Dec 2026, 8 Feb, 30 Apr, 17 May 2027) but the town is not confirmed and school sites are not accepted. Needs the 
-  { slug: "canet-de-mar", name: "Canet de Mar", watch: "https://www.canetdemar.cat/3205", hosts: /(^|\.)canetdemar\.cat$/, checked: READ },
+  { slug: "canet-de-mar", name: "Canet de Mar", watch: "https://www.canetdemar.cat/3205", hosts: /(^|\.)canetdemar\.cat$/, checked: REREAD },
   // Cardedeu: Cardedeu's CEM approves five common days every year, but nothing official is online: the education page 'Infantil, primària, ESO i postobligatòria curs 2026/2027' has no calendar and site searches ('lliure disposició', 'calendari escolar', 'Consell Escolar Municipal') return only old items. Not accepted (school document): Escola Les Aigües' 'Acords de Consell escolar curs 25-26' reportedly ratifie
-  { slug: "cardedeu", name: "Cardedeu", watch: "https://www.cardedeu.cat/temes/educacio/infantil-primaria-eso-i-postobligatoria-curs-20262027", hosts: /(^|\.)cardedeu\.cat$/, checked: READ },
+  { slug: "cardedeu", name: "Cardedeu", watch: "https://www.cardedeu.cat/temes/educacio/infantil-primaria-eso-i-postobligatoria-curs-20262027", hosts: /(^|\.)cardedeu\.cat$/, checked: REREAD },
   // Castell d'Aro, Platja d'Aro i s'Agaró: Council site ciutada.platjadaro.com (WordPress). Its 2026-27 calendar uploads are only for the municipal Llar d’Infants (CALENDARI-ESCOLAR-26-27-pdf.pdf, which lists 7 de desembre de 2026 (lliure disposició) for the nursery only) and for the adult-education centre (Calendari-curs-26-27.pdf); the CEM page lists only 2025-26 members. No common free days for the town schools (Fanals d’Aro, Els Estany
-  { slug: "castell-d-aro-platja-d-aro-i-s-agaro", name: "Castell d'Aro, Platja d'Aro i s'Agaró", watch: "https://ciutada.platjadaro.com/serveis/educacio-i-formacio/escoles-i-institut/consell-escolar-municipal/", hosts: /(^|\.)platjadaro\.com$/, checked: READ },
+  { slug: "castell-d-aro-platja-d-aro-i-s-agaro", name: "Castell d'Aro, Platja d'Aro i s'Agaró", watch: "https://ciutada.platjadaro.com/serveis/educacio-i-formacio/escoles-i-institut/consell-escolar-municipal/", hosts: /(^|\.)platjadaro\.com$/, checked: REREAD },
   // Castellbisbal: The council page Calendari curs escolar (last updated 14.07.2025) still shows Curs Escolar 2025 - 2026 only: five days acordats al Consell Escolar Municipal (3 Nov 2025, 5 Dec 2025, 23 Jan, 16 Feb, 4 May 2026). Not updated for 2026-27 yet; web searches found no 2026-27 Castellbisbal dates. Good page to re-check.
-  { slug: "castellbisbal", name: "Castellbisbal", watch: "https://www.castellbisbal.cat/2028-tramits/cataleg-de-serveis/calendari-curs-escolar.html", hosts: /(^|\.)castellbisbal\.cat$/, checked: READ },
-  // Castelldefels: Searched castelldefels.org site search ('lliure disposició', 'calendari escolar 2026-2027', 'Consell d'Educació Municipal'), the Educació section and the Consell Escolar Municipal page (descriptive text only, no documents or dates), plus web searches: no official 2026-2027 free-days list found. Newest relevant council item seen: back-to-school news for 2024-2025. The CEM is being reformulated as a
-  { slug: "castelldefels", name: "Castelldefels", watch: "https://www.castelldefels.org/ca/serveis/educacio/participacio-educativa/consell-escolar-municipal", hosts: /(^|\.)castelldefels\.org$/, checked: READ },
+  { slug: "castellbisbal", name: "Castellbisbal", watch: "https://www.castellbisbal.cat/2028-tramits/cataleg-de-serveis/calendari-curs-escolar.html", hosts: /(^|\.)castellbisbal\.cat$/, checked: REREAD },
   // Corbera de Llobregat: corberadellobregat.cat has no education/CEM section (only the families page with school directory links and a convenis/ensenyament page). Web searches (Catalan queries) returned nothing about 2026-27 common free days for Corbera de Llobregat.
-  { slug: "corbera-de-llobregat", name: "Corbera de Llobregat", watch: "https://www.corberadellobregat.cat/tho-fem-facil/si-tens-fillslles", hosts: /(^|\.)corberadellobregat\.cat$/, checked: READ },
+  { slug: "corbera-de-llobregat", name: "Corbera de Llobregat", watch: "https://www.corberadellobregat.cat/tho-fem-facil/si-tens-fillslles", hosts: /(^|\.)corberadellobregat\.cat$/, checked: REREAD },
   // Cornellà de Llobregat: cornella.cat site search for 'lliure disposició' and 'calendari escolar' returns nothing relevant; education section has no calendar/CEM page. Web search only found a school certificate (Escola Els Pins, per search summary in Cornellà, 21 Jul 2026: 9 Oct 2026, 7 Dec 2026, 8 Feb 2027, 27 May 2027) - school source, not accepted, and it does not say the days are municipal.
-  { slug: "cornella-de-llobregat", name: "Cornellà de Llobregat", watch: "https://www.cornella.cat/ca/viure-a-cornella/cornella-humana/educacio", hosts: /(^|\.)cornella\.cat$/, checked: READ },
+  { slug: "cornella-de-llobregat", name: "Cornellà de Llobregat", watch: "https://www.cornella.cat/ca/viure-a-cornella/cornella-humana/educacio", hosts: /(^|\.)cornella\.cat$/, checked: REREAD },
   // Cubelles: cubelles.cat site search: 'lliure disposició' only hits the La Draga nursery enrolment notice (no dates), 'calendari escolar' only 2013-2018 news. No education/CEM page with 2026-27 days. Not accepted (school documents, per search snippets): Escola Els Pins council (15 Jun 2026) lists 9 Oct, 7 Dec, 8 Feb, 27 May; CEIP Llebeig acta 106 lists 2 Nov, 7 Dec, 8 Feb, 29-30 Apr - suggests schools differ 
-  { slug: "cubelles", name: "Cubelles", watch: "https://www.cubelles.cat/informacio-i-actualitat/noticies", hosts: /(^|\.)cubelles\.cat$/, checked: READ },
+  { slug: "cubelles", name: "Cubelles", watch: "https://www.cubelles.cat/informacio-i-actualitat/noticies", hosts: /(^|\.)cubelles\.cat$/, checked: REREAD },
   // Cunit: cunit.cat: the CEM page has only a general description; the Sessions del Consell Escolar Municipal page lists sessions only up to 13 Nov 2019; the page Calendari escolar curs 2025-2026 is the El Trenet nursery calendar for 2025-26. Web searches gave no 2026-27 common free days for Cunit.
-  { slug: "cunit", name: "Cunit", watch: "https://www.cunit.cat/informacio-i-serveis/educacio/consell-escolar-municipal/", hosts: /(^|\.)cunit\.cat$/, checked: READ },
+  { slug: "cunit", name: "Cunit", watch: "https://www.cunit.cat/informacio-i-serveis/educacio/consell-escolar-municipal/", hosts: /(^|\.)cunit\.cat$/, checked: REREAD },
   // Esparreguera: Searched web, esparreguera.cat Educació and Consell Escolar Municipal pages (generic text, no calendar), 'Dies festius' page (2026 labour holidays only), and site search ('lliure disposició', 'calendari escolar'). A municipal calendar does exist: the council's 'Instruccions ... Escola Municipal de les Arts curs 2026-2027' PDF says 'L’Escola Municipal de Les Arts seguirà els dies festius i de lliur
-  { slug: "esparreguera", name: "Esparreguera", watch: "https://www.esparreguera.cat/educacio/consell-escolar-municipal/", hosts: /(^|\.)esparreguera\.cat$/, checked: READ },
+  { slug: "esparreguera", name: "Esparreguera", watch: "https://www.esparreguera.cat/educacio/consell-escolar-municipal/", hosts: /(^|\.)esparreguera\.cat$/, checked: REREAD },
   // Esplugues de Llobregat: Searched esplugues.cat (WordPress search API for 'lliure disposició', 'calendari escolar', 'consell escolar municipal'; media library for 'calendari', 'escolar', 'lliure') and the Educació page: no 2026-2027 free-days document. The council did publish 'Calendari escolar Esplugues curs 2024-2025' (wp-content/uploads/2024/06/Calendari-escolar-Esplugues-curs-2024-2025.pdf), but no 2025-26 or 2026-27 
-  { slug: "esplugues-de-llobregat", name: "Esplugues de Llobregat", watch: "https://www.esplugues.cat/serveis/educacio/", hosts: /(^|\.)esplugues\.cat$/, checked: READ },
+  { slug: "esplugues-de-llobregat", name: "Esplugues de Llobregat", watch: "https://www.esplugues.cat/serveis/educacio/", hosts: /(^|\.)esplugues\.cat$/, checked: REREAD },
   // Figueres: figueres.cat site search ('lliure disposició') and the Consell Escolar Municipal – Consell d'Educació page (only the reglament) give no 2026-2027 free days. The 'Calendaris escolars / Proposta de calendaris escolars' link redirects to the Pla Educatiu d'Entorn Google Site (sites.google.com/xtec.cat/pee-figueres/calendari-escolar), which offers 'Calendari_Escolar_Pla_Educatiu_Entorn_2026-2027.pdf' 
-  { slug: "figueres", name: "Figueres", watch: "https://www.figueres.cat/temes/educacio/escolaritzacio", hosts: /(^|\.)figueres\.cat$/, checked: READ },
+  { slug: "figueres", name: "Figueres", watch: "https://www.figueres.cat/temes/educacio/escolaritzacio", hosts: /(^|\.)figueres\.cat$/, checked: REREAD },
   // les Franqueses del Vallès: Council site is lesfranqueses.cat (franqueses.cat does not resolve). Education page and the 9 Sep 2026 news 'Els centres educatius reprenen les classes' (curs 2026-2027) give no free days; site search for 'lliure disposició' returns no results. Web search found only BOP grant notices and other towns' schools.
-  { slug: "les-franqueses-del-valles", name: "les Franqueses del Vallès", watch: "https://www.lesfranqueses.cat/temes/educacio", hosts: /(^|\.)lesfranqueses\.cat$/, checked: READ },
+  { slug: "les-franqueses-del-valles", name: "les Franqueses del Vallès", watch: "https://www.lesfranqueses.cat/temes/educacio", hosts: /(^|\.)lesfranqueses\.cat$/, checked: REREAD },
   // la Garriga: Searched web (Catalan queries) and lagarriga.cat: the education page (temes/educacio-i-formacio) and the seu Calendaris page (only festius, comercial, fiscal calendars) have no 2026-27 school calendar or CEM free days. Search only surfaced school-level actes (e.g. a school council acta listing 2 Nov, 7 Dec 2026, 8 Feb, 29-30 Apr 2027 without saying which town/school) - not accepted.
-  { slug: "la-garriga", name: "la Garriga", watch: "https://www.lagarriga.cat/temes/educacio-i-formacio", hosts: /(^|\.)lagarriga\.cat$/, checked: READ },
+  { slug: "la-garriga", name: "la Garriga", watch: "https://www.lagarriga.cat/temes/educacio-i-formacio", hosts: /(^|\.)lagarriga\.cat$/, checked: REREAD },
   // Gavà: Council site is gavaciutat.cat (gava.cat redirects). Site search for 'lliure disposició' and 'calendari escolar' returns no 2026-2027 school free days (newest education hit: 'Inici del període de preinscripció escolar pel curs 2026-2027'); the Consell Escolar Municipal page is descriptive only. Education page links news to elbruguersdigital.cat (municipal news) but nothing on free days seen. Web s
-  { slug: "gava", name: "Gavà", watch: "https://www.gavaciutat.cat/educacio", hosts: /(^|\.)gavaciutat\.cat$/, checked: READ },
+  { slug: "gava", name: "Gavà", watch: "https://www.gavaciutat.cat/educacio", hosts: /(^|\.)gavaciutat\.cat$/, checked: REREAD },
   // l'Hospitalet de Llobregat: The Consell Educatiu de L'Hospitalet usually ratifies the free days in plenary (2 Jul 2025 agenda item 3: 'Ratificació dies de lliure disposició dels centres educatius' for 2025-26). A meeting 'CE Sessió Plenària curs 2026-2027' (meetings/5213, created ~30 Oct 2026) and an 'extraordinària curs 2025-2026' (4126) exist on participa311 but are not publicly viewable (redirect to login; API returns nul
-  { slug: "l-hospitalet-de-llobregat", name: "l'Hospitalet de Llobregat", watch: "https://participa311-lhospitalet.diba.cat/assemblies/ConsellEducatiu", hosts: /(^|\.)diba\.cat$/, checked: READ },
+  { slug: "l-hospitalet-de-llobregat", name: "l'Hospitalet de Llobregat", watch: "https://participa311-lhospitalet.diba.cat/assemblies/ConsellEducatiu", hosts: /(^|\.)diba\.cat$/, checked: REREAD },
   // Igualada: Searched igualada.cat (site search 'lliure disposició' and 'calendari escolar'; Educació service page): no 2026-2027 school free days or CEM document. Search hits were unrelated or old (e.g. 'Avui comença el curs escolar a Igualada', 12-09-2019; guia de centres/preinscripció news). Web searches gave only other towns' and schools' documents.
-  { slug: "igualada", name: "Igualada", watch: "https://www.igualada.cat/ca/serveis/educacio", hosts: /(^|\.)igualada\.cat$/, checked: READ },
+  { slug: "igualada", name: "Igualada", watch: "https://www.igualada.cat/ca/serveis/educacio", hosts: /(^|\.)igualada\.cat$/, checked: REREAD },
   // Lloret de Mar: Searched lloret.cat (site search 'lliure disposició' and 'calendari escolar', Educació section, press note 'Més de 5.500 alumnes inicien el curs escolar 2026-2027 a Lloret de Mar' of 08-09-2026): no town-wide/CEM free-days list for schools. Only hit: the calendar of ONE municipal nursery, Llar d'Infants Els Pops, Curs 2026-2027 ('Dies de lliure disposició: 7 desembre, 5 i 8 febrer, 30 abril i 17 m
-  { slug: "lloret-de-mar", name: "Lloret de Mar", watch: "https://www.lloret.cat/ca/seccions/educacio", hosts: /(^|\.)lloret\.cat$/, checked: READ },
+  { slug: "lloret-de-mar", name: "Lloret de Mar", watch: "https://www.lloret.cat/ca/seccions/educacio", hosts: /(^|\.)lloret\.cat$/, checked: REREAD },
   // Manresa: Council education section (web.manresa.cat) has no CEM or school-calendar page; web searches found no council/CEM document for 2026-27. Only a school source surfaced: Institut Escola Manresa's '26-27 Carta d'inici de curs' (agora.xtec.cat), which per search summary lists 2 Nov, 7 Dec, 23 Feb, 30 Apr, 17 May as festius de lliure disposició - not accepted and not stated to be municipal. (The 'ACTA C
-  { slug: "manresa", name: "Manresa", watch: "https://web.manresa.cat/web/menu/3358-educacio", hosts: /(^|\.)manresa\.cat$/, checked: READ },
+  { slug: "manresa", name: "Manresa", watch: "https://web.manresa.cat/web/menu/3358-educacio", hosts: /(^|\.)manresa\.cat$/, checked: REREAD },
   // el Masnou: Searched web, elmasnou.cat Educació and CEMM pages (only reglament), 'Guia educativa 26-27' PDF (no free days). The CEMM approves common days each May: its minutes 'Acta CEMM 20-05-25' (seu-e.cat) approved 2025-26 days ('1r trimestre: divendres 10 d’octubre i dilluns 3 de novembre de 2025. 2n trimestre: dilluns 16 de febrer i divendres 13 de març de 2026'). The equivalent 2026 minutes for 2026-27 
-  { slug: "el-masnou", name: "el Masnou", watch: "https://www.elmasnou.cat/temes/educacio/consell-escolar-municipal-del-masnou-cemm", hosts: /(^|\.)elmasnou\.cat$/, checked: READ },
+  { slug: "el-masnou", name: "el Masnou", watch: "https://www.elmasnou.cat/temes/educacio/consell-escolar-municipal-del-masnou-cemm", hosts: /(^|\.)elmasnou\.cat$/, checked: REREAD },
   // Molins de Rei: Searched web, molinsderei.cat WordPress search ('lliure disposició', 'calendari escolar', 'consell escolar/educatiu municipal'), the 'Participació educativa' page (only CEM minutes 2022-2023), the 9 Sep 2026 start-of-course news item. The council's 'Dossier preinscripció Bressol 2026-2027' says 'Dies de lliure disposició del curs escolar 2026-2027: els que aprovin els Consells Escolars de les esco
-  { slug: "molins-de-rei", name: "Molins de Rei", watch: "https://molinsderei.cat/participacioeducativa/", hosts: /(^|\.)molinsderei\.cat$/, checked: READ },
+  { slug: "molins-de-rei", name: "Molins de Rei", watch: "https://molinsderei.cat/participacioeducativa/", hosts: /(^|\.)molinsderei\.cat$/, checked: REREAD },
   // Mollerussa: mollerussa.cat education section (centres, OME, educació per edats) has no school calendar/CEM page; site search for calendari escolar and lliure disposició found only school open-day and music-school news. Web searches gave no 2026-27 common free days for Mollerussa.
-  { slug: "mollerussa", name: "Mollerussa", watch: "https://www.mollerussa.cat/serveis/educacio/", hosts: /(^|\.)mollerussa\.cat$/, checked: READ },
+  { slug: "mollerussa", name: "Mollerussa", watch: "https://www.mollerussa.cat/serveis/educacio/", hosts: /(^|\.)mollerussa\.cat$/, checked: REREAD },
   // Montornès del Vallès: The CEM has its own space on the council participation portal (participa311-montornes.diba.cat), but its newest posted session is the Plenari CEM of 19 Apr 2023 (checked via the Decidim API). montornes.cat (menus JS-rendered) and web searches gave no 2026-27 school calendar or common free days; only generic/other-town results.
-  { slug: "montornes-del-valles", name: "Montornès del Vallès", watch: "https://participa311-montornes.diba.cat/assemblies/CEMontornes", hosts: /(^|\.)diba\.cat$/, checked: READ },
+  { slug: "montornes-del-valles", name: "Montornès del Vallès", watch: "https://participa311-montornes.diba.cat/assemblies/CEMontornes", hosts: /(^|\.)diba\.cat$/, checked: REREAD },
   // Olesa de Montserrat: Searched web (Catalan queries), olesademontserrat.cat 'Educació i infància' page, the Sept 2026 start-of-course news item, and the site's own search for 'lliure disposició' (only hit: 2009 news 'Aprovats els tres dies festius de lliure disposició dels centres Escolars Curs 2009', showing the CEM historically approves common days). Nothing for 2026-27 found.
-  { slug: "olesa-de-montserrat", name: "Olesa de Montserrat", watch: "https://www.olesademontserrat.cat/educacio-i-infancia", hosts: /(^|\.)olesademontserrat\.cat$/, checked: READ },
+  { slug: "olesa-de-montserrat", name: "Olesa de Montserrat", watch: "https://www.olesademontserrat.cat/educacio-i-infancia", hosts: /(^|\.)olesademontserrat\.cat$/, checked: REREAD },
   // Palafrugell: Searched web, educacio.palafrugell.cat WordPress search ('lliure disposició', 'calendari escolar', 'consell escolar municipal'), the CEM page: its 'CONSULTA EL CALENDARI ESCOLAR' button still links to the generic Generalitat 2025-2026 calendar image (uploaded Jan 2026, no town days). News item on start of course (comunicacio.palafrugell.cat/.../6770) now 404s. No 2026-27 common days found.
-  { slug: "palafrugell", name: "Palafrugell", watch: "https://educacio.palafrugell.cat/participacio/consells/consell-escolar-municipal/", hosts: /(^|\.)palafrugell\.cat$/, checked: READ },
+  { slug: "palafrugell", name: "Palafrugell", watch: "https://educacio.palafrugell.cat/participacio/consells/consell-escolar-municipal/", hosts: /(^|\.)palafrugell\.cat$/, checked: REREAD },
   // Palamós i Sant Joan: Council site palamos.cat (old ASP.NET portal): Ensenyament and Ciutat Educadora pages list only extracurricular/PEC documents; the news list shows nothing recent on the school calendar. Web searches (incl. site:palamos.cat) found no 2026-27 free days, only other towns' schools.
-  { slug: "palamos-i-sant-joan", name: "Palamós i Sant Joan", watch: "https://www.palamos.cat/palamos/ajuntament/punts.aspx?punt=p06", hosts: /(^|\.)palamos\.cat$/, checked: READ },
+  { slug: "palamos-i-sant-joan", name: "Palamós i Sant Joan", watch: "https://www.palamos.cat/palamos/ajuntament/punts.aspx?punt=p06", hosts: /(^|\.)palamos\.cat$/, checked: REREAD },
   // Piera: Council site is viladepiera.cat (piera.cat does not resolve). Site search for 'lliure disposició' returns only 2011/2022 items; 'curs 2026-2027' returns the 10 Sep 2026 news 'Piera dona la benvinguda al nou curs escolar...' and the activities guide, neither with free days. No education/CEM page with a 2026-27 calendar found.
-  { slug: "piera", name: "Piera", watch: "https://www.viladepiera.cat/actualitat/noticies", hosts: /(^|\.)viladepiera\.cat$/, checked: READ },
+  { slug: "piera", name: "Piera", watch: "https://www.viladepiera.cat/actualitat/noticies", hosts: /(^|\.)viladepiera\.cat$/, checked: REREAD },
   // Premià de Mar: Council education area (premiademar.cat area.php?id=54) has no calendar/free-days page; the 8 Sep 2026 press note 'Prop de 3.130 alumnes d'infantil, primària i secundària han començat avui el curs 2026-2027 a Premià de Mar' (https://premiademar.cat/document.php?id=38027) gives no free days. Web searches returned only other towns' CEM minutes (Malgrat, Montornès).
-  { slug: "premia-de-mar", name: "Premià de Mar", watch: "https://premiademar.cat/area.php?id=54", hosts: /(^|\.)premiademar\.cat$/, checked: READ },
+  { slug: "premia-de-mar", name: "Premià de Mar", watch: "https://premiademar.cat/area.php?id=54", hosts: /(^|\.)premiademar\.cat$/, checked: REREAD },
   // Reus: Reus sets common days in the Consell Educatiu de Ciutat (CEC). Newest published acta is the CEC plenary of 29 Oct 2025 (signed 30 Mar 2026), item 'TERCER .- Dies de lliure disposició curs 2026-27': by city agreement the choice rotates, and for 2026-27 it is the turn of 'infantil i primària pública' to choose; the primary-heads representative asked to decide later ('no precipitar-nos fixant dates a
-  { slug: "reus", name: "Reus", watch: "https://www.reus.cat/serveis/consell-educatiu-de-ciutat", hosts: /(^|\.)reus\.cat$/, checked: READ },
+  { slug: "reus", name: "Reus", watch: "https://www.reus.cat/serveis/consell-educatiu-de-ciutat", hosts: /(^|\.)reus\.cat$/, checked: REREAD },
   // Roses: Ensenyament section and CEM page (presentation/reglament only) have no school calendar; roses.cat site search (Plone RSS) for 'lliure disposició', 'calendari escolar' and 'curs 2026-2027' (newest first) returns only transport, textbook aid and activity items. No official 2026-27 free days found.
-  { slug: "roses", name: "Roses", watch: "https://www.roses.cat/la-vila/ensenyament/consell-escolar-municipal", hosts: /(^|\.)roses\.cat$/, checked: READ },
+  { slug: "roses", name: "Roses", watch: "https://www.roses.cat/la-vila/ensenyament/consell-escolar-municipal", hosts: /(^|\.)roses\.cat$/, checked: REREAD },
   // Rubí: rubi.cat site search ('lliure disposició', 'calendari escolar 2026') and the CEM page give no 2026-27 days. The council's annual 'Guia d'ensenyament' (2025-26 edition checked) does not list lliure disposició days; no 2026-27 edition found at the expected path. Web search returned only school actes (town unclear) - not accepted.
-  { slug: "rubi", name: "Rubí", watch: "https://www.rubi.cat/ca/temes/educacio/participa/consell-escolar-municipal-cem", hosts: /(^|\.)rubi\.cat$/, checked: READ },
+  { slug: "rubi", name: "Rubí", watch: "https://www.rubi.cat/ca/temes/educacio/participa/consell-escolar-municipal-cem", hosts: /(^|\.)rubi\.cat$/, checked: REREAD },
   // la Ràpita: larapita.cat (WordPress; TLS cert chain incomplete for curl) education page has no school calendar; WP search and media-library search for lliure disposició / calendari / escolar found only fiscal calendars and the 2017-19 CEM reglament. Web searches gave no 2026-27 common free days for la Ràpita.
-  { slug: "la-rapita", name: "la Ràpita", watch: "https://larapita.cat/ajuntament/regidories/educacio/", hosts: /(^|\.)larapita\.cat$/, checked: READ },
-  // Sabadell: Council site web.sabadell.cat / www.sabadell.cat unreachable from here (DNS failure / connection refused), so could not search it; watch URL is the homepage (education page path not verified). The Sabadell CEM normally issues a 'CEM Calendari ... CENTRES EDUCATIUS NO UNIVERSITARIS' proposal 'per a tots els centres educatius de Sabadell' (2024-25 copy seen on a school site). For 2026-27 only school
-  { slug: "sabadell", name: "Sabadell", watch: "https://web.sabadell.cat/", hosts: /(^|\.)sabadell\.cat$/, checked: READ },
+  { slug: "la-rapita", name: "la Ràpita", watch: "https://larapita.cat/ajuntament/regidories/educacio/", hosts: /(^|\.)larapita\.cat$/, checked: REREAD },
   // Sant Adrià de Besòs: Council site moved to sant-adria.cat (old sant-adria.net has a broken cert/empty page). Site search for "lliure disposició" returns only the Canguteca rules page; search 'calendari escolar' returns nothing relevant. Education section and CEM page (https://www.sant-adria.cat/sant-adria-per-temes/educacio/consell-escolar-municipal) have no calendar or 2026-27 free days. Web searches found only press
-  { slug: "sant-adria-de-besos", name: "Sant Adrià de Besòs", watch: "https://www.sant-adria.cat/sant-adria-per-temes/educacio", hosts: /(^|\.)sant-adria\.cat$/, checked: READ },
+  { slug: "sant-adria-de-besos", name: "Sant Adrià de Besòs", watch: "https://www.sant-adria.cat/sant-adria-per-temes/educacio", hosts: /(^|\.)sant-adria\.cat$/, checked: REREAD },
   // Sant Andreu de la Barca: Searched web (Catalan queries), sabarca.cat education theme page and its documents (Patis Oberts 26-27 forms), education news list (newest: 'Els Patis Oberts tornen l'1 d'octubre', '3.837 alumnes comencen el curs escolar' of 8 Sep 2026 - no free days mentioned). No CEM page or 2026-27 lliure disposició dates found on official sources.
-  { slug: "sant-andreu-de-la-barca", name: "Sant Andreu de la Barca", watch: "https://sabarca.cat/temes/educacio", hosts: /(^|\.)sabarca\.cat$/, checked: READ },
+  { slug: "sant-andreu-de-la-barca", name: "Sant Andreu de la Barca", watch: "https://sabarca.cat/temes/educacio", hosts: /(^|\.)sabarca\.cat$/, checked: REREAD },
   // Sant Boi de Llobregat: Web search found nothing for Sant Boi (only schools in Cornellà/Pallejà and El Prat's calendar). santboi.cat site search ('lliure disposició', 'calendari escolar') only returns the general 'Calendari festiu' page (no school days); education section (consells-de-participacio, serveis-les-families, actualitat-educacio) has no calendar or CEM agreement.
-  { slug: "sant-boi-de-llobregat", name: "Sant Boi de Llobregat", watch: "https://www.santboi.cat/ciutadania/educacio/consells-de-participacio", hosts: /(^|\.)santboi\.cat$/, checked: READ },
+  { slug: "sant-boi-de-llobregat", name: "Sant Boi de Llobregat", watch: "https://www.santboi.cat/ciutadania/educacio/consells-de-participacio", hosts: /(^|\.)santboi\.cat$/, checked: REREAD },
   // Sant Cugat del Vallès: Web searches (Catalan) returned only school actes from other/unclear towns and the local paper Tot Sant Cugat (not accepted). santcugat.cat site search is JS-rendered; checked sitemap education pages (etapes-educatives, the 'Educació' hub whose slug is llistes-definitives-preinscripcio-a-ebm02) - no calendar / lliure disposició / CEM content found. Watch URL is the council's 'Educació' hub per its
-  { slug: "sant-cugat-del-valles", name: "Sant Cugat del Vallès", watch: "https://santcugat.cat/web/llistes-definitives-preinscripcio-a-ebm02", hosts: /(^|\.)santcugat\.cat$/, checked: READ },
+  { slug: "sant-cugat-del-valles", name: "Sant Cugat del Vallès", watch: "https://santcugat.cat/web/llistes-definitives-preinscripcio-a-ebm02", hosts: /(^|\.)santcugat\.cat$/, checked: REREAD },
   // Sant Feliu de Guíxols: Searched web (Catalan queries incl. ensenyament.guixols.cat), guixols.cat homepage and site search for 'lliure disposició' (no relevant hits), ciutadania.guixols.cat areas page (links to 'Servei d'Educació Municipal' at https://ensenyament.guixols.cat/, which currently returns only a default 'IIS Windows Server' page). No CEM page or 2026-27 free days found.
-  { slug: "sant-feliu-de-guixols", name: "Sant Feliu de Guíxols", watch: "https://ciutadania.guixols.cat/arees_i_serveis", hosts: /(^|\.)guixols\.cat$/, checked: READ },
+  { slug: "sant-feliu-de-guixols", name: "Sant Feliu de Guíxols", watch: "https://ciutadania.guixols.cat/arees_i_serveis", hosts: /(^|\.)guixols\.cat$/, checked: REREAD },
   // Sant Feliu de Llobregat: www.santfeliu.cat was unreachable from here (curl connection timeout; WebFetch ECONNREFUSED), so the council site could not be searched. Checked the council's Decidim platform (participa311-santfeliu.diba.cat): Consell Escolar Municipal assembly page (cmescolar) has no 2026-27 documents; the Consell Educatiu de Ciutat assembly only has 2022 session reports. Web searches returned only other towns' 
   { slug: "sant-feliu-de-llobregat", name: "Sant Feliu de Llobregat", watch: "https://www.santfeliu.cat/", hosts: /(^|\.)santfeliu\.cat$/, checked: READ },
   // Sant Joan Despí: Council site search (sjdespi.cat) for 'lliure disposició' and 'calendari escolar' returns nothing relevant; education section has no calendar page; the 2026-27 start-of-course news item ('Inici del curs escolar per a més de 4.100 alumnes a Sant Joan Despí') gives no free days. Web searches found only other towns' school/CEM documents.
-  { slug: "sant-joan-despi", name: "Sant Joan Despí", watch: "https://sjdespi.cat/la-ciutat-per-temes/educacio", hosts: /(^|\.)sjdespi\.cat$/, checked: READ },
+  { slug: "sant-joan-despi", name: "Sant Joan Despí", watch: "https://sjdespi.cat/la-ciutat-per-temes/educacio", hosts: /(^|\.)sjdespi\.cat$/, checked: REREAD },
   // Sant Pere de Ribes: Council 'Calendari escolar' page only says the Departament sets the calendar and to ask each school; CEM page (https://www.santperederibes.cat/municipi/educacio/consell-escolar-municipal) is descriptive only, no documents. Web searches found council aid notices and a 16 Jun 2026 JGL agenda (unrelated), no 2026-27 free days.
-  { slug: "sant-pere-de-ribes", name: "Sant Pere de Ribes", watch: "https://www.santperederibes.cat/municipi/educacio/calendari-escolar", hosts: /(^|\.)santperederibes\.cat$/, checked: READ },
+  { slug: "sant-pere-de-ribes", name: "Sant Pere de Ribes", watch: "https://www.santperederibes.cat/municipi/educacio/calendari-escolar", hosts: /(^|\.)santperederibes\.cat$/, checked: REREAD },
   // Sant Vicenç dels Horts: Searched web (Catalan queries), svh.cat WordPress search ('lliure disposició', 'calendari escolar', 'consell escolar municipal'), the three CEM pages (Actiu page modified 2026-11-03 but only has generic text + reglament) and the 'Guia educativa 26-27' PDF (preinscription guide, no free days). No 2026-27 free days on council site. A school (IES Gabriela Mistral, agora.xtec.cat) published a common '
-  { slug: "sant-vicenc-dels-horts", name: "Sant Vicenç dels Horts", watch: "https://svh.cat/les-eines/organs-de-participacio/consell-escolar-municipal/", hosts: /(^|\.)svh\.cat$/, checked: READ },
+  { slug: "sant-vicenc-dels-horts", name: "Sant Vicenç dels Horts", watch: "https://svh.cat/les-eines/organs-de-participacio/consell-escolar-municipal/", hosts: /(^|\.)svh\.cat$/, checked: REREAD },
   // Santa Coloma de Farners: Council site is scf.cat (scfarners.cat does not resolve); its homepage/sitemap expose no education or school-calendar page (only agenda categories). Search found only Institut de Santa Coloma de Farners family letters (school site, undated / 2025-26) saying the 4 days are consensuats pels centres educatius i l Ajuntament de SCF - not accepted. No 2026-27 official dates found.
-  { slug: "santa-coloma-de-farners", name: "Santa Coloma de Farners", watch: "https://www.scf.cat/", hosts: /(^|\.)scf\.cat$/, checked: READ },
+  { slug: "santa-coloma-de-farners", name: "Santa Coloma de Farners", watch: "https://www.scf.cat/", hosts: /(^|\.)scf\.cat$/, checked: REREAD },
   // Santa Coloma de Gramenet: gramenet.cat returns 403 to curl and WebFetch (whole site, incl. PDFs), so could not check. Search found the municipal bulletin 'Ajuntament Informa' 1894 (24 Jul 2026) and 1851 (12 Sep 2025) PDFs and the 2026 school guides, but could not open them; no official 2026-27 dates seen in search snippets. The town's body is the 'Consell d'Educació Municipal' (reglament modified 2025). Watch URL is the ho
   { slug: "santa-coloma-de-gramenet", name: "Santa Coloma de Gramenet", watch: "https://www.gramenet.cat/", hosts: /(^|\.)gramenet\.cat$/, checked: READ },
   // Santa Perpètua de Mogoda: Searched web (Catalan queries), staperpetua.cat education theme page (only preinscripció 26-27 rules and absenteeism protocol PDFs), the Consell Escolar Municipal page (generic text, last updated 27.02.2026, no documents), and the site search (results JS-rendered, nothing usable). No official 2026-27 lliure disposició dates found.
-  { slug: "santa-perpetua-de-mogoda", name: "Santa Perpètua de Mogoda", watch: "https://www.staperpetua.cat/ajuntament/govern/consells-municipals-i-comissions/consell-escolar-municipal.html", hosts: /(^|\.)staperpetua\.cat$/, checked: READ },
+  { slug: "santa-perpetua-de-mogoda", name: "Santa Perpètua de Mogoda", watch: "https://www.staperpetua.cat/ajuntament/govern/consells-municipals-i-comissions/consell-escolar-municipal.html", hosts: /(^|\.)staperpetua\.cat$/, checked: REREAD },
   // la Seu d'Urgell: laseu.cat: the Educació section and the CEM page only carry the CEM reglament text (no actes or calendar documents). Web searches found nothing on 2026-27 free days for la Seu d’Urgell.
-  { slug: "la-seu-d-urgell", name: "la Seu d'Urgell", watch: "https://www.laseu.cat/lajuntament/consells-municipals/consell-escolar-municipal", hosts: /(^|\.)laseu\.cat$/, checked: READ },
+  { slug: "la-seu-d-urgell", name: "la Seu d'Urgell", watch: "https://www.laseu.cat/lajuntament/consells-municipals/consell-escolar-municipal", hosts: /(^|\.)laseu\.cat$/, checked: REREAD },
   // Sitges: Council site search for "lliure disposició" returns 0 results; 'calendari escolar' returns only start-of-course news. Education section ('Tornada a l'escola', Educació Infantil i Primària) has no calendar or free days; the 8 Sep 2026 news 'Sitges comença el curs escolar 2026-2027 amb 2.883 alumnes...' gives no free days. No CEM page found.
-  { slug: "sitges", name: "Sitges", watch: "https://www.sitges.cat/serveis/ensenyament", hosts: /(^|\.)sitges\.cat$/, checked: READ },
+  { slug: "sitges", name: "Sitges", watch: "https://www.sitges.cat/serveis/ensenyament", hosts: /(^|\.)sitges\.cat$/, checked: REREAD },
   // Terrassa: terrassa.cat and participa.terrassa.cat are behind Cloudflare (403 / challenge) for curl and WebFetch. Search found the council press release '260903 NP inici curs escolar' (3 Sep 2026, could not open) and old CEM minutes (CEM historically votes the common days, e.g. 2022-23). The only 2026-27-free-day-adjacent hits were school sites (Joan Maragall acta, no dates) and a 2025-26 school calendar (10
+  // 27 Nov 2026: search now shows a council PDF "Calendari escolar a Terrassa Curs 2026-2027" (www.terrassa.cat/documents/12006/226005/…) and the page www.terrassa.cat/calendari-escolar, but both still answer curl and WebFetch with the Cloudflare 403 challenge, so the days stay out until someone reads the PDF itself.
   { slug: "terrassa", name: "Terrassa", watch: "https://participa.terrassa.cat/assemblies", hosts: /(^|\.)terrassa\.cat$/, checked: READ },
   // Torredembarra: Council section 'Curs 2026-2027' has calendar pages only for the municipal nurseries, music school and adult school, and none lists free days (the nursery page says they follow the rest of the town's schools for 'dies de lliure disposició' without giving dates). Site search for 'lliure disposició' and 'calendari escolar 2026' found nothing else. Web search found only the CEM reglament and press.
-  { slug: "torredembarra", name: "Torredembarra", watch: "https://www.torredembarra.cat/temes/educacio/curs-2026-2027", hosts: /(^|\.)torredembarra\.cat$/, checked: READ },
+  { slug: "torredembarra", name: "Torredembarra", watch: "https://www.torredembarra.cat/temes/educacio/curs-2026-2027", hosts: /(^|\.)torredembarra\.cat$/, checked: REREAD },
   // Tortosa: Council site (www2.tortosa.cat) education section has only static pages (no calendar). Council news archive search for 'lliure disposici' returns nothing; 'curs escolar' returns only old start-of-year items (latest 2022). Web searches surfaced only school/press calendars from other towns; nothing official for Tortosa 2026-27.
-  { slug: "tortosa", name: "Tortosa", watch: "https://www2.tortosa.cat/ciutat/educacio/", hosts: /(^|\.)tortosa\.cat$/, checked: READ },
+  { slug: "tortosa", name: "Tortosa", watch: "https://www2.tortosa.cat/ciutat/educacio/", hosts: /(^|\.)tortosa\.cat$/, checked: REREAD },
   // Vallirana: vallirana.cat education page (temes/educacio) has only school directory links, Guia educativa and the 2026-27 ajuts escolars news; no school calendar or CEM page found. Web searches (Catalan queries, site:vallirana.cat) gave no 2026-27 common free days for Vallirana.
-  { slug: "vallirana", name: "Vallirana", watch: "https://www.vallirana.cat/temes/educacio", hosts: /(^|\.)vallirana\.cat$/, checked: READ },
+  { slug: "vallirana", name: "Vallirana", watch: "https://www.vallirana.cat/temes/educacio", hosts: /(^|\.)vallirana\.cat$/, checked: REREAD },
   // Vila-seca: Searched web (Catalan queries), vila-seca.cat 'Ensenyament' service page (only transport escolar 2026-2027 and llars d'infants procedures), education news list and the Joomla site search for 'lliure disposició' (no relevant hits). No CEM page or 2026-27 lliure disposició dates found. Press reports the 2027 local holidays as 18 Jan and 3 Aug 2027 (not an official source; not used).
-  { slug: "vila-seca", name: "Vila-seca", watch: "https://www.vila-seca.cat/ca/serveis-a-vila-seca/ensenyament-a-vila-seca", hosts: /(^|\.)vila-seca\.cat$/, checked: READ },
+  { slug: "vila-seca", name: "Vila-seca", watch: "https://www.vila-seca.cat/ca/serveis-a-vila-seca/ensenyament-a-vila-seca", hosts: /(^|\.)vila-seca\.cat$/, checked: REREAD },
   // Viladecans: viladecans.cat (all pages and PDFs) returns a Cloudflare 403 challenge to curl and WebFetch, so the council site could not be read; Wayback CDX was rate-limited/unavailable. Web searches ('lliure disposició' 2026-2027 Viladecans, site:viladecans.cat calendari escolar) returned no council page or CEM document with 2026-2027 free days, only other towns' and schools' calendars. The municipal magazine
   { slug: "viladecans", name: "Viladecans", watch: "https://www.viladecans.cat/", hosts: /(^|\.)viladecans\.cat$/, checked: READ },
   // Vilafranca del Penedès: Council education portal educacio.vilafranca.cat checked: CEM minutes page lists actes up to 'Acta CEM 2026-04-13.pdf' (no mention of lliure disposició); the 7 Sep 2026 news 'Vilafranca inicia el curs escolar 2026-2027 amb 6.656 alumnes' and its PDF have no free days; site search is Google CSE (not usable); no calendari escolar page. A school's June 2026 acords (agora.xtec.cat/ceipestalella, not o
-  { slug: "vilafranca-del-penedes", name: "Vilafranca del Penedès", watch: "https://educacio.vilafranca.cat/participacio/consell-escolar-municipal/actes-reunions", hosts: /(^|\.)vilafranca\.cat$/, checked: READ },
+  { slug: "vilafranca-del-penedes", name: "Vilafranca del Penedès", watch: "https://educacio.vilafranca.cat/participacio/consell-escolar-municipal/actes-reunions", hosts: /(^|\.)vilafranca\.cat$/, checked: REREAD },
   // Vilassar de Mar: CEM page only lists minutes up to 2019 and the reglament; education page (temes/educacio-i-formacio) and the site search ('lliure disposició', 'calendari escolar') show nothing for 2026-27. Web searches returned only other towns' schools. Site has an incomplete TLS chain (curl needs -k).
-  { slug: "vilassar-de-mar", name: "Vilassar de Mar", watch: "https://www.vilassardemar.cat/participacio/espais-consells/consell-escolar-municipal", hosts: /(^|\.)vilassardemar\.cat$/, checked: READ },
+  { slug: "vilassar-de-mar", name: "Vilassar de Mar", watch: "https://www.vilassardemar.cat/participacio/espais-consells/consell-escolar-municipal", hosts: /(^|\.)vilassardemar\.cat$/, checked: REREAD },
 ];
 
 /* -------------------------------------------------------------------------- */

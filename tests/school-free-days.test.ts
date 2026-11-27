@@ -8,6 +8,9 @@ import {
   SCHOOL_FREE_DAYS,
   SCHOOL_FREE_DAYS_META,
   buildSchoolFreeDaysBody,
+  christmasEdgeTowns,
+  christmasEdges,
+  christmasEdgesLine,
   freeDaysDescription,
   freeDaysSources,
   freeDaysTitle,
@@ -289,4 +292,39 @@ test("the publish route registers `lliure-disposicio` and `lliure-disposicio-lin
   const route = read("src/app/api/admin/publish/route.ts");
   assert.match(route, /wants\("lliure-disposicio"\)\) published\.push\(await publishB2Article\(SCHOOL_FREE_DAYS\)\)/);
   assert.match(route, /wants\("lliure-disposicio-links"\)\) published\.push\(await publishB2Article\(DECEMBER_BRIDGE\)\)/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* Re-read of 27 Nov 2026 (batch 8T): new towns and the Christmas edges       */
+/* -------------------------------------------------------------------------- */
+
+test("27 Nov re-read: Sabadell (CEM agreement) and Castelldefels (council page) have rows with the days their sources print", () => {
+  const sbd = FREE_DAYS_TOWNS.find((t) => t.slug === "sabadell")!;
+  assert.deepEqual(sbd.days, ["2026-10-30", "2026-12-07", "2027-02-08", "2027-04-30", "2027-06-04"]);
+  assert.equal(sbd.kind, "agreement");
+  const cdf = FREE_DAYS_TOWNS.find((t) => t.slug === "castelldefels")!;
+  assert.deepEqual(cdf.days, ["2026-10-13", "2026-11-02", "2027-02-08", "2027-04-30", "2027-05-17"]);
+  // Monday 7 December is a Castelldefels local holiday: no school, and not one of its free days.
+  assert.equal(monday7(cdf), "local");
+  for (const slug of ["sabadell", "castelldefels"]) assert.ok(!FREE_DAYS_PENDING.some((p) => p.slug === slug), slug);
+});
+
+test("Christmas edges: Monday 21 December and Friday 8 January; the hub's line and FAQ follow the rows", () => {
+  const [last, back] = christmasEdges();
+  assert.equal(last, "2026-12-21");
+  assert.equal(back, "2027-01-08");
+  assert.equal(weekdayIndex(last), 1);
+  assert.equal(weekdayIndex(back), 5);
+  assert.deepEqual(christmasEdgeTowns(), [], "no published set has a free day on 21 Dec or 8 Jan (re-read 27 Nov 2026)");
+  assert.match(christmasEdgesLine("ca"), new RegExp(`^Cap dels ${FREE_DAYS_TOWNS.length} municipis`));
+  const withEdge: FreeDaysTown = { ...FREE_DAYS_TOWNS.find((t) => t.slug === "barcelona")!, days: ["2026-10-30", "2026-12-21", "2027-02-08", "2027-05-14"] };
+  assert.deepEqual(christmasEdgeTowns([withEdge]).map((x) => x.day), ["2026-12-21"]);
+  assert.match(christmasEdgesLine("es", [withEdge]), /Barcelona \(lunes 21 de diciembre de 2026\)/);
+  const questions: Record<Locale, string> = { ca: "Hi ha algun dia de lliure disposició per Nadal?", es: "¿Hay algún día de libre disposición en Navidad?", en: "Is there a school free day around Christmas?" };
+  for (const locale of LOCALES) {
+    const json = JSON.stringify(SCHOOL_FREE_DAYS.editions[locale].blocks);
+    assert.ok(json.includes(questions[locale]), locale);
+    const body = text(SCHOOL_FREE_DAYS.editions[locale].blocks);
+    assert.equal(body.split(christmasEdgesLine(locale)).length - 1, 2, `${locale}: the line in the rest section and in the FAQ`);
+  }
 });
