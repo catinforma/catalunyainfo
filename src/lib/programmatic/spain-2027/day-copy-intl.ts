@@ -7,6 +7,7 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 
 import { YEAR } from "./calendar";
 import { DESCRIPTION_LIMIT, TITLE_LIMIT } from "./copy";
+import { withCataloniaSections } from "./day-catalonia";
 import type { DaySection } from "./day-copy";
 import { change2026, dayRuns, isCity, isWeekend, movableName, type DayHolder, type SpainDay } from "./days";
 
@@ -530,7 +531,8 @@ export function daySectionsIntl(day: SpainDay, L: IntlLocale): DaySection[] {
     const last = feast ? (ca ? `el ${feast}` : feast) : ca ? `${caDayArticle(day.date)}${dayMonth(day.date, "ca")}` : dayMonth(day.date, "en");
     sections.push({ id: "en-2026", question: ca ? `Va ser festiu ${last} el 2026?` : `Was ${last} a public holiday in 2026?`, answer: change, printed: change });
   }
-  return sections;
+  // 27 Nov 2026 (batch 10E): Catalonia, its shops and the weekday (day-catalonia.ts).
+  return withCataloniaSections(sections, day, L, the);
 }
 
 /** "Del sábado 9 al martes 12 de octubre: 4 días…", short, for descriptions. */

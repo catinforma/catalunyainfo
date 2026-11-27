@@ -126,7 +126,7 @@ export function printedDayFaq(day: SpainDay, locale: DateLocale): Faq[] {
     { question: h1, answer: lead.join(" ") },
     ...sections.map((s) => {
       const lists = s.id === "donde" ? dayWhereLines(day, locale) : s.id === "puente" ? dayBridgeLines(day, locale) : [];
-      return { question: s.question, answer: [s.printed, ...lists].join("\n") };
+      return { question: s.question, answer: [s.printed, ...(s.more ?? []), ...lists].join("\n") };
     }),
   ];
 }

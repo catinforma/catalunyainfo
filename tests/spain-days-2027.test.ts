@@ -449,8 +449,9 @@ test("links in: the hub lists every date, the community tables link theirs, and 
   ]);
   assert.ok(DATE_PAGES.includes("2027-09-11") && !hasDayPage("2027-09-11"));
   assert.equal(restOfSpainLabel("2027-03-19"), "Dónde es festivo el 19 de marzo de 2027, comunidad por comunidad");
-  // And back: the Spain page links the Catalan page (Spanish edition) where it exists.
-  assert.match(COMPONENT, /isDatePage\(iso\) \? \(/);
+  // And back: the Spain page links the Catalan page (Spanish edition) where it exists, the towns hub otherwise
+  // (27 Nov 2026: the line moved from "where" to the new Catalonia section).
+  assert.match(COMPONENT, /isDatePage\(iso\) \? <Link href=\{datePath\(locale, iso\)\}>\{dateQuestion\(iso, locale\)\}<\/Link> : <Link href=\{hubPath\(locale\)\}>\{ui\.towns\}<\/Link>/);
   assert.match(COMPONENT, /<Link href=\{datePath\(locale, iso\)\}>/);
   assert.equal(datePath("es", "2027-03-19"), "/es/festivos/dia/19-marzo-2027/");
 });

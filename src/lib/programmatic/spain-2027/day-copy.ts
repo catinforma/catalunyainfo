@@ -8,6 +8,7 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 import { YEAR } from "./calendar";
 import { names } from "./communities";
 import { DESCRIPTION_LIMIT, TITLE_LIMIT, rangeWords, runLine, territoryCount, weekdayDate } from "./copy";
+import { withCataloniaSections } from "./day-catalonia";
 import { change2026, dayRuns, isCity, isWeekend, movableName, type DayHolder, type SpainDay } from "./days";
 
 /**
@@ -392,6 +393,8 @@ export interface DaySection {
   answer: string;
   /** The paragraph printed under the H2, when the page puts the rest in a list ("where", "bridge"). */
   printed: string;
+  /** Further paragraphs printed under it, before any list (the shops answer's second line). */
+  more?: string[];
 }
 
 /** The page's sections after the answer, each a question: the FAQ is these and the H1. */
@@ -407,7 +410,8 @@ export function daySections(day: SpainDay): DaySection[] {
   }
   const change = change2026Line(day);
   if (change) sections.push({ id: "en-2026", question: `¿Fue festivo ${the.replace(` de ${YEAR}`, "")} en 2026?`, answer: change, printed: change });
-  return sections;
+  // 27 Nov 2026 (batch 10E): Catalonia, its shops and the weekday (day-catalonia.ts).
+  return withCataloniaSections(sections, day, "es", the);
 }
 
 // FAQPage: `printedDayFaq` in day-faq.ts (the H1 and each section, with the text printed under them).

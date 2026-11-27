@@ -49,7 +49,7 @@ test("Spain day pages: FAQPage is the H1 and each H2 with exactly the text print
         { question: h1, answer: lead.join(" ") },
         ...sections.map((s) => ({
           question: s.question,
-          answer: [s.printed, ...(s.id === "donde" ? dayWhereLines(day, locale) : s.id === "puente" ? dayBridgeLines(day, locale) : [])].join("\n"),
+          answer: [s.printed, ...(s.more ?? []), ...(s.id === "donde" ? dayWhereLines(day, locale) : s.id === "puente" ? dayBridgeLines(day, locale) : [])].join("\n"),
         })),
       ];
       const schema = faqSchema([{ type: "faq", items: printedDayFaq(day, locale) }]) as unknown as SchemaFaq;

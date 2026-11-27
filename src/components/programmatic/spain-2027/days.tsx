@@ -444,16 +444,21 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
             <section key={s.id} aria-labelledby={`ci-dia-${s.id}`}>
               <h2 id={`ci-dia-${s.id}`}>{s.question}</h2>
               <p>{s.printed}</p>
+              {s.more?.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
               {s.id === "puente" ? <BridgeList day={day} locale={locale} /> : null}
+              {s.id === "cataluna" ? (
+                // The Catalonia date page has the towns list, schools and transport; without one, the towns hub.
+                <p>
+                  {ui.catalonia}{" "}
+                  {isDatePage(iso) ? <Link href={datePath(locale, iso)}>{dateQuestion(iso, locale)}</Link> : <Link href={hubPath(locale)}>{ui.towns}</Link>}
+                </p>
+              ) : null}
               {s.id === "donde" ? (
                 <>
                   <WhereLists day={day} locale={locale} />
                   <DayCities iso={iso} locale={locale} />
-                  {isDatePage(iso) ? (
-                    <p>
-                      {ui.catalonia} <Link href={datePath(locale, iso)}>{dateQuestion(iso, locale)}</Link>
-                    </p>
-                  ) : null}
                   {EASTER_DAYS_2027.includes(iso) ? (
                     <p>
                       {ui.easter} <Link href={GUIDES.easter2027[locale]}>{ui.easterLink}</Link>.

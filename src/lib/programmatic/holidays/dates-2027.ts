@@ -976,6 +976,18 @@ export function whitMondayNotice(locale: DateLocale): NonNullable<DateContent["t
   };
 }
 
+/**
+ * 27 Nov 2026 (batch 10E): this page's Catalonia answer and shops answer, for
+ * the Spain-wide day pages (`spain-2027/day-catalonia.ts`), so both families
+ * say the same thing from the same data (Ordre EMT/52/2026, the councils'
+ * 2027 days until the DOGC order, Llei 18/2017, Ordre EMT/89/2026).
+ */
+export function cataloniaDay2027(iso: string, locale: DateLocale, next: NextYearLocal = NEXT_YEAR): { holiday: boolean; answer: string; shops: string[] } {
+  const local = nextYearPlacesOn(iso, next);
+  const kind = dayKind2027(iso, local.places);
+  return { holiday: kind === "holiday" || kind === "weekend-holiday", answer: answerFor(iso, kind, local, locale), shops: shopsParagraphs(iso, kind, locale) };
+}
+
 export function dateContent2027(iso: string, locale: DateLocale, next: NextYearLocal = NEXT_YEAR): DateContent {
   const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
   const local = nextYearPlacesOn(iso, next);
