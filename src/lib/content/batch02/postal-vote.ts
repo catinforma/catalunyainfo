@@ -18,7 +18,6 @@ import {
   type B2Source,
 } from "./shared";
 import { handinPastCallout, HANDIN_URL } from "./postal-handin";
-import { POSTAL_ENTRY_KEY } from "./postal-snippet";
 import { VOTING } from "./voting";
 
 /**
@@ -874,7 +873,8 @@ export function buildPostalVote(asOf: string = POSTAL_AS_OF): B2Article {
   const phase = postalPhase(asOf);
   return {
     key: "postalVote",
-    entryKey: POSTAL_ENTRY_KEY,
+    // Literal on purpose: tests/discover-news.test.ts greps `entryKey: "<key>"`; postal-snippet.ts POSTAL_ENTRY_KEY must equal it.
+    entryKey: "guide-postal-vote",
     categoryKey: "public-services",
     sources: SOURCES,
     heroKey: VOTING.heroKey,

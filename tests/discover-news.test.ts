@@ -548,3 +548,9 @@ test("eventSchema emits no Event without a venue: Google requires location", () 
   assert.equal(location.name, "Plaça Major");
   assert.ok(location.address, "Event location needs an address");
 });
+
+test("postal-vote: the live-title key equals the spec's literal entryKey", async () => {
+  const { POSTAL_ENTRY_KEY } = await import("../src/lib/content/batch02/postal-snippet.ts");
+  const { buildPostalVote } = await import("../src/lib/content/batch02/postal-vote.ts");
+  assert.equal(buildPostalVote().entryKey, POSTAL_ENTRY_KEY);
+});
