@@ -245,8 +245,8 @@ export async function generateMetadata({
         path: entry.href,
         // A live figure in the title where the page has one (reservoirs,
         // weekend dates, the school calendar's next break).
-        title: (await liveEntryTitle(entry.body, locale)) ?? entry.seoTitle ?? entry.title,
-        description: liveEntryDescription(entry.body, locale) ?? entry.seoDescription ?? entry.excerpt,
+        title: (await liveEntryTitle(entry.body, locale, entry.key)) ?? entry.seoTitle ?? entry.title,
+        description: liveEntryDescription(entry.body, locale, entry.key) ?? entry.seoDescription ?? entry.excerpt,
         translations: entry.translations,
         canonicalOverride: entry.canonicalUrl,
         // Demo fixtures and drafts are never indexable, wherever they render.

@@ -8,6 +8,7 @@ import { liveSchoolDescription, liveSchoolTitle } from "@/lib/content/school/sni
 import { liveTodayDescription, liveTodayTitle } from "@/lib/content/holidays/today-snippet";
 import { liveSpainSchoolDescription, liveSpainSchoolTitle, spainSchoolRegionOf } from "@/lib/content/school-spain/live";
 import { liveShopsDescription, liveShopsTitle } from "@/lib/content/batch02/shops-snippet";
+import { livePostalDescription, livePostalTitle } from "@/lib/content/batch02/postal-snippet";
 
 /**
  * A page title computed at render time, for pages whose answer is a live
@@ -18,7 +19,7 @@ import { liveShopsDescription, liveShopsTitle } from "@/lib/content/batch02/shop
  * does and costs no extra ISR write. The reservoir fetch is the same one the
  * block makes in the same render, which Next memoises.
  */
-export async function liveEntryTitle(body: Body, locale: Locale): Promise<string | null> {
+export async function liveEntryTitle(body: Body, locale: Locale, key?: string | null): Promise<string | null> {
   if (body.some((block) => block.type === "reservoirLevels")) {
     return liveReservoirTitle(locale, await loadReservoirs());
   }
@@ -35,7 +36,8 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
   if (spain) return liveSpainSchoolTitle(spain, todayInCatalonia(), locale);
   // 27 Nov 2026: the shops guide (the only page with `shopsToday`) drops polling day from its CA title from 30 Nov.
   if (body.some((block) => block.type === "shopsToday")) return liveShopsTitle(locale);
-  return null;
+  // 27 Nov 2026: the postal-vote guide (by entry key) says the hand-in has ended from 26 Nov 14:00 (batch02/postal-snippet.ts).
+  return livePostalTitle(body, locale, key);
 }
 
 /**
@@ -44,7 +46,7 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
  * "is today a holiday" the next holiday, which a stored description cannot do
  * for more than a few weeks. Null means "use the stored seoDescription".
  */
-export function liveEntryDescription(body: Body, locale: Locale): string | null {
+export function liveEntryDescription(body: Body, locale: Locale, key?: string | null): string | null {
   if (body.some((block) => block.type === "schoolCalendar")) {
     return liveSchoolDescription(locale, todayInCatalonia());
   }
@@ -55,7 +57,7 @@ export function liveEntryDescription(body: Body, locale: Locale): string | null 
   if (spain) return liveSpainSchoolDescription(spain, todayInCatalonia(), locale);
   // 27 Nov 2026: the shops guide's descriptions drop polling day from 30 Nov (batch02/shops-snippet.ts).
   if (body.some((block) => block.type === "shopsToday")) return liveShopsDescription(locale);
-  return null;
+  return livePostalDescription(body, locale, key);
 }
 
 const SHORT_MONTHS: Record<Locale, string[]> = {

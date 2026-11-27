@@ -18,6 +18,7 @@ import {
   type B2Source,
 } from "./shared";
 import { handinPastCallout, HANDIN_URL } from "./postal-handin";
+import { POSTAL_ENTRY_KEY } from "./postal-snippet";
 import { VOTING } from "./voting";
 
 /**
@@ -731,7 +732,9 @@ const ABROAD_LINK: Record<Locale, string> = {
  * `electionPhased` block: `pre` is the text as it was live, `handin` and `after` the same facts in the past tense
  * (JEC Acuerdo 418/2026; Correos "hasta el 26 de noviembre de 2026 a las 14:00h", re-read 26 Nov). The 14:01:30
  * publish of `vot-correu` re-renders the page after the instant, so it reads the `handin` text. Each `was` must
- * match exactly one item (checked in body()); title and description are untouched.
+ * match exactly one item (checked in body()). The search title and description switch at the same instant, from
+ * the render clock (27 Nov 2026: postal-snippet.ts through content/live-title.ts; the stored closed-phase strings
+ * below are what the page printed until 14:00).
  */
 type HandinPast = {
   lead: string;
@@ -871,7 +874,7 @@ export function buildPostalVote(asOf: string = POSTAL_AS_OF): B2Article {
   const phase = postalPhase(asOf);
   return {
     key: "postalVote",
-    entryKey: "guide-postal-vote",
+    entryKey: POSTAL_ENTRY_KEY,
     categoryKey: "public-services",
     sources: SOURCES,
     heroKey: VOTING.heroKey,

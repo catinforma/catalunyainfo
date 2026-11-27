@@ -5,7 +5,7 @@ import { CANDIDATES } from "../src/lib/content/batch02/candidates.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
-import { POSTAL_VOTE } from "../src/lib/content/batch02/postal-vote.ts";
+import { POSTAL_VOTE, buildPostalVote } from "../src/lib/content/batch02/postal-vote.ts";
 import { b2href, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
 import { parseBody } from "../src/lib/content/blocks.ts";
@@ -573,12 +573,59 @@ test("polls: noindex exactly inside the blackout (ticket expectation)", { todo: 
 /* 6. Static text that cannot switch                                          */
 /* -------------------------------------------------------------------------- */
 
-test("metadata of guides that switch: no future instruction in static titles/descriptions after their deadline", { todo: "FINDING: postal seoTitle/description still say 'hand it in by 26 Nov' after the deadline; static (built at POSTAL_AS_OF)" }, () => {
+// 27 Nov 2026: the finding (postal seoTitle/description still said "hand it in by 26 Nov" after the deadline) is fixed
+// by the live snippet (batch02/postal-snippet.ts through content/live-title.ts, from HANDIN_CLOSES); this test now
+// checks what the page PRINTS (live ?? stored, as page.tsx does) at every instant, for the closed-phase build.
+test("metadata of guides that switch: no future instruction in static titles/descriptions after their deadline", async () => {
+  const { liveEntryDescription, liveEntryTitle } = await import("../src/lib/content/live-title.ts");
+  const { livePostalDescription, livePostalTitle, POSTAL_ENTRY_KEY, POSTAL_SNIPPET_HANDIN_PAST } = await import(
+    "../src/lib/content/batch02/postal-snippet.ts"
+  );
+  const closed = buildPostalVote("2026-11-20");
+  const printed = (l: Locale, now: Date) => {
+    const ed = closed.editions[l];
+    const body = ed.blocks as Parameters<typeof livePostalTitle>[0];
+    return [
+      ed.title,
+      livePostalTitle(body, l, closed.entryKey, now) ?? ed.seoTitle,
+      livePostalDescription(body, l, closed.entryKey, now) ?? ed.seoDescription,
+      ed.excerpt,
+    ];
+  };
   const bad: string[] = [];
-  for (const l of LOCALES) {
-    for (const t of guideMeta(POSTAL_VOTE, l)) {
-      if (/26/.test(t) && /entreg|lliur|hand/i.test(t) && !PAST.test(t)) bad.push(`${l}: ${t}`);
+  for (const name of NAMES) {
+    const now = INSTANTS[name]!;
+    for (const l of LOCALES) {
+      const texts = printed(l, now);
+      if (now.getTime() < HANDIN) {
+        // Before 14:00 the stored closed-phase strings, unchanged.
+        assert.equal(texts[1], closed.editions[l].seoTitle, `${name} ${l}`);
+        assert.equal(texts[2], closed.editions[l].seoDescription, `${name} ${l}`);
+        continue;
+      }
+      for (const t of texts) if (/26/.test(t) && /entreg|lliur|hand/i.test(t) && !PAST.test(t)) bad.push(`${name} ${l}: ${t}`);
+      assert.equal(texts[1], POSTAL_SNIPPET_HANDIN_PAST[l].title, `${name} ${l}`);
     }
   }
   assert.deepEqual(bad, []);
+  for (const l of LOCALES) {
+    const { title, description } = POSTAL_SNIPPET_HANDIN_PAST[l];
+    assert.ok(title.length <= 60 && description.length <= 155, `${l}: ${title.length} / ${description.length}`);
+    assert.match(title, PAST, l);
+    assert.match(title, l === "en" ? /^Postal vote/ : l === "ca" ? /^Vot per correu/ : /^Voto por correo/);
+    assert.match(`${title} ${description}`, /26/);
+    // Only what the body says from 14:00: requesters cannot vote in person, the rest vote at their table 9-20.
+    assert.match(description, l === "ca" ? /no pots votar en persona/ : l === "es" ? /no puedes votar en persona/ : /cannot vote in person/);
+    assert.match(description, /9(:00)? a 20 h|9:00-20:00/);
+    // The page wiring: by entry key only, and only on the closed-phase body (the "over" copy keeps its stored strings).
+    const body = closed.editions[l].blocks as Parameters<typeof liveEntryTitle>[0];
+    assert.equal(closed.entryKey, POSTAL_ENTRY_KEY);
+    assert.equal(await liveEntryTitle(body, l, POSTAL_ENTRY_KEY), title, `${l}: live title (real clock is past 26 Nov 14:00)`);
+    assert.equal(liveEntryDescription(body, l, POSTAL_ENTRY_KEY), description, l);
+    assert.equal(await liveEntryTitle(body, l, "guide-voting"), null, `${l}: other keys untouched`);
+    assert.equal(await liveEntryTitle(body, l), null, `${l}: no key, no switch`);
+    const over = buildPostalVote("2026-11-30").editions[l].blocks as Parameters<typeof liveEntryTitle>[0];
+    assert.equal(await liveEntryTitle(over, l, POSTAL_ENTRY_KEY), null, `${l}: over copy prints its stored title`);
+    assert.equal(liveEntryDescription(over, l, POSTAL_ENTRY_KEY), null, l);
+  }
 });

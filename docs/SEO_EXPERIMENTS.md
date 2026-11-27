@@ -15929,3 +15929,25 @@ Why: the titles now follow the searched word order ("tren barcelona sitges", "ba
 **Tests.** `tests/strikes-hub.test.ts`: new test (no doubled preposition in the hub as of 27 Nov, the SMU run still in an H3, ca/es/en); the "no advice for past strikes" regex now also catches the run form.
 
 **Review.** None needed (copy fix).
+
+## 2026-11-27 (batch 8X, ci-edicio) — Postal-vote guide: search title and description past the hand-in deadline (factual tense correction, ca/es/en) (review 2026-12-03)
+
+**URLs.** `/ca/guies/vot-per-correu/`, `/es/guias/voto-por-correo/`, `/en/guides/postal-vote-spain/` (group `vot-correu`).
+
+**Why.** The closed-phase title and description (changed 26 Nov, see "postal guide past its hand-in") still said "Vot per correu 29N: lliurament fins al 26 de novembre, 14 h" / "Voto por correo 29N: entrega hasta el 26 de noviembre, 14 h" / "Postal vote, Spain 29N election: hand-in by 26 Nov, 14:00", an instruction once Thu 26 Nov 14:00 had passed (the body already switched at that instant). Reported by the todo test in `tests/election-29n-flow.test.ts`. **Window:** title and description changed 26 Nov (inside 28 days); this is a factual correction, not a CTR test. H1 and lead untouched.
+
+**Changed.** New `src/lib/content/batch02/postal-snippet.ts`: from `HANDIN_CLOSES` (26 Nov 14:00 Madrid, the same instant as the body's `handin` variants) the page prints, from the render clock through `content/live-title.ts` (as the shops guide does), and only for entry key `guide-postal-vote` while it carries the closed-phase body (the "over" copy from 30 Nov keeps its stored strings):
+- ca: "Vot per correu 29N: el termini va acabar el 26 de novembre" / "El lliurament a Correus va acabar el dijous 26 a les 14 h. Si el vas demanar, no pots votar en persona; si no, vota a la teva mesa el 29, de 9 a 20 h."
+- es: "Voto por correo 29N: la entrega terminó el 26 de noviembre" / "La entrega en Correos terminó el jueves 26 a las 14 h. Si lo pediste, no puedes votar en persona; si no, vota en tu mesa el 29, de 9 a 20 h."
+- en: "Postal vote, Spain 29N election: hand-in ended on 26 Nov" / "Hand-in at Correos ended on Thu 26 Nov, 14:00. If you applied, you cannot vote in person; if not, vote at your polling station on 29 Nov, 9:00-20:00."
+Only facts the page already states with sources (JEC Acuerdo 418/2026; Correos "hasta el 26 de noviembre de 2026 a las 14:00h"; Interior "una vez ha sido admitida su solicitud, ya no puede votar de forma presencial"; INE; LOREG 73.1); no new source read. `liveEntryTitle` / `liveEntryDescription` take the entry key as an optional third argument (page.tsx passes `entry.key`).
+
+**Baseline.** See the 26 Nov entry (GSC lags 2 days; no data yet for the 26 Nov wording).
+
+**Tests.** `tests/election-29n-flow.test.ts`: the metadata rule is a real test now (printed title/description at every instant: stored before 14:00, past tense from 14:00, ≤60/≤155, key- and body-gated, over copy untouched). Green: all election-*, elections, foreign-vote, postal-vote, weekend-election-29n, batch02, school-calendar, shops-key-facts-27nov, day-dependent-text; `npx tsc --noEmit -p .`.
+
+**Go-live.** Deploy, then `publish.sh vot-correu` (code-only; the stored rows need no change). IndexNow: `/ca/guies/vot-per-correu`, `/es/guias/voto-por-correo`, `/en/guides/postal-vote-spain`. From 30 Nov `tests/postal-vote.test.ts` already forces POSTAL_AS_OF past polling day (over copy, stored evergreen title).
+
+**Review 2026-12-03:** `snapshot.py page vot-per-correu 7`, `page voto-por-correo 7`, `page postal-vote-spain 7`.
+
+**Outcome:** _pending_
