@@ -97,8 +97,17 @@ import {
 /**
  * The day every operator below was last read. Every "checked" line reads this, never the clock.
  * 21 Nov 2026: FGC has published its 2026-27 hours (Govern press room, 19 Nov); TMB, ATM, Rodalies and TRAM nothing yet.
+ * 27 Nov 2026 (curl, browser UA, ~07:00): still nothing for 24 Dec-6 Jan from TMB (press room: only "TMB reforça el
+ * metro per a l'encesa de llums de Nadal 2026", 25 Nov, for 26 and 28 Nov; hours page unchanged: "24 de desembre De
+ * 5.00 a 23.00 hores", "31 de desembre Servei continu tota la nit de Cap d'Any", "Divendres i vigílies de festius
+ * intersetmanals De 5.00 a 2.00 hores"), ATM (newest Christmas note is 2025's; /w/ndp-horaris-nadal2026 answers 404),
+ * Rodalies (news to 18 Nov: strikes and works ending by 14 Dec, no Christmas item), barcelona.cat/nadal (still "Nadal
+ * 2025") or the Govern press room besides FGC's note, re-read and unchanged ("el dia 24 de desembre, vigília de Nadal,
+ * el servei de trens finalitzarà a les 23.00 h i el dia de Nadal els trens circularan fins a les 2.00 h"). tram.cat's
+ * FAQ is a script-rendered app whose CMS refuses plain requests: not re-read; TRAM's 2026-27 note, if any, comes in the
+ * ATM joint note (none yet). Every cited 2025 notice answers 200 (fgc.cat's two FAQ pages answer 403 to curl, as before).
  */
-export const TRANSPORT_NADAL_AS_OF = "2026-11-21";
+export const TRANSPORT_NADAL_AS_OF = "2026-11-27";
 
 /**
  * The re-read checkpoints: from each of these days TRANSPORT_NADAL_AS_OF must

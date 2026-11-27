@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { addDays, holidayOn, weekdayIndex } from "@/lib/content/holidays/calendar";
 import { CATALONIA_HOLIDAYS, SOURCES as HOLIDAY_SOURCES_2027 } from "@/lib/content/holidays/payload";
+import { metroDay } from "@/lib/content/metro/tonight";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SCHOOL_SOURCE, SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import type { Locale } from "@/lib/i18n/config";
@@ -439,6 +440,8 @@ const U = {
   bcnTraditions: "https://www.barcelona.cat/nadal/ca/tradicions/tradicions-de-reis",
   bcnCulturaPopular: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/cavalcada-de-reis",
   tmb2026: "https://noticies.tmb.cat/sala-de-premsa/transport-public-cavalcada-de-reis-de-barcelona-2026",
+  /** TMB's standing hours (re-read 27 Nov 2026): "Divendres i vigílies de festius intersetmanals De 5.00 a 2.00 hores". */
+  tmbHours: "https://www.tmb.cat/ca/transport-barcelona/horari-metro-bus",
 } as const;
 
 export const REIS_URLS = U;
@@ -500,6 +503,28 @@ export const TRANSPORT_2026 = {
   stations: ["Drassanes", "Paral·lel", "Sant Antoni", "Poble Sec", "Espanya"],
   url: U.tmb2026,
 } as const;
+
+/**
+ * The metro on the parade night under TMB's standing timetable, not a 2027
+ * announcement (tmb.cat hours page, re-read 27 Nov 2026: "Divendres i
+ * vigílies de festius intersetmanals De 5.00 a 2.00 hores"). 5 January 2027
+ * is a Tuesday, the eve of a weekday holiday, so metroDay() gives 2:00.
+ * TMB's own parade-night note (extra trains, bus diversions) comes out on
+ * the day; until then the page prints 2026's, dated.
+ */
+export function paradeMetroStanding(locale: Locale): string {
+  const close = {
+    ca: { midnight: "tanca a mitjanit", two: "funciona fins a les 2:00", allNight: "funciona tota la nit", eleven: "tanca a les 23:00" },
+    es: { midnight: "cierra a medianoche", two: "funciona hasta las 2:00", allNight: "funciona toda la noche", eleven: "cierra a las 23:00" },
+    en: { midnight: "closes at midnight", two: "runs until 2:00", allNight: "runs all night", eleven: "closes at 23:00" },
+  }[locale][metroDay(PARADE_DAY).close];
+  const eve = dayDate(PARADE_DAY, locale, false);
+  return {
+    ca: `Segons l'horari general de TMB, el ${eve}, vigília de festiu, el metro ${close}.`,
+    es: `Según el horario general de TMB, el ${eve}, víspera de festivo, el metro ${close}.`,
+    en: `Under TMB's standing timetable, on ${eve}, the eve of a public holiday, the metro ${close}.`,
+  }[locale];
+}
 
 /** The Fira de Reis on the Gran Via, 2025-26 season (the Christmas site's Reis page). */
 export const FIRA_DE_REIS_2025 = { from: "2025-12-18", to: "2026-01-06", url: U.bcnReisPage } as const;
@@ -846,6 +871,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Inscripcions a la Cavalcada de Reis 2027", url: BARCELONA_NEWS_2027.url, publisher: "Ajuntament de Barcelona" },
   { name: "Cavalcada de Reis: resultat del sorteig de la Crida 2027", url: BARCELONA_NEWS_2027.results.url, publisher: "Ajuntament de Barcelona" },
   { name: "Transport públic per a la Cavalcada de Reis de Barcelona 2026 (5/1/2026)", url: U.tmb2026, publisher: "TMB" },
+  { name: "Horaris del metro i bus de Barcelona", url: U.tmbHours, publisher: "TMB" },
   ...HOLIDAY_SOURCES_2027.slice(0, 1).map((s) => ({ name: s.name, url: s.url, publisher: s.publisher })),
   { name: SCHOOL_SOURCE.name, url: SCHOOL_SOURCE.url, publisher: SCHOOL_SOURCE.publisher },
   ...[shopsSource("EMT/89/2026"), shopsSource("Llei 18/2017")].filter((s): s is B2Source => Boolean(s)),
@@ -1336,9 +1362,9 @@ function daysParas(locale: Locale): string[] {
     }[locale],
     shops,
     {
-      ca: `**Metro i bus a Barcelona.** TMB publica les mesures el mateix dia. El ${published} va anunciar que el metro funcionaria fins a les ${T.metroUntil}, per ser vigília de festiu, amb més trens a partir de les ${T.reinforcedFrom}, i que la majoria de línies de bus serien limitades o desviades entre les ${T.busFrom} i les ${T.busTo}, aproximadament; va reforçar el personal d'estacions com ${stations}. Per al 2027 encara no ha publicat res. Els horaris de cada nit, a ${b2link("hours", "ca", "l'horari del metro de Barcelona")}, i els de bus, Rodalies, FGC i tram el 5 i el 6, a ${b2link("christmasTransport", "ca", "transport per Nadal i Cap d'Any")}.`,
-      es: `**Metro y bus en Barcelona.** TMB publica las medidas el mismo día. El ${published} anunció que el metro funcionaría hasta las ${T.metroUntil}, por ser víspera de festivo, con más trenes a partir de las ${T.reinforcedFrom}, y que la mayoría de líneas de bus serían limitadas o desviadas entre las ${T.busFrom} y las ${T.busTo}, aproximadamente; reforzó el personal de estaciones como ${stations}. Para 2027 aún no ha publicado nada. Los horarios de cada noche, en ${b2link("hours", "es", "el horario del metro de Barcelona")}, y los de bus, Rodalies, FGC y tranvía el 5 y el 6, en ${b2link("christmasTransport", "es", "transporte en Navidad y Nochevieja")}.`,
-      en: `**Metro and buses in Barcelona.** TMB announces its arrangements on the day itself. On ${published} it said the metro would run until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}, and that most bus lines would be cut short or diverted between about ${T.busFrom} and ${T.busTo}; it added staff at stations such as ${stations}. Nothing has been published for 2027 yet. Each night's hours are in ${b2link("hours", "en", "Barcelona metro hours")}, and buses, Rodalies, FGC and the tram on the 5th and 6th in ${b2link("christmasTransport", "en", "public transport at Christmas and New Year")}.`,
+      ca: `**Metro i bus a Barcelona.** TMB publica les mesures el mateix dia. El ${published} va anunciar que el metro funcionaria fins a les ${T.metroUntil}, per ser vigília de festiu, amb més trens a partir de les ${T.reinforcedFrom}, i que la majoria de línies de bus serien limitades o desviades entre les ${T.busFrom} i les ${T.busTo}, aproximadament; va reforçar el personal d'estacions com ${stations}. Per al 2027 encara no ha publicat res. ${paradeMetroStanding("ca")} Els horaris de cada nit, a ${b2link("hours", "ca", "l'horari del metro de Barcelona")}, i els de bus, Rodalies, FGC i tram el 5 i el 6, a ${b2link("christmasTransport", "ca", "transport per Nadal i Cap d'Any")}.`,
+      es: `**Metro y bus en Barcelona.** TMB publica las medidas el mismo día. El ${published} anunció que el metro funcionaría hasta las ${T.metroUntil}, por ser víspera de festivo, con más trenes a partir de las ${T.reinforcedFrom}, y que la mayoría de líneas de bus serían limitadas o desviadas entre las ${T.busFrom} y las ${T.busTo}, aproximadamente; reforzó el personal de estaciones como ${stations}. Para 2027 aún no ha publicado nada. ${paradeMetroStanding("es")} Los horarios de cada noche, en ${b2link("hours", "es", "el horario del metro de Barcelona")}, y los de bus, Rodalies, FGC y tranvía el 5 y el 6, en ${b2link("christmasTransport", "es", "transporte en Navidad y Nochevieja")}.`,
+      en: `**Metro and buses in Barcelona.** TMB announces its arrangements on the day itself. On ${published} it said the metro would run until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}, and that most bus lines would be cut short or diverted between about ${T.busFrom} and ${T.busTo}; it added staff at stations such as ${stations}. Nothing has been published for 2027 yet. ${paradeMetroStanding("en")} Each night's hours are in ${b2link("hours", "en", "Barcelona metro hours")}, and buses, Rodalies, FGC and the tram on the 5th and 6th in ${b2link("christmasTransport", "en", "public transport at Christmas and New Year")}.`,
     }[locale],
     {
       ca: `**Pont.** El 6 cau en dimecres: si vols fer pont, mira ${b2link("bridges2027", "ca", "els ponts del 2027")}.`,
@@ -1707,9 +1733,9 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
       {
         question: LL({ ca: "Funciona el metro de Barcelona la nit de la cavalcada?", es: "¿Funciona el metro de Barcelona la noche de la cabalgata?", en: "Does the Barcelona metro run late on the night of the parade?" }),
         answer: LL({
-          ca: `El 2026, sí: TMB va allargar el metro fins a les ${T.metroUntil}, per ser vigília de festiu, i en va reforçar el servei des de les ${T.reinforcedFrom}. Ho anuncia el mateix dia; per al 2027 encara no ha publicat res.`,
-          es: `En 2026, sí: TMB alargó el metro hasta las ${T.metroUntil}, por ser víspera de festivo, y reforzó el servicio desde las ${T.reinforcedFrom}. Lo anuncia el mismo día; para 2027 aún no ha publicado nada.`,
-          en: `In 2026 it did: TMB ran the metro until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}. It announces this on the day; nothing has been published for 2027 yet.`,
+          ca: `${paradeMetroStanding("ca")} El 2026 TMB el va allargar fins a les ${T.metroUntil}, per ser vigília de festiu, i en va reforçar el servei des de les ${T.reinforcedFrom}. Els reforços i els desviaments de bus d'aquella nit els anuncia el mateix dia; per al 2027 encara no n'ha publicat cap.`,
+          es: `${paradeMetroStanding("es")} En 2026 TMB lo alargó hasta las ${T.metroUntil}, por ser víspera de festivo, y reforzó el servicio desde las ${T.reinforcedFrom}. Los refuerzos y los desvíos de bus de esa noche los anuncia el mismo día; para 2027 aún no ha publicado ninguno.`,
+          en: `${paradeMetroStanding("en")} In 2026 TMB ran it until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}. It announces that night's extra trains and bus diversions on the day; nothing has been published for 2027 yet.`,
         }),
       },
     ];

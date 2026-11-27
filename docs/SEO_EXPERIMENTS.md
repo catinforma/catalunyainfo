@@ -15985,5 +15985,31 @@ Only facts the page already states with sources (JEC Acuerdo 418/2026; Correos "
 **Go-live.** Deploy, then `publish.sh huelgas-espana` (19N, 20N, 23N, 26N), `huelga-23-26n`, `strike-educacio`, `strike-11n`, `huelga-trenes-17n`, `strikes`. IndexNow: the URLs above.
 
 **Review 2026-12-11:** `snapshot.py page huelga-26-noviembre 14`, `page vaga-26-novembre 14`, `page huelga-20-noviembre 14`, `page huelga-general-11-noviembre 14`: "hubo huelga / hubo clase" queries and CTR on the past pages.
+## 27 Nov 2026 — Christmas transport re-read (no 2026-27 notice yet except FGC's) and the Reis parade night's metro from TMB's standing timetable (body only; deploy, then groups `transport-nadal`, `reis-2027`) (review 2026-12-08, 2027-01-08)
+
+**Why.** Worker 10B: Christmas-period transport (TMB, Rodalies/Renfe, FGC) for 24-25 and 31 Dec, 1 and 5-6 Jan. The transport page (`christmas-transport.ts`, 5 and 21 Nov) already answers each day for every operator; the open question was whether any 2026-27 notice is out. The Reis page (2,878 ES impressions in 28 days) answered "metro on the parade night" with 2026 only, though TMB's standing timetable already fixes 5 Jan 2027.
+
+**What the official sources say on 27 Nov 2026 (~07:00, curl with a browser UA).**
+- **TMB:** press room has only "TMB reforça el metro per a l'encesa de llums de Nadal 2026" (25 Nov; 26 and 28 Nov, outside the window). Hours page unchanged: "24 de desembre De 5.00 a 23.00 hores", "31 de desembre Servei continu tota la nit de Cap d'Any", "Divendres i vigílies de festius intersetmanals De 5.00 a 2.00 hores".
+- **ATM:** newest Christmas note is 2025's (`/w/ndp-horaris-nadal2025`, 200); `/w/ndp-horaris-nadal2026` answers 404.
+- **Rodalies:** news up to 18 Nov (strikes; R7, R3 and R2 works ending 6 and 14 Dec); no Christmas item. renfe.com: nothing found for Rodalies.
+- **FGC:** the 19 Nov note on govern.cat, re-read, unchanged ("el dia 24 de desembre … finalitzarà a les 23.00 h i el dia de Nadal els trens circularan fins a les 2.00 h"). Nothing else for transport in the Govern press room.
+- **Barcelona:** barcelona.cat/nadal still "Nadal 2025"; no Cap d'Any 2026 or Cavalcada 2027 transport.
+- **TRAM:** tram.cat's FAQ is a script-rendered app and its CMS refuses plain requests, so it was not re-read. No 2026-27 joint ATM note either.
+
+**What changed (ca/es/en, body only).**
+- `christmas-transport.ts`: `TRANSPORT_NADAL_AS_OF` 21 → 27 Nov, with the re-read record. No fact changes.
+- `reis.ts`: `paradeMetroStanding()` adds one sentence from `metroDay(PARADE_DAY)` and TMB's standing hours. It is labelled "Segons l'horari general de TMB" and carries no year. CA reads "el dimarts 5 de gener, vigília de festiu, el metro funciona fins a les 2:00". The sentence appears in the 5-6 January paragraph and opens the FAQ answer "Funciona el metro de Barcelona la nit de la cavalcada?". That answer still gives 2026's note with its date and says the extra trains and bus diversions come on the day. TMB's hours page is added to the sources.
+- The existing guard "no 2027 metro time is printed" stays and passes: no 2027 announcement is claimed.
+
+**Not changed.** Titles, descriptions, H1s and leads of both pages (Reis lead window; transport lead switch from 21 Nov).
+
+**Baselines (GSC 28 d to 26 Nov; clicks / impressions / CTR / position).** Reis: CA 27 / 1,040 / 2.6 % / 6.4; ES 37 / 2,878 / 1.3 % / 6.6; EN 5 / 232 / 2.2 % / 7.2. Transport: CA 11 / 244 / 4.5 % / 6.0; ES 16 / 875 / 1.8 % / 5.5; EN 9 / 244 / 3.7 % / 4.7.
+
+**Tests.** New: `tests/reis-metro-standing-27nov.test.ts`. It checks that 5 Jan 2027 closes at "two", that the line is labelled and carries no year, that it is in the paragraph and the FAQ, and that the source is listed. From 6 Jan 2027 it fails until TRANSPORT_2026 is replaced by TMB's 2027 parade note. Green: reis, christmas-transport, dec-events-21nov, christmas-calendar, christmas-season-links-25nov, barcelona-winter, continue-reading, winter-sales, festive-pages; `npx tsc --noEmit -p .`.
+
+**Pending officially (re-read):** ATM joint note (5 Dec in 2025 → `TRANSPORT_NADAL_REREAD_BY` 7 Dec); Rodalies (16 Dec in 2025 → 17 Dec); TMB Christmas Eve (23 Dec) and New Year's Eve note (30 Dec); TMB parade night (5 Jan 2027, the day itself); Barcelona Christmas transport page and Cavalcada 2027 route (`REIS_REREAD_BY` 1 Dec).
+
+**Review 2026-12-08** (`snapshot.py page cabalgata-de-reyes 7`, `page transporte-navidad 7`; query "metro 5 de enero" / "metro cabalgata") and **2027-01-08**.
 
 **Outcome:** _pending_
