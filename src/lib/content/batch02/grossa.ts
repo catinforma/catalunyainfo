@@ -1,6 +1,10 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
+// The calculator's data module (a leaf: it imports nothing), for the Christmas
+// lottery side of the comparison table. Not loteria-nadal.ts, which imports
+// this file: a cycle would leave its constants undefined at module load.
+import { DRAWS, PRESETS, SELAE_READ } from "@/lib/programmatic/lottery-tax/rules";
 import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
 import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 
@@ -90,6 +94,28 @@ import { SHOPS } from "./shops";
  * note on 20 Nov (newest "La Grossa de La Diada 2026: Números premiats");
  * DRAW_TIME_CHECKED stays 17 Nov because it prints in the lead, which is in
  * the 17 Nov window: move it when `grossa` is published.
+ *
+ * 27 Nov 2026 (ci-edicio, batch 8N; body, tables and FAQ only: title,
+ * description, H1 and lead are in the 17 Nov window to 15 Dec): a draw-day
+ * section shown only on 31 Dec (Madrid time) through the generic
+ * `dateWindow` block, a "La Grossa vs Christmas lottery" table, a per-euro
+ * table for participacions in the tax section, and two FAQ items in the
+ * searched words ("la grossa de nadal", "quant es cobra per euro"). Read
+ * that day: DOGC 9640 PDF (portaldogc PdfProviderServlet?documentId=1041354),
+ * annex 3 unchanged ("La data de realització del sorteig és el 31 de desembre
+ * de 2026", "El preu del bitllet és de deu (10) euros", the five prize
+ * tables); BOE Ley 35/2006 DA 33ª ("Estarán exentos del gravamen especial
+ * los premios cuyo importe íntegro sea igual o inferior a 40.000 euros",
+ * "loterías y apuestas organizadas por la Sociedad Estatal Loterías y
+ * Apuestas del Estado y por los órganos o entidades de las Comunidades
+ * Autónomas", last update 25/11/2026); BOE RD 1136/1979, art. 1 ("Se reduce
+ * a tres meses el plazo de caducidad del derecho al cobro de premios de la
+ * Lotería Nacional"); loteriesdecatalunya.info press list (no 2026 Cap d'Any
+ * note; newest "La Grossa de La Diada 2026: Números premiats"). Not readable
+ * that day: loteriesdecatalunya.cat (403, robots.txt included) and SELAE
+ * (403), so the Christmas side of the table (20 € décimo, 400,000 € a
+ * décimo, 22 Dec) is the calculator's SELAE reading (SELAE_READ, 31 Oct),
+ * printed with that date, and no new Loteries de Catalunya fact is added.
  *
  * No new photograph: the hero is the shops guide's second picture (also the
  * December bridge's hero), with its exact alt text and caption, because media
@@ -300,6 +326,7 @@ const U = {
   sales2026: "https://api.loteriesdecatalunya.cat/web/lagrossa/rest/dgs/v1/games/LAGROSSACAT/draws/?drawingDate=2026-12-31",
   tv2025: "https://www.3cat.cat/3catinfo/la-grossa-de-cap-dany-2025-data-horari-i-premis-del-sorteig/noticia/3386747/",
   irpf: "https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764#datrigesimatercera",
+  nadalExpiry: "https://www.boe.es/buscar/doc.php?id=BOE-A-1979-12628",
   aeatIrpf:
     "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c02-irpf-cuestiones-generales/sujecion-irpf-aspectos-materiales/delimitacion-negativa-hecho-imponible-rentas-sujetas/gravamen-especial-sobre-premios-determinadas-apuestas.html",
   aeatNonResidents:
@@ -325,6 +352,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "La Grossa de Cap d'Any 2026: obertura i tancament de la venda (sistema de venda)", url: U.sales2026, publisher: "Loteries de Catalunya" },
   { name: "El 01379, primer premi de la Grossa de Cap d'Any 2025 (31/12/2025)", url: U.tv2025, publisher: "3Cat" },
   { name: "Ley 35/2006, del Impuesto sobre la Renta de las Personas Físicas, disposición adicional trigésima tercera", url: U.irpf, publisher: "BOE" },
+  { name: "Real Decreto 1136/1979, de 20 de abril, por el que se modifica el plazo de caducidad en el pago de premios (Lotería Nacional)", url: U.nadalExpiry, publisher: "BOE" },
   { name: "Gravamen especial sobre los premios de determinadas loterías y apuestas (Manual práctico de Renta 2025)", url: U.aeatIrpf, publisher: "Agencia Tributaria" },
   { name: "Gravamen especial sobre premios de loterías y apuestas (no residentes)", url: U.aeatNonResidents, publisher: "Agencia Tributaria" },
 ];
@@ -1137,6 +1165,213 @@ const COPY: Record<Locale, Copy> = {
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------- */
+/* 27 Nov 2026: draw day, La Grossa vs Christmas lottery, per euro, FAQ       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The draw-day section is read from 00:00 to 24:00 Madrid time on 31 Dec 2026
+ * (CET, UTC+1): a `dateWindow` block (blocks.ts), switched by the nightly
+ * 00:05 re-render, so nobody publishes at midnight. It is only built while
+ * RESULTS_2026 is empty: once the numbers are in, the lead and the results
+ * table take over.
+ */
+export const GROSSA_DRAW_DAY_WINDOW = { from: "2026-12-31T00:00:00+01:00", until: "2027-01-01T00:00:00+01:00" } as const;
+
+/**
+ * The draw-day text and the comparison table were checked against their
+ * sources on this day (see the 27 Nov note in the header). Date guard: from
+ * GROSSA_DRAW_DAY_RECHECK_BY a test fails until they are re-read (the 2026
+ * time and broadcast, the payment rules) and this date is moved.
+ */
+export const GROSSA_DRAW_DAY_CHECKED = "2026-11-27";
+export const GROSSA_DRAW_DAY_RECHECK_BY = "2026-12-29";
+
+/** The Christmas lottery side of the comparison: the calculator's SELAE reading (lottery-tax/rules.ts). */
+const NADAL_DRAW = DRAWS["navidad-2026"];
+const NADAL_FIRST = PRESETS.find((preset) => preset.id === "gordo")!.prize;
+
+/** Per euro played, gross and after the levy (the levy is per ticket, so it scales with the share). */
+export function perEuro(prize: number, price: number = TICKET_PRICE): { gross: number; net: number } {
+  return { gross: prize / price, net: (prize - levy(prize)) / price };
+}
+
+export const COMPARISON = {
+  grossa: { date: GROSSA_DRAW_DATE, price: TICKET_PRICE, first: PRIZES.first.five },
+  nadal: { date: NADAL_DRAW.date, price: NADAL_DRAW.price, first: NADAL_FIRST },
+} as const;
+
+interface Extra {
+  compareHeading: string;
+  compareTable: { caption: string; headers: string[]; labels: string[]; organisers: [string, string]; ticket: [string, string]; perTicket: [string, string]; tax: [string, string]; deadline: [string, string]; note: string };
+  compareAfter: string;
+  perEuroTable: { caption: string; headers: string[]; note: string };
+  drawDayHeading(c: Ctx): string;
+  drawDay(c: Ctx): string[];
+  drawDayAfter: string;
+  faq: { question: string; answer: string }[];
+}
+
+const g = COMPARISON.grossa;
+const n = COMPARISON.nadal;
+const gEuro = perEuro(g.first, g.price);
+const nEuro = perEuro(n.first, n.price);
+
+const EXTRA: Record<Locale, Extra> = {
+  ca: {
+    compareHeading: "La Grossa de Cap d'Any i la loteria de Nadal: en què es diferencien",
+    compareTable: {
+      caption: "La Grossa de Cap d'Any i la loteria de Nadal del 2026, cara a cara",
+      headers: ["Característica", "La Grossa de Cap d'Any", "Loteria de Nadal"],
+      labels: ["Qui la fa", "Sorteig", "Preu", "Primer premi", "Primer premi per euro jugat", "Et queda del primer premi, després d'Hisenda", "Impostos", "Termini per cobrar"],
+      organisers: ["Loteries de Catalunya (Generalitat)", "SELAE (Estat)"],
+      ticket: ["el bitllet", "el dècim"],
+      perTicket: ["per bitllet", "per dècim (el Gordo)"],
+      tax: ["El 20% del que passa de 40.000 € per bitllet", "El 20% del que passa de 40.000 € per dècim"],
+      deadline: ["90 dies naturals des del sorteig", "Tres mesos"],
+      note: `Fonts: acord de Loteries de Catalunya publicat al DOGC el 8 d'abril de 2026; programa de premis de SELAE del 2026 (llegit el ${dateYear(SELAE_READ, "ca")}); Llei 35/2006 de l'IRPF, disposició addicional 33a; Reial decret 1136/1979.`,
+    },
+    compareAfter: `Per cada euro jugat, el primer premi paga el mateix a les dues loteries, ${eur(gEuro.gross, "ca")}. Els bitllets d'una no serveixen per a l'altra, i cadascuna té la seva llista oficial. La llei de l'IRPF aplica el mateix gravamen a les loteries de SELAE i a les de les comunitats autònomes, i el termini de tres mesos de la loteria de Nadal el fixa el ${link(U.nadalExpiry, "Reial decret 1136/1979")}.`,
+    perEuroTable: {
+      caption: "Què cobra cada euro jugat a La Grossa de Cap d'Any (per a participacions)",
+      headers: ["Premi", "Per euro jugat", "Et queda per euro, després d'Hisenda"],
+      note: "Calculat amb els premis per bitllet de 10 € de l'acord publicat al DOGC i el gravamen de l'IRPF: el 20% del que passa de 40.000 € per bitllet, repartit segons la part de cadascú. Per a una participació, multiplica per l'import jugat que hi consta.",
+    },
+    drawDayHeading: (c) => `Avui, ${c.dayNoYear}, és el sorteig de La Grossa de Cap d'Any: on seguir-lo i què fer si et toca`,
+    drawDay: (c) => [
+      `**Quan:** ${
+        c.time
+          ? `avui a les ${c.time.time}, segons ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : `Loteries de Catalunya no havia anunciat l'hora en l'última revisió d'aquesta pàgina (${c.checked}); el 2025 el sorteig va començar a les 13:00, en directe per 3Cat.`
+      }`,
+      `**Encara pots comprar fins a les 11:00:** a aquesta hora tanca la venda, segons el ${link(U.sales2026, "sistema de venda de Loteries de Catalunya")}.`,
+      `**Els números:** a la ${link(U.results, "pàgina de resultats de Loteries de Catalunya")}, amb el seu comprovador. Si hi hagués cap diferència amb qualsevol altra llista, val el resultat oficial.`,
+      "**Si et toca:** fins a 120 €, a qualsevol punt de venda amb terminal; a partir de 50 €, a CaixaBank; de qualsevol import, a l'oficina de Loteries de Catalunya del carrer d'Enric Granados, 33, de Barcelona, de dilluns a divendres de 9:00 a 14:00. Hi ha 90 dies per cobrar-lo, i l'1 de gener és festiu.",
+      `**Quant et queda:** fins a 40.000 € per bitllet no es paga res. Un bitllet del primer premi deixa ${eur(PRIZES.first.five - levy(PRIZES.first.five), "ca")}, i un del segon, ${eur(PRIZES.second.five - levy(PRIZES.second.five), "ca")}.`,
+    ],
+    drawDayAfter: "Tan bon punt Loteries de Catalunya publiqui els números premiats, aquí hi haurà tots els premis. Fins aleshores, la font és Loteries de Catalunya.",
+    faq: [
+      {
+        question: "La Grossa de Cap d'Any és el mateix que la loteria de Nadal?",
+        answer: `No. La Grossa de Cap d'Any és la loteria de la Generalitat (Loteries de Catalunya) i se sorteja el ${dayDate(g.date, "ca")}; la loteria de Nadal és de l'Estat (SELAE) i se sorteja el ${dayDate(n.date, "ca")}. El bitllet de La Grossa costa ${eur(g.price, "ca")} i el primer premi és de ${eur(g.first, "ca")}; el dècim de Nadal costa ${eur(n.price, "ca")} i el Gordo és de ${eur(n.first, "ca")} per dècim. Els impostos són els mateixos: el 20% del que passa de 40.000 €.`,
+      },
+      {
+        question: "Quant es cobra per euro a La Grossa de Cap d'Any?",
+        answer: `El primer premi paga ${eur(gEuro.gross, "ca")} per euro jugat (${eur(gEuro.net, "ca")} després d'Hisenda), el segon ${eur(perEuro(PRIZES.second.five).gross, "ca")} (${eur(perEuro(PRIZES.second.five).net, "ca")}), el tercer ${eur(perEuro(PRIZES.third.five).gross, "ca")}, els quarts ${eur(perEuro(PRIZES.fourth.five).gross, "ca")} i els cinquens ${eur(perEuro(PRIZES.fifth.five).gross, "ca")}. Per a una participació, multiplica per l'import jugat que hi consta.`,
+      },
+    ],
+  },
+  es: {
+    compareHeading: "La Grossa de Cap d'Any y la Lotería de Navidad: en qué se diferencian",
+    compareTable: {
+      caption: "La Grossa de Cap d'Any y la Lotería de Navidad de 2026, cara a cara",
+      headers: ["Característica", "La Grossa de Cap d'Any", "Lotería de Navidad"],
+      labels: ["Quién la organiza", "Sorteo", "Precio", "Primer premio", "Primer premio por euro jugado", "Te queda del primer premio, después de Hacienda", "Impuestos", "Plazo para cobrar"],
+      organisers: ["Loteries de Catalunya (Generalitat)", "SELAE (Estado)"],
+      ticket: ["el billete", "el décimo"],
+      perTicket: ["por billete", "por décimo (el Gordo)"],
+      tax: ["El 20% de lo que pasa de 40.000 € por billete", "El 20% de lo que pasa de 40.000 € por décimo"],
+      deadline: ["90 días naturales desde el sorteo", "Tres meses"],
+      note: `Fuentes: acuerdo de Loteries de Catalunya publicado en el DOGC el 8 de abril de 2026; programa de premios de SELAE de 2026 (leído el ${dateYear(SELAE_READ, "es")}); Ley 35/2006 del IRPF, disposición adicional 33ª; Real Decreto 1136/1979.`,
+    },
+    compareAfter: `Por cada euro jugado, el primer premio paga lo mismo en las dos loterías, ${eur(gEuro.gross, "es")}. Los billetes de una no sirven para la otra, y cada una tiene su lista oficial. La ley del IRPF aplica el mismo gravamen a las loterías de SELAE y a las de las comunidades autónomas, y el plazo de tres meses de la Lotería de Navidad lo fija el ${link(U.nadalExpiry, "Real Decreto 1136/1979")}.`,
+    perEuroTable: {
+      caption: "Qué cobra cada euro jugado en La Grossa de Cap d'Any (para participaciones)",
+      headers: ["Premio", "Por euro jugado", "Te queda por euro, después de Hacienda"],
+      note: "Calculado con los premios por billete de 10 € del acuerdo publicado en el DOGC y el gravamen del IRPF: el 20% de lo que pasa de 40.000 € por billete, repartido según la parte de cada uno. Para una participación, multiplica por el importe jugado que consta en ella.",
+    },
+    drawDayHeading: (c) => `Hoy, ${c.dayNoYear}, es el sorteo de La Grossa de Cap d'Any: dónde seguirlo y qué hacer si te toca`,
+    drawDay: (c) => [
+      `**Cuándo:** ${
+        c.time
+          ? `hoy a las ${c.time.time}, según ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : `Loteries de Catalunya no había anunciado la hora en la última revisión de esta página (${c.checked}); en 2025 el sorteo empezó a las 13:00, en directo por 3Cat.`
+      }`,
+      `**Aún puedes comprar hasta las 11:00:** a esa hora cierra la venta, según el ${link(U.sales2026, "sistema de venta de Loteries de Catalunya")}.`,
+      `**Los números:** en la ${link(U.results, "página de resultados de Loteries de Catalunya")}, con su comprobador. Si hubiera alguna diferencia con cualquier otra lista, vale el resultado oficial.`,
+      "**Si te toca:** hasta 120 €, en cualquier punto de venta con terminal; a partir de 50 €, en CaixaBank; de cualquier importe, en la oficina de Loteries de Catalunya de la calle Enric Granados, 33, de Barcelona, de lunes a viernes de 9:00 a 14:00. Hay 90 días para cobrarlo, y el 1 de enero es festivo.",
+      `**Cuánto te queda:** hasta 40.000 € por billete no se paga nada. Un billete del primer premio deja ${eur(PRIZES.first.five - levy(PRIZES.first.five), "es")}, y uno del segundo, ${eur(PRIZES.second.five - levy(PRIZES.second.five), "es")}.`,
+    ],
+    drawDayAfter: "En cuanto Loteries de Catalunya publique los números premiados, aquí estarán todos los premios. Hasta entonces, la fuente es Loteries de Catalunya.",
+    faq: [
+      {
+        question: "¿La Grossa de Cap d'Any es lo mismo que la Lotería de Navidad?",
+        answer: `No. La Grossa de Cap d'Any es la lotería de la Generalitat (Loteries de Catalunya) y se sortea el ${dayDate(g.date, "es")}; la Lotería de Navidad es del Estado (SELAE) y se sortea el ${dayDate(n.date, "es")}. El billete de La Grossa cuesta ${eur(g.price, "es")} y el primer premio es de ${eur(g.first, "es")}; el décimo de Navidad cuesta ${eur(n.price, "es")} y el Gordo es de ${eur(n.first, "es")} por décimo. Los impuestos son los mismos: el 20% de lo que pasa de 40.000 €.`,
+      },
+      {
+        question: "¿Cuánto toca por euro en La Grossa de Cap d'Any?",
+        answer: `El primer premio paga ${eur(gEuro.gross, "es")} por euro jugado (${eur(gEuro.net, "es")} después de Hacienda), el segundo ${eur(perEuro(PRIZES.second.five).gross, "es")} (${eur(perEuro(PRIZES.second.five).net, "es")}), el tercero ${eur(perEuro(PRIZES.third.five).gross, "es")}, los cuartos ${eur(perEuro(PRIZES.fourth.five).gross, "es")} y los quintos ${eur(perEuro(PRIZES.fifth.five).gross, "es")}. Para una participación, multiplica por el importe jugado que consta en ella.`,
+      },
+    ],
+  },
+  en: {
+    compareHeading: "La Grossa de Cap d'Any vs the Spanish Christmas Lottery: the differences",
+    compareTable: {
+      caption: "La Grossa de Cap d'Any and the 2026 Spanish Christmas Lottery side by side",
+      headers: ["Feature", "La Grossa de Cap d'Any", "Spanish Christmas Lottery"],
+      labels: ["Run by", "Draw", "Price", "First prize", "First prize per euro played", "First prize after tax", "Tax", "Time to claim"],
+      organisers: ["Loteries de Catalunya (Catalan government)", "SELAE (Spanish state)"],
+      ticket: ["a ticket", "a décimo"],
+      perTicket: ["a ticket", "a décimo (El Gordo)"],
+      tax: ["20% of the part above €40,000 a ticket", "20% of the part above €40,000 a décimo"],
+      deadline: ["90 calendar days from the draw", "Three months"],
+      note: `Sources: Loteries de Catalunya agreement published in the DOGC on 8 April 2026; SELAE's 2026 prize programme (read on ${dateYear(SELAE_READ, "en")}); Spanish income tax law 35/2006, additional provision 33; Royal Decree 1136/1979.`,
+    },
+    compareAfter: `For each euro played, the first prize pays the same in both lotteries, ${eur(gEuro.gross, "en")}. Tickets for one are no good for the other, and each has its own official list. Spanish income tax law applies the same levy to SELAE's lotteries and to the regional ones, and the Christmas Lottery's three-month deadline is set by ${link(U.nadalExpiry, "Royal Decree 1136/1979")}.`,
+    perEuroTable: {
+      caption: "What each euro played on La Grossa de Cap d'Any wins (for shares)",
+      headers: ["Prize", "Per euro played", "Per euro after tax"],
+      note: "Worked out from the prizes per €10 ticket in the agreement published in the DOGC and the Spanish levy: 20% of the part above €40,000 a ticket, split according to each person's share. For a share (participació), multiply by the amount played printed on it.",
+    },
+    drawDayHeading: (c) => `The draw is today, ${c.dayNoYear}: where to follow La Grossa and what to do if you win`,
+    drawDay: (c) => [
+      `**When:** ${
+        c.time
+          ? `today at ${c.time.time}, according to ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : `Loteries de Catalunya had not announced the time when this page was last checked (${c.checked}); in 2025 the draw began at 13:00, live on 3Cat.`
+      }`,
+      `**You can still buy until 11:00:** sales close then, according to the ${link(U.sales2026, "Loteries de Catalunya sales system")}.`,
+      `**The numbers:** on the ${link(U.results, "Loteries de Catalunya results page")}, which has a checker. If any other list differs, the official result counts.`,
+      "**If you win:** up to €120 at any outlet with a terminal; from €50 at CaixaBank; any amount at the Loteries de Catalunya office, Carrer d'Enric Granados 33, Barcelona, Monday to Friday 9:00 to 14:00. You have 90 days to claim, and 1 January is a public holiday.",
+      `**What you keep:** prizes up to €40,000 a ticket are tax-free. A first-prize ticket leaves ${eur(PRIZES.first.five - levy(PRIZES.first.five), "en")}, and a second-prize one ${eur(PRIZES.second.five - levy(PRIZES.second.five), "en")}.`,
+    ],
+    drawDayAfter: "As soon as Loteries de Catalunya publishes the winning numbers, every prize will be listed here. Until then, Loteries de Catalunya is the source.",
+    faq: [
+      {
+        question: "Is La Grossa the same as the Spanish Christmas Lottery (El Gordo)?",
+        answer: `No. La Grossa de Cap d'Any is the Catalan government's lottery (Loteries de Catalunya), drawn on ${dayDate(g.date, "en")}; the Christmas Lottery is the Spanish state's (SELAE), drawn on ${dayDate(n.date, "en")}. A La Grossa ticket costs ${eur(g.price, "en")} and its first prize is ${eur(g.first, "en")}; a Christmas décimo costs ${eur(n.price, "en")} and El Gordo pays ${eur(n.first, "en")} a décimo. The tax is the same: 20% of the part above €40,000.`,
+      },
+      {
+        question: "How much does La Grossa pay per euro?",
+        answer: `The first prize pays ${eur(gEuro.gross, "en")} per euro played (${eur(gEuro.net, "en")} after tax), the second ${eur(perEuro(PRIZES.second.five).gross, "en")} (${eur(perEuro(PRIZES.second.five).net, "en")}), the third ${eur(perEuro(PRIZES.third.five).gross, "en")}, the fourth prizes ${eur(perEuro(PRIZES.fourth.five).gross, "en")} and the fifth prizes ${eur(perEuro(PRIZES.fifth.five).gross, "en")}. For a share, multiply by the amount played printed on it.`,
+      },
+    ],
+  },
+};
+
+function compareRows(locale: Locale): string[][] {
+  const t = EXTRA[locale].compareTable;
+  const [who, draw, price, first, firstEuro, firstNet, tax, deadline] = t.labels as [string, string, string, string, string, string, string, string];
+  return [
+    [who, ...t.organisers],
+    [draw, cap(dayDate(g.date, locale)), cap(dayDate(n.date, locale))],
+    [price, `${eur(g.price, locale)} ${t.ticket[0]}`, `${eur(n.price, locale)} ${t.ticket[1]}`],
+    [first, `${eur(g.first, locale)} ${t.perTicket[0]}`, `${eur(n.first, locale)} ${t.perTicket[1]}`],
+    [firstEuro, eur(gEuro.gross, locale), eur(nEuro.gross, locale)],
+    [firstNet, eur(g.first - levy(g.first), locale), eur(n.first - levy(n.first), locale)],
+    [tax, ...t.tax],
+    [deadline, ...t.deadline],
+  ];
+}
+
+function perEuroRows(locale: Locale): string[][] {
+  const t = COPY[locale];
+  return CATEGORY_ORDER.map((category) => {
+    const { gross, net } = perEuro(PRIZES[category].five);
+    return [t.names[category].one, eur(gross, locale), eur(net, locale)];
+  });
+}
+
 const RELATED = ["newYear", "christmasBarcelona", "christmasTraditions", "shops", "holidayToday", "workCalendar"] as const;
 
 function heading(level: 2 | 3, text: string, id?: string): Block {
@@ -1188,6 +1423,7 @@ export function buildGrossaBody(
   asOf: string = GROSSA_AS_OF,
 ): Block[] {
   const t = COPY[locale];
+  const x = EXTRA[locale];
   const c: Ctx = {
     locale,
     results,
@@ -1201,6 +1437,18 @@ export function buildGrossaBody(
   blocks.push(lead(t.lead(c)));
   blocks.push(keyFacts(t.keyFactsTitle, t.keyFacts(c)));
   blocks.push(callout("official", verifiedLine(locale, asOf), t.data(c)));
+
+  // 31 Dec only (Madrid time), until the numbers are pasted in: where to
+  // follow the draw (official sources only) and what to do with a winning
+  // ticket. The generic `dateWindow` block, as on the Christmas lottery guide.
+  if (!results) {
+    blocks.push({
+      type: "dateWindow",
+      from: GROSSA_DRAW_DAY_WINDOW.from,
+      until: GROSSA_DRAW_DAY_WINDOW.until,
+      on: [heading(2, x.drawDayHeading(c), "avui"), list(...x.drawDay(c)), ...paras(x.drawDayAfter)],
+    } as Block);
+  }
 
   // The results first: on 31 December and 1 January that is what people came for.
   blocks.push(heading(2, t.resultsHeading(c), "resultats"));
@@ -1235,13 +1483,19 @@ export function buildGrossaBody(
   blocks.push(...h2(t.taxHeading, t.taxIntro));
   blocks.push(table(t.taxTable.caption, t.taxTable.headers, t.taxTable.rows));
   blocks.push(...paras(...t.taxAfter));
+  // 27 Nov 2026: per euro played, for participacions ("quant es cobra per euro").
+  blocks.push(table(x.perEuroTable.caption, x.perEuroTable.headers, perEuroRows(locale), x.perEuroTable.note));
 
   blocks.push(...h2(t.nightHeading, ...t.night(c)));
 
   blocks.push(...h2(t.aboutHeading, ...t.about));
+  // 27 Nov 2026: "la grossa de nadal 2026", "la grossa de navidad": the two draws side by side.
+  blocks.push(heading(2, x.compareHeading, "grossa-o-nadal"));
+  blocks.push(table(x.compareTable.caption, x.compareTable.headers, compareRows(locale), x.compareTable.note));
+  blocks.push(...paras(x.compareAfter));
   blocks.push(callout("info", t.responsibleTitle, t.responsible));
 
-  blocks.push(faq(t.faq(c).map((item) => ({ question: item.question, answer: strip(item.answer) }))));
+  blocks.push(faq([...t.faq(c), ...x.faq].map((item) => ({ question: item.question, answer: strip(item.answer) }))));
   blocks.push(...paras(verifiedLine(locale, GROSSA_VERIFIED)));
   blocks.push(...b2Related([...RELATED], locale));
   return blocks;

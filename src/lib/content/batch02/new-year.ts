@@ -80,8 +80,26 @@ import {
  * al voltant del mes de novembre del 2026") and its Cap d'Any page (still the 2025 show), TMB's operating-hours page
  * ("24 December", "31 December: Continuous service throughout New Year's Eve") and TMB's press room (latest item
  * 25 Nov; no Christmas or New Year's Eve notice).
+ * 27 Nov 2026 (ci-edicio, batch 8N; curl, browser UA): press room tag "nadal-2026" newest item 26/11/2026 ("Barcelona
+ * encén el Nadal 2026 amb un gran ritual col·lectiu al Passeig de Gràcia"), no "cap d'any" or "campanades" anywhere
+ * on it; barcelona.cat/nadal/ca still "Nadal 2025" and "Aquest web es tornarà a actualitzar al voltant del mes de
+ * novembre del 2026"; its Cap d'Any page still "Espectacle de cap d'any 2025 ... de 23.50 h a 00.10 h"; TMB's press
+ * room newest item 26.11.2026 06:48 (bus diversions for the Allianz Jean Bouin race), no Christmas or New Year's Eve
+ * notice; TMB's hours page unchanged ("31 December", "Continuous service throughout New Year's Eve"). So still no
+ * 2026-27 venue, time or night service to print.
  */
-export const NEW_YEAR_CHECKED = "2026-11-25";
+export const NEW_YEAR_CHECKED = "2026-11-27";
+
+/**
+ * "Cap d'Any 2026: quin dia cau i és festiu?" (27 Nov 2026, FAQ). Read that day: the Generalitat's 2026 calendar
+ * page, "Són festes laborals a Catalunya durant l'any 2026: ... 8 de desembre, dimarts / 25 de desembre, divendres /
+ * 26 de desembre, dissabte" (no 31 December); its 2027 page, "1 de gener, divendres"; Barcelona's 2026 local
+ * holidays in the Generalitat's open-data calendar of local holidays (dataset b4eh-r8up, the Ordre EMT/208/2025
+ * rows): 2026-05-25 and 2026-09-24, "Festiu local".
+ */
+export const BARCELONA_LOCAL_2026 = ["2026-05-25", "2026-09-24"] as const;
+const CALENDAR_2026_URL = "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2026/";
+const LOCAL_HOLIDAYS_URL = "https://analisi.transparenciacatalunya.cat/d/b4eh-r8up";
 
 /**
  * TMB's own notices of last season, for the sentence that says when they come out: Christmas Eve hours on 23 Dec 2025
@@ -127,6 +145,8 @@ const SOURCES: B2Source[] = [
   { name: "Metro and bus opening hours", url: WATCH.tmbHours, publisher: "TMB" },
   { name: "Horaris especials del metro i els autobusos de TMB la vigília de Nadal (2025)", url: PAST.tmbChristmas2025.url, publisher: "Ajuntament de Barcelona / TMB" },
   { name: "Calendari de festes laborals 2027", url: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2027/", publisher: "Generalitat de Catalunya" },
+  { name: "Calendari oficial de festes laborals a Catalunya 2026", url: CALENDAR_2026_URL, publisher: "Generalitat de Catalunya" },
+  { name: "Calendari de festes locals a Catalunya (dades obertes)", url: LOCAL_HOLIDAYS_URL, publisher: "Generalitat de Catalunya" },
   { name: "Llei 18/2017, de comerç, serveis i fires (articles 36 i 37)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320", publisher: "BOE" },
   { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1045357&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Sagrada Família: schedules", url: SIGHT_SOURCES.sagradaFamilia, publisher: "Junta Constructora del Temple de la Sagrada Família" },
@@ -328,6 +348,19 @@ function moreFaq(locale: Locale, facts: Announcements): { question: string; answ
         ca: `${fgcNye ? `FGC, sí: el 2026-27 ${fgcNye.ca} (nota del ${dateYear(fgc!.published ?? fgc!.read, "ca")}).` : "FGC, el 2025, va circular tota la nit, com cada any, a la zona urbana de Barcelona i fins a Sabadell i Terrassa; el 2026-27, per confirmar."} ${rodNye ? `Rodalies, el 2026-27: ${rodNye.ca}.` : `Rodalies no ha anunciat cap servei especial per a aquesta nit (${CHECKED_NYE.ca}), i el 2025 tampoc.`} El metro no tanca en tota la nit.`,
         es: `${fgcNye ? `FGC, sí: en 2026-27 ${fgcNye.es} (nota del ${dateYear(fgc!.published ?? fgc!.read, "es")}).` : "FGC, en 2025, circuló toda la noche, como cada año, en la zona urbana de Barcelona y hasta Sabadell y Terrassa; en 2026-27, por confirmar."} ${rodNye ? `Rodalies, en 2026-27: ${rodNye.es}.` : `Rodalies no ha anunciado ningún servicio especial para esa noche (${CHECKED_NYE.es}), y en 2025 tampoco.`} El metro no cierra en toda la noche.`,
         en: `${fgcNye ? `FGC does: for 2026-27, ${fgcNye.en} (note of ${dateYear(fgc!.published ?? fgc!.read, "en")}).` : "FGC ran all night in 2025, as every year, in Barcelona and out to Sabadell and Terrassa; 2026-27 to be confirmed."} ${rodNye ? `Rodalies, for 2026-27: ${rodNye.en}.` : `Rodalies has announced no special service for that night (${CHECKED_NYE.en}), and it announced none in 2025 either.`} The metro runs all night.`,
+      }),
+    },
+    {
+      // 27 Nov 2026: "cap d'any 2026" (44 impressions at 7.1, 28 d) and "que pasa el 31 en barcelona".
+      question: L({
+        ca: "Quin dia cau Cap d'Any 2026 i és festiu el 31 de desembre?",
+        es: "¿Qué día cae Nochevieja 2026 y es festivo el 31 de diciembre?",
+        en: "What day is New Year's Eve 2026, and is 31 December a holiday?",
+      }),
+      answer: L({
+        ca: `La nit de Cap d'Any és la del dijous 31 de desembre de 2026 al divendres 1 de gener de 2027. El 31 de desembre és laborable: no és al calendari de festes laborals de Catalunya del 2026, i les festes locals de Barcelona del 2026 són el ${dateYear(BARCELONA_LOCAL_2026[0], "ca").replace(/ de 2026$/, "")} i el ${dateYear(BARCELONA_LOCAL_2026[1], "ca")}. L'1 de gener de 2027 sí que és festiu a tot Catalunya.`,
+        es: `La Nochevieja es la noche del jueves 31 de diciembre de 2026 al viernes 1 de enero de 2027. El 31 de diciembre es laborable: no está en el calendario de fiestas laborales de Cataluña de 2026, y las fiestas locales de Barcelona de 2026 son el ${dateYear(BARCELONA_LOCAL_2026[0], "es").replace(/ de 2026$/, "")} y el ${dateYear(BARCELONA_LOCAL_2026[1], "es")}. El 1 de enero de 2027 sí es festivo en toda Cataluña.`,
+        en: `New Year's Eve is the night of Thursday 31 December 2026 into Friday 1 January 2027. 31 December is a working day: it is not on Catalonia's 2026 public holiday calendar, and Barcelona's 2026 local holidays are ${dateYear(BARCELONA_LOCAL_2026[0], "en").replace(/ 2026$/, "")} and ${dateYear(BARCELONA_LOCAL_2026[1], "en")}. 1 January 2027 is a public holiday across Catalonia.`,
       }),
     },
     {

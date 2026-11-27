@@ -98,9 +98,9 @@
    "files": 30
   },
   "gordo": {
-   "date": "2026-11-25T17:46:57.401Z",
-   "fingerprint": "v1:d8a7edda443775f1cf20be2f45a88110",
-   "files": 39
+   "date": "2026-11-27T01:17:54.000Z",
+   "fingerprint": "v1:033fb1e343dfb46ee02aa43dcecd02c8",
+   "files": 40
   },
   "grossa-check": {
    "date": "2026-11-24T21:32:58.000Z",
@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-27T00:52:01.000Z",
-   "fingerprint": "v1:7f8e8e43dc72d24c319a9ff2ec94f734",
+   "date": "2026-11-27T01:01:15.000Z",
+   "fingerprint": "v1:e1c6d62f5077dbd0f69f4d2a849a7b25",
    "files": 54
   },
   "holidays-report": {
