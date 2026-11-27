@@ -12,8 +12,15 @@ export type Token =
   | { kind: "code"; value: string }
   | { kind: "link"; label: string; href: string };
 
+/**
+ * 27 Nov 2026: `#` is a link start too. A same-page jump such as
+ * `[enero](#enero-en-barcelona)` (climate.ts month list, the shops guide's
+ * "find your town") did not match and printed its raw markdown on the live
+ * pages. It is a link token now; `safeHref` keeps only `#[a-z0-9-]{1,80}`, and
+ * anything else it refuses renders as its label alone, never as markdown.
+ */
 const PATTERN =
-  /(\*\*[^*]+\*\*)|(_[^_]+_)|(`[^`]+`)|(\[[^\]]+\]\((?:https?:\/\/|mailto:|\/)[^)\s]+\))/g;
+  /(\*\*[^*]+\*\*)|(_[^_]+_)|(`[^`]+`)|(\[[^\]]+\]\((?:https?:\/\/|mailto:|\/|#)[^)\s]+\))/g;
 
 export function tokenize(input: string): Token[] {
   const tokens: Token[] = [];

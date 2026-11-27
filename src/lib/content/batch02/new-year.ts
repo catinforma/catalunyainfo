@@ -406,7 +406,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       ),
       ...h2(
         "Què obre l'1 de gener a Barcelona?",
-        `L'1 de gener de 2027 és divendres i festiu. Les botigues amb horari general han de tancar, com el 6 de gener; hi poden obrir els forns, les botigues de conveniència, les farmàcies i les botigues de fins a 300 m² d'alimentació o de petites empreses. El primer diumenge del calendari comercial general del 2027 és el 3 de gener (Ordre EMT/89/2026); Barcelona encara no ha publicat els seus dies del 2027. Tot el detall, a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
+        `L'1 de gener de 2027 és divendres i festiu. Les botigues amb horari general han de tancar, com el 6 de gener; hi poden obrir els forns, les botigues de conveniència, les farmàcies i les botigues de fins a 300 m² d'alimentació o de petites empreses. El primer diumenge del calendari comercial general del 2027 és el 3 de gener (Ordre EMT/89/2026); Barcelona encara no ha publicat els seus dies del 2027. Tot el detall, a ${b2link("shops", "ca", "quines botigues obren en festiu a Catalunya")}.`,
         `**Monuments i museus:** la Sagrada Família obre de 9:00 a 14:00 i la Pedrera, d'11:00 a 20:30; el MNAC i el Museu Picasso tanquen. Per a l'1 de gener de 2026, TMB va avisar que el Barcelona Bus Turístic no circularia. Per al dia de Nadal i Sant Esteve, mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
       ),
       ...h2(
@@ -496,7 +496,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       ),
       ...h2(
         "¿Qué abre el 1 de enero en Barcelona?",
-        `El 1 de enero de 2027 es viernes y festivo. Las tiendas con horario general deben cerrar, igual que el 6 de enero; pueden abrir las panaderías, las tiendas de conveniencia, las farmacias y las tiendas de hasta 300 m² de alimentación o de pequeñas empresas. El primer domingo del calendario comercial general de 2027 es el 3 de enero (Orden EMT/89/2026); Barcelona aún no ha publicado sus días de 2027. Todo el detalle, en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
+        `El 1 de enero de 2027 es viernes y festivo. Las tiendas con horario general deben cerrar, igual que el 6 de enero; pueden abrir las panaderías, las tiendas de conveniencia, las farmacias y las tiendas de hasta 300 m² de alimentación o de pequeñas empresas. El primer domingo del calendario comercial general de 2027 es el 3 de enero (Orden EMT/89/2026); Barcelona aún no ha publicado sus días de 2027. Todo el detalle, en ${b2link("shops", "es", "qué tiendas abren en festivo en Cataluña")}.`,
         `**Monumentos y museos:** la Sagrada Familia abre de 9:00 a 14:00 y La Pedrera, de 11:00 a 20:30; el MNAC y el Museu Picasso cierran. Para el 1 de enero de 2026, TMB avisó de que el Barcelona Bus Turístic no circularía. Para el día de Navidad y San Esteban, mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
       ),
       ...h2(
@@ -585,7 +585,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
     ),
     ...h2(
       "What is open on 1 January in Barcelona?",
-      `1 January 2027 is a Friday and a public holiday. Shops on the general timetable must close, as on 6 January; bakeries, convenience stores, pharmacies and shops of up to 300 m² selling everyday food or run by small businesses may open. The first Sunday in the 2027 general shopping calendar is 3 January (Ordre EMT/89/2026); Barcelona has not yet published its own 2027 days. Details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
+      `1 January 2027 is a Friday and a public holiday. Shops on the general timetable must close, as on 6 January; bakeries, convenience stores, pharmacies and shops of up to 300 m² selling everyday food or run by small businesses may open. The first Sunday in the 2027 general shopping calendar is 3 January (Ordre EMT/89/2026); Barcelona has not yet published its own 2027 days. Details in ${b2link("shops", "en", "which shops open on public holidays in Catalonia")}.`,
       `**Sights and museums:** the Sagrada Família opens 9:00 to 14:00 and La Pedrera 11:00 to 20:30; MNAC and the Museu Picasso are closed. For 1 January 2026, TMB said the Barcelona Bus Turístic would not run. For Christmas Day and Sant Esteve, see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
     ),
     ...h2(

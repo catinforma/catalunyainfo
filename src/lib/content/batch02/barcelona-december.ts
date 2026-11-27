@@ -923,7 +923,7 @@ export function buildBarcelonaDecemberBody(
       specialDayTable("ca"),
       ...h2(
         "Què obre i què tanca: botigues, museus i monuments",
-        `**Botigues.** A Barcelona poden obrir ${shopDays}, segons el calendari comercial del 2026. El 25 i el 26 de desembre la llei de comerç obliga a tancar les botigues amb horari general; poden obrir, perquè en queden excloses, els forns i pastisseries, les floristeries, les botigues de conveniència, les farmàcies, les botigues de dins de les estacions i les de fins a 300 m² d'alimentació o de petites i mitjanes empreses. Poder obrir no vol dir que obrin: cada botiga decideix. El detall és a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
+        `**Botigues.** A Barcelona poden obrir ${shopDays}, segons el calendari comercial del 2026. El 25 i el 26 de desembre la llei de comerç obliga a tancar les botigues amb horari general; poden obrir, perquè en queden excloses, els forns i pastisseries, les floristeries, les botigues de conveniència, les farmàcies, les botigues de dins de les estacions i les de fins a 300 m² d'alimentació o de petites i mitjanes empreses. Poder obrir no vol dir que obrin: cada botiga decideix. El detall és a ${b2link("shops", "ca", "quan obren les botigues els diumenges a Barcelona")}.`,
         "**Museus i monuments.** Aquests són els horaris de festes que publiquen els grans llocs a la seva web oficial. Per a la resta, mira la web de cada museu abans d'anar-hi: els horaris de festius canvien d'un any a l'altre.",
       ),
       sightTable("ca"),
@@ -1009,7 +1009,7 @@ export function buildBarcelonaDecemberBody(
       specialDayTable("es"),
       ...h2(
         "Qué abre y qué cierra: tiendas, museos y monumentos",
-        `**Tiendas.** En Barcelona pueden abrir ${shopDays}, según el calendario comercial de 2026. El 25 y el 26 de diciembre la ley de comercio obliga a cerrar a las tiendas con horario general; pueden abrir, porque quedan excluidas, las panaderías y pastelerías, las floristerías, las tiendas de conveniencia, las farmacias, las tiendas dentro de las estaciones y las de hasta 300 m² de alimentación o de pequeñas y medianas empresas. Poder abrir no quiere decir que abran: cada tienda decide. El detalle está en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
+        `**Tiendas.** En Barcelona pueden abrir ${shopDays}, según el calendario comercial de 2026. El 25 y el 26 de diciembre la ley de comercio obliga a cerrar a las tiendas con horario general; pueden abrir, porque quedan excluidas, las panaderías y pastelerías, las floristerías, las tiendas de conveniencia, las farmacias, las tiendas dentro de las estaciones y las de hasta 300 m² de alimentación o de pequeñas y medianas empresas. Poder abrir no quiere decir que abran: cada tienda decide. El detalle está en ${b2link("shops", "es", "cuándo abren las tiendas los domingos en Barcelona")}.`,
         "**Museos y monumentos.** Estos son los horarios de fiestas que publican los grandes lugares en su web oficial. Para el resto, mira la web de cada museo antes de ir: los horarios de festivos cambian de un año a otro.",
       ),
       sightTable("es"),
@@ -1094,7 +1094,7 @@ export function buildBarcelonaDecemberBody(
     specialDayTable("en"),
     ...h2(
       "What's open and what's closed: shops, museums and sights",
-      `**Shops.** In Barcelona they may open on ${shopDays}, under the 2026 shopping calendar. On 25 and 26 December Catalan retail law keeps shops on the general timetable closed; exempt, and so free to open, are bakeries and cake shops, florists, convenience stores, pharmacies, shops inside stations, and shops of up to 300 m² that sell everyday food or are run by small and medium-sized businesses. Being allowed to open does not mean every shop will: each decides. Details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
+      `**Shops.** In Barcelona they may open on ${shopDays}, under the 2026 shopping calendar. On 25 and 26 December Catalan retail law keeps shops on the general timetable closed; exempt, and so free to open, are bakeries and cake shops, florists, convenience stores, pharmacies, shops inside stations, and shops of up to 300 m² that sell everyday food or are run by small and medium-sized businesses. Being allowed to open does not mean every shop will: each decides. Details in ${b2link("shops", "en", "when shops open on Sundays in Barcelona")}.`,
       "**Museums and sights.** These are the holiday hours the big sights publish on their official websites. For anywhere else, check the museum's own site before you go: holiday hours change from year to year.",
     ),
     sightTable("en"),

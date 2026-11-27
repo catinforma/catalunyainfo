@@ -371,7 +371,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         MARATO_WHEN_TITLE.ca,
         `El **${day}**. Segons ${link(PROGRAMME.news, "3Cat")}, el programa de televisió començarà a les **${PROGRAMME.tv[0].from}** des de la Torre de Collserola, on s'allargarà fins a les ${PROGRAMME.tv[0].to}, i es reprendrà a les **${PROGRAMME.tv[1].from}** des del Parc Audiovisual de Catalunya, a Terrassa, fins a la ${PROGRAMME.tv[1].to} de la matinada. A Catalunya Ràdio, Roger Escapa presentarà una edició especial d'«El suplement» des de la Universitat de Lleida a partir de les ${PROGRAMME.radioFrom} (consultat el ${PROGRAMME_CHECKED_TEXT.ca}).`,
         "La Torre de Collserola es va inaugurar el 1992, el mateix any que La Marató, i segons 3Cat simbolitza la connexió: com les neurones transmeten informació, la torre fa arribar els senyals de ràdio i televisió al territori.",
-        `És el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}. Aquell dia les botigues de Barcelona poden obrir, perquè el 13 de desembre és un dels diumenges d'obertura del calendari comercial del 2026: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
+        `És el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}. Aquell dia les botigues de Barcelona poden obrir, perquè el 13 de desembre és un dels diumenges d'obertura del calendari comercial del 2026: ho detallem a ${b2link("shops", "ca", "botigues obertes en diumenge a Barcelona")}.`,
       ),
       ...h2(
         "Com fer un donatiu a La Marató 2026",
@@ -489,7 +489,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         MARATO_WHEN_TITLE.es,
         `El **${day}**. Según ${link(PROGRAMME.news, "3Cat")}, el programa de televisión empezará a las **${hm(PROGRAMME.tv[0].from)}** desde la Torre de Collserola, donde seguirá hasta las ${hm(PROGRAMME.tv[0].to)}, y se reanudará a las **${hm(PROGRAMME.tv[1].from)}** desde el Parc Audiovisual de Catalunya, en Terrassa, hasta la ${hm(PROGRAMME.tv[1].to)} de la madrugada. En Catalunya Ràdio, Roger Escapa presentará una edición especial de «El suplement» desde la Universitat de Lleida a partir de las ${hm(PROGRAMME.radioFrom)} (consultado el ${PROGRAMME_CHECKED_TEXT.es}).`,
         "La Torre de Collserola se inauguró en 1992, el mismo año que La Marató, y según 3Cat simboliza la conexión: como las neuronas transmiten información, la torre hace llegar las señales de radio y televisión al territorio.",
-        `Es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}. Ese día las tiendas de Barcelona pueden abrir, porque el 13 de diciembre es uno de los domingos de apertura del calendario comercial de 2026: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
+        `Es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}. Ese día las tiendas de Barcelona pueden abrir, porque el 13 de diciembre es uno de los domingos de apertura del calendario comercial de 2026: lo detallamos en ${b2link("shops", "es", "tiendas abiertas en domingo en Barcelona")}.`,
       ),
       ...h2(
         "Cómo hacer un donativo a La Marató 2026",
@@ -605,7 +605,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       MARATO_WHEN_TITLE.en,
       `On **${day}**. According to ${link(PROGRAMME.news, "3Cat")}, the TV programme starts at **${hm(PROGRAMME.tv[0].from)}** from the Torre de Collserola, where it runs until ${hm(PROGRAMME.tv[0].to)}, and resumes at **${hm(PROGRAMME.tv[1].from)}** from the Parc Audiovisual de Catalunya in Terrassa, until ${hm(PROGRAMME.tv[1].to)} am. On Catalunya Ràdio, Roger Escapa presents a special edition of "El suplement" from the University of Lleida from ${hm(PROGRAMME.radioFrom)} (checked on ${PROGRAMME_CHECKED_TEXT.en}).`,
       "The Torre de Collserola, Barcelona's telecommunications tower, opened in 1992, the same year as La Marató; for 3Cat it stands for connection: just as neurons pass on information, the tower carries radio and TV signals across the country.",
-      `It is the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}. Shops in Barcelona may open that day, because 13 December is one of the Sunday opening days in the 2026 shopping calendar: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
+      `It is the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}. Shops in Barcelona may open that day, because 13 December is one of the Sunday opening days in the 2026 shopping calendar: details in ${b2link("shops", "en", "shops open on Sunday in Barcelona")}.`,
     ),
     ...h2(
       "How to donate to La Marató 2026",

@@ -25,7 +25,7 @@ import { LOCALES } from "../src/lib/i18n/config.ts";
  * answer for "cuándo abren las tiendas los domingos" and its family.
  *  - a key-facts box under the lead, in the searched words;
  *  - the general Sundays section moved up, with "why only ten" (Ley 1/2004 art. 4);
- *  - three rule questions in the FAQ;
+ *  - rule questions in the FAQ (three, a fourth on the timetable in v3);
  *  - the polling-day stretches (lead sentence, 29N section, November Sundays
  *    line, 29N FAQ) as `electionPhased` blocks: as live before the vote, gone
  *    from 30 Nov with no republish;
@@ -45,7 +45,7 @@ const faqOf = (blocks: B[]) => blocks.filter((b) => b.type === "faq").flatMap((b
 test("date guard: the key-facts box is re-read before 28 Dec 2026", () => {
   assert.ok(
     today < KEY_FACTS_REREAD_BY,
-    "From 28 Dec 2026 the 'December Sundays' fact of KEY_FACTS (shops.ts) is past: replace it with the 2027 days once the DOGC list of each town's 2027 days is out (or the general 3 Jan / 10 Jan default), and move KEY_FACTS_REREAD_BY.",
+    "From 28 Dec 2026 the 'December Sundays' fact of KEY_FACTS and the December sentence of SHOPS_EXCERPT (the standfirst, shops.ts) are past: replace it with the 2027 days once the DOGC list of each town's 2027 days is out (or the general 3 Jan / 10 Jan default), and move KEY_FACTS_REREAD_BY.",
   );
 });
 
@@ -111,17 +111,17 @@ test("shops: the 29N section, the November Sundays line and the 29N questions ar
   assert.match(left("over"), /després del pont de desembre, els diumenges 13, 20 i 27/);
 });
 
-test("shops: the three rule questions follow the two Sunday questions in every phase, with the state law", () => {
+test("shops: the rule questions (four since v3) follow the two Sunday questions in every phase, with the state law", () => {
   for (const locale of LOCALES) {
     for (const phase of ["pre", "after", "over"] as const) {
       const questions = shopsFaq(locale, phase).map((i) => i.question);
       const first = questions.indexOf(SUNDAY_RULES_FAQ[locale][0]!.question);
       assert.ok(first > 0, `${locale} ${phase}`);
-      assert.deepEqual(questions.slice(first, first + 3), SUNDAY_RULES_FAQ[locale].map((i) => i.question));
+      assert.deepEqual(questions.slice(first, first + SUNDAY_RULES_FAQ[locale].length), SUNDAY_RULES_FAQ[locale].map((i) => i.question));
       assert.equal(new Set(questions).size, questions.length, `${locale} ${phase}: no duplicate question`);
     }
     for (const item of SUNDAY_RULES_FAQ[locale]) assert.match(item.answer, /1\/2004|18\/2017/, `${locale}: ${item.question}`);
-    assert.ok(SUNDAY_RULES_FAQ[locale][2]!.answer.includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: Spain page link`);
+    assert.ok(SUNDAY_RULES_FAQ[locale].at(-1)!.answer.includes(`](${b2href("shopsSpainDecember", locale)})`), `${locale}: Spain page link`);
   }
   assert.ok(SHOPS.sources.some((s) => s.url === "https://www.boe.es/buscar/act.php?id=BOE-A-2004-21421"), "Ley 1/2004 among the sources");
 });

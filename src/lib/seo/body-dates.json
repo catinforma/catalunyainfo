@@ -23,9 +23,9 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-26T23:19:12.933Z",
-   "fingerprint": "v1:17744665cd3018fcf769366861a682f1",
-   "files": 21
+   "date": "2026-11-27T00:04:28.842Z",
+   "fingerprint": "v1:da10fa39f36317781ac6536ef9e1511e",
+   "files": 22
   },
   "block:touristTax": {
    "date": "2026-11-25T14:49:33.729Z",
@@ -298,8 +298,8 @@
    "files": 12
   },
   "weekend": {
-   "date": "2026-11-25T19:54:47.000Z",
-   "fingerprint": "v1:7dbc63e0684381112096ac1a69bd647d",
+   "date": "2026-11-26T23:54:18.000Z",
+   "fingerprint": "v1:3e426a49ce33fedcefb04e081f8cd8fa",
    "files": 34
   },
   "widow-pension": {
