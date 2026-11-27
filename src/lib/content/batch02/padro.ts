@@ -78,16 +78,61 @@ import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, h3
  *    L'Hospitalet (seuelectronica.l-h.cat: OAC appointments for «Padró: altes
  *    i canvis de domicili»).
  *
- * Not printed: Barcelona's volant/certificate procedure details (its Oficina
- * Virtual pages render in JavaScript and could not be read by curl), opening
- * hours of offices, appointment lead times, any fee for certificates in other
- * towns (they differ and change), and anything from the press or gestorías.
+ * Not printed: opening hours of offices, appointment lead times, any fee for
+ * certificates in other towns (they differ and change), how to get a signed
+ * certificado (not only the volante) in Barcelona (no readable council page
+ * describes it), and anything from the press or gestorías.
  *
  * Re-read by PADRO_REREAD_BY (a test fails after it): the Barcelona sheet is
  * the one most likely to change.
+ *
+ * PADRO_BCN_CHANNELS_AS_OF 2026-11-27 (striking-distance pass: channels,
+ * timing, volante, minors' IDs, registering someone else). Read that day with
+ * curl + grep; the Oficina Virtual pages still render in JavaScript, so the
+ * council's Barcelona International Welcome procedure pages (barcelona.cat,
+ * ca/es/en) are the readable source:
+ *  - T135 sheet (ca, es) re-read: «El formulario pedirá que se identifique en
+ *    el Portal y que haga uso de la firma electrónica»; «en 7 días naturales
+ *    aproximadamente»; «Este trámite es gratuito»; minors' IDs «Menores de 14
+ *    años: libro de familia o certificado de nacimiento», «Mayores de 14 años:
+ *    pasaporte (en el que consten los datos de los progenitores)» or residence
+ *    card; «Si en la documentación de la persona menor extranjera no constan
+ *    los datos de los progenitores, debe aportar el libro de familia,
+ *    inscripción de nacimiento o el pasaporte de los progenitores».
+ *  - International Welcome "Alta al padró d'habitants de Barcelona" (ca, es,
+ *    en): online with «idCAT Mòbil», «Cl@ve o DNIe», «Certificat digital
+ *    FNMT-RCM»; in person «cal concertar cita prèviament» through «Cita amb les
+ *    oficines d'atenció ciutadana»; «la inscripció en el padró es farà en el
+ *    mateix moment i se't lliurarà el volant, del qual podràs sol·licitar fins
+ *    a dues còpies»; by phone (010) instructions by post, «Abans d'un mes»
+ *    send the signed form back, volant by post; «termini màxim 3 mesos»; «És
+ *    gratuït»; «Una persona empadronada que autoritzi la parella o els fills,
+ *    acreditant la relació documentalment amb llibre de família, certificat de
+ *    naixement, certificat de matrimoni o escriptura de parella estable (no cal
+ *    acreditar amb documents la titularitat de l'habitatge)». It gives a
+ *    delegation to register other adults «una validesa d'un mes», while the
+ *    T135 sheet says «El documento de autorización o delegación es válido
+ *    durante 3 meses»: the page prints both and tells the reader to bring a
+ *    recent one.
+ *  - International Welcome "Volants de convivència i de residència" (ca, es,
+ *    en): convivència 18+, residència 16+; online with «certificat digital
+ *    idCAT», «certificat digital FNMT-RCM» or «Cl@ve PIN o DNIe», PDF «bon punt
+ *    acabis el procés en línia»; OAC with cita prèvia, same day; Punt BCN kiosk
+ *    only for the volant de residència; 010 «set dies hàbils» by post or «24
+ *    hores» by email for the residència one; «Ambdós volants no caduquen, però
+ *    la validesa varia en funció del tràmit»; «És gratuït».
+ *  - International Welcome "Empadronament" (ca): the volant de convivència is
+ *    needed «per a la preinscripció i la matriculació del teu fill o filla en
+ *    centres educatius».
+ *  - BOE-A-2020-4784 re-read (consolidated 08/02/2023): volantes «de carácter
+ *    puramente informativo», the certificate «acredita fehacientemente»,
+ *    «operará el silencio positivo».
  */
 export const PADRO_AS_OF = "2026-11-13";
 export const PADRO_REREAD_BY = "2027-02-13";
+/** Barcelona channels, timings and volante facts added on 27 Nov 2026 (International Welcome pages + T135 sheet). */
+export const PADRO_BCN_CHANNELS_AS_OF = "2026-11-27";
+export const PADRO_BCN_CHANNELS_REREAD_BY = "2027-02-27";
 /** The INE's last day for EU citizens to be on the padró and vote on 23 May 2027 (foreign-vote.ts has the same date). */
 export const EU_VOTE_PADRO_DEADLINE = "2026-12-30";
 
@@ -106,6 +151,15 @@ export const PADRO_URLS = {
   lleida: "https://tramits.paeria.cat/Ciutadania/DetallTramit.aspx?IdTramit=2089",
   tarragona: "https://seu.tarragona.cat/sta/CarpetaPublic/doEvent?APP_CODE=STA&PAGE_CODE=CATALOGO&DETALLE=6269000003494351199500",
   hospitalet: "https://seuelectronica.l-h.cat/tramits/detallTramit.aspx?1ngWPs28HsEgTIvTMGQACY5a7DvLnSB0XtpVHw9udkagqazB",
+  iwAltaCa: "https://www.barcelona.cat/internationalwelcome/ca/tramit/alta-al-padro-dhabitants-de-barcelona",
+  iwAltaEs: "https://www.barcelona.cat/internationalwelcome/es/tramite/alta-en-el-padron-de-habitantes-de-barcelona",
+  iwAltaEn: "https://www.barcelona.cat/internationalwelcome/en/procedure/registration-municipal-register-residents-city-barcelona",
+  iwVolantCa: "https://www.barcelona.cat/internationalwelcome/ca/tramit/volants-de-convivencia-i-de-residencia-del-padro-de-barcelona",
+  iwVolantEs: "https://www.barcelona.cat/internationalwelcome/es/tramite/volantes-de-convivencia-y-de-residencia-del-padron-de-barcelona",
+  iwVolantEn: "https://www.barcelona.cat/internationalwelcome/en/procedure/volant-de-convivencia-and-volant-de-residencia-barcelona-register-residents",
+  /** "Cita amb les oficines d'atenció ciutadana" (the International Welcome pages link it; ajuntament.barcelona.cat/cita redirects here). */
+  citaCa: "https://seuelectronica.ajuntament.barcelona.cat/oficinavirtual/ca/tramit/20230001668",
+  citaEs: "https://seuelectronica.ajuntament.barcelona.cat/oficinavirtual/es/tramit/20230001668",
 } as const;
 
 const SOURCES: B2Source[] = [
@@ -120,6 +174,8 @@ const SOURCES: B2Source[] = [
   { name: "Alta al Padró Municipal d'Habitants", url: PADRO_URLS.lleida, publisher: "Ajuntament de Lleida" },
   { name: "Alta al padró d'habitants", url: PADRO_URLS.tarragona, publisher: "Ajuntament de Tarragona" },
   { name: "Cita prèvia a les Oficines d'Atenció Ciutadana", url: PADRO_URLS.hospitalet, publisher: "Ajuntament de L'Hospitalet" },
+  { name: "Alta al padró d'habitants de Barcelona (Barcelona International Welcome)", url: PADRO_URLS.iwAltaCa, publisher: "Ajuntament de Barcelona" },
+  { name: "Volants de convivència i de residència del padró de Barcelona (Barcelona International Welcome)", url: PADRO_URLS.iwVolantCa, publisher: "Ajuntament de Barcelona" },
 ];
 
 /** A Markdown link; parentheses in the URL (council PDFs named "…(1).pdf") are percent-encoded so they cannot close it. */
@@ -132,6 +188,10 @@ function bcn(locale: Locale) {
     sheet: es ? PADRO_URLS.bcnSheetEs : PADRO_URLS.bcnSheetCa,
     news: es ? PADRO_URLS.bcnNewsEs : PADRO_URLS.bcnNewsCa,
     nova: es ? PADRO_URLS.bcnNovaEs : PADRO_URLS.bcnNovaCa,
+    // International Welcome publishes all three languages.
+    alta: { ca: PADRO_URLS.iwAltaCa, es: PADRO_URLS.iwAltaEs, en: PADRO_URLS.iwAltaEn }[locale],
+    volant: { ca: PADRO_URLS.iwVolantCa, es: PADRO_URLS.iwVolantEs, en: PADRO_URLS.iwVolantEn }[locale],
+    cita: es ? PADRO_URLS.citaEs : PADRO_URLS.citaCa,
   };
 }
 
@@ -190,6 +250,14 @@ export function buildPadroBody(locale: Locale): Block[] {
         { title: "Prepara la prova del domicili", text: "Depèn de la teva situació: propietari, llogater, persona autoritzada pel titular o residència col·lectiva (segona taula). Els documents han d'estar en català o castellà, o traduïts per un traductor jurat, el consolat o una administració." },
         { title: "Espera la confirmació", text: "Si ho fas per internet i els documents són correctes, l'Ajuntament t'envia un correu de confirmació al cap d'uns 7 dies naturals. Si en falta algun, te'l demana. El termini màxim per respondre és de 3 mesos." },
       ],
+      channelsCaption: "Per internet, amb cita a l'OAC o pel 010: com es fa i quan quedes empadronat a Barcelona",
+      channelsHead: ["Via", "Com es fa", "Quan quedes empadronat"],
+      channelsRows: [
+        ["Per internet", "Amb idCAT Mòbil, Cl@ve o DNIe, o certificat digital FNMT; omples el formulari, adjuntes els documents i signes electrònicament (18 anys o més)", "Si tot és correcte, en uns 7 dies naturals reps un correu de confirmació"],
+        ["Presencial, a una OAC", `Primer demanes ${a(B.cita, "cita prèvia a les oficines d'atenció ciutadana")} i hi portes els documents originals`, "En el mateix moment: et donen el volant, i en pots demanar fins a dues còpies"],
+        ["Per telèfon, al 010", "Et fan arribar per correu postal les instruccions i el full de sol·licitud; l'has de tornar signat amb els documents abans d'un mes", "Quan s'acaba el tràmit, reps el volant per correu postal"],
+      ],
+      channelsNote: `Font: ${a(B.alta, "tràmit d'alta al padró")} de Barcelona International Welcome (Ajuntament de Barcelona), consultat el 27 de novembre de 2026. Sigui quina sigui la via, l'Ajuntament té com a màxim 3 mesos per resoldre, i el tràmit és gratuït.`,
       idCaption: "Quin document d'identitat val per empadronar-se a Barcelona",
       idHead: ["Nacionalitat", "Document (en vigor)"],
       idRows: [
@@ -198,8 +266,11 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["Regne Unit", "Com la resta de països, o el document de residència de l'acord de retirada"],
         ["Altres països", "Passaport o targeta de residència"],
         ["Menors de 14 anys espanyols", "Llibre de família o certificat de naixement (i DNI o passaport, si en tenen)"],
+        ["Menors espanyols de més de 14 anys", "DNI o passaport"],
+        ["Menors estrangers de menys de 14 anys", "Llibre de família o certificat de naixement"],
+        ["Menors estrangers de més de 14 anys", "Passaport on constin les dades dels pares, o targeta de residència (si són de la UE, també el document d'identitat del país, amb el certificat de NIE si en tenen). Si el document no porta les dades dels pares: llibre de família, inscripció de naixement o el passaport dels pares on surti el menor"],
       ],
-      idNote: "Font: fitxa del tràmit i pàgina d'empadronament de l'Ajuntament de Barcelona, consultades el 13 de novembre de 2026.",
+      idNote: "Font: fitxa del tràmit i pàgina d'empadronament de l'Ajuntament de Barcelona, consultades el 13 de novembre de 2026 (files dels menors, el 27 de novembre de 2026).",
       homeCaption: "Quina prova del domicili demana Barcelona, segons la teva situació",
       homeHead: ["La teva situació", "Què has de portar"],
       homeRows: [
@@ -207,11 +278,12 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["Lloges el pis a nom teu", "Contracte vigent a nom teu, de més de 3 mesos o amb pròrroga explícita, on surti el propietari o l'administrador"],
         ["El contracte està prorrogat, és indefinit, escanejat o signat electrònicament", "A més, l'últim rebut del lloguer o l'última factura de llum, aigua o gas pagada a nom teu (dels últims 3 mesos). No valen les de mòbil ni internet"],
         ["Vius en un pis o habitació que és d'una altra persona", "Autorització per inscriure't al domicili, el document d'identitat del titular i el seu contracte o escriptura. L'autorització val 3 mesos"],
+        ["Ja estàs empadronat i hi vols empadronar la teva parella o els teus fills", "La teva autorització i un document que provi la relació: llibre de família, certificat de naixement, certificat de matrimoni o escriptura de parella estable. No cal tornar a provar la titularitat del pis"],
         ["Residència d'estudiants o de gent gran", "Autorització d'empadronament en domicili col·lectiu, signada i segellada per l'entitat (nom, adreça i NIF)"],
         ["No tens cap document", "Pots demanar-lo igualment: l'Ajuntament et truca i fa una visita de comprovació"],
         ["Vius al carrer, en un allotjament d'urgència o amb risc de perdre l'habitatge", "Empadronament sense domicili fix, amb l'informe de coneixement de residència (ICR) de Serveis Socials, d'una OAC o de l'Oficina de Prestacions Socials i Econòmiques"],
       ],
-      homeNote: `Fonts: ${a(B.sheet, "fitxa del tràmit")} i ${a(B.news, "guia de l'Ajuntament")} (Barcelona), consultades el 13 de novembre de 2026.`,
+      homeNote: `Fonts: ${a(B.sheet, "fitxa del tràmit")} i ${a(B.news, "guia de l'Ajuntament")} (Barcelona), consultades el 13 de novembre de 2026; parella i fills, International Welcome (27/11/2026).`,
       noContractH: "Sense contracte de lloguer també et pots empadronar",
       noContract: [
         "És la pregunta que més es repeteix, i la llei la respon. Les instruccions estatals als ajuntaments (BOE, 2020) diuen que el padró ha de reflectir on viu realment cada persona i que l'ajuntament no té cap competència per jutjar qüestions de propietat o de lloguer: el títol de l'habitatge només serveix per provar que hi vius. Pot acceptar altres documents, com factures de subministraments, o comprovar-ho amb la policia local o una inspecció.",
@@ -225,7 +297,17 @@ export function buildPadroBody(locale: Locale): Block[] {
       docH: "Volant o certificat: quin has de demanar",
       doc: [
         "Un cop empadronat pots demanar dos papers. El **volant** és informatiu, sense signatura de cap funcionari, i serveix per a la majoria de gestions. El **certificat** és un document públic que acredita l'empadronament amb plena validesa, i és el que demanen alguns organismes, com el CatSalut per a la primera targeta sanitària. Quant de temps val cada un ho decideix l'organisme que te'l demana; el CatSalut, per exemple, el vol de menys de tres mesos.",
+        "A Barcelona hi ha dos volants. El **volant de residència** acredita que estàs empadronat a la ciutat (el pots demanar a partir dels 16 anys). El **volant de convivència** diu on vius i amb qui (a partir dels 18 anys), i és el que et poden demanar, per exemple, per preinscriure i matricular un fill a l'escola. Tots dos són gratuïts i no caduquen: la validesa depèn del tràmit per al qual el demanes.",
       ],
+      volantCaption: "Com es demana el volant d'empadronament a Barcelona",
+      volantHead: ["Via", "Com", "Quan el tens"],
+      volantRows: [
+        ["Per internet", "Identificant-te al portal amb certificat digital idCAT, certificat FNMT o Cl@ve PIN o DNIe", "Al moment: el descarregues en PDF"],
+        ["OAC", `Amb ${a(B.cita, "cita prèvia")}`, "El mateix dia de la cita"],
+        ["Quiosc Punt BCN", "Només el volant de residència", "Al moment"],
+        ["Telèfon 010", "Trucant-hi", "Per correu postal en uns 7 dies hàbils; el de residència, en 24 hores si te l'envien per correu electrònic"],
+      ],
+      volantNote: `Font: ${a(B.volant, "volants de convivència i de residència")}, Barcelona International Welcome (Ajuntament de Barcelona), consultat el 27 de novembre de 2026. Abans has d'estar donat d'alta al padró.`,
       renewH: "Renovació, canvis de domicili i baixes",
       renewCaption: "Cada quant s'ha de renovar o confirmar l'empadronament",
       renewHead: ["Qui", "Què has de fer"],
@@ -252,10 +334,14 @@ export function buildPadroBody(locale: Locale): Block[] {
       faqH: "Preguntes freqüents",
       faq: [
         { question: "Què necessito per empadronar-me? (requisits i documents)", answer: "Dues coses per cada persona que s'empadrona: un document d'identitat vigent (DNI o passaport; els ciutadans de la UE, també el document d'identitat del seu país o la targeta de residència) i una prova que vius en aquella adreça segons el teu cas: si n'ets propietari, normalment res, perquè l'Ajuntament ho comprova; si lloges, el contracte al teu nom; si el pis és d'una altra persona, la seva autorització amb el seu document d'identitat i el seu contracte o escriptura. No cal el NIE ni tenir la residència en regla, i si no tens cap document l'Ajuntament pot fer una visita de comprovació. A Barcelona és gratuït, per internet o en una OAC." },
+        { question: "Què cal per empadronar algú al meu pis?", answer: "Si n'ets el propietari o el llogater (no cal que hi estiguis empadronat), signes l'autorització per inscriure'l al domicili i hi adjuntes el teu document d'identitat i la prova que el pis és teu o el lloges (escriptura o contracte; si pagues l'IBI, no cal). La persona que s'empadrona porta el seu document d'identitat. Si ja hi estàs empadronat i hi vols empadronar la teva parella o els teus fills, n'hi ha prou amb la teva autorització i el llibre de família, el certificat de naixement, de matrimoni o l'escriptura de parella estable. Porta l'autorització recent: la fitxa del tràmit diu que val 3 mesos i la guia International Welcome de l'Ajuntament dona un mes a la delegació per inscriure altres adults." },
+        { question: "Em puc empadronar per internet a Barcelona?", answer: "Sí, si tens 18 anys o més i una identificació digital: idCAT Mòbil, Cl@ve o DNIe, o certificat digital FNMT. Omples el formulari de l'Oficina Virtual, hi adjuntes els documents i el signes electrònicament. Si tot és correcte, en uns 7 dies naturals reps un correu que confirma l'alta." },
+        { question: "Com demano cita prèvia per empadronar-me a Barcelona?", answer: `Per fer-ho en persona cal cita prèvia a una Oficina d'Atenció Ciutadana (OAC), que es demana al tràmit ${a(PADRO_URLS.citaCa, "Cita amb les oficines d'atenció ciutadana")} de l'Ajuntament (també pots fer tot el tràmit per telèfon al 010, amb els papers per correu postal). El dia de la cita, amb els documents originals, l'alta es fa al moment i et donen el volant.` },
+        { question: "Com puc treure el volant o el certificat d'empadronament a Barcelona?", answer: "Un cop empadronat, el volant de residència o de convivència es demana per internet (amb idCAT, certificat FNMT o Cl@ve PIN o DNIe; el descarregues en PDF al moment), a una OAC amb cita prèvia (el mateix dia), en un quiosc Punt BCN (només el de residència) o al 010 (per correu postal). És gratuït. Si un organisme et demana expressament el certificat, consulta-ho a l'Ajuntament." },
         { question: "Em puc empadronar sense contracte de lloguer?", answer: "Sí. Pots aportar l'autorització de qui té el pis (amb el seu document i el seu títol) i, si no tens cap document, a Barcelona l'Ajuntament fa una trucada i una visita de comprovació. La llei no permet a l'ajuntament jutjar si el lloguer és legal: només comprova que hi vius." },
         { question: "Em puc empadronar si no tinc papers o estic en situació irregular?", answer: "Sí. Les instruccions estatals diuen que l'ajuntament no ha de controlar la legalitat de la residència, i l'Ajuntament de Barcelona escriu que no cal tenir residència regular. Pots fer-ho amb el passaport en vigor." },
         { question: "Em puc empadronar en una habitació llogada?", answer: "Sí. Barcelona empadrona a l'adreça on vius, sigui un pis, una casa o una habitació llogada. Si el contracte del pis és d'una altra persona, necessites la seva autorització i el seu document d'identitat." },
-        { question: "Quant es triga a estar empadronat?", answer: "A Barcelona, per internet, l'Ajuntament envia la confirmació al cap d'uns 7 dies si els documents són correctes; a Tarragona, a l'oficina, la inscripció es fa a l'instant. El màxim legal és de tres mesos i, si l'ajuntament no respon, quedes empadronat des del dia de la sol·licitud." },
+        { question: "Quant es triga a estar empadronat?", answer: "A Barcelona, en persona a una OAC amb cita prèvia, l'alta es fa al moment i et donen el volant; per internet, l'Ajuntament envia la confirmació al cap d'uns 7 dies si els documents són correctes; a Tarragona, a l'oficina, la inscripció també es fa a l'instant. El màxim legal és de tres mesos i, si l'ajuntament no respon, quedes empadronat des del dia de la sol·licitud." },
         { question: "Quant costa empadronar-se?", answer: "Res. L'alta és gratuïta a Barcelona, Girona, Lleida i Tarragona." },
         { question: "Hi ha un termini per empadronar-se després d'arribar?", answer: "La llei no fixa un nombre de dies: obliga a inscriure's al municipi on resideixes habitualment. Convé fer-ho de seguida, perquè la targeta sanitària i molts altres tràmits ho demanen." },
         { question: "Puc empadronar-me amb el passaport?", answer: "Sí. Per a les persones estrangeres, el passaport en vigor és vàlid; els ciutadans de la UE també poden usar el document d'identitat del seu país, i si tenen el certificat de NIE l'han de portar." },
@@ -288,6 +374,14 @@ export function buildPadroBody(locale: Locale): Block[] {
         { title: "Prepara la prueba del domicilio", text: "Depende de tu situación: propietario, inquilino, persona autorizada por el titular o residencia colectiva (segunda tabla). Los documentos deben estar en catalán o castellano, o traducidos por un traductor jurado, el consulado o una administración." },
         { title: "Espera la confirmación", text: "Si lo haces por internet y los documentos son correctos, el Ayuntamiento te envía un correo de confirmación al cabo de unos 7 días naturales. Si falta alguno, te lo pide. El plazo máximo para responder es de 3 meses." },
       ],
+      channelsCaption: "Por internet, con cita en la OAC o por el 010: cómo se hace y cuándo quedas empadronado en Barcelona",
+      channelsHead: ["Vía", "Cómo se hace", "Cuándo quedas empadronado"],
+      channelsRows: [
+        ["Por internet", "Con idCAT Mòbil, Cl@ve o DNIe, o certificado digital FNMT; rellenas el formulario, adjuntas los documentos y firmas electrónicamente (18 años o más)", "Si todo está bien, en unos 7 días naturales recibes un correo de confirmación"],
+        ["En persona, en una OAC", `Primero pides ${a(B.cita, "cita previa en las oficinas de atención ciudadana")} y llevas los documentos originales`, "En el mismo momento: te dan el volante, y puedes pedir hasta dos copias"],
+        ["Por teléfono, en el 010", "Te mandan por correo postal las instrucciones y la hoja de solicitud; tienes que devolverla firmada con los documentos antes de un mes", "Al terminar el trámite, recibes el volante por correo postal"],
+      ],
+      channelsNote: `Fuente: ${a(B.alta, "trámite de alta en el padrón")} de Barcelona International Welcome (Ayuntamiento de Barcelona), consultado el 27 de noviembre de 2026. Sea cual sea la vía, el Ayuntamiento tiene como máximo 3 meses para resolver, y el trámite es gratuito.`,
       idCaption: "Qué documento de identidad vale para empadronarse en Barcelona",
       idHead: ["Nacionalidad", "Documento (en vigor)"],
       idRows: [
@@ -296,8 +390,11 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["Reino Unido", "Como el resto de países, o el documento de residencia del acuerdo de retirada"],
         ["Otros países", "Pasaporte o tarjeta de residencia"],
         ["Menores de 14 años españoles", "Libro de familia o certificado de nacimiento (y DNI o pasaporte, si lo tienen)"],
+        ["Menores españoles de más de 14 años", "DNI o pasaporte"],
+        ["Menores extranjeros de menos de 14 años", "Libro de familia o certificado de nacimiento"],
+        ["Menores extranjeros de más de 14 años", "Pasaporte en el que consten los datos de los padres, o tarjeta de residencia (si son de la UE, también el documento de identidad del país, con el certificado de NIE si lo tienen). Si el documento no lleva los datos de los padres: libro de familia, inscripción de nacimiento o el pasaporte de los padres donde figure el menor"],
       ],
-      idNote: "Fuente: ficha del trámite y página de empadronamiento del Ayuntamiento de Barcelona, consultadas el 13 de noviembre de 2026.",
+      idNote: "Fuente: ficha del trámite y página de empadronamiento del Ayuntamiento de Barcelona, consultadas el 13 de noviembre de 2026 (filas de los menores, el 27 de noviembre de 2026).",
       homeCaption: "Qué prueba del domicilio pide Barcelona, según tu situación",
       homeHead: ["Tu situación", "Qué tienes que llevar"],
       homeRows: [
@@ -305,11 +402,12 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["Alquilas el piso a tu nombre", "Contrato vigente a tu nombre, de más de 3 meses o con prórroga explícita, en el que aparezca el propietario o el administrador"],
         ["El contrato está prorrogado, es indefinido, escaneado o firmado electrónicamente", "Además, el último recibo del alquiler o la última factura de luz, agua o gas pagada a tu nombre (de los últimos 3 meses). No valen las de móvil ni internet"],
         ["Vives en un piso o habitación que es de otra persona", "Autorización para inscribirte en el domicilio, el documento de identidad del titular y su contrato o escritura. La autorización vale 3 meses"],
+        ["Ya estás empadronado y quieres empadronar a tu pareja o a tus hijos", "Tu autorización y un documento que pruebe la relación: libro de familia, certificado de nacimiento, certificado de matrimonio o escritura de pareja estable. No hace falta volver a probar la titularidad del piso"],
         ["Residencia de estudiantes o de mayores", "Autorización de empadronamiento en domicilio colectivo, firmada y sellada por la entidad (nombre, dirección y NIF)"],
         ["No tienes ningún documento", "Puedes pedirlo igualmente: el Ayuntamiento te llama y hace una visita de comprobación"],
         ["Vives en la calle, en un alojamiento de urgencia o con riesgo de perder la vivienda", "Empadronamiento sin domicilio fijo, con el informe de conocimiento de residencia (ICR) de Servicios Sociales, de una OAC o de la Oficina de Prestaciones Sociales y Económicas"],
       ],
-      homeNote: `Fuentes: ${a(B.sheet, "ficha del trámite")} y ${a(B.news, "guía del Ayuntamiento")} (Barcelona), consultadas el 13 de noviembre de 2026.`,
+      homeNote: `Fuentes: ${a(B.sheet, "ficha del trámite")} y ${a(B.news, "guía del Ayuntamiento")} (Barcelona), consultadas el 13 de noviembre de 2026; pareja e hijos, International Welcome (27/11/2026).`,
       noContractH: "Sin contrato de alquiler también puedes empadronarte",
       noContract: [
         "Es la pregunta que más se repite, y la ley la responde. Las instrucciones estatales a los ayuntamientos (BOE, 2020) dicen que el padrón debe reflejar dónde vive realmente cada persona y que el ayuntamiento no tiene ninguna competencia para juzgar cuestiones de propiedad o de alquiler: el título de la vivienda solo sirve para probar que vives allí. Puede aceptar otros documentos, como facturas de suministros, o comprobarlo con la policía local o una inspección.",
@@ -323,7 +421,17 @@ export function buildPadroBody(locale: Locale): Block[] {
       docH: "Volante o certificado: cuál tienes que pedir",
       doc: [
         "Una vez empadronado puedes pedir dos papeles. El **volante** es informativo, sin firma de ningún funcionario, y sirve para la mayoría de gestiones. El **certificado** es un documento público que acredita el empadronamiento con plena validez, y es el que piden algunos organismos, como el CatSalut para la primera tarjeta sanitaria. Cuánto tiempo vale cada uno lo decide el organismo que te lo pide; el CatSalut, por ejemplo, lo quiere de menos de tres meses.",
+        "En Barcelona hay dos volantes. El **volante de residencia** acredita que estás empadronado en la ciudad (puedes pedirlo desde los 16 años). El **volante de convivencia** dice dónde vives y con quién (desde los 18 años), y es el que te pueden pedir, por ejemplo, para preinscribir y matricular a un hijo en el colegio. Los dos son gratuitos y no caducan: su validez depende del trámite para el que lo pidas.",
       ],
+      volantCaption: "Cómo se pide el volante de empadronamiento en Barcelona",
+      volantHead: ["Vía", "Cómo", "Cuándo lo tienes"],
+      volantRows: [
+        ["Por internet", "Identificándote en el portal con certificado digital idCAT, certificado FNMT o Cl@ve PIN o DNIe", "Al momento: lo descargas en PDF"],
+        ["OAC", `Con ${a(B.cita, "cita previa")}`, "El mismo día de la cita"],
+        ["Quiosco Punt BCN", "Solo el volante de residencia", "Al momento"],
+        ["Teléfono 010", "Llamando", "Por correo postal en unos 7 días hábiles; el de residencia, en 24 horas si te lo envían por correo electrónico"],
+      ],
+      volantNote: `Fuente: ${a(B.volant, "volantes de convivencia y de residencia")}, Barcelona International Welcome (Ayuntamiento de Barcelona), consultado el 27 de noviembre de 2026. Antes tienes que estar dado de alta en el padrón.`,
       renewH: "Renovación, cambios de domicilio y bajas",
       renewCaption: "Cada cuánto hay que renovar o confirmar el empadronamiento",
       renewHead: ["Quién", "Qué tienes que hacer"],
@@ -350,10 +458,14 @@ export function buildPadroBody(locale: Locale): Block[] {
       faqH: "Preguntas frecuentes",
       faq: [
         { question: "¿Qué necesito para empadronarme? (requisitos y documentos)", answer: "Dos cosas por cada persona que se empadrona: un documento de identidad en vigor (DNI o pasaporte; los ciudadanos de la UE, también el documento de identidad de su país o la tarjeta de residencia) y una prueba de que vives en esa dirección según tu caso: si eres propietario, normalmente nada, porque el Ayuntamiento lo comprueba; si alquilas, el contrato a tu nombre; si el piso es de otra persona, su autorización con su documento de identidad y su contrato o escritura. No hace falta el NIE ni tener la residencia en regla, y si no tienes ningún documento el Ayuntamiento puede hacer una visita de comprobación. En Barcelona es gratis, por internet o en una OAC." },
+        { question: "¿Qué hace falta para empadronar a alguien en mi piso?", answer: "Si eres el propietario o el inquilino (no hace falta que estés empadronado), firmas la autorización para inscribirlo en el domicilio y adjuntas tu documento de identidad y la prueba de que el piso es tuyo o lo alquilas (escritura o contrato; si pagas el IBI, no hace falta). La persona que se empadrona lleva su documento de identidad. Si ya estás empadronado y quieres empadronar a tu pareja o a tus hijos, basta con tu autorización y el libro de familia, el certificado de nacimiento, de matrimonio o la escritura de pareja estable. Lleva una autorización reciente: la ficha del trámite dice que vale 3 meses y la guía International Welcome del Ayuntamiento da un mes a la delegación para inscribir a otros adultos." },
+        { question: "¿Me puedo empadronar por internet en Barcelona?", answer: "Sí, si tienes 18 años o más y una identificación digital: idCAT Mòbil, Cl@ve o DNIe, o certificado digital FNMT. Rellenas el formulario de la Oficina Virtual, adjuntas los documentos y lo firmas electrónicamente. Si todo está bien, en unos 7 días naturales recibes un correo que confirma el alta." },
+        { question: "¿Cómo pido cita previa para empadronarme en Barcelona?", answer: `Para hacerlo en persona hace falta cita previa en una Oficina de Atención Ciudadana (OAC), que se pide en el trámite ${a(PADRO_URLS.citaEs, "Cita con las oficinas de atención ciudadana")} del Ayuntamiento (también puedes hacer todo el trámite por teléfono en el 010, con los papeles por correo postal). El día de la cita, con los documentos originales, el alta se hace al momento y te dan el volante.` },
+        { question: "¿Cómo saco el volante o el certificado de empadronamiento en Barcelona?", answer: "Una vez empadronado, el volante de residencia o de convivencia se pide por internet (con idCAT, certificado FNMT o Cl@ve PIN o DNIe; lo descargas en PDF al momento), en una OAC con cita previa (el mismo día), en un quiosco Punt BCN (solo el de residencia) o en el 010 (por correo postal). Es gratuito. Si un organismo te pide expresamente el certificado, consúltalo con el Ayuntamiento." },
         { question: "¿Me puedo empadronar sin contrato de alquiler?", answer: "Sí. Puedes aportar la autorización de quien tiene el piso (con su documento y su título) y, si no tienes ningún documento, en Barcelona el Ayuntamiento hace una llamada y una visita de comprobación. La ley no permite al ayuntamiento juzgar si el alquiler es legal: solo comprueba que vives allí." },
         { question: "¿Me puedo empadronar sin papeles o en situación irregular?", answer: "Sí. Las instrucciones estatales dicen que el ayuntamiento no debe controlar la legalidad de la residencia, y el Ayuntamiento de Barcelona escribe que no es necesario disponer de residencia regular. Puedes hacerlo con el pasaporte en vigor." },
         { question: "¿Me puedo empadronar en una habitación alquilada?", answer: "Sí. Barcelona empadrona en la dirección donde vives, sea un piso, una casa o una habitación alquilada. Si el contrato del piso es de otra persona, necesitas su autorización y su documento de identidad." },
-        { question: "¿Cuánto se tarda en estar empadronado?", answer: "En Barcelona, por internet, el Ayuntamiento envía la confirmación al cabo de unos 7 días si los documentos son correctos; en Tarragona, en la oficina, la inscripción se hace al instante. El máximo legal es de tres meses y, si el ayuntamiento no responde, quedas empadronado desde el día de la solicitud." },
+        { question: "¿Cuánto se tarda en estar empadronado?", answer: "En Barcelona, en persona en una OAC con cita previa, el alta se hace al momento y te dan el volante; por internet, el Ayuntamiento envía la confirmación al cabo de unos 7 días si los documentos son correctos; en Tarragona, en la oficina, la inscripción también se hace al instante. El máximo legal es de tres meses y, si el ayuntamiento no responde, quedas empadronado desde el día de la solicitud." },
         { question: "¿Cuánto cuesta empadronarse?", answer: "Nada. El alta es gratuita en Barcelona, Girona, Lleida y Tarragona." },
         { question: "¿Hay un plazo para empadronarse después de llegar?", answer: "La ley no fija un número de días: obliga a inscribirse en el municipio donde resides habitualmente. Conviene hacerlo enseguida, porque la tarjeta sanitaria y muchos otros trámites lo piden." },
         { question: "¿Puedo empadronarme con el pasaporte?", answer: "Sí. Para las personas extranjeras, el pasaporte en vigor es válido; los ciudadanos de la UE también pueden usar el documento de identidad de su país, y si tienen el certificado de NIE deben llevarlo." },
@@ -386,6 +498,14 @@ export function buildPadroBody(locale: Locale): Block[] {
         { title: "Bring proof of address", text: "It depends on your situation: owner, tenant, person authorised by the holder, or a shared residence (second table). Documents must be in Catalan or Spanish, or translated by a sworn translator, your consulate or a public administration." },
         { title: "Wait for the confirmation", text: "Online, if the documents are in order, the council emails a confirmation after about 7 calendar days. If something is missing, it asks for it. The legal maximum to answer is 3 months." },
       ],
+      channelsCaption: "Online, by appointment at an OAC or through 010: how it works and when you are registered in Barcelona",
+      channelsHead: ["Channel", "How", "When you are registered"],
+      channelsRows: [
+        ["Online", "With idCAT Mòbil, Cl@ve or DNIe, or an FNMT digital certificate; fill in the form, attach the documents and sign electronically (18 or over)", "If all is in order, an email confirms it in about 7 calendar days"],
+        ["In person at an OAC", `First book an ${a(B.cita, "appointment with the citizen service offices")} and bring the original documents`, "On the spot: you get the volante, and can ask for up to two copies"],
+        ["By phone, 010", "You are sent the instructions and application form by post; return it signed with the documents within one month", "When it is done, the volante arrives by post"],
+      ],
+      channelsNote: `Source: ${a(B.alta, "padrón registration procedure")} on Barcelona International Welcome (Barcelona City Council), read on 27 November 2026. Whatever the channel, the council has 3 months at most to decide, and it is free.`,
       idCaption: "Which ID document Barcelona accepts for the padrón",
       idHead: ["Nationality", "Document (valid)"],
       idRows: [
@@ -394,8 +514,11 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["United Kingdom", "As other countries, or the Withdrawal Agreement residence document"],
         ["Other countries", "Passport or residence card"],
         ["Spanish children under 14", "Family book or birth certificate (and DNI or passport, if they have one)"],
+        ["Spanish children over 14", "DNI or passport"],
+        ["Foreign children under 14", "Family book or birth certificate"],
+        ["Foreign children over 14", "Passport showing the parents' details, or residence card (EU children may also use their national ID card, with the NIE certificate if they have one). If the document does not show the parents' details: family book, birth registration or the parents' passport listing the child"],
       ],
-      idNote: "Source: Barcelona City Council's procedure sheet and padrón page, read on 13 November 2026.",
+      idNote: "Source: Barcelona City Council's procedure sheet and padrón page, read on 13 November 2026 (children's rows on 27 November 2026).",
       homeCaption: "What proof of address Barcelona asks for, by situation",
       homeHead: ["Your situation", "What to bring"],
       homeRows: [
@@ -403,11 +526,12 @@ export function buildPadroBody(locale: Locale): Block[] {
         ["You rent the flat in your name", "A current contract in your name, for more than 3 months or with an explicit extension, naming the owner or the letting agent"],
         ["The contract has been extended, is open-ended, scanned or e-signed", "Also the last rent receipt or the last electricity, water or gas bill paid in your name (within 3 months). Mobile and internet bills are not accepted"],
         ["You live in a flat or room someone else holds", "Permission to register at the address, the holder's ID and their contract or deed. The permission is valid for 3 months"],
+        ["You are already registered and want to add your partner or children", "Your permission and a document proving the relationship: family book, birth certificate, marriage certificate or civil partnership deed. You do not have to prove title to the home again"],
         ["Student or care residence", "A collective-address authorisation signed and stamped by the institution (name, address and tax number)"],
         ["You have no documents at all", "You can still apply: the council phones you and makes a check visit"],
         ["You sleep rough, are in emergency housing or at risk of losing your home", "Registration without a fixed address, with a residence report (ICR) from Social Services, an OAC or the Social Benefits Office"],
       ],
-      homeNote: `Sources: ${a(B.sheet, "procedure sheet")} and ${a(B.news, "council guide")} (Barcelona, in Catalan), read on 13 November 2026.`,
+      homeNote: `Sources: ${a(B.sheet, "procedure sheet")} and ${a(B.news, "council guide")} (Barcelona, in Catalan), read on 13 November 2026; partner and children, International Welcome (27 Nov 2026).`,
       noContractH: "No rental contract? You can still register",
       noContract: [
         "It is the most common question, and the law answers it. The national instructions to councils (BOE, 2020) say the padrón must show where each person really lives, and that councils have no power to rule on ownership or tenancy: the title to the home only serves to prove that you live there. Councils may accept other documents, such as utility bills, or check through the local police or an inspection.",
@@ -421,7 +545,17 @@ export function buildPadroBody(locale: Locale): Block[] {
       docH: "Volante or certificado: which one to ask for",
       doc: [
         "Once you are registered you can ask for two documents. The **volante** is informative, with no official's signature, and is enough for most errands. The **certificado** is a public document with full legal value, and some bodies require it: CatSalut, for instance, for your first health card. How long each one stays valid is up to whoever asks for it; CatSalut wants it issued within the last three months.",
+        "Barcelona issues two volantes. The **volant de residència** proves that you are registered in the city (from age 16). The **volant de convivència** shows where you live and with whom (from age 18), and is the one you may be asked for, for example, to pre-register and enrol a child at school. Both are free and neither expires: how long they are accepted depends on the procedure you need them for.",
       ],
+      volantCaption: "How to get a padrón volante in Barcelona",
+      volantHead: ["Channel", "How", "When you get it"],
+      volantRows: [
+        ["Online", "Log in to the portal with an idCAT digital certificate, an FNMT certificate, or Cl@ve PIN or DNIe", "On the spot: you download it as a PDF"],
+        ["OAC", `By ${a(B.cita, "appointment")}`, "On the day of the appointment"],
+        ["Punt BCN kiosk", "Volant de residència only", "On the spot"],
+        ["Phone, 010", "Call", "By post in about 7 working days; the residence one in 24 hours if sent by email"],
+      ],
+      volantNote: `Source: ${a(B.volant, "volant de convivència and volant de residència")}, Barcelona International Welcome (Barcelona City Council), read on 27 November 2026. You must be registered on the padrón first.`,
       renewH: "Renewal, moving house and leaving",
       renewCaption: "How often the registration must be renewed or confirmed",
       renewHead: ["Who", "What to do"],
@@ -448,10 +582,14 @@ export function buildPadroBody(locale: Locale): Block[] {
       faqH: "Frequently asked questions",
       faq: [
         { question: "What do I need to register on the padrón? (requirements and documents)", answer: "Two things for each person registering: a valid ID document (DNI or passport; EU citizens may also use their national ID card or residence card) and proof that you live at that address, depending on your case: if you own the home, usually nothing, because the council checks it; if you rent, the contract in your name; if the flat belongs to someone else, their permission with their ID and their contract or deeds. You do not need a NIE or legal residence, and if you have no document at all the council can make a verification visit. In Barcelona it is free, online or at an OAC." },
+        { question: "What do I need to register someone at my flat?", answer: "If you own or rent the flat (you need not be registered there yourself), sign the permission to register them at the address and attach your ID and proof that you own or rent it (deed or contract; not needed if you pay the IBI). The person registering brings their own ID. If you are already registered there and want to add your partner or children, your permission plus the family book, birth certificate, marriage certificate or civil partnership deed is enough. Bring a recent permission: the procedure sheet says it is valid for 3 months, and the council's International Welcome guide gives a delegation to register other adults one month." },
+        { question: "Can I register on the padrón online in Barcelona?", answer: "Yes, if you are 18 or over and have a digital ID: idCAT Mòbil, Cl@ve or DNIe, or an FNMT digital certificate. Fill in the form on the Oficina Virtual, attach the documents and sign it electronically. If all is in order, an email confirms the registration in about 7 calendar days." },
+        { question: "How do I book an appointment (cita previa) for the padrón in Barcelona?", answer: `To register in person you need an appointment at a Citizen Service Office (OAC), booked through the council's ${a(PADRO_URLS.citaCa, "Cita amb les oficines d'atenció ciutadana")} page (you can also do the whole procedure by phone on 010, with the papers sent by post). On the day, with the original documents, you are registered on the spot and handed the volante.` },
+        { question: "How do I get a padrón volante or certificate in Barcelona?", answer: "Once registered, ask for the volant de residència or de convivència online (with idCAT, an FNMT certificate or Cl@ve PIN or DNIe; you download the PDF on the spot), at an OAC by appointment (same day), at a Punt BCN kiosk (residence one only) or on 010 (by post). It is free. If a body specifically asks for the certificado, check with the council." },
         { question: "Can I register on the padrón without a rental contract?", answer: "Yes. You can bring the permission of whoever holds the flat (with their ID and their title) and, if you have no documents at all, Barcelona City Council phones you and makes a check visit. The law does not let the council judge whether a tenancy is legal: it only checks that you live there." },
         { question: "Can I register if I am undocumented or my immigration status is irregular?", answer: "Yes. The national instructions say councils must not check whether residence is lawful, and Barcelona City Council states that legal residence is not required. A valid passport is enough as ID." },
         { question: "Can I register at a rented room?", answer: "Yes. Barcelona registers you at the address where you live, whether a flat, a house or a rented room. If the flat's contract is in someone else's name, you need their permission and their ID." },
-        { question: "How long does it take to be registered?", answer: "In Barcelona, online, the council emails a confirmation after about 7 days if the documents are in order; in Tarragona, at the office, you are registered on the spot. The legal maximum is three months and, if the council does not answer, you are registered from the day you applied." },
+        { question: "How long does it take to be registered?", answer: "In Barcelona, in person at an OAC by appointment, you are registered on the spot and handed the volante; online, the council emails a confirmation after about 7 days if the documents are in order; in Tarragona, at the office, you are also registered on the spot. The legal maximum is three months and, if the council does not answer, you are registered from the day you applied." },
         { question: "How much does it cost?", answer: "Nothing. Registration is free in Barcelona, Girona, Lleida and Tarragona." },
         { question: "Is there a deadline to register after I arrive?", answer: "The law sets no number of days: it requires you to register in the town where you usually live. Do it straight away, because the health card and many other procedures ask for it." },
         { question: "Can I register with my passport?", answer: "Yes. For foreign nationals a valid passport is accepted; EU citizens may also use their national ID card, and should bring the NIE certificate if they have one." },
@@ -467,11 +605,13 @@ export function buildPadroBody(locale: Locale): Block[] {
     ...h2(t.whyH, ...t.why),
     { type: "heading", level: 2, text: t.bcnH } as Block,
     steps(t.stepsTitle, t.steps),
+    table(t.channelsCaption, t.channelsHead, t.channelsRows, t.channelsNote),
     table(t.idCaption, t.idHead, t.idRows, t.idNote),
     table(t.homeCaption, t.homeHead, t.homeRows, t.homeNote),
     ...h2(t.noContractH, ...t.noContract),
     ...h3(t.kidsH, ...t.kids),
     ...h2(t.docH, ...t.doc),
+    table(t.volantCaption, t.volantHead, t.volantRows, t.volantNote),
     ...h2(t.renewH),
     table(t.renewCaption, t.renewHead, t.renewRows),
     ...paras(...t.renew),
@@ -482,9 +622,9 @@ export function buildPadroBody(locale: Locale): Block[] {
     { type: "heading", level: 2, text: t.faqH } as Block,
     faq(t.faq),
     callout("official", verifiedLine(L, PADRO_AS_OF), {
-      ca: `Llei 7/1985 i ${a(PADRO_URLS.instructions, "instruccions tècniques del padró")} (BOE), fitxa i guia de l'Ajuntament de Barcelona, CatSalut, INE i les seus electròniques de Girona, Lleida, Tarragona i L'Hospitalet.`,
-      es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha y guía del Ayuntamiento de Barcelona, CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
-      en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet and guide, CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
+      ca: `Llei 7/1985 i ${a(PADRO_URLS.instructions, "instruccions tècniques del padró")} (BOE), fitxa i guia de l'Ajuntament de Barcelona, Barcelona International Welcome (27 de novembre de 2026), CatSalut, INE i les seus electròniques de Girona, Lleida, Tarragona i L'Hospitalet.`,
+      es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha y guía del Ayuntamiento de Barcelona, Barcelona International Welcome (27 de noviembre de 2026), CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
+      en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet and guide, Barcelona International Welcome (27 November 2026), CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
     }[L]),
     ...b2Related(["tsi", "nieTie", "foreignVote", "barcelonaHub", "transport", "payDates"], L, [netSalaryRelatedItem(L)]),
   ];

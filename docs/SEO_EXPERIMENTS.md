@@ -16032,5 +16032,33 @@ Only facts the page already states with sources (JEC Acuerdo 418/2026; Correos "
 **Go-live.** Deploy only (code routes, no publish group). IndexNow: `/es/calculadoras/multas-trafico/ /ca/calculadores/multes-transit/ /en/calculators/traffic-fines-spain/ /es/calculadoras/gastos-compraventa-vivienda/ /ca/calculadores/despeses-compravenda-habitatge/ /en/calculators/spain-home-buying-costs/ /es/calculadoras/impuesto-donaciones-madrid/ /ca/calculadores/impost-donacions-madrid/ /en/calculators/madrid-gift-tax/`.
 
 **Review 2026-12-25:** `snapshot.py page multas-trafico 28`, `page multes-transit 28`, `page gastos-compraventa-vivienda 28`, `page despeses-compravenda 28`, `page spain-home-buying-costs 28`, `page impuesto-donaciones-madrid 28`.
+## 2026-11-27 — Padró guide striking-distance pass: Barcelona channels and timing, volante, minors' IDs, registering someone else, four FAQs (ca/es/en, body only; group `padro`)
+
+**Pages.** `/ca/guies/empadronament-padro-barcelona-catalunya/`, `/es/guias/empadronarse-padron-barcelona-cataluna/`, `/en/guides/padron-registration-barcelona-catalonia/`.
+
+**Window.** Published 13 Nov (inside 28 days): title, meta description, H1 and lead untouched. Body only.
+
+**Baseline** (GSC 30 Oct–26 Nov, `snapshot.py page empadron 28` = ca+es): 1,320 impressions, 3 clicks; daily position from 30.7 (14 Nov) to 5.8–8.1 (24–26 Nov). EN (`page padron-registration 28`): 33 impressions, 0 clicks. ES, 7 days: 227 impressions at 8.4 (head's figure). Queries (28 d, impressions / position): "que necesito para empadronarme" 27 / 31.7, "que se necesita para empadronarse" 21 / 41.1, "requisitos para empadronarse" 16 / 18.3, "padro municipal barcelona" 12 / 9.0, "requisitos empadronamiento barcelona" 12 / 42.1, "como empadronarse" 10 / 29.2, "papeles para empadronarse" 10 / 27.2, "documentacion para empadronarse" 9 / 10.7, "ajuntament barcelona empadronament" 8 / 7.9, "requisitos para empadronar a alguien" 8 / 45.6, "empadronament barcelona" 7 / 15.6, "padró municipal barcelona" 7 / 14.0, "empadronament barcelona certificat" 2 / 9.0, "padro barcelona certificat" 2 / 10.0, "certificat empadronament barcelona" 1 / 8.0.
+
+**Gap read.** The page already had the steps, ID and proof-of-address tables, cost and the 3-month limit. Missing against the queries and the council's own pages: how long each channel takes (in person it is done on the spot), the online IDs (idCAT/Cl@ve), the appointment, how to get the volante in Barcelona (the 13 Nov pass could not read it: the Oficina Virtual renders in JavaScript), IDs for foreign minors, and registering someone else at your flat.
+
+**Added** (module `batch02/padro.ts`, `PADRO_BCN_CHANNELS_AS_OF` 2026-11-27; `PADRO_AS_OF` stays 13 Nov because CatSalut, INE and the other councils were not re-read):
+- Table after the Barcelona steps, "online / OAC with cita / 010": idCAT Mòbil, Cl@ve or DNIe, FNMT certificate, e-signature, 18+, about 7 calendar days; OAC by appointment (links the council's "Cita amb les oficines d'atenció ciutadana" procedure), registered on the spot and handed the volante (up to two copies); 010 by post, return within one month; 3-month maximum; free.
+- ID table: three minors' rows (Spanish over 14; foreign under 14; foreign over 14 with the parents' details, or the family book, birth registration or parents' passport).
+- Proof-of-address table: a registered resident adding a partner or children (authorisation plus family book, birth, marriage or civil partnership document; no proof of title).
+- Volante section: Barcelona's volant de residència (16+) and de convivència (18+, e.g. school pre-registration), free, neither expires; table online (PDF at once) / OAC (same day) / Punt BCN kiosk (residence one only) / 010 (about 7 working days by post, 24 h by email for the residence one).
+- FAQ +4, in FAQPage via the existing faq block: "¿Qué hace falta para empadronar a alguien en mi piso?" (second), "¿Me puedo empadronar por internet en Barcelona?", "¿Cómo pido cita previa para empadronarme en Barcelona?", "¿Cómo saco el volante o el certificado de empadronamiento en Barcelona?", with ca/en twins. "¿Cuánto se tarda?" now also says that in person it is done on the spot. 14 questions.
+
+**Sources** (read 27 Nov with curl + grep; quotes in the module header): Barcelona T135 procedure sheet ca/es (re-read: «en 7 días naturales aproximadamente», «Este trámite es gratuito», minors' IDs); Barcelona International Welcome (barcelona.cat, the council's own site) "Alta al padró d'habitants de Barcelona" ca/es/en («la inscripció en el padró es farà en el mateix moment i se't lliurarà el volant, del qual podràs sol·licitar fins a dues còpies», «idCAT Mòbil», «Cl@ve o DNIe», «És gratuït», partner/children authorisation) and "Volants de convivència i de residència" ca/es/en («Telemàticament: al moment», «Ambdós volants no caduquen», «És gratuït»); BOE-A-2020-4784 re-read (volante «puramente informativo», «silencio positivo»). One conflict is printed as such and not resolved: the T135 sheet says the authorisation or delegation is valid for 3 months; International Welcome gives a delegation to register other adults one month. The page tells readers to bring a recent one.
+
+**Not added (could not verify):** how to get a signed *certificado* (as opposed to the volante) in Barcelona; whether 010 books OAC appointments; OAC lead times.
+
+**Prediction.** By 27 Dec: ES "requisitos para empadronar a alguien" from 45.6 to ≤ 20; "empadronament barcelona certificat" / "padro barcelona certificat" and "padro municipal barcelona" hold ≤ 10; the three editions together get more than 1,600 impressions in 28 days, with position ≤ 9. Wrong if position worsens by more than 2 or the new FAQ queries do not appear.
+
+**Tests.** `tests/padro.test.ts`: 6 tables, channels and volante content, 14 FAQs, and a date guard (`PADRO_BCN_CHANNELS_REREAD_BY` 2027-02-27). Green: padro, batch02, b2-sources-unique, faq-schema-mirrors-page, nie-tie, tsi, income-tax-guide; `npx tsc --noEmit -p .`. `npm run seo:body-dates`: padró is a published B2 article and not a body family, so its entry does not change. The only diff is the `gordo` fingerprint, 39 to 40 files with the same date, a leftover from main; committed as the rules require.
+
+**Go-live.** Deploy, then `publish.sh padro`. IndexNow the three URLs.
+
+**Review 2026-12-27:** `snapshot.py page empadron 28`, `page padron-registration 28`; then 2027-01-15 with the 13 Nov entry's review. Re-read International Welcome alta + volants pages by 2027-02-27 (test fails after).
 
 **Outcome:** _pending_

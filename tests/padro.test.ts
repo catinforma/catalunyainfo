@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { FOREIGN_VOTE } from "../src/lib/content/batch02/foreign-vote.ts";
-import { EU_VOTE_PADRO_DEADLINE, PADRO, PADRO_AS_OF, PADRO_REREAD_BY, buildPadroBody } from "../src/lib/content/batch02/padro.ts";
+import { EU_VOTE_PADRO_DEADLINE, PADRO, PADRO_AS_OF, PADRO_BCN_CHANNELS_AS_OF, PADRO_BCN_CHANNELS_REREAD_BY, PADRO_REREAD_BY, PADRO_URLS, buildPadroBody } from "../src/lib/content/batch02/padro.ts";
 import { B2_PATHS, B2_TITLES, b2href } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
@@ -67,13 +67,13 @@ test("padró: the answer comes first (free, where, no contract, no legal residen
 test("padró: the tables carry the official rules (contract > 3 months, bills of 3 months, renewal 2 and 5 years)", () => {
   for (const locale of LOCALES) {
     const t = tables(locale);
-    assert.equal(t.length, 4, `${locale}: ID, address, renewal, cities`);
+    assert.equal(t.length, 6, `${locale}: channels, ID, address, volante, renewal, cities`);
     const all = JSON.stringify(t);
     assert.match(all, /3 (mesos|meses|months)/, `${locale}: 3-month rule`);
     assert.match(all, /2 (anys|años|years)/, `${locale}: non-EU renewal`);
     assert.match(all, /5 (anys|años|years)/, `${locale}: EU confirmation`);
     assert.match(all, /(mòbil|móvil|Mobile)/, `${locale}: phone bills not accepted`);
-    assert.equal(t[3]?.rows?.length, 4, `${locale}: four other cities`);
+    assert.equal(t[5]?.rows?.length, 4, `${locale}: four other cities`);
   }
 });
 
@@ -144,4 +144,54 @@ test("padró: the publish route registers `padro` and `padro-links`", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /wants\("padro"\)\) published\.push\(await publishB2Article\(PADRO\)\)/);
   assert.match(route, /wants\("padro-links"\)\) published\.push\(await publishB2Article\(FOREIGN_VOTE\), await publishB2Article\(BARCELONA_HUB\)\)/);
+});
+
+test("padró: Barcelona channels and timings (27 Nov pass): online ~7 days, OAC on the spot with cita, 010 by post", () => {
+  const onSpot = { ca: /En el mateix moment/, es: /En el mismo momento/, en: /On the spot/ } as const;
+  for (const locale of LOCALES) {
+    const channels = tables(locale)[0]!;
+    assert.equal(channels.rows?.length, 3, `${locale}: online, OAC, 010`);
+    const all = JSON.stringify(channels);
+    assert.match(all, /idCAT Mòbil/, `${locale}: idCAT Mòbil`);
+    assert.match(all, /Cl@ve/, `${locale}: Cl@ve`);
+    assert.match(all, /7 (dies|días|calendar days)/, `${locale}: ~7 days online`);
+    assert.match(all, onSpot[locale], `${locale}: in person on the spot`);
+    assert.match(all, /010/, `${locale}: phone channel`);
+    assert.ok(all.includes("oficinavirtual/") && all.includes("20230001668"), `${locale}: links the OAC appointment procedure`);
+  }
+});
+
+test("padró: the volante table says free, PDF at once online, Punt BCN only for the residence one", () => {
+  const free = { ca: /gratuïts/, es: /gratuitos/, en: /Both are free/ } as const;
+  for (const locale of LOCALES) {
+    const volant = tables(locale)[3]!;
+    assert.equal(volant.rows?.length, 4, `${locale}: online, OAC, Punt BCN, 010`);
+    assert.match(JSON.stringify(volant), /PDF/);
+    assert.match(JSON.stringify(volant), /Punt BCN/);
+    assert.match(text(locale), free[locale], `${locale}: volantes are free`);
+    assert.match(text(locale), /16/, `${locale}: residence volante from 16`);
+  }
+});
+
+test("padró: the FAQ answers the queries of the 27 Nov snapshot (register someone, online, cita, volante)", () => {
+  const asks: Record<Locale, RegExp[]> = {
+    ca: [/empadronar algú/, /per internet/, /cita prèvia/, /volant o el certificat/],
+    es: [/empadronar a alguien/, /por internet/, /cita previa/, /volante o el certificado/],
+    en: [/register someone/, /online/, /appointment/, /volante or certificate/],
+  };
+  for (const locale of LOCALES) {
+    const faqBlock = (PADRO.editions[locale].blocks as unknown as { type: string; items?: { question: string }[] }[]).find((b) => b.type === "faq")!;
+    const questions = faqBlock.items!.map((i) => i.question);
+    assert.equal(questions.length, 14, `${locale}: 14 questions`);
+    assert.match(questions[0]!, /(necessito|necesito|need)/, `${locale}: the requirements question stays first`);
+    for (const ask of asks[locale]) assert.ok(questions.some((q) => ask.test(q)), `${locale}: FAQ ${ask}`);
+  }
+});
+
+test("padró: the Barcelona channel facts were read recently (re-read International Welcome alta + volants pages, then move the date)", () => {
+  assert.ok(PADRO_BCN_CHANNELS_AS_OF < PADRO_BCN_CHANNELS_REREAD_BY);
+  assert.ok(
+    Date.now() < Date.parse(`${PADRO_BCN_CHANNELS_REREAD_BY}T00:00:00Z`),
+    `Barcelona channels last read ${PADRO_BCN_CHANNELS_AS_OF}: re-read ${PADRO_URLS.iwAltaCa} and ${PADRO_URLS.iwVolantCa} (idCAT/Cl@ve, cita, on the spot, 7 days, free), then move PADRO_BCN_CHANNELS_AS_OF and PADRO_BCN_CHANNELS_REREAD_BY`,
+  );
 });
