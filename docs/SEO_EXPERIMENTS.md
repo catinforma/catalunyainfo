@@ -15920,3 +15920,12 @@ Why: the titles now follow the searched word order ("tren barcelona sitges", "ba
 **Review 2026-12-11**: `snapshot.py page vall-de-nuria 14`, `page rack-railway 14`, `page portaventura 14`.
 
 **Outcome:** _pending_
+## 2026-11-27 (05:00, ci-revisio, third pre-deploy review) — Strikes hub: "Serveis mínims del des del ..." headings and FAQ question fixed (ca/es/en)
+
+**URLs.** `/ca/guies/vaga-avui-catalunya/` and its es/en editions (the Catalan strikes hub; path from `B2_PATHS.strikes`).
+
+**Changed.** A strike dated as a run of three or more days (the SMU doctors' strike, 16-28 Nov) printed its H3s and one FAQ question with a doubled preposition: "Serveis mínims del des del dilluns 16 ...", "Què cal fer el des del ...", "Quins serveis mínims hi ha el des del ...?" (es "del desde el", "el desde el"; en "on from"). `strikeRef` / `strikeWhen` (strikes.ts) now return the run as it reads ("Serveis mínims des del dilluns 16 de novembre fins al dissabte 28 de novembre de 2026"). H3s and one FAQ question only; title, meta description, H1 and lead untouched. Not a fact change.
+
+**Tests.** `tests/strikes-hub.test.ts`: new test (no doubled preposition in the hub as of 27 Nov, the SMU run still in an H3, ca/es/en); the "no advice for past strikes" regex now also catches the run form.
+
+**Review.** None needed (copy fix).

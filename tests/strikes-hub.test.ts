@@ -474,7 +474,7 @@ test("after the last strike the page renders every strike as past, with a 'none 
     };
     assert.ok(all.some((h) => h.text.startsWith(endedDays[locale])), `${locale}: ${all.map((h) => h.text).join(" | ")}`);
     // Past strikes carry no advice for the day.
-    assert.ok(!all.some((h) => /Què cal fer el|Qué hacer el|What to do on/.test(h.text)), locale);
+    assert.ok(!all.some((h) => /Què cal fer (el|des del)|Qué hacer (el|desde el)|What to do (on|from)/.test(h.text)), locale);
   }
   // Half way: Renfe past, the other two upcoming.
   const mid = buildStrikesBody("en", "2026-10-30");
@@ -960,5 +960,16 @@ test("24 Nov 2026: the numbered school order, the students' strike of the 26th a
     const withRail = strikeDayAnswers(locale, "2026-11-24", [...STRIKES.filter((s) => !s.affects.includes("rodalies")), rail]);
     assert.equal(withRail[1]!.transport, true, locale);
     assert.doesNotMatch(withRail[1]!.text, /^(no hi ha|no hay|no general strike)/i, locale);
+  }
+});
+
+test("27 Nov 2026: a run of strike days (SMU, 16-28 Nov) reads 'des del ... fins al ...' once: no 'del des del' / 'el desde el' / 'on from' in headings or FAQ", () => {
+  const doubled = /\b(del|el) (des del|desde el)\b|\bon from\b/;
+  const run = { ca: "des del dilluns 16 de novembre", es: "desde el lunes 16 de noviembre", en: "from Monday 16 November" } as const;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const body = buildStrikesBody(locale, "2026-11-27");
+    assert.doesNotMatch(bodyToPlainText(body), doubled, locale);
+    // The SMU strike's own headings still carry its run of days.
+    assert.ok(headings(body).some((h) => h.level === 3 && h.text.includes(run[locale])), `${locale}: ${headings(body).map((h) => h.text).join(" | ")}`);
   }
 });

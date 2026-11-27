@@ -1617,6 +1617,8 @@ export function andList(items: string[], locale: Locale): string {
 function strikeRef(strike: Strike, locale: Locale): string {
   const days = strikeDays(strike, locale);
   if (strike.indefinite) return { ca: `de la ${strike.title.ca}`, es: `de la ${strike.title.es}`, en: `for the ${strike.title.en}` }[locale];
+  // 27 Nov 2026: a run of days already reads "des del ... fins al ..." (strikeDays): no second "del" / "on" before it.
+  if (days.startsWith(FROM[locale])) return days;
   return { ca: `del ${days}`, es: `del ${days}`, en: `on ${days}` }[locale];
 }
 
@@ -1624,6 +1626,7 @@ function strikeRef(strike: Strike, locale: Locale): string {
 function strikeWhen(strike: Strike, locale: Locale): string {
   const days = strikeDays(strike, locale);
   if (strike.indefinite) return { ca: `durant la ${strike.title.ca}`, es: `durante la ${strike.title.es}`, en: `during the ${strike.title.en}` }[locale];
+  if (days.startsWith(FROM[locale])) return days;
   return { ca: `el ${days}`, es: `el ${days}`, en: `on ${days}` }[locale];
 }
 
