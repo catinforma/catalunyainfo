@@ -1,5 +1,6 @@
 import "server-only";
 
+import { calendarLine } from "@/lib/content/batch02/christmas-season-links";
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Block } from "@/lib/content/blocks";
 import { IMAGES } from "@/lib/content/images";
@@ -563,6 +564,8 @@ function daysOff(year: SchoolYear, locale: Locale): Block[] {
     p.push("Add each town's two local holidays, listed in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/), and the four free-choice days each school sets.");
   }
   if (reisLine) p.push(reisLine);
+  // 27 Nov 2026 (batch 8M): the Christmas hub's season calendar, only for the course whose holidays it covers.
+  if (CALENDAR_HUB_COURSES.has(year.label)) p.push(calendarLine(locale));
   if (easterLine) p.push(easterLine);
 
   return [
@@ -725,6 +728,13 @@ const REIS_PAGE: Record<string, Record<Locale, string>> = {
     en: "/en/guides/three-kings-parade-barcelona/",
   },
 };
+
+/**
+ * Courses whose Christmas holidays the Christmas hub's calendar
+ * (batch02/christmas-calendar.ts, 1 Dec 2026 - 7 Jan 2027) covers. Add the
+ * next course when the calendar is rolled to it.
+ */
+const CALENDAR_HUB_COURSES: ReadonlySet<string> = new Set(["2026-2027"]);
 
 const BRIDGE_PAGE: Record<Locale, string> = {
   ca: "/ca/guies/pont-desembre-catalunya/",

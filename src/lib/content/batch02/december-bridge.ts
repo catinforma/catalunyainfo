@@ -6,6 +6,7 @@ import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { barcelonaDec7, barcelonaDec7Answer, barcelonaDec7Question } from "@/lib/programmatic/holidays/barcelona-dec7";
 import { datePath } from "@/lib/programmatic/holidays/paths";
 
+import { calendarLine } from "./christmas-season-links";
 import { dayDate, range, span } from "./festive";
 import { FREE_DAYS_TOWNS, monday7 } from "./school-free-days-towns";
 import { SHOPS } from "./shops";
@@ -609,6 +610,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         `I el diumenge següent, 13 de desembre, és ${b2link("marato", "ca", "La Marató de 3Cat")}, dedicada enguany a les malalties neurodegeneratives i neuromusculars.`,
         `Tot el mes a la ciutat, dia a dia (concerts, botigues obertes, metro i temps), és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
         `Després del pont venen els altres festius: el metro i els trens del 24 de desembre al 6 de gener, a ${b2link("christmasTransport", "ca", "transport per Nadal i Cap d'Any")}; la nit del 31, a ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}, i la cavalcada del 5 de gener, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
+        calendarLine("ca"),
       ),
       faq([
         { question: "Hi ha pont al desembre del 2026 a Catalunya?", answer: `Només si demanes el dilluns 7. L'únic festiu és el dimarts 8; el diumenge 6 no és festiu a Catalunya. Amb el 7 lliure, el pont va ${runWords(bridge, "ca")}.` },
@@ -702,6 +704,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         `Y el domingo siguiente, 13 de diciembre, es ${b2link("marato", "es", "La Marató de 3Cat")}, dedicada este año a las enfermedades neurodegenerativas y neuromusculares.`,
         `Todo el mes en la ciudad, día a día (conciertos, tiendas abiertas, metro y tiempo), está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
         `Después del puente vienen los otros festivos: el metro y los trenes del 24 de diciembre al 6 de enero, en ${b2link("christmasTransport", "es", "transporte en Navidad y Nochevieja")}; la noche del 31, en ${b2link("newYear", "es", "Nochevieja en Barcelona")}, y la cabalgata del 5 de enero, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
+        calendarLine("es"),
       ),
       faq([
         { question: "¿Hay puente en diciembre de 2026 en Cataluña?", answer: `Solo si pides el lunes 7. El único festivo es el martes 8; el domingo 6 no es festivo en Cataluña. Con el 7 libre, el puente va ${runWords(bridge, "es")}.` },
@@ -794,6 +797,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       `And the following Sunday, 13 December, is ${b2link("marato", "en", "La Marató de 3Cat")}, the TV3 telethon, this year for neurodegenerative and neuromuscular diseases.`,
       `The whole month in the city, day by day (concerts, shop opening days, the metro and the weather), is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
       `After the long weekend come the other holidays: the metro and trains from 24 December to 6 January are in ${b2link("christmasTransport", "en", "public transport at Christmas and New Year")}, the night of the 31st in ${b2link("newYear", "en", "New Year's Eve in Barcelona")}, and the 5 January parade in ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
+      calendarLine("en"),
     ),
     faq([
       { question: "Is there a long weekend in December 2026 in Catalonia?", answer: `Only if you take Monday the 7th off. The only holiday is Tuesday the 8th; Sunday the 6th is not a holiday in Catalonia. With the 7th off, the break runs ${runWords(bridge, "en")}.` },

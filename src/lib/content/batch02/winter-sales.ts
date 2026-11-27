@@ -2,7 +2,8 @@ import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { dayMonth, dayMonthYear, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 
-import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { calendarLine } from "./christmas-season-links";
+import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 import { OPENING_2027 } from "./shops";
 
 /**
@@ -325,6 +326,7 @@ export function buildWinterSalesBody(L: Locale): Block[] {
     ...h2(t.lawH, ...t.law),
     ...h2(t.sundaysH, ...t.sundays),
     table(t.sundaysCaption, t.sundaysHead, t.sundaysRows, t.sundaysNote),
+    ...paras(calendarLine(L)),
     ...h2(t.rightsH, t.rightsLead),
     list(...t.rights),
     ...h2(t.spainH, ...t.spain),

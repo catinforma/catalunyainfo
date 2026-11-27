@@ -8,6 +8,7 @@ import { DRAWS, PRESETS, SELAE_READ } from "@/lib/programmatic/lottery-tax/rules
 import { grossaCheckPath } from "@/lib/programmatic/grossa-check/paths";
 import { ninoCheckPath } from "@/lib/programmatic/nino-check/paths";
 
+import { calendarLine } from "./christmas-season-links";
 import { dateYear, dayDate } from "./festive";
 import {
   b2Related,
@@ -1486,7 +1487,7 @@ export function buildGrossaBody(
   // 27 Nov 2026: per euro played, for participacions ("quant es cobra per euro").
   blocks.push(table(x.perEuroTable.caption, x.perEuroTable.headers, perEuroRows(locale), x.perEuroTable.note));
 
-  blocks.push(...h2(t.nightHeading, ...t.night(c)));
+  blocks.push(...h2(t.nightHeading, ...t.night(c), calendarLine(locale)));
 
   blocks.push(...h2(t.aboutHeading, ...t.about));
   // 27 Nov 2026: "la grossa de nadal 2026", "la grossa de navidad": the two draws side by side.

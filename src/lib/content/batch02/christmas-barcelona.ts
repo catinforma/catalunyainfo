@@ -3,6 +3,8 @@ import { shortDate } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
+import { CALENDAR_FAIRS, SAGRADA_2026 } from "./christmas";
+import { calendarFaq, christmasCalendar, type CalendarFairs } from "./christmas-calendar";
 import { LIGHTS_TOWNS } from "./christmas-lights-towns";
 
 import {
@@ -497,14 +499,16 @@ function reisLink(locale: Locale): string {
   }[locale];
 }
 
-export function cavalcadaSentence(locale: Locale, facts: Announcements): string {
+/** `link` false: the page already links the Reis guide elsewhere (Christmas in Barcelona does it from its season calendar). */
+export function cavalcadaSentence(locale: Locale, facts: Announcements, link = true): string {
+  const more = link ? reisLink(locale) : "";
   const a = facts.cavalcada;
   if (a) {
     return {
       ca: `La **Cavalcada de Reis** del 2027 és ${when(a, "ca")}, segons l'[Ajuntament](${a.url}).`,
       es: `La **Cabalgata de Reyes** de 2027 es ${when(a, "es")}, según el [Ayuntamiento](${a.url}).`,
       en: `The 2027 **Three Kings parade** (Cavalcada de Reis) is on ${when(a, "en")}, according to the [City Council](${a.url}).`,
-    }[locale] + reisLink(locale);
+    }[locale] + more;
   }
   const p = PAST.programme2025.published;
   const r = PAST.cavalcada2026.route;
@@ -512,7 +516,7 @@ export function cavalcadaSentence(locale: Locale, facts: Announcements): string 
     ca: `La **Cavalcada de Reis** és el vespre del 5 de gener, vigília del festiu del 6; l'Ajuntament en publica l'horari i el recorregut les setmanes abans (per a la del 2026, el programa el ${dateYear(p, "ca")} i el recorregut complet el ${dateYear(r, "ca")}).`,
     es: `La **Cabalgata de Reyes** es la tarde-noche del 5 de enero, víspera del festivo del 6; el Ayuntamiento publica su horario y su recorrido las semanas antes (para la de 2026, el programa el ${dateYear(p, "es")} y el recorrido completo el ${dateYear(r, "es")}).`,
     en: `The **Three Kings parade** (Cavalcada de Reis) is on the evening of 5 January, the eve of the 6 January holiday; the City Council publishes its times and route in the weeks before (for the 2026 parade, the programme on ${dateYear(p, "en")} and the full route on ${dateYear(r, "en")}).`,
-  }[locale] + reisLink(locale);
+  }[locale] + more;
 }
 
 function switchOnAnswer(locale: Locale, facts: Announcements): string {
@@ -569,6 +573,16 @@ function sightTable(locale: Locale) {
 
 const RELATED = ["newYear", "christmas", "shops", "hours", "workCalendar", "climate", "barcelonaHub"] as const;
 
+/**
+ * 27 Nov 2026 (batch 8M, Christmas hub): the city's season calendar
+ * (christmas-calendar.ts) under the switch-on section, with the two big fairs
+ * as the markets guide gives them. Its La Marató row carries the page's one
+ * link to La Marató (the "More Christmas events" paragraph names it in bold),
+ * and its Sant Esteve row links the holiday calendar, not the traditions
+ * guide, which this page links once.
+ */
+const BCN_CALENDAR_FAIRS: CalendarFairs = { ...CALENDAR_FAIRS, sagrada: { start: SAGRADA_2026.start, end: SAGRADA_2026.end } };
+
 export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements = ANNOUNCED_2026) {
   const holidaysFact = {
     ca: `Divendres ${dateYear(DAYS.christmas, "ca")} i dissabte 26 (Sant Esteve); divendres 1 i dimecres 6 de gener de 2027`,
@@ -600,6 +614,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         `El 2025 els llums van estar encesos fins al ${dateYear(PAST.lights2025.until, "ca")}, ${lightingHours2025("ca")}.`,
         lightsPageSentence("ca"),
       ),
+      ...christmasCalendar("ca", "barcelona", BCN_CALENDAR_FAIRS, facts.lightsSwitchOn),
       ...h2(
         "Llums de Nadal de Barcelona 2026: quins carrers",
         `L'Ajuntament va presentar el pla del 2026 el 9 de juliol: **${LIGHTS_PLAN_2026.km} quilòmetres de carrers i places amb llums**${planKmNote("ca")} a tots els districtes, amb els eixos i les associacions de comerciants, i un pressupost d'uns 4,6 milions d'euros, més del 65% pagat amb ${b2link("touristTax", "ca", "l'impost turístic")}.`,
@@ -628,7 +643,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Més activitats de Nadal a la ciutat",
         `El programa del 2025, publicat el ${dateYear(PAST.programme2025.published, "ca")}, incloïa el Barcelona Festival de Nadal (${PAST.festival2025.shows} funcions d'arts de carrer a la plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "ca")} de 2025) i el Concert de Nadal de l'Orfeó Català al pla de la Seu (${dateYear(PAST.concert2025, "ca")}). El programa del 2026 encara no s'ha publicat.`,
-        `A mitjan desembre també hi ha ${b2link("marato", "ca", "La Marató de 3Cat")}, el programa solidari de TV3, que el 2026 es dedica a les malalties neurodegeneratives i neuromusculars; és el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}.`,
+        `A mitjan desembre també hi ha **La Marató de 3Cat**, el programa solidari de TV3, que el 2026 es dedica a les malalties neurodegeneratives i neuromusculars; és el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}.`,
         `Tot el que passa a la ciutat aquest mes, dia a dia (concerts, festius, botigues i metro), és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
       ),
       ...h2(
@@ -657,7 +672,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "**El pessebre i el caganer.** Els pessebres es fan amb suro, molsa i fusta, i a Catalunya hi ha un caganer amagat: una figura que porta bona sort.",
         "**Els Pastorets.** Una obra de teatre que barreja el Naixement amb la baralla entre àngels i dimonis; per Nadal se'n fan per tot arreu.",
         "**El cava.** L'escumós dels brindis de Nadal es fa pel mètode tradicional, amb una segona fermentació a l'ampolla i com a mínim nou mesos de criança amb les lies; segons la DO Cava, el seu origen és al Penedès, sobretot a Sant Sadurní d'Anoia i els voltants.",
-        `**La loteria de Nadal.** El sorteig de l'Estat, el 22 de desembre, obre les festes: els premis, com es cobren i on toquen a Catalunya són a ${b2link("loteriaNadal", "ca", "la guia de la loteria de Nadal")}. La de la Generalitat, ${b2link("grossa", "ca", "La Grossa de Cap d'Any")}, se sorteja el 31 de desembre.`,
+        `**La loteria de Nadal.** El sorteig de l'Estat, el 22 de desembre, obre les festes (els premis i com es cobren, al calendari de dalt). La de la Generalitat, ${b2link("grossa", "ca", "La Grossa de Cap d'Any")}, se sorteja el 31 de desembre.`,
         "**Els Innocents.** El 28 de desembre és el dia de les bromes: vigila que no et pengin una llufa a l'esquena.",
         `Com es fa cagar el tió pas a pas, on s'amaga el caganer i què es menja per Nadal i per Sant Esteve ho expliquem a ${b2link("christmasTraditions", "ca", "la guia de tradicions de Nadal a Catalunya")}.`,
       ),
@@ -668,7 +683,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Cap d'Any i Reis",
         `La nit del 31 de desembre, la gran cita és l'espectacle gratuït de Cap d'Any de la ciutat: com va anar el 2024 i el 2025 i què s'ha anunciat per a enguany ho expliquem a ${b2link("newYear", "ca", "la guia de Cap d'Any a Barcelona")}.`,
-        cavalcadaSentence("ca", facts),
+        cavalcadaSentence("ca", facts, false),
       ),
       faq([
         { question: "Quan s'encenen els llums de Nadal de Barcelona el 2026?", answer: switchOnAnswer("ca", facts) },
@@ -691,6 +706,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
           question: "Funciona el metro el dia de Nadal?",
           answer: "Sí. Segons l'horari general de TMB, el divendres 25 de desembre de 2026 obre a les 5:00 i tanca a les 2:00, perquè l'endemà és festiu; el 24 de desembre tanca a les 23:00. TMB confirma l'horari de Nadal al desembre.",
         },
+        ...calendarFaq("ca", "barcelona"),
       ]),
       ...paras(verifiedLine("ca", FESTIVE_VERIFIED)),
       ...b2Related([...RELATED], "ca"),
@@ -718,6 +734,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         `En 2025 las luces estuvieron encendidas hasta el ${dateYear(PAST.lights2025.until, "es")}, ${lightingHours2025("es")}.`,
         lightsPageSentence("es"),
       ),
+      ...christmasCalendar("es", "barcelona", BCN_CALENDAR_FAIRS, facts.lightsSwitchOn),
       ...h2(
         "Luces de Navidad de Barcelona 2026: qué calles",
         `El Ayuntamiento presentó el plan de 2026 el 9 de julio: **${LIGHTS_PLAN_2026.km} kilómetros de calles y plazas con luces**${planKmNote("es")} en todos los distritos, junto con los ejes y asociaciones de comerciantes, y un presupuesto de unos 4,6 millones de euros, más del 65% pagado con ${b2link("touristTax", "es", "la tasa turística")}.`,
@@ -746,7 +763,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Más actos de Navidad en la ciudad",
         `El programa de 2025, publicado el ${dateYear(PAST.programme2025.published, "es")}, incluía el Barcelona Festival de Nadal (${PAST.festival2025.shows} funciones de artes de calle en la plaza de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "es")} de 2025) y el Concierto de Navidad del Orfeó Català en el pla de la Seu (${dateYear(PAST.concert2025, "es")}). El programa de 2026 aún no se ha publicado.`,
-        `A mediados de diciembre también está ${b2link("marato", "es", "La Marató de 3Cat")}, el programa solidario de TV3, que en 2026 se dedica a las enfermedades neurodegenerativas y neuromusculares; es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}.`,
+        `A mediados de diciembre también está **La Marató de 3Cat**, el programa solidario de TV3, que en 2026 se dedica a las enfermedades neurodegenerativas y neuromusculares; es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}.`,
         `Todo lo que pasa en la ciudad este mes, día a día (conciertos, festivos, tiendas y metro), está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
       ),
       ...h2(
@@ -775,7 +792,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "**El belén y el caganer.** Los belenes se hacen con corcho, musgo y madera, y en Cataluña llevan un caganer escondido: una figura que da buena suerte.",
         "**Els Pastorets.** Una obra de teatro que mezcla el Nacimiento con la lucha entre ángeles y demonios; en Navidad se representa por todas partes.",
         "**El cava.** El espumoso de los brindis navideños se elabora por el método tradicional, con una segunda fermentación en la botella y al menos nueve meses de crianza con sus lías; según la DO Cava, su origen está en el Penedès, sobre todo en Sant Sadurní d'Anoia y alrededores.",
-        `**La Lotería de Navidad.** El sorteo del Estado, el 22 de diciembre, abre las fiestas: los premios, cómo se cobran y dónde tocan en Cataluña están en ${b2link("loteriaNadal", "es", "la guía de la Lotería de Navidad")}. La de la Generalitat, ${b2link("grossa", "es", "La Grossa de Cap d'Any")}, se sortea el 31 de diciembre.`,
+        `**La Lotería de Navidad.** El sorteo del Estado, el 22 de diciembre, abre las fiestas (los premios y cómo se cobran, en el calendario de arriba). La de la Generalitat, ${b2link("grossa", "es", "La Grossa de Cap d'Any")}, se sortea el 31 de diciembre.`,
         "**Los Inocentes.** El 28 de diciembre es el día de las bromas: en Cataluña, cuidado con que no te cuelguen una llufa (un monigote de papel) en la espalda.",
         `Cómo se hace cagar el tió paso a paso, dónde se esconde el caganer y qué se come en Navidad y San Esteban lo contamos en ${b2link("christmasTraditions", "es", "la guía de tradiciones de Navidad en Cataluña")}.`,
       ),
@@ -786,7 +803,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Nochevieja y Reyes",
         `La noche del 31 de diciembre, la gran cita es el espectáculo gratuito de fin de año de la ciudad: cómo fue en 2024 y 2025 y qué se ha anunciado para este año lo contamos en ${b2link("newYear", "es", "la guía de Nochevieja en Barcelona")}.`,
-        cavalcadaSentence("es", facts),
+        cavalcadaSentence("es", facts, false),
       ),
       faq([
         { question: "¿Cuándo se encienden las luces de Navidad de Barcelona en 2026?", answer: switchOnAnswer("es", facts) },
@@ -809,6 +826,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
           question: "¿Funciona el metro el día de Navidad?",
           answer: "Sí. Según el horario general de TMB, el viernes 25 de diciembre de 2026 abre a las 5:00 y cierra a las 2:00, porque el día siguiente es festivo; el 24 de diciembre cierra a las 23:00. TMB confirma el horario de Navidad en diciembre.",
         },
+        ...calendarFaq("es", "barcelona"),
       ]),
       ...paras(verifiedLine("es", FESTIVE_VERIFIED)),
       ...b2Related([...RELATED], "es"),
@@ -835,6 +853,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       `In 2025 the lights stayed on until ${dateYear(PAST.lights2025.until, "en")}, ${lightingHours2025("en")}.`,
       lightsPageSentence("en"),
     ),
+    ...christmasCalendar("en", "barcelona", BCN_CALENDAR_FAIRS, facts.lightsSwitchOn),
     ...h2(
       "Barcelona Christmas lights 2026: which streets",
       `The City Council presented its 2026 plan on 9 July: **${LIGHTS_PLAN_2026.km} km of streets and squares with lights**${planKmNote("en")} in every district, together with the local shopkeepers' associations, on a budget of about €4.6 million, more than 65% of it paid from ${b2link("touristTax", "en", "the tourist tax")}.`,
@@ -863,7 +882,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "More Christmas events in the city",
       `The 2025 programme, published on ${dateYear(PAST.programme2025.published, "en")}, included the Barcelona Festival de Nadal (${PAST.festival2025.shows} street-arts performances of theatre, dance, circus and music on Plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "en")} 2025) and the city's Christmas concert by the Orfeó Català on the Pla de la Seu (${dateYear(PAST.concert2025, "en")}). The 2026 programme has not been published yet.`,
-      `Mid-December also brings ${b2link("marato", "en", "La Marató de 3Cat")}, TV3's charity telethon, which in 2026 is for neurodegenerative and neuromuscular diseases; it is on the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}.`,
+      `Mid-December also brings **La Marató de 3Cat**, TV3's charity telethon, which in 2026 is for neurodegenerative and neuromuscular diseases; it is on the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}.`,
       `Everything else on in the city that month, day by day (concerts, holidays, shops and the metro), is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ),
     ...h2(
@@ -891,7 +910,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       "**The pessebre and the caganer.** Nativity scenes are built with cork, moss and wood, and in Catalonia they hide a caganer, a squatting figure that brings good luck.",
       "**Els Pastorets.** A Christmas play that mixes the Nativity with a fight between angels and devils; theatres of every size put it on.",
       "**Cava.** The sparkling wine of Christmas toasts is made by the traditional method, with a second fermentation in the bottle and at least nine months on its lees; according to the DO Cava, its origins are in the Penedès, especially around Sant Sadurní d'Anoia.",
-      `**The Christmas Lottery.** The Spanish state's draw on 22 December opens the season: prizes, how to claim and where El Gordo falls in Catalonia are in ${b2link("loteriaNadal", "en", "our Spanish Christmas Lottery guide")}. The Catalan government's own lottery, ${b2link("grossa", "en", "La Grossa de Cap d'Any")}, is drawn on 31 December.`,
+      `**The Christmas Lottery.** The Spanish state's draw on 22 December opens the season (prizes and how to claim: see the calendar above). The Catalan government's own lottery, ${b2link("grossa", "en", "La Grossa de Cap d'Any")}, is drawn on 31 December.`,
       "**Innocents' Day.** 28 December is the day for practical jokes: in Catalonia, check your back for a llufa, a paper cut-out pinned on without you noticing.",
       `How to make the tió poo step by step, where the caganer hides and what Catalans eat on Christmas Day and Sant Esteve are in ${b2link("christmasTraditions", "en", "our guide to Catalan Christmas traditions")}.`,
     ),
@@ -902,7 +921,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "New Year's Eve and the Three Kings",
       `On 31 December the big event is the city's free New Year's Eve show: how it ran in 2024 and 2025 and what has been announced for this year are in ${b2link("newYear", "en", "New Year's Eve in Barcelona")}.`,
-      cavalcadaSentence("en", facts),
+      cavalcadaSentence("en", facts, false),
     ),
     faq([
       { question: "When are the Christmas lights switched on in Barcelona in 2026?", answer: switchOnAnswer("en", facts) },
@@ -925,6 +944,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         question: "Does the metro run on Christmas Day in Barcelona?",
         answer: "Yes. By TMB's standing timetable it opens at 5:00 on Friday 25 December 2026 and closes at 2:00, because the next day is a holiday; on 24 December it closes at 23:00. TMB confirms its Christmas hours in December.",
       },
+      ...calendarFaq("en", "barcelona"),
     ]),
     ...paras(verifiedLine("en", FESTIVE_VERIFIED)),
     ...b2Related([...RELATED], "en"),

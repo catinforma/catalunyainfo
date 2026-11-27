@@ -2,6 +2,7 @@ import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
+import { calendarLine } from "./christmas-season-links";
 import { dayDate } from "./festive";
 import { granRecapteMention } from "./gran-recapte";
 import { SHOPS } from "./shops";
@@ -438,6 +439,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "Més plans per al desembre",
         `El pont, els mercats i el Nadal: ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}, ${b2link("christmas", "ca", "els mercats de Nadal de Catalunya")}, ${b2link("pessebres", "ca", "els pessebres vivents")} i ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
         `El cap de setmana de La Marató també és de fires de Nadal en molts municipis: les que tenen data oficial, poble a poble, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
+        calendarLine("ca"),
       ),
       faq([
         { question: "Quan és La Marató de TV3 2026?", answer: `El ${day}, a TV3 i Catalunya Ràdio.` },
@@ -555,6 +557,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "Más planes para diciembre",
         `El puente, los mercados y la Navidad: ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}, ${b2link("christmas", "es", "los mercados de Navidad de Cataluña")}, ${b2link("pessebres", "es", "los belenes vivientes")} y ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
         `El fin de semana de La Marató también es de ferias de Navidad en muchos municipios: las que tienen fecha oficial, pueblo a pueblo, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
+        calendarLine("es"),
       ),
       faq([
         { question: "¿Cuándo es La Marató de TV3 2026?", answer: `El ${day}, en TV3 y Catalunya Ràdio.` },
@@ -671,6 +674,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       "More for December",
       `The long weekend, the markets and Christmas: ${b2link("decemberBridge", "en", "the December 2026 long weekend")}, ${b2link("christmas", "en", "Christmas markets in Catalonia")}, ${b2link("pessebres", "en", "living nativity scenes")} and ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
       `La Marató's weekend is also a Christmas market weekend in many towns: those with official dates, town by town, are in [Christmas markets by town](${fairsHubPath("en")}).`,
+      calendarLine("en"),
     ),
     faq([
       { question: "When is La Marató de TV3 2026?", answer: `On ${day}, on TV3 and Catalunya Ràdio.` },

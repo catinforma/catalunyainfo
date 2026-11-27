@@ -5,6 +5,7 @@ import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SCHOOL_SOURCE, SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
+import { calendarLine } from "./christmas-season-links";
 import { DAYS, PAST, dateYear, dayDate } from "./festive";
 import { REIS_TOWNS, REIS_TOWNS_AS_OF, REIS_TOWNS_LEFT_OUT, type ReisTown } from "./reis-towns";
 import {
@@ -1516,6 +1517,7 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
         es: `En Cataluña los regalos de Reyes los traen Melchor, Gaspar y Baltasar. Los niños les escriben antes una carta para pedir los juegos y juguetes que quieren, y la dan a los pajes y carteros reales, que la recogen los días antes e incluso durante la cabalgata. La noche del 5 al 6 los Reyes van de casa en casa, y el 6 por la mañana se abren los regalos; quien no se ha portado bien puede encontrar carbón junto a los zapatos. El día de Reyes es costumbre compartir en familia el tortell de Reis, el roscón catalán, que esconde un haba seca y una figurita de rey: quien encuentra el haba paga el tortell, y quien encuentra la figurita es coronado rey. Las demás tradiciones, del tió al caganer, están en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}, y antes, en diciembre, hay ${b2link("christmas", "es", "mercados de Navidad")}, como la Fira de Santa Llúcia, y ${b2link("pessebres", "es", "belenes vivientes")}.`,
         en: `In Catalonia it is the Three Kings, Melcior, Gaspar and Baltasar, who bring children their presents, on the night of 5 January. Children write them a letter asking for the games and toys they want and hand it to the royal pages and postmen, who collect letters in the days before and even during the parade. That night the Kings go from house to house, and the presents are opened on the morning of the 6th; a child who has misbehaved may find coal beside their shoes. On Three Kings' Day families share a tortell de Reis, a ring-shaped pastry hiding a dried broad bean and a little king figure: whoever finds the bean pays for the tortell, and whoever finds the king is crowned. The other traditions, from the tió log to the caganer, are in ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}; before that, in December, come ${b2link("christmas", "en", "the Christmas markets")}, Santa Llúcia's among them, and ${b2link("pessebres", "en", "the living nativity scenes")}.`,
       }),
+      calendarLine(locale),
     ),
     faq(faqItems(locale, announced)),
     ...paras(verifiedLine(locale, REIS_AS_OF)),

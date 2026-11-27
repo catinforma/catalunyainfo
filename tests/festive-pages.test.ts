@@ -28,6 +28,7 @@ import {
   type Announcements,
 } from "../src/lib/content/batch02/festive.ts";
 import { NEW_YEAR, buildNewYearBody, newYearLead } from "../src/lib/content/batch02/new-year.ts";
+import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS, withReadNext, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
@@ -108,7 +109,8 @@ test("sources are https, untracked, and the reader sees the check date", () => {
 
 test("internal links stay in their language, end in a slash and point at a published path", () => {
   const published = new Set([
-    ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
+    // 27 Nov 2026: SIBLING_PATHS adds the school calendar, which the season calendar links.
+    ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
     // Programmatic family pages, as their own module lists what it publishes.
     ...christmasFairsPaths().map((p) => p.path),
   ]);
@@ -285,7 +287,11 @@ test("every 2024 or 2025 date is printed with its own year, never with 2026", ()
       for (const iso of past) {
         const day = shortDate(iso, locale);
         assert.ok(!new RegExp(`\\b${day} (de )?2026`).test(body), `${locale}: ${day} printed as 2026`);
+        // 27 Nov 2026: the season calendar prints this season's days with their 2026 weekday
+        // ("Diumenge 13 de desembre", La Marató); a day printed with that weekday is not last year's.
+        const this2026 = iso.startsWith("2025") ? dayDate(`2026${iso.slice(4)}`, locale, false).toLowerCase() : null;
         for (const sentence of sentences(body).filter((s) => new RegExp(`(^|\\D)${day}(?!\\d)`).test(s))) {
+          if (this2026 && sentence.toLowerCase().includes(this2026)) continue;
           checked += 1;
           assert.match(sentence, /2024|2025/, `${locale}: "${sentence}" gives ${day} without its year`);
         }

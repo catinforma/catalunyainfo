@@ -3,6 +3,7 @@ import { FAIRS, familyLastChecked, townBySlug, towns } from "@/lib/programmatic/
 import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
+import { calendarFaq, christmasCalendar, type CalendarFairs } from "./christmas-calendar";
 import { LIGHTS_TOWNS } from "./christmas-lights-towns";
 
 import type { SeasonSpan } from "./christmas-traditions";
@@ -185,6 +186,16 @@ export const SANTA_LLUCIA_2026: SeasonSpan = {
   via: "agenda",
   hours: { open: "10:00", close: "21:00" },
   read: "2026-11-03",
+};
+
+/**
+ * 27 Nov 2026 (batch 8M, Christmas hub): what the season calendar
+ * (christmas-calendar.ts) needs from this guide, so both read the same fair.
+ */
+export const CALENDAR_FAIRS: CalendarFairs = {
+  santaLlucia: SANTA_LLUCIA_2026,
+  count: FAMILY.fairs,
+  towns: FAMILY.towns,
 };
 
 /** "de 10 a 21 h" / "de 10 a 21 h" / "10:00 to 21:00". */
@@ -424,6 +435,7 @@ function body(locale: Locale) {
         "També al desembre, tot i que no és un mercat de Nadal: el **Mercat Medieval de Vic** ocupa el centre històric de la ciutat del 5 al 8 de desembre de 2026, segons l'agenda de l'Ajuntament de Vic.",
         busyWeekends("ca"),
       ),
+      ...christmasCalendar("ca", "catalonia", CALENDAR_FAIRS),
       ...h2(
         "Fira de Santa Llúcia 2026: quan i on",
         "Segons l'Ajuntament de Barcelona, «des del 1786 es fa, al davant de la Catedral, la Fira de Santa Llúcia, una de les més populars de la ciutat». Les parades omplen el pla de la Seu i l'avinguda de la Catedral, s'hi instal·len a final de novembre o principi de desembre, **sempre abans del dia 13, Santa Llúcia**, i s'hi queden durant els dies de Nadal.",
@@ -482,6 +494,7 @@ function body(locale: Locale) {
           question: "Quins dies obren les botigues al desembre del 2026?",
           answer: "A Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8 de desembre. El 25 i el 26 de desembre tanquen.",
         },
+        ...calendarFaq("ca", "catalonia"),
       ]),
       ...paras(verifiedLine("ca", VERIFIED)),
       ...b2Related(["christmasBarcelona", "christmasTraditions", "pessebres", "newYear", "shops"], "ca"),
@@ -508,6 +521,7 @@ function body(locale: Locale) {
         "También en diciembre, aunque no es un mercado de Navidad: el **Mercat Medieval de Vic** ocupa el centro histórico de la ciudad del 5 al 8 de diciembre de 2026, según la agenda del Ayuntamiento de Vic.",
         busyWeekends("es"),
       ),
+      ...christmasCalendar("es", "catalonia", CALENDAR_FAIRS),
       ...h2(
         "Fira de Santa Llúcia 2026: cuándo y dónde",
         "Según el Ayuntamiento de Barcelona, desde 1786 se celebra frente a la Catedral y es una de las ferias más populares de la ciudad. Los puestos llenan el pla de la Seu y la avenida de la Catedral, se instalan a finales de noviembre o principios de diciembre, **siempre antes del día 13, Santa Llúcia**, y se quedan durante los días de Navidad.",
@@ -566,6 +580,7 @@ function body(locale: Locale) {
           question: "¿Qué días abren las tiendas en diciembre de 2026?",
           answer: "En Barcelona y en la mayoría de municipios, los domingos 6, 13, 20 y 27 de diciembre y el martes 8 de diciembre. El 25 y el 26 de diciembre cierran.",
         },
+        ...calendarFaq("es", "catalonia"),
       ]),
       ...paras(verifiedLine("es", VERIFIED)),
       ...b2Related(["christmasBarcelona", "christmasTraditions", "pessebres", "newYear", "shops"], "es"),
@@ -591,6 +606,7 @@ function body(locale: Locale) {
       "Also in December, though not a Christmas market: **Vic's Medieval Market** fills the historic centre from 5 to 8 December 2026, according to Vic City Council's events listing.",
       busyWeekends("en"),
     ),
+    ...christmasCalendar("en", "catalonia", CALENDAR_FAIRS),
     ...h2(
       "Fira de Santa Llúcia 2026: when and where",
       "According to Barcelona City Council, the fair has been held in front of the Cathedral since 1786 and is one of the most popular in the city. Its stalls fill the Pla de la Seu and Avinguda de la Catedral; they set up at the end of November or the start of December, **always before 13 December, Santa Llúcia's day**, and stay through the Christmas days.",
@@ -649,6 +665,7 @@ function body(locale: Locale) {
         question: "Are shops open on Sundays in December 2026?",
         answer: "In Barcelona and most towns, shops may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December. They are closed on 25 and 26 December.",
       },
+      ...calendarFaq("en", "catalonia"),
     ]),
     ...paras(verifiedLine("en", VERIFIED)),
     ...b2Related(["christmasBarcelona", "christmasTraditions", "pessebres", "newYear", "shops"], "en"),

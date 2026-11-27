@@ -64,6 +64,39 @@ const HEADING: Record<Locale, string> = {
   en: "For the holidays: lights, markets, shops and holidays",
 };
 
+/**
+ * 27 Nov 2026 (batch 8M): the two Christmas hubs now open with a dated
+ * calendar, 1 December to the end of the school holidays (christmas-calendar.ts).
+ * The seasonal pages send readers to it with the words people search for the
+ * whole season. No date here either: the gloss names the stretch, not its days.
+ */
+export type CalendarHubKey = Extract<B2Key, "christmas" | "christmasBarcelona">;
+
+const CALENDAR_HUBS: Record<CalendarHubKey, Record<Locale, Entry>> = {
+  christmas: {
+    ca: { label: "calendari de Nadal 2026 a Catalunya", gloss: "festius, botigues obertes, vacances escolars i loteries, del pont de desembre a Reis" },
+    es: { label: "calendario de Navidad 2026 en Cataluña", gloss: "festivos, tiendas abiertas, vacaciones escolares y loterías, del puente de diciembre a Reyes" },
+    en: { label: "Christmas 2026 in Catalonia, day by day", gloss: "public holidays, shop openings, school holidays and lotteries, from the December long weekend to the Three Kings" },
+  },
+  christmasBarcelona: {
+    ca: { label: "Nadal 2026 a Barcelona, dia a dia", gloss: "llums, fires, botigues, festius i Reis a la ciutat" },
+    es: { label: "Navidad 2026 en Barcelona, día a día", gloss: "luces, ferias, tiendas, festivos y Reyes en la ciudad" },
+    en: { label: "Christmas 2026 in Barcelona, day by day", gloss: "lights, markets, shops, holidays and the Three Kings in the city" },
+  },
+};
+
+const CALENDAR_LEAD: Record<Locale, string> = {
+  ca: "Tot el Nadal en una taula",
+  es: "Toda la Navidad en una tabla",
+  en: "The whole season in one table",
+};
+
+/** One sentence for a seasonal page's body: "Tot el Nadal en una taula, [calendari de Nadal 2026 a Catalunya](...): festius, ...". */
+export function calendarLine(locale: Locale, key: CalendarHubKey = "christmas"): string {
+  const entry = CALENDAR_HUBS[key][locale];
+  return `${CALENDAR_LEAD[locale]}, ${b2link(key, locale, entry.label)}: ${entry.gloss}.`;
+}
+
 /** One list item: the searched words as the anchor, then what the page has. */
 export function seasonItem(key: SeasonKey, locale: Locale): string {
   const entry = ENTRIES[key][locale];
