@@ -36,6 +36,10 @@ export const ANSWER_FIRST_ENTRY_KEYS: readonly string[] = [
   "guide-strikes-catalonia-today", // strikes hub (Catalonia)
   "guide-strikes-spain", // strikes hub (Spain)
   "guide-strike-renfe-november-2026", // Renfe / rail strike guide
+  // 27 Nov 2026 (head, batch 7D v4; docs/SEO_EXPERIMENTS.md): the shops guide
+  // (ca/es/en). Measured live at 412x915 its answer began at 1,305 px, under
+  // the photo and the top ad; its key-facts box (v1) goes above the photo.
+  "guide-shops-open-holidays-catalonia", // tiendas abiertas en domingos y festivos (shops.ts)
 ];
 
 /**

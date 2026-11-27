@@ -15391,4 +15391,27 @@ Query family on the ES guide (28 d, impressions / clicks / position): cuando abr
 
 **Review 2026-12-11** (`snapshot.py page /es/festivos/ 14`, `page /ca/festius/ 14` + the query x page pull by pattern) and **2026-12-28** (28 d, after the DOGC order). Revert rule: the line is one component (`<Town2027FirstLine>` in both pages); removing it restores the old callout position only if `t.nextLead` is put back.
 
+
+## 2026-11-27 (night, v4) — Shops guide on the answer-first layout (head request): key facts above the photo on phones; reader pass in ca/es/en (ci-numero1; template switch for one entry key + body wording; no title, description, H1 or lead touched; no ad slot touched; group `shops`) (review 2026-12-04, 2026-12-11 with the v1 entry)
+
+**What changed.**
+1. `lib/layout/answer-first.ts`: `guide-shops-open-holidays-catalonia` added to `ANSWER_FIRST_ENTRY_KEYS`. No layout code changed: the template (`EntryArticle.tsx`) draws the summary under the byline, then the photo, then the top ad, as on the strike pages. For this body the split gives: summary = the key-facts box ("…, de un vistazo"), the first 3 facts shown (December Sundays, closing days, ten a year) and the rest under "Más datos"; the lead opens the body, the first H2 follows; the "Última verificación" callout (with "busca tu municipio") moves to the end of the body; "Siguiente paso útil" sits under the summary. Every block kept once (tested).
+2. Key facts reordered so the ten-a-year rule is among the facts shown (the summary shows 3-5 within ~360 characters).
+3. **Reader pass** (as a demanding reader, ca/es/en): key facts now one colon per line ("Pueden abrir el 6, 13, 20 y 27, y el martes 8 (festivo), en Barcelona y en la mayoría de municipios"); "Cierre obligatorio" says "(salvo las tiendas exentas)" (bakeries etc. may open: the box no longer implies everything shuts); "dos que elige cada ayuntamiento"; the Sundays section's link read "en Calendario de 2027" → "en la sección del calendario de 2027". Lead untouched (window to 3 Dec).
+
+**Measurements (one headless Chromium 1140 per run, closed after each; `scripts/ads-cls-lab.mjs`, CONSENT=accept, 20 s + full scroll; live pages, 27 Nov ~01:15).** The live shops page is still the pre-v1 build, so it is the baseline:
+
+| Page (live) | Layout | 412×915 CLS (all / worst session) | 1280×800 CLS | Main shift |
+| --- | --- | --- | --- | --- |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ | classic (baseline) | 0.525 / 0.499 | 0 | at ~6.4 s, `nav.ci-alerts` and `main` pushed down 487 px from the top of the page after the consent click (site-wide, not the body) |
+| /es/guias/huelgas-espana/ | answer-first | 0.383 / 0.382 | 0.0025 | the same top-of-page push (373 px) at ~6.4 s |
+
+The mobile CLS is the same site-wide insertion above the header on both layouts (see the 25 Nov "Mobile layout shift with ads" entry), not something the answer-first summary adds: the summary is server-rendered and no slot moved. First screen of the live answer-first page at 412×915 (`fold.mjs`): H1 164-313, answer 535-741, photo 1077, top ad 1283; for the shops guide the summary takes the same place (~480-760 px), the photo and the top ad move below the fold. **After the deploy, the head should re-run** `CONSENT=accept node scripts/ads-cls-lab.mjs https://www.catalunyainfo.com/es/guias/tiendas-abiertas-festivos-cataluna/ 412 915` (and 1280 800): expect ≤ the baseline above; if the mobile figure rises above 0.525, take the key out of the list (one line).
+
+**Risk noted.** The holiday guides left this layout on 19 Nov (mobile engagement −4.4 points, engagement time −21 %, position +3.5 worse). This guide is the same family. **Review rule (11 Dec):** compare mobile engagement rate and engagement time of the ES guide, 27 Nov-10 Dec vs 13-26 Nov (GA4), and the mix-free position of the v1 query rows; if engagement falls more than 3 points or position worsens by more than 1.5, remove the key from `ANSWER_FIRST_ENTRY_KEYS` (the body stays as it is).
+
+**Tests.** New `tests/shops-answer-first-27nov.test.ts` (3): on the switch; summary = key facts with the rule shown, lead first in the body before and after 30 Nov, verified box at the end, no block lost; template order summary → photo → top ad. Run with answer-first, shops-*, batch02, query-answers-26nov, inline-anchor-links: all pass. `npx tsc --noEmit -p .` clean.
+
+**Go-live.** Deploy (the switch is read at render), then publish `shops` (the wording). IndexNow: the three shops URLs.
+
 **Outcome:** _pending_
