@@ -325,6 +325,9 @@ test("local days: once local-2027.json holds the DOGC order, it replaces the cou
 /* -------------------------------------------------------------------------- */
 
 test("shops and schools: the retail law's closing days, the 2027 shop calendar and the school order", () => {
+  // 27 Nov 2026 (batch 10G): the weekday (and on weekends the Monday) sections come first after the towns, so shops is found by its title.
+  const shopsOf = (iso: string, locale: "ca" | "es" | "en") => dateContent(iso, locale).sections.find((s) => /^(Obren les botigues|¿Abren las tiendas|Are shops open)/.test(s.title))!;
+  const schoolOf = (iso: string, locale: "ca" | "es" | "en") => dateContent(iso, locale).sections.find((s) => /^(Hi ha escola|¿Hay colegio|Is there school)/.test(s.title))!;
   // Llei 18/2017, art. 36.2.d, by date: 26 December 2027 is a closing day though not a holiday.
   assert.deepEqual([...CLOSING_2027].sort(), ["2027-01-01", "2027-01-06", "2027-03-28", "2027-03-29", "2027-05-01", "2027-06-24", "2027-09-11", "2027-12-25", "2027-12-26"]);
   for (const iso of ["2027-03-29", "2027-05-01", "2027-06-24", "2027-09-11", "2027-12-25", "2027-12-26"]) {
@@ -332,24 +335,24 @@ test("shops and schools: the retail law's closing days, the 2027 shop calendar a
     const shops = dateContent(iso, "ca").sections.find((s) => s.title.startsWith("Obren les botigues"));
     assert.match(shops!.paragraphs[0]!, /^Les botigues amb horari general han de tancar/, iso);
   }
-  assert.match(dateContent("2027-12-26", "es").sections[0]!.paragraphs[0]!, /el 26 de diciembre está en la lista aunque en 2027 no sea festivo/);
+  assert.match(shopsOf("2027-12-26", "es").paragraphs[0]!, /el 26 de diciembre está en la lista aunque en 2027 no sea festivo/);
   // The eight general days of Ordre EMT/89/2026 that have a page.
   for (const iso of OPENING_2027.general.filter((d) => isTranche4(d))) {
-    assert.match(dateContent(iso, "ca").sections[0]!.paragraphs[0]!, /^Les botigues poden obrir: (l'|el )\d+ de \w+ és un dels vuit/, iso);
+    assert.match(shopsOf(iso, "ca").paragraphs[0]!, /^Les botigues poden obrir: (l'|el )\d+ de \w+ és un dels vuit/, iso);
   }
   assert.deepEqual(OPENING_2027.general.filter((d) => isTranche4(d)), ["2027-11-01", "2027-12-06", "2027-12-08"]);
   // Good Friday and 12 October: holidays, not general opening days, not closing days.
-  for (const iso of ["2027-03-26", "2027-10-12", "2027-08-15"]) assert.match(dateContent(iso, "es").sections[0]!.paragraphs[0]!, /no es ninguno de los ocho días de apertura/, iso);
-  assert.match(dateContent("2027-04-23", "en").sections[0]!.paragraphs[0]!, /^It is a working day, so shops keep their usual hours/);
+  for (const iso of ["2027-03-26", "2027-10-12", "2027-08-15"]) assert.match(shopsOf(iso, "es").paragraphs[0]!, /no es ninguno de los ocho días de apertura/, iso);
+  assert.match(shopsOf("2027-04-23", "en").paragraphs[0]!, /^It is a working day, so shops keep their usual hours/);
 
   // Schools (Ordre EDF/66/2026): Easter break 20-29 March, summer from 22 June, Christmas from 22 December 2027.
-  assert.match(dateContent("2027-03-25", "ca").sections[1]!.paragraphs[0]!, /vacances escolars de Setmana Santa, del 20 al 29 de març de 2027/);
-  assert.match(dateContent("2027-06-24", "es").sections[1]!.paragraphs[0]!, /^No hay clase: es verano\. El curso 2026-2027 acaba el 21 de junio de 2027/);
-  assert.match(dateContent("2027-12-24", "en").sections[1]!.paragraphs[0]!, /Christmas school holidays, 22 December 2027 to 9 January 2028/);
-  assert.match(dateContent("2027-04-23", "ca").sections[1]!.paragraphs[0]!, /^Hi ha classe a Catalunya, tret dels municipis on és festa local/);
-  assert.match(dateContent("2027-03-19", "ca").sections[1]!.paragraphs[0]!, /L'endemà comencen les vacances escolars de Setmana Santa\.$/);
-  assert.match(dateContent("2027-09-24", "ca").sections[1]!.paragraphs[0]!, /^No hi ha classe als municipis on és festa local, com Barcelona/);
-  assert.match(dateContent("2027-10-12", "ca").sections[1]!.paragraphs[0]!, /^És festiu i, per tant, no hi ha classe/);
+  assert.match(schoolOf("2027-03-25", "ca").paragraphs[0]!, /vacances escolars de Setmana Santa, del 20 al 29 de març de 2027/);
+  assert.match(schoolOf("2027-06-24", "es").paragraphs[0]!, /^No hay clase: es verano\. El curso 2026-2027 acaba el 21 de junio de 2027/);
+  assert.match(schoolOf("2027-12-24", "en").paragraphs[0]!, /Christmas school holidays, 22 December 2027 to 9 January 2028/);
+  assert.match(schoolOf("2027-04-23", "ca").paragraphs[0]!, /^Hi ha classe a Catalunya, tret dels municipis on és festa local/);
+  assert.match(schoolOf("2027-03-19", "ca").paragraphs[0]!, /L'endemà comencen les vacances escolars de Setmana Santa\.$/);
+  assert.match(schoolOf("2027-09-24", "ca").paragraphs[0]!, /^No hi ha classe als municipis on és festa local, com Barcelona/);
+  assert.match(schoolOf("2027-10-12", "ca").paragraphs[0]!, /^És festiu i, per tant, no hi ha classe/);
 });
 
 test("notices: one sentence, one link, to the Easter 2027 guide around Easter, the parade on 5 January, the long weekends otherwise", () => {

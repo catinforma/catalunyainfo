@@ -988,6 +988,136 @@ export function cataloniaDay2027(iso: string, locale: DateLocale, next: NextYear
   return { holiday: kind === "holiday" || kind === "weekend-holiday", answer: answerFor(iso, kind, local, locale), shops: shopsParagraphs(iso, kind, locale) };
 }
 
+/* -------------------------------------------------------------------------- */
+/* 27 Nov 2026 (batch 10G, striking distance): questions under their own H2   */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Search Console, 31 Oct-27 Nov 2026 (28 d): the 2027 date pages sit at 4-10
+ * with CTR under 1 % (`/es/festivos/dia/17-mayo-2027/` 6 / 1,089 / 5.8,
+ * `/es/festivos/dia/7-diciembre-2027/` 12 / 1,258 / 5.3, `/ca/festius/dia/17-maig-2027/`
+ * 12 / 584 / 5.6). Queries the pages answered only inside other paragraphs:
+ * "what day is 6 december 2027", "december 6 2027 day", "december 8 2027 day",
+ * "lunes 17 de mayo es festivo"; "pasqua granada 2027" (127 at 7.0 on the
+ * Catalan 17 May page) and "dilluns de pasqua granada 2027"; and, on the Spain
+ * pages' twins, "el 15 de agosto de 2027 se pasa al lunes" (batch 10E). Each
+ * gets its heading and an FAQ item with the same text. No new fact: the
+ * weekday is the calendar's, the Monday is Ordre EMT/52/2026 (`OFF`), the
+ * councils' or DOGC days (`nextYearPlacesOn`) and the BOE list (`spainScope`),
+ * and Pasqua Granada is the date the councils' acts give 17 May 2027, seven
+ * weeks after the order's Easter Monday (checked below, not typed).
+ */
+
+/** "Quin dia de la setmana és el 6 de desembre de 2027?" → "Cau en dilluns: el dilluns 6 de desembre de 2027." */
+export function weekdaySection2027(iso: string, locale: DateLocale): DateSection {
+  const wd = weekdayName(iso, locale);
+  return {
+    title: { ca: `Quin dia de la setmana és ${theDate(iso, "ca")}?`, es: `¿Qué día de la semana es el ${dayMonthYear(iso, "es")}?`, en: `What day of the week is ${dayMonthYear(iso, "en")}?` }[locale],
+    paragraphs: [
+      {
+        ca: `Cau en ${wd}: el ${wdm(iso, "ca")} de ${YEAR}.`,
+        es: `Cae en ${wd}: el ${wdm(iso, "es")} de ${YEAR}.`,
+        en: `It falls on a ${wd}: ${wdm(iso, "en")} ${YEAR}.`,
+      }[locale],
+    ],
+  };
+}
+
+/**
+ * A date on a Saturday or Sunday: is it moved to the Monday? In Catalonia
+ * (the order; the councils' local days on that Monday) and in the rest of
+ * Spain (the BOE list for that Monday). The wording says what each list
+ * marks on the Monday, never that a region "moved" its own day.
+ */
+export function mondaySection2027(iso: string, kind: DayKind2027, next: NextYearLocal, locale: DateLocale): DateSection | null {
+  if (kind !== "weekend" && kind !== "weekend-holiday") return null;
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const monday = mondayAfter(iso);
+  const m = wdm(monday, locale);
+  const title = L(`Es passa al dilluns ${theDate(iso, "ca")}?`, `¿Se pasa al lunes el ${dayMonthYear(iso, "es")}?`, `Is ${dayMonthYear(iso, "en")} moved to the Monday?`);
+
+  let catalonia: string;
+  if (OFF.has(monday)) {
+    catalonia = L(`El ${m} és festiu a tot Catalunya (Ordre EMT/52/2026).`, `El ${m} es festivo en toda Cataluña (Orden EMT/52/2026).`, `${m} is a public holiday across Catalonia (Order EMT/52/2026).`);
+  } else if (kind === "weekend-holiday") {
+    catalonia = L(
+      `No a Catalunya: l'Ordre EMT/52/2026 no el passa a cap altre dia i el ${m} és feiner.`,
+      `No en Cataluña: la Orden EMT/52/2026 no lo pasa a otro día y el ${m} es laborable.`,
+      `Not in Catalonia: Order EMT/52/2026 does not move it, and ${m} is a working day.`,
+    );
+  } else {
+    catalonia = L(
+      `No a Catalunya: ${theDate(iso, "ca")} no és festiu i l'Ordre EMT/52/2026 tampoc no fa festiu el ${m}.`,
+      `No en Cataluña: el ${dayMonthYear(iso, "es")} no es festivo y la Orden EMT/52/2026 tampoco hace festivo el ${m}.`,
+      `Not in Catalonia: ${dayMonthYear(iso, "en")} is not a public holiday, and Order EMT/52/2026 does not make ${m} one either.`,
+    );
+  }
+  const on = nextYearPlacesOn(monday, next);
+  if (!OFF.has(monday) && on.places.length > 0) {
+    const pending = on.status === "council";
+    const atLeast = pending ? L("almenys ", "al menos ", "at least ") : "";
+    const n = placesPhrase(on.places, locale);
+    const source = pending ? pendingClause(on.places, locale) : "";
+    catalonia += L(
+      ` El ${m} sí que és festa local ${atLeast}a ${n}, com ${topTowns(on.places, 3, "ca")}${source}.`,
+      ` El ${m} sí es fiesta local ${atLeast}en ${n}, como ${topTowns(on.places, 3, "es")}${source}.`,
+      ` ${capitalize(m)} is a local holiday in ${atLeast}${n}, such as ${topTowns(on.places, 3, "en")}${source}.`,
+    );
+  }
+
+  const scope = spainScope(monday);
+  const spain =
+    scope.kind === "none"
+      ? L(
+          `A la resta d'Espanya, la relació de festes del ${YEAR} publicada al BOE no marca el ${m} a cap comunitat.`,
+          `En el resto de España, la relación de fiestas de ${YEAR} publicada en el BOE no marca el ${m} en ninguna comunidad.`,
+          `In the rest of Spain, the BOE's list of ${YEAR} holidays does not mark ${m} in any region.`,
+        )
+      : scope.kind === "all"
+        ? L(
+            `A la resta d'Espanya, el ${m} és festiu a totes les comunitats, segons la relació de festes del ${YEAR} publicada al BOE.`,
+            `En el resto de España, el ${m} es festivo en todas las comunidades, según la relación de fiestas de ${YEAR} publicada en el BOE.`,
+            `In the rest of Spain, ${m} is a holiday in every region, according to the BOE's list of ${YEAR} holidays.`,
+          )
+        : scope.kind === "allBut"
+          ? L(
+              `A la resta d'Espanya, el ${m} és festiu a totes les comunitats excepte a ${regionList(scope.except, "ca")}, segons la relació de festes del ${YEAR} publicada al BOE.`,
+              `En el resto de España, el ${m} es festivo en todas las comunidades salvo en ${regionList(scope.except, "es")}, según la relación de fiestas de ${YEAR} publicada en el BOE.`,
+              `In the rest of Spain, ${m} is a holiday everywhere except ${regionList(scope.except, "en")}, according to the BOE's list of ${YEAR} holidays.`,
+            )
+          : L(
+              `A la resta d'Espanya, el ${m} és festiu a ${regionList(scope.regions, "ca")}, segons la relació de festes del ${YEAR} publicada al BOE.`,
+              `En el resto de España, el ${m} es festivo en ${regionList(scope.regions, "es")}, según la relación de fiestas de ${YEAR} publicada en el BOE.`,
+              `In the rest of Spain, ${m} is a holiday in ${regionList(scope.regions, "en")}, according to the BOE's list of ${YEAR} holidays.`,
+            );
+  return { title, paragraphs: [catalonia, spain] };
+}
+
+/**
+ * Pasqua Granada (17 May 2027): "pasqua granada 2027" asks when it is, and the
+ * page's H1 asks whether 17 May is a holiday. The date is the councils' (the
+ * day's name in `TITLE_NAME`); "seven weeks after Easter Monday" is checked
+ * against the order's Easter Monday, so a wrong constant fails at build.
+ */
+function whitMondaySection(iso: string, kind: DayKind2027, local: NextYearPlaces, locale: DateLocale): DateSection | null {
+  if (iso !== WHIT_MONDAY_2027 || kind !== "local") return null;
+  if (addDays(EASTER_MONDAY, 49) !== WHIT_MONDAY_2027) throw new Error("2027 date pages: Pasqua Granada is not seven weeks after Easter Monday");
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const pending = local.status === "council";
+  const atLeast = pending ? L("almenys ", "al menos ", "at least ") : "";
+  const n = placesPhrase(local.places, locale);
+  return {
+    title: L(`Quan és la Pasqua Granada el ${YEAR}?`, `¿Cuándo es la Pascua Granada en ${YEAR}?`, `When is Whit Monday (Pasqua Granada) in ${YEAR}?`),
+    paragraphs: [
+      L(
+        `La Pasqua Granada del ${YEAR} és el ${wdm(iso, "ca")}, set setmanes després del Dilluns de Pasqua (${wdm(EASTER_MONDAY, "ca")}). No és cap dels dotze festius del ${YEAR} a Catalunya (Ordre EMT/52/2026): és festa local ${atLeast}a ${n}, com ${topTowns(local.places, 3, "ca")}${pending ? pendingClause(local.places, "ca") : ""}.`,
+        `La Pascua Granada de ${YEAR} es el ${wdm(iso, "es")}, siete semanas después del Lunes de Pascua (${wdm(EASTER_MONDAY, "es")}). No es ninguno de los doce festivos de ${YEAR} en Cataluña (Orden EMT/52/2026): es fiesta local ${atLeast}en ${n}, como ${topTowns(local.places, 3, "es")}${pending ? pendingClause(local.places, "es") : ""}.`,
+        `Whit Monday (Pasqua Granada) ${YEAR} is ${wdm(iso, "en")}, seven weeks after Easter Monday (${wdm(EASTER_MONDAY, "en")}). It is not one of Catalonia's twelve ${YEAR} holidays (Order EMT/52/2026): it is a local holiday in ${atLeast}${n}, such as ${topTowns(local.places, 3, "en")}${pending ? pendingClause(local.places, "en") : ""}.`,
+      ),
+    ],
+  };
+}
+
 export function dateContent2027(iso: string, locale: DateLocale, next: NextYearLocal = NEXT_YEAR): DateContent {
   const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
   const local = nextYearPlacesOn(iso, next);
@@ -1016,8 +1146,15 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const school = schoolParagraph(iso, kind, local.places, locale);
   const transport = transportParagraph(iso, locale);
   const easterBlock = iso === EASTER_MONDAY ? easterSection(locale) : null;
+  // 27 Nov 2026 (batch 10G): Pasqua Granada above the towns; the weekday and the Monday right after them.
+  const whitBlock = whitMondaySection(iso, kind, local, locale);
+  const beforeLocal = [...(easterBlock ? [easterBlock] : []), ...(whitBlock ? [whitBlock] : [])];
+  const weekdayBlock = weekdaySection2027(iso, locale);
+  const mondayBlock = mondaySection2027(iso, kind, next, locale);
   const sections: DateSection[] = [
-    ...(easterBlock ? [easterBlock] : []),
+    ...beforeLocal,
+    weekdayBlock,
+    ...(mondayBlock ? [mondayBlock] : []),
     { title: shopsTitle, paragraphs: shops },
     { title: schoolTitle, paragraphs: [school] },
     ...(compensation ? [{ title: compensation.question, paragraphs: [compensation.answer] }] : []),
@@ -1047,8 +1184,9 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const localAnswer = [localPart.text, ...localPart.places.map((p) => datePlaceLine(p, locale)), localPart.note ?? ""].filter(Boolean).join("\n");
   const faq = [
     { question: dateQuestion(iso, locale), answer: sameDayIn2026(iso) ? answer : [answer, ...answerNote].join(" ") },
-    ...(easterBlock ? [{ question: easterBlock.title, answer: easterBlock.paragraphs.join(" ") }] : []),
+    ...beforeLocal.map((s) => ({ question: s.title, answer: s.paragraphs.join(" ") })),
     { question: localPart.title ?? "", answer: localAnswer },
+    ...[weekdayBlock, ...(mondayBlock ? [mondayBlock] : [])].map((s) => ({ question: s.title, answer: s.paragraphs.join(" ") })),
     { question: shopsTitle, answer: shops.join(" ") },
     { question: schoolTitle, answer: school },
     ...(compensation ? [compensation] : []),
@@ -1063,7 +1201,8 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
     local: localPart,
     sections,
     // 26 Nov 2026 ("pasqua 2027" 401 impressions at 9.1 in 28 d, 1 click): the Easter section above the list of towns.
-    ...(easterBlock ? { sectionsBeforeLocal: 1 } : {}),
+    // 27 Nov 2026: and Pasqua Granada's "when is it" on 17 May.
+    ...(beforeLocal.length ? { sectionsBeforeLocal: beforeLocal.length } : {}),
     guides,
     title: dateTitle2027(iso, locale),
     ...(kind === "local" ? { verdict: L("Festa local", "Fiesta local", "Local holiday") } : {}),

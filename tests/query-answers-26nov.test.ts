@@ -120,5 +120,8 @@ test("Easter Monday 2027: 'Quan és Pasqua el 2027?' prints above the local-holi
     assert.match(page.sections[0]!.title, /Pasqua el 2027|Pascua en 2027|Easter in 2027/);
     assert.match(page.sections[0]!.paragraphs[0]!, /28/);
   }
-  for (const iso of ["2027-03-26", "2027-05-17", "2027-12-08"]) assert.equal(dateContent2027(iso, "ca").sectionsBeforeLocal, undefined, iso);
+  for (const iso of ["2027-03-26", "2027-12-08"]) assert.equal(dateContent2027(iso, "ca").sectionsBeforeLocal, undefined, iso);
+  // 27 Nov 2026 (batch 10G): Pasqua Granada's own "when is it" sits there on 17 May, not Easter's.
+  assert.equal(dateContent2027("2027-05-17", "ca").sectionsBeforeLocal, 1);
+  assert.equal(dateContent2027("2027-05-17", "ca").sections[0]!.title, "Quan és la Pasqua Granada el 2027?");
 });
