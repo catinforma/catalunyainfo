@@ -204,9 +204,9 @@ export function town2027Line(
     return { state: days.state, strong, text: days.local.length ? ` ${list}, ${councilLabel(days.council, locale)}.${sum}` : nucleiOnly, link };
   }
   const text = {
-    ca: ` pendents de publicació. Els proposa l'Ajuntament i els fixa una ordre del DOGC, que encara no ha sortit (la del ${YEAR} va sortir el 17 de desembre de 2025). Els ${n} de tot Catalunya ja són oficials.`,
-    es: ` pendientes de publicación. Los propone el Ayuntamiento y los fija una orden del DOGC, que aún no ha salido (la de ${YEAR} salió el 17 de diciembre de 2025). Los ${n} de toda Cataluña ya son oficiales.`,
-    en: ` not published yet. The council proposes them and a DOGC order sets them; it has not come out yet (the ${YEAR} one came out on 17 December 2025). Catalonia's ${n} are already official.`,
+    ca: ` pendents de publicació. Els proposa l'Ajuntament i els fixa una ordre del DOGC, que encara no ha sortit (la del ${YEAR} va sortir el 17 de desembre de 2025). Els ${n} ${aran ? "generals de l'Aran" : "de tot Catalunya"} ja són oficials.`,
+    es: ` pendientes de publicación. Los propone el Ayuntamiento y los fija una orden del DOGC, que aún no ha salido (la de ${YEAR} salió el 17 de diciembre de 2025). Los ${n} ${aran ? "generales de Arán" : "de toda Cataluña"} ya son oficiales.`,
+    en: ` not published yet. The council proposes them and a DOGC order sets them; it has not come out yet (the ${YEAR} one came out on 17 December 2025). ${aran ? "Aran's" : "Catalonia's"} ${n} are already official.`,
   }[locale];
   return { state: days.state, strong, text, link };
 }

@@ -51,7 +51,9 @@ function barcelonaLine(locale: DateLocale): { days: string; count: number; state
   const names = t.council?.names ?? [null, null];
   const parts = t.local.map((iso, i) => {
     const name = names[i] ? LOCAL_NAMES[names[i]!]?.[locale] : undefined;
-    return name ? `${weekdayDayMonth(iso, locale)} (${name})` : weekdayDayMonth(iso, locale);
+    // es/ca: every date carries its article ("el lunes 25 de mayo … y el jueves 24 de septiembre").
+    const day = locale === "en" ? weekdayDayMonth(iso, locale) : `el ${weekdayDayMonth(iso, locale)}`;
+    return name ? `${day} (${name})` : day;
   });
   return { days: joinList(parts, locale), count: parts.length, state: t.state };
 }
@@ -102,7 +104,7 @@ export function hubFaq(locale: DateLocale): HubFaqItem[] {
     const bcnAnswer =
       bcn.state === "pending"
         ? `Los ${next.length} festivos de Cataluña: ${listDays(next, "es")}. Los festivos locales de Barcelona de ${NEXT} aún no se han publicado.`
-        : `Barcelona tiene ${next.length + bcn.count} festivos en ${NEXT}. Los festivos locales de Barcelona son el ${bcn.days}${bcn.state === "council" ? ", aprobados por el Ayuntamiento (falta la orden de la Generalitat con los festivos locales de todos los municipios)" : ""}. Se suman a los ${next.length} de Cataluña: ${listDays(next, "es")}.`;
+        : `Barcelona tiene ${next.length + bcn.count} festivos en ${NEXT}. Los festivos locales de Barcelona son ${bcn.days}${bcn.state === "council" ? ", aprobados por el Ayuntamiento (falta la orden de la Generalitat con los festivos locales de todos los municipios)" : ""}. Se suman a los ${next.length} de Cataluña: ${listDays(next, "es")}.`;
     return [
       { question: `¿Cuáles son los festivos de Barcelona en ${NEXT}?`, answer: bcnAnswer },
       { question: "¿El 6 de diciembre es festivo en Cataluña?", answer: both("12-06") },
@@ -121,7 +123,7 @@ export function hubFaq(locale: DateLocale): HubFaqItem[] {
   const bcnAnswer =
     bcn.state === "pending"
       ? `Els ${next.length} festius de Catalunya: ${listDays(next, "ca")}. Els festius locals de Barcelona del ${NEXT} encara no s'han publicat.`
-      : `Barcelona té ${next.length + bcn.count} festius el ${NEXT}. Els festius locals de Barcelona són el ${bcn.days}${bcn.state === "council" ? ", aprovats per l'Ajuntament (falta l'ordre de la Generalitat amb els festius locals de tots els municipis)" : ""}. S'afegeixen als ${next.length} de Catalunya: ${listDays(next, "ca")}.`;
+      : `Barcelona té ${next.length + bcn.count} festius el ${NEXT}. Els festius locals de Barcelona són ${bcn.days}${bcn.state === "council" ? ", aprovats per l'Ajuntament (falta l'ordre de la Generalitat amb els festius locals de tots els municipis)" : ""}. S'afegeixen als ${next.length} de Catalunya: ${listDays(next, "ca")}.`;
   return [
     { question: `Quins són els festius de Barcelona el ${NEXT}?`, answer: bcnAnswer },
     { question: "El 6 de desembre és festiu a Catalunya?", answer: both("12-06") },
