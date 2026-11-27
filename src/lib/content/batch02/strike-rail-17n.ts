@@ -470,6 +470,44 @@ function pastFaq(locale: Locale, msState: string, rodalies: string, msPending: b
   ];
 }
 
+/**
+ * 27 Nov 2026: the sections that still spoke from before the day once it is past (phase "after"), in the past tense, as the lead and
+ * pastFaq already were: the minimum-services heading ("qué trenes funcionaron"), the Cercanías intro and the ticket advice ("mira tu
+ * tren la víspera"). Same facts and figures; titles, descriptions and the H1 untouched.
+ */
+const PAST_17N: Record<Locale, { msHeading: string; networksIntro: (renfe: string) => string; ticketsHeading: string; tickets: string[] }> = {
+  es: {
+    msHeading: "Servicios mínimos: qué trenes funcionaron el 17 de noviembre",
+    networksIntro: (renfe) =>
+      `Todas las redes de Cercanías las opera Renfe, cuya plantilla estaba llamada a la huelga del 17. Los servicios mínimos los fijó el Ministerio de Transportes, salvo en Rodalies de Catalunya (Generalitat) y en Bilbao y San Sebastián (Gobierno Vasco). Los horarios de cada red, en ${link(renfe, "renfe.com")}.`,
+    ticketsHeading: "Billetes de AVE, Larga Distancia, Iryo u Ouigo del 17",
+    tickets: [
+      `**Renfe:** el cambio o la devolución dependía de Renfe, que lo publicaba en ${link(U.renfe, "renfe.com")} o lo enviaba por correo a sus viajeros.`,
+      "**Iryo y Ouigo:** SEMAF llamó también a sus maquinistas; cada compañía avisaba a sus viajeros de los trenes afectados.",
+    ],
+  },
+  ca: {
+    msHeading: "Serveis mínims: quins trens van funcionar el 17 de novembre",
+    networksIntro: (renfe) =>
+      `Totes les xarxes de Cercanías les opera Renfe, el personal de la qual estava cridat a la vaga del 17. Els serveis mínims els va fixar el Ministeri de Transports, llevat de Rodalies de Catalunya (Generalitat) i de Bilbao i Sant Sebastià (Govern Basc). Els horaris de cada xarxa, a ${link(renfe, "renfe.com")}.`,
+    ticketsHeading: "Bitllets d'AVE, Llarga Distància, Iryo o Ouigo del 17",
+    tickets: [
+      `**Renfe:** el canvi o la devolució depenia de Renfe, que ho publicava a ${link(U.renfe, "renfe.com")} o ho enviava per correu als seus viatgers.`,
+      "**Iryo i Ouigo:** SEMAF també va cridar els seus maquinistes; cada companyia avisava els seus viatgers dels trens afectats.",
+    ],
+  },
+  en: {
+    msHeading: "Minimum services: which trains ran on 17 November",
+    networksIntro: (renfe) =>
+      `Renfe runs every Cercanías network, and its staff were called out on the 17th. The Ministry of Transport set minimum services, except on Rodalies de Catalunya (the Generalitat) and in Bilbao and San Sebastián (the Basque Government). Each network's timetables are on ${link(renfe, "renfe.com")}.`,
+    ticketsHeading: "AVE, long-distance, Iryo and Ouigo tickets for the 17th",
+    tickets: [
+      `**Renfe:** changes and refunds depended on Renfe, which published them on ${link(U.renfe, "renfe.com")} or emailed its passengers.`,
+      "**Iryo and Ouigo:** SEMAF also called out their drivers; each company told its passengers which trains were affected.",
+    ],
+  },
+};
+
 export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): Block[] {
   const t = COPY[locale];
   const spain = spainEntry();
@@ -484,6 +522,7 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
   const rodaliesCell = catalan.minimumServices.status === "published" ? t.rodaliesRow : t.pending;
   const next = asOf <= NEXT_DAY ? SPAIN_NOT_HAPPENING.find((s) => s.id === RAIL_17N_ID.next) : undefined;
   const renfeGuide = `/${locale}/${B2_PATHS.strikeRenfe[locale]}/`;
+  const past = phase === "after" ? PAST_17N[locale] : undefined;
 
   const rows = [
     ...CERCANIAS_NETWORKS.map((network) => (BASQUE_NETWORKS.has(network) ? [network, t.basque, BASQUE_MS_PUBLISHED ? t.basqueRow : t.pending] : [network, t.ministry, stateCell])),
@@ -511,16 +550,16 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
       : []),
     heading(2, t.whoHeading, t.whoId),
     ...paras(spain.calledBy[locale]),
-    heading(2, t.msHeading, t.msId),
+    heading(2, past?.msHeading ?? t.msHeading, t.msId),
     ...paras(`${t.stateSub} ${stateText}`, ...(msPending ? [t.precedent(RENFE_PRECEDENT)] : []), `${t.rodaliesSub} ${rodaliesText}`),
     heading(2, t.networksHeading, t.networksId),
-    ...paras(t.networksIntro(RENFE_CERCANIAS)),
+    ...paras((past?.networksIntro ?? t.networksIntro)(RENFE_CERCANIAS)),
     table(t.caption, [...t.headers], rows, t.networksNote),
     ...paras(t.rodaliesGuide(renfeGuide)),
     // 18 Nov 2026: the 19th's call-off stays on the page until that day has passed ("huelga renfe 19 noviembre").
     ...(asOf > CALLED_OFF_DAY ? [] : [heading(2, t.day19Heading, t.day19Id), ...paras(t.day19(U.scf38), b2link("strike19n", locale, B2_TITLES.strike19n[locale]))]),
-    heading(2, t.ticketsHeading),
-    list(...t.tickets),
+    heading(2, past?.ticketsHeading ?? t.ticketsHeading),
+    list(...(past?.tickets ?? t.tickets)),
     heading(2, next ? t.next23Heading : t.nextHeading, t.nextId),
     list(
       ...(next ? [t.next23(next.title[locale], fillChecked(next.text, locale, spainCheckedOn())), b2link("strike23n", locale, B2_TITLES.strike23n[locale])] : []),

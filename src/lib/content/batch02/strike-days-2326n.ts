@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, schoolSpainHubLink, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
-import { DAY_URLS, MADRID_SOURCES, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
+import { DAY_URLS, MADRID_SOURCES, PAST_COMMON_1920, STRIKE_DAYS_VERIFIED, calledOffOnDay, strikeDaysCheckedOn, type StrikeDayPhase } from "./strike-days-1920n";
 import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKE_GUIDE_SPECS } from "./strike-guides";
 import { STRIKES, STRIKES_AS_OF, STRIKE_DAY_PAGES, STRIKE_URLS, isOnDay, type Strike } from "./strikes";
@@ -686,12 +686,14 @@ function strikeSection(strike: SpainStrike, locale: Locale): Block[] {
 }
 
 /** The 26th: the Catalan education entry as a section of its own, with its facts and minimum services. */
-function educationSection(locale: Locale): Block[] {
+function educationSection(locale: Locale, past = false): Block[] {
   const entry = educationEntry();
   const t = COPY[locale];
+  // 27 Nov 2026: once the day has passed, the entry's own past-tense minimum services ("Los fijó…", strikes.ts `pastFaq.ms`).
+  const ms = past && entry.pastFaq ? entry.pastFaq.ms[locale] : entry.minimumServices.text[locale];
   return [
     heading(3, `${cap(dayDate(STRIKE_DAY_2326.strike26n, locale))}: ${entry.title[locale]}`, entry.id),
-    list(...entry.facts[locale], `**${t.ms}:** ${entry.minimumServices.text[locale]}`),
+    list(...entry.facts[locale], `**${t.ms}:** ${ms}`),
   ];
 }
 
@@ -750,6 +752,182 @@ const PAST_FAQ: Record<Locale, Record<StrikeDay2326Key, FaqItem[]>> = {
   },
 };
 
+/**
+ * 27 Nov 2026: the rest of the page once the day has passed (phase "after"), in the past tense, as the lead and PAST_FAQ already were:
+ * the day's own section ("¿Hubo clase el jueves 26 en Cataluña?" with what the Generalitat's order fixed, and its table; the 23rd's
+ * trains), CSIF's line for the day, the Catalan intro and "what was not on that day" (headings and intros: PAST_COMMON_1920). Same
+ * facts as the present-tense copy, same anchors; no participation figure (none is printed before or after). Titles, descriptions and
+ * H1s are untouched (measurement windows). The 26th's education section uses the entry's own past-tense `pastFaq.ms` (strikes.ts).
+ */
+interface PastSection {
+  extraHeading: string;
+  extra: (checked: string) => Block[];
+  madridDay: string;
+  notCalled: string;
+}
+
+const PAST_SECTIONS: Record<Locale, Record<StrikeDay2326Key, PastSection>> = {
+  es: {
+    strike23n: {
+      extraHeading: "Trenes el lunes 23: sin huelga",
+      extra: (checked) => [
+        ...paras(
+          `**La huelga de maquinistas se desconvocó.** SEMAF lo anunció el 20 de noviembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables», según ${link(U.semaf38, "su comunicado 2026-38")}. En ${link(U.semaf39, "el 2026-39")} llamó a ese texto «Acuerdo de fin de huelga (art. 8.2 RDLRT)».`,
+        ),
+        table(
+          "Trenes del lunes 23 de noviembre de 2026, tras la desconvocatoria de SEMAF",
+          ["Servicio", "El lunes 23", "Servicios mínimos"],
+          [
+            ["Rodalies de Catalunya y regionales de Cataluña", "Sin huelga: horario habitual, salvo aviso de Renfe", "Ninguno: el 66% en hora punta y el 33% que había fijado la Generalitat eran para esta huelga"],
+            ["Cercanías fuera de Cataluña", "Sin huelga: horario habitual, salvo aviso de Renfe", "Ninguno: el Ministerio de Transportes no había publicado resolución para el 23"],
+            ["AVE, Larga Distancia y Media Distancia de Renfe", "Sin huelga: horario habitual, salvo aviso de Renfe", "Ninguno"],
+            ["Iryo y Ouigo", "Sin huelga convocada en las fuentes revisadas", "—"],
+            ["Metro, autobuses, tranvías y FGC", "No formaban parte de ninguna huelga ese día", "—"],
+          ],
+          `Revisado el ${checked}.`,
+        ),
+        ...paras(
+          `**Ninguna otra huelga de trenes ese día:** el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos para el 23 en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}, cuya última era la del 12 de noviembre para el 17, y la orden de la Generalitat para Rodalies del 16 de noviembre, en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}, era para la huelga de SEMAF.`,
+        ),
+      ],
+      madridDay: "**El lunes 23:** no fue uno de los días de paros parciales de CSIF (los siguientes fueron el martes 24 y el jueves 26, de 9.00 a 11.00 y de 17.00 a 19.00 h, según su calendario); la huelga indefinida siguió convocada.",
+      notCalled:
+        "No fue una huelga general ni de trenes: la de maquinistas de Renfe se desconvocó, Iryo y Ouigo no tenían convocatoria en las fuentes revisadas, y el metro, los autobuses, los tranvías y FGC no formaban parte de ninguna. En Andalucía, la huelga de Correos fue solo en Cádiz, Córdoba, Huelva, Málaga y Sevilla.",
+    },
+    strike26n: {
+      extraHeading: "¿Hubo clase el jueves 26 en Cataluña?",
+      extra: (checked) => [
+        ...paras(
+          `**Sí, los centros abrieron:** era una huelga del personal, no un cierre, y el jueves 26 fue día lectivo. Según ${link(U.cgtEns26Notice, "el preaviso de la CGT")}, que CGT Ensenyament publicó el 18 de noviembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), estaban llamados el personal docente y no docente de los centros públicos, las escuelas infantiles (escoles bressol), los EAP y los CREETDIC, y el personal de comedor, acogida, ocio, extraescolares y transporte escolar de los centros públicos, privados y concertados.`,
+          `**Servicios mínimos:** los fijó el Departament d'Empresa i Treball por una orden del 23 de noviembre, en ${link(U.treballMs, "su lista")}: en cada centro, una persona del equipo directivo y, además, un docente por cada 3 aulas en infantil, primaria y secundaria; el 50% de la plantilla en educación especial y el 33% en las escuelas infantiles (llars d'infants); y el 50% del personal de comedor, cocina, acogida y extraescolares. La dirección de cada centro designaba quién los cubría.`,
+        ),
+        table(
+          "Qué funcionó el jueves 26 de noviembre de 2026 en Cataluña",
+          ["Servicio", "El jueves 26", "Servicios mínimos"],
+          [
+            ["Escuelas e institutos públicos", "Abrieron; el profesorado y el personal no docente estaban convocados", "Una persona del equipo directivo y un docente por cada 3 aulas; educación especial, 50% de la plantilla"],
+            ["Escoles bressol, EAP y CREETDIC", "Convocados", "Escuelas infantiles (llars d'infants): 33% de la plantilla"],
+            ["Comedor, acogida, extraescolares y transporte escolar", "Convocados también en la concertada y la privada", "50% del personal de comedor, cocina, acogida y extraescolares"],
+            ["Sanidad pública", "Huelgas de médicos (Sindicato Médicos Unidos y Metges de Catalunya)", "Publicados: urgencias y unidades especiales con normalidad"],
+            ["Rodalies, metro, autobuses y FGC", "Sin huelga convocada ese día en las fuentes revisadas", "—"],
+          ],
+          `Revisado el ${checked}.`,
+        ),
+        ...paras(`La convocatoria, los servicios mínimos y lo que se anunció para las familias: ${b2link("strikeEducation", "es", "la huelga en la educación del 26 de noviembre en Cataluña")}.`),
+      ],
+      madridDay: "**El jueves 26:** CSIF convocó paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h, según su calendario.",
+      notCalled:
+        "No fue una huelga general ni de trenes: SEMAF desconvocó la huelga de maquinistas de Renfe del lunes 23 y el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos ferroviarios para el jueves 26. La huelga de Correos en Andalucía terminó el 25; en Madrid estaba convocada hasta el 27.",
+    },
+  },
+  ca: {
+    strike23n: {
+      extraHeading: "Trens el dilluns 23: sense vaga",
+      extra: (checked) => [
+        ...paras(
+          `**La vaga de maquinistes es va desconvocar.** SEMAF ho va anunciar el 20 de novembre: «SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables», segons ${link(U.semaf38, "el seu comunicat 2026-38")}. En ${link(U.semaf39, "el 2026-39")} va qualificar aquest text d'«Acuerdo de fin de huelga (art. 8.2 RDLRT)».`,
+        ),
+        table(
+          "Trens del dilluns 23 de novembre de 2026, després de la desconvocatòria de SEMAF",
+          ["Servei", "El dilluns 23", "Serveis mínims"],
+          [
+            ["Rodalies de Catalunya i regionals de Catalunya", "Sense vaga: horari habitual, llevat d'avís de Renfe", "Cap: el 66% en hora punta i el 33% que havia fixat la Generalitat eren per a aquesta vaga"],
+            ["Cercanías fora de Catalunya", "Sense vaga: horari habitual, llevat d'avís de Renfe", "Cap: el Ministeri de Transports no havia publicat cap resolució per al 23"],
+            ["AVE, Llarga Distància i Mitja Distància de Renfe", "Sense vaga: horari habitual, llevat d'avís de Renfe", "Cap"],
+            ["Iryo i Ouigo", "Sense vaga convocada a les fonts revisades", "—"],
+            ["Metro, autobusos, tramvies i FGC", "No formaven part de cap vaga aquell dia", "—"],
+          ],
+          `Revisat el ${checked}.`,
+        ),
+        ...paras(
+          `**Cap altra vaga de trens aquell dia:** el Ministeri de Transports no tenia cap resolució de serveis mínims per al 23 a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}, que acabava amb la del 12 de novembre per al 17, i l'ordre de la Generalitat per a Rodalies del 16 de novembre, a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}, era per a la vaga de SEMAF.`,
+        ),
+      ],
+      madridDay: "**El dilluns 23:** no va ser un dels dies d'aturades parcials de CSIF (els següents van ser el dimarts 24 i el dijous 26, de 9.00 a 11.00 i de 17.00 a 19.00 h, segons el seu calendari); la vaga indefinida va continuar convocada.",
+      notCalled:
+        "No va ser una vaga general ni de trens: la de maquinistes de Renfe es va desconvocar, Iryo i Ouigo no tenien convocatòria a les fonts revisades, i el metro, els autobusos, els tramvies i FGC no formaven part de cap. A Andalusia, la vaga de Correus va ser només a Cadis, Còrdova, Huelva, Màlaga i Sevilla.",
+    },
+    strike26n: {
+      extraHeading: "Hi va haver classe el dijous 26 a Catalunya?",
+      extra: (checked) => [
+        ...paras(
+          `**Sí, els centres van obrir:** era una vaga del personal, no un tancament, i el dijous 26 va ser dia lectiu. Segons ${link(U.cgtEns26Notice, "el preavís de la CGT")}, que CGT Ensenyament va publicar el 18 de novembre (${link(U.cgtEns26Call, "«us convoquem a la vaga»")}), hi estaven cridats el personal docent i no docent dels centres públics, les escoles bressol, els EAP i els CREETDIC, i el personal de menjador, acollida, lleure, extraescolars i transport escolar dels centres públics, privats i concertats.`,
+          `**Serveis mínims:** els va fixar el Departament d'Empresa i Treball per una ordre del 23 de novembre, a ${link(U.treballMs, "la seva llista")}: a cada centre, una persona de l'equip directiu i, a més, un docent per cada 3 aules a infantil, primària i secundària; el 50% de la plantilla a l'educació especial i el 33% a les llars d'infants; i el 50% del personal de menjador, cuina, acollida i extraescolars. La direcció de cada centre designava qui els cobria.`,
+        ),
+        table(
+          "Què va funcionar el dijous 26 de novembre de 2026 a Catalunya",
+          ["Servei", "El dijous 26", "Serveis mínims"],
+          [
+            ["Escoles i instituts públics", "Van obrir; el professorat i el personal no docent hi estaven convocats", "Una persona de l'equip directiu i un docent per cada 3 aules; educació especial, 50% de la plantilla"],
+            ["Escoles bressol, EAP i CREETDIC", "Convocats", "Llars d'infants: 33% de la plantilla"],
+            ["Menjador, acollida, extraescolars i transport escolar", "Convocats també a la concertada i la privada", "50% del personal de menjador, cuina, acollida i extraescolars"],
+            ["Sanitat pública", "Vagues de metges (Sindicato Médicos Unidos i Metges de Catalunya)", "Publicats: urgències i unitats especials amb normalitat"],
+            ["Rodalies, metro, autobusos i FGC", "Sense vaga convocada aquell dia a les fonts revisades", "—"],
+          ],
+          `Revisat el ${checked}.`,
+        ),
+        ...paras(`La convocatòria, els serveis mínims i el que es va anunciar per a les famílies: ${b2link("strikeEducation", "ca", "la vaga a l'educació del 26 de novembre a Catalunya")}.`),
+      ],
+      madridDay: "**El dijous 26:** CSIF hi va convocar aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h, segons el seu calendari.",
+      notCalled:
+        "No va ser una vaga general ni de trens: SEMAF va desconvocar la vaga de maquinistes de Renfe del dilluns 23 i el Ministeri de Transports no tenia cap resolució de serveis mínims ferroviaris per al dijous 26. La vaga de Correus a Andalusia es va acabar el 25; a Madrid era convocada fins al 27.",
+    },
+  },
+  en: {
+    strike23n: {
+      extraHeading: "Trains on Monday 23: no strike",
+      extra: (checked) => [
+        ...paras(
+          `**The drivers' strike was called off.** SEMAF announced it on 20 November: "SEMAF ha procedido a la desconvocatoria de la jornada de huelga prevista para el próximo 23 de noviembre tras alcanzar un acuerdo que transforma las reivindicaciones del colectivo en realidades normativas, operativas y verificables" (SEMAF has called off the strike day planned for 23 November after reaching an agreement that turns the drivers' demands into regulatory, operational and verifiable facts), according to ${link(U.semaf38, "its notice 2026-38")}. ${link(U.semaf39, "Notice 2026-39")} called the text an "Acuerdo de fin de huelga (art. 8.2 RDLRT)" (an agreement ending the strike).`,
+        ),
+        table(
+          "Trains on Monday 23 November 2026, after SEMAF's call-off",
+          ["Service", "On Monday 23", "Minimum services"],
+          [
+            ["Rodalies de Catalunya and Catalan regional trains", "No strike: usual timetable unless Renfe said otherwise", "None: the 66% at peak and 33% the Generalitat had set were for this strike"],
+            ["Cercanías outside Catalonia", "No strike: usual timetable unless Renfe said otherwise", "None: the Ministry of Transport had published no resolution for the 23rd"],
+            ["Renfe AVE, long-distance and Media Distancia trains", "No strike: usual timetable unless Renfe said otherwise", "None"],
+            ["Iryo and Ouigo", "No strike called in the sources checked", "—"],
+            ["Metro, buses, trams and FGC", "Not part of any strike that day", "—"],
+          ],
+          `Checked on ${checked}.`,
+        ),
+        ...paras(
+          `**No other rail strike that day:** the Ministry of Transport had no minimum-services resolution for the 23rd on ${link(U.ministryRail, "its list of rail resolutions")}, whose newest was the one of 12 November for the 17th, and the Generalitat's Rodalies order of 16 November, on ${link(U.treballMs, "the Catalan labour department's list")}, was for SEMAF's strike.`,
+        ),
+      ],
+      madridDay: "**On Monday 23:** not one of CSIF's partial-stoppage days (the next were Tuesday 24 and Thursday 26, 09:00 to 11:00 and 17:00 to 19:00, according to its calendar); the open-ended strike stayed called.",
+      notCalled:
+        "It was not a general strike or a rail strike: the Renfe drivers' strike was called off, Iryo and Ouigo had no call in the sources checked, and metros, buses, trams and FGC were not part of any. In Andalusia, Correos' strike was only in Cádiz, Córdoba, Huelva, Málaga and Seville.",
+    },
+    strike26n: {
+      extraHeading: "Was there school in Catalonia on Thursday 26?",
+      extra: (checked) => [
+        ...paras(
+          `**Yes, schools opened:** it was a strike by staff, not a closure, and Thursday 26 was a school day. According to ${link(U.cgtEns26Notice, "CGT's strike notice")}, which CGT Ensenyament published on 18 November (${link(U.cgtEns26Call, "\"us convoquem a la vaga\"")}, we call you out on strike), teaching and non-teaching staff at state schools, nursery schools (escoles bressol), the EAP and CREETDIC support teams, and lunchtime, before- and after-school, leisure and school-transport staff at state, private and concertada (state-funded private) schools were called out.`,
+          `**Minimum services:** the Department of Business and Labour set them by an order of 23 November, on ${link(U.treballMs, "its list")}: at each school, one member of the head team plus one teacher per 3 classes in infant, primary and secondary schools; 50% of staff at special-needs schools and 33% at nursery schools (llars d'infants); and 50% of lunchtime, kitchen, before-school care and after-school activity staff. Each school's management named who covered them.`,
+        ),
+        table(
+          "What ran in Catalonia on Thursday 26 November 2026",
+          ["Service", "On Thursday 26", "Minimum services"],
+          [
+            ["State schools", "Opened; teachers and non-teaching staff were called out", "One member of the head team and one teacher per 3 classes; special-needs schools, 50% of staff"],
+            ["Nursery schools (escoles bressol), EAP and CREETDIC", "Called out", "Nursery schools (llars d'infants): 33% of staff"],
+            ["Lunchtime, before- and after-school care, school transport", "Called out at concertada and private schools too", "50% of lunchtime, kitchen, before-school care and after-school activity staff"],
+            ["Public healthcare", "Doctors' strikes (Sindicato Médicos Unidos and Metges de Catalunya)", "Published: A&E and special units ran normally"],
+            ["Rodalies, metro, buses and FGC", "No strike called that day in the sources checked", "—"],
+          ],
+          `Checked on ${checked}.`,
+        ),
+        ...paras(`The call, the minimum services and what was announced for parents: ${b2link("strikeEducation", "en", "the 26 November education strike in Catalonia")}.`),
+      ],
+      madridDay: "**On Thursday 26:** CSIF called partial stoppages from 09:00 to 11:00 and from 17:00 to 19:00, according to its calendar.",
+      notCalled:
+        "There was no general strike and no rail strike: SEMAF called off the Renfe drivers' strike of Monday 23, and the Ministry of Transport had no rail minimum-services resolution for Thursday 26. Correos' strike in Andalusia ended on the 25th; in Madrid it was called to the 27th.",
+    },
+  },
+};
+
 export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF): Block[] {
   const t = COPY[locale];
   const d = t.days[key];
@@ -779,28 +957,32 @@ export function buildStrikeDay2326Body(key: StrikeDay2326Key, locale: Locale, as
       ? PAST_FAQ[locale][key].map((item) => ({ question: item.question, answer: strip(item.answer) }))
       : d.faq(checked).map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
   const other: StrikeDay2326Key = key === "strike23n" ? "strike26n" : "strike23n";
+  // 27 Nov 2026: every section of a past day in the past tense, not only the lead and the FAQ (PAST_SECTIONS).
+  const past = phase === "after" ? PAST_SECTIONS[locale][key] : undefined;
+  const pastCommon = phase === "after" ? PAST_COMMON_1920[locale] : undefined;
 
   return [
     lead(d.lead(phase, checkedDay)),
     // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
     sourcesCheckedLine(locale, checkedOn, key),
     keyFacts(t.factsTitle(dayName), facts),
-    heading(2, d.extraHeading, d.extraId),
-    ...d.extra(checked),
+    heading(2, past?.extraHeading ?? d.extraHeading, d.extraId),
+    ...(past ? past.extra(checked) : d.extra(checked)),
     heading(2, t.allHeading(dayName), t.allId),
-    ...(education ? educationSection(locale) : []),
+    ...(pastCommon ? paras(pastCommon.allIntro) : []),
+    ...(education ? educationSection(locale, phase === "after") : []),
     ...spain.flatMap((strike) => strikeSection(strike, locale)),
     heading(2, t.madridHeading, t.madridId),
-    list(...t.madrid(d.madridDay)),
+    list(...t.madrid(past?.madridDay ?? d.madridDay)),
     heading(2, t.airportsHeading, t.airportsId),
     ...paras(t.airportsIntro),
     list(...SPAIN_OPEN_STRIKES.map((strike) => `**${strike.title[locale]}.** ${fillChecked(strike.text, locale, strikeDaysCheckedOn())}`)),
     heading(2, t.catalanHeading, t.catalanId),
-    ...paras(t.catalanIntro(dayName)),
+    ...paras((pastCommon?.catalanIntro ?? t.catalanIntro)(dayName)),
     list(...catalan.map((strike) => `**${cap(strike.title[locale])}.** ${strike.minimumServices.msShort[locale]}.`)),
     ...paras(`${d.catalanGuide(locale)} · ${t.catalanHub(b2link("strikes", locale, B2_TITLES.strikes[locale]))}`),
-    heading(2, t.notHeading, t.notId),
-    ...paras(`${d.notCalled} ${t.checked(checked)}`),
+    heading(2, pastCommon?.notHeading ?? t.notHeading, t.notId),
+    ...paras(`${past?.notCalled ?? d.notCalled} ${t.checked(checked)}`),
     // 20 Nov 2026: the 23rd's Renfe strike, called off, from SPAIN_NOT_HAPPENING (as the 19th printed Adif's).
     ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
     list(

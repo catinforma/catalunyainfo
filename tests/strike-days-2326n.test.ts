@@ -176,7 +176,9 @@ test("the day's strikes come from the entries and every one is named and has its
   for (const locale of LOCALES) {
     const blocks = STRIKE_26N_GUIDE.editions[locale].blocks;
     assert.ok(blocks.some((b) => b.type === "heading" && (b as { id?: string }).id === STRIKE_DAY_2326_IDS.education), locale);
-    assert.ok(json(blocks).includes(JSON.stringify(educationEntry().minimumServices.text[locale]).slice(1, -1)), `${locale}: the education entry's minimum services`);
+    // 27 Nov 2026: once the 26th has passed, the entry's own past-tense text (pastFaq.ms) instead of the present-tense one.
+    const ms = strikeDay2326Phase("strike26n") === "after" && educationEntry().pastFaq ? educationEntry().pastFaq!.ms[locale] : educationEntry().minimumServices.text[locale];
+    assert.ok(json(blocks).includes(JSON.stringify(ms).slice(1, -1)), `${locale}: the education entry's minimum services`);
   }
 });
 
@@ -208,8 +210,9 @@ test("the 23rd: called off, said from SEMAF's notice; the 26th's school order pe
     assert.ok(!STRIKES.some((s) => s.scope === "rail" && s.dates.includes(day)), `a Catalan rail strike on ${day}: rewrite the day page`);
   }
   // 27 Nov 2026: the lead's "No hay huelga general ni de trenes" goes with the day (past lead); the "not on that day" section keeps it.
-  assert.match(text(STRIKE_26N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes|No es una huelga general ni de trenes: SEMAF desconvocó/);
-  assert.match(text(STRIKE_23N_GUIDE.editions.es.blocks), /No es una huelga general ni de trenes/);
+  // 27 Nov 2026: and once the day has passed, that section says it in the past tense too (PAST_SECTIONS).
+  assert.match(text(STRIKE_26N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes|No (es|fue) una huelga general ni de trenes: SEMAF desconvocó/);
+  assert.match(text(STRIKE_23N_GUIDE.editions.es.blocks), /No (es|fue) una huelga general ni de trenes/);
 });
 
 test("links: external ones are named https non-press sources; internal ones are registered paths in the page's language", () => {

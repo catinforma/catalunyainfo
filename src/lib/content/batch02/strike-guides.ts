@@ -1231,6 +1231,30 @@ function msLead(c: Ctx): string {
   return t.msPending(ms.msShort[c.locale], c.checked, t.sets(parts));
 }
 
+/**
+ * 27 Nov 2026: the lines that still spoke from before the strike once it is past (`!c.upcoming`), in the past tense, as the lead's `past`
+ * line and the past FAQ already were: the "when minimum services come out, you will see it here" promise, the affects table's
+ * "¿Le afecta?" column and its note pointing to "other strikes below" (a section printed only while the strike is to come). The
+ * minimum-services section prints the entry's own past-tense text (`pastFaq.ms`, strikes.ts) when it has one.
+ */
+const PAST_GUIDE: Record<Locale, { data: (hub: string) => string; affectsHeaders: [string, string]; affectsNote: string }> = {
+  ca: {
+    data: (hub) => `Aquesta pàgina es fa amb la mateixa llista de vagues que ${hub}: només el que publiquen el sindicat convocant, els operadors, el DOGC, el BOE i el Ministeri de Transports, i no el que avança la premsa.`,
+    affectsHeaders: ["Servei", "Afectat per aquesta vaga?"],
+    affectsNote: "Només aquesta vaga.",
+  },
+  es: {
+    data: (hub) => `Esta página se hace con la misma lista de huelgas que ${hub}: solo lo que publican el sindicato convocante, los operadores, el DOGC, el BOE y el Ministerio de Transportes, no lo que adelanta la prensa.`,
+    affectsHeaders: ["Servicio", "¿Le afectó esta huelga?"],
+    affectsNote: "Solo esta huelga.",
+  },
+  en: {
+    data: (hub) => `This page is built from the same list of strikes as ${hub}: only what the union calling the strike, the operators, the DOGC and BOE gazettes and the Ministry of Transport publish, never what the press reports ahead of them.`,
+    affectsHeaders: ["Service", "Affected by this strike?"],
+    affectsNote: "This strike only.",
+  },
+};
+
 export function buildStrikeGuideBody(
   key: StrikeGuideKey,
   locale: Locale,
@@ -1307,7 +1331,8 @@ export function buildStrikeGuideBody(
 
   // "En català · En castellano · In English", under the answer (as on the hub and the 11N page).
   blocks.push(languageLinks());
-  blocks.push(callout("official", verifiedLine(locale, STRIKES_VERIFIED), t.data(hub)));
+  const past = c.upcoming ? undefined : PAST_GUIDE[locale];
+  blocks.push(callout("official", verifiedLine(locale, STRIKES_VERIFIED), (past?.data ?? t.data)(hub)));
   // 19 Nov 2026: the covered entry's one-day page (23 or 26 Nov), right under the answer.
   blocks.push(...entryDayPageParas(c));
   // 20 Nov 2026: a called-off strike: the line to its day's page (strike-day-links.ts), then its own section.
@@ -1319,7 +1344,7 @@ export function buildStrikeGuideBody(
 
   // 3. Minimum services: the entry's own text, then who sets them and where.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));
-  blocks.push(...paras(strike.minimumServices.text[locale]));
+  blocks.push(...paras(past && strike.pastFaq ? strike.pastFaq.ms[locale] : strike.minimumServices.text[locale]));
   blocks.push(...h3(t.whereHeading));
   blocks.push(
     table(
@@ -1334,9 +1359,9 @@ export function buildStrikeGuideBody(
   blocks.push(
     table(
       t.affectsCaption,
-      [...t.affectsHeaders],
+      [...(past?.affectsHeaders ?? t.affectsHeaders)],
       SERVICE_KEYS.map((k) => [t.services[k].name, strike.affects.includes(k) ? t.yes : t.no]),
-      t.affectsNote,
+      past?.affectsNote ?? t.affectsNote,
     ),
   );
   blocks.push(...s.section(c));

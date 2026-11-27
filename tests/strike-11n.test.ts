@@ -346,7 +346,8 @@ test("known answers: schools are open, it is a school day and not a Catalan holi
   assert.ok(year);
   assert.equal(year.start, "2026-09-08");
   assert.equal(year.christmas[0], "2026-12-22");
-  const schoolDay: Record<Locale, RegExp> = { ca: /Sí, és dia lectiu/, es: /Sí, es día lectivo/, en: /Yes, it is a school day/ };
+  // 27 Nov 2026: past the day, the same answer in the past tense (PAST_11N).
+  const schoolDay: Record<Locale, RegExp> = { ca: /Sí, (és|va ser) dia lectiu/, es: /Sí, (es|fue) día lectivo/, en: /Yes, it (is|was) a school day/ };
   for (const locale of LOCALES) {
     const all = body(locale);
     assert.match(all, schoolDay[locale], locale);

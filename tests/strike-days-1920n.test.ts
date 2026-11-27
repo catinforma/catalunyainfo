@@ -165,7 +165,8 @@ test("no rail strike on the 19th (Adif's called off) or the 20th, the doctors an
     assert.match(page, /SCF ha acordado la desconvocatoria para el día 19/, locale);
     assert.match(STRIKE_19N_GUIDE.editions[locale].seoTitle, /desconvocada|called off/, locale);
   }
-  assert.match(text(STRIKE_19N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
+  // 27 Nov 2026: past the day, the same line in the past tense (PAST_SECTIONS).
+  assert.match(text(STRIKE_19N_GUIDE.editions.es.blocks), /No (hay|hubo) huelga general ni de trenes/);
   // Said before and on the day (20 Nov 2026: the published page is past by now, so built as of the 18th).
   assert.match(text(buildStrikeDayBody("strike19n", "es", "2026-11-18")), /Renfe no estaba convocada/);
   // 21 Nov 2026: the published 20N page is past too (its lead is in the past tense), so the present-tense line is checked as of the day.

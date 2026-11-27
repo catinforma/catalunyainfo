@@ -696,6 +696,129 @@ const PAST_FAQ: Record<Locale, Record<StrikeDayKey, () => FaqItem[]>> = {
   },
 };
 
+/**
+ * 27 Nov 2026: the rest of the page once the day has passed (phase "after"), in the past tense, as the lead and PAST_FAQ already were:
+ * the day's own section ("¿Hubo clase el viernes 20?", the marches), CSIF's line for the day, the Catalan intro and "what was not on
+ * that day". Same facts, same tables (SMU_MARCHES_19N, STUDENT_DEMOS_20N), same anchors; only the tense changes. Titles, descriptions
+ * and H1s are untouched (measurement windows). The dated entries under "all the strikes" are the shared Spain hub's: on a past day
+ * they get a line saying they are printed as announced (as the education guide's `past` line does).
+ */
+interface PastSection {
+  extraHeading: string;
+  extra: () => Block[];
+  /** CSIF's line for the day in the Madrid section. */
+  madridDay: string;
+  notCalled: string;
+}
+
+interface PastCommon {
+  allIntro: string;
+  catalanIntro: (day: string) => string;
+  notHeading: string;
+}
+
+export const PAST_COMMON_1920: Record<Locale, PastCommon> = {
+  es: {
+    allIntro: "Lo que se había convocado y publicado para ese día, tal como estaba en las fuentes oficiales:",
+    catalanIntro: (day) => `Las huelgas que afectaron a Cataluña el ${day}, con sus servicios mínimos:`,
+    notHeading: "Lo que no hubo ese día",
+  },
+  ca: {
+    allIntro: "El que s'havia convocat i publicat per a aquell dia, tal com era a les fonts oficials:",
+    catalanIntro: (day) => `Les vagues que van afectar Catalunya el ${day}, amb els seus serveis mínims:`,
+    notHeading: "El que no hi va haver aquell dia",
+  },
+  en: {
+    allIntro: "What had been called and published for that day, as it stood in the official sources:",
+    catalanIntro: (day) => `The strikes that touched Catalonia on ${day}, with their minimum services:`,
+    notHeading: "What was not on that day",
+  },
+};
+
+const PAST_SECTIONS: Record<Locale, Record<StrikeDayKey, PastSection>> = {
+  es: {
+    strike19n: {
+      extraHeading: "Manifestaciones de médicos del jueves 19 a las 18.00 h",
+      extra: () => [
+        ...paras(`El Sindicato Médicos Unidos convocó a las 18.00 h del jueves 19 estas manifestaciones y concentraciones, según ${link(DAY_URLS.smuMarches, "su lista")}. En Valencia, la convocatoria fue el miércoles 18, a la misma hora.`),
+        table("Manifestaciones del SMU el jueves 19 de noviembre de 2026, 18.00 h", ["Ciudad", "Salida", "Llegada"], marchRows("es"), "Tal como las publicó el sindicato; donde no había recorrido, era una concentración."),
+      ],
+      madridDay: `**El jueves 19:** no fue uno de los días de paros parciales de CSIF (el siguiente fue el viernes 20, de 9.00 a 11.00 y de 17.00 a 19.00 h, según ${link(DAY_URLS.csifMadrid, "su calendario")}); la huelga indefinida siguió convocada.`,
+      notCalled:
+        "No hubo huelga general ni de trenes: el SCF desconvocó el paro del personal de circulación de Adif, y Renfe, Iryo y Ouigo no estaban convocados el jueves 19. El metro, los autobuses y los tranvías no formaban parte de ninguna convocatoria estatal ese día.",
+    },
+    strike20n: {
+      extraHeading: "¿Hubo clase el viernes 20?",
+      extra: () => [
+        ...paras(
+          `**Sí, los colegios e institutos abrieron.** La huelga del 20 fue de estudiantes, no del profesorado: el Sindicato de Estudiantes la comunicó a cada dirección como una decisión colectiva de los alumnos desde 3.º de ESO, que el artículo 8 de la Ley Orgánica 8/1985 permite sin sanción si se comunica antes al centro (${link(SPAIN_URLS.studentsNotice, "su comunicación oficial")}). Los alumnos más pequeños tuvieron clase con normalidad.`,
+          "**En Madrid** fue distinto: allí el profesorado de la enseñanza pública estaba en huelga indefinida y CSIF convocó paros el 20 de 9.00 a 11.00 y de 17.00 a 19.00 h, con los servicios mínimos de la Comunidad. Lo detallamos más abajo.",
+        ),
+        heading(2, "Manifestaciones de estudiantes del viernes 20 a las 12 h", "manifestaciones"),
+        ...paras(`El Sindicato de Estudiantes convocó movilizaciones a las 12 h del viernes 20 en estas ciudades, según ${link(SPAIN_URLS.students, "su convocatoria")}.`),
+        table("Movilizaciones del Sindicato de Estudiantes el viernes 20 de noviembre de 2026, 12 h", ["Ciudad", "Lugar"], demoRows(), "Tal como las publicó el sindicato."),
+      ],
+      madridDay: `**El viernes 20:** CSIF convocó ese día paros parciales de 9.00 a 11.00 y de 17.00 a 19.00 h, según ${link(DAY_URLS.csifMadrid, "su calendario")}.`,
+      notCalled:
+        "No hubo huelga general, ni de trenes: el Ministerio de Transportes no tenía ninguna resolución de servicios mínimos ferroviarios para el viernes 20 y ningún sindicato ferroviario había convocado ese día. El metro, los autobuses y los tranvías no formaban parte de ninguna convocatoria estatal.",
+    },
+  },
+  ca: {
+    strike19n: {
+      extraHeading: "Manifestacions de metges del dijous 19 a les 18.00 h",
+      extra: () => [
+        ...paras(`El Sindicato Médicos Unidos va convocar a les 18.00 h del dijous 19 aquestes manifestacions i concentracions, segons ${link(DAY_URLS.smuMarches, "la seva llista")}. A València, la convocatòria va ser el dimecres 18, a la mateixa hora.`),
+        table("Manifestacions de l'SMU el dijous 19 de novembre de 2026, 18.00 h", ["Ciutat", "Sortida", "Arribada"], marchRows("ca"), "Tal com les va publicar el sindicat; on no hi havia recorregut, era una concentració."),
+      ],
+      madridDay: `**El dijous 19:** no va ser un dels dies d'aturades parcials de CSIF (el següent va ser el divendres 20, de 9.00 a 11.00 i de 17.00 a 19.00 h, segons ${link(DAY_URLS.csifMadrid, "el seu calendari")}); la vaga indefinida va continuar convocada.`,
+      notCalled:
+        "No hi va haver vaga general ni de trens: l'SCF va desconvocar l'aturada del personal de circulació d'Adif, i Renfe, Iryo i Ouigo no hi estaven convocats el dijous 19. El metro, els autobusos i els tramvies no formaven part de cap convocatòria estatal aquell dia.",
+    },
+    strike20n: {
+      extraHeading: "Hi va haver classe el divendres 20?",
+      extra: () => [
+        ...paras(
+          `**Sí, les escoles i els instituts van obrir.** La vaga del 20 va ser d'estudiants, no del professorat: el Sindicato de Estudiantes la va comunicar a cada direcció com una decisió col·lectiva dels alumnes des de 3r d'ESO, que l'article 8 de la Llei orgànica 8/1985 permet sense sanció si es comunica abans al centre (${link(SPAIN_URLS.studentsNotice, "la seva comunicació oficial")}). Els alumnes més petits van tenir classe amb normalitat.`,
+          "**A Madrid** va ser diferent: allà el professorat de l'ensenyament públic era en vaga indefinida i CSIF hi va convocar aturades el 20 de 9.00 a 11.00 i de 17.00 a 19.00 h, amb els serveis mínims de la Comunitat. Ho detallem més avall.",
+        ),
+        heading(2, "Manifestacions d'estudiants del divendres 20 a les 12 h", "manifestacions"),
+        ...paras(`El Sindicato de Estudiantes va convocar mobilitzacions a les 12 h del divendres 20 en aquestes ciutats, segons ${link(SPAIN_URLS.students, "la seva convocatòria")}; a Catalunya, a la plaça Universitat de Barcelona i a la plaça Imperial Tàrraco de Tarragona.`),
+        table("Mobilitzacions del Sindicato de Estudiantes el divendres 20 de novembre de 2026, 12 h", ["Ciutat", "Lloc"], demoRows(), "Tal com les va publicar el sindicat."),
+      ],
+      madridDay: `**El divendres 20:** CSIF hi va convocar aturades parcials de 9.00 a 11.00 i de 17.00 a 19.00 h, segons ${link(DAY_URLS.csifMadrid, "el seu calendari")}.`,
+      notCalled:
+        "No hi va haver vaga general, ni de trens: el Ministeri de Transports no tenia cap resolució de serveis mínims ferroviaris per al divendres 20 i cap sindicat ferroviari hi havia convocat. El metro, els autobusos i els tramvies no formaven part de cap convocatòria estatal.",
+    },
+  },
+  en: {
+    strike19n: {
+      extraHeading: "Doctors' marches on Thursday 19 at 18:00",
+      extra: () => [
+        ...paras(`Sindicato Médicos Unidos called these marches and rallies at 18:00 on Thursday 19, according to ${link(DAY_URLS.smuMarches, "its list")}. Valencia's was on Wednesday 18, at the same time.`),
+        table("SMU marches on Thursday 19 November 2026, 18:00", ["City", "Starts at", "Ends at"], marchRows("en"), "As the union listed them; where there was no route, it was a rally in one place."),
+      ],
+      madridDay: `**On Thursday 19:** not one of CSIF's partial-stoppage days (the next was Friday 20, 09:00 to 11:00 and 17:00 to 19:00, according to ${link(DAY_URLS.csifMadrid, "its calendar")}); the open-ended strike stayed called.`,
+      notCalled:
+        "There was no general strike and no rail strike: SCF called off the stoppage by Adif's traffic-control staff, and Renfe, Iryo and Ouigo were not called out on Thursday 19. Metros, buses and trams were not part of any nationwide call that day.",
+    },
+    strike20n: {
+      extraHeading: "Was there school on Friday 20?",
+      extra: () => [
+        ...paras(
+          `**Yes, schools opened.** The 20th was a students' strike, not a teachers' one: Sindicato de Estudiantes notified each school head of a collective decision by pupils from the third year of secondary school (ESO), which article 8 of Organic Law 8/1985 allows without sanction if the school is told beforehand (${link(SPAIN_URLS.studentsNotice, "its official notice")}). Younger pupils had lessons as usual.`,
+          "**Madrid** was different: there, state-school teachers were on an open-ended strike and CSIF called stoppages on the 20th from 09:00 to 11:00 and 17:00 to 19:00, under the Community's minimum services. Details below.",
+        ),
+        heading(2, "Students' demonstrations on Friday 20 at 12:00", "demonstrations"),
+        ...paras(`Sindicato de Estudiantes called demonstrations at 12:00 on Friday 20 in these cities, according to ${link(SPAIN_URLS.students, "its call")}.`),
+        table("Sindicato de Estudiantes demonstrations on Friday 20 November 2026, 12:00", ["City", "Place"], demoRows(), "As the union listed them."),
+      ],
+      madridDay: `**On Friday 20:** CSIF called partial stoppages from 09:00 to 11:00 and from 17:00 to 19:00, according to ${link(DAY_URLS.csifMadrid, "its calendar")}.`,
+      notCalled:
+        "There was no general strike and no rail strike: the Ministry of Transport had no rail minimum-services resolution for Friday 20 and no rail union had called that day. Metros, buses and trams were not part of any nationwide call.",
+    },
+  },
+};
+
 export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: string = STRIKES_SPAIN_AS_OF): Block[] {
   const t = COPY[locale];
   const d = t.days[key];
@@ -708,6 +831,11 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
   // 18 Nov 2026: "Fuentes revisadas" prints the day the sources were re-read, never a later as-of day.
   const checked = dateYear(strikeDaysCheckedOn(asOf), locale);
   const calledOff = calledOffOnDay(key);
+  // 27 Nov 2026: every section of a past day in the past tense, not only the lead and the FAQ (PAST_SECTIONS).
+  const past = phase === "after" ? PAST_SECTIONS[locale][key] : undefined;
+  const pastCommon = phase === "after" ? PAST_COMMON_1920[locale] : undefined;
+  const madrid = t.madrid(twentieth);
+  if (past) madrid[1] = past.madridDay;
 
   const facts = [
     ...spain.map((strike) => ({ label: cap(strike.title[locale]), value: `${strike.minimumServices.short[locale]}.` })),
@@ -726,21 +854,22 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
     sourcesCheckedLine(locale, strikeDaysCheckedOn(asOf), key),
     keyFacts(t.factsTitle(dayName), facts),
-    heading(2, d.extraHeading, d.extraId),
-    ...d.extra(),
+    heading(2, past?.extraHeading ?? d.extraHeading, d.extraId),
+    ...(past ? past.extra() : d.extra()),
     heading(2, t.allHeading(dayName), t.allId),
+    ...(pastCommon ? paras(pastCommon.allIntro) : []),
     ...spain.flatMap((strike) => strikeSection(strike, locale, key)),
     heading(2, t.madridHeading, t.madridId),
-    list(...t.madrid(twentieth)),
+    list(...madrid),
     heading(2, t.airportsHeading, t.airportsId),
     ...paras(t.airportsIntro),
     list(...SPAIN_OPEN_STRIKES.map((strike) => `**${strike.title[locale]}.** ${fillChecked(strike.text, locale, strikeDaysCheckedOn())}`)),
     heading(2, t.catalanHeading, t.catalanId),
-    ...paras(t.catalanIntro(dayName)),
+    ...paras((pastCommon?.catalanIntro ?? t.catalanIntro)(dayName)),
     list(...catalan.map((strike) => `**${cap(strike.title[locale])}.** ${strike.minimumServices.msShort[locale]}.`)),
     ...paras(t.catalanHub(b2link("strikes", locale, B2_TITLES.strikes[locale]))),
-    heading(2, t.notHeading, t.notId),
-    ...paras(`${d.notCalled} ${t.checked(checked)}`),
+    heading(2, pastCommon?.notHeading ?? t.notHeading, t.notId),
+    ...paras(`${past?.notCalled ?? d.notCalled} ${t.checked(checked)}`),
     ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
     // 19 Nov 2026: and the next strike day with a page of its own, the 23rd (strike-days-2326n.ts; SEMAF's strike there called off on 20 Nov).
     list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale]), b2link("strike23n", locale, B2_TITLES.strike23n[locale])),

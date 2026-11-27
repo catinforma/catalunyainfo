@@ -64,6 +64,9 @@ const liveBlocks = (key: StrikeGuideKey, article: typeof STRIKE_RENFE_GUIDE, loc
   key === "strikeRenfe" ? buildStrikeGuideBody(key, locale, LIVE_RENFE_DAY) : article.editions[locale].blocks;
 
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
+/** 27 Nov 2026: the minimum-services text the live page shows: the entry's past-tense `pastFaq.ms` once its strike has passed. */
+const shownMs = (strike: Strike, key: StrikeGuideKey, locale: Locale): string =>
+  !isUpcoming(strike, liveDay(key)) && strike.pastFaq ? strike.pastFaq.ms[locale] : strike.minimumServices.text[locale];
 const entry = (id: string): Strike => {
   const strike = STRIKES.find((s) => s.id === id);
   assert.ok(strike, id);
@@ -316,7 +319,7 @@ test("every fact on the page is the entry's: facts, minimum services and advice 
         const { value } = splitFact(fact);
         assert.ok(body.includes(JSON.stringify(value).slice(1, -1)), `${key}/${locale}: fact missing: ${fact.slice(0, 60)}`);
       }
-      assert.ok(body.includes(JSON.stringify(strike.minimumServices.text[locale]).slice(1, -1)), `${key}/${locale}: minimum services text`);
+      assert.ok(body.includes(JSON.stringify(shownMs(strike, key, locale)).slice(1, -1)), `${key}/${locale}: minimum services text`);
       assert.ok(body.includes(JSON.stringify(strike.short[locale]).slice(1, -1)), `${key}/${locale}: short`);
       if (isUpcoming(strike, STRIKES_AS_OF)) {
         for (const advice of strike.advice[locale]) assert.ok(body.includes(JSON.stringify(advice).slice(1, -1)), `${key}/${locale}: advice`);
@@ -333,7 +336,8 @@ test("every fact on the page is the entry's: facts, minimum services and advice 
 
 test("editing the entry changes the guide without touching the template", () => {
   for (const { key, strikeId } of GUIDES) {
-    const out = withEntry(strikeId, (s) => ({ ...s, minimumServices: PUBLISHED_MS }));
+    // 27 Nov 2026: a new order needs its own past-tense text too (pastFaq, kept in step by the past-FAQ test), so the edit drops the old one.
+    const out = withEntry(strikeId, (s) => ({ ...s, minimumServices: PUBLISHED_MS, pastFaq: undefined }));
     for (const locale of LOCALES) {
       const blocks = buildStrikeGuideBody(key, locale, liveDay(key), out);
       assert.ok(bodySchema.safeParse(blocks).success, `${key}/${locale}`);
@@ -402,7 +406,7 @@ test("minimum services: the section has the entry's text and says who sets them 
       const blocks = liveBlocks(key, article, locale);
       const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === "serveis-minims");
       assert.ok(at > 3, `${key}/${locale}: no minimum-services section`);
-      assert.equal((blocks[at + 1] as { text?: string }).text, strike.minimumServices.text[locale]);
+      assert.equal((blocks[at + 1] as { text?: string }).text, shownMs(strike, key, locale));
       const tableBlock = blocks.slice(at).find((b) => b.type === "table") as { rows: string[][] };
       assert.equal(tableBlock.rows.length, strike.affects.length, `${key}/${locale}`);
       const tableJson = JSON.stringify(tableBlock.rows);

@@ -580,6 +580,55 @@ export function nextDatesBlocks(locale: Locale, asOf: string, hub: "strikes" | "
   ];
 }
 
+/** The Rodalies live-notices line in `more.rodalies`: dropped once the strike is past (27 Nov 2026: "today's notices" for a past day). */
+const RODALIES_LIVE_11N: Record<Locale, string> = {
+  ca: ` El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya.`,
+  es: ` El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya.`,
+  en: ` On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya.`,
+};
+
+/** The closing "before you travel" advice of `more.longDistance` and `more.airports`: cut from here on once the strike is past. */
+const PAST_CUT_11N: Record<Locale, string[]> = {
+  ca: [" Si tens bitllet per a l'11,", " Abans d'anar a l'aeroport,"],
+  es: [" Si tienes billete para el 11,", " Antes de ir al aeropuerto,"],
+  en: [" If you have a ticket for the 11th,", " Before you leave for the airport,"],
+};
+
+function pastMore11n(text: string, locale: Locale): string {
+  let out = text.replace(RODALIES_LIVE_11N[locale], "");
+  for (const cut of PAST_CUT_11N[locale]) {
+    const at = out.indexOf(cut);
+    if (at >= 0) out = out.slice(0, at);
+  }
+  return out;
+}
+
+/**
+ * 27 Nov 2026: the sections that still spoke from before the day once it is past, in the past tense, as the lead and pastFaq11n
+ * already were: the schools heading ("¿Hubo colegio…?"), its key fact and the transport intro's "check them the evening before".
+ * Same facts; titles, descriptions and the H1 untouched.
+ */
+const PAST_11N: Record<Locale, { schoolsHeading: string; schoolsLabel: string; schoolsFact: string; transportIntro: string }> = {
+  ca: {
+    schoolsHeading: "Hi va haver escola l'11 de novembre?",
+    schoolsLabel: "Escoles",
+    schoolsFact: "Va ser dia lectiu: les escoles van obrir amb el personal mínim que fixava l'ordre de serveis mínims",
+    transportIntro: "Una vaga general pot afectar tots els operadors alhora, i cadascun va publicar els seus horaris de serveis mínims quan va sortir l'ordre. Les ordres permetien repartir el percentatge de manera desigual al llarg del dia.",
+  },
+  es: {
+    schoolsHeading: "¿Hubo colegio el 11 de noviembre?",
+    schoolsLabel: "Colegios",
+    schoolsFact: "Fue día lectivo: los colegios abrieron con el personal mínimo que fijaba la orden de servicios mínimos",
+    transportIntro: "Una huelga general puede afectar a todos los operadores a la vez, y cada uno publicó sus horarios de servicios mínimos cuando salió la orden. Las órdenes permitían repartir el porcentaje de forma desigual a lo largo del día.",
+  },
+  en: {
+    schoolsHeading: "Was there school on 11 November?",
+    schoolsLabel: "Schools",
+    schoolsFact: "A school day: schools opened with the minimum staff the minimum-services order set",
+    transportIntro: "A general strike can hit every operator at once, and each published its minimum-service timetables once the order was out. The orders let operators spread the percentage unevenly over the day.",
+  },
+};
+
 const COPY: Record<Locale, Copy> = {
   ca: {
     lead: (c) => {
@@ -692,7 +741,7 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, bus, FGC, trens i avions",
     transportIntro: "Una vaga general pot afectar tots els operadors alhora, i cadascun publica els seus horaris de serveis mínims quan surt l'ordre. Mira'ls el vespre abans i el mateix matí: les ordres permeten repartir el percentatge de manera desigual al llarg del dia, així que no tots els trens o autobusos de la teva hora hi seran.",
     more: {
-      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya. **El dia abans, vaga a Renfe:** el sindicat de maquinistes SEMAF va convocar una aturada total el dimarts 10 de novembre, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, ${{ pending: "sense hores ni serveis mínims publicats encara", published: "amb serveis mínims ja publicats", none: "sense serveis mínims publicats" }[RENFE_NOV_MS]}. Les aturades parcials que també havia convocat el dijous 12 les va desconvocar el 10 de novembre i les va substituir per una nova vaga el dilluns 23, segons ${link(U.semaf23, "un altre comunicat")}. Tot el que se'n sap, a ${b2link("strikeRenfe", "ca", "la guia de la vaga de Renfe")}.`,
+      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26.${RODALIES_LIVE_11N.ca} **El dia abans, vaga a Renfe:** el sindicat de maquinistes SEMAF va convocar una aturada total el dimarts 10 de novembre, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, ${{ pending: "sense hores ni serveis mínims publicats encara", published: "amb serveis mínims ja publicats", none: "sense serveis mínims publicats" }[RENFE_NOV_MS]}. Les aturades parcials que també havia convocat el dijous 12 les va desconvocar el 10 de novembre i les va substituir per una nova vaga el dilluns 23, segons ${link(U.semaf23, "un altre comunicat")}. Tot el que se'n sap, a ${b2link("strikeRenfe", "ca", "la guia de la vaga de Renfe")}.`,
       tmb: `TMB els publica als seus ${link(U.tmb, "avisos de servei")}. L'horari d'un dia normal és a ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
       fgcTram: `FGC informa de l'estat del servei a ${link(U.fgc, "fgc.cat")}. Les ordres de les vagues generals del 2024 també hi incloïen el tramvia i la resta d'autobusos urbans i interurbans.`,
       longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va fixar el Ministeri de Transports, amb ${link(U.ouigoResolution, "una resolució del 27 d'octubre")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 de novembre també afectava els trens de Renfe (la del 12 es va desconvocar).`,
@@ -704,7 +753,9 @@ const COPY: Record<Locale, Copy> = {
     schools: (c) => {
       const s = schoolSpan("ca");
       return [
-        `**Sí, és dia lectiu.** El curs 2026-2027 va del ${s.start} al ${s.end} i les vacances de Nadal comencen el ${s.christmas}, segons l'${link(U.schoolOrder, "Ordre EDF/66/2026")}, i l'11 de novembre no és cap dels festius de tot Catalunya. Una vaga no canvia el calendari escolar: les escoles obren, amb el personal mínim que fixi l'ordre de serveis mínims, i és cada escola qui diu a les famílies què pot garantir aquell dia. Compta també els dies de lliure disposició de la teva escola i la festa local, si n'hi ha: ${link(`/ca/${TOOL_PATHS.school.ca}/`, "calendari escolar 2026-2027")}.`,
+        c.phase === "past"
+          ? `**Sí, va ser dia lectiu.** El curs 2026-2027 va del ${s.start} al ${s.end} i les vacances de Nadal comencen el ${s.christmas}, segons l'${link(U.schoolOrder, "Ordre EDF/66/2026")}, i l'11 de novembre no era cap dels festius de tot Catalunya. Una vaga no canvia el calendari escolar: les escoles van obrir, amb el personal mínim que fixava l'ordre de serveis mínims, i cada escola deia a les famílies què podia garantir aquell dia. El calendari complet: ${link(`/ca/${TOOL_PATHS.school.ca}/`, "calendari escolar 2026-2027")}.`
+          : `**Sí, és dia lectiu.** El curs 2026-2027 va del ${s.start} al ${s.end} i les vacances de Nadal comencen el ${s.christmas}, segons l'${link(U.schoolOrder, "Ordre EDF/66/2026")}, i l'11 de novembre no és cap dels festius de tot Catalunya. Una vaga no canvia el calendari escolar: les escoles obren, amb el personal mínim que fixi l'ordre de serveis mínims, i és cada escola qui diu a les famílies què pot garantir aquell dia. Compta també els dies de lliure disposició de la teva escola i la festa local, si n'hi ha: ${link(`/ca/${TOOL_PATHS.school.ca}/`, "calendari escolar 2026-2027")}.`,
         `**Qui fa vaga a l'educació:** el sindicat docent USTEC·STEs ha ratificat la vaga general i diu: «Cridem tot el personal educatiu a fer vaga». ${c.phase === "past" ? "" : "Per tant, alguns docents i altres treballadors de l'escola poden no ser-hi."}`.trim(),
         ...educationLine(c),
         slot(c.slots, "schools").status === "published" && slot(c.slots, "schools").text
@@ -917,7 +968,7 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transporte: Rodalies, metro, bus, FGC, trenes y aviones",
     transportIntro: "Una huelga general puede afectar a todos los operadores a la vez, y cada uno publica sus horarios de servicios mínimos cuando sale la orden. Míralos la noche antes y la misma mañana: las órdenes permiten repartir el porcentaje de forma desigual a lo largo del día, así que no todos los trenes o autobuses de tu hora estarán.",
     more: {
-      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya. **El día antes, huelga en Renfe:** el sindicato de maquinistas SEMAF convocó un paro total el martes 10 de noviembre, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, ${{ pending: "sin horas ni servicios mínimos publicados todavía", published: "con servicios mínimos ya publicados", none: "sin servicios mínimos publicados" }[RENFE_NOV_MS]}. Los paros parciales que también había convocado el jueves 12 los desconvocó el 10 de noviembre y los sustituyó por una nueva huelga el lunes 23, según ${link(U.semaf23, "otro comunicado")}. Todo lo que se sabe, en ${b2link("strikeRenfe", "es", "la guía de la huelga de Renfe")}.`,
+      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26.${RODALIES_LIVE_11N.es} **El día antes, huelga en Renfe:** el sindicato de maquinistas SEMAF convocó un paro total el martes 10 de noviembre, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, ${{ pending: "sin horas ni servicios mínimos publicados todavía", published: "con servicios mínimos ya publicados", none: "sin servicios mínimos publicados" }[RENFE_NOV_MS]}. Los paros parciales que también había convocado el jueves 12 los desconvocó el 10 de noviembre y los sustituyó por una nueva huelga el lunes 23, según ${link(U.semaf23, "otro comunicado")}. Todo lo que se sabe, en ${b2link("strikeRenfe", "es", "la guía de la huelga de Renfe")}.`,
       tmb: `TMB los publica en sus ${link(U.tmb, "avisos de servicio")}. El horario de un día normal está en ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
       fgcTram: `FGC informa del estado del servicio en ${link(U.fgc, "fgc.cat")}. Las órdenes de las huelgas generales de 2024 también incluían el tranvía y el resto de autobuses urbanos e interurbanos.`,
       longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los fijó el Ministerio de Transportes, con ${link(U.ouigoResolution, "una resolución del 27 de octubre")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 de noviembre también afectaba a los trenes de Renfe (la del 12 se desconvocó).`,
@@ -929,7 +980,9 @@ const COPY: Record<Locale, Copy> = {
     schools: (c) => {
       const s = schoolSpan("es");
       return [
-        `**Sí, es día lectivo.** El curso 2026-2027 va del ${s.start} al ${s.end} y las vacaciones de Navidad empiezan el ${s.christmas}, según la ${link(U.schoolOrder, "Ordre EDF/66/2026")}, y el 11 de noviembre no es ninguno de los festivos de toda Cataluña. Una huelga no cambia el calendario escolar: los colegios abren, con el personal mínimo que fije la orden de servicios mínimos, y es cada colegio quien dice a las familias qué puede garantizar ese día. Cuenta también los días de libre disposición de tu colegio y la fiesta local, si la hay: ${link(`/es/${TOOL_PATHS.school.es}/`, "calendario escolar 2026-2027")}.`,
+        c.phase === "past"
+          ? `**Sí, fue día lectivo.** El curso 2026-2027 va del ${s.start} al ${s.end} y las vacaciones de Navidad empiezan el ${s.christmas}, según la ${link(U.schoolOrder, "Ordre EDF/66/2026")}, y el 11 de noviembre no era ninguno de los festivos de toda Cataluña. Una huelga no cambia el calendario escolar: los colegios abrieron, con el personal mínimo que fijaba la orden de servicios mínimos, y cada colegio decía a las familias qué podía garantizar ese día. El calendario completo: ${link(`/es/${TOOL_PATHS.school.es}/`, "calendario escolar 2026-2027")}.`
+          : `**Sí, es día lectivo.** El curso 2026-2027 va del ${s.start} al ${s.end} y las vacaciones de Navidad empiezan el ${s.christmas}, según la ${link(U.schoolOrder, "Ordre EDF/66/2026")}, y el 11 de noviembre no es ninguno de los festivos de toda Cataluña. Una huelga no cambia el calendario escolar: los colegios abren, con el personal mínimo que fije la orden de servicios mínimos, y es cada colegio quien dice a las familias qué puede garantizar ese día. Cuenta también los días de libre disposición de tu colegio y la fiesta local, si la hay: ${link(`/es/${TOOL_PATHS.school.es}/`, "calendario escolar 2026-2027")}.`,
         `**Quién hace huelga en la educación:** el sindicato docente USTEC·STEs ha ratificado la huelga general y llama a todo el personal educativo a la huelga («Cridem tot el personal educatiu a fer vaga»). ${c.phase === "past" ? "" : "Por tanto, algunos docentes y otros trabajadores del colegio pueden no estar."}`.trim(),
         ...educationLine(c),
         slot(c.slots, "schools").status === "published" && slot(c.slots, "schools").text
@@ -1142,7 +1195,7 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, buses, FGC, trains and flights",
     transportIntro: "A general strike can hit every operator at once, and each publishes its minimum-service timetables once the order is out. Check them the evening before and that morning: the orders let operators spread the percentage unevenly over the day, so not every train or bus at your usual time will run.",
     more: {
-      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya. **A Renfe strike the day before:** the train drivers' union SEMAF called a full stoppage on Tuesday 10 November, according to ${link(U.semaf1012, "its notice of 29 October")}, ${{ pending: "with no hours or minimum services published yet", published: "and its minimum services are out", none: "with no minimum services published" }[RENFE_NOV_MS]}. The partial stoppages it had also called for Thursday 12 November were withdrawn on 10 November and replaced with a new strike on Monday 23 November, according to ${link(U.semaf23, "a later notice")}. Everything known about it is in ${b2link("strikeRenfe", "en", "our Renfe strike guide")}.`,
+      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th.${RODALIES_LIVE_11N.en} **A Renfe strike the day before:** the train drivers' union SEMAF called a full stoppage on Tuesday 10 November, according to ${link(U.semaf1012, "its notice of 29 October")}, ${{ pending: "with no hours or minimum services published yet", published: "and its minimum services are out", none: "with no minimum services published" }[RENFE_NOV_MS]}. The partial stoppages it had also called for Thursday 12 November were withdrawn on 10 November and replaced with a new strike on Monday 23 November, according to ${link(U.semaf23, "a later notice")}. Everything known about it is in ${b2link("strikeRenfe", "en", "our Renfe strike guide")}.`,
       tmb: `TMB publishes them in its ${link(U.tmb, "service notices")}. Normal-day hours are in ${b2link("hours", "en", "Barcelona metro and night bus hours")}.`,
       fgcTram: `FGC posts its service status on ${link(U.fgc, "fgc.cat")}. The 2024 general-strike orders also covered the tram and all other urban and interurban buses.`,
       longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport set the minimum services in ${link(U.ouigoResolution, "a resolution of 27 October")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 November also affected Renfe trains (the 12th's was withdrawn).`,
@@ -1154,7 +1207,9 @@ const COPY: Record<Locale, Copy> = {
     schools: (c) => {
       const s = schoolSpan("en");
       return [
-        `**Yes, it is a school day.** The 2026-2027 school year runs from ${s.start} to ${s.end}, with the Christmas holidays starting on ${s.christmas}, under ${link(U.schoolOrder, "Order EDF/66/2026")}, and 11 November is not one of Catalonia's public holidays. A strike does not change the school calendar: schools open with the minimum staff the minimum-services order sets, and each school tells families what it can provide that day. Also check your school's own free days and any local holiday: ${link(`/en/${TOOL_PATHS.school.en}/`, "Catalonia school calendar 2026-2027")}.`,
+        c.phase === "past"
+          ? `**Yes, it was a school day.** The 2026-2027 school year runs from ${s.start} to ${s.end}, with the Christmas holidays starting on ${s.christmas}, under ${link(U.schoolOrder, "Order EDF/66/2026")}, and 11 November was not one of Catalonia's public holidays. A strike does not change the school calendar: schools opened with the minimum staff the minimum-services order set, and each school told families what it could provide that day. The full calendar: ${link(`/en/${TOOL_PATHS.school.en}/`, "Catalonia school calendar 2026-2027")}.`
+          : `**Yes, it is a school day.** The 2026-2027 school year runs from ${s.start} to ${s.end}, with the Christmas holidays starting on ${s.christmas}, under ${link(U.schoolOrder, "Order EDF/66/2026")}, and 11 November is not one of Catalonia's public holidays. A strike does not change the school calendar: schools open with the minimum staff the minimum-services order sets, and each school tells families what it can provide that day. Also check your school's own free days and any local holiday: ${link(`/en/${TOOL_PATHS.school.en}/`, "Catalonia school calendar 2026-2027")}.`,
         `**Who strikes in education:** the teachers' union USTEC·STEs has ratified the general strike and calls all education staff out ("Cridem tot el personal educatiu a fer vaga"). ${c.phase === "past" ? "" : "So some teachers and other school staff may be absent."}`.trim(),
         ...educationLine(c),
         slot(c.slots, "schools").status === "published" && slot(c.slots, "schools").text
@@ -1349,7 +1404,9 @@ export function buildStrike11nBody(
   blocks.push(lead(t.lead(c)));
   // 25 Nov 2026: the sources the page stands on, with the day they were re-read, right under the answer (strike-citable.ts).
   blocks.push(sourcesCheckedLine(locale, checkedOn(asOf, STRIKE_11N_VERIFIED), "strike11n"));
-  blocks.push(keyFacts(t.keyFactsTitle, t.keyFacts(c)));
+  const past = c.phase === "past" ? PAST_11N[locale] : undefined;
+  const facts = t.keyFacts(c).map((fact) => (past && fact.label === past.schoolsLabel ? { ...fact, value: past.schoolsFact } : fact));
+  blocks.push(keyFacts(t.keyFactsTitle, facts));
   // 3 Nov 2026: "En català · En castellano · In English", under the answer.
   // Catalan queries land on the Spanish edition (hreflang follows the Google
   // interface language); this line takes the reader to theirs.
@@ -1386,14 +1443,14 @@ export function buildStrike11nBody(
   }
 
   // Transport, sector by sector.
-  blocks.push(...h2(t.transportHeading, t.transportIntro));
+  blocks.push(...h2(t.transportHeading, past?.transportIntro ?? t.transportIntro));
   for (const key of TRANSPORT) {
     blocks.push(heading(3, t.sectors[key].name));
-    blocks.push(...paras(t.msLine(c, key), t.more[key]));
+    blocks.push(...paras(t.msLine(c, key), past ? pastMore11n(t.more[key], locale) : t.more[key]));
   }
   blocks.push(...h3(t.taxiHeading, t.taxi));
 
-  blocks.push(heading(2, t.schoolsHeading, "escoles"));
+  blocks.push(heading(2, past?.schoolsHeading ?? t.schoolsHeading, "escoles"));
   blocks.push(...paras(...t.schools(c)));
   // The 2024 reference is dropped once this year's figures are in.
   const health = t.health(c);
