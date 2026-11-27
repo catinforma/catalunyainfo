@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { itvPath } from "@/lib/programmatic/itv/copy";
@@ -774,6 +775,7 @@ export function TrafficFinesRoute({ locale }: { locale: TfLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

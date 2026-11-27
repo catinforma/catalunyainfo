@@ -10,6 +10,7 @@ import { NetSalaryEmbedBox } from "@/components/programmatic/embed-calc/CalcEmbe
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
@@ -587,6 +588,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
               <p>{sourceNote}</p>
               <SpecialRegimeSources locale={locale} />
 

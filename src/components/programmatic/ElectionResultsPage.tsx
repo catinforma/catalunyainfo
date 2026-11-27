@@ -14,6 +14,7 @@ import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
 import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
 import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
@@ -252,6 +253,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                       </li>
                     ))}
                   </ol>
+                  <SourcesPolicyLink locale={locale} />
                 </section>
               </div>
 

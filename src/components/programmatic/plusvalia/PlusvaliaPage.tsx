@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
@@ -532,6 +533,7 @@ export function PlusvaliaRoute({ locale }: { locale: PvLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

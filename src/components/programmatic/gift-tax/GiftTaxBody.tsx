@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { GIFT_AGENCY, GIFT_REGION_IN, giftCite, giftEditions, giftLawName, giftPath, type GiftLocale } from "@/lib/programmatic/gift-tax/copy";
 import { GIFT_RULES, giftDeadline, giftDefaultInput, giftExample, giftExampleResults, giftFaq, giftMeta } from "@/lib/programmatic/gift-tax/page";
 import { compareCopy, compareRows } from "@/lib/programmatic/gift-tax/compare";
@@ -553,6 +554,7 @@ export function GiftTaxBody({ region, locale, crumbs, nextStep, more }: { region
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

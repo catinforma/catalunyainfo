@@ -274,7 +274,7 @@ export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: Sna
 
                 <LinkList title={w.related} id="ci-reservoir-related" links={relatedLinks(locale)} />
 
-                <Sources title={w.sources} note={w.sourcesNote} items={sources(locale)} />
+                <Sources title={w.sources} note={w.sourcesNote} items={sources(locale)} locale={locale} />
               </div>
 
               <div className="ci-article-aside hidden lg:block">
@@ -372,7 +372,7 @@ export function ReservoirHubPage({ locale, server, totals }: { locale: Locale; s
 
             <LinkList title={w.related} id="ci-reservoir-related" links={relatedLinks(locale)} />
 
-            <Sources title={w.sources} note={w.sourcesNote} items={sources(locale)} />
+            <Sources title={w.sources} note={w.sourcesNote} items={sources(locale)} locale={locale} />
           </div>
           <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="reservoirs" variant="full" />
         </div>

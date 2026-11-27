@@ -6,7 +6,7 @@ import { caDayArticle, dayMonth, dayMonthYear, weekdayName } from "@/lib/program
 import { joinList } from "@/lib/programmatic/holidays/names";
 
 import { YEAR } from "./calendar";
-import { DESCRIPTION_LIMIT, TITLE_LIMIT, type Faq } from "./copy";
+import { DESCRIPTION_LIMIT, TITLE_LIMIT } from "./copy";
 import type { DaySection } from "./day-copy";
 import { change2026, dayRuns, isCity, isWeekend, movableName, type DayHolder, type SpainDay } from "./days";
 
@@ -531,14 +531,6 @@ export function daySectionsIntl(day: SpainDay, L: IntlLocale): DaySection[] {
     sections.push({ id: "en-2026", question: ca ? `Va ser festiu ${last} el 2026?` : `Was ${last} a public holiday in 2026?`, answer: change, printed: change });
   }
   return sections;
-}
-
-/** As `dayFaq`: the first question is the H1 as printed (with the date for the Easter feasts). */
-export function dayFaqIntl(day: SpainDay, L: IntlLocale): Faq[] {
-  return [
-    { question: dayH1Intl(day.date, L), answer: [dayLeadIntl(day, L), ...dayNotesIntl(day, L)].join(" ") },
-    ...daySectionsIntl(day, L).map(({ question, answer }) => ({ question, answer })),
-  ];
 }
 
 /** "Del sábado 9 al martes 12 de octubre: 4 días…", short, for descriptions. */

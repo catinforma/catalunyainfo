@@ -75,6 +75,15 @@ export function bodyDate(key: string, file: BodyDatesFile = FILE): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/**
+ * The newest body date of any family: when the code-built content last changed
+ * (stamped with the deploy's time by the build). llms.txt prints it as its
+ * "Updated" line, with the newest guide publish.
+ */
+export function latestBodyDate(file: BodyDatesFile = FILE): Date | null {
+  return latestDate(...Object.values(file.families).map((f) => f.date));
+}
+
 /** The latest of the given dates; null when none is valid. */
 export function latestDate(...dates: ReadonlyArray<Date | string | null | undefined>): Date | null {
   let newest: Date | null = null;

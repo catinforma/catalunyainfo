@@ -7,6 +7,7 @@ import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysCommunityLink, WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalculatorsHubLink } from "@/components/programmatic/calculators/MoreCalculators";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
 import { municipalities } from "@/lib/programmatic/holidays/data";
@@ -141,6 +142,7 @@ export function SourceList({ items, locale, title }: { items: (OfficialText | nu
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

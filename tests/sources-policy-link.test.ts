@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { sourcesPolicyLink } from "@/lib/content/sources-policy-link";
@@ -40,4 +41,27 @@ test("the article and the main programmatic source lists render the sources poli
     assert.match(src, /ci-sources/, file);
     assert.match(src, /<SourcesPolicyLink locale=\{locale\} \/>/, file);
   }
+});
+
+// Batch 8F (27 Nov 2026): the same line on every other template with a source
+// list (elections, calculators, Rodalies, ZBE, zona azul, weekend agenda,
+// fuel by province, Spain 2027 communities and cities, polls), so no page lists
+// official sources without saying how they are chosen and checked.
+test("every component with a sources heading or a .ci-sources list renders the sources policy link", () => {
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const p = join(dir, name);
+      return statSync(p).isDirectory() ? walk(p) : p.endsWith(".tsx") ? [p] : [];
+    });
+  const missing: string[] = [];
+  let checked = 0;
+  for (const file of walk("src/components")) {
+    if (file.endsWith("SourcesPolicyLink.tsx") || file.endsWith("AnalyticsClicks.tsx")) continue;
+    const src = readFileSync(file, "utf8");
+    if (!/<h2[^>]*id="(fuentes|sources)"|<(ol|ul)[^>]*ci-sources/.test(src)) continue;
+    checked += 1;
+    if (!/<SourcesPolicyLink locale=\{locale\} \/>/.test(src)) missing.push(file);
+  }
+  assert.ok(checked >= 45, String(checked));
+  assert.deepEqual(missing, []);
 });

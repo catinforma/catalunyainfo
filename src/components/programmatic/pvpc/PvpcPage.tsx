@@ -341,7 +341,7 @@ export function PvpcArticle({ locale, which, view }: { locale: Locale; which: Pv
 
               <LinkList title={w.related} id="ci-pvpc-related" links={relatedLinks(locale, which)} />
 
-              <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale)} />
+              <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale)} locale={locale} />
             </div>
             <ShareBar locale={locale} path={crumbPath(trail)} title={h1} contentType="pvpc" variant="full" />
           </div>

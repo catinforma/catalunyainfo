@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { CAP_ROW_LABEL, CATEGORY_LABEL, SPECIAL_LABEL, bonoSocialEditions, bonoSocialPath, elDay, kwh, money, rate, type BsLocale } from "@/lib/programmatic/bono-social/copy";
 import { SPECIAL_IDS, type BonoResult } from "@/lib/programmatic/bono-social/engine";
@@ -622,6 +623,7 @@ export function BonoSocialRoute({ locale }: { locale: BsLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

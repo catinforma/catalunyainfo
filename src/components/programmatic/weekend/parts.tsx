@@ -12,6 +12,7 @@ import { electionWeekendNote } from "@/lib/programmatic/weekend/election-note";
 import type { SnapshotFair } from "@/lib/programmatic/weekend/types";
 import type { WeekendLocale, ZoneDef } from "@/lib/programmatic/weekend/zones";
 import type { ProvinceCode } from "@/lib/programmatic/weekend/types";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 
 /** Shared, server-rendered pieces of the weekend pages. Nothing here reads the clock. */
 
@@ -232,6 +233,7 @@ export function Sources({ locale }: { locale: WeekendLocale }) {
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
       <p className="mt-2 text-xs text-[var(--color-muted)]">
         {locale === "es" ? `Datos leídos el ${date(SNAPSHOT.readOn)}.` : `Dades llegides el ${date(SNAPSHOT.readOn)}.`}
       </p>

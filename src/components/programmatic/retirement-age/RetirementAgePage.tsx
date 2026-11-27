@@ -11,6 +11,7 @@ import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { subsidyOver52Line } from "@/lib/programmatic/calculators/context-links";
@@ -678,6 +679,7 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
                   <A href={OFFICIAL_TOOLS.tuss}>Tu Seguridad Social</A> ({L(locale, { es: "informe de vida laboral e informe de edad legal de jubilación", ca: "informe de vida laboral i informe d'edat legal de jubilació", en: "working-life report and legal retirement age report" })})
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

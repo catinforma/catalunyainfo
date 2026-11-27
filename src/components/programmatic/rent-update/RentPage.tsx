@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
@@ -417,6 +418,7 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                   <A href={tableUrl(SERIES.irav)}>IRAV {SERIES.irav.code}</A> · <A href={tableUrl(SERIES.igc)}>IGC {SERIES.igc.code}</A>
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="rent-update" locale={locale} />
             </div>

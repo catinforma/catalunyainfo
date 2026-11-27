@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { renderInline } from "@/lib/content/inline";
 import type { CompensationCopy, LinkItem, LinePageCopy } from "@/lib/programmatic/rodalies/copy";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
+import type { Locale } from "@/lib/i18n/config";
 
 /** Shared, server-rendered pieces of the Rodalies pages. */
 
@@ -59,7 +61,7 @@ export function LinkList({ title, id, links }: { title: string; id: string; link
   );
 }
 
-export function Sources({ title, note, items }: { title: string; note: string; items: LinePageCopy["sources"] }) {
+export function Sources({ title, note, items, locale }: { title: string; note: string; items: LinePageCopy["sources"]; locale: Locale }) {
   return (
     <section className="mt-12">
       <h2 className="font-sans text-base font-semibold">{title}</h2>
@@ -77,6 +79,7 @@ export function Sources({ title, note, items }: { title: string; note: string; i
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

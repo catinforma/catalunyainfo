@@ -20,7 +20,6 @@ const { DAY_PAGES, spainDay } = await import("../src/lib/programmatic/spain-2027
 const {
   HOLIDAY_NAMES,
   dayDescriptionIntl,
-  dayFaqIntl,
   dayH1Intl,
   dayLeadIntl,
   dayNotesIntl,
@@ -29,6 +28,7 @@ const {
   dayVerdictIntl,
   restOfSpainLabelIntl,
 } = await import("../src/lib/programmatic/spain-2027/day-copy-intl.ts");
+const { printedDayFaq } = await import("../src/lib/programmatic/spain-2027/day-faq.ts");
 const { resolveSpainDay, spainDayPath, spainDayPaths, spainDaySlug, spainDayStaticParams, spainDayTranslations } = await import(
   "../src/lib/programmatic/spain-2027/paths.ts"
 );
@@ -69,7 +69,7 @@ function allText(iso: string, locale: L): string {
     dayLeadIntl(d, locale),
     ...dayNotesIntl(d, locale),
     ...daySectionsIntl(d, locale).flatMap((s) => [s.question, s.answer, s.printed]),
-    ...dayFaqIntl(d, locale).flatMap((f) => [f.question, f.answer]),
+    ...printedDayFaq(d, locale).flatMap((f) => [f.question, f.answer]),
   ].join(" ");
 }
 
@@ -196,7 +196,7 @@ test("titles <= 60 with the question first, descriptions <= 165; nothing unfille
       const description = dayDescriptionIntl(d, locale);
       assert.ok(description.length <= DESCRIPTION_LIMIT, `${iso} ${locale}: ${description.length}`);
       assert.doesNotMatch(allText(iso, locale), /undefined|null|NaN|\[object|\s{2}|\s[,.]/, `${iso} ${locale}`);
-      const faq = dayFaqIntl(d, locale);
+      const faq = printedDayFaq(d, locale);
       // The H1 as printed (site audit 17 Nov 2026: the Easter feasts' H1 carries the date).
       assert.equal(faq[0]!.question, dayH1Intl(iso, locale));
       assert.deepEqual(

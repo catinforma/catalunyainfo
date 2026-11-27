@@ -35,7 +35,7 @@ async function allGuides(locale: Locale): Promise<LlmsEntry[]> {
   const out = new Map<string, LlmsEntry>();
   for (let offset = 0; offset < MAX_GUIDES; offset += PAGE) {
     const entries = await listEntries(locale, { types: ["article", "guide"], limit: PAGE, offset });
-    for (const entry of entries) out.set(entry.href, { title: entry.title, href: entry.href, excerpt: entry.excerpt ?? null });
+    for (const entry of entries) out.set(entry.href, { title: entry.title, href: entry.href, excerpt: entry.excerpt ?? null, updatedAt: entry.updatedAt });
     if (entries.length < PAGE) break;
   }
   return [...out.values()];

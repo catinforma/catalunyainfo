@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
 import { parkingHubLine } from "@/lib/nav/driving-hubs";
@@ -99,7 +100,7 @@ function Facts({ city, kinds, locale }: { city: ZbeCity; kinds: FactKind[]; loca
   );
 }
 
-function Sources({ id, title, sources }: { id: string; title: string; sources: ZbeSource[] }) {
+function Sources({ id, title, sources, locale }: { id: string; title: string; sources: ZbeSource[]; locale: ZbeLocale }) {
   return (
     <section className="mt-12" aria-labelledby={id}>
       <h2 id={id} className="font-sans text-base font-semibold">
@@ -117,6 +118,7 @@ function Sources({ id, title, sources }: { id: string; title: string; sources: Z
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }
@@ -309,7 +311,7 @@ export function ZbeCityPage({ locale, city }: { locale: ZbeLocale; city: ZbeCity
           </p>
         </section>
 
-        <Sources id="ci-zbe-sources" title={copy.sourcesTitle} sources={city.sources} />
+        <Sources id="ci-zbe-sources" title={copy.sourcesTitle} sources={city.sources} locale={locale} />
       </div>
     </article>
   );
@@ -430,7 +432,7 @@ export function ZbeHubPage({ locale }: { locale: ZbeLocale }) {
           <Faq title={copy.faqTitle} faq={hubFaqFor(locale)} />
         </div>
 
-        <Sources id="ci-zbe-sources" title={copy.sourcesTitle} sources={sources} />
+        <Sources id="ci-zbe-sources" title={copy.sourcesTitle} sources={sources} locale={locale} />
       </div>
     </article>
   );

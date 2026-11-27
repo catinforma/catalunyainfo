@@ -39,6 +39,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 import { PensionCalculator } from "./PensionCalculator";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 
 /**
@@ -628,6 +629,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
                   <A href={OFFICIAL_LINKS.ssRevaluation}>{ssLink}</A>
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="pensions-2027" locale={locale} />
             </div>

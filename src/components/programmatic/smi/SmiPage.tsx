@@ -11,6 +11,7 @@ import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { bonoSocialLimitLine, subsidyIncomeLimitLine } from "@/lib/programmatic/calculators/context-links";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
@@ -606,6 +607,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                   {L(locale, { es: "Ministerio de Trabajo y Economía Social", ca: "Ministeri de Treball i Economia Social", en: "Ministry of Labour and Social Economy" })}: <A href={d.urls.draft}>{draftDocs[0]}</A> · <A href={d.urls.main}>{draftDocs[1]}</A>
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="smi-2027" locale={locale} />
             </div>

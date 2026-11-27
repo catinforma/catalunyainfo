@@ -96,7 +96,7 @@ export function HubPage({ locale }: { locale: ZaLocale }) {
             </section>
           ))}
 
-          <SourceList title={v.headings.sources} sources={hubSources()} note={v.checked} />
+          <SourceList title={v.headings.sources} sources={hubSources()} note={v.checked} locale={locale} />
 
           <ShareBar locale={locale} path={path} title={v.h1} contentType="zona_azul_hub" variant="full" />
         </div>

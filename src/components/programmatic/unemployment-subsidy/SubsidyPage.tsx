@@ -39,6 +39,7 @@ import {
   monthlyAmount,
 } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { mdLinks } from "@/components/programmatic/calculators/md-links";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { bonoSocialLimitLine } from "@/lib/programmatic/calculators/context-links";
 import { ipremPath } from "@/lib/programmatic/iprem/copy";
 import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
@@ -566,6 +567,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{h.limits}</h2>
               <ul>

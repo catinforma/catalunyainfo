@@ -9,6 +9,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
@@ -500,6 +501,7 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{h.limits}</h2>
               <ul>

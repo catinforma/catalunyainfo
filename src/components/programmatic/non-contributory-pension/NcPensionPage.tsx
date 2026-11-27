@@ -11,6 +11,7 @@ import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
@@ -655,6 +656,7 @@ export function NcPensionRoute({ locale }: { locale: NcLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

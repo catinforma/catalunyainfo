@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { bonoSocialPath } from "@/lib/programmatic/bono-social/copy";
 import { BASE_MULTIPLIER, PER_EXTRA_ADULT, PER_MINOR, QUOTE as BONO_QUOTE, SPECIAL_BONUS } from "@/lib/programmatic/bono-social/rules";
@@ -619,6 +620,7 @@ export function IpremRoute({ locale }: { locale: IpremLocale }) {
                   <A href={`https://www.boe.es/buscar/doc.php?id=${s27.budgetRules.boeId}`}>{s27.budgetRules.norm}</A> ({s27.budgetRules.boeId})
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
               <p className="text-sm">
                 {L(locale, { es: `Todo leído ${on(IPREM_RULES_AS_OF)}.`, ca: `Tot llegit ${on(IPREM_RULES_AS_OF)}.`, en: `All read ${on(IPREM_RULES_AS_OF)}.` })}
               </p>

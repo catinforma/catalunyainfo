@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { ShareBar } from "@/components/share/ShareBar";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { cityView, hubRow, primaryRule, ruleSentence, type Sourced } from "@/lib/programmatic/zona-azul/copy";
 import { CITIES } from "@/lib/programmatic/zona-azul/data";
@@ -67,7 +68,7 @@ export function Refs({ ids, sources, locale }: { ids: readonly string[]; sources
   );
 }
 
-export function SourceList({ title, sources, note, id = "fuentes" }: { title: string; sources: readonly Source[]; note: string; id?: string }) {
+export function SourceList({ title, sources, note, id = "fuentes", locale }: { title: string; sources: readonly Source[]; note: string; id?: string; locale: ZaLocale }) {
   return (
     <section className="mt-12" aria-labelledby={id}>
       <h2 id={id} className="font-sans text-base font-semibold">
@@ -85,6 +86,7 @@ export function SourceList({ title, sources, note, id = "fuentes" }: { title: st
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
       <p className="mt-3 text-sm text-[var(--color-muted)]">{note}</p>
     </section>
   );
@@ -261,7 +263,7 @@ export function CityPage({ city, locale }: { city: City; locale: ZaLocale }) {
 
           <LinkList title={v.headings.more} id="otras-ciudades" links={links} />
 
-          <SourceList title={v.headings.sources} sources={city.sources} note={v.checked} />
+          <SourceList title={v.headings.sources} sources={city.sources} note={v.checked} locale={locale} />
 
           <ShareBar locale={locale} path={path} title={v.h1} contentType="zona_azul_city" variant="full" />
         </div>

@@ -11,6 +11,7 @@ import { mdLinks } from "@/components/programmatic/calculators/md-links";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
@@ -758,6 +759,7 @@ export function WidowPensionRoute({ locale }: { locale: WpLocale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <h2 id="limites">{hd.limits}</h2>
               <ul>

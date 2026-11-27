@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
@@ -201,6 +202,7 @@ export function MortgageRoute({ locale, data }: { locale: MortgageLocale; data: 
                   </li>
                 ) : null}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="mortgage" locale={locale} />
             </div>

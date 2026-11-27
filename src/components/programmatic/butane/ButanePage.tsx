@@ -205,7 +205,7 @@ export function ButaneArticle({ locale, day }: { locale: Locale; day: string }) 
 
           <LinkList title={w.related} id="ci-butane-related" links={relatedLinks(locale)} />
 
-          <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale, shown)} />
+          <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale, shown)} locale={locale} />
         </div>
         <ShareBar locale={locale} path={crumbPath(trail)} title={w.h1} contentType="butane" variant="full" />
       </div>

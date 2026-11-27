@@ -51,7 +51,6 @@ import {
   eventSchema,
   faqSchema,
   graph,
-  howToSchema,
   placeSchema,
   siteAuthorProfileSchema,
 } from "@/lib/seo/jsonld";
@@ -188,7 +187,9 @@ export async function generateMetadata({
       return buildMetadata({
         locale,
         path: sectionPath("authors", locale),
-        title: t.nav.authors,
+        // 27 Nov 2026: a description and og:description like the other hubs (messages hubMeta.authors).
+        title: t.hubMeta.authors.title,
+        description: t.hubMeta.authors.description,
         // With only the founder listed, the index is a thin copy of his own
         // (indexable) page; keep it out until the CMS publishes an author.
         noindex: (await listAuthors(locale)).length === 0,
@@ -554,7 +555,6 @@ export default async function CatchAllPage({
     entry.type === "destination" || entry.type === "place" ? placeSchema(entry) : null,
     entry.type === "page" ? null : articleSchema(entry),
     faqSchema(entry.body),
-    howToSchema(entry),
   ]);
 
   return (

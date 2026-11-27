@@ -7,7 +7,7 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 
 import { YEAR } from "./calendar";
 import { names } from "./communities";
-import { DESCRIPTION_LIMIT, TITLE_LIMIT, rangeWords, runLine, territoryCount, weekdayDate, type Faq } from "./copy";
+import { DESCRIPTION_LIMIT, TITLE_LIMIT, rangeWords, runLine, territoryCount, weekdayDate } from "./copy";
 import { change2026, dayRuns, isCity, isWeekend, movableName, type DayHolder, type SpainDay } from "./days";
 
 /**
@@ -410,18 +410,7 @@ export function daySections(day: SpainDay): DaySection[] {
   return sections;
 }
 
-/**
- * The page's questions, as printed, for FAQPage: the H1's, then each section's.
- * The H1 itself, not `dayQuestion`: for the feasts that move with Easter the H1
- * adds the date ("… Jueves Santo de 2027 (25 de marzo)?"), and an FAQ question
- * the page does not show is markup without visible content (site audit, 17 Nov 2026).
- */
-export function dayFaq(day: SpainDay): Faq[] {
-  return [
-    { question: dayH1(day.date), answer: [dayLead(day), ...dayNotes(day)].join(" ") },
-    ...daySections(day).map(({ question, answer }) => ({ question, answer })),
-  ];
-}
+// FAQPage: `printedDayFaq` in day-faq.ts (the H1 and each section, with the text printed under them).
 
 /** The hub's line for a date: where, and the BOE's name. */
 export function hubDayWords(day: SpainDay): string {

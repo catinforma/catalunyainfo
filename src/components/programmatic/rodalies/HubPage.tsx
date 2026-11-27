@@ -132,7 +132,7 @@ export function HubPage({ locale, initial = null, today }: { locale: Locale; ini
 
             <LinkList title={t.relatedTitle} id="ci-rodalies-related" links={t.related} />
 
-            <Sources title={t.sourcesTitle} note={t.sourcesNote} items={t.sources} />
+            <Sources title={t.sourcesTitle} note={t.sourcesNote} items={t.sources} locale={locale} />
           </div>
           <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="rodalies_hub" variant="full" />
         </div>

@@ -23,7 +23,6 @@ import { BRIDGES, HUB, compactDates, runLine, weekdayDate } from "@/lib/programm
 import {
   COMPUTED_NOTE,
   dayDescription,
-  dayFaq,
   dayH1,
   dayLead,
   dayNotes,
@@ -39,7 +38,6 @@ import {
 import {
   computedNote,
   dayDescriptionIntl,
-  dayFaqIntl,
   dayH1Intl,
   dayLeadIntl,
   dayNotesIntl,
@@ -47,8 +45,6 @@ import {
   daySectionsIntl,
   dayTitleIntl,
   dayVerdictIntl,
-  holidayName,
-  regionName,
   runLineIntl,
   weekdayDateIntl,
   whereWordsIntl,
@@ -56,7 +52,8 @@ import {
   type IntlLocale,
 } from "@/lib/programmatic/spain-2027/day-copy-intl";
 import { BRIDGES_INTL, HUB_INTL } from "@/lib/programmatic/spain-2027/copy-intl";
-import { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, isCity, isWeekend, neighbours, spainDay, type SpainDay } from "@/lib/programmatic/spain-2027/days";
+import { DAY_LIST_UI, dayHolderNote, dayHolidayLabel, dayPlaceLabel, printedDayFaq } from "@/lib/programmatic/spain-2027/day-faq";
+import { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, isWeekend, neighbours, spainDay, type SpainDay } from "@/lib/programmatic/spain-2027/days";
 import { editionBridgesPath, editionCommunityPath } from "@/lib/programmatic/spain-2027/editions";
 import { SPAIN_MAIN } from "@/lib/programmatic/spain-2027/main-urls";
 import { isLowDemandPath } from "@/lib/seo/low-demand";
@@ -91,7 +88,6 @@ interface DayWords {
   lead: (day: SpainDay) => string;
   notes: (day: SpainDay) => string[];
   sections: (day: SpainDay) => ReturnType<typeof daySections>;
-  faq: (day: SpainDay) => ReturnType<typeof dayFaq>;
   working: (day: SpainDay) => Region[];
   where: (regions: readonly Region[]) => string;
   run: (run: Parameters<typeof runLine>[0]) => string;
@@ -110,13 +106,12 @@ const ES_WORDS: DayWords = {
   lead: dayLead,
   notes: dayNotes,
   sections: daySections,
-  faq: dayFaq,
   working: workingIn,
   where: whereWords,
   run: runLine,
   note: COMPUTED_NOTE,
-  place: (r) => names(r).short,
-  holiday: (name) => name,
+  place: (r) => dayPlaceLabel(r, "es"),
+  holiday: (name) => dayHolidayLabel(name, "es"),
   weekdayDate,
 };
 
@@ -130,16 +125,12 @@ function intlWords(L: IntlLocale): DayWords {
     lead: (day) => dayLeadIntl(day, L),
     notes: (day) => dayNotesIntl(day, L),
     sections: (day) => daySectionsIntl(day, L),
-    faq: (day) => dayFaqIntl(day, L),
     working: workingInIntl,
     where: (regions) => whereWordsIntl(regions, L),
     run: (run) => runLineIntl(run, L),
     note: computedNote(L),
-    place: (r) => {
-      const name = regionName(r, L);
-      return name.charAt(0).toUpperCase() + name.slice(1);
-    },
-    holiday: (name) => holidayName(name, L),
+    place: (r) => dayPlaceLabel(r, L),
+    holiday: (name) => dayHolidayLabel(name, L),
     weekdayDate: (iso) => weekdayDateIntl(iso, L),
   };
 }
@@ -152,13 +143,7 @@ export function dayWords(locale: DateLocale): DayWords {
 const UI = {
   ca: {
     parent: HUB_INTL.ca.breadcrumb,
-    on: "Festiu",
-    off: "Laborable",
-    cityLocal: "festa local de la ciutat",
-    allLocal: "festa local a tots els municipis",
-    movedTo: "Al",
-    notMoved: "No es trasllada",
-    in: "a",
+    ...DAY_LIST_UI.ca,
     catalonia: "A Catalunya, amb les festes locals de cada municipi:",
     easter: "Pasqua 2027 a Catalunya: quins dies són festius, les vacances escolars i els ponts, a",
     easterLink: "Setmana Santa 2027 a Catalunya",
@@ -176,13 +161,7 @@ const UI = {
   },
   es: {
     parent: HUB.breadcrumb,
-    on: "Festivo",
-    off: "Laborable",
-    cityLocal: "fiesta local de la ciudad",
-    allLocal: "fiesta local en todos los municipios",
-    movedTo: "Al",
-    notMoved: "No se traslada",
-    in: "en",
+    ...DAY_LIST_UI.es,
     catalonia: "En Cataluña, con las fiestas locales de cada municipio:",
     easter: "Semana Santa y Pascua 2027 en Cataluña: qué días son festivos, las vacaciones escolares y los puentes, en",
     easterLink: "Semana Santa 2027 en Cataluña",
@@ -200,13 +179,7 @@ const UI = {
   },
   en: {
     parent: HUB_INTL.en.breadcrumb,
-    on: "Holiday",
-    off: "Working day",
-    cityLocal: "the city's local holiday",
-    allLocal: "local holiday in every municipality",
-    movedTo: "To",
-    notMoved: "Not moved",
-    in: "in",
+    ...DAY_LIST_UI.en,
     catalonia: "In Catalonia, with each town's local holidays:",
     easter: "Easter 2027 in Catalonia: which days are public holidays, the school break and the long weekends, in",
     easterLink: "Easter 2027 in Catalonia",
@@ -354,12 +327,9 @@ function WhereLists({ day, locale }: { day: SpainDay; locale: DateLocale }) {
           <li key={h.region}>
             <Place r={h.region} locale={locale} />
             {h.basis === "local" ? (
-              <span className="text-[var(--color-muted)]">
-                {" "}
-                ({isCity(h.region) ? ui.cityLocal : ui.allLocal}: {w.holiday(h.name)})
-              </span>
+              <span className="text-[var(--color-muted)]">{dayHolderNote(h, several, locale)}</span>
             ) : several ? (
-              <span className="text-[var(--color-muted)]"> ({w.holiday(h.name)})</span>
+              <span className="text-[var(--color-muted)]">{dayHolderNote(h, several, locale)}</span>
             ) : null}
           </li>
         ))}
@@ -550,7 +520,8 @@ export function SpainDayRoute({ iso, locale = "es" }: { iso: string; locale?: Da
       <JsonLd
         json={graph([
           breadcrumbSchema(dayCrumbs(iso, locale)),
-          faqSchema([{ type: "faq", items: w.faq(day) }]),
+          // What the page prints under each question (day-faq.ts), as FAQPage.
+          faqSchema([{ type: "faq", items: printedDayFaq(day, locale) }]),
           datasetSchema({
             path,
             name: w.h1(iso),

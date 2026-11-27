@@ -2,6 +2,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { renderInline } from "@/lib/content/inline";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 import { ORG_NAMES, POLLS_PAGE_UPDATED, dateLabel, pollsCopy, spanLabel, type PollsCopy } from "@/lib/programmatic/polls/copy";
@@ -107,6 +108,7 @@ export function PollsView({ locale, data }: { locale: Locale; data: PollsPageDat
                 </li>
               ))}
             </ul>
+            <SourcesPolicyLink locale={locale} />
           </div>
         </div>
       </main>

@@ -163,6 +163,11 @@ const ca = {
       title: "Rutes a peu i en bicicleta per Catalunya",
       description: "Rutes a peu i en bicicleta per Catalunya amb distància, desnivell i punt de sortida verificats.",
     },
+    // 27 Nov 2026 (live audit: no meta description or og:description). Noindex while only the founder is listed.
+    authors: {
+      title: "Equip de CatalunyaInfo: qui escriu i revisa les guies",
+      description: "Qui escriu i revisa CatalunyaInfo: el perfil de cada autor, de què escriu i com comprovem cada dada a la font oficial abans de publicar-la.",
+    },
   },
   localHolidays: {
     title: "Festius locals per municipi",

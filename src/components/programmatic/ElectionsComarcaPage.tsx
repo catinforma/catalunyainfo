@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
 import { ReturnStep } from "@/components/ReturnStep";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { returnStepForElectionHub } from "@/lib/engagement/return-step";
 import { renderInline } from "@/lib/content/inline";
@@ -167,6 +168,7 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
                     </li>
                   ))}
                 </ol>
+                <SourcesPolicyLink locale={locale} />
               </section>
             </div>
             <ShareBar locale={locale} path={crumbPath(crumbs)} title={model.h1} contentType="elections_comarca" variant="full" />

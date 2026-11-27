@@ -255,7 +255,7 @@ export function WarningsArticle({ locale, view }: { locale: Locale; view: Warnin
 
           <LinkList title={w.related} id="ci-warnings-related" links={relatedLinks(locale)} />
 
-          <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale)} />
+          <Sources title={w.sourcesTitle} note={w.sourcesNote} items={sources(locale)} locale={locale} />
         </div>
         <ShareBar locale={locale} path={crumbPath(trail)} title={w.h1} contentType="warnings" variant="full" />
       </div>

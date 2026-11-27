@@ -10,8 +10,8 @@ import type { DateContent, DateSection } from "./dates";
 import { addDays, caDayArticle, capitalize, dayMonth, dayMonthYear, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
 import { GUIDES, OFFICIAL, type GuideKey } from "./links";
 import { esName, joinList } from "./names";
-import { LOCAL_2027, TRANCHE_4 } from "./paths";
-import { placeNames, placesPhrase } from "./places";
+import { LOCAL_2027, TRANCHE_4, sameDayIn2026 } from "./paths";
+import { datePlaceLine, placeNames, placesPhrase } from "./places";
 import { dateQuestion } from "./question";
 import type { DatePlace, NextYearLocal, SourceRef } from "./types";
 
@@ -1027,9 +1027,14 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const extraSources: SourceRef[] = [...localSources, ...(compensation ? SATURDAY_SOURCES.map(({ name, ref, url }) => ({ name, ref, url })) : [])];
   const regionalSource = SNAPSHOT.sources.regional[String(YEAR)];
 
-  const localAnswer = [localPart.text, localPart.places.length ? `${placeNames(localPart.places, locale)}.` : "", localPart.note ?? ""].filter(Boolean).join(" ");
+  // 27 Nov 2026 (live audit: 117 FAQ answers worded differently from the page): every
+  // answer is the text DatePage.tsx prints under its question, in its order. The list of
+  // towns is one line per item, as the page lists them (`datePlaceLine`); the lead is
+  // followed by its notes only where nothing is printed between them (the "Looking for
+  // 2026?" line sits right under the lead on the pages with a 2026 twin).
+  const localAnswer = [localPart.text, ...localPart.places.map((p) => datePlaceLine(p, locale)), localPart.note ?? ""].filter(Boolean).join("\n");
   const faq = [
-    { question: dateQuestion(iso, locale), answer: [answer, ...answerNote].join(" ") },
+    { question: dateQuestion(iso, locale), answer: sameDayIn2026(iso) ? answer : [answer, ...answerNote].join(" ") },
     ...(easterBlock ? [{ question: easterBlock.title, answer: easterBlock.paragraphs.join(" ") }] : []),
     { question: localPart.title ?? "", answer: localAnswer },
     { question: shopsTitle, answer: shops.join(" ") },

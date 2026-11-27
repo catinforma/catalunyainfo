@@ -30,3 +30,13 @@ export function placeNames(places: readonly DatePlace[], locale: DateLocale): st
   const shown = (name: string) => (locale === "es" ? esName(name) : name);
   return joinList(places.map((p) => (p.parent ? `${shown(p.name)} (${shown(p.parent)})` : shown(p.name))), locale);
 }
+
+/**
+ * One item of a date page's list of towns, as DatePage.tsx prints it: "Vistabella
+ * (la Secuita)" for a nucleus, the town's name otherwise (Spanish names in Spanish).
+ * The FAQPage answer lists the same lines, so the markup carries the printed text.
+ */
+export function datePlaceLine(place: DatePlace, locale: DateLocale): string {
+  const shown = (name: string) => (locale === "es" ? esName(name) : name);
+  return place.parent ? `${shown(place.name)} (${shown(place.parent)})` : shown(place.name);
+}

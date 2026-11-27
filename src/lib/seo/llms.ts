@@ -69,6 +69,7 @@ import { OWNER } from "@/lib/content/pages/institutional";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SITE, WHATSAPP_CHANNEL } from "@/lib/site";
 import { isLowDemandPath } from "@/lib/seo/low-demand";
+import { latestBodyDate, latestDate } from "@/lib/seo/body-dates";
 import { CITIES as SPAIN_CITIES } from "@/lib/programmatic/spain-2027/cities";
 import { COMMUNITIES as SPAIN_COMMUNITIES } from "@/lib/programmatic/spain-2027/communities";
 import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
@@ -111,6 +112,21 @@ export interface LlmsEntry {
   title: string;
   href: string;
   excerpt: string | null;
+  /** The guide's last publish that changed what a reader sees (entries.updated_at). */
+  updatedAt?: Date | string | null;
+}
+
+/**
+ * 27 Nov 2026 (live audit): the file had no date. "Updated: YYYY-MM-DD" is the
+ * newest of the body dates (body-dates.json, stamped by the deploy that changed
+ * a page family) and the guides' last publish, as a Madrid calendar day. Never
+ * a date typed by hand, never the request's clock.
+ */
+export function llmsUpdatedLine(guides: Partial<Record<Locale, readonly LlmsEntry[]>>, bodyDate: Date | null = latestBodyDate()): string | null {
+  const newest = latestDate(bodyDate, ...Object.values(guides).flatMap((list) => (list ?? []).map((e) => e.updatedAt)));
+  if (!newest) return null;
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid", year: "numeric", month: "2-digit", day: "2-digit" }).format(newest);
+  return `Updated: ${day}`;
 }
 
 const LANGUAGE_NAME: Record<Locale, string> = { ca: "Català", es: "Español", en: "English" };
@@ -623,7 +639,8 @@ function toolLine(tool: Pick<LiveTool, "name" | "hubs" | "description">, origin:
  * leaves it out (site audit, 19 Nov 2026: 43 noindex URLs in the file).
  */
 export function buildLlmsTxt(origin: string, siteName: string, guides: Partial<Record<Locale, readonly LlmsEntry[]>>, today?: string): string {
-  const parts: string[] = [`# ${siteName}`, "", LLMS_SUMMARY, "", "## Live tools and data", ""];
+  const updated = llmsUpdatedLine(guides);
+  const parts: string[] = [`# ${siteName}`, "", LLMS_SUMMARY, "", ...(updated ? [updated, ""] : []), "## Live tools and data", ""];
   for (const tool of liveTools(today)) parts.push(toolLine(tool, origin));
   parts.push("", "## About this site and how we verify", "");
   for (const page of trustPages()) parts.push(toolLine(page, origin));

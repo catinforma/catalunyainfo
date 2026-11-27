@@ -164,6 +164,11 @@ const es: Messages = {
       title: "Rutas a pie y en bicicleta por Cataluña",
       description: "Rutas a pie y en bicicleta por Cataluña con distancia, desnivel y punto de salida verificados.",
     },
+    // 27 Nov 2026 (live audit: no meta description or og:description). Noindex while only the founder is listed.
+    authors: {
+      title: "Equipo de CatalunyaInfo: quién escribe y revisa las guías",
+      description: "Quién escribe y revisa CatalunyaInfo: el perfil de cada autor, sobre qué escribe y cómo comprobamos cada dato en la fuente oficial antes de publicarlo.",
+    },
   },
   localHolidays: {
     title: "Festivos locales por municipio",

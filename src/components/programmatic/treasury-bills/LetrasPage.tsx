@@ -9,6 +9,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { CALENDAR_2026_PDF, CALENDAR_2027, CALENDAR_PAGE_URL, nextAuctionOf, upcoming } from "@/lib/programmatic/treasury-bills/calendar";
@@ -587,6 +588,7 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="treasury-bills" locale={locale} />
             </div>

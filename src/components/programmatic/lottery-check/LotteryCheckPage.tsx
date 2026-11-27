@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { NADAL_URLS } from "@/lib/content/batch02/loteria-nadal";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -372,6 +373,7 @@ export function LotteryCheckRoute({ locale }: { locale: Locale }) {
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer(locale)}</p>
             </div>
             <ShareBar locale={locale} path={checkPath(locale)} title={meta.h1} contentType="lottery_check" variant="full" />

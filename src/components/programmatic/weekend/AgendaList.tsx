@@ -8,6 +8,7 @@ import { buildView, type AgendaItem, type AgendaSourceId, type DayBucket, type S
 import { BCN_SOURCE, GENCAT_SOURCE } from "@/lib/programmatic/weekend/agenda-upstream";
 import type { ChristmasTownLink } from "@/lib/programmatic/weekend/christmas-weekend";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 
 /**
  * This weekend's activities, server-rendered: by day, then by type, each
@@ -191,6 +192,7 @@ export function AgendaSources({ locale, sources }: { locale: Locale; sources: { 
           );
         })}
       </ul>
+      <SourcesPolicyLink locale={locale} />
       <p className="mt-2 text-xs text-[var(--color-muted)]">{TRANSFORMATION[locale]}</p>
     </section>
   );

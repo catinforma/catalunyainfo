@@ -164,6 +164,11 @@ const en: Messages = {
       title: "Walking and cycling routes in Catalonia",
       description: "Walking and cycling routes in Catalonia with verified distance, elevation and starting point.",
     },
+    // 27 Nov 2026 (live audit: no meta description or og:description). Noindex while only the founder is listed.
+    authors: {
+      title: "The CatalunyaInfo team: who writes and checks the guides",
+      description: "Who writes and checks CatalunyaInfo: each author's profile, what they cover and how we check every figure against the official source before publishing it.",
+    },
   },
   localHolidays: {
     title: "Local holidays by municipality",

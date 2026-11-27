@@ -196,7 +196,7 @@ export function LinePage({ line, locale, initial = null, today }: { line: Snapsh
 
                 <LinkList title={t.relatedTitle} id="ci-rodalies-related" links={t.related} />
 
-                <Sources title={t.sourcesTitle} note={t.sourcesNote} items={t.sources} />
+                <Sources title={t.sourcesTitle} note={t.sourcesNote} items={t.sources} locale={locale} />
               </div>
 
               <div className="ci-article-aside hidden lg:block">

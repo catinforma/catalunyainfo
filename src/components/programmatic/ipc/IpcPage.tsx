@@ -10,6 +10,7 @@ import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/c
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
@@ -311,6 +312,7 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
                   <A href={INE_LINKS.latest}>{L(locale, { es: "INE: IPC, últimos datos", ca: "INE: IPC, últimes dades", en: "INE: CPI, latest data" })}</A> · <A href={INE_LINKS.press}>{L(locale, { es: "notas de prensa del IPC", ca: "notes de premsa de l'IPC", en: "CPI press releases" })}</A>
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="ipc" locale={locale} />
             </div>

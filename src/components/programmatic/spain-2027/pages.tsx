@@ -7,6 +7,7 @@ import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysCommunityLink, WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalculatorsHubLink } from "@/components/programmatic/calculators/MoreCalculators";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { municipalities } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
@@ -100,7 +101,9 @@ export function Header({ crumbs, h1, lead }: { crumbs: Crumb[]; h1: string; lead
   );
 }
 
+// The Spanish edition: the policy line in Spanish (pages-intl.tsx has its own list for ca/en).
 export function SourceList({ items, title = "Fuentes oficiales" }: { items: (OfficialText | null | undefined)[]; title?: string }) {
+  const locale = "es";
   const shown = items.filter((i): i is OfficialText => Boolean(i)).filter((item, i, all) => all.findIndex((x) => x.url === item.url) === i);
   return (
     <section className="ci-measure mt-12" aria-labelledby="ci-es27-sources">
@@ -122,6 +125,7 @@ export function SourceList({ items, title = "Fuentes oficiales" }: { items: (Off
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

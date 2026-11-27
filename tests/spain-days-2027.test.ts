@@ -19,7 +19,6 @@ const { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, neighbours, spai
 const {
   NATIONAL_TITLE_NAME,
   dayDescription,
-  dayFaq,
   dayH1,
   dayLead,
   dayNotes,
@@ -32,7 +31,8 @@ const {
 const { SPAIN_BRIDGES_SLUG, SPAIN_DAY_SLUG, resolveCommunity, resolveSpainDay, spainDayPath, spainDayPaths, spainDaySitemapEntries, spainDaySlug, spainDayStaticParams, spainDayTranslations, spainPaths } =
   await import("../src/lib/programmatic/spain-2027/paths.ts");
 const { B2_PATHS } = await import("../src/lib/content/batch02/shared.ts");
-const { dayFaqIntl, dayH1Intl } = await import("../src/lib/programmatic/spain-2027/day-copy-intl.ts");
+const { dayH1Intl } = await import("../src/lib/programmatic/spain-2027/day-copy-intl.ts");
+const { printedDayFaq } = await import("../src/lib/programmatic/spain-2027/day-faq.ts");
 
 type Region = (typeof REGIONS)[number];
 type Day = (typeof SPAIN_DAYS)[number];
@@ -297,11 +297,11 @@ test("2026: only where the same day's table differs, from BOE-A-2025-21667", () 
 test("FAQPage: the H1's question and each section's, as printed; nothing unfilled", () => {
   for (const iso of DAY_PAGES) {
     const d = day(iso);
-    const faq = dayFaq(d);
+    const faq = printedDayFaq(d, "es");
     // The H1 as printed, the date included for the Easter feasts (site audit 17 Nov 2026:
     // "¿Es festivo el Jueves Santo de 2027?" was marked up but not on the page).
     assert.equal(faq[0]!.question, dayH1(iso));
-    for (const L of ["ca", "en"] as const) assert.equal(dayFaqIntl(d, L)[0]!.question, dayH1Intl(iso, L), `${iso} ${L}`);
+    for (const L of ["ca", "en"] as const) assert.equal(printedDayFaq(d, L)[0]!.question, dayH1Intl(iso, L), `${iso} ${L}`);
     assert.ok(faq[0]!.answer.startsWith(dayLead(d)));
     assert.deepEqual(
       faq.slice(1).map((f) => f.question),
@@ -310,8 +310,8 @@ test("FAQPage: the H1's question and each section's, as printed; nothing unfille
     const all = [dayTitle(iso, d), dayDescription(d), dayH1(iso), dayVerdict(d), ...faq.flatMap((f) => [f.question, f.answer])].join(" ");
     assert.doesNotMatch(all, /undefined|null|NaN|\[object|\s{2}|\s[,.]/, iso);
   }
-  assert.match(COMPONENT, /faqSchema\(\[\{ type: "faq", items: w\.faq\(day\) \}\]\)/);
-  assert.match(COMPONENT, /const ES_WORDS: DayWords = \{[^}]*faq: dayFaq,/);
+  // 27 Nov 2026: the printed text under each question (day-faq.ts; tests/faq-schema-mirrors-page.test.ts).
+  assert.match(COMPONENT, /faqSchema\(\[\{ type: "faq", items: printedDayFaq\(day, locale\) \}\]\)/);
   assert.match(COMPONENT, /breadcrumbSchema\(dayCrumbs\(iso, locale\)\)/);
 });
 

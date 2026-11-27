@@ -11,6 +11,7 @@ import { RevisionCalculator } from "@/components/programmatic/mortgage/RevisionC
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { REF_NAME, REF_SHORT, bareDay, euriborEditions, euriborPath, monthText, ofMonth, points, rate3, type EuriborLocale } from "@/lib/programmatic/euribor/copy";
@@ -362,6 +363,7 @@ export function EuriborRoute({ locale, data }: { locale: EuriborLocale; data: Eu
                   <A href={URLS.emmiTerms}>{L(locale, { es: "EMMI: condiciones de uso", ca: "EMMI: condicions d'ús", en: "EMMI: terms of use" })}</A> · <A href={URLS.bdeLegal}>{L(locale, { es: "Banco de España: aviso legal", ca: "Banc d'Espanya: avís legal", en: "Banco de España: legal notice" })}</A>
                 </li>
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators current="euribor" locale={locale} />
             </div>

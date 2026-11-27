@@ -358,21 +358,12 @@ export function faqSchema(body: Block[]): Json | null {
   };
 }
 
-/** Emitted only when the body actually contains a steps block. */
-export function howToSchema(entry: EntryDetail): Json | null {
-  const steps = entry.body.find((b) => b.type === "steps");
-  if (!steps || steps.type !== "steps") return null;
-  return {
-    "@type": "HowTo",
-    name: steps.title ?? entry.title,
-    step: steps.items.map((item, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: item.title,
-      ...(item.text ? { text: plainInline(item.text).trim() } : {}),
-    })),
-  };
-}
+/*
+ * No HowTo markup (27 Nov 2026): Google retired HowTo rich results in September
+ * 2023 and the live audit found it on 37 guides with a steps block. The steps
+ * stay on the page as a numbered list; only the markup is gone
+ * (tests/no-howto-markup.test.ts).
+ */
 
 /* -------------------------------------------------------------------------- */
 /* Dataset (live open-data pages)                                             */

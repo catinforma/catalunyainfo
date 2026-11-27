@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { BOE_ORDER_URL, GEOPORTAL_HOME, attribution, liveLabels, readLine } from "@/lib/programmatic/fuel/copy";
@@ -141,6 +142,7 @@ function SpainSources({ locale }: { locale: FuelHubLocale }) {
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

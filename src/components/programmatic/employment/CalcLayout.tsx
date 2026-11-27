@@ -8,6 +8,7 @@ import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalcu
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { PAY_DATES_PATH, dateWords } from "@/lib/programmatic/employment/paths";
 import { calcEditions, calcPath, type CalcKey, type CalcLocale } from "@/lib/programmatic/calculators/paths";
@@ -128,6 +129,7 @@ export function CalcLayout({
                   </li>
                 ))}
               </ul>
+              <SourcesPolicyLink locale={locale} />
 
               <MoreCalculators
                 current={calcKey}
