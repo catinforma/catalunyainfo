@@ -15453,3 +15453,30 @@ Not changed, and why: how-to-vote (already answers "can foreigners vote", EU mun
 **Review 2026-12-11** (14 d: `snapshot.py page /en/holidays/ 14`, `page barcelona-metro-hours 14`, `page barcelona-catalonia-tourist-tax 14`, `page polling-station-duty 14`) and **2026-12-25** (28 d, same pages + es/ca twins). Right if the hubs gain clicks at equal position for "public holidays barcelona 2027" / "6 december" / "26 december" queries and metro hours shows "christmas eve" / "new year's eve" queries with clicks. Re-read TMB's hours page in mid-December for any Christmas 2026 notice (the FAQs give the standing rule).
 
 **Outcome:** _pending_
+
+## 2026-11-27 (night, batch 8E, ci-enginyeria) — Mobile CLS: the whole late push is Google's TOP anchor ad; bottom-only anchor measured at ~0 (diagnosis + owner recommendation; no page, ad or consent code changed; lab script extended) (review 2026-12-08 with the 25 Nov entries)
+
+**Question.** Lab CLS on phones 0.38-0.53 site-wide (shops guide 0.525, strike hub 0.383): one push of the whole page 155-487 px down at ~4-7 s. Ours (alert strip, header, election line, fonts, client-rendered boxes) or Google's?
+
+**Method.** `scripts/ads-cls-lab.mjs`, one headless Chromium 1140 at a time (closed after each run), 412×915 DPR 2.625, Pixel UA, live www pages, 27 Nov 01:20-02:00. Modes: `CONSENT=accept` (Google CMP dialog clicked when shown), `WARM=<url>` (new: returning visitor, consent accepted on an earlier page so the FCCDCF cookie is set), `BLOCK=1` (googlesyndication, googleads, adservice, fundingchoices, doubleclick, googletagservices and now adtrafficquality blocked), `OVERLAYS=bottom` (new, lab only: sets `data-overlays="bottom"` on Google's script tag before it runs, the documented code form of "anchor at the bottom only", AdSense help 7478225, read 27 Nov).
+
+**Result (CLS all shifts, 20 s idle + full scroll; worst session in brackets).**
+
+| Template | Live, consent accepted | Live, returning visitor | Ads blocked | Bottom-only anchor (sim.) |
+|---|---|---|---|---|
+| Shops guide `/es/guias/tiendas-abiertas-festivos-cataluna/` | 0.409 (0.382; anchor 373 px) | 0.386 (0.382) | 0 | 0.004 |
+| Strike hub `/es/guias/huelgas-espana/` | 0.405 (0.382; 373 px) | — | 0 | 0.0004 |
+| Home `/ca/` | 0.160 (0.159; 155 px) | — | 0 | — |
+| Calculator `/ca/calculadores/sou-net/` | 0.408 (0.382; 373 px) | — | 0 | 0.003 |
+| Town holidays `/ca/festius/barcelona/` | 0.013 (dialog never shown, no ads) | 0.500 (0.499; 487 px) | 0 | 0.002 |
+| Shops guide, no consent click | 0.023 (dialog only; no ads load before a TCF answer) | | | |
+
+**Cause.** In every run with ads, one shift at 4-7 s: Google's **top anchor** (`ins.adsbygoogle[data-anchor-status=displayed]`, `iframe#aswift_1`) is inserted and Google writes `body{padding-top:155|373|487px}` (creative height); `nav.ci-alerts` and `main#main` move down by exactly that (57 → 430/544). It happens for returning visitors too (cookie already set: 0.38-0.50 at ~4-5 s), so it is real-user CLS, not a lab artefact of the consent click. The rest: 0.023 from Google's consent dialog resizing itself (`fc-dialog-container`, Google's, not touched), 0.001-0.013 from in-article units filling/collapsing during the scroll. With ads blocked every template measures **0**: no shift from our alert strip, header, election line, web fonts or client components. The 0.525 / 487 px of 26 Nov was the same anchor with a taller creative. **Nothing to fix in our code.**
+
+**For the owner (AdSense dashboard, reversible, no code).** AdSense → Ads → By site → catalunyainfo.com → Edit (Auto ads settings) → **Overlay formats → Advanced settings → Anchor ads → position: "Bottom only"** (options "Top or bottom" / "Top only" / "Bottom only", AdSense help 9305577, read 27 Nov) → Apply. Expected: mobile lab CLS 0.38-0.50 → 0.002-0.004 (measured above; with a bottom anchor Google pads the bottom of `body`, which moves nothing on screen). The anchor still shows, at the bottom, so it is not switched off. Trade-off: Google says "anchor ads perform better at the top of the user's screen" (help 7478225), so compare earnings by ad format (Reports → Ad format = Anchor; page RPM) 7 days before vs after. Code alternative, only if the owner allows touching the AdSense loader: one attribute, `s.setAttribute("data-overlays", "bottom")` in `src/components/AdsRuntime.tsx` where the script is created (not done: AdSense code is off-limits for workers). Also visible in the screenshot: the top anchor covers the H1 and the first answer on a 412 px phone (373 px of 915).
+
+**Prediction / review 2026-12-08.** If set, re-run `WARM=https://www.catalunyainfo.com/es/ node scripts/ads-cls-lab.mjs <url> 412 915` on the shops guide and town page: expect ≤ 0.03. Field (GSC Core Web Vitals mobile, CrUX) needs 28 days of visits after the switch; no field claim before then.
+
+**Files.** `scripts/ads-cls-lab.mjs` (WARM, OVERLAYS, adtrafficquality in the block list). No page code, ad slot, AdSense loader or consent banner changed.
+
+**Outcome:** _pending owner decision_

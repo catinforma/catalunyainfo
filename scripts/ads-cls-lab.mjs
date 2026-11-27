@@ -1,5 +1,5 @@
 // Lab for docs/SEO_EXPERIMENTS.md "Mobile CLS with ads" (25 Nov 2026). One headless Chromium, mobile emulation, >= 20 s, layout-shift sources.
-// node scripts/ads-cls-lab.mjs <url> <W> <H>   env: CONSENT=accept|deny|none (clicks .fc-cta-consent / .fc-cta-do-not-consent of the Google CMP), BLOCK=1 (no-ads control), CSS=file, SHOT=png; summarise with ads-cls-sum.mjs
+// node scripts/ads-cls-lab.mjs <url> <W> <H>   env: WARM=1|<url> (consent accepted on an earlier view, cookie set), OVERLAYS=bottom (lab-only: sets data-overlays on Google's script tag, as AdSense help 7478225 describes, to preview a bottom-only anchor), CONSENT=accept|deny|none (clicks .fc-cta-consent / .fc-cta-do-not-consent of the Google CMP), BLOCK=1 (no-ads control), CSS=file, SHOT=png; summarise with ads-cls-sum.mjs
 import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import { mkdtempSync } from "node:fs";
@@ -20,16 +20,21 @@ ws.onmessage = (m) => { const d = JSON.parse(m.data); if (d.id && pend.has(d.id)
 const send = (method, params = {}) => new Promise((r) => { const i = ++id; pend.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
 const ev = async (e) => (await send("Runtime.evaluate", { expression: e, returnByValue: true })).result?.value;
 await send("Page.enable"); await send("Runtime.enable"); await send("Network.enable");
-if (process.env.BLOCK) await send("Network.setBlockedURLs", { urls: ["*googlesyndication.com*", "*googleads*", "*adservice*", "*fundingchoices*", "*doubleclick*", "*googletagservices*"] });
+if (process.env.BLOCK) await send("Network.setBlockedURLs", { urls: ["*googlesyndication.com*", "*googleads*", "*adservice*", "*fundingchoices*", "*doubleclick*", "*googletagservices*", "*adtrafficquality*"] });
 await send("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: 2.625, mobile: true });
 await send("Emulation.setUserAgentOverride", { userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36" });
 const css = process.env.CSS ? fs.readFileSync(process.env.CSS, "utf8") : "";
 const obs = `
-window.__ls=[];window.__mu=[];
+window.__ls=[];window.__mu=[];${process.env.OVERLAYS ? `new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes)if(n.tagName==='SCRIPT'&&/adsbygoogle\\.js/.test(n.src||''))n.setAttribute('data-overlays',${JSON.stringify(process.env.OVERLAYS)});}).observe(document,{childList:true,subtree:true});` : ""}
 function sel(n){ if(!n||!n.nodeType) return '?'; if(n.nodeType===3) n=n.parentElement; if(!n) return '?'; const parts=[]; let c=n; for(let i=0;i<3&&c&&c.tagName;i++){ let s=c.tagName.toLowerCase(); if(c.id) s+='#'+c.id; if(c.className&&typeof c.className==='string') s+='.'+c.className.trim().split(/\\s+/).slice(0,2).join('.'); parts.unshift(s); c=c.parentElement;} return parts.join(' > '); }
 new PerformanceObserver(l=>{ for(const e of l.getEntries()){ window.__ls.push({t:Math.round(e.startTime),v:+e.value.toFixed(4),inp:e.hadRecentInput,src:(e.sources||[]).map(s=>({n:sel(s.node),ad:!!(s.node&&s.node.closest&&s.node.closest('.ci-ad')),mid:!!(s.node&&s.node.closest&&s.node.closest('.ci-ad-middle')),prev:[Math.round(s.previousRect.y),Math.round(s.previousRect.height)],cur:[Math.round(s.currentRect.y),Math.round(s.currentRect.height)]}))}); } }).observe({type:'layout-shift',buffered:true});
 document.addEventListener('DOMContentLoaded',()=>{ new MutationObserver(ms=>{for(const m of ms){const t=Math.round(performance.now()); const n=m.target; if(n===document.body||n===document.documentElement){ if(m.type==='attributes') window.__mu.push({t,n:n.tagName,a:m.attributeName,v:(n.getAttribute(m.attributeName)||'').slice(0,160)}); else window.__mu.push({t,n:'body-child',add:[...m.addedNodes].map(x=>x.tagName+'.'+(x.className||x.id||'')).join(',').slice(0,120)});}}}).observe(document,{attributes:true,childList:true,subtree:true,attributeFilter:['style','class']});${css ? `const s=document.createElement('style');s.textContent=${JSON.stringify(css)};document.head.append(s);` : ""} });`;
 await send("Page.addScriptToEvaluateOnNewDocument", { source: obs });
+if (process.env.WARM) { // returning visitor: accept consent on a first view (FCCDCF cookie), then measure a fresh navigation with the cookie set
+  await send("Page.navigate", { url: process.env.WARM.startsWith("http") ? process.env.WARM : url });
+  let ok = false; for (let i = 0; i < 40 && !ok; i++) { await sleep(500); ok = await ev(`(()=>{const b=document.querySelector('.fc-cta-consent'); if(b){b.click();return true}return false})()`); }
+  await sleep(4000); if (!ok) console.error("WARM: no consent dialog seen");
+}
 await send("Page.navigate", { url });
 let clicked = null;
 const t0 = Date.now();
