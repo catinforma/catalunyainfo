@@ -3,7 +3,9 @@ import { WEEKDAY_NAMES, addDays, shortDate, weekdayIndex } from "@/lib/content/h
 import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate, range, span } from "./festive";
-import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
+
+import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2href, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { sourcesCheckedLine } from "./strike-citable";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
@@ -371,6 +373,8 @@ interface Wording {
   recentHeading: string;
   recentId: string;
   recentIntro: string;
+  /** Before the links to a recent strike's own guides (recentGuideLinks). */
+  recentMore: string;
   lawHeading: string;
   lawId: string;
   law: string[];
@@ -473,6 +477,7 @@ const T: Record<Locale, Wording> = {
     recentHeading: "Vagues recents",
     recentId: "recents",
     recentIntro: "Les últimes vagues d'àmbit estatal i els serveis mínims que s'hi van fixar.",
+    recentMore: "Més detalls:",
     lawHeading: "Com es fixen els serveis mínims",
     lawId: "serveis-minims",
     law: [
@@ -555,6 +560,7 @@ const T: Record<Locale, Wording> = {
     recentHeading: "Huelgas recientes",
     recentId: "recientes",
     recentIntro: "Las últimas huelgas de ámbito estatal y los servicios mínimos que se fijaron.",
+    recentMore: "Más detalles:",
     lawHeading: "Cómo se fijan los servicios mínimos",
     lawId: "servicios-minimos",
     law: [
@@ -637,6 +643,7 @@ const T: Record<Locale, Wording> = {
     recentHeading: "Recent strikes",
     recentId: "recent",
     recentIntro: "The latest Spain-wide strikes and the minimum services that were set for them.",
+    recentMore: "More details:",
     lawHeading: "How minimum services are set",
     lawId: "minimum-services",
     law: [
@@ -692,6 +699,24 @@ const SPANISH_ONLY_GUIDES: Record<string, string> = {
 function dayPageOver(key: B2Key, asOf: string): boolean {
   const page = STRIKE_DAY_PAGES.find((p) => p.key === key);
   return Boolean(page && page.day < asOf);
+}
+
+/**
+ * 27 Nov 2026 (internal-link audit, round 3; docs/SEO_EXPERIMENTS.md): a strike
+ * under "recent" links its own guides, the day pages included (`guideLinks`
+ * drops a day page once its day has passed, which is right for what is coming
+ * and wrong for the record). The 19N day page (2,871 impressions in 14 days)
+ * had one editorial inlink, the guides index. Left out: the standing "is there
+ * a strike today?" page, linked higher up, and the postal-vote guide (Correos
+ * entry), which is about the vote, not the strike; and any page out of the
+ * index (low-demand.ts: the 11N Spain-wide page and its city pages).
+ */
+const NOT_THE_STRIKE: readonly B2Key[] = ["strikes", "postalVote"];
+
+export function recentGuideLinks(strike: SpainStrike, locale: Locale): string[] {
+  return (strike.guides ?? [])
+    .filter((key) => !NOT_THE_STRIKE.includes(key) && !isLowDemandPath(b2href(key, locale)))
+    .map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
 }
 
 function guideLinks(strike: SpainStrike, locale: Locale, asOf: string): string[] {
@@ -928,7 +953,12 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
     blocks.push(heading(2, t.recentHeading, t.recentId));
     blocks.push(...paras(t.recentIntro));
     blocks.push(
-      list(...recent.map((strike) => `**${cap(spainDays(strike.dates, locale))}: ${strike.title[locale]}.** ${text(strike.scope)} ${text(strike.minimumServices.text)}`)),
+      list(
+        ...recent.map((strike) => {
+          const more = recentGuideLinks(strike, locale);
+          return `**${cap(spainDays(strike.dates, locale))}: ${strike.title[locale]}.** ${text(strike.scope)} ${text(strike.minimumServices.text)}${more.length ? ` ${t.recentMore} ${more.join(" · ")}.` : ""}`;
+        }),
+      ),
     );
   }
 

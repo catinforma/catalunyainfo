@@ -19,6 +19,7 @@ import { SURPRISING } from "../src/lib/content/features/surprising.ts";
 import { RAINY } from "../src/lib/content/features/rainy.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 import { warningsPath } from "../src/lib/programmatic/warnings/paths.ts";
+import { linePath } from "../src/lib/programmatic/rodalies/paths.ts";
 
 /**
  * Ten feature guides in three languages.
@@ -58,6 +59,8 @@ const PUBLISHED_HREFS = new Set([
   ...LOCALES.flatMap((locale) => [sitgesHolidaysHref(locale), sitgesR2Href(locale)]),
   // Code routes the 12 day trips guide links (25 Nov 2026 audit, round 2): the R1, R2 and R4 line pages.
   ...LOCALES.flatMap((locale) => railLineHrefs(locale)),
+  // 27 Nov 2026 (round 3): the same table links the R2 Sud, R11 and R3 line pages.
+  ...LOCALES.flatMap((locale) => (["R2S", "R11", "R3"] as const).map((id) => linePath(locale, id))),
 ]);
 
 test("there are ten features, thirty editions, thirty distinct paths", () => {

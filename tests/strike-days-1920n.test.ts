@@ -237,7 +237,11 @@ test("links in: both hubs and the 17N page, while the day is to come", () => {
       assert.ok(json(buildStrikesSpainBody(locale, "2026-11-18")).includes(target), `${locale}: Spain hub → ${key}`);
       assert.ok(json(buildStrikesBody(locale, "2026-11-18")).includes(target), `${locale}: Catalan hub → ${key}`);
       assert.ok(json(buildRail17nBody(locale, "2026-11-17")).includes(target), `${locale}: 17N page → ${key}`);
-      assert.ok(!json(buildStrikesSpainBody(locale, "2026-11-23")).includes(target), `${locale}: Spain hub still links ${key} the week after`);
+      // 27 Nov 2026 (link audit, round 3): the "recent strikes" list links each past strike's own pages, day pages included
+      // (strikes-spain.ts recentGuideLinks); the sections about what is coming still drop a day page once its day has passed.
+      const after = buildStrikesSpainBody(locale, "2026-11-23");
+      const recentAt = after.findIndex((b) => b.type === "heading" && /^(recents|recientes|recent)$/.test((b as { id?: string }).id ?? ""));
+      assert.ok(!json(recentAt >= 0 ? after.slice(0, recentAt) : after).includes(target), `${locale}: Spain hub still links ${key} the week after`);
       assert.ok(!json(buildStrikesBody(locale, "2026-11-23")).includes(target), `${locale}: Catalan hub still links ${key} after the day`);
     }
     // 17 Nov 2026: on the Spain hub, the day pages sit right under the week summary (second paragraph), and each day's

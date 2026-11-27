@@ -1,6 +1,8 @@
 import type { Block } from "@/lib/content/blocks";
 import { railLinesSentence } from "@/lib/content/audit-links";
 import { b2link } from "@/lib/content/batch02/shared";
+import { linePath, type LineLocale } from "@/lib/programmatic/rodalies/paths";
+import type { LineId } from "@/lib/programmatic/rodalies/types";
 import {
   ARTICLE_PATHS,
   callout,
@@ -53,6 +55,32 @@ const TABLE_NOTE = {
   en: "Journey time from Barcelona-Sants and Rodalies single fare from the official Rodalies journey planner, re-read on 25 November 2026 (first on 27 October); high-speed times from Renfe's open data, also of 25 November. Check the service on the day: some journeys may involve a change.",
 };
 
+/**
+ * 27 Nov 2026 (internal-link audit, round 3; docs/SEO_EXPERIMENTS.md): the
+ * "usual line" cell links the line's live page (incidents, timetables) the
+ * first time the table names it: R2 Sud (Sitges), R11 (Girona) and R3 (Vic,
+ * the line that is cut). R1, R2 and R4 are linked in the sentence after the
+ * table (railLinesSentence); Tarragona's R14-R17 stay plain text.
+ */
+const TABLE_LINES: readonly (readonly [label: string, id: LineId])[] = [
+  ["R2 Sud", "R2S"],
+  ["R11", "R11"],
+  ["R3", "R3"],
+];
+
+export function lineLinks(locale: LineLocale, rows: string[][]): string[][] {
+  const done = new Set<LineId>();
+  return rows.map(([place, line, ...rest]) => {
+    let cell = line!;
+    for (const [label, id] of TABLE_LINES) {
+      if (done.has(id) || !cell.startsWith(label) || /^[0-9]/.test(cell.slice(label.length))) continue;
+      cell = `[${label}](${linePath(locale, id)})${cell.slice(label.length)}`;
+      done.add(id);
+    }
+    return [place!, cell, ...rest];
+  });
+}
+
 const VIC_R3 = {
   ca: "Ara mateix, però, no hi ha trens de l'R3 entre Barcelona i Sant Martí de Centelles: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís i horaris de Rodalies llegits el 25 de novembre de 2026; la interrupció entre la Garriga i Figaró dura fins al 14 de desembre).",
   es: "Ahora mismo, sin embargo, no hay trenes de la R3 entre Barcelona y Sant Martí de Centelles: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso y horarios de Rodalies leídos el 25 de noviembre de 2026; la interrupción entre La Garriga y Figaró dura hasta el 14 de diciembre).",
@@ -79,7 +107,7 @@ function ca(): Block[] {
     table(
       "Les 12 escapades, d'un cop d'ull",
       ["Destinació", "Línia habitual", "Durada des de Sants", "Senzill", "Per a què hi vas"],
-      [
+      lineLinks("ca", [
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, nucli antic i museus"],
         ["Girona", "R11 o alta velocitat", "1 h 19–1 h 41 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
         ["Tarragona", "Regionals R14–R17", "69 min", "8,60 €", "Patrimoni romà i Mediterrani"],
@@ -92,7 +120,7 @@ function ca(): Block[] {
         ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
         ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu i patrimoni ignasià"],
         ["Terrassa", "R4 (Estació del Nord) o FGC", "51–53 min (R4)", "5,50 € (R4)", "Modernisme industrial"],
-      ],
+      ]),
       TABLE_NOTE.ca,
     ),
     ...paras(
@@ -198,7 +226,7 @@ function es(): Block[] {
     table(
       "Las 12 escapadas, de un vistazo",
       ["Destino", "Línea habitual", "Duración desde Sants", "Sencillo", "A qué vas"],
-      [
+      lineLinks("es", [
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, casco antiguo y museos"],
         ["Girona", "R11 o alta velocidad", "1 h 19–1 h 41 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
         ["Tarragona", "Regionales R14–R17", "69 min", "8,60 €", "Patrimonio romano y Mediterráneo"],
@@ -211,7 +239,7 @@ function es(): Block[] {
         ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
         ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu y patrimonio ignaciano"],
         ["Terrassa", "R4 (Estació del Nord) o FGC", "51–53 min (R4)", "5,50 € (R4)", "Modernismo industrial"],
-      ],
+      ]),
       TABLE_NOTE.es,
     ),
     ...paras(
@@ -315,7 +343,7 @@ function en(): Block[] {
     table(
       "The 12 trips at a glance",
       ["Destination", "Usual line", "Journey from Sants", "Single fare", "What you go for"],
-      [
+      lineLinks("en", [
         ["Sitges", "R2 Sud", "31–37 min", "€5.50", "Beaches, old town, museums"],
         ["Girona", "R11 or high-speed", "1 h 19–1 h 41 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
         ["Tarragona", "Regional R14–R17", "69 min", "€8.60", "Roman heritage and the Mediterranean"],
@@ -328,7 +356,7 @@ function en(): Block[] {
         ["Sant Sadurní d'Anoia", "R4", "54 min", "€5.50", "Cava country"],
         ["Manresa", "R4", "1 h 25–1 h 29", "€8.25", "La Seu and Ignatian heritage"],
         ["Terrassa", "R4 (Estació del Nord) or FGC", "51–53 min (R4)", "€5.50 (R4)", "Industrial Modernisme"],
-      ],
+      ]),
       TABLE_NOTE.en,
     ),
     ...paras(

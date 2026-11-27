@@ -7,6 +7,7 @@ import { calendarFaq, christmasCalendar, type CalendarFairs } from "./christmas-
 import { LIGHTS_TOWNS } from "./christmas-lights-towns";
 
 import type { SeasonSpan } from "./christmas-traditions";
+import { linkLeadingTown, linkTownCell } from "./christmas-town-links";
 import { LOCAL_MONDAY_7 } from "./december-bridge";
 import { dateYear, range } from "./festive";
 import {
@@ -344,6 +345,9 @@ const HEADERS: Record<Locale, string[]> = {
   en: ["Market", "Town", "Where", "2026 dates"],
 };
 
+/** Towns the table leaves unlinked: the guide links their fair page in its body (Espinelves in the list below the table). */
+const TABLE_SKIP = ["Barcelona", "Girona", "Manresa", "Granollers", "Espinelves"] as const;
+
 function marketTable(locale: Locale) {
   const caption: Record<Locale, string> = {
     ca: "Els grans mercats de Nadal de Catalunya i les seves dates",
@@ -355,7 +359,9 @@ function marketTable(locale: Locale) {
     es: `«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el ${dateYear(VERIFIED, "es")}; Santa Llúcia, en la Agenda Cultural de la Generalitat (la web de la feria aún muestra 2025); la Sagrada Família, en la Guia BCN del Ayuntamiento de Barcelona; Girona, en la agenda del Ayuntamiento. Manresa y Granollers, en las páginas de sus ayuntamientos, leídas el ${dateYear(MANRESA_GRANOLLERS_READ, "es")}.`,
     en: `"Not yet published" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. "Where" only when an official page says so. Checked on ${dateYear(VERIFIED, "en")}; Santa Llúcia in the Catalan government's cultural agenda (the fair's own website still shows 2025), the Sagrada Família in Barcelona City Council's Guia BCN, and Girona in the City Council's events listing. Manresa and Granollers on their councils' own pages, read on ${dateYear(MANRESA_GRANOLLERS_READ, "en")}.`,
   };
-  return table(caption[locale], HEADERS[locale], MARKETS[locale], note[locale]);
+  // Town cells link the town's fair page (christmas-town-links.ts), except the towns in TABLE_SKIP.
+  const rows = MARKETS[locale].map(([market, town, where, dates]): Row => [market, linkTownCell(town, locale, TABLE_SKIP), where, dates]);
+  return table(caption[locale], HEADERS[locale], rows, note[locale]);
 }
 
 /** Smaller fairs whose 2026 dates their council has published, in date order. */
@@ -430,7 +436,7 @@ function body(locale: Locale) {
         "Fires de Nadal dels pobles: on és la llista sencera",
         `Aquesta guia segueix els grans mercats. La llista de totes les fires amb data oficial, ordenada per dia i amb el lloc de cada una, és a [totes les fires de Nadal del 2026 per data i municipi](${fairsHubPath("ca")}). Algunes de les que els ajuntaments ja han publicat:`,
       ),
-      list(...CONFIRMED.ca),
+      list(...CONFIRMED.ca.map((item) => linkLeadingTown(item, "ca"))),
       ...paras(
         "També al desembre, tot i que no és un mercat de Nadal: el **Mercat Medieval de Vic** ocupa el centre històric de la ciutat del 5 al 8 de desembre de 2026, segons l'agenda de l'Ajuntament de Vic.",
         busyWeekends("ca"),
@@ -516,7 +522,7 @@ function body(locale: Locale) {
         "Ferias de Navidad de los pueblos: dónde está la lista completa",
         `Esta guía sigue los grandes mercados. La lista de todas las ferias con fecha oficial, ordenada por día y con el lugar de cada una, está en [todas las ferias de Navidad de 2026 por fecha y municipio](${fairsHubPath("es")}). Algunas de las que los ayuntamientos ya han publicado:`,
       ),
-      list(...CONFIRMED.es),
+      list(...CONFIRMED.es.map((item) => linkLeadingTown(item, "es"))),
       ...paras(
         "También en diciembre, aunque no es un mercado de Navidad: el **Mercat Medieval de Vic** ocupa el centro histórico de la ciudad del 5 al 8 de diciembre de 2026, según la agenda del Ayuntamiento de Vic.",
         busyWeekends("es"),
@@ -601,7 +607,7 @@ function body(locale: Locale) {
       "Town Christmas fairs: where the full list is",
       `This guide follows the big markets. Every fair with an official date, in date order and with its venue, is in [all 2026 Christmas fairs by date and town](${fairsHubPath("en")}): ${FAMILY.fairs} of them in ${FAMILY.towns} towns as of ${dateYear(FAMILY.checked, "en")}. Some of those their councils have already published:`,
     ),
-    list(...CONFIRMED.en),
+    list(...CONFIRMED.en.map((item) => linkLeadingTown(item, "en"))),
     ...paras(
       "Also in December, though not a Christmas market: **Vic's Medieval Market** fills the historic centre from 5 to 8 December 2026, according to Vic City Council's events listing.",
       busyWeekends("en"),

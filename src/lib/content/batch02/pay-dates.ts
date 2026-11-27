@@ -108,6 +108,8 @@ const RETIREMENT = calcEditions("retirement-age");
  * con la misma periodicidad que los salarios» (quoted on that page, its "Quién paga y cuándo cobras").
  */
 const SICK = calcEditions("sick-leave");
+/** 27 Nov 2026 (link audit, round 3): the non-contributory pension calculator (707 impressions in 28 days, no editorial inlink) next to the line on who pays it. */
+const PNC = calcEditions("non-contributory-pension");
 
 const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const weekday = (s: string) => new Date(`${s}T12:00:00Z`).getUTCDay();
@@ -205,7 +207,7 @@ const COPY: Record<Locale, PayCopy> = {
       heading: "¿Por qué mi banco me paga antes?",
       text: `Porque algunas entidades deciden adelantar el dinero: conocen la transferencia antes de recibirla y la ponen a tu disposición unos días antes, según el ${link(U.bde, "Banco de España")}. Es una decisión de cada banco, no una fecha oficial: si tu banco no adelanta, el plazo legal es el de la tabla.`,
       items: [
-        "Las pensiones no contributivas las paga la Tesorería de la Seguridad Social, salvo en Navarra y el País Vasco, que las gestionan ellos.",
+        `Las pensiones no contributivas las paga la Tesorería de la Seguridad Social, salvo en Navarra y el País Vasco, que las gestionan ellos. ${link(PNC.es, "Calcula cuánto cobrarías de pensión no contributiva")}.`,
         "Este calendario no sirve para nóminas de empresa ni para ayudas autonómicas.",
         `Tampoco para la baja laboral: en general la paga la empresa en tu nómina, con la misma periodicidad que el salario («pago delegado»). ${link(SICK.es, "Calcula cuánto cobras de baja laboral")}.`,
       ],
@@ -248,7 +250,7 @@ const COPY: Record<Locale, PayCopy> = {
       heading: "Per què el meu banc em paga abans?",
       text: `Perquè algunes entitats decideixen avançar els diners: coneixen la transferència abans de rebre-la i la posen a la teva disposició uns dies abans, segons el ${link(U.bde, "Banc d'Espanya")}. És una decisió de cada banc, no una data oficial: si el teu banc no avança el pagament, el termini legal és el de la taula.`,
       items: [
-        "Les pensions no contributives les paga la Tresoreria de la Seguretat Social, tret de Navarra i el País Basc, que les gestionen ells mateixos.",
+        `Les pensions no contributives les paga la Tresoreria de la Seguretat Social, tret de Navarra i el País Basc, que les gestionen ells mateixos. ${link(PNC.ca, "Calcula quant cobraries de pensió no contributiva")}.`,
         "Aquest calendari no serveix per a les nòmines d'empresa ni per als ajuts autonòmics.",
         `Tampoc per a la baixa laboral: en general la paga l'empresa a la teva nòmina, amb la mateixa periodicitat que el sou («pagament delegat»). ${link(SICK.ca, "Calcula quant cobres de baixa laboral")}.`,
       ],
@@ -291,7 +293,7 @@ const COPY: Record<Locale, PayCopy> = {
       heading: "Why does my bank pay me early?",
       text: `Because some banks choose to advance the money: they know the transfer is coming before they receive it and make it available a few days earlier, according to the ${link(U.bde, "Bank of Spain")}. It is each bank's decision, not an official date: if your bank does not pay early, the legal deadline is the one in the table.`,
       items: [
-        "Non-contributory pensions are paid by the Social Security Treasury, except in Navarre and the Basque Country, which manage their own.",
+        `Non-contributory pensions are paid by the Social Security Treasury, except in Navarre and the Basque Country, which manage their own. ${link(PNC.en, "Work out how much non-contributory pension you would get")}.`,
         "This calendar does not apply to company payrolls or to regional benefits.",
         `Nor to sick leave: as a rule your employer pays it in your payslip, on the same schedule as your salary (“pago delegado”). ${link(SICK.en, "Work out your sick pay in Spain")}.`,
       ],

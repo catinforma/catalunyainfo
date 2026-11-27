@@ -271,6 +271,9 @@ export function buildIncomeTaxBody(locale: Locale): Block[] {
   const catTop = CATALAN_SCALE[CATALAN_SCALE.length - 1]!;
 
   const calc = `${calcPath("net-salary", L)}`;
+  // 27 Nov 2026 link audit, round 3: the Treasury bills calculator (2,524 impressions in 28 days, position 7.1) had one editorial inlink; this
+  // guide prints the savings scale it applies (treasury-bills/engine.ts: LIRPF art. 25.2.b yield, no withholding, savings scale).
+  const bills = calcPath("treasury-bills", L);
   const calcLink = a(calc, { ca: "calculadora de sou net", es: "calculadora de sueldo neto", en: "net salary calculator" }[L]);
   const beckham = b2link("beckhamLaw", L, { ca: "guia de la llei Beckham", es: "guía de la ley Beckham", en: "Beckham law guide" }[L]);
   const nieTie = b2link("nieTie", L, { ca: "guia del NIE i la TIE", es: "guía del NIE y la TIE", en: "NIE and TIE guide" }[L]);
@@ -373,6 +376,7 @@ export function buildIncomeTaxBody(locale: Locale): Block[] {
       savCaption: "Escala de la base liquidable de l'estalvi (interessos, dividends, guanys i pèrdues per transmissions)",
       savHead: ["Base de l'estalvi", "Estat", "Comunitat", "Total"],
       savNote: `Font: Llei de l'IRPF, ${savingsLaw}, en la redacció de la Llei 7/2024, des de l'1 de gener de 2025. La meitat autonòmica la fixa la llei estatal: és igual a tot Espanya.`,
+      savBills: `Les Lletres del Tresor tributen en aquesta escala: el que guanyes (el valor nominal menys el que vas pagar) és rendiment del capital mobiliari, sense retenció, i es declara a la renda de l'any en què es cobra la lletra. Quant et queda en el teu cas: [calculadora de Lletres del Tresor](${bills}).`,
       fileH: "Has de fer la declaració de la renda?",
       file: [
         `L'${art96} de la llei diu qui no ha de declarar. Si només tens sou, no estàs obligat fins a ${m(FILING.onePayer)} bruts l'any d'una sola empresa, i fins a ${m(FILING.severalPayers)} si en tens més d'una (llevat que la segona i les següents sumin ${m(FILING.otherPayersUpTo)} o menys). Qui ha estat d'alta com a autònom en algun moment de l'any ha de declarar sempre. Encara que no hi estiguis obligat, et pot convenir declarar si te n'han de tornar.`,
@@ -464,6 +468,7 @@ export function buildIncomeTaxBody(locale: Locale): Block[] {
       savCaption: "Escala de la base liquidable del ahorro (intereses, dividendos, ganancias y pérdidas por transmisiones)",
       savHead: ["Base del ahorro", "Estado", "Comunidad", "Total"],
       savNote: `Fuente: Ley del IRPF, ${savingsLaw}, en la redacción de la Ley 7/2024, desde el 1 de enero de 2025. La mitad autonómica la fija la ley estatal: es igual en toda España.`,
+      savBills: `Las Letras del Tesoro tributan en esta escala: lo que ganas (el valor nominal menos lo que pagaste) es rendimiento del capital mobiliario, sin retención, y se declara en la Renta del año en que se cobra la letra. Cuánto te queda en tu caso: [calculadora de Letras del Tesoro](${bills}).`,
       fileH: "¿Tienes que hacer la declaración de la Renta?",
       file: [
         `El ${art96} de la ley dice quién no tiene que declarar. Si solo tienes sueldo, no estás obligado hasta ${m(FILING.onePayer)} brutos al año de una sola empresa, y hasta ${m(FILING.severalPayers)} si tienes más de una (salvo que la segunda y las siguientes sumen ${m(FILING.otherPayersUpTo)} o menos). Quien ha estado dado de alta como autónomo en algún momento del año tiene que declarar siempre. Aunque no estés obligado, te puede convenir declarar si te tienen que devolver.`,
@@ -555,6 +560,7 @@ export function buildIncomeTaxBody(locale: Locale): Block[] {
       savCaption: "Scale for the savings taxable base (interest, dividends, gains and losses on sales)",
       savHead: ["Savings base", "State", "Region", "Total"],
       savNote: `Source: IRPF Law, ${savingsLaw}, as worded by Ley 7/2024, from 1 January 2025. The regional half is set by State law, so it is the same in every region.`,
+      savBills: `Spanish Treasury bills (Letras del Tesoro) are taxed on this scale: what you earn (the face value minus what you paid) is investment income, with no withholding, declared in the return for the year the bill is repaid. What you keep in your case: [Treasury bills calculator](${bills}).`,
       fileH: "Do you have to file a tax return?",
       file: [
         `${art96} of the law says who does not have to file. With salary only, you are not obliged up to ${m(FILING.onePayer)} gross a year from one employer, or ${m(FILING.severalPayers)} with more than one (unless the second and later ones add up to ${m(FILING.otherPayersUpTo)} or less). Anyone registered as self-employed at any point in the year must always file. Even when you do not have to, filing can pay off if you are owed a refund.`,
@@ -608,6 +614,7 @@ export function buildIncomeTaxBody(locale: Locale): Block[] {
     ...h2(t.whH, ...t.wh),
     ...h2(t.savH),
     table(t.savCaption, t.savHead, savingsRows, t.savNote),
+    ...paras(t.savBills),
     ...h2(t.fileH, ...t.file),
     ...h2(t.dedH, ...t.ded),
     ...h2(t.mistakesH),

@@ -52,6 +52,7 @@ import {
   type IntlLocale,
 } from "@/lib/programmatic/spain-2027/day-copy-intl";
 import { BRIDGES_INTL, HUB_INTL } from "@/lib/programmatic/spain-2027/copy-intl";
+import { DAY_CITIES_UI, dayCityLinks } from "@/lib/programmatic/spain-2027/day-cities";
 import { DAY_LIST_UI, dayHolderNote, dayHolidayLabel, dayPlaceLabel, printedDayFaq } from "@/lib/programmatic/spain-2027/day-faq";
 import { DAY_PAGES, SPAIN_DAYS, change2026, dayRuns, hasDayPage, isWeekend, neighbours, spainDay, type SpainDay } from "@/lib/programmatic/spain-2027/days";
 import { editionBridgesPath, editionCommunityPath } from "@/lib/programmatic/spain-2027/editions";
@@ -348,6 +349,24 @@ function WhereLists({ day, locale }: { day: SpainDay; locale: DateLocale }) {
   );
 }
 
+/** The cities whose 2027 local days fall on this date (day-cities.ts): every one named, the indexable pages linked. */
+export function DayCities({ iso, locale }: { iso: string; locale: DateLocale }) {
+  const cities = dayCityLinks(iso, locale);
+  if (cities.length === 0) return null;
+  const ui = DAY_CITIES_UI[locale];
+  return (
+    <>
+      <h3 id="ci-dia-ciudades">{ui.heading(dayMonth(iso, locale), cities.length)}</h3>
+      <p>{ui.intro}</p>
+      <ul className="columns-1 sm:columns-2 lg:columns-3">
+        {cities.map((c) => (
+          <li key={`${c.city.region}-${c.city.slug}`}>{c.href ? <Link href={c.href}>{c.name}</Link> : c.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 function BridgeList({ day, locale }: { day: SpainDay; locale: DateLocale }) {
   const w = dayWords(locale);
   const runs = dayRuns(day);
@@ -429,6 +448,7 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
               {s.id === "donde" ? (
                 <>
                   <WhereLists day={day} locale={locale} />
+                  <DayCities iso={iso} locale={locale} />
                   {isDatePage(iso) ? (
                     <p>
                       {ui.catalonia} <Link href={datePath(locale, iso)}>{dateQuestion(iso, locale)}</Link>

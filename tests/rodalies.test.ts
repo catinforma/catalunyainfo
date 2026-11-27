@@ -718,7 +718,8 @@ test("transport passes, metro hours, airport and strikes guides gain exactly one
     assert.equal(count(TRANSPORT.editions[locale].blocks, hub), 1, `transport/${locale}`);
     assert.equal(count(HOURS.editions[locale].blocks, hub), 1, `hours/${locale}`);
     assert.equal(count(STRIKES_GUIDE.editions[locale].blocks, hub), 1, `strikes/${locale}`);
-    const airportTarget = locale === "en" ? hub : `](${linePath(locale, "R2N")})`;
+    // 27 Nov 2026 (link audit, round 3): the English guide links the R2 Nord line page too (English line pages since 21 Nov).
+    const airportTarget = `](${linePath(locale, "R2N")})`;
     assert.equal(count(AIRPORT.editions[locale].blocks, airportTarget), 1, `airport/${locale}`);
     assert.ok(!JSON.stringify(AIRPORT.editions[locale].blocks).includes("aerobusbcn"));
   }

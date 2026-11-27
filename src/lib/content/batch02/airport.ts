@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { hubPath as rodaliesHub, linePath as rodaliesLine } from "@/lib/programmatic/rodalies/paths";
+import { linePath as rodaliesLine } from "@/lib/programmatic/rodalies/paths";
 
 import {
   b2Related,
@@ -401,7 +401,8 @@ const COPY: Record<Locale, T> = {
     train: [
       "The Rodalies station is at **Terminal 2, Level 0**, served only by the **R2 Nord**, with **a train every 30 minutes** every day. It stops at El Prat, Bellvitge, **Barcelona-Sants** (19 minutes) and **Passeig de Gràcia** (24 minutes).",
       "It accepts **every integrated pass, the T-casual included**, so if you already hold one, the train costs you one journey. Landing at T1? The free shuttle takes about 10 minutes to T2.",
-      `Before you head for the station, check [Rodalies disruptions today](${rodaliesHub("en")}), R2 Nord included.`,
+      // 27 Nov 2026 (link audit, round 3): the English line pages exist since 21 Nov, so the line itself, as in ca/es.
+      `Before you head for the station, check [whether the R2 Nord has disruptions today](${rodaliesLine("en", "R2N")}).`,
     ],
     trainCaption: "R2 Nord: first and last trains",
     trainHeaders: ["Direction", "First train", "Last train", "Departures"],
