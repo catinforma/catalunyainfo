@@ -58,7 +58,7 @@ const COPY: Record<Locale, Copy> = {
     title: "Festius locals de Catalunya: el calendari de tots els municipis",
     seoTitle: "Festius locals Catalunya 2026 per municipi: busca el teu",
     seoDescription:
-      "Busca els dos festius locals del teu municipi de Catalunya: cada municipi té la seva pàgina. Propers: 11 i 30 de novembre i 7 de desembre.",
+      "Festius locals 2026 dels municipis de Catalunya, amb cercador i dades de la Generalitat. Cada un té la seva pàgina: l'any sencer i si avui és festiu.",
     excerpt:
       "Els dos dies de festa local de cada municipi de Catalunya, en una sola taula amb cercador i dades oficials de la Generalitat.",
     lead: "A banda dels dotze festius de tot Catalunya, **cada municipi en fixa dos de propis**. Busca el teu a la taula, amb tots els municipis; els {count} que tenen festius oficials tenen, a més, la seva pàgina amb l'any sencer i si avui és festiu: **[festius locals per municipi](/ca/festius/)** ({towns}…).",
@@ -89,7 +89,7 @@ const COPY: Record<Locale, Copy> = {
     title: "Festivos locales de Cataluña: el calendario de todos los municipios",
     seoTitle: "Festivos locales Cataluña 2026 por municipio: busca el tuyo",
     seoDescription:
-      "Busca los dos festivos locales de tu municipio en Cataluña: cada municipio tiene su página. Próximos: 11 y 30 de noviembre y 7 de diciembre.",
+      "Festivos locales 2026 de los municipios de Cataluña, con buscador y datos de la Generalitat. Cada uno tiene su página: el año entero y si hoy es festivo.",
     excerpt:
       "Los dos días de fiesta local de cada municipio de Cataluña, en una sola tabla con buscador y datos oficiales de la Generalitat.",
     lead: "Además de los doce festivos de toda Cataluña, **cada municipio fija dos propios**. Busca el tuyo en la tabla, con todos los municipios; los {count} que tienen festivos oficiales tienen, además, su página con el año entero y si hoy es festivo: **[festivos locales por municipio](/es/festivos/)** ({towns}…).",

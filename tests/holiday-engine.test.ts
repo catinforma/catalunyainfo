@@ -1356,6 +1356,21 @@ test("the local-holidays guide links to the hub, one sentence per locale", () =>
   assert.match(LOCAL_COPY.en.related, /\]\(\/en\/holidays\/\)/);
 });
 
+test("local-holidays guide snippet (27 Nov 2026, batch 9C): no day that goes past, the snapshot's year, lengths", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const { seoTitle, seoDescription } = LOCAL_COPY[locale];
+    assert.ok(seoTitle.length <= 60, `${locale} title ${seoTitle.length}`);
+    assert.ok(seoDescription.length > 80 && seoDescription.length <= 155, `${locale} description ${seoDescription.length}`);
+    // The old ca/es descriptions listed "11 and 30 Nov, 7 Dec" as next; a
+    // description outlives its dates (Google keeps it weeks), so none here.
+    assert.doesNotMatch(seoDescription, /\d{1,2} (de |d')?(novembre|noviembre|desembre|diciembre|November|December)/, `${locale}: dated day in the description`);
+  }
+  for (const locale of ["ca", "es"] as const) {
+    assert.ok(LOCAL_COPY[locale].seoTitle.includes(String(SNAPSHOT.year)), `${locale}: title year is the snapshot's`);
+    assert.ok(LOCAL_COPY[locale].seoDescription.includes(String(SNAPSHOT.year)), `${locale}: description year is the snapshot's`);
+  }
+});
+
 test("server output carries no clock: no argument-less new Date() outside the browser component", () => {
   const files = [
     "src/lib/programmatic/holidays/copy.ts",
