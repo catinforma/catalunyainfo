@@ -64,13 +64,46 @@ import type { ElectionDayPhase } from "./election-day";
  * notes still need a browser read (owner) before 29 Nov. Re-read again 27-28 Nov.
  * The election-day layer (election-day.ts) prints this switch as a button
  * from 20:00 on 29 Nov.
+ *
+ * Checked 27 Nov 2026, 02:44-02:50 CET (curl, browser user agent; then
+ * WebFetch for the 403 hosts): ANNOUNCED. lamoncloa.gob.es's Interior press
+ * list (HTTP 200) opens with the note of 26.11.2026 "Una web y una app
+ * facilitarán el seguimiento en tiempo real de los resultados electorales del
+ * 29N" (HTTP 200), which names the site verbatim: «La página web
+ * https://resultados.29neleccionesgenerales.com , y la app móvil Elecciones
+ * Generales 29N [...] ofrecerán a los usuarios información en tiempo real sobre
+ * todo el proceso»; «estarán disponibles a partir de este sábado»; «Desde las
+ * 21 horas, tras el cierre de los colegios electorales en Canarias, la página
+ * web y la aplicación móvil empezarán a difundir los primeros resultados del
+ * escrutinio»; its link's href is "https://resultados.29neleccionesgenerales.com/".
+ * NOTE the .com: not the .es election site. The address itself answered 401
+ * (Basic auth, CloudFront) at 02:45 CET: it opens on Saturday 28 Nov per the
+ * note, so step 2 above ("grep it for resultados") can only pass from then.
+ * 29neleccionesgenerales.es home and /es/sitemap.xml: 200, no
+ * "resultad", newest lastmod 2026-11-03. interior.gob.es (press notes),
+ * www.interior.gob.es and infoelectoral.interior.gob.es: 403 to curl
+ * (Cloudflare "Just a moment...") and to WebFetch: not read.
+ *
+ * WHY THE SWITCH IS STILL OFF (ci-fonts, 27 Nov): the address answers 401
+ * until Saturday, so step 2 cannot pass today, and five tests pin the "off"
+ * state (election-day "after the night", batch02 "election night EN",
+ * election-municipal-pages "no guessed results site", election-29n-import
+ * "render without g2026", election-guides-after "until 23:59"): flipping it
+ * needs those reviewed together. RESULTS_SITE_CHECKED is NOT moved to 27 Nov:
+ * with the switch off the pages print "not announced yet (checked on <date>)",
+ * which was true at the 26 Nov 07:20 read and would be false for 27 Nov. To
+ * do on Sat 28 Nov once the site answers 200 with "resultados": set
+ *   ELECTION_NIGHT_RESULTS_URL = "https://resultados.29neleccionesgenerales.com/"
+ *   ELECTION_NIGHT_RESULTS_SOURCE = "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/interior/Paginas/2026/261126-app-seguimiento-resultados-electorales.aspx"
+ *   RESULTS_SITE_CHECKED = that day; update the five tests; publish
+ *   `election-night election-results voting`.
  */
 export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 
 /** The official note or page that names the results site; required once the URL is set. */
 export const ELECTION_NIGHT_RESULTS_SOURCE: string | null = null;
 
-/** When the official sites were last read for it. */
+/** When the official sites were last read for it (with the switch off this is printed as "not announced yet, checked on"). */
 export const RESULTS_SITE_CHECKED = "2026-11-26";
 
 /** Hosts an announcement may come from (the results site itself may be on another domain). */

@@ -75,7 +75,12 @@ export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
  */
 // 20 Nov 2026: the press room's mobility note of that day (MOBILITY_2026) confirms 26 Nov, 18:00; still no name for who switches them on.
 // 25 Nov 2026: both notes (9 and 20 Nov) read again on ajuntament.barcelona.cat, unchanged ("L'acte començarà a les 18 hores"; mobility note of 20 Nov: "Entre el dilluns 23 i el dijous 26 el tronc central del passeig de Gràcia estarà tallat").
-export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-25";
+// 27 Nov 2026 (~02:58 CET): the City Council's note of the day, 26 Nov 2026, "Barcelona encén el Nadal 2026 amb un gran ritual col·lectiu al
+// Passeig de Gràcia" (ajuntament.barcelona.cat/premsa/2026/11/26/...-2/): «Aquesta tarda, al passeig de Gràcia amb carrer Roselló, l'alcalde de
+// Barcelona, Jaume Collboni, ha participat en l'acte d'encesa oficial dels llums de Nadal 2026». The switch-on took place as announced; the
+// past-tense text (LIGHTS_PAST_FROM) needs no change. `who` is still not filled (not asked for; the note names the mayor).
+// MOBILITY_2026 stays: no comment marks it for deletion; it is already unpublished from LIGHTS_PAST_FROM and the before-the-day tests read it.
+export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-27";
 
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {

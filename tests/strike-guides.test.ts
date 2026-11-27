@@ -22,6 +22,7 @@ import {
   type StrikeGuideKey,
 } from "../src/lib/content/batch02/strike-guides.ts";
 import { STRIKES, STRIKES_AS_OF, STRIKES_CALLED_OFF, STRIKES_GUIDE, STRIKES_VERIFIED, STRIKE_URLS, buildStrikesBody, guideEntry, isUpcoming, type Strike } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES_SPAIN_VERIFIED } from "../src/lib/content/batch02/strikes-spain-data.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { TRAINS } from "../src/lib/content/features/trains.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -442,11 +443,19 @@ test("what it touches: one row per service, from `affects`; Rodalies lines link 
 test("the education guide: 26 November is a school day; families and staff get the entry's advice", () => {
   const strike = entry("vaga-educacio-2026-11-26");
   for (const day of strike.dates) assert.equal(schoolStatusOn(day).kind, "term", day);
-  const line: Record<Locale, RegExp> = {
-    ca: /El dijous 26 de novembre és dia lectiu al calendari escolar 2026-2027/,
-    es: /El jueves 26 de noviembre es día lectivo en el calendario escolar 2026-2027/,
-    en: /Thursday 26 November is a school day in the 2026-2027 school calendar/,
-  };
+  // 27 Nov 2026: from the day after, the same fact in the past tense (strike-guides.ts, "va ser dia lectiu").
+  const past = STRIKES_AS_OF > "2026-11-26";
+  const line: Record<Locale, RegExp> = past
+    ? {
+        ca: /El dijous 26 de novembre va ser dia lectiu al calendari escolar 2026-2027/,
+        es: /El jueves 26 de noviembre fue día lectivo en el calendario escolar 2026-2027/,
+        en: /Thursday 26 November was a school day in the 2026-2027 school calendar/,
+      }
+    : {
+        ca: /El dijous 26 de novembre és dia lectiu al calendari escolar 2026-2027/,
+        es: /El jueves 26 de noviembre es día lectivo en el calendario escolar 2026-2027/,
+        en: /Thursday 26 November is a school day in the 2026-2027 school calendar/,
+      };
   for (const locale of LOCALES) {
     const body = text(STRIKE_EDUCATION_GUIDE.editions[locale].blocks);
     assert.match(body, line[locale], locale);
@@ -620,7 +629,9 @@ test("on a strike day the lead says so; after it, the page speaks of the past an
       const after = buildStrikeGuideBody(key, locale, "2026-12-31", over);
       assert.ok(bodySchema.safeParse(after).success, `${key}/${locale}`);
       // 24 Nov 2026: the Renfe guide after its last strike is the standing page (its lead is dated to the last re-read, from 18 Dec).
-      if (key === "strikeRenfe") assert.match(text(after.slice(0, 1)), new RegExp(`^(A|As of) ${Number(STRIKES_VERIFIED.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`), `${key}/${locale}`);
+      // 27 Nov 2026: dated to the earlier of the two hubs' re-reads (rail-strike-next.ts), which may differ for a day.
+      const railChecked = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STRIKES_VERIFIED : STRIKES_SPAIN_VERIFIED;
+      if (key === "strikeRenfe") assert.match(text(after.slice(0, 1)), new RegExp(`^(A|As of) ${Number(railChecked.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`), `${key}/${locale}`);
       else assert.match(text(after.slice(0, 1)), /ja ha passat|ya ha pasado|is over/, `${key}/${locale}`);
       assert.ok(!after.some((b) => b.type === "heading" && (b as { id?: string }).id === "que-fer"), `${key}/${locale}: advice after the strike`);
     }

@@ -28,7 +28,9 @@ import { DAY_DEPENDENT_BLOCKS } from "../src/lib/content/day-dependent.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 
 /** 25 Nov 2026: the stamp moves with each re-read (STRIKES_VERIFIED), so the tests read it instead of pinning a day. */
-const STAMPED_RE = new RegExp(`^(A|As of) ${Number(STRIKES_VERIFIED.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`);
+// 27 Nov 2026: the stamp is the earlier of the two hubs' re-reads (railVerified), which may differ for a day.
+const RAIL_STAMP = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STRIKES_VERIFIED : STRIKES_SPAIN_VERIFIED;
+const STAMPED_RE = new RegExp(`^(A|As of) ${Number(RAIL_STAMP.slice(8))} (de )?(novembre|noviembre|November) (de )?2026`);
 
 /**
  * 24 Nov 2026 (docs/SEO_EXPERIMENTS.md, "Renfe guide as the standing 'is there

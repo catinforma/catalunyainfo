@@ -173,9 +173,9 @@ test("the page is honest about the towns: 'dates' in the title only when a town 
 /* -------------------------------------------------------------------------- */
 
 test("with no 2026 date, the lead says so with the check date and gives 2025 and 2024 with their years", () => {
-  // 25 Nov 2026: the City Council's notes of 9 and 20 Nov were read again, unchanged; the check date moved with them.
-  const checked: Record<Locale, string> = { ca: "comprovat el 25 de novembre de 2026", es: "comprobado el 25 de noviembre de 2026", en: "checked on 25 November 2026" };
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-25");
+  // 27 Nov 2026: the City Council's note of 26 Nov (switch-on held) was read; the check date moved with it.
+  const checked: Record<Locale, string> = { ca: "comprovat el 27 de novembre de 2026", es: "comprobado el 27 de noviembre de 2026", en: "checked on 27 November 2026" };
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-27");
   for (const locale of LOCALES) {
     const first = (buildChristmasLightsBody(locale, NONE, LIGHTS_TOWNS, PRE)[0] as { text: string }).text;
     assert.ok(first.includes(checked[locale]), `${locale}: ${first}`);

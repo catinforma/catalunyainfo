@@ -264,7 +264,9 @@ test("links in: both hubs and the 17N page, while the day is to come", () => {
 });
 
 test("as-of discipline: both hubs verified on their as-of day", () => {
-  assert.equal(STRIKES_SPAIN_VERIFIED, STRIKES_SPAIN_AS_OF);
+  // 27 Nov 2026: the as-of day may run one day ahead of the last full re-read (a cited source unreadable that day: ELA, bot check), never more.
+  assert.ok(STRIKES_SPAIN_VERIFIED <= STRIKES_SPAIN_AS_OF, "verified after the as-of day");
+  assert.ok(Date.parse(STRIKES_SPAIN_AS_OF) - Date.parse(STRIKES_SPAIN_VERIFIED) <= 86_400_000, `Spain hub as of ${STRIKES_SPAIN_AS_OF}, last fully re-read ${STRIKES_SPAIN_VERIFIED}: re-read`);
   assert.ok(STRIKE_DAYS_VERIFIED <= STRIKES_VERIFIED && STRIKE_DAYS_VERIFIED <= STRIKES_SPAIN_VERIFIED);
 });
 

@@ -5,6 +5,7 @@ import { test } from "node:test";
 import type { Block } from "../src/lib/content/blocks.ts";
 import { CALENDAR_FAIRS, CHRISTMAS, FAMILY, SAGRADA_2026, SANTA_LLUCIA_2026 } from "../src/lib/content/batch02/christmas.ts";
 import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcelona.ts";
+import { LIGHTS_TOWNS } from "../src/lib/content/batch02/christmas-lights-towns.ts";
 import {
   BACK_TO_SCHOOL,
   CALENDAR_HOLIDAYS,
@@ -102,7 +103,10 @@ test("each row prints its date from the module, in every language and both scope
       ];
       for (const label of expected) assert.ok(labels.includes(label), `${scope}/${locale}: no row "${label}"`);
       // Date order.
-      assert.equal(rows.length, scope === "catalonia" ? expected.length + 1 : expected.length, `${scope}/${locale}: Tortosa's 4 Dec switch-on is the only extra row`);
+      // 27 Nov 2026: Tarragona published 3 Dec, so two town switch-ons fall inside the calendar (Tarragona, Tortosa), one row each.
+      const townRows = LIGHTS_TOWNS.filter((t) => t.y2026 && t.y2026.date >= CALENDAR_SPAN.from && t.y2026.date <= CALENDAR_SPAN.to).map((t) => t.key);
+      assert.deepEqual(townRows, ["tarragona", "tortosa"]);
+      assert.equal(rows.length, scope === "catalonia" ? expected.length + townRows.length : expected.length, `${scope}/${locale}: the town switch-ons inside the span are the only extra rows`);
       // Each row links the page that answers it.
       for (const [label, text] of rows) assert.match(text!, /\]\(\/(ca|es|en)\//, `${scope}/${locale} ${label}: no link`);
     }

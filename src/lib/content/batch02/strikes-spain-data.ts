@@ -277,8 +277,22 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * SEMAF (newest item on Renfe's 4th agreement, no strike); CESM (newest 23 Nov, nothing new); Basque list (newest 17 Nov).
  * Not out at read time: BOE of 26 Nov (API 404 at 06:52) and BOCM of 26 Nov (newest on its home núm. 283); BOE núm. 293 and BOCM núm. 283 (25 Nov)
  * had no strike order.
+ *
+ * 27 Nov 2026 (02:45-03:40 CET, Friday): re-read (docs/SEO_EXPERIMENTS.md, "2026-11-27 — Strikes re-read the day after 26N (ci-fonts)").
+ * CHANGED: the perfumery strike (27 Nov, 23 Dec, 4 Jan) was called off on 26 Nov after a pre-agreement with STANPA (CCOO de Catalunya's note of
+ * 26 Nov; CCOO de Industria's of 26/11/2026: «Se desconvocan los tres días de huelga [...] el 27 de noviembre, el 23 de diciembre y el 4 de
+ * enero»): its entry leaves SPAIN_STRIKES for SPAIN_NOT_HAPPENING ("perfumeria-desconvocada"). UGT FICA's site has nothing newer than nº 3861
+ * (18 Nov). Unchanged: SMU (notice PDF «hasta las 08:00 horas del sábado 28 de noviembre de 2026»; documentation page; huelgamedica.es feed newest
+ * 26 Nov, not a call-off); Correos (Orden INT/1239/2026, «23 a 27 de noviembre de 2026 en Madrid»; press room: nothing); CSIF Madrid (call page
+ * 97107 unchanged; newest items 26 Nov on pay and the teachers' career scheme; appeal page 100572), Órdenes 4252/2026 and 4977/2026 (BOCM);
+ * Ministry air list (newest still Serveo, PDF «hasta el día 31 de enero de 2027»; SAERCO, Groundforce, Outsmart resolutions «30 de noviembre de
+ * 2026»; USCA); rail list (newest 12 Nov); Basque list (newest the two care-home orders of 17 Nov; both PDFs and the Osakidetza order re-read);
+ * LAB (2 Dec condition unchanged); CESM (newest items 9-13 Nov, call «continúa vigente»); SCF (newest SCFCOM 41, 25 Nov, not a strike),
+ * ALFERRO (newest 83/2026), CCOO rail (no call). BOE núm. 294 (26 Nov, 285 items): no strike or minimum-services item; BOCM núm. 284 (26 Nov,
+ * full issue PDF): none. Not out at read time: BOE of 27 Nov (API 404) and BOCM núm. 285 (403/404). NOT READ: ELA's Osakidetza note (Anubis bot
+ * check, by curl and WebFetch), so STRIKES_SPAIN_VERIFIED stays 26 Nov; LAB's note, read today, carries the same sentence.
  */
-export const STRIKES_SPAIN_AS_OF: string = "2026-11-26";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-27";
 
 /**
  * Printed as the page's "last verified" date and in every "checked on" line.
@@ -390,6 +404,11 @@ export const SPAIN_URLS = {
    * 23 de diciembre de 2026 y el 4 de enero de 2027».
    */
   perfumeryFica: `${FICA}/3861?catid=8`,
+  /** CCOO de Catalunya, 26 Nov 2026 (read 27 Nov 2026, ~02:55 CET; HTTP 200): «Es desconvoca la vaga que els sindicats amb representació al sector de la perfumeria i la cosmètica havien convocat per al 27 de novembre»; «CCOO d'Indústria i UGT-FICA van arribar ahir a la nit a un preacord amb STANPA que ha de ser ratificat». */
+  perfumeryOff: "https://www.ccoo.cat/noticies/es-desconvoca-la-vaga-prevista-pel-divendres-27-de-novembre-en-ple-black-friday/",
+  /** CCOO de Industria, 26/11/2026 (read 27 Nov 2026, ~02:55 CET; HTTP 200): «Se desconvocan los tres días de huelga que los sindicatos con representación en el sector de la perfumería y la cosmética habían convocado el 27 de noviembre, el 23 de diciembre y el 4 de enero». */
+  perfumeryOffIndustria:
+    "https://industria.ccoo.es/noticia:773854--Preacuerdo_en_la_negociacion_del_convenio_que_regulara_las_condiciones_laborales_del_sector_de_la_perfumeria_y_la_cosmetica_%E2%80%9CTodo_son_mejoras_para_las_personas_trabajadoras%E2%80%9D",
   /**
    * Madrid public schools, 25 Nov 2026 (read ~00:55 CET, all HTTP 200). BOCM núm. 241 of 9 Oct 2026, Orden 4252/2026 of 7 Oct (minimum services «durante las
    * huelgas convocadas a partir del día 14 de octubre de 2026, en todos los centros docentes y educativos públicos no universitarios de la Comunidad de
@@ -1078,57 +1097,6 @@ const SPAIN_STRIKES_ALL: SpainStrike[] = [
     ],
   },
   {
-    // 25 Nov 2026 (read that day, ~00:25 CET): CCOO de Catalunya's news of 24 Nov (perfumery). Second and third source read the same night (~00:40):
-    // UGT FICA nº 3861 (18 Nov: the SIMA mediation of 17 Nov ended without agreement, strike kept on 27 Nov, 23 Dec and 4 Jan) and CCOO de Industria's
-    // state-level news (19 Nov: "del Estado"; shops of the big brands such as El Corte Inglés, and factories). Still the organisers' notices only: no
-    // registered call or order seen, and none is due (a private sector). The employers' association, STANPA, has nothing on the strike on its site
-    // (its own search for "huelga" is empty, 25 Nov).
-    id: "huelga-perfumeria-2026-11-27",
-    dates: ["2026-11-27", "2026-12-23", "2027-01-04"],
-    sector: "industry",
-    status: "called",
-    title: {
-      ca: "vaga al sector de la perfumeria i la cosmètica (CCOO Indústria, UGT FICA)",
-      es: "huelga en el sector de la perfumería y la cosmética (CCOO Industria, UGT FICA)",
-      en: "perfumery and cosmetics sector strike (CCOO Industria, UGT FICA)",
-    },
-    label: { ca: "perfumeria i cosmètica", es: "perfumería y cosmética", en: "perfumery and cosmetics" },
-    scope: {
-      ca: "Les persones que treballen al sector de la perfumeria i la cosmètica (conveni estatal de perfumeria i afins), a tot Espanya: segons CCOO d'Indústria, qui ven les marques a botigues com El Corte Inglés i les plantilles de les fàbriques de gels i xampús; unes 7.000 a Catalunya, segons CCOO de Catalunya. No afecta el transport, la sanitat ni les escoles.",
-      es: "Las personas que trabajan en el sector de la perfumería y la cosmética (convenio estatal de perfumería y afines), en toda España: según CCOO de Industria, quienes venden las marcas en tiendas como El Corte Inglés y las plantillas de las fábricas de geles y champús; unas 7.000 en Cataluña, según CCOO de Catalunya. No afecta al transporte, la sanidad ni los colegios.",
-      en: "People who work in the perfumery and cosmetics sector (the state-wide perfumery and related products collective agreement), all over Spain: according to CCOO Industria, those who sell the brands in shops such as El Corte Inglés and the workforces of the factories that make gels and shampoos; about 7,000 in Catalonia, according to CCOO de Catalunya. It does not touch transport, health care or schools.",
-    },
-    hours: {
-      ca: "Tres jornades de vaga: el divendres 27 de novembre (Black Friday), el 23 de desembre i el 4 de gener. L'avís no en diu l'horari. El 27, CCOO convoca una concentració a partir de les 9.00 h davant d'El Corte Inglés de la plaça Catalunya de Barcelona.",
-      es: "Tres jornadas de huelga: el viernes 27 de noviembre (Black Friday), el 23 de diciembre y el 4 de enero. El aviso no dice el horario. El 27, CCOO convoca una concentración a partir de las 9.00 h ante El Corte Inglés de la plaza de Cataluña de Barcelona.",
-      en: "Three strike days: Friday 27 November (Black Friday), 23 December and 4 January. The notice gives no hours. On the 27th CCOO has called a rally from 09:00 outside El Corte Inglés in Plaça Catalunya, Barcelona.",
-    },
-    calledBy: {
-      ca: `CCOO d'Indústria i UGT FICA, segons ${link(U.perfumeryFica, "la nota de UGT FICA del 18 de novembre")}, ${link(U.perfumeryIndustria, "la de CCOO d'Indústria del 19")} i ${link(U.perfumery, "la notícia de CCOO de Catalunya del 24 de novembre")}. La patronal que negocia el conveni és STANPA.`,
-      es: `CCOO de Industria y UGT FICA, según ${link(U.perfumeryFica, "la nota de UGT FICA del 18 de noviembre")}, ${link(U.perfumeryIndustria, "la de CCOO de Industria del 19")} y ${link(U.perfumery, "la noticia de CCOO de Catalunya del 24 de noviembre")}. La patronal que negocia el convenio es STANPA.`,
-      en: `The unions CCOO Industria and UGT FICA, according to ${link(U.perfumeryFica, "UGT FICA's note of 18 November")}, ${link(U.perfumeryIndustria, "CCOO Industria's of 19 November")} and ${link(U.perfumery, "CCOO de Catalunya's news of 24 November")}. The employers' association at the bargaining table is STANPA.`,
-    },
-    basis: {
-      ca: `Consta als avisos dels dos sindicats convocants, amb les mateixes tres dates (27 de novembre, 23 de desembre i 4 de gener): ${link(U.perfumeryFica, "UGT FICA, el 18 de novembre")} (després de la mediació sense acord al SIMA del dia 17: «ambos sindicatos confirman el mantenimiento de la huelga»), ${link(U.perfumeryIndustria, "CCOO d'Indústria, el 19")} i ${link(U.perfumery, "CCOO de Catalunya, el 24")} («tres jornades de vaga»). No hi ha cap ordre ni resolució oficial, perquè no és un servei públic essencial, i el {checked} la patronal STANPA no havia publicat res sobre la vaga al seu web.`,
-      es: `Consta en los avisos de los dos sindicatos convocantes, con las mismas tres fechas (27 de noviembre, 23 de diciembre y 4 de enero): ${link(U.perfumeryFica, "UGT FICA, el 18 de noviembre")} (tras la mediación sin acuerdo en el SIMA del día 17: «ambos sindicatos confirman el mantenimiento de la huelga»), ${link(U.perfumeryIndustria, "CCOO de Industria, el 19")} y ${link(U.perfumery, "CCOO de Catalunya, el 24")} («tres jornadas de huelga»). No hay ninguna orden ni resolución oficial, porque no es un servicio público esencial, y el {checked} la patronal STANPA no había publicado nada sobre la huelga en su web.`,
-      en: `It rests on the notices of both unions that call it, with the same three dates (27 November, 23 December and 4 January): ${link(U.perfumeryFica, "UGT FICA, 18 November")} (after the SIMA mediation of the 17th ended without agreement: "ambos sindicatos confirman el mantenimiento de la huelga"), ${link(U.perfumeryIndustria, "CCOO Industria, 19 November")} and ${link(U.perfumery, "CCOO de Catalunya, 24 November")} ("tres jornadas de huelga", three strike days). There is no official order or resolution, because it is not an essential public service, and on {checked} the employers' association STANPA had published nothing about the strike on its website.`,
-    },
-    minimumServices: {
-      status: "none",
-      short: { ca: "No afecta serveis públics", es: "No afecta a servicios públicos", en: "No public service affected" },
-      text: {
-        ca: "És una vaga en un sector privat (perfumeria i cosmètica): no afecta el transport, la sanitat ni les escoles.",
-        es: "Es una huelga en un sector privado (perfumería y cosmética): no afecta al transporte, la sanidad ni los colegios.",
-        en: "It is a strike in a private sector (perfumery and cosmetics): transport, health care and schools are not affected.",
-      },
-    },
-    sources: [
-      { name: "El sector de la perfumeria i la cosmètica farà vaga el 27 de novembre per reclamar un conveni que avanci en salaris, jornada i conciliació (24 de novembre de 2026)", url: U.perfumery, publisher: "CCOO de Catalunya" },
-      { name: "El 27N será un viernes negro en la perfumería y la cosmética: los y las trabajadoras irán a la huelga para exigir avances en salarios, jornada y conciliación (19 de noviembre de 2026)", url: U.perfumeryIndustria, publisher: "CCOO de Industria" },
-      { name: "UGT FICA denuncia el bloqueo de la negociación del Convenio Estatal de Perfumería y Afines y mantiene la convocatoria de huelga (18 de noviembre de 2026)", url: U.perfumeryFica, publisher: "UGT FICA" },
-    ],
-  },
-  {
     // 24 Nov 2026 (read that day): the Basque Government's order of 26 Oct, on its list of minimum-services orders. The order also covers 30 Oct
     // (past, never listed here). The callers keep the December days on a condition (LAB 13 Nov, ELA 17 Nov): talks on 2 Dec. Re-read on 3 Dec.
     id: "huelga-osakidetza-2026-12-09",
@@ -1423,6 +1391,29 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
 /* -------------------------------------------------------------------------- */
 
 export const SPAIN_NOT_HAPPENING: SpainNotHappening[] = [
+  {
+    // 27 Nov 2026 (read 02:50-03:00 CET): CCOO de Catalunya's note of 26 Nov ("Es desconvoca la vaga que els sindicats amb representació al sector
+    // de la perfumeria i la cosmètica havien convocat per al 27 de novembre"; "CCOO d'Indústria i UGT-FICA van arribar ahir a la nit a un preacord
+    // amb STANPA que ha de ser ratificat") and CCOO de Industria's of 26/11/2026 ("Se desconvocan los tres días de huelga que los sindicatos con
+    // representación en el sector de la perfumería y la cosmética habían convocado el 27 de noviembre, el 23 de diciembre y el 4 de enero").
+    // UGT FICA's site had nothing newer than its nº 3861 of 18 Nov (still "mantiene la convocatoria"): CCOO's notes speak for both unions.
+    // The strike entry (huelga-perfumeria-2026-11-27, listed from 25 Nov) is removed: none of its days took place.
+    id: "perfumeria-desconvocada",
+    title: {
+      ca: "Perfumeria i cosmètica (CCOO d'Indústria, UGT FICA), 27 de novembre, 23 de desembre i 4 de gener: desconvocada",
+      es: "Perfumería y cosmética (CCOO de Industria, UGT FICA), 27 de noviembre, 23 de diciembre y 4 de enero: desconvocada",
+      en: "Perfumery and cosmetics (CCOO Industria, UGT FICA), 27 November, 23 December and 4 January: called off",
+    },
+    text: {
+      ca: `Les tres jornades de vaga del sector de la perfumeria i la cosmètica es van desconvocar el 26 de novembre, després que CCOO d'Indústria i UGT FICA arribessin a un preacord del conveni estatal amb la patronal STANPA, que encara s'ha de ratificar: «Es desconvoca la vaga que els sindicats amb representació al sector de la perfumeria i la cosmètica havien convocat per al 27 de novembre», segons ${link(U.perfumeryOff, "CCOO de Catalunya")}, i «se desconvocan los tres días de huelga [...] el 27 de noviembre, el 23 de diciembre y el 4 de enero», segons ${link(U.perfumeryOffIndustria, "CCOO d'Indústria")}. No afectava cap servei públic.`,
+      es: `Las tres jornadas de huelga del sector de la perfumería y la cosmética se desconvocaron el 26 de noviembre, después de que CCOO de Industria y UGT FICA alcanzaran un preacuerdo del convenio estatal con la patronal STANPA, que aún debe ratificarse: «Se desconvocan los tres días de huelga que los sindicatos con representación en el sector de la perfumería y la cosmética habían convocado el 27 de noviembre, el 23 de diciembre y el 4 de enero», según ${link(U.perfumeryOffIndustria, "CCOO de Industria")}; ${link(U.perfumeryOff, "CCOO de Catalunya")} lo dice también. No afectaba a ningún servicio público.`,
+      en: `The three strike days in the perfumery and cosmetics sector were called off on 26 November, after CCOO Industria and UGT FICA reached a pre-agreement on the state-wide collective agreement with the employers' association STANPA, still to be ratified: "Se desconvocan los tres días de huelga [...] el 27 de noviembre, el 23 de diciembre y el 4 de enero" (the three strike days of 27 November, 23 December and 4 January are called off), according to ${link(U.perfumeryOffIndustria, "CCOO Industria")}; ${link(U.perfumeryOff, "CCOO de Catalunya")} says the same. It touched no public service.`,
+    },
+    sources: [
+      { name: "CCOO arriba a un preacord en la negociació del conveni del sector de la perfumeria i la cosmètica: es desconvoca la vaga del 27 de novembre (26 de novembre de 2026)", url: U.perfumeryOff, publisher: "CCOO de Catalunya" },
+      { name: "Preacuerdo en la negociación del convenio de la perfumería y la cosmética: se desconvocan los tres días de huelga (26 de noviembre de 2026)", url: U.perfumeryOffIndustria, publisher: "CCOO de Industria" },
+    ],
+  },
   {
     // 20 Nov 2026: SEMAF nº 2026-38 (20/11/2026, datePublished 01:04 CET) and nº 2026-39 (same day). No other rail call for the 23rd on
     // the Ministry of Transport's rail list or from SCF, CCOO, SFF-CGT or ALFERRO (read that day); no notice from Renfe or Rodalies yet.

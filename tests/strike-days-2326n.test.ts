@@ -207,7 +207,8 @@ test("the 23rd: called off, said from SEMAF's notice; the 26th's school order pe
     assert.ok(!SPAIN_STRIKES.some((s) => s.sector === "rail" && s.dates.includes(day)), `a rail strike on ${day}: rewrite the day page`);
     assert.ok(!STRIKES.some((s) => s.scope === "rail" && s.dates.includes(day)), `a Catalan rail strike on ${day}: rewrite the day page`);
   }
-  assert.match(text(STRIKE_26N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes/);
+  // 27 Nov 2026: the lead's "No hay huelga general ni de trenes" goes with the day (past lead); the "not on that day" section keeps it.
+  assert.match(text(STRIKE_26N_GUIDE.editions.es.blocks), /No hay huelga general ni de trenes|No es una huelga general ni de trenes: SEMAF desconvocó/);
   assert.match(text(STRIKE_23N_GUIDE.editions.es.blocks), /No es una huelga general ni de trenes/);
 });
 

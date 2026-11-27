@@ -31,7 +31,8 @@ test("Barcelona 2026: Thursday 26 November, show 18:00, lights 18:30, Passeig de
   assert.equal(a.km, 140);
   assert.equal(a.who, undefined, "the note names nobody");
   assert.match(a.url, /^https:\/\/ajuntament\.barcelona\.cat\/premsa\/2026\/11\/09\//);
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-25");
+  // 27 Nov 2026: the City Council's note of 26 Nov (the switch-on took place) was read the next day.
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-27");
   assert.equal(dayDate(a.date, "ca"), "dijous 26 de novembre de 2026");
   for (const locale of LOCALES) {
     assert.match(placePhrase(a, locale), /^(al passeig|en el paseo|on Passeig) de Gràcia/, locale);
@@ -66,7 +67,7 @@ test("the lights page and the Christmas hub give the date in title, snippet and 
   for (const article of [CHRISTMAS_LIGHTS, CHRISTMAS_BARCELONA]) assert.doesNotMatch(text(article.editions.ca.blocks as Block[]), /\ba (el )?passeig de Gràcia, entre el carrer de Rosselló/);
 });
 
-test("twenty of the 27 towns published their 2026 switch-on on their own sites (read 12, 20 and 25 Nov 2026)", () => {
+test("twenty-three of the 27 towns published their 2026 switch-on on their own sites (read 12, 20, 25 and 27 Nov 2026)", () => {
   const dated = Object.fromEntries(LIGHTS_TOWNS.filter((t) => t.y2026).map((t) => [t.key, `${t.y2026!.date} ${t.y2026!.time ?? "-"} ${t.y2026!.place ?? "-"}`]));
   assert.deepEqual(dated, {
     terrassa: "2026-11-28 18:00 Raval de Montserrat",
@@ -92,12 +93,16 @@ test("twenty of the 27 towns published their 2026 switch-on on their own sites (
     tortosa: "2026-12-04 17:30 plaça de l'Ajuntament",
     "sant-boi": "2026-11-20 18:00 plaça de l'Ajuntament",
     cerdanyola: "2026-11-27 17:30 plaça de Francesc Layret, plaça d'Abat Oliba",
+    // 27 Nov 2026: three more councils (note of 25 Nov, note of 26 Nov, municipal agenda).
+    tarragona: "2026-12-03 18:30 plaça de la Font",
+    lleida: "2026-11-27 18:30 plaça de la Paeria",
+    sitges: "2026-11-27 17:30 Cap de la Vila",
   });
   assert.equal(LIGHTS_TOWNS.length, 27);
   for (const t of LIGHTS_TOWNS) assert.deepEqual(switchOnProblems(t, 2026), [], t.key);
-  assert.equal(LIGHTS_TOWNS_AS_OF, "2026-11-25");
-  // The ones with no 2026 switch-on on their news pages or agendas on 25 Nov.
-  for (const key of ["blanes", "tarragona", "lleida", "sitges", "cornella", "vilanova", "santa-coloma"]) assert.equal(LIGHTS_TOWNS.find((t) => t.key === key)?.y2026, null, key);
+  assert.equal(LIGHTS_TOWNS_AS_OF, "2026-11-27");
+  // The ones with no 2026 switch-on on their news pages or agendas on 27 Nov.
+  for (const key of ["blanes", "cornella", "vilanova", "santa-coloma"]) assert.equal(LIGHTS_TOWNS.find((t) => t.key === key)?.y2026, null, key);
   // Only Santa Coloma's site (403) could not be read: it keeps its last reading, printed under the table.
   assert.deepEqual(LIGHTS_TOWNS_NOT_REREAD.map((u) => `${u.key} ${u.read}`), ["santa-coloma 2026-11-04"]);
   for (const u of LIGHTS_TOWNS_NOT_REREAD) assert.equal(LIGHTS_TOWNS.find((t) => t.key === u.key)?.y2026, null, u.key);
@@ -123,16 +128,16 @@ test("Sant Boi and Cerdanyola (two of the 30 largest towns) are in the table wit
   for (const locale of LOCALES) assert.match(lightsEdition(locale, PRE).excerpt, new RegExp(`\\b${LIGHTS_TOWNS.length}\\b`), `${locale}: the excerpt counts the towns`);
 });
 
-test("the lead gives the count and the span of dates, not twenty names; the table keeps every town", () => {
+test("the lead gives the count and the span of dates, not twenty-three names; the table keeps every town", () => {
   const dated = announcedTowns();
   const first = dated[0]!;
   const last = dated[dated.length - 1]!;
   assert.equal(first.key, "badalona");
   assert.equal(last.key, "tortosa");
   const lead: Record<Locale, RegExp> = {
-    ca: /20 dels 27 municipis d'aquesta guia ja han publicat la data del 2026: de Badalona \(20 de novembre\) a Tortosa \(4 de desembre\)/,
-    es: /20 de los 27 municipios de esta guía ya han publicado la fecha de 2026: de Badalona \(20 de noviembre\) a Tortosa \(4 de diciembre\)/,
-    en: /20 of the 27 towns in this guide have already published their 2026 date: from Badalona \(20 November\) to Tortosa \(4 December\)/,
+    ca: /23 dels 27 municipis d'aquesta guia ja han publicat la data del 2026: de Badalona \(20 de novembre\) a Tortosa \(4 de desembre\)/,
+    es: /23 de los 27 municipios de esta guía ya han publicado la fecha de 2026: de Badalona \(20 de noviembre\) a Tortosa \(4 de diciembre\)/,
+    en: /23 of the 27 towns in this guide have already published their 2026 date: from Badalona \(20 November\) to Tortosa \(4 December\)/,
   };
   for (const locale of LOCALES) {
     const blocks = lightsEdition(locale, PRE).blocks as Block[];
@@ -154,13 +159,15 @@ test("FAQ: the towns people search have their own question; a day before the rea
   for (const locale of LOCALES) {
     const faq = (lightsEdition(locale, PRE).blocks as Block[]).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
     for (const pattern of asked[locale]) assert.ok(faq.items.some((i) => pattern.test(i.question)), `${locale}: ${pattern}`);
-    // El Prat switched on on 21 Nov, before the reading date of 25 Nov; L'Hospitalet is on the 26th.
-    const prat = faq.items.find((i) => /Prat/.test(i.question))!;
-    assert.match(prat.answer, past[locale], locale);
-    assert.doesNotMatch(prat.answer, future[locale], locale);
-    const hospitalet = faq.items.find((i) => /Hospitalet/.test(i.question))!;
-    assert.match(hospitalet.answer, future[locale], locale);
-    assert.doesNotMatch(hospitalet.answer, past[locale], locale);
+    // El Prat switched on on 21 Nov and L'Hospitalet on the 26th, both before the reading date of 27 Nov; Terrassa is on the 28th.
+    for (const town of [/Prat/, /Hospitalet/]) {
+      const item = faq.items.find((i) => town.test(i.question))!;
+      assert.match(item.answer, past[locale], `${locale}: ${town}`);
+      assert.doesNotMatch(item.answer, future[locale], `${locale}: ${town}`);
+    }
+    const terrassa = faq.items.find((i) => /Terrassa/.test(i.question))!;
+    assert.match(terrassa.answer, future[locale], locale);
+    assert.doesNotMatch(terrassa.answer, past[locale], locale);
   }
   assert.equal(of("L'Hospitalet", "ca"), "de l'Hospitalet");
   assert.equal(of("El Prat", "ca"), "del Prat");
@@ -169,7 +176,9 @@ test("FAQ: the towns people search have their own question; a day before the rea
   assert.equal(of("Girona", "ca"), "de Girona");
   assert.equal(of("Girona", "en"), "Girona");
   assert.equal(isHeld({ date: "2026-11-24" }, PRE), true);
-  assert.equal(isHeld({ date: "2026-11-26" }, PRE), false, "the day itself is not yet past");
+  // 27 Nov 2026: a day before LIGHTS_TOWNS_AS_OF is past whatever the clock; the reading day itself is not.
+  assert.equal(isHeld({ date: "2026-11-26" }, PRE), true, "before the reading date");
+  assert.equal(isHeld({ date: LIGHTS_TOWNS_AS_OF }, PRE), false, "the reading day itself is not yet past");
 });
 
 /**

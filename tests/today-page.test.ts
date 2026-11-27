@@ -405,7 +405,8 @@ test("strikes: today, tomorrow and next from the embedded dates; the list's age"
   assert.equal(strikesListStale("2026-11-07", "2026-10-30"), true);
   // On the real list: no rail strike on 23 November (20 Nov 2026: SEMAF called it off, nº 2026-38); the education strike of the 26th is on.
   assert.ok(!strikesOn("2026-11-23", todayStrikes("ca")).some((s) => s.id === "vaga-renfe-2026-11-23"));
-  assert.ok(strikesOn("2026-11-26", todayStrikes("ca")).some((s) => s.id === "vaga-educacio-2026-11-26"));
+  // 27 Nov 2026: from the day after (STRIKES_AS_OF), the education strike is past and leaves the embedded list.
+  assert.equal(strikesOn("2026-11-26", todayStrikes("ca")).some((s) => s.id === "vaga-educacio-2026-11-26"), STRIKES_AS_OF <= "2026-11-26");
   assert.ok(!todayStrikes("ca").some((s) => s.id === "vaga-general-2026-11-11" || s.id === "vaga-ferroviaria-2026-11-17"));
 });
 

@@ -162,7 +162,9 @@ test("three native editions at the registered paths, valid and substantial", () 
   assert.equal(STRIKES_SPAIN_GUIDE.entryKey, "guide-strikes-spain");
   assert.ok(NEWS_CYCLE_ENTRY_KEYS.has(STRIKES_SPAIN_GUIDE.entryKey), "marked up as NewsArticle, like the other strike pages");
   assert.equal(STRIKES_SPAIN_GUIDE.verifiedAt, STRIKES_SPAIN_VERIFIED);
-  assert.equal(STRIKES_SPAIN_VERIFIED, STRIKES_SPAIN_AS_OF);
+  // 27 Nov 2026: the as-of day may run one day ahead of the last full re-read (ELA unreadable that day), never more.
+  assert.ok(STRIKES_SPAIN_VERIFIED <= STRIKES_SPAIN_AS_OF);
+  assert.ok(Date.parse(STRIKES_SPAIN_AS_OF) - Date.parse(STRIKES_SPAIN_VERIFIED) <= 86_400_000, `as of ${STRIKES_SPAIN_AS_OF}, verified ${STRIKES_SPAIN_VERIFIED}`);
 });
 
 test("the three editions have the same shape: same block types in the same order, same sections, same table sizes", () => {
@@ -632,43 +634,23 @@ test("24 Nov 2026: Osakidetza's December strike (Basque Government's order of 26
   }
 });
 
-test("25 Nov 2026: the perfumery and cosmetics strike (CCOO de Catalunya's news of 24 Nov) is listed as called, with no public service and no invented figure", () => {
-  const perfumery = SPAIN_STRIKES.find((s) => s.id === "huelga-perfumeria-2026-11-27")!;
-  assert.deepEqual(perfumery.dates, ["2026-11-27", "2026-12-23", "2027-01-04"]);
-  // Only the organisers' notice: never "confirmed", and nothing official is due.
-  assert.equal(perfumery.status, "called");
-  assert.equal(perfumery.minimumServices.status, "none");
-  assert.equal(perfumery.sector, "industry");
-  assert.equal(
-    perfumery.sources[0]!.url,
-    "https://www.ccoo.cat/noticies/el-sector-de-la-perfumeria-i-la-cosmetica-fara-vaga-el-27-de-novembre-per-reclamar-un-conveni-que-avanci-en-salaris-jornada-i-conciliacio/",
-  );
+test("27 Nov 2026: the perfumery and cosmetics strike (27 Nov, 23 Dec, 4 Jan) was called off on 26 Nov: out of the strikes, in 'not happening' with CCOO's two notes", () => {
+  // CCOO de Catalunya and CCOO de Industria, 26 Nov 2026 (read 27 Nov): pre-agreement with STANPA, the three days called off.
+  assert.equal(SPAIN_STRIKES.find((s) => s.id === "huelga-perfumeria-2026-11-27"), undefined, "no longer listed as a strike");
+  const off = SPAIN_NOT_HAPPENING.find((s) => s.id === "perfumeria-desconvocada");
+  assert.ok(off, "listed as called off");
+  const urls = off.sources.map((src) => src.url);
+  assert.ok(urls.includes("https://www.ccoo.cat/noticies/es-desconvoca-la-vaga-prevista-pel-divendres-27-de-novembre-en-ple-black-friday/"), "CCOO de Catalunya, 26 Nov");
+  assert.ok(urls.some((url) => /^https:\/\/industria\.ccoo\.es\/noticia:773854--/.test(url)), "CCOO de Industria, 26 Nov");
   for (const locale of LOCALES) {
-    assert.match(perfumery.scope[locale], /7[.,]000/, `${locale}: the figure is CCOO's, for Catalonia`);
-    assert.match(perfumery.scope[locale], /CCOO/, `${locale}: attributed`);
-    assert.match(perfumery.hours![locale], /Black Friday/, locale);
-    assert.match(perfumery.hours![locale], /9\.00|09:00/, `${locale}: the rally at 9:00`);
-    // The week of the as-of day holds the 27th: the description names it, and so does the day-by-day answer for that day.
-    assert.match(strikesSpainDescription(locale, "2026-11-25"), /perfumeria i cosm|perfumería y cosm|perfumery and cosmetics/, locale);
-    const answers = spainDayAnswers(locale, "2026-11-25");
-    assert.equal(answers[2]!.day, "2026-11-27");
-    assert.match(answers[2]!.text, /perfumeria i la cosm|perfumería y la cosm|perfumery and cosmetics/, `${locale}/${answers[2]!.day}`);
-  }
-});
-
-test("25 Nov 2026: the perfumery strike has a second and a third source (UGT FICA nº 3861, CCOO de Industria), stays 'called', and its scope is state-wide", () => {
-  const perfumery = SPAIN_STRIKES.find((s) => s.id === "huelga-perfumeria-2026-11-27")!;
-  // Both calling unions' own notices, with the same three days; no official order exists (not a public service), so never "official".
-  assert.equal(perfumery.status, "called");
-  const urls = perfumery.sources.map((src) => src.url);
-  assert.ok(urls.includes("https://ugt-fica.org/component/content/article/3861?catid=8"), "UGT FICA nº 3861 (18 Nov)");
-  assert.ok(urls.some((url) => /^https:\/\/industria\.ccoo\.es\/noticia:772972--/.test(url)), "CCOO de Industria (19 Nov)");
-  for (const locale of LOCALES) {
-    const linked = externalHrefs(perfumery.calledBy[locale] + perfumery.basis[locale]);
+    assert.match(off.title[locale], /desconvocada|called off/, locale);
+    assert.match(off.title[locale], /27/, `${locale}: the day people search for`);
+    const linked = externalHrefs(off.text[locale]);
     for (const url of urls) assert.ok(linked.includes(url), `${locale}: ${url} is cited in the text`);
-    assert.match(perfumery.calledBy[locale], /STANPA/, `${locale}: the employers' association`);
-    assert.match(perfumery.basis[locale], /SIMA/, `${locale}: the failed mediation of 17 Nov`);
-    assert.match(perfumery.scope[locale], /(Espanya|España|Spain)/, `${locale}: state-wide`);
+    assert.match(off.text[locale], /STANPA/, `${locale}: the employers' association`);
+    assert.doesNotMatch(off.text[locale], /4[.,]5 ?%/, `${locale}: no pay figures from the pre-agreement`);
+    // From the 27th the hub no longer names the perfumery strike as a strike day.
+    for (const answer of spainDayAnswers(locale, "2026-11-27")) assert.doesNotMatch(answer.text, /perfumeria i la cosm|perfumería y la cosm|perfumery and cosmetics/, `${locale}/${answer.day}`);
   }
 });
 

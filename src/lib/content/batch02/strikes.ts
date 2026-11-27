@@ -481,8 +481,21 @@ import { sourcesCheckedLine } from "./strike-citable";
  * SMU: notice PDF re-read ("hasta las 08:00 horas del sábado 28 de noviembre de 2026"), home and manifestations pages: no call-off. Rodalies, TMB,
  * FGC: no strike notice; Ministry rail list newest still 12 Nov; SEMAF's newest item is about Renfe's 4th collective agreement (no strike).
  * Copy: the education entry's `short` says "convocada / called" instead of "anunciada / announced" (the calls are registered; the strike is on).
+ *
+ * 27 Nov 2026 (02:45-03:40 CET, Friday, the day after 26N): re-read (docs/SEO_EXPERIMENTS.md, "2026-11-27 — Strikes re-read the day after 26N
+ * (ci-fonts)"). The education strike of 26 Nov is past: as of today it is printed under past strikes and its guide uses `pastFaq`. Treball's list:
+ * newest entry still the 26N school order (23/11/2026); e-Tauler 660276 (API): "esmena" empty, data_retirada 21/12/2026; e-Tauler newest 300 edicts
+ * (20-27 Nov): no other strike edict. DOGC núm. 9804 (27 Nov, summary PDF, 486 lines): no strike or essential-service order (9803 was read on 26 Nov).
+ * ORDRE EMT/237/2026 and EMT/209/2026 re-read in their DOGC PDFs (9801: «un docent per cada 3 unitats o aules»; 9780: «hemodiàlisi»). Every source
+ * the education entry cites re-read (USTEC·STEs 28 Oct, 17, 20 and 23 Nov; CGT Ensenyament call, notice PDF «00:00 hores i fins les 24:00», joint
+ * PDF; Sindicat d'Estudiants page and notice PDF; LODE art. 8): unchanged; no new item on 26-27 Nov about a further strike (USTEC newest 25 Nov,
+ * CGT feed newest 24 Nov). CHANGED: Metges de Catalunya, 26 Nov: it proposes to the Govern a mediation and, if accepted, will put a temporary
+ * suspension of the indefinite strike to its members; the strike goes on (counter data-start="2026-10-28"): added to "On és" with its note. SMU:
+ * notice PDF «hasta las 08:00 horas del sábado 28 de noviembre de 2026», no call-off. Rodalies (newest alteration 18/11, no strike), TMB (no
+ * strike notice), Ministry rail list (newest 12 Nov), SEMAF (newest nº 2026-39), SCF (SCFCOM 41, not a strike): no new call. FGC's home answered
+ * 403 (it is a "where to check" link in the table, not a source of any fact).
  */
-export const STRIKES_AS_OF: string = "2026-11-26";
+export const STRIKES_AS_OF: string = "2026-11-27";
 
 /**
  * The day the facts on the page were last read on the sources. Every "fonts
@@ -491,7 +504,7 @@ export const STRIKES_AS_OF: string = "2026-11-26";
  * a re-read must not make the page claim one. Typed as string so a test that
  * compares the two never narrows it to `never`.
  */
-export const STRIKES_VERIFIED: string = "2026-11-26";
+export const STRIKES_VERIFIED: string = "2026-11-27";
 
 /** The date a "checked on" line may claim for a page built as of `asOf`: the last re-read, never later than the as-of day. */
 export function checkedOn(asOf: string, verified: string = STRIKES_VERIFIED): string {
@@ -650,6 +663,13 @@ export const STRIKE_URLS = {
   metgesStrike: "https://metgesdecatalunya.cat/ca/actualitat/noticies/mc-prou-dexcuses-salut-pot-negociar-si-vol-i-fins-ara-no-ha-volgut",
   metgesCall: "https://metgesdecatalunya.cat/ca/actualitat/noticies/els-sindicats-medics-acorden-iniciar-la-vaga-indefinida-de-facultatius-el-proper-28-doctubre",
   metgesNews: "https://metgesdecatalunya.cat/ca/actualitat/noticies",
+  /**
+   * Metges de Catalunya, dijous 26 Nov 2026 (read 27 Nov 2026, ~02:58 CET; HTTP 200): «Metges de Catalunya (MC) ha llançat una proposta al president
+   * de la Generalitat, Salvador Illa, i a la consellera de Salut, Olga Pané, per posar en suspens la vaga mèdica indefinida»; «l'establiment d'una
+   * mediació especialitzada en conflictes»; «en cas que l'executiu accepti la proposta, la direcció de MC plantejarà als seus afiliats la suspensió
+   * temporal de la vaga».
+   */
+  metgesMediation: "https://metgesdecatalunya.cat/ca/actualitat/noticies/metges-de-catalunya-proposa-al-govern-suspendre-la-vaga-indefinida-si-accepta-una-mediacio",
   treballMs: "https://treball.gencat.cat/ca/ambits/relacions_laborals/vagues/serveis-minims/",
   ccooRegistered: "https://www.ccoo.es/noticia:770401",
   ccooCall: "https://www.ccoo.es/noticia:769574--Convocamos_huelga_general_para_el_11_de_noviembre",
@@ -808,21 +828,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 26 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 27 de novembre de 2026 la vaga continuava, sense cap acord amb el Departament de Salut ni data de final a ${link(U.metgesNews, "les notícies de Metges de Catalunya")}. El 26 de novembre, MC va proposar al Govern una mediació especialitzada i, si l'accepta, plantejarà als seus afiliats «la suspensió temporal de la vaga», segons ${link(U.metgesMediation, "la seva notícia d'aquell dia")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 26 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 27 de noviembre de 2026 la huelga seguía, sin ningún acuerdo con el Departament de Salut ni fecha de final en ${link(U.metgesNews, "las noticias de Metges de Catalunya")}. El 26 de noviembre, MC propuso al Govern una mediación especializada y, si la acepta, planteará a sus afiliados «la suspensió temporal de la vaga» (la suspensión temporal de la huelga), según ${link(U.metgesMediation, "su noticia de ese día")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 26 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 27 November 2026 the strike was still on, with no agreement with the Health Department and no end date in ${link(U.metgesNews, "Metges de Catalunya's news")}. On 26 November MC proposed a specialist mediation to the Catalan government and, if it accepts, will put "la suspensió temporal de la vaga" (a temporary suspension of the strike) to its members, according to ${link(U.metgesMediation, "its news item that day")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -857,7 +877,8 @@ export const STRIKES: Strike[] = [
     sources: [
       { name: "Ordre EMT/209/2026, de 22 d'octubre: servei essencial d'assistència sanitària dels centres del SISCAT (DOGC núm. 9780, 26/10/2026)", url: U.ordreMetges, publisher: "DOGC" },
       { name: "MC: «Prou d'excuses, Salut pot negociar si vol i fins ara no ha volgut» (28/10/2026)", url: U.metgesStrike, publisher: "Metges de Catalunya" },
-      { name: "Notícies de Metges de Catalunya (consultades el 24/11/2026)", url: U.metgesNews, publisher: "Metges de Catalunya" },
+      { name: "Notícies de Metges de Catalunya (consultades el 27/11/2026)", url: U.metgesNews, publisher: "Metges de Catalunya" },
+      { name: "Metges de Catalunya proposa al Govern suspendre la vaga indefinida si accepta una mediació (26/11/2026)", url: U.metgesMediation, publisher: "Metges de Catalunya" },
       { name: "Els sindicats mèdics acorden iniciar la vaga indefinida de facultatius el proper 28 d'octubre (10/09/2026)", url: U.metgesCall, publisher: "Metges de Catalunya" },
     ],
   },

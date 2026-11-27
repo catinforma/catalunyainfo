@@ -137,7 +137,8 @@ export function strikeNextStep(scope: "catalonia" | "spain", locale: Locale, sel
   const links =
     scope === "catalonia"
       ? [rodaliesStep(locale), ...dated, b2Step("strikes", locale), b2Step("strikesSpain", locale)]
-      : [...dated, b2Step("strikesSpain", locale)];
+      : // 27 Nov 2026: with no dated strike page ahead (after 26N), the Spain hub itself would be left with no link at all: the Catalan hub stands in there.
+        [...dated, b2Step("strikesSpain", locale), ...(dated.length === 0 && pathOnly(self) === pathOnly(b2href("strikesSpain", locale)) ? [b2Step("strikes", locale)] : [])];
   return nextStep("strikes", links, self, NEXT_STEP_MAX_LINKS);
 }
 
