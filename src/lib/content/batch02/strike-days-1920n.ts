@@ -731,7 +731,7 @@ export const PAST_COMMON_1920: Record<Locale, PastCommon> = {
   en: {
     allIntro: "What had been called and published for that day, as it stood in the official sources:",
     catalanIntro: (day) => `The strikes that touched Catalonia on ${day}, with their minimum services:`,
-    notHeading: "What was not on that day",
+    notHeading: "What did not happen that day",
   },
 };
 

@@ -155,7 +155,7 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
       },
       {
         q: "¿Cuánto es una multa de tráfico leve, grave o muy grave?",
-        a: `Las leves, hasta ${M(leve)}; las graves, ${M(grave)}, y las muy graves, ${M(muyGrave)} (Ley de Tráfico, art. 80.1). Pagando en ${DISCOUNT_DAYS} días con el 50 % se quedan en un máximo de ${halves[0]}, ${halves[1]} y ${halves[2]}. La velocidad va por la tabla del anexo IV (de ${speedMin} a ${speedMax}), y el alcohol o las drogas en los casos del artículo 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunas restan puntos: el móvil en la mano, ${phonePoints}; el semáforo en rojo, ${redPoints}.`,
+        a: `Las leves, hasta ${M(leve)}; las graves, ${M(grave)}, y las muy graves, ${M(muyGrave)} (Ley de Tráfico, art. 80.1). Pagando en ${DISCOUNT_DAYS} días con el 50 % las leves se quedan como máximo en ${halves[0]}; las graves, en ${halves[1]}, y las muy graves, en ${halves[2]}. La velocidad va por la tabla del anexo IV (de ${speedMin} a ${speedMax}), y el alcohol o las drogas en los casos del artículo 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunas restan puntos: el móvil en la mano, ${phonePoints}; el semáforo en rojo, ${redPoints}.`,
       },
     ],
     ca: [
@@ -197,7 +197,7 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
       },
       {
         q: "Quant és una multa de trànsit lleu, greu o molt greu?",
-        a: `Les lleus, fins a ${M(leve)}; les greus, ${M(grave)}, i les molt greus, ${M(muyGrave)} (Llei de trànsit, art. 80.1). Pagant en ${DISCOUNT_DAYS} dies amb el 50 % es queden en un màxim de ${halves[0]}, ${halves[1]} i ${halves[2]}. La velocitat va per la taula de l'annex IV (de ${speedMin} a ${speedMax}), i l'alcohol o les drogues en els casos de l'article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunes resten punts: el mòbil a la mà, ${phonePoints}; el semàfor en vermell, ${redPoints}.`,
+        a: `Les lleus, fins a ${M(leve)}; les greus, ${M(grave)}, i les molt greus, ${M(muyGrave)} (Llei de trànsit, art. 80.1). Pagant en ${DISCOUNT_DAYS} dies amb el 50 % les lleus es queden com a màxim en ${halves[0]}; les greus, en ${halves[1]}, i les molt greus, en ${halves[2]}. La velocitat va per la taula de l'annex IV (de ${speedMin} a ${speedMax}), i l'alcohol o les drogues en els casos de l'article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunes resten punts: el mòbil a la mà, ${phonePoints}; el semàfor en vermell, ${redPoints}.`,
       },
     ],
     en: [
@@ -239,7 +239,7 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
       },
       {
         q: "How much is a minor, serious or very serious traffic fine in Spain?",
-        a: `Minor offences, up to ${M(leve)}; serious, ${M(grave)}; very serious, ${M(muyGrave)} (Traffic Act, art. 80.1). Paid within ${DISCOUNT_DAYS} days with 50% off they come to ${halves[0]} at most, ${halves[1]} and ${halves[2]}. Speeding follows the annex IV table (${speedMin} to ${speedMax}), and alcohol or drugs in the cases of article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Some take points: a hand-held phone, ${phonePoints}; a red light, ${redPoints}.`,
+        a: `Minor offences, up to ${M(leve)}; serious, ${M(grave)}; very serious, ${M(muyGrave)} (Traffic Act, art. 80.1). Paid within ${DISCOUNT_DAYS} days with 50% off minor fines come to ${halves[0]} at most, serious ones to ${halves[1]} and very serious ones to ${halves[2]}. Speeding follows the annex IV table (${speedMin} to ${speedMax}), and alcohol or drugs in the cases of article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Some take points: a hand-held phone, ${phonePoints}; a red light, ${redPoints}.`,
       },
     ],
   }[locale];
