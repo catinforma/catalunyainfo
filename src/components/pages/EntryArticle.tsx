@@ -12,6 +12,7 @@ import { UsefulNow } from "@/components/UsefulNow";
 import { ElectionLine } from "@/components/ElectionLine";
 import { CalculatorLine } from "@/components/CalculatorLine";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
 import { PreferredSource } from "@/components/share/PreferredSource";
@@ -331,6 +332,7 @@ export function EntryArticle({
                     </li>
                   ))}
                 </ol>
+                <SourcesPolicyLink locale={locale} />
               </section>
             ) : null}
 

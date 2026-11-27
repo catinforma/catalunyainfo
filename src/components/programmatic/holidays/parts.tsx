@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
+
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
@@ -315,6 +317,7 @@ export function Sources({
           );
         })}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

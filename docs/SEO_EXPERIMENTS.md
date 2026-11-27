@@ -15413,5 +15413,20 @@ The mobile CLS is the same site-wide insertion above the header on both layouts 
 **Tests.** New `tests/shops-answer-first-27nov.test.ts` (3): on the switch; summary = key facts with the rule shown, lead first in the body before and after 30 Nov, verified box at the end, no block lost; template order summary → photo → top ad. Run with answer-first, shops-*, batch02, query-answers-26nov, inline-anchor-links: all pass. `npx tsc --noEmit -p .` clean.
 
 **Go-live.** Deploy (the switch is read at render), then publish `shops` (the wording). IndexNow: the three shops URLs.
+## 2026-11-27 — Brand/E-E-A-T, batch 7C (ci-enginyeria): every main source list links to the "how we use sources" page; brand demand baseline (internal links only; ca/es/en; no title, meta, H1 or lead touched; deploy) (review 2026-12-25)
+
+**Why.** The method page (/ca/legal/fonts/ and es/en equivalents) was linked only from the footer; the 20 source lists (`.ci-sources`) cited official sources without saying how they are chosen and checked. One line under the list, "Com triem i comprovem les fonts" / "Cómo elegimos y comprobamos las fuentes" / "How we choose and check sources", same words everywhere (`src/lib/content/sources-policy-link.ts`, `src/components/SourcesPolicyLink.tsx`).
+
+**Where.** CMS articles (`EntryArticle.tsx`), holidays date/hub pages (`holidays/parts.tsx` Sources), fuel pages, weekly-market town pages, Christmas fair pages, "today" pages, Spain 2027 day pages. Not added (left for the owners of those templates tonight): elections, strikes, shops, calculators, bridge, zona azul, ZBE, Rodalies (no `locale` in the Sources component), weekend agenda.
+
+**Brand layer checked live 27 Nov 00:05 (no change needed).** Organization `@id` /#organization, name "CatalunyaInfo", alternateName ["Catalunya Info", "catalunyainfo.com"], logo /logo.png 512×512 (file checked), sameAs = WhatsApp channel only (200 today); og:site_name "CatalunyaInfo"; WebSite with the same alternateName and publisher; founder Person with his three profiles. No other publication profile exists, so none added.
+
+**Brand demand baseline (GSC 29 Oct–25 Nov, query contains "catalunya info" / "catalunyainfo").** "catalunya info" 16 clicks / 87 impr / pos 5.4; "catalunyainfo" 17 / 25 / 1.0; "catalunya informacio" 0 / 83 / 10.3; "catalunya información" 0 / 49 / 8.6; "catalunya informació" 0 / 17 / 8.8. Total 33 clicks / 261 impressions.
+
+**Prediction.** Neutral to slightly positive on trust; no ranking claim. Watch that the brand query "catalunya info" moves from 5.4 towards ≤ 3 by 25 Dec (sitewide entity signals already shipped 17-25 Nov).
+
+**Tests.** New `tests/sources-policy-link.test.ts` (2: href per locale with trailing slash and no cross-language leak; the seven templates render the line). Run with the 40 test files that read the touched templates: 576 pass. `npx tsc --noEmit -p .`: see commit.
+
+**Review 2026-12-25**: brand queries again with the same filter; `snapshot.py page legal/fonts 28`.
 
 **Outcome:** _pending_

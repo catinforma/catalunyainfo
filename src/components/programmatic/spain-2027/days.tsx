@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -521,6 +522,7 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
               </li>
             ))}
           </ol>
+          <SourcesPolicyLink locale={locale} />
         </section>
         <ShareBar locale={locale} path={crumbPath(dayCrumbs(iso, locale))} title={w.h1(iso)} contentType="holidays_2027_day" variant="full" />
       </div>

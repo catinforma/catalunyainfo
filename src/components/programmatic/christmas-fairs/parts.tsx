@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
+
 import { renderInline } from "@/lib/content/inline";
 import { attribution, fairShortName, guidance, guidanceShort, labels, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import { comarcaOf, hasEnglish, SNAPSHOT, townByIne } from "@/lib/programmatic/christmas-fairs/data";
@@ -285,6 +287,7 @@ export function Sources({ locale, fairs }: { locale: FairsLocale; fairs: readonl
         ))}
       </ol>
       <p className="mt-2 text-xs text-[var(--color-muted)]">{t.readOn(date(SNAPSHOT.readOn))}</p>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

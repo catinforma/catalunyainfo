@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { TownHub } from "@/components/TownHub";
 import { ShareBar } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
@@ -56,6 +57,7 @@ export function SourceList({ title, sources, locale, note }: { title: string; so
         ))}
       </ol>
       <p className="mt-3 text-sm text-[var(--color-muted)]">{note}</p>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }

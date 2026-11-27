@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
+
 import { renderInline } from "@/lib/content/inline";
 import { attribution, BOE_ORDER_URL, driverGuides, guidance, sectionTitles, type GuidanceRead } from "@/lib/programmatic/fuel/copy";
 import { MUNICIPALITIES } from "@/lib/programmatic/fuel/data";
@@ -76,6 +78,7 @@ export function Sources({ locale }: { locale: FuelHubLocale }) {
           </li>
         ))}
       </ol>
+      <SourcesPolicyLink locale={locale} />
     </section>
   );
 }
