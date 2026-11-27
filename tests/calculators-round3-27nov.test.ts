@@ -143,18 +143,20 @@ test("self-employed: eight earnings rows from calculateSelfEmployed; the 1.000 �
 /* Retirement age by years contributed at 65 ------------------------------- */
 
 test("retirement: age by contributions at 65 (DT 7ª table via ordinaryDate), FAQs in the searchers' words", () => {
-  const t = byContributionRows().map((r) => [ymText(r.at65, "es"), ymText(r.y2026.age, "es"), ymText(r.y2027.age, "es")]);
+  // Batch 8R: each cell is a list of birth spans (age + DT 7ª row of the year the age is reached); 38 years at 65 in 2026 splits on 1 Oct 1961.
+  const ages = (spans: { result: { age: { y: number; m: number }; row: { year: number } } }[]) => spans.map((s) => `${ymText(s.result.age, "es")} @${s.result.row.year}`).join(" | ");
+  const t = byContributionRows().map((r) => [ymText(r.at65, "es"), ages(r.y2026), ages(r.y2027)]);
   assert.deepEqual(t, [
-    ["35 años", "67 años", "67 años"],
-    ["37 años", "66 años y 6 meses", "66 años y 6 meses"],
-    ["38 años", "65 años y 3 meses", "65 años y 6 meses"],
-    ["38 años y 3 meses", "65 años", "65 años y 3 meses"],
-    ["38 años y 6 meses", "65 años", "65 años"],
-    ["39 años", "65 años", "65 años"],
-    ["40 años", "65 años", "65 años"],
+    ["35 años", "67 años @2027", "67 años @2027"],
+    ["37 años", "66 años y 6 meses @2027", "66 años y 6 meses @2027"],
+    ["38 años", "65 años y 3 meses @2026 | 65 años y 6 meses @2027", "65 años y 6 meses @2027"],
+    ["38 años y 3 meses", "65 años @2026", "65 años y 3 meses @2027"],
+    ["38 años y 6 meses", "65 años @2026", "65 años @2027"],
+    ["39 años", "65 años @2026", "65 años @2027"],
+    ["40 años", "65 años @2026", "65 años @2027"],
   ]);
   const es = byContributionCopy("es");
-  assert.match(es.intro, /con 35 años cotizados a los 65 en 2026, los 66 años y 10 meses llegan en 2028, cuando ya se piden 67 años\./);
+  assert.match(es.intro, /con 35 años cotizados a los 65 en 2026, los 66 años y 10 meses llegan en 2027 o 2028, cuando ya se piden 67 años;/);
   assert.equal(es.faq[0]!.q, "¿Me puedo jubilar a los 65 con 39 años cotizados?");
   assert.match(byContributionCopy("ca").faq[1]!.a, /^38 anys i 6 mesos si fas 65 anys el 2027 o després/);
   assert.match(byContributionCopy("en").faq[0]!.a, /^Yes, with no cut: from 2027 you need 38 years and 6 months/);

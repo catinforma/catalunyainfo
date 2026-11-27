@@ -18,6 +18,7 @@ import { money, percent, subsidyEditions, subsidyPath, type SubLocale } from "@/
 import { DEFAULT_INPUT, checkSubsidy, type SubsidyResult } from "@/lib/programmatic/unemployment-subsidy/engine";
 import { subsidyCaseRows, subsidyExamplesCopy } from "@/lib/programmatic/unemployment-subsidy/examples";
 import { SOC_SOURCE, socCopy } from "@/lib/programmatic/employment/catalonia-soc";
+import { RGC_GUIDE_URL, RGC_SOURCE, rgcCopy } from "@/lib/programmatic/unemployment-subsidy/catalonia-rgc";
 import {
   AMOUNT_BANDS,
   CAE_JOBS,
@@ -456,7 +457,8 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
     result.months === null ? ex8.untilRetirement : months(result.months),
     result.total === null ? `${m(result.firstMonthly)} / ${L(locale, { es: "mes", ca: "mes", en: "month" })}` : m(result.total),
   ]);
-  const allFaq = [...faq, ...ex8.faq];
+  const rgc = rgcCopy(locale);
+  const allFaq = [...faq, ...ex8.faq, rgc.faq];
   const faqSchema = { "@type": "FAQPage", mainEntity: allFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
 
   return (
@@ -573,6 +575,23 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               <p>
                 {L(locale, { es: "¿Tienes derecho a la no contributiva?", ca: "Tens dret a la no contributiva?", en: "Do you qualify for the non-contributory pension?" })}{" "}
                 <Link href={calcPath("non-contributory-pension", locale)}>{L(locale, { es: "Calcula la pensión no contributiva y el límite de ingresos de tu hogar", ca: "Calcula la pensió no contributiva i el límit d'ingressos de la llar", en: "Work out the non-contributory pension and your household's income limit" })}</Link>.
+              </p>
+
+              {/* 27 Nov 2026 (batch 8R): the Generalitat's RGC, "what if the subsidy ends" (unemployment-subsidy/catalonia-rgc.ts). */}
+              <h2 id="renda-garantida">{rgc.heading}</h2>
+              <p>{rgc.paragraphs[0]}</p>
+              <Table head={rgc.tableHead} rows={rgc.tableRows} caption={rgc.caption} />
+              <p>{rgc.paragraphs[1]}</p>
+              <p>{rgc.paragraphs[2]}</p>
+              <p className="text-sm text-[var(--color-muted)]">
+                <a href={RGC_SOURCE.url} rel="noopener" target="_blank">
+                  {rgc.sourceName}
+                </a>
+                {" · "}
+                <a href={RGC_GUIDE_URL} rel="noopener" target="_blank">
+                  {rgc.guideName}
+                </a>{" "}
+                · {rgc.readLine}
               </p>
 
               <h2 id="preguntas">{h.faq}</h2>

@@ -22,7 +22,7 @@ import { OFFICIAL_LINKS as PENSION_LINKS } from "@/lib/programmatic/pensions-202
 import { COLUMN_LABEL, COLUMN_SHORT, coef, day, elDay, monthsText, retirementEditions, retirementPath, whole, ymText, type RaLocale } from "@/lib/programmatic/retirement-age/copy";
 import type { EarlyOutcome } from "@/lib/programmatic/retirement-age/engine";
 import { DEFAULT_INPUT, delayTable, examples, headline, retirementFaq, retirementMeta, type ExampleId } from "@/lib/programmatic/retirement-age/page";
-import { byContributionCopy, byContributionRows } from "@/lib/programmatic/retirement-age/by-contributions";
+import { byContributionCopy, byContributionRows, cellLines } from "@/lib/programmatic/retirement-age/by-contributions";
 import {
   ACTIVE_STEP,
   COLUMNS,
@@ -524,8 +524,15 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
                         <th scope="row" className="font-normal">
                           {ymText(r.at65, locale)}
                         </th>
-                        <td data-label={byC.cols[1]}>{ymText(r.y2026.age, locale)}</td>
-                        <td data-label={byC.cols[2]}>{ymText(r.y2027.age, locale)}</td>
+                        {[r.y2026, r.y2027].map((spans, i) => (
+                          <td key={i} data-label={byC.cols[i + 1]}>
+                            {cellLines(spans, locale).map((line) => (
+                              <span key={line} className="block">
+                                {line}
+                              </span>
+                            ))}
+                          </td>
+                        ))}
                       </tr>
                     ))}
                   </tbody>
