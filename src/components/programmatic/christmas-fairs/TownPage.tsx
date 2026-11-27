@@ -2,6 +2,7 @@ import { AdSlot } from "@/components/AdSlot";
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ContinueReading } from "@/components/ContinueReading";
 import { NextStep } from "@/components/NextStep";
 import { PlacePhoto } from "@/components/PlacePhoto";
 import { TownHub } from "@/components/TownHub";
@@ -10,13 +11,15 @@ import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
 import { fairPagePhoto } from "@/lib/content/place-photos";
+import { townFamilyOnward } from "@/lib/engagement/continue-templates";
 import { christmasNextStep } from "@/lib/engagement/next-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
-import { confirmationNote, headlineFairs, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
+import { confirmationNote, guidanceShort, headlineFairs, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import {
   FAIRS,
   comarcaOf,
+  familyLastChecked,
   hasEnglish,
   holidayDatesIn,
   holidayTown,
@@ -104,6 +107,18 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
   const guides = guideKeys.map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
   const withDetails = town.fairs.filter((f) => f.details);
   const accessTitle = withDetails.length === 1 ? (withDetails[0]!.details!.accessTitle?.[locale] ?? null) : null;
+  // The seasonal link at the foot (lib/engagement/continue-templates.ts), which never repeats a link of the next-step box,
+  // the town hub, the lists or the page's sentences. Clock-free like the rest of the page: the step and the hub by this
+  // town's last read, the season by the family's.
+  const onward = townFamilyOnward({
+    self: townPath(locale, town.slug),
+    locale,
+    today: familyLastChecked(),
+    steps: [christmasNextStep(locale, crumbPath(townCrumbs(town, locale)), checked, { barcelona: town.ine === BARCELONA_INE })],
+    hub: townHub(town.slug, locale, "fair", checked),
+    links: [...guides, ...sameWeekendLinks, ...nearby, { href: fairsHubPath(locale) }],
+    markdown: [trains.intro, ...trains.items, ...(trains.outro ? [trains.outro] : []), ...holidays, ...(zone && locale !== "en" ? [weekendSentence(zone, locale)] : []), guidanceShort(locale, fairsHubPath(locale))],
+  });
 
   return (
     <article>
@@ -184,6 +199,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
 
           {/* The town's other pages (lib/engagement/town-hub.ts), led by its holiday page; dated by the last read, like the page. */}
           <TownHub hub={townHub(town.slug, locale, "fair", checked)} />
+          {/* 27 Nov 2026 (batch 8U): the page for the days ahead (the lottery, New Year's Eve, Reis) that no box of this page links. */}
+          <ContinueReading data={onward} locale={locale} className="my-6" />
         </div>
 
         {sameWeekendLinks.length > 0 ? (

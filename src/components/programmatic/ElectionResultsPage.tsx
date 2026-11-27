@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
+import { ContinueReading } from "@/components/ContinueReading";
 import { NextStep } from "@/components/NextStep";
 import { ReturnStep } from "@/components/ReturnStep";
 import { PlacePhoto } from "@/components/PlacePhoto";
@@ -20,6 +21,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { photoImageObject, townPhoto } from "@/lib/content/place-photos";
 import { electionTownNextStep } from "@/lib/engagement/next-step";
+import { pathsIn, townFamilyOnward } from "@/lib/engagement/continue-templates";
 import { returnStepForElectionTown } from "@/lib/engagement/return-step";
 import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
@@ -58,6 +60,21 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
   const day = townElectionDay(municipality, locale, phase, model.polling, undefined, now);
   const crumbs = electionCrumbs(locale, municipality);
   const faqBlock = { type: "faq", items: model.faq } as Block;
+  // 27 Nov 2026 (batch 8U): the seasonal link at the foot (lib/engagement/continue-templates.ts), which never repeats a
+  // link of the "keep it" block, the next-step box, the election-day block, the town hub or any link of the model
+  // (its sections, the town lists, the election guides list).
+  const onward = townFamilyOnward({
+    self: electionPath(locale, municipality.slug),
+    locale,
+    today: todayInCatalonia(),
+    steps: [
+      returnStepForElectionTown(municipality.slug, locale, crumbPath(crumbs), todayInCatalonia()),
+      electionTownNextStep(locale, crumbPath(crumbs), todayInCatalonia()),
+    ],
+    hub: townHub(municipality.slug, locale, "elections", todayInCatalonia()),
+    links: pathsIn([model, day]).map((href) => ({ href })),
+    markdown: [],
+  });
 
   const sections = [
     model.slot.title,
@@ -198,6 +215,8 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
 
                 {/* The town's other pages (lib/engagement/town-hub.ts), led by its holiday page. */}
                 <TownHub hub={townHub(municipality.slug, locale, "elections", todayInCatalonia())} />
+                {/* The page for the days ahead (the Christmas calendar, the lottery, New Year's Eve, Reis) that no box of this page links. */}
+                <ContinueReading data={onward} locale={locale} className="my-6" />
 
                 <nav aria-labelledby="ci-elections-siblings">
                   <h2 id="ci-elections-siblings">{model.siblings.title}</h2>

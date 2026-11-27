@@ -1,5 +1,6 @@
 import { IntentLink } from "@/components/nav/IntentLink";
 
+import { RELATED_HEADING } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
 import { SEASONAL_NOTE, type ContinueReading as ContinueReadingData } from "@/lib/engagement/continue-reading";
 import type { Locale } from "@/lib/i18n/config";
@@ -16,16 +17,24 @@ import type { Locale } from "@/lib/i18n/config";
  * onward box in one look. Links prefetch on intent only (IntentLink), like
  * the other onward boxes.
  *
+ * The programmatic templates (lib/engagement/continue-templates.ts, 27 Nov
+ * 2026) show the box with its seasonal link only and no heading of their own:
+ * without `labelledBy` the box is named "Continua llegint" (aria-label).
+ *
  * Clicks: `data-ci-placement="continue_reading"` on the box and the rest;
  * the seasonal item carries its own `"seasonal_next"`, which `closest()` in
  * AnalyticsClicks.tsx finds first. Both are `related_content_click`.
  */
-export function ContinueReading({ data, locale, labelledBy }: { data: ContinueReadingData | null; locale: Locale; labelledBy: string }) {
+export function ContinueReading({ data, locale, labelledBy, className }: { data: ContinueReadingData | null; locale: Locale; labelledBy?: string; className?: string }) {
   if (!data) return null;
   return (
     <>
       {data.topical.length > 0 || data.seasonal ? (
-        <nav aria-labelledby={labelledBy} className="ci-callout ci-next-step ci-continue-reading" data-ci-placement="continue_reading">
+        <nav
+          {...(labelledBy ? { "aria-labelledby": labelledBy } : { "aria-label": RELATED_HEADING[locale] })}
+          className={`ci-callout ci-next-step ci-continue-reading${className ? ` ${className}` : ""}`}
+          data-ci-placement="continue_reading"
+        >
           <ul className="ci-next-step-list">
             {data.topical.map((item) => (
               <li key={item.href}>

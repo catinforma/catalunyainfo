@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 
 import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
-import { CALCULATOR_NEXT, calculatorNextStep, type NextToolKey } from "@/lib/engagement/next-step-calculators";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { calculatorNextStepKeys, calculatorSeasonal } from "@/lib/engagement/continue-calculators";
+import { SEASONAL_NOTE } from "@/lib/engagement/continue-reading";
+import { calculatorNextStep, type NextToolKey } from "@/lib/engagement/next-step-calculators";
 import { calculatorCard } from "@/lib/programmatic/calculators/hub";
 import { RELATED_TITLE, byPopularity, relatedCalculators } from "@/lib/programmatic/calculators/related";
 import { CALCULATOR_IDS, calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "@/lib/programmatic/calculators/paths";
@@ -34,13 +37,14 @@ const T = {
 } as const;
 
 /** The keys the page's "next useful step" box links (CalculatorNextStep): the related block uses them only as a last resort. */
-function nextStepKeys(current: CalculatorId): readonly string[] {
-  return current === "lottery-tax" ? [] : (CALCULATOR_NEXT[current] ?? []);
-}
+const nextStepKeys = calculatorNextStepKeys;
 
 export function RelatedCalculators({ current, locale }: { current: CalculatorId; locale: CalcLocale }) {
   const links = relatedCalculators(current, locale, nextStepKeys(current));
   if (links.length === 0) return null;
+  // 27 Nov 2026 (batch 8U, lib/engagement/continue-calculators.ts): one seasonal link after the related tools, the page
+  // for the days ahead that no box of this page links (data-ci-placement "seasonal_next", like the content pages').
+  const seasonal = calculatorSeasonal(current, locale, todayInCatalonia());
   return (
     <nav aria-labelledby="calculadoras-relacionadas" className="ci-callout ci-callout-tip ci-next-step mb-8" data-ci-placement="related_calculators">
       <h2 id="calculadoras-relacionadas" className="ci-next-step-title">
@@ -53,6 +57,12 @@ export function RelatedCalculators({ current, locale }: { current: CalculatorId;
             <span className="ci-next-step-note">{link.note}</span>
           </li>
         ))}
+        {seasonal ? (
+          <li data-ci-placement="seasonal_next">
+            <IntentLink href={seasonal.href}>{seasonal.label}</IntentLink>
+            <span className="ci-next-step-note">{SEASONAL_NOTE[locale]}</span>
+          </li>
+        ) : null}
       </ul>
     </nav>
   );

@@ -291,6 +291,12 @@ export interface ContinueInput {
   exclude: readonly string[];
   /** The edition's most-read pages (lib/content/most-read.ts), the last topical fallback. */
   mostRead?: readonly NextStepLink[];
+  /**
+   * The topical links and the seasonal scope, in the place of the content
+   * page's family (`topicalFor`): the programmatic templates pass theirs
+   * (continue-templates.ts, 27 Nov 2026, batch 8U).
+   */
+  family?: { links: readonly NextStepLink[]; scope: OnwardScope };
   today: string;
   now?: Date;
 }
@@ -310,7 +316,7 @@ export function continueReading(input: ContinueInput): ContinueReading | null {
   const locale = entry.locale;
   const self = pathOnly(entry.href);
   const taken = new Set<string>([self, ...input.exclude.map(pathOnly)]);
-  const { links: family, scope } = topicalFor(entry, today, now);
+  const { links: family, scope } = input.family ?? topicalFor(entry, today, now);
 
   // The seasonal link first, so a stored item that is also the season's page
   // (the Christmas hub on the bridge guide) is shown as the seasonal link; it

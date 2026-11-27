@@ -2,11 +2,13 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { CalculatorLine } from "@/components/CalculatorLine";
+import { ContinueReading } from "@/components/ContinueReading";
 import { ElectionLine } from "@/components/ElectionLine";
 import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { dateCalculatorLine } from "@/lib/engagement/calculator-line";
+import { dateOnward } from "@/lib/engagement/continue-templates";
 import { dateElectionLine } from "@/lib/engagement/election-line";
 import { holidayDateNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
@@ -196,6 +198,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               ))}
             </section>
           ))}
+          {/* 27 Nov 2026 (batch 8U, lib/engagement/continue-templates.ts): the page for the days ahead (Christmas
+              calendar, lottery, New Year's Eve, Reis, then 2027) that no box of this page links, at the end of the answer. */}
+          <ContinueReading data={dateOnward(iso, locale, todayInCatalonia())} locale={locale} className="my-6" />
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-other-dates">

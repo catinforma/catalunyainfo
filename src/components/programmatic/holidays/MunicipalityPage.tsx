@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ContinueReading } from "@/components/ContinueReading";
 import { NextStep } from "@/components/NextStep";
 import { PlacePhoto } from "@/components/PlacePhoto";
 import { townPhoto } from "@/lib/content/place-photos";
@@ -15,6 +16,7 @@ import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/Wor
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { townGuideKeys, townOnward } from "@/lib/engagement/continue-templates";
 import { townNextStep } from "@/lib/engagement/next-step-towns";
 import { townHub } from "@/lib/engagement/town-hub";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
@@ -133,6 +135,17 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const line2027 = town2027Line(m, locale, days2027);
   const dateLink = town2027DateLink(m, locale, days2027);
   const dateLink2027 = dateLink && !isLowDemandPath(datePath(locale, dateLink.date)) ? dateLink : null;
+  // The seasonal link at the foot (lib/engagement/continue-templates.ts) never repeats a link of the next-step box, the
+  // town hub, the guides list or the FAQ: it reads the same calls they render with.
+  const onward = townOnward({
+    slug: m.slug,
+    locale,
+    step: townNextStep(m.slug, name, locale, crumbPath(crumbs), todayInCatalonia()),
+    hub: townHub(m.slug, locale, "holidays", todayInCatalonia()),
+    guides: townGuideKeys(m.slug),
+    faqLinks: faq.map((item) => item.link?.href),
+    today: todayInCatalonia(),
+  });
 
   return (
     <article>
@@ -349,6 +362,8 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
           {/* The hub of the town's pages (lib/engagement/town-hub.ts): its Christmas fair, its 29N page, working days. */}
           <TownHub hub={townHub(m.slug, locale, "holidays", todayInCatalonia())} />
+          {/* 27 Nov 2026 (batch 8U, lib/engagement/continue-templates.ts): the page for the days ahead that no box above links. */}
+          <ContinueReading data={onward} locale={locale} className="my-6" />
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-siblings">
@@ -380,6 +395,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           </p>
         </section>
 
+        {/* The same list as townGuideKeys (continue-templates.ts), which the seasonal link reads; a test holds them equal. */}
         <GuideLinks
           keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge", ...(m.slug === "barcelona" ? (["metroHours"] as const) : [])]}
           locale={locale}

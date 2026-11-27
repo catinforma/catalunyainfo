@@ -3,6 +3,7 @@ import Link from "next/link";
 import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ContinueReading } from "@/components/ContinueReading";
 import { NextStep } from "@/components/NextStep";
 import { PlacePhoto } from "@/components/PlacePhoto";
 import { townPhoto } from "@/lib/content/place-photos";
@@ -13,6 +14,7 @@ import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
+import { townOnward } from "@/lib/engagement/continue-templates";
 import { townNextStep } from "@/lib/engagement/next-step-towns";
 import { townHub } from "@/lib/engagement/town-hub";
 import { familyLastChecked } from "@/lib/programmatic/christmas-fairs/data";
@@ -93,6 +95,16 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
     "decemberBridge",
     "school",
   ];
+  // The seasonal link at the foot (lib/engagement/continue-templates.ts), which never repeats a link of the next-step box,
+  // the town hub or the guides list. Clock-free like the rest of the page: dated by the day the fairs were last read.
+  const onward = townOnward({
+    slug: m.slug,
+    locale: "en",
+    step: townNextStep(m.slug, name, "en", crumbPath(englishTownCrumbs(m))),
+    hub: townHub(m.slug, "en", "holidays", familyLastChecked()),
+    guides,
+    today: familyLastChecked(),
+  });
 
   return (
     <article>
@@ -278,6 +290,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           {/* The town's other English pages (lib/engagement/town-hub.ts). Clock-free like the rest of the page:
               dated by the day the fairs were last read, as the next-step box is. */}
           <TownHub hub={townHub(m.slug, "en", "holidays", familyLastChecked())} />
+          {/* 27 Nov 2026 (batch 8U, lib/engagement/continue-templates.ts): the page for the days ahead that no box above links. */}
+          <ContinueReading data={onward} locale="en" className="my-6" />
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-siblings">
