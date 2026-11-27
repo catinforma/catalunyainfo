@@ -414,6 +414,14 @@ const U = {
   aeatNonResidents: GROSSA_URLS.aeatNonResidents,
   /** AEAT notice of 17 Dec 2024: shared prizes split the exemption; no other return to file. */
   aeatPrizes: "https://sede.agenciatributaria.gob.es/Sede/todas-noticias/2024/diciembre/17/premios-sorteo-loteria-navidad.html",
+  /**
+   * BOE-A-1979-12628, Real Decreto 1136/1979 (read 27 Nov 2026, 200): art. 1
+   * "Se reduce a tres meses el plazo de caducidad del derecho al cobro de
+   * premios de la Lotería Nacional"; in force since 1 Jan 1980, no repeal
+   * noted on its BOE page. How the three months are counted ("desde el día
+   * siguiente") stays SELAE's (2025 official list, read 31 Oct).
+   */
+  expiry: "https://www.boe.es/buscar/doc.php?id=BOE-A-1979-12628",
 } as const;
 
 export const NADAL_URLS = U;
@@ -441,6 +449,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Ley 35/2006, del Impuesto sobre la Renta de las Personas Físicas, disposición adicional trigésima tercera", url: U.irpf, publisher: "BOE" },
   { name: "Gravamen especial sobre premios de loterías y apuestas (no residentes)", url: U.aeatNonResidents, publisher: "Agencia Tributaria" },
   { name: "Premios del sorteo de la lotería de Navidad (17/12/2024)", url: U.aeatPrizes, publisher: "Agencia Tributaria" },
+  { name: "Real Decreto 1136/1979, de 20 de abril, por el que se modifica el plazo de caducidad en el pago de premios", url: U.expiry, publisher: "BOE" },
 ];
 
 /** Every source the page cites: the fixed ones plus the results, per-prize and time sources, once. */
@@ -602,6 +611,14 @@ interface Copy {
   taxIntro: string;
   taxTable: { caption: string; headers: string[]; rows: string[][] };
   taxAfter: string[];
+  /** Participacions per euro played (27 Nov 2026). */
+  shareHeading: string;
+  shareIntro: string;
+  shareTable: { caption: string; headers: string[]; note: string };
+  /** The draw-day section, read only on 22 Dec (a `dateWindow` block). */
+  drawDayHeading(c: Ctx): string;
+  drawDay(c: Ctx): string[];
+  drawDayAfter: string;
   grossaHeading: string;
   grossa: string[];
   responsibleTitle: string;
@@ -689,6 +706,75 @@ function perDecimoAnswer(locale: Locale): string {
     es: `Por décimo de 20 €, según el programa de SELAE de 2026: el Gordo, ${d("first")}; el segundo, ${d("second")}; el tercero, ${d("third")}; cada cuarto, ${d("fourth")}; cada quinto, ${d("fifth")}; cada número de la pedrea, ${d("pedrea")}; el anterior y el posterior al Gordo, ${d("approxFirst")} (al segundo, ${d("approxSecond")}, y al tercero, ${d("approxThird")}); el resto de la centena y las dos últimas cifras, ${d("hundreds")}, y el reintegro, ${d("reintegro")}. Un billete entero, de 10 décimos, cobra diez veces más.`,
     en: `Per €20 décimo, under SELAE's 2026 programme: El Gordo ${d("first")}; second ${d("second")}; third ${d("third")}; each fourth prize ${d("fourth")}; each fifth ${d("fifth")}; each pedrea number ${d("pedrea")}; the numbers just before and after El Gordo ${d("approxFirst")} (the second's ${d("approxSecond")}, the third's ${d("approxThird")}); the rest of the hundred and the last two digits ${d("hundreds")}; and the money back (reintegro) ${d("reintegro")}. A full ticket of 10 décimos wins ten times as much.`,
   }[locale];
+}
+
+/**
+ * 27 Nov 2026 (searched words, GSC 28 d: "pedrea loteria navidad 2026",
+ * "quant val / quant toca", participacions, "comprobar lotería del niño"):
+ * the pedrea, a 5 € participación of the Gordo, when payment starts, and El
+ * Niño's date (SELAE's Lotería Nacional page, read 31 Oct 2026: the BOE
+ * carries no 2026-27 Lotería Nacional programme).
+ */
+function extraFaq(c: Ctx): { question: string; answer: string }[] {
+  const l = c.locale;
+  const five = (perDecimo("first") * 5) / DECIMO_PRICE;
+  const pedrea = D("pedrea", l);
+  return {
+    ca: [
+      {
+        question: "Quant és la pedrea de la loteria de Nadal?",
+        answer: `${pedrea} per dècim de 20 € (${B("pedrea", l)} per bitllet). Són 1.794 números per sèrie, segons el programa de SELAE del 2026, i com que no passen de ${eur(LEVY_EXEMPT, l)} no paguen impostos. La resta de la centena dels premis grossos i les dues últimes xifres del primer, el segon i el tercer premi també cobren ${D("hundreds", l)} per dècim.`,
+      },
+      {
+        question: "Quant toca una participació de 5 € del Gordo?",
+        answer: `${eur(five, l)}, la quarta part del premi d'un dècim. Hisenda en reté ${eur(QUARTER_LEVY, l)} i te'n queden ${eur(QUARTER_NET, l)}. Per cada euro jugat, el Gordo deixa ${eur(netPerEuro("first"), l)} nets.`,
+      },
+      {
+        question: "Quan es pot cobrar la loteria de Nadal?",
+        answer: "El 2025, SELAE va començar a pagar la tarda del mateix dia del sorteig, en acabar les verificacions. Després hi ha tres mesos, comptats des de l'endemà del sorteig.",
+      },
+      {
+        question: "Quan és el sorteig del Nen 2027?",
+        answer: "El dimecres 6 de gener de 2027, amb dècims de 20 € i 2 milions d'euros per sèrie al primer premi, segons la pàgina de la Loteria Nacional de SELAE (consultada el 31 d'octubre de 2026).",
+      },
+    ],
+    es: [
+      {
+        question: "¿Cuánto es la pedrea de la Lotería de Navidad?",
+        answer: `${pedrea} por décimo de 20 € (${B("pedrea", l)} por billete). Son 1.794 números por serie, según el programa de SELAE de 2026, y como no pasan de ${eur(LEVY_EXEMPT, l)} no pagan impuestos. El resto de la centena de los premios grandes y las dos últimas cifras del primer, el segundo y el tercer premio también cobran ${D("hundreds", l)} por décimo.`,
+      },
+      {
+        question: "¿Cuánto toca en una participación de 5 € del Gordo?",
+        answer: `${eur(five, l)}, la cuarta parte del premio de un décimo. Hacienda retiene ${eur(QUARTER_LEVY, l)} y te quedan ${eur(QUARTER_NET, l)}. Por cada euro jugado, el Gordo deja ${eur(netPerEuro("first"), l)} netos.`,
+      },
+      {
+        question: "¿Cuándo se puede cobrar la Lotería de Navidad?",
+        answer: "En 2025, SELAE empezó a pagar la tarde del mismo día del sorteo, al terminar las verificaciones. Después hay tres meses, contados desde el día siguiente al sorteo.",
+      },
+      {
+        question: "¿Cuándo es el sorteo del Niño 2027?",
+        answer: "El miércoles 6 de enero de 2027, con décimos de 20 € y 2 millones de euros por serie en el primer premio, según la página de la Lotería Nacional de SELAE (consultada el 31 de octubre de 2026).",
+      },
+    ],
+    en: [
+      {
+        question: "How much is the pedrea in the Spanish Christmas Lottery?",
+        answer: `${pedrea} per €20 décimo (${B("pedrea", l)} per full ticket). There are 1,794 such numbers in each series under SELAE's 2026 programme, and as they are below ${eur(LEVY_EXEMPT, l)} they are not taxed. The rest of the hundred of the big prizes and the last two digits of the first, second and third prizes also pay ${D("hundreds", l)} per décimo.`,
+      },
+      {
+        question: "How much does a €5 share of El Gordo win?",
+        answer: `${eur(five, l)}, a quarter of one décimo's prize. The tax office withholds ${eur(QUARTER_LEVY, l)} and you keep ${eur(QUARTER_NET, l)}. Each euro played on El Gordo leaves ${eur(netPerEuro("first"), l)} after tax.`,
+      },
+      {
+        question: "When can I collect a Christmas Lottery prize?",
+        answer: "In 2025 SELAE began paying on the afternoon of the draw itself, once the checks were complete. From then you have three months, counted from the day after the draw.",
+      },
+      {
+        question: "When is the El Niño draw in 2027?",
+        answer: "On Wednesday 6 January 2027, with €20 décimos and €2 million per series for the first prize, according to SELAE's Lotería Nacional page (read on 31 October 2026).",
+      },
+    ],
+  }[l];
 }
 
 const R25 = RESULTS_2025;
@@ -803,7 +889,7 @@ const COPY: Record<Locale, Copy> = {
     prizesIntro: `SELAE hi posa 205 sèries de 100.000 números, set més que el 2025, per un total de 4.100 milions d'euros; el 70%, 2.870 milions, va a premis. Cada número té 205 bitllets, un per sèrie, i cada bitllet de 200 € es divideix en 10 dècims de 20 €. El ${link(U.programme, "programa de premis de SELAE")} dona els imports per bitllet; un dècim en cobra la desena part:`,
     prizeTable: {
       caption: "Premis de la loteria de Nadal 2026 (programa de SELAE del 26 de gener de 2026)",
-      headers: ["Premi", "Quants n'hi ha a cada sèrie", "Per bitllet (200 €)", "Per dècim (20 €)"],
+      headers: ["Premi", "Quants n'hi ha a cada sèrie", "Per bitllet (200 €)", "Per dècim (20 €)", "Et queda per dècim, després d'Hisenda"],
       note: "Cada sèrie reparteix 15.304 premis i 14 milions d'euros. Els premis s'acumulen.",
     },
     prizesAfter: [
@@ -831,7 +917,7 @@ const COPY: Record<Locale, Copy> = {
       `**Comprat per internet:** menys de 2.000 €, al moneder automàticament (si passa del saldo màxim de 400 €, al teu compte bancari); 2.000 € o més, per transferència, després de verificar el compte (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
-      `**Quan:** el 2025, SELAE va començar a pagar la tarda del mateix 22 de desembre, en acabar les verificacions. **Termini:** el dret a cobrar caduca als tres mesos comptats des de l'endemà del sorteig, segons la ${link(U.list2025, "llista oficial")}; per al sorteig del 2025, l'últim dia va ser el 23 de març de 2026.`,
+      `**Quan:** el 2025, SELAE va començar a pagar la tarda del mateix 22 de desembre, en acabar les verificacions. **Termini:** el dret a cobrar els premis de la Loteria Nacional caduca als tres mesos (${link(U.expiry, "Reial decret 1136/1979, al BOE")}), comptats des de l'endemà del sorteig, segons la ${link(U.list2025, "llista oficial")}; per al sorteig del 2025, l'últim dia va ser el 23 de març de 2026.`,
       "Si el dècim premiat està fet malbé, s'ha de portar a un punt de venda amb el formulari de sol·licitud de pagament de premis, i SELAE l'autentica. Si te l'han robat, SELAE recomana denunciar-ho.",
     ],
     taxHeading: "Quants impostos paga la loteria de Nadal?",
@@ -853,6 +939,26 @@ const COPY: Record<Locale, Copy> = {
       `**Participacions** (d'una colla d'amics o de família, d'una penya, d'una confraria, d'una entitat...): per a Hisenda el premi també és compartit. Els ${eur(LEVY_EXEMPT, "ca")} exempts del dècim es reparteixen entre tots els titulars segons el seu percentatge de participació, i qui cobri el dècim com a beneficiari únic o gestor del cobrament ha de poder acreditar davant l'Agència Tributària que l'ha repartit entre els titulars de les participacions (${link(U.aeatPrizes, "nota de l'Agència Tributària")}). Per exemple, qui tingui una quarta part d'un dècim del Gordo en cobra ${eur(QUARTER_FIRST, "ca")}, en té ${eur(QUARTER_EXEMPT, "ca")} exempts i paga ${eur(QUARTER_LEVY, "ca")} de gravamen: n'hi queden ${eur(QUARTER_NET, "ca")}.`,
       "**No es declara a la Renda:** el gravamen ja es reté en cobrar el premi, i qui ha patit aquesta retenció no ha de presentar cap altra autoliquidació per aquest premi, segons la mateixa nota de l'Agència Tributària. La llei de l'IRPF diu, a més, que aquests premis no s'integren a la base imposable de l'impost.",
     ],
+    shareHeading: "Quant toca una participació per euro jugat",
+    shareIntro: `En una participació (de 2, 4, 5 o 10 €, per exemple) cobres la part del premi que correspon al que hi jugues: un dècim són 20 €, així que cada euro jugat cobra la vintena part del premi del dècim. Els ${eur(LEVY_EXEMPT, "ca")} exempts també es reparteixen en la mateixa proporció (${link(U.aeatPrizes, "Agència Tributària")}), i per això el que et queda després d'Hisenda també és proporcional:`,
+    shareTable: {
+      caption: "Què cobra cada euro jugat a la loteria de Nadal 2026",
+      headers: ["Premi", "Per euro jugat", "Et queda per euro, després d'Hisenda", "Si jugues 5 €, et queda"],
+      note: "Calculat amb el programa de premis de SELAE del 2026 i el gravamen de l'IRPF (disposició addicional 33a): el 20% del que passa de la part exempta.",
+    },
+    drawDayHeading: (c) => `Avui, ${c.dayNoYear}, és el sorteig de la loteria de Nadal: on seguir-lo i què fer si et toca`,
+    drawDay: (c) => [
+      `**On i quan:** avui, al Teatro Real de Madrid. ${
+        c.time
+          ? `Comença a les ${c.time.time}, segons ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : "SELAE no havia anunciat l'hora en l'última revisió d'aquesta pàgina; el 2025, la mesa del sorteig es constituïa a les 8:30 i RTVE l'emetia a La 1 des de les 8:00."
+      }`,
+      `**Els números, a mesura que surten:** a la ${link(U.lnac, "pàgina de la Loteria Nacional de SELAE")}, que té el comprovador de números. El 2025 el sorteig es va poder veure en directe a La 1, TVE Internacional i RTVE Play (${link(U.tv2025, "RTVE")}).`,
+      `**Només val la llista oficial:** la cantada pot tenir errors, i per cobrar només compta la llista oficial de premis de SELAE, que el 2025 es va publicar la tarda del mateix dia del sorteig (${link(U.dossier2025, "dossier de SELAE")}).`,
+      `**Si et toca:** el 2025, SELAE va començar a pagar la tarda del dia del sorteig. Menys de 2.000 € per dècim, a qualsevol punt de venda; 2.000 € o més, a BBVA o CaixaBank amb el document d'identitat (${link(U.collect, "SELAE")}). Hi ha tres mesos per cobrar-lo (${link(U.expiry, "Reial decret 1136/1979")}).`,
+      `**Quant et queda:** fins a ${eur(LEVY_EXEMPT, "ca")} per dècim no es paga res, i del que passa, el 20%. Un dècim del Gordo deixa ${eur(NET_FIRST, "ca")}; per a una participació o diversos dècims, fes el compte amb la ${link(calcPath("lottery-tax", "ca"), "calculadora de premis de loteria")}.`,
+    ],
+    drawDayAfter: "Tan bon punt SELAE publiqui els números premiats, aquí hi haurà el Gordo, la resta de premis grossos i els municipis de Catalunya on s'han venut. Fins aleshores, la font és SELAE.",
     grossaHeading: "La loteria de Nadal no és La Grossa: La Grossa de Cap d'Any i el Nen",
     grossa: [
       `La loteria de Nadal és de l'Estat (SELAE) i se sorteja a Madrid. A Catalunya, nou dies després, hi ha ${b2link("grossa", "ca", "La Grossa de Cap d'Any")}, la loteria de la Generalitat: es fa el ${dayDate(GROSSA_DRAW_DATE, "ca")}, el bitllet costa ${eur(GROSSA_TICKET, "ca")} i el primer premi és de ${eur(GROSSA_PRIZES.first.five, "ca")} per bitllet. Els bitllets d'una no serveixen per a l'altra.`,
@@ -896,7 +1002,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "Fins quan es pot cobrar la loteria de Nadal?",
-        answer: "Tres mesos, comptats des de l'endemà del sorteig. Per al sorteig del 2025, el termini va acabar el 23 de març de 2026.",
+        answer: "Tres mesos, comptats des de l'endemà del sorteig: els tres mesos de caducitat dels premis de la Loteria Nacional els fixa el Reial decret 1136/1979 (BOE). Per al sorteig del 2025, el termini va acabar el 23 de març de 2026.",
       },
       {
         question: "Com sé si m'ha tocat la loteria de Nadal?",
@@ -910,6 +1016,7 @@ const COPY: Record<Locale, Copy> = {
         question: "Com tributa una participació de la loteria de Nadal?",
         answer: `Com un premi compartit: els ${eur(LEVY_EXEMPT, "ca")} exempts del dècim es reparteixen segons la part de cada titular, i el 20% s'aplica només al que passa de la seva part exempta. Una quarta part d'un dècim del Gordo cobra ${eur(QUARTER_FIRST, "ca")} i en paga ${eur(QUARTER_LEVY, "ca")}.`,
       },
+      ...extraFaq(c),
     ],
   },
 
@@ -1021,7 +1128,7 @@ const COPY: Record<Locale, Copy> = {
     prizesIntro: `SELAE pone en juego 205 series de 100.000 números, siete más que en 2025, por un total de 4.100 millones de euros; el 70%, 2.870 millones, va a premios. Cada número tiene 205 billetes, uno por serie, y cada billete de 200 € se divide en 10 décimos de 20 €. El ${link(U.programme, "programa de premios de SELAE")} da los importes por billete; un décimo cobra la décima parte:`,
     prizeTable: {
       caption: "Premios de la Lotería de Navidad 2026 (programa de SELAE del 26 de enero de 2026)",
-      headers: ["Premio", "Cuántos hay en cada serie", "Por billete (200 €)", "Por décimo (20 €)"],
+      headers: ["Premio", "Cuántos hay en cada serie", "Por billete (200 €)", "Por décimo (20 €)", "Te queda por décimo, después de Hacienda"],
       note: "Cada serie reparte 15.304 premios y 14 millones de euros. Los premios se acumulan.",
     },
     prizesAfter: [
@@ -1049,7 +1156,7 @@ const COPY: Record<Locale, Copy> = {
       `**Comprado por internet:** menos de 2.000 €, en el monedero automáticamente (si supera el saldo máximo de 400 €, en tu cuenta bancaria); 2.000 € o más, por transferencia, tras verificar la cuenta (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
-      `**Cuándo:** en 2025, SELAE empezó a pagar la tarde del mismo 22 de diciembre, al terminar las verificaciones. **Plazo:** el derecho a cobrar caduca a los tres meses contados desde el día siguiente al sorteo, según la ${link(U.list2025, "lista oficial")}; para el sorteo de 2025, el último día fue el 23 de marzo de 2026.`,
+      `**Cuándo:** en 2025, SELAE empezó a pagar la tarde del mismo 22 de diciembre, al terminar las verificaciones. **Plazo:** el derecho al cobro de los premios de la Lotería Nacional caduca a los tres meses (${link(U.expiry, "Real Decreto 1136/1979, en el BOE")}), contados desde el día siguiente al sorteo, según la ${link(U.list2025, "lista oficial")}; para el sorteo de 2025, el último día fue el 23 de marzo de 2026.`,
       "Si el décimo premiado está estropeado, hay que llevarlo a un punto de venta con el formulario de solicitud de pago de premios, y SELAE lo autentica. Si te lo han robado, SELAE recomienda denunciarlo.",
     ],
     taxHeading: "¿Cuántos impuestos paga la Lotería de Navidad?",
@@ -1071,6 +1178,26 @@ const COPY: Record<Locale, Copy> = {
       `**Participaciones** (de un grupo de amigos o parientes, una peña, una cofradía, una entidad...): para Hacienda el premio también es compartido. Los ${eur(LEVY_EXEMPT, "es")} exentos del décimo se reparten entre todos los titulares en proporción a su porcentaje de participación, y quien cobre el décimo como beneficiario único o gestor de cobro debe poder acreditar ante la Agencia Tributaria que lo ha repartido entre los titulares de las participaciones (${link(U.aeatPrizes, "nota de la Agencia Tributaria")}). Por ejemplo, quien tenga una cuarta parte de un décimo del Gordo cobra ${eur(QUARTER_FIRST, "es")}, tiene ${eur(QUARTER_EXEMPT, "es")} exentos y paga ${eur(QUARTER_LEVY, "es")} de gravamen: le quedan ${eur(QUARTER_NET, "es")}.`,
       "**No se declara en la Renta:** el gravamen ya se retiene al cobrar el premio, y quien ha soportado esa retención no tiene que presentar ninguna otra autoliquidación por ese premio, según la misma nota de la Agencia Tributaria. La ley del IRPF dice, además, que estos premios no se integran en la base imponible del impuesto.",
     ],
+    shareHeading: "Cuánto toca una participación por euro jugado",
+    shareIntro: `En una participación (de 2, 4, 5 o 10 €, por ejemplo) cobras la parte del premio que corresponde a lo que juegas: un décimo son 20 €, así que cada euro jugado cobra la vigésima parte del premio del décimo. Los ${eur(LEVY_EXEMPT, "es")} exentos también se reparten en la misma proporción (${link(U.aeatPrizes, "Agencia Tributaria")}), y por eso lo que te queda después de Hacienda también es proporcional:`,
+    shareTable: {
+      caption: "Qué cobra cada euro jugado en la Lotería de Navidad 2026",
+      headers: ["Premio", "Por euro jugado", "Te queda por euro, después de Hacienda", "Si juegas 5 €, te quedan"],
+      note: "Calculado con el programa de premios de SELAE de 2026 y el gravamen del IRPF (disposición adicional 33.ª): el 20% de lo que pasa de la parte exenta.",
+    },
+    drawDayHeading: (c) => `Hoy, ${c.dayNoYear}, es el sorteo de la Lotería de Navidad: dónde seguirlo y qué hacer si te toca`,
+    drawDay: (c) => [
+      `**Dónde y cuándo:** hoy, en el Teatro Real de Madrid. ${
+        c.time
+          ? `Empieza a las ${c.time.time}, según ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : "SELAE no había anunciado la hora en la última revisión de esta página; en 2025, la mesa del sorteo se constituía a las 8:30 y RTVE lo emitía en La 1 desde las 8:00."
+      }`,
+      `**Los números, según van saliendo:** en la ${link(U.lnac, "página de la Lotería Nacional de SELAE")}, que tiene el comprobador de números. En 2025 el sorteo se pudo ver en directo en La 1, TVE Internacional y RTVE Play (${link(U.tv2025, "RTVE")}).`,
+      `**Solo vale la lista oficial:** la cantada puede tener errores, y para cobrar solo cuenta la lista oficial de premios de SELAE, que en 2025 se publicó la tarde del mismo día del sorteo (${link(U.dossier2025, "dosier de SELAE")}).`,
+      `**Si te toca:** en 2025, SELAE empezó a pagar la tarde del día del sorteo. Menos de 2.000 € por décimo, en cualquier punto de venta; 2.000 € o más, en BBVA o CaixaBank con el documento de identidad (${link(U.collect, "SELAE")}). Hay tres meses para cobrarlo (${link(U.expiry, "Real Decreto 1136/1979")}).`,
+      `**Cuánto te queda:** hasta ${eur(LEVY_EXEMPT, "es")} por décimo no se paga nada, y de lo que pasa, el 20%. Un décimo del Gordo deja ${eur(NET_FIRST, "es")}; para una participación o varios décimos, haz la cuenta con la ${link(calcPath("lottery-tax", "es"), "calculadora de premios de lotería")}.`,
+    ],
+    drawDayAfter: "En cuanto SELAE publique los números premiados, aquí estarán el Gordo, el resto de premios grandes y los municipios de Cataluña donde se han vendido. Hasta entonces, la fuente es SELAE.",
     grossaHeading: "La Lotería de Navidad no es La Grossa: La Grossa de Cap d'Any y El Niño",
     grossa: [
       `La Lotería de Navidad es del Estado (SELAE) y se sortea en Madrid. En Cataluña, nueve días después, está ${b2link("grossa", "es", "La Grossa de Cap d'Any")}, la lotería de la Generalitat: se celebra el ${dayDate(GROSSA_DRAW_DATE, "es")}, el billete cuesta ${eur(GROSSA_TICKET, "es")} y el primer premio es de ${eur(GROSSA_PRIZES.first.five, "es")} por billete. Los billetes de una no valen para la otra.`,
@@ -1114,7 +1241,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "¿Hasta cuándo se puede cobrar la Lotería de Navidad?",
-        answer: "Tres meses, contados desde el día siguiente al sorteo. Para el sorteo de 2025, el plazo terminó el 23 de marzo de 2026.",
+        answer: "Tres meses, contados desde el día siguiente al sorteo: los tres meses de caducidad de los premios de la Lotería Nacional los fija el Real Decreto 1136/1979 (BOE). Para el sorteo de 2025, el plazo terminó el 23 de marzo de 2026.",
       },
       {
         question: "¿Cómo sé si me ha tocado la Lotería de Navidad?",
@@ -1128,6 +1255,7 @@ const COPY: Record<Locale, Copy> = {
         question: "¿Cómo tributa una participación de Lotería de Navidad?",
         answer: `Como un premio compartido: los ${eur(LEVY_EXEMPT, "es")} exentos del décimo se reparten según la parte de cada titular, y el 20% se aplica solo a lo que pasa de su parte exenta. Una cuarta parte de un décimo del Gordo cobra ${eur(QUARTER_FIRST, "es")} y paga ${eur(QUARTER_LEVY, "es")}.`,
       },
+      ...extraFaq(c),
     ],
   },
 
@@ -1239,7 +1367,7 @@ const COPY: Record<Locale, Copy> = {
     prizesIntro: `SELAE issues 205 series of 100,000 numbers, seven more than in 2025, worth €4.1 billion in all; 70%, €2.87 billion, goes to prizes. Each number has 205 full tickets (billetes), one per series, and each €200 billete is split into ten €20 décimos. ${link(U.programme, "SELAE's prize programme")} gives the amounts per billete; a décimo wins a tenth:`,
     prizeTable: {
       caption: "Spanish Christmas Lottery 2026 prizes (SELAE programme of 26 January 2026)",
-      headers: ["Prize", "How many in each series", "Per billete (€200)", "Per décimo (€20)"],
+      headers: ["Prize", "How many in each series", "Per billete (€200)", "Per décimo (€20)", "You keep per décimo, after tax"],
       note: "Each series pays 15,304 prizes worth €14 million. Prizes add up.",
     },
     prizesAfter: [
@@ -1267,7 +1395,7 @@ const COPY: Record<Locale, Copy> = {
       `**Bought online:** under €2,000, into your wallet automatically (anything above the €400 maximum balance goes to your bank account); €2,000 or more, by bank transfer once the account is verified (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
-      `**When:** in 2025 SELAE began paying on the afternoon of 22 December itself, once the checks were complete. **Deadline:** the right to collect expires three months after the day following the draw, according to the ${link(U.list2025, "official list")}; for the 2025 draw, the last day was 23 March 2026.`,
+      `**When:** in 2025 SELAE began paying on the afternoon of 22 December itself, once the checks were complete. **Deadline:** the right to collect a Lotería Nacional prize expires after three months (${link(U.expiry, "Royal Decree 1136/1979, in the BOE")}), counted from the day after the draw, according to the ${link(U.list2025, "official list")}; for the 2025 draw, the last day was 23 March 2026.`,
       "If a winning décimo is damaged, take it to an outlet with the prize payment request form and SELAE will authenticate it. If it was stolen, SELAE recommends reporting it to the authorities.",
     ],
     taxHeading: "How is the Spanish Christmas Lottery taxed?",
@@ -1289,6 +1417,26 @@ const COPY: Record<Locale, Copy> = {
       `**Participaciones** (shares of a décimo held by a group of friends or relatives, a club, a brotherhood or an association): for the tax office the prize is shared too. The décimo's ${eur(LEVY_EXEMPT, "en")} exemption is split between all the holders in proportion to their share, and whoever collects the décimo as sole winner or collecting agent must be able to show the Agencia Tributaria that it was shared out among the holders of the participaciones (${link(U.aeatPrizes, "Agencia Tributaria notice")}). For example, a quarter share of a Gordo décimo is ${eur(QUARTER_FIRST, "en")}, with ${eur(QUARTER_EXEMPT, "en")} tax-free and ${eur(QUARTER_LEVY, "en")} in levy: ${eur(QUARTER_NET, "en")} left.`,
       "**It does not go on your income tax return:** the levy is withheld when the prize is paid, and anyone who has had it withheld does not have to file any other return for that prize, according to the same Agencia Tributaria notice. The income tax law also says these prizes are not part of the taxable base.",
     ],
+    shareHeading: "What a participación wins per euro played",
+    shareIntro: `With a participación (a share of €2, €4, €5 or €10, say) you get the part of the prize that matches what you play: a décimo is €20, so each euro played wins one twentieth of the décimo's prize. The ${eur(LEVY_EXEMPT, "en")} tax-free part is split in the same proportion (${link(U.aeatPrizes, "Spain's tax agency")}), so what you keep after tax is proportional too:`,
+    shareTable: {
+      caption: "What each euro played wins in the 2026 Spanish Christmas Lottery",
+      headers: ["Prize", "Per euro played", "You keep per euro, after tax", "Playing €5, you keep"],
+      note: "Worked out from SELAE's 2026 prize programme and the income tax levy (Ley 35/2006, additional provision 33): 20% of anything above the tax-free part.",
+    },
+    drawDayHeading: (c) => `The draw is today, ${c.dayNoYear}: where to follow it and what to do if you win`,
+    drawDay: (c) => [
+      `**Where and when:** today, at the Teatro Real in Madrid. ${
+        c.time
+          ? `It starts at ${c.time.time}, according to ${link(c.time.source.url, c.time.source.publisher ?? c.time.source.name)}.`
+          : "SELAE had not announced the start time when this page was last checked; in 2025 the presiding table was constituted at 8:30 and RTVE broadcast the draw on La 1 from 8:00."
+      }`,
+      `**The numbers as they come out:** on ${link(U.lnac, "SELAE's Lotería Nacional page")}, which has a number checker. In 2025 the draw was live on La 1, TVE Internacional and RTVE Play (${link(U.tv2025, "RTVE")}).`,
+      `**Only the official list counts:** the sung numbers can contain mistakes, and only SELAE's official prize list counts for payment; in 2025 it came out on the afternoon of the draw (${link(U.dossier2025, "SELAE's dossier")}).`,
+      `**If you win:** in 2025 SELAE began paying on the afternoon of the draw. Under €2,000 per décimo, at any SELAE outlet; €2,000 or more, at BBVA or CaixaBank with your ID (${link(U.collect, "SELAE")}). You have three months to claim (${link(U.expiry, "Royal Decree 1136/1979")}).`,
+      `**What you keep:** nothing is taxed up to ${eur(LEVY_EXEMPT, "en")} per décimo, and 20% of anything above. An El Gordo décimo leaves ${eur(NET_FIRST, "en")}; for a share or several décimos, use the ${link(calcPath("lottery-tax", "en"), "lottery prize tax calculator")}.`,
+    ],
+    drawDayAfter: "As soon as SELAE publishes the winning numbers, El Gordo, the other big prizes and the Catalan towns that sold them will be listed here. Until then, SELAE is the source.",
     grossaHeading: "Christmas Lottery, La Grossa de Cap d'Any and El Niño",
     grossa: [
       `The Christmas Lottery is the Spanish state's (SELAE's) and is drawn in Madrid. In Catalonia, nine days later, comes ${b2link("grossa", "en", "La Grossa de Cap d'Any")}, the Catalan government's lottery: it is drawn on ${dayDate(GROSSA_DRAW_DATE, "en")}, a ticket costs ${eur(GROSSA_TICKET, "en")} and the first prize is ${eur(GROSSA_PRIZES.first.five, "en")} per ticket. Tickets for one are no good for the other.`,
@@ -1332,7 +1480,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "How long do I have to claim a Christmas Lottery prize?",
-        answer: "Three months, counted from the day after the draw. For the 2025 draw, the deadline was 23 March 2026.",
+        answer: "Three months, counted from the day after the draw: the three-month expiry of Lotería Nacional prizes is set by Royal Decree 1136/1979 (BOE). For the 2025 draw, the deadline was 23 March 2026.",
       },
       {
         question: "How do I check my décimo?",
@@ -1350,6 +1498,7 @@ const COPY: Record<Locale, Copy> = {
         question: "How is a participación (a share of a décimo) taxed?",
         answer: `As a shared prize: the décimo's ${eur(LEVY_EXEMPT, "en")} exemption is split by each holder's share, and the 20% applies only above that holder's tax-free part. A quarter share of a Gordo décimo is ${eur(QUARTER_FIRST, "en")} and pays ${eur(QUARTER_LEVY, "en")}.`,
       },
+      ...extraFaq(c),
     ],
   },
 };
@@ -1386,8 +1535,46 @@ function resultsRows(r: NadalResults, locale: Locale): string[][] {
 function programmeRows(locale: Locale): string[][] {
   const t = COPY[locale];
   const count = (n: number) => String(n).replace(/(\d)(?=(\d{3})+$)/g, `$1${locale === "en" ? "," : "."}`);
-  return PROGRAMME.map((row) => [t.prizeNames[row.key], count(row.count), eur(row.perBillete, locale), eur(row.perBillete / 10, locale)]);
+  return PROGRAMME.map((row) => [t.prizeNames[row.key], count(row.count), eur(row.perBillete, locale), eur(row.perBillete / 10, locale), eur(netPerDecimo(row.key), locale)]);
 }
+
+/** What a décimo of a prize leaves after the 20% levy above 40,000 € (Ley 35/2006, DA 33ª). */
+export function netPerDecimo(key: PrizeKey): number {
+  return perDecimo(key) - levy(perDecimo(key));
+}
+
+/**
+ * Per euro played (27 Nov 2026): a participación of x € holds x/20 of a décimo,
+ * and the AEAT notice splits the 40,000 € exemption "en proporción a su
+ * porcentaje de participación", so the net is proportional too: the décimo's
+ * net divided by 20 per euro.
+ */
+export function netPerEuro(key: PrizeKey): number {
+  return netPerDecimo(key) / DECIMO_PRICE;
+}
+
+export const SHARE_KEYS: PrizeKey[] = ["first", "second", "third", "fourth", "fifth", "approxFirst", "pedrea", "reintegro"];
+
+function shareRows(locale: Locale): string[][] {
+  const t = COPY[locale];
+  return SHARE_KEYS.map((key) => [t.prizeNames[key], eur(perDecimo(key) / DECIMO_PRICE, locale), eur(netPerEuro(key), locale), eur(netPerEuro(key) * 5, locale)]);
+}
+
+/**
+ * The draw-day section (27 Nov 2026) is read from 00:00 to 24:00 Madrid time
+ * on 22 Dec 2026 (CET, UTC+1): a `dateWindow` block, switched by the nightly
+ * 00:05 re-render, so nobody has to publish at midnight. It goes away as soon
+ * as RESULTS_2026 is filled (the lead and the results table take over).
+ */
+export const DRAW_DAY_WINDOW = { from: "2026-12-22T00:00:00+01:00", until: "2026-12-23T00:00:00+01:00" } as const;
+
+/**
+ * The draw-day text was checked against its sources on this day (SELAE's
+ * pages keep their 31 Oct reading: 403 to the server; BOE RD 1136/1979, AEAT
+ * and RTVE read 27 Nov). Date guard: from 21 Dec 2026 the tests fail until
+ * it is re-read (RTVE's or SELAE's 2026 broadcast and time) and moved.
+ */
+export const DRAW_DAY_CHECKED = "2026-11-27";
 
 export function buildNadalBody(
   locale: Locale,
@@ -1409,6 +1596,17 @@ export function buildNadalBody(
   blocks.push(lead(t.lead(c)));
   blocks.push(keyFacts(t.keyFactsTitle, t.keyFacts(c)));
   blocks.push(callout("official", verifiedLine(locale, asOf), t.data(c)));
+
+  // 22 Dec only, until the numbers are pasted in: where to follow the draw
+  // (official sources only), what counts, and what to do with a winning décimo.
+  if (!results) {
+    blocks.push({
+      type: "dateWindow",
+      from: DRAW_DAY_WINDOW.from,
+      until: DRAW_DAY_WINDOW.until,
+      on: [heading(2, t.drawDayHeading(c), "avui"), list(...t.drawDay(c)), ...paras(t.drawDayAfter)],
+    });
+  }
 
   // The results first: on 22 December that is what people came for.
   blocks.push(heading(2, t.resultsHeading(c), "resultats"));
@@ -1461,6 +1659,9 @@ export function buildNadalBody(
   blocks.push(...h2(t.taxHeading, t.taxIntro));
   blocks.push(table(t.taxTable.caption, t.taxTable.headers, t.taxTable.rows));
   blocks.push(...paras(...t.taxAfter));
+  blocks.push(heading(3, t.shareHeading, "participacions"));
+  blocks.push(...paras(t.shareIntro));
+  blocks.push(table(t.shareTable.caption, t.shareTable.headers, shareRows(locale), t.shareTable.note));
 
   blocks.push(...h2(t.grossaHeading, ...t.grossa));
   blocks.push(callout("info", t.responsibleTitle, t.responsible));

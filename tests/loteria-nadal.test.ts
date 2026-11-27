@@ -475,8 +475,8 @@ test("20 Nov 2026: the time and per-décimo questions, the Gordo's tax in the ta
     // "Cuánto se lleva Hacienda del Gordo": the tax answer leads with it.
     assert.ok(answer(asks[locale].tax).includes(eur(levy(perDecimo("first")), locale)), `${locale}: the Gordo's levy`);
     assert.ok(answer(asks[locale].tax).includes(eur(perDecimo("first") - levy(perDecimo("first")), locale)), `${locale}: the Gordo's net`);
-    // The prize tax calculator is linked from the body, once.
-    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 2, `${locale}: calculator link (key facts + tax section)`);
+    // The prize tax calculator is linked from the key facts and the tax section, and (27 Nov) from the draw-day section.
+    assert.equal(json(locale).split(`](${calcPath("lottery-tax", locale)})`).length - 1, 3, `${locale}: calculator link (key facts + tax section + draw day)`);
   }
 });
 

@@ -611,6 +611,26 @@ export const electionPhasedBlock = z.object({
   held: rawBlocks.optional(),
 });
 
+/**
+ * A stretch of a page shown only between two instants (27 Nov 2026; first
+ * use: the Christmas lottery guide's "draw day" section, 22 Dec 2026). `on`
+ * is read from `from` (inclusive) until `until` (exclusive), `off` (optional,
+ * else nothing) the rest of the time. Raw blocks, parsed with `parseBody` when
+ * `resolveDateWindows` (content/date-window.ts) picks one, like
+ * `electionPhased`. The page resolves it with the render time before the table
+ * of contents and the FAQ structured data are built, and the nightly cron
+ * re-renders pages carrying one (day-dependent.ts), so a window that opens
+ * and closes at Madrid midnight switches by itself just after 00:05.
+ */
+const instant = z.iso.datetime({ offset: true });
+export const dateWindowBlock = z.object({
+  type: z.literal("dateWindow"),
+  from: instant,
+  until: instant,
+  on: rawBlocks,
+  off: rawBlocks.optional(),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -654,6 +674,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   candidateListsBlock,
   spainSchoolCalendarBlock,
   electionPhasedBlock,
+  dateWindowBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
@@ -776,6 +797,10 @@ export function bodyToPlainText(body: Body, locale: Locale = DEFAULT_LOCALE): st
       case "electionPhased":
         // Search reads the page as it is until polling day.
         parts.push(bodyToPlainText(parseBody(block.pre), locale));
+        break;
+      case "dateWindow":
+        // Search reads the page as it is outside the window: the same text every night.
+        parts.push(bodyToPlainText(parseBody(block.off ?? []), locale));
         break;
       default:
         // Day-dependent blocks: a stable, date-free description (day-dependent-text.ts).

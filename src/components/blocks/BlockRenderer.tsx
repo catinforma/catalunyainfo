@@ -29,6 +29,7 @@ import { CandidateLists } from "@/components/blocks/CandidateLists";
 import { SpainSchoolCalendar } from "@/components/blocks/SpainSchoolCalendar";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
+import { resolveDateWindows } from "@/lib/content/date-window";
 import { resolveElectionPhased } from "@/lib/content/election-phased";
 import { renderInline, safeHref } from "@/lib/content/inline";
 import type { EntrySummary, MediaView, SourceView } from "@/lib/content/types";
@@ -463,6 +464,16 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
       return (
         <>
           {resolveElectionPhased([block]).map((inner, index) => (
+            <BlockView key={index} block={inner} context={context} />
+          ))}
+        </>
+      );
+
+    case "dateWindow":
+      // Same: normally resolved by the page (content/date-window.ts).
+      return (
+        <>
+          {resolveDateWindows([block]).map((inner, index) => (
             <BlockView key={index} block={inner} context={context} />
           ))}
         </>

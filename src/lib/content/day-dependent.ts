@@ -22,11 +22,19 @@ export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockCha
  */
 export const PHASE_DEPENDENT_BLOCKS = ["electionPhased"];
 
+/**
+ * Blocks shown only inside a date window (`dateWindow`, 27 Nov 2026: the
+ * Christmas lottery guide's draw-day section, 22 Dec). The nightly cron
+ * re-renders pages carrying one so the window opens and closes by itself;
+ * neither the sitemap's "changes daily" nor the phase `lastmod` applies.
+ */
+export const WINDOW_DEPENDENT_BLOCKS = ["dateWindow"];
+
 /** Matches a block of one of those types in a body's jsonb text form: the sitemap's "changes daily". */
 export const DAY_DEPENDENT_PATTERN = `"type":\\s*"(${DAY_DEPENDENT_BLOCKS.join("|")})"`;
 
-/** Same, plus the phase-dependent blocks: every page the nightly cron must re-render. */
-export const REVALIDATE_NIGHTLY_PATTERN = `"type":\\s*"(${[...DAY_DEPENDENT_BLOCKS, ...PHASE_DEPENDENT_BLOCKS].join("|")})"`;
+/** Same, plus the phase- and window-dependent blocks: every page the nightly cron must re-render. */
+export const REVALIDATE_NIGHTLY_PATTERN = `"type":\\s*"(${[...DAY_DEPENDENT_BLOCKS, ...PHASE_DEPENDENT_BLOCKS, ...WINDOW_DEPENDENT_BLOCKS].join("|")})"`;
 
 /** Matches an `electionPhased` block in a body's jsonb text form. */
 export const PHASE_DEPENDENT_PATTERN = `"type":\\s*"(${PHASE_DEPENDENT_BLOCKS.join("|")})"`;
