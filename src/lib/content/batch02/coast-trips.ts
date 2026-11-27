@@ -126,29 +126,41 @@ type Meta = { path: string; title: string; seoTitle: string; seoDescription: str
 /* Sitges                                                                     */
 /* ========================================================================== */
 
+/**
+ * Snippet rewrite, 27 Nov 2026 (ci-analitica, batch 8H; docs/SEO_EXPERIMENTS.md,
+ * review 25 Dec 2026): the only page with >= 1,000 impressions in 28 days, CTR
+ * under the site curve and no title/description/H1/lead change since 24 Oct.
+ * Titles follow the searched word order ("tren barcelona sitges", "barcelona
+ * to sitges train schedule") and carry the fare; descriptions add the last
+ * train FROM Sants (0:06), which "last train from barcelona to sitges" asks
+ * and the old snippet did not say. Every figure is already in the body (fare
+ * page re-read 27 Nov 2026: "4 zones: 5,50 €"; the R2 PDF is still the one
+ * dated "01/9/2026"). H1 and lead unchanged. The fare in the title is covered
+ * by REREAD_BY in tests/sitges-quick-answer.test.ts (1 Jan 2027 fare change).
+ */
 const SITGES_META: Record<Locale, Meta> = {
   ca: {
     path: "escapades/sitges-des-de-barcelona-tren",
     title: "Tren de Barcelona a Sitges: horaris, preu, últim tren i què veure",
-    seoTitle: "Tren de Barcelona a Sitges: horaris, preu i últim tren",
+    seoTitle: "Tren Barcelona-Sitges: horaris, preu 5,50 € i últim tren",
     seoDescription:
-      "R2 Sud des de Sants, Passeig de Gràcia i França: 4 trens per hora, 31-37 min i 5,50 € el senzill. L'últim tren de tornada surt a les 22:22.",
+      "R2 Sud des de Sants: 4 trens per hora, 31-37 min, 5,50 € el senzill. Últim cap a Sitges, 0:06 des de Sants; de tornada, 22:22. Horari oficial de Rodalies.",
     excerpt: "Horaris del tren de Barcelona a Sitges, quant costa el bitllet, l'últim tren de tornada i què veure a Sitges en un dia, amb dades oficials.",
   },
   es: {
     path: "escapadas/sitges-desde-barcelona-tren",
     title: "Tren de Barcelona a Sitges: horarios, precio, último tren y qué ver",
-    seoTitle: "Tren de Barcelona a Sitges: horarios, precio y último tren",
+    seoTitle: "Tren Barcelona-Sitges: horarios, precio 5,50 € y último tren",
     seoDescription:
-      "R2 Sud desde Sants, Passeig de Gràcia y França: 4 trenes por hora, 31-37 min y 5,50 € el sencillo. El último tren de vuelta sale a las 22:22.",
+      "R2 Sud desde Sants: 4 trenes por hora, 31-37 min, 5,50 € el sencillo. Último a Sitges, 0:06 desde Sants; de vuelta, 22:22. Horario oficial de Rodalies.",
     excerpt: "Horarios del tren de Barcelona a Sitges, cuánto cuesta el billete, el último tren de vuelta y qué ver en Sitges en un día, con datos oficiales.",
   },
   en: {
     path: "day-trips/sitges-from-barcelona-by-train",
     title: "Barcelona to Sitges by train: timetable, fares, last train and what to see",
-    seoTitle: "Barcelona to Sitges train: times, fares and last train",
+    seoTitle: "Barcelona to Sitges train: schedule, €5.50 fare, last train",
     seoDescription:
-      "The R2 Sud from Sants, Passeig de Gràcia and França: 4 trains an hour, 31-37 min, €5.50 single. The last train back from Sitges leaves at 22:22.",
+      "R2 Sud from Sants: 4 trains an hour, 31-37 min, €5.50 single. Last train to Sitges 0:06 from Sants; last back 22:22. Official Rodalies timetable.",
     excerpt: "Barcelona to Sitges train times, what the ticket costs, the last train back and what to see in Sitges in a day, from official sources.",
   },
 };

@@ -8,7 +8,8 @@ import { LOCALES } from "../src/lib/i18n/config.ts";
 /**
  * Barcelona-Sitges train guide: "Quick answer" block and the searchers' H2s,
  * read on 25 Nov 2026 from Rodalies de Catalunya (line page, journey planner,
- * fare page) and ATM. Title, meta, H1 and lead are untouched (see
+ * fare page) and ATM. H1 and lead are untouched; the search title and
+ * description were rewritten on 27 Nov 2026 (last test; see
  * docs/SEO_EXPERIMENTS.md).
  */
 
@@ -71,5 +72,28 @@ test("sitges: quick-answer facts need a re-read after the 1 Jan 2027 fare change
   const today = new Date().toISOString().slice(0, 10);
   if (today > REREAD_BY) {
     assert.ok(SITGES_QUICK_READ >= "2027-01-01", `re-read the Rodalies line page, planner, fare page and ATM T-casual, then update SITGES_QUICK_READ (read ${SITGES_QUICK_READ})`);
+  }
+});
+
+/**
+ * 27 Nov 2026 snippet rewrite (ci-analitica, batch 8H; review 25 Dec 2026):
+ * titles in the searched order with the fare, descriptions with the last
+ * train each way. The figures must be the body's own, so a fare change on
+ * 1 Jan 2027 that updates the quick answer breaks this test until the
+ * snippet follows (same REREAD_BY as above).
+ */
+test("sitges: search title and description lead with the query and repeat the body's fare and last trains", () => {
+  const start = { ca: /^Tren Barcelona-Sitges: horaris/, es: /^Tren Barcelona-Sitges: horarios/, en: /^Barcelona to Sitges train: schedule/ } as const;
+  for (const locale of LOCALES) {
+    const { seoTitle, seoDescription, blocks } = SITGES.editions[locale];
+    assert.ok(seoTitle.length <= 60, `${locale}: title ${seoTitle.length} chars`);
+    assert.ok(seoDescription.length <= 155, `${locale}: description ${seoDescription.length} chars`);
+    assert.match(seoTitle, start[locale], `${locale}: query first`);
+    const body = JSON.stringify(blocks);
+    const fare = locale === "en" ? "€5.50" : "5,50 €";
+    assert.ok(seoTitle.includes(fare) && body.includes(fare), `${locale}: title fare is the body's`);
+    for (const time of ["0:06", "22:22"]) {
+      assert.ok(seoDescription.includes(time) && body.includes(time), `${locale}: ${time} in description and body`);
+    }
   }
 });
