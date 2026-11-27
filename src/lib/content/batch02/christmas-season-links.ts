@@ -1,7 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 
-import { b2link, h2, list, type B2Key } from "./shared";
+import { b2href, b2link, h2, list, type B2Key } from "./shared";
 
 /**
  * 25 Nov 2026 (December demand, audit section 2 "sense classificar" and 7):
@@ -95,6 +95,16 @@ const CALENDAR_LEAD: Record<Locale, string> = {
 export function calendarLine(locale: Locale, key: CalendarHubKey = "christmas"): string {
   const entry = CALENDAR_HUBS[key][locale];
   return `${CALENDAR_LEAD[locale]}, ${b2link(key, locale, entry.label)}: ${entry.gloss}.`;
+}
+
+/**
+ * The calendar hub as a plain link (27 Nov 2026, batch 8S: the seasonal link
+ * of the "Continua llegint" box, lib/engagement/continue-reading.ts): the
+ * label of `calendarLine`, capitalised, and the hub's path.
+ */
+export function calendarHubLink(locale: Locale, key: CalendarHubKey = "christmas"): { href: string; label: string } {
+  const label = CALENDAR_HUBS[key][locale].label;
+  return { href: b2href(key, locale), label: `${label.charAt(0).toUpperCase()}${label.slice(1)}` };
 }
 
 /** One list item: the searched words as the anchor, then what the page has. */

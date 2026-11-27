@@ -223,11 +223,21 @@ export function holidayGuideNextStep(key: B2Key, locale: Locale, self: string, t
   return nextStep("holidays", [first[key], ...second], self);
 }
 
-/** "Is <date> a holiday?" pages: the December bridge for the days around it, the 2027 bridges for a 2027 day, and the leave planner. */
+/** The days of the December 2026 long weekend whose date pages also hand on to the shops guide. */
+export const DECEMBER_BRIDGE_DATE_PAGES: readonly string[] = ["2026-12-06", "2026-12-07", "2026-12-08"];
+
+/**
+ * "Is <date> a holiday?" pages: the December bridge for the days around it, the 2027 bridges for a 2027 day, and the leave planner.
+ * 27 Nov 2026 (batch 8S): the 6, 7 and 8 December pages (the 7 December page, 96 sessions at 1.34 pages per
+ * session on 19-26 Nov, GA4) also get the shops guide while the bridge is ahead, which answers "are shops open on the
+ * 6th, 7th and 8th?" in a section of its own; three links then.
+ */
 export function holidayDateNextStep(iso: string, locale: Locale, self: string, today: string): NextStep | null {
-  const bridge = iso.startsWith("2026-") && today <= DECEMBER_BRIDGE_LAST_DAY ? b2Step("decemberBridge", locale) : null;
+  const ahead = today <= DECEMBER_BRIDGE_LAST_DAY;
+  const bridge = iso.startsWith("2026-") && ahead ? b2Step("decemberBridge", locale) : null;
+  const shops = ahead && DECEMBER_BRIDGE_DATE_PAGES.includes(iso) ? b2Step("shops", locale) : null;
   const year2027 = iso.startsWith("2027-") ? b2Step("bridges2027", locale) : null;
-  return nextStep("holidays", [bridge, year2027, leaveStep(locale)], self);
+  return nextStep("holidays", [bridge, shops, year2027, leaveStep(locale)], self, shops ? NEXT_STEP_MAX_LINKS : 2);
 }
 
 /* -------------------------------------------------------------------------- */

@@ -48,5 +48,13 @@ export function nextStep(family: NextStepFamily, links: (NextStepLink | null | u
   return kept.length > 0 ? { family, links: kept } : null;
 }
 
+/** The box without the links to `paths` (compared without the hash); null when nothing is left. */
+export function withoutPaths(step: NextStep | null, paths: readonly string[]): NextStep | null {
+  if (!step) return null;
+  const drop = new Set(paths.map(pathOnly));
+  const links = step.links.filter((link) => !drop.has(pathOnly(link.href)));
+  return links.length > 0 ? { ...step, links } : null;
+}
+
 /** A guide of the registry, under its own title. */
 export const b2Step = (key: B2Key, locale: Locale): NextStepLink => ({ href: b2href(key, locale), label: B2_TITLES[key][locale] });

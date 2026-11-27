@@ -7,6 +7,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
 import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
+import { ContinueReading } from "@/components/ContinueReading";
 import { ReturnStep } from "@/components/ReturnStep";
 import { UsefulNow } from "@/components/UsefulNow";
 import { ElectionLine } from "@/components/ElectionLine";
@@ -18,7 +19,9 @@ import { ShareBar } from "@/components/share/ShareBar";
 import { PreferredSource } from "@/components/share/PreferredSource";
 import { FollowChannel } from "@/components/share/FollowChannel";
 import { isDailyFollowPage } from "@/lib/share/channel";
-import { tableOfContents } from "@/lib/content/blocks";
+import { headingId, tableOfContents } from "@/lib/content/blocks";
+import { continueReading, storedRelated } from "@/lib/engagement/continue-reading";
+import { withoutPaths } from "@/lib/engagement/next-step-core";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
@@ -104,6 +107,34 @@ export function EntryArticle({
     : stepInsert;
   // One calculator line after the body (holiday, election, shops, lottery, pay-dates and death guides), unless the page already links it.
   const calculatorLine = entryCalculatorLine({ href: entry.href, locale, body: entry.body }, step, todayInCatalonia());
+  // 27 Nov 2026 (batch 8S): the "next useful step" box that strike and election pages show at the foot of the
+  // page no longer repeats a link of the "keep it" block or the election line above it (the 26N page's box was
+  // the Spain strikes hub, already the first link of its "keep it" block).
+  const footStep = ret ? withoutPaths(step, [...ret.links.map((l) => l.href), ...(electionLine?.links ?? []).map((l) => l.href)]) : null;
+  // "Continua llegint" (lib/engagement/continue-reading.ts): the stored list shown as one box of three topical
+  // links and one seasonal link, never a path another onward box of the page links; the rest of the list after it.
+  const related = storedRelated(body, locale);
+  const onward = related
+    ? continueReading({
+        entry: { href: entry.href, key: entry.key, locale },
+        stored: related.items,
+        exclude: [
+          ...(ret?.links ?? []).map((l) => l.href),
+          ...(ret ? (footStep?.links ?? []) : (step?.links ?? [])).map((l) => l.href),
+          ...(electionLine?.links ?? []).map((l) => l.href),
+          ...(calculatorLine?.links ?? []).map((l) => l.href),
+          ...(useful?.links ?? []).map((l) => l.href),
+          ...mostRead.map((item) => item.path),
+        ],
+        mostRead: answerFirst ? [] : mostReadFor(locale, entry.href, todayInCatalonia()).map((item) => ({ href: item.path, label: item.title })),
+        today: todayInCatalonia(),
+      })
+    : null;
+  const relatedHeading = related ? body[related.heading] : undefined;
+  const onwardInsert =
+    related && onward && relatedHeading?.type === "heading"
+      ? { at: related.list, replace: true, node: <ContinueReading data={onward} locale={locale} labelledBy={headingId(relatedHeading)} /> }
+      : undefined;
 
   // Phones never see the sidebar index; long pages get it collapsed, without
   // JavaScript. On answer-first pages it sits under the summary, closed.
@@ -276,7 +307,7 @@ export function EntryArticle({
                 in the server HTML so it moves nothing (components/AdSlot). */}
             <AdSlot kind="top" locale={locale} path={entry.href} />
 
-            <BlockRenderer body={body} context={context} insert={bodyInsert} />
+            <BlockRenderer body={body} context={context} insert={[bodyInsert, onwardInsert]} />
 
             {/* The calculator its readers need next (lib/engagement/calculator-line.ts, 26 Nov 2026), right after the body. */}
             <CalculatorLine line={calculatorLine} className="mt-8" />
@@ -290,7 +321,7 @@ export function EntryArticle({
               </div>
             ) : null}
 
-            {ret ? <NextStep step={step} locale={locale} className="mt-12" /> : null}
+            {ret ? <NextStep step={footStep} locale={locale} className="mt-12" /> : null}
 
             <UsefulNow data={useful} locale={locale} />
 

@@ -56,20 +56,38 @@ const LANGUAGE_LINE_LABEL: Record<Locale, string> = {
   en: "In English",
 };
 
+export interface BodyInsert {
+  at: number;
+  node: ReactNode;
+  /** Render the node in the place of the block at `at` instead of before it (27 Nov 2026: the "Continua llegint" list, components/ContinueReading.tsx). */
+  replace?: boolean;
+}
+
 /**
- * `insert` puts one server-rendered node inside the same prose column, before
- * the block at `at` (EntryArticle's "next useful step", after the answer).
+ * `insert` puts server-rendered nodes inside the same prose column, before
+ * the block at `at` (EntryArticle's "next useful step", after the answer), or
+ * in its place with `replace`.
  */
-export function BlockRenderer({ body, context, insert }: { body: Body; context: BlockContext; insert?: { at: number; node: ReactNode } }) {
+export function BlockRenderer({ body, context, insert }: { body: Body; context: BlockContext; insert?: BodyInsert | readonly (BodyInsert | undefined)[] }) {
+  const inserts = (Array.isArray(insert) ? insert : [insert]).filter((item): item is BodyInsert => Boolean(item));
   return (
     <div className="ci-prose">
-      {body.map((block, index) => (
-        <Fragment key={index}>
-          {insert && insert.at === index ? insert.node : null}
-          <BlockView block={block} context={context} />
-        </Fragment>
-      ))}
-      {insert && insert.at >= body.length ? insert.node : null}
+      {body.map((block, index) => {
+        const here = inserts.filter((item) => item.at === index);
+        return (
+          <Fragment key={index}>
+            {here.map((item, i) => (
+              <Fragment key={`insert-${i}`}>{item.node}</Fragment>
+            ))}
+            {here.some((item) => item.replace) ? null : <BlockView block={block} context={context} />}
+          </Fragment>
+        );
+      })}
+      {inserts
+        .filter((item) => item.at >= body.length)
+        .map((item, i) => (
+          <Fragment key={`insert-end-${i}`}>{item.node}</Fragment>
+        ))}
     </div>
   );
 }

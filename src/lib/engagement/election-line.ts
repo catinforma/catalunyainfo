@@ -4,8 +4,8 @@ import type { Locale } from "@/lib/i18n/config";
 import { electionPhase, type ElectionDayPhase } from "@/lib/programmatic/elections/election-day";
 import { hubPath } from "@/lib/programmatic/elections/paths";
 
-import { CATALONIA_STRIKE_KEYS, SPAIN_STRIKE_KEYS, STRIKE_11N_SPAIN_KEY_PREFIX, b2KeyForHref, votingWhereStep } from "./next-step";
-import type { NextStepLink } from "./next-step-core";
+import { CATALONIA_STRIKE_KEYS, ELECTION_KEYS, SPAIN_STRIKE_KEYS, STRIKE_11N_SPAIN_KEY_PREFIX, b2KeyForHref, votingWhereStep } from "./next-step";
+import { pathOnly, type NextStepLink } from "./next-step-core";
 
 /**
  * "Elecciones generales del 29N" one-line box (26 Nov 2026, batch 5A): the
@@ -105,21 +105,35 @@ export function electionLineFor(locale: Locale, phase: ElectionDayPhase, opts: {
   };
 }
 
-/** Which content pages carry it: the strike pages (not the 11N pages for the rest of Spain) and the December bridge guide. */
-export function electionLineScope(entry: { href: string; key?: string | null }): "strike" | "holiday" | null {
+/**
+ * Which content pages carry it: the strike pages (not the 11N pages for the
+ * rest of Spain), the December bridge guide and, since 27 Nov 2026 (batch 8S),
+ * the election guides themselves (candidates, how to vote, polling-station
+ * duty, postal vote, election night). GA4 19-26 Nov: the candidates guide
+ * 1.10 pages per session (198 + 97 sessions), election night 1.10 (89, en);
+ * right after their answer they had only the "keep it" block (is today a
+ * holiday, strikes today), and the town finder or the results by town only
+ * at the foot of the page, if at all.
+ */
+export function electionLineScope(entry: { href: string; key?: string | null }): "strike" | "holiday" | "election" | null {
   if (entry.key?.startsWith(STRIKE_11N_SPAIN_KEY_PREFIX)) return null;
   const key = b2KeyForHref(entry.href);
   if (!key) return null;
   if (CATALONIA_STRIKE_KEYS.includes(key) || SPAIN_STRIKE_KEYS.includes(key)) return "strike";
   if (HOLIDAY_KEYS.includes(key)) return "holiday";
+  if (ELECTION_KEYS.includes(key)) return "election";
   return null;
 }
 
-/** A content page's line at render time. */
+/** A content page's line at render time; never a link to the page itself (the how-to-vote guide keeps only the town finder). */
 export function entryElectionLine(entry: { href: string; key?: string | null; locale: Locale }, now: Date = new Date()): ElectionLine | null {
   const scope = electionLineScope(entry);
   if (!scope) return null;
-  return electionLineFor(entry.locale, electionPhase(now), { shops: scope === "holiday" });
+  const line = electionLineFor(entry.locale, electionPhase(now), { shops: scope === "holiday" });
+  if (!line) return null;
+  const self = pathOnly(entry.href);
+  const links = line.links.filter((link) => pathOnly(link.href) !== self);
+  return links.length > 0 ? { ...line, links } : null;
 }
 
 /** "Is <date> a holiday?" pages from 27 Nov to 8 Dec 2026 (the election weekend and the December bridge). */

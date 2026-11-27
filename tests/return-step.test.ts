@@ -191,7 +191,7 @@ test("every strike and election template renders the block", () => {
     assert.match(read(`src/components/programmatic/${file}.tsx`), /<ReturnStep step=\{returnStepForElection/, file);
   }
   // The longer "next useful step" box did not go: it moved down on the pages that have the block.
-  assert.match(read("src/components/pages/EntryArticle.tsx"), /\{ret \? <NextStep step=\{step\}/);
+  assert.match(read("src/components/pages/EntryArticle.tsx"), /\{ret \? <NextStep step=\{footStep\}/);
   assert.match(read("src/components/programmatic/ElectionResultsPage.tsx"), /<NextStep step=\{electionTownNextStep/);
 });
 

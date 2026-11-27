@@ -206,7 +206,9 @@ test("holidays: guides and date pages hand on to the December bridge while it is
       assert.ok(!later.links.some((l) => l.href === bridge || l.href === b2href("decemberBridgeSpain", locale)), `${key}/${locale}: December bridge after 8 Dec`);
     }
     const day = holidayDateNextStep("2026-12-07", locale, `/${locale}/x/`, TODAY)!;
-    assert.deepEqual(day.links.map((l) => l.href), [bridge, leavePath(locale)]);
+    // 27 Nov 2026 (batch 8S): the bridge days also get the shops guide while the bridge is ahead.
+    assert.deepEqual(day.links.map((l) => l.href), [bridge, b2href("shops", locale), leavePath(locale)]);
+    assert.deepEqual(holidayDateNextStep("2026-12-01", locale, `/${locale}/x/`, TODAY)!.links.map((l) => l.href), [bridge, leavePath(locale)]);
     const day2027 = holidayDateNextStep("2027-04-02", locale, `/${locale}/x/`, TODAY)!;
     assert.deepEqual(day2027.links.map((l) => l.href), [b2href("bridges2027", locale), leavePath(locale)]);
   }
@@ -282,7 +284,7 @@ test("templates render the box server-side, after the answer, with the placement
   const article = read("src/components/pages/EntryArticle.tsx");
   // 25 Nov 2026: the strike and election pages show the "keep it" block (return-step.ts) in this place and the box lower down.
   assert.match(article, /<SummaryBox[^>]*\/>\s*\{ret \?[^]*?nextStepInSummary \? \(?\s*<NextStep/);
-  assert.match(article, /<BlockRenderer body=\{body\} context=\{context\} insert=\{bodyInsert\} \/>/);
+  assert.match(article, /<BlockRenderer body=\{body\} context=\{context\} insert=\{\[bodyInsert, onwardInsert\]\} \/>/);
   for (const [file, re] of [
     // Right after the first screen (answer, table, lead: holidays/first-screen.ts, 19 Nov 2026), before #avui.
     ["src/components/programmatic/holidays/MunicipalityPage.tsx", /\{firstScreenOrder\(locale\)\.map\([^]*?\{t\.lead\} \{t\.source\}\s*<\/p>\s*\),\s*\)\}\s*(?:<TownQuickLinks[^>]*\/>\s*)?\{\/\*[^*]*\*\/\}\s*<NextStep step=\{townNextStep\([^]*?<h2 id="avui">/],

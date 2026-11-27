@@ -49,7 +49,11 @@ test("scope: strike pages and the December bridge guide, not the shops guide nor
   assert.equal(electionLineScope({ href: "/es/guias/puente-diciembre-cataluna/" }), "holiday");
   assert.equal(electionLineScope({ href: b2href("decemberBridge", "ca") }), "holiday");
   assert.equal(electionLineScope({ href: b2href("shops", "es") }), null);
-  assert.equal(electionLineScope({ href: b2href("voting", "es") }), null);
+  // 27 Nov 2026 (batch 8S): the election guides carry it too, without a link to themselves.
+  assert.equal(electionLineScope({ href: b2href("voting", "es") }), "election");
+  assert.equal(electionLineScope({ href: b2href("candidates", "ca") }), "election");
+  assert.equal(electionLineScope({ href: b2href("electionNight", "en") }), "election");
+  assert.equal(electionLineScope({ href: b2href("congressResults", "es") }), null);
   assert.equal(electionLineScope({ href: "/es/guias/huelga-general-11-noviembre-2026-sevilla/", key: "guide-general-strike-11-november-2026-sevilla" }), null);
 });
 
@@ -73,6 +77,20 @@ test("before the polls close: hours, the town finder and how to vote; the shops'
         assert.doesNotMatch(link.label, /undefined|null|NaN/);
       }
     }
+  }
+});
+
+test("election guides: the town finder and how to vote before the count, results by town after; never the page itself", () => {
+  for (const locale of LOCALES) {
+    const hub = { ca: "/ca/eleccions/", es: "/es/elecciones/", en: "/en/elections/" }[locale];
+    const candidates = entryElectionLine({ href: b2href("candidates", locale), locale }, BEFORE)!;
+    assert.equal(candidates.links[0]!.href, hub);
+    assert.ok(candidates.links[1]!.href.startsWith(`${b2href("voting", locale)}#`));
+    const voting = entryElectionLine({ href: b2href("voting", locale), locale }, BEFORE)!;
+    assert.deepEqual(voting.links.map((l) => l.href), [hub]);
+    const night = entryElectionLine({ href: b2href("electionNight", locale), locale }, COUNT)!;
+    assert.deepEqual(night.links.map((l) => l.href), [hub]);
+    assert.equal(entryElectionLine({ href: b2href("candidates", locale), locale }, OVER), null);
   }
 });
 
