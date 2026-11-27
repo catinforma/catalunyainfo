@@ -251,4 +251,11 @@ export const SOURCES = [
 // 17 Jun), Portal Jurídic (Ordre EMT/52/2026, DOGC 9637, 1 Apr 2026), the BOE
 // list (BOE-A-2026-21254: the same twelve for Cataluña, Jueves Santo not
 // marked) and Barcelona's calendar (17 May and 24 Sep 2027): unchanged.
-export const LAST_VERIFIED = "2026-11-03";
+// Re-read on 27 Nov 2026 with curl: the order's PDF (portaldogc 9637/2143535.pdf,
+// "Seran festes laborals a Catalunya durant l'any 2027: 1 de gener, divendres
+// … 25 de desembre, dissabte", art. 1 b) Aran 29 Mar -> 17 Jun), the BOE PDF
+// (BOE-A-2026-21254, note 2 repeating it), the Generalitat's 2027 page ("S'ha
+// aprovat el calendari de festes laborals per a 2027") and Barcelona's calendar
+// ("2027 hi ha 14 festius, entre els quals s'inclouen el 17 de maig i el 24 de
+// setembre com a festius locals"): unchanged.
+export const LAST_VERIFIED = "2026-11-27";

@@ -225,8 +225,12 @@ function easterSection(copy: HolidayCopy, locale: Locale): Block[] {
  * order either. The section prints the date; tests/holiday-serp-push-13nov.test.ts
  * fails 21 days later so it is read again (the 2026 order came out on 17 Dec
  * 2025; run `npm run holidays:snapshot -- find`).
+ * Read again on 27 Nov 2026: `holidays:snapshot -- find --year 2027` over DOGC
+ * núm. 9798 (19 Nov) to 9804 (27 Nov), "NOT PUBLISHED", Treball's "Normativa
+ * relacionada" lists no 2027 local order, and the open data's newest
+ * `any_calendari` is still 2026.
  */
-export const LOCAL_ORDER_CHECKED = "2026-11-24";
+export const LOCAL_ORDER_CHECKED = "2026-11-27";
 /** How many of the largest towns the local-days table lists. */
 export const LOCAL_TABLE_TOWNS = 15;
 
@@ -313,10 +317,14 @@ export function officialBox(copy: HolidayCopy, locale: Locale): Block {
   const dogc = `https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=${DOGC_ORDER_PDF[locale]}`;
   const asOf = `${formatDay(LOCAL_ORDER_CHECKED, copy, locale)}${locale === "en" ? " " : " de "}${LOCAL_ORDER_CHECKED.slice(0, 4)}`;
   const local = localAnchor(copy, locale);
+  // 27 Nov 2026: "calendario laboral cataluña 2027 pdf" / "… barcelona 2027 pdf" reach the page; the
+  // download (.ics, the calendar section) and the town finder go on the first screen with the PDFs.
+  const ics = calendarAnchor(copy, locale);
+  const finder = HOLIDAY_PATH[locale].local;
   const text = {
-    ca: `Els dotze festius són els de l'[Ordre EMT/52/2026 (DOGC núm. 9637, de l'1 d'abril de 2026, PDF)](${dogc}); el BOE els recull a la [Resolució de 8 d'octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Els dos festius locals de cada municipi no hi són: els fixa una altra ordre del Departament d'Empresa i Treball, a proposta dels ajuntaments (art. 2). A ${asOf} encara no ha sortit al DOGC; mentrestant, els dies que ja han aprovat els ajuntaments són [més avall](${local}).`,
-    es: `Los doce festivos son los de la [Orden EMT/52/2026 (DOGC núm. 9637, de 1 de abril de 2026, PDF)](${dogc}); el BOE los recoge en la [Resolución de 8 de octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Los dos festivos locales de cada municipio no están en ella: los fija otra orden del Departament d'Empresa i Treball, a propuesta de los ayuntamientos (art. 2). A ${asOf} todavía no ha salido en el DOGC; mientras tanto, los días que ya han aprobado los ayuntamientos están [más abajo](${local}).`,
-    en: `The twelve days are those of [Order EMT/52/2026 (DOGC no. 9637, 1 April 2026, PDF, in Catalan)](${dogc}); the BOE lists them in the [Resolution of 8 October 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Each town's two local holidays are not in it: another order of the Catalan labour department sets them, on the town councils' proposals (art. 2). On ${asOf} it had not appeared in the DOGC; meanwhile, the days the councils have already approved are [further down](${local}).`,
+    ca: `Els dotze festius són els de l'[Ordre EMT/52/2026 (DOGC núm. 9637, de l'1 d'abril de 2026, PDF)](${dogc}); el BOE els recull a la [Resolució de 8 d'octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Els dos festius locals de cada municipi no hi són: els fixa una altra ordre del Departament d'Empresa i Treball, a proposta dels ajuntaments (art. 2). A ${asOf} encara no ha sortit al DOGC; mentrestant, els dies que ja han aprovat els ajuntaments són [més avall](${local}). Per tenir els dotze festius al mòbil o a l'Outlook, [descarrega'ls en un arxiu .ics](${ics}); els de la teva població, amb les dues festes locals, són al [cercador de festius locals per municipi](${finder}).`,
+    es: `Los doce festivos son los de la [Orden EMT/52/2026 (DOGC núm. 9637, de 1 de abril de 2026, PDF)](${dogc}); el BOE los recoge en la [Resolución de 8 de octubre de 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Los dos festivos locales de cada municipio no están en ella: los fija otra orden del Departament d'Empresa i Treball, a propuesta de los ayuntamientos (art. 2). A ${asOf} todavía no ha salido en el DOGC; mientras tanto, los días que ya han aprobado los ayuntamientos están [más abajo](${local}). Para tener los doce festivos en el móvil o en Outlook, [descárgalos en un archivo .ics](${ics}); los de tu municipio, con sus dos fiestas locales, están en el [buscador de festivos locales por municipio](${finder}).`,
+    en: `The twelve days are those of [Order EMT/52/2026 (DOGC no. 9637, 1 April 2026, PDF, in Catalan)](${dogc}); the BOE lists them in the [Resolution of 8 October 2026 (BOE-A-2026-21254, PDF)](${BOE_2027_PDF}). Each town's two local holidays are not in it: another order of the Catalan labour department sets them, on the town councils' proposals (art. 2). On ${asOf} it had not appeared in the DOGC; meanwhile, the days the councils have already approved are [further down](${local}). To have the twelve days on your phone or in Outlook, [download them as an .ics file](${ics}); your own town's, with its two local holidays, are in the [local holidays by town](${finder}).`,
   }[locale];
   const title = {
     ca: "Calendari laboral 2027 de Catalunya: documents oficials i festius locals",
@@ -328,6 +336,11 @@ export function officialBox(copy: HolidayCopy, locale: Locale): Block {
 
 function localAnchor(copy: HolidayCopy, locale: Locale): string {
   return `/${locale}/${copy.path}/#${slugifyAnchor(copy.localTitle)}`;
+}
+
+/** The "add the holidays to your calendar" section (the .ics download) of this page. */
+function calendarAnchor(copy: HolidayCopy, locale: Locale): string {
+  return `/${locale}/${copy.path}/#${slugifyAnchor(copy.calendarTitle)}`;
 }
 
 const DEC7_2026 = "2026-12-07";
@@ -785,8 +798,36 @@ function faqBlock(locale: Locale): Block {
   const sjRun = locale === "en" ? `${sjFrom} to ${sjTo}` : `${locale === "ca" && /^(1|11)\b/.test(sjFrom) ? "de l'" : "del "}${sjFrom} ${locale === "ca" && /^(1|11)\b/.test(sjTo) ? "a l'" : "al "}${sjTo}`;
   const sjPage = (lead: string, text: string) => (isDatePage(santJoan.date) ? ` ${lead} ${linkedDay(santJoan.date, text, locale)}.` : "");
 
+  /*
+   * 27 Nov 2026 (docs/SEO_EXPERIMENTS.md): the head query of the family, "calendario laboral 2027
+   * cataluña" / "festius 2027 catalunya", answered with the twelve days and their weekdays in one
+   * sentence, from the same CATALONIA_HOLIDAYS as the table; the three days of Catalonia's own
+   * ("festivos autonómicos cataluña 2027", BOE-A-2026-21254 marks them for the community); and
+   * where the PDF and the download are ("calendario laboral cataluña 2027 pdf").
+   */
+  const plainName = (h: Holiday) => h.name[locale].replace(/ \(.*\)$/, "");
+  const allDays = joinList(
+    CATALONIA_HOLIDAYS.map((h) => `${weekdayOf(h.date, copy)} ${formatDay(h.date, copy, locale)} (${plainName(h)})`),
+    locale,
+  );
+  const aranDay = formatDay(ARAN_REPLACEMENT.date, copy, locale);
+  const swapped = formatDay(findHoliday(CATALONIA_HOLIDAYS, "Easter Monday").date, copy, locale);
+  const aranSwapLine = {
+    ca: `A l'Aran, ${dayArticle(aranDay, locale)}${aranDay} (${ARAN_REPLACEMENT.name.ca}) substitueix ${dayArticle(swapped, locale)}${swapped}.`,
+    es: `En Arán, el ${aranDay} (${ARAN_REPLACEMENT.name.es}) sustituye al ${swapped}.`,
+    en: `In Aran, ${aranDay} (${ARAN_REPLACEMENT.name.en}) replaces ${swapped}.`,
+  }[locale];
+  const own = ["Easter Monday", "Sant Joan", "National Day of Catalonia"].map((en) => findHoliday(CATALONIA_HOLIDAYS, en));
+  const ownDays = joinList(own.map((h) => `${plainName(h)} (${weekdayOf(h.date, copy)} ${formatDay(h.date, copy, locale)})`), locale);
+  const dogcPdf = (lang: "ca_ES" | "es_ES") => `https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=${lang}`;
+  const ics = calendarAnchor(copy, locale);
+  const bcnLocal = barcelonaLocalLine(copy, locale);
+
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
+      { question: `Quins són els festius del ${YEAR} a Catalunya?`, answer: `${cap(allDays)}. ${aranSwapLine} A més, cada municipi té dues festes locals: a ${bcnLocal}; les de la teva població, al [cercador de festius locals](${path.local}).` },
+      { question: `Quins són els festius propis de Catalunya el ${YEAR}?`, answer: `Tres: ${ownDays}. Els altres nou són festes nacionals. El Dijous Sant, festiu a la majoria de comunitats, a Catalunya és feiner.` },
+      { question: `On hi ha el calendari laboral ${YEAR} de Catalunya en PDF?`, answer: `El document oficial és l'Ordre EMT/52/2026, publicada al DOGC núm. 9637 l'1 d'abril de 2026: [PDF en català](${dogcPdf("ca_ES")}) o [en castellà](${dogcPdf("es_ES")}). El BOE la recull a la [resolució BOE-A-2026-21254 (PDF)](${BOE_2027_PDF}). Per afegir els dotze festius al calendari del mòbil, [descarrega l'arxiu .ics](${ics}).` },
       { question: `Quants festius hi ha a Catalunya el ${YEAR}?`, answer: `${count} festius a tot Catalunya, fixats per la Generalitat, més dues festes locals que tria cada ajuntament: consulta les [festes locals de cada municipi](${path.local}).` },
       { question: `Quan és Divendres Sant el ${YEAR}?`, answer: `${cap(goodFriday)}. És festiu a tot Catalunya.` },
       { question: `Quan és Pasqua Florida el ${YEAR}?`, answer: `El Dilluns de Pasqua Florida és ${easterMonday}, festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran.` },
@@ -801,6 +842,9 @@ function faqBlock(locale: Locale): Block {
       { question: "És festiu avui?", answer: `Ho diem dia a dia a [és festiu avui a Catalunya?](${path.today}), amb el pròxim festiu.` },
     ],
     es: [
+      { question: `¿Cuáles son los festivos de ${YEAR} en Cataluña?`, answer: `${cap(allDays)}. ${aranSwapLine} Además, cada municipio tiene dos fiestas locales: en ${bcnLocal}; las de tu municipio, en el [buscador de festivos locales](${path.local}).` },
+      { question: `¿Cuáles son los festivos autonómicos de Cataluña en ${YEAR}?`, answer: `Tres: ${ownDays}. Los otros nueve son fiestas nacionales. El Jueves Santo, festivo en la mayoría de comunidades, en Cataluña es laborable.` },
+      { question: `¿Dónde está el calendario laboral ${YEAR} de Cataluña en PDF?`, answer: `El documento oficial es la Orden EMT/52/2026, publicada en el DOGC núm. 9637 el 1 de abril de 2026: [PDF en castellano](${dogcPdf("es_ES")}) o [en catalán](${dogcPdf("ca_ES")}). El BOE la recoge en la [resolución BOE-A-2026-21254 (PDF)](${BOE_2027_PDF}). Para añadir los doce festivos al calendario del móvil, [descarga el archivo .ics](${ics}).` },
       { question: `¿Cuántos festivos hay en Cataluña en ${YEAR}?`, answer: `${count} festivos en toda Cataluña, fijados por la Generalitat, más dos fiestas locales que elige cada ayuntamiento: consulta las [fiestas locales de cada municipio](${path.local}).` },
       { question: `¿Cuándo es Viernes Santo en ${YEAR}?`, answer: `${cap(goodFriday)}. Es festivo en toda Cataluña.` },
       { question: `¿Cuándo es el Lunes de Pascua en ${YEAR}?`, answer: `${cap(easterMonday)}. Es festivo en toda Cataluña excepto en Arán, donde lo sustituye la Festa d'Aran.` },
@@ -815,6 +859,9 @@ function faqBlock(locale: Locale): Block {
       { question: "¿Es festivo hoy?", answer: `Lo decimos cada día en [¿es festivo hoy en Cataluña?](${path.today}), con el próximo festivo.` },
     ],
     en: [
+      { question: `What are the public holidays in Catalonia in ${YEAR}?`, answer: `${cap(allDays)}. ${aranSwapLine} Each town also has two local holidays (in ${bcnLocal}); for your own town, see the [local holidays by town](${path.local}).` },
+      { question: `Which ${YEAR} public holidays are Catalonia's own?`, answer: `Three: ${ownDays}. The other nine are national holidays. Maundy Thursday, a holiday in most of Spain, is a working day in Catalonia.` },
+      { question: `Where is the official ${YEAR} Catalonia holiday calendar as a PDF?`, answer: `The official document is Order EMT/52/2026, published in DOGC no. 9637 on 1 April 2026: [PDF in Catalan](${dogcPdf("ca_ES")}) or [in Spanish](${dogcPdf("es_ES")}). The BOE lists it in [resolution BOE-A-2026-21254 (PDF)](${BOE_2027_PDF}). To add the twelve days to your phone's calendar, [download the .ics file](${ics}).` },
       { question: `How many public holidays does Catalonia have in ${YEAR}?`, answer: `${count} across Catalonia, set by the Generalitat, plus two local holidays chosen by each town council: see the [local holidays for each town](${path.local}).` },
       { question: `When is Good Friday in ${YEAR}?`, answer: `${cap(goodFriday)}. It is a public holiday across Catalonia.` },
       { question: `When is Easter Monday in ${YEAR}?`, answer: `${cap(easterMonday)}. It is a public holiday across Catalonia except in Aran, where the Festa d'Aran replaces it.` },

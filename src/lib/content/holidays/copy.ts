@@ -140,7 +140,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Festes locals", value: "2 per municipi" },
       { label: "Millor pont d'un dia", value: "7 de desembre de 2027" },
       { label: "Excepció d'Aran", value: "Sí, el 29 de març se substitueix" },
-      { label: "Última verificació", value: "3 de novembre de 2026" },
+      { label: "Última verificació", value: "27 de novembre de 2026" },
     ],
 
     tableTitle: "Tots els festius laborals de Catalunya el 2027",
@@ -247,7 +247,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "El fitxer conté només els **dotze festius oficials de Catalunya**. No inclou ni les festes locals ni els dies de vacances suggerits: aquests són recomanacions editorials, no festius.",
     calendarDownload: "Descarrega els festius (.ics)",
     calendarFilename: "festius-catalunya-2027",
-    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, comprovades amb el BOE del 13 d'octubre i, el 3 de novembre de 2026, amb el calendari del Departament d'Empresa i Treball.",
+    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, comprovades amb el BOE del 13 d'octubre i, el 27 de novembre de 2026, amb el calendari del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda aquesta guia",
     closing: [
@@ -282,7 +282,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Fiestas locales", value: "2 por municipio" },
       { label: "Mejor puente de un día", value: "7 de diciembre de 2027" },
       { label: "Excepción de Arán", value: "Sí, el 29 de marzo se sustituye" },
-      { label: "Última verificación", value: "3 de noviembre de 2026" },
+      { label: "Última verificación", value: "27 de noviembre de 2026" },
     ],
 
     tableTitle: "Festivos oficiales en Cataluña en 2027",
@@ -389,7 +389,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "El archivo contiene únicamente los **doce festivos oficiales de Cataluña**. No incluye fiestas locales ni los días de vacaciones sugeridos: eso son recomendaciones editoriales, no festivos.",
     calendarDownload: "Descargar los festivos (.ics)",
     calendarFilename: "festivos-cataluna-2027",
-    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, comprobadas con el BOE del 13 de octubre y, el 3 de noviembre de 2026, con el calendario del Departament d'Empresa i Treball.",
+    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, comprobadas con el BOE del 13 de octubre y, el 27 de noviembre de 2026, con el calendario del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda esta guía",
     closing: [
@@ -424,7 +424,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Local holidays", value: "2 per municipality" },
       { label: "Best one-day bridge", value: "7 December 2027" },
       { label: "Aran exception", value: "Yes — 29 March is replaced" },
-      { label: "Last verified", value: "3 November 2026" },
+      { label: "Last verified", value: "27 November 2026" },
     ],
 
     tableTitle: "Official Catalonia public holidays in 2027",
@@ -531,7 +531,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "The file contains only the **twelve official Catalonia-wide holidays**. It does not include local holidays or the suggested days of leave: those are editorial recommendations, not public holidays.",
     calendarDownload: "Download the holidays (.ics)",
     calendarFilename: "catalonia-public-holidays-2027",
-    calendarNote: "Dates transcribed from Order EMT/52/2026, checked against the BOE of 13 October and, on 3 November 2026, against the Catalan labour department's calendar.",
+    calendarNote: "Dates transcribed from Order EMT/52/2026, checked against the BOE of 13 October and, on 27 November 2026, against the Catalan labour department's calendar.",
 
     closingTitle: "Save this guide",
     closing: [

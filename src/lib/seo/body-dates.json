@@ -8,13 +8,13 @@
    "files": 14
   },
   "block:electionHistory": {
-   "date": "2026-11-25T16:13:40.240Z",
-   "fingerprint": "v1:6b9d1be4f3db718a810c2362a049c247",
+   "date": "2026-11-27T01:34:07.476Z",
+   "fingerprint": "v1:b895402b1a4a5b5f251c29b0728fc1aa",
    "files": 4
   },
   "block:localHolidays": {
-   "date": "2026-11-25T16:13:40.240Z",
-   "fingerprint": "v1:7b33886557f842813512873c9a92d3a8",
+   "date": "2026-11-27T01:34:07.476Z",
+   "fingerprint": "v1:fe2a311c4b8dd35d041533af4e6246d4",
    "files": 6
   },
   "block:municipalElections": {
@@ -63,8 +63,8 @@
    "files": 35
   },
   "embed-2027": {
-   "date": "2026-11-25T14:30:11.000Z",
-   "fingerprint": "v1:dd8f22ad4f6e26f030c68340fafda36a",
+   "date": "2026-11-27T01:34:07.476Z",
+   "fingerprint": "v1:21a2c2e906a28eddfe242d5b01a25a53",
    "files": 9
   },
   "employment": {
@@ -258,18 +258,18 @@
    "files": 12
   },
   "spain-2027": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:af54451f165638819b30d618fb28b339",
+   "date": "2026-11-27T01:22:30.000Z",
+   "fingerprint": "v1:dbac0203566c36d10b79943463f92faa",
    "files": 30
   },
   "spain-2027-days": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:d7ff3e7bde699843847557c596d55929",
+   "date": "2026-11-27T01:22:30.000Z",
+   "fingerprint": "v1:5c89e49b56d3aaff10639377fe792a31",
    "files": 22
   },
   "spain-2027-editions": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:7f72b604f4972680e73c80bfa7dce7d0",
+   "date": "2026-11-27T01:22:30.000Z",
+   "fingerprint": "v1:a926d94bdeeb4e0c5a08d58bb6782b60",
    "files": 38
   },
   "today": {

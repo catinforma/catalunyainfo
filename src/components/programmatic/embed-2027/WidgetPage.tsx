@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { widgetCopy } from "@/lib/programmatic/embed-2027/copy";
 import { pickerGroups, widgetEditions, widgetPagePath, type EmbedLocale } from "@/lib/programmatic/embed-2027/places";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { hubPath } from "@/lib/programmatic/holidays/paths";
 import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import { HUB } from "@/lib/programmatic/spain-2027/copy";
@@ -31,6 +32,19 @@ const LOCAL_HUB: Record<EmbedLocale, string> = {
   ca: "Festius locals de tots els municipis de Catalunya",
   es: "Festivos locales de todos los municipios de Cataluña",
   en: "Catalonia public holidays and local holidays",
+};
+
+/**
+ * 27 Nov 2026: Google showed this page for "calendario laboral 2027 cataluña",
+ * "calendario laboral barcelona 2027" and "festivos catalunya 2027" (positions
+ * 10-30, a few impressions a week) while the work-calendar guide is the page
+ * that answers them. It links the guide in the query's words, so the
+ * Catalonia question has one owner (docs/SEO_EXPERIMENTS.md, 27 Nov).
+ */
+export const WORK_CALENDAR_ANCHOR: Record<EmbedLocale, string> = {
+  ca: "Calendari laboral 2027 de Catalunya: els 12 festius i els ponts",
+  es: "Calendario laboral 2027 de Cataluña: los 12 festivos y los puentes",
+  en: "Catalonia public holidays 2027: the 12 dates and long weekends",
 };
 
 function spainHub(locale: EmbedLocale): { href: string; label: string } {
@@ -106,6 +120,9 @@ export function WidgetRoute({ locale }: { locale: EmbedLocale }) {
 
               <h2>{t.moreTitle}</h2>
               <ul>
+                <li>
+                  <Link href={GUIDES.workCalendar[locale]}>{WORK_CALENDAR_ANCHOR[locale]}</Link>
+                </li>
                 <li>
                   <Link href={hub.href}>{hub.label}</Link>
                 </li>
