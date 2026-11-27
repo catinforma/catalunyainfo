@@ -5,7 +5,7 @@ import { absoluteUrl } from "@/lib/site";
 
 import { TF_LOCALES, money, trafficFinesEditions, type TfLocale } from "./copy";
 import { calculateOk, fine, type FineInput, type FineResult } from "./engine";
-import { BASE_FINE, DISCOUNT_DAYS, DISCOUNT_RATE, FULL_PAYMENT_DAYS, POINTS, PRESCRIPTION_MONTHS, RULES_AS_OF, SURCHARGE_RATE } from "./rules";
+import { ANNEX_II, BASE_FINE, DISCOUNT_DAYS, DISCOUNT_RATE, FULL_PAYMENT_DAYS, POINTS, PRESCRIPTION_MONTHS, RED_LIGHT, RULES_AS_OF, SPECIAL_FINE, SPEED_BANDS, SURCHARGE_RATE } from "./rules";
 
 /**
  * Pure pieces of the traffic-fines page: titles, the default input, the
@@ -108,6 +108,13 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
   const half = grave * (1 - DISCOUNT_RATE);
   const pct = (r: number) => (locale === "en" ? `${Math.round(r * 100)}%` : `${Math.round(r * 100)} %`);
   const [s5, s10, s20] = [SURCHARGE_RATE.executive, SURCHARGE_RATE.reduced, SURCHARGE_RATE.ordinary].map(pct);
+  // 27 Nov 2026 (GSC 28 d): "cuanto tarda en llegar una multa por saltarse un semaforo", "importe multas", "sanciones trafico", "multas y sanciones", "sancions transit".
+  const redPoints = ANNEX_II.find((r) => r.n === RED_LIGHT.annexRow)!.points;
+  const [leve, muyGrave] = [BASE_FINE.leveMax, BASE_FINE.muyGrave];
+  const halves = [leve, grave, muyGrave].map((n) => M(n * (1 - DISCOUNT_RATE)));
+  const phonePoints = ANNEX_II.find((r) => r.n === "8")!.points;
+  const speedFines = SPEED_BANDS.map((b) => b.fine);
+  const [speedMin, speedMax] = [M(Math.min(...speedFines)), M(Math.max(...speedFines))];
   return {
     es: [
       {
@@ -141,6 +148,14 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
       {
         q: "¿Cómo recurro una multa de tráfico?",
         a: `Con alegaciones en los ${DISCOUNT_DAYS} días naturales siguientes a la notificación (art. 95.1), ante el organismo que te multó; si alegas, pierdes el descuento. Contra la resolución sancionadora cabe recurso de reposición en un mes (art. 96.2), que no detiene el cobro, o recurso contencioso-administrativo en dos meses.`,
+      },
+      {
+        q: "¿Cuánto tarda en llegar una multa de tráfico?",
+        a: `No hay un plazo fijo de envío. Si no te paran (radar, cámara de semáforo, coche aparcado), la ley permite notificarla después (art. 89.2), y Tráfico tiene hasta que la infracción prescribe: ${PRESCRIPTION_MONTHS.leve} meses desde el día de los hechos si es leve y ${PRESCRIPTION_MONTHS.grave} si es grave o muy grave (art. 112). Saltarse un semáforo en rojo es grave (art. 76 k): ${M(grave)}, ${M(grave * (1 - DISCOUNT_RATE))} con el 50 %, y ${redPoints} puntos. Si te llega pasado ese plazo y antes no hubo ninguna notificación ni gestión para localizarte, la infracción ha prescrito y puedes alegarlo.`,
+      },
+      {
+        q: "¿Cuánto es una multa de tráfico leve, grave o muy grave?",
+        a: `Las leves, hasta ${M(leve)}; las graves, ${M(grave)}, y las muy graves, ${M(muyGrave)} (Ley de Tráfico, art. 80.1). Pagando en ${DISCOUNT_DAYS} días con el 50 % se quedan en un máximo de ${halves[0]}, ${halves[1]} y ${halves[2]}. La velocidad va por la tabla del anexo IV (de ${speedMin} a ${speedMax}), y el alcohol o las drogas en los casos del artículo 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunas restan puntos: el móvil en la mano, ${phonePoints}; el semáforo en rojo, ${redPoints}.`,
       },
     ],
     ca: [
@@ -176,6 +191,14 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
         q: "Com recorro una multa de trànsit?",
         a: `Amb al·legacions en els ${DISCOUNT_DAYS} dies naturals següents a la notificació (art. 95.1), davant l'organisme que et va multar; si al·legues, perds el descompte. Contra la resolució sancionadora hi ha recurs de reposició en un mes (art. 96.2), que no atura el cobrament, o recurs contenciós administratiu en dos mesos.`,
       },
+      {
+        q: "Quant triga a arribar una multa de trànsit?",
+        a: `No hi ha un termini fix d'enviament. Si no t'aturen (radar, càmera de semàfor, cotxe aparcat), la llei permet notificar-la després (art. 89.2), i Trànsit té fins que la infracció prescriu: ${PRESCRIPTION_MONTHS.leve} mesos des del dia dels fets si és lleu i ${PRESCRIPTION_MONTHS.grave} si és greu o molt greu (art. 112). Saltar-se un semàfor en vermell és greu (art. 76 k): ${M(grave)}, ${M(grave * (1 - DISCOUNT_RATE))} amb el 50 %, i ${redPoints} punts. Si t'arriba passat aquest termini i abans no hi va haver cap notificació ni gestió per localitzar-te, la infracció ha prescrit i ho pots al·legar.`,
+      },
+      {
+        q: "Quant és una multa de trànsit lleu, greu o molt greu?",
+        a: `Les lleus, fins a ${M(leve)}; les greus, ${M(grave)}, i les molt greus, ${M(muyGrave)} (Llei de trànsit, art. 80.1). Pagant en ${DISCOUNT_DAYS} dies amb el 50 % es queden en un màxim de ${halves[0]}, ${halves[1]} i ${halves[2]}. La velocitat va per la taula de l'annex IV (de ${speedMin} a ${speedMax}), i l'alcohol o les drogues en els casos de l'article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Algunes resten punts: el mòbil a la mà, ${phonePoints}; el semàfor en vermell, ${redPoints}.`,
+      },
     ],
     en: [
       {
@@ -209,6 +232,14 @@ export function trafficFinesFaq(locale: TfLocale): { q: string; a: string }[] {
       {
         q: "How do I appeal a Spanish traffic fine?",
         a: `By filing alegaciones within ${DISCOUNT_DAYS} calendar days of the notification (art. 95.1), with the authority that fined you; if you do, you lose the discount. Against the decision you can file a recurso de reposición within one month (art. 96.2), which does not stop collection, or go to court (contencioso-administrativo) within two months.`,
+      },
+      {
+        q: "How long does a Spanish traffic fine take to arrive?",
+        a: `There is no fixed sending time. If you are not stopped (speed camera, red-light camera, parked car), the law allows notice later (art. 89.2), and Tráfico has until the offence is time-barred: ${PRESCRIPTION_MONTHS.leve} months from the day it happened if minor and ${PRESCRIPTION_MONTHS.grave} if serious or very serious (art. 112). Running a red light is serious (art. 76 k): ${M(grave)}, ${M(grave * (1 - DISCOUNT_RATE))} with 50% off, and ${redPoints} points. If it reaches you after that period and there was no earlier notification or step to trace you, the offence is time-barred and you can say so in your alegaciones.`,
+      },
+      {
+        q: "How much is a minor, serious or very serious traffic fine in Spain?",
+        a: `Minor offences, up to ${M(leve)}; serious, ${M(grave)}; very serious, ${M(muyGrave)} (Traffic Act, art. 80.1). Paid within ${DISCOUNT_DAYS} days with 50% off they come to ${halves[0]} at most, ${halves[1]} and ${halves[2]}. Speeding follows the annex IV table (${speedMin} to ${speedMax}), and alcohol or drugs in the cases of article 80.2 a), ${M(SPECIAL_FINE.alcoholDrugs)}. Some take points: a hand-held phone, ${phonePoints}; a red light, ${redPoints}.`,
       },
     ],
   }[locale];

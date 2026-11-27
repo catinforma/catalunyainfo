@@ -25,6 +25,7 @@ import {
   POINTS,
   PRESCRIPTION_MONTHS,
   QUOTE,
+  RED_LIGHT,
   RULES_AS_OF,
   RULES_UNTIL,
   SERVICES,
@@ -363,13 +364,13 @@ test("examples: every one from the engine, the TEU and DEV cases, the apremio ro
   }
 });
 
-test("FAQ: eight questions per language, the real queries, every figure from the rules", () => {
+test("FAQ: ten questions per language, the real queries, every figure from the rules", () => {
   const es = trafficFinesFaq("es");
   assert.deepEqual(es.map((f) => f.q).slice(0, 3), ["¿Cuántos días tengo para pagar una multa con el 50 % de descuento?", "¿Qué multas no tienen descuento del 50 %?", "¿Si pago la multa con descuento pierdo los puntos?"]);
   for (const l of TF_LOCALES) {
     const faq = trafficFinesFaq(l);
-    assert.equal(faq.length, 8, l);
-    assert.equal(new Set(faq.map((f) => f.q)).size, 8, l);
+    assert.equal(faq.length, 10, l);
+    assert.equal(new Set(faq.map((f) => f.q)).size, 10, l);
     const all = faq.map((f) => f.a).join(" ");
     for (const n of [money(BASE_FINE.grave, l), money(BASE_FINE.grave / 2, l), String(FULL_PAYMENT_DAYS), String(DISCOUNT_DAYS), String(POINTS.course)]) assert.ok(all.includes(n), `${l}: ${n}`);
     assert.doesNotMatch(all, /undefined|NaN/, l);
@@ -383,4 +384,23 @@ test("links: ITV page and fuel guides link the tool; next steps both ways", () =
   for (const l of ["es", "ca"] as const) assert.ok(driverGuides(l).some((g) => g.href === calcPath("traffic-fines", l)), `fuel ${l}`);
   assert.deepEqual(CALCULATOR_NEXT["traffic-fines"], ["itv", "working-days"]);
   assert.ok(CALCULATOR_NEXT.itv?.includes("traffic-fines"));
+});
+
+test("FAQ 27 Nov: how long a fine takes to arrive (red light) and the amounts, from the quoted articles", () => {
+  // Queries (GSC 28 d to 26 Nov): "cuanto tarda en llegar una multa por saltarse un semaforo" 1 at 22, "importe multas" 1 at 7, "sanciones trafico" 1 at 32, "sancions transit" 2 at 23.
+  assert.equal(RED_LIGHT.severity, "grave");
+  assert.match(QUOTE.redLight, /^k\) No respetar la luz roja de un semáforo\.$/);
+  assert.match(QUOTE.noticeCamera, /medios de captación y reproducción de imágenes/);
+  const red = ANNEX_II.find((r) => r.n === RED_LIGHT.annexRow)!;
+  assert.match(red.text, /semáforos con luz roja encendida/);
+  assert.equal(red.points, 4);
+  assert.match(QUOTE.amounts, /hasta 100 euros; las graves, con multa de 200 euros, y las muy graves, con multa de 500 euros/);
+  const q = { es: ["¿Cuánto tarda en llegar una multa de tráfico?", "¿Cuánto es una multa de tráfico leve, grave o muy grave?"], ca: ["Quant triga a arribar una multa de trànsit?", "Quant és una multa de trànsit lleu, greu o molt greu?"], en: ["How long does a Spanish traffic fine take to arrive?", "How much is a minor, serious or very serious traffic fine in Spain?"] } as const;
+  for (const l of TF_LOCALES) {
+    const faq = trafficFinesFaq(l);
+    const [arrive, amounts] = q[l].map((x) => faq.find((f) => f.q === x));
+    assert.ok(arrive && amounts, l);
+    for (const n of [String(PRESCRIPTION_MONTHS.leve), String(PRESCRIPTION_MONTHS.grave), money(BASE_FINE.grave, l), money(BASE_FINE.grave / 2, l), String(red.points), "76 k", "89.2", "112"]) assert.ok(arrive.a.includes(n), `${l} arrive: ${n}`);
+    for (const n of [money(BASE_FINE.leveMax, l), money(BASE_FINE.grave, l), money(BASE_FINE.muyGrave, l), money(BASE_FINE.leveMax / 2, l), money(BASE_FINE.muyGrave / 2, l), money(100, l), money(600, l), money(1_000, l), "80.1"]) assert.ok(amounts.a.includes(n), `${l} amounts: ${n}`);
+  }
 });

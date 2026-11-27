@@ -16,7 +16,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { HT_DATA_PATH, clientCommunity, communityOptions } from "@/lib/programmatic/home-purchase-tax/communities";
 import { EXAMPLE, bareDay, euros, lawEuros, pcEditions, pcPath, pct, wholeEuros, type PcLocale } from "@/lib/programmatic/purchase-costs/copy";
-import { exampleResults, feeTable, headline, pcFaq, pcMeta, type ExampleId } from "@/lib/programmatic/purchase-costs/page";
+import { deedCostTable, exampleResults, feeTable, headline, pcFaq, pcMeta, type ExampleId } from "@/lib/programmatic/purchase-costs/page";
 import {
   ARANCEL_REBATE,
   EXTRAS,
@@ -148,6 +148,7 @@ export function PurchaseCostsRoute({ locale }: { locale: PcLocale }) {
   const faq = pcFaq(locale);
   const examples = exampleResults();
   const rows = feeTable();
+  const deedRows = deedCostTable();
   const src = (s: { url: string; name: string }, art: string) => ({ url: s.url, label: `${s.name}, ${art}` });
 
   const lead = L(locale, {
@@ -167,9 +168,9 @@ export function PurchaseCostsRoute({ locale }: { locale: PcLocale }) {
   });
 
   const hd = L(locale, {
-    es: { who: "Quién paga cada gasto", notary: "Notaría: el arancel del Real Decreto 1426/1989", copies: "Copias y folios de la escritura", registry: "Registro de la Propiedad: el arancel del Real Decreto 1427/1989", owners: "Si compráis varias personas", vpo: "Vivienda protegida (VPO): las rebajas", table: "Notaría y Registro por precio de la vivienda", vat: "El IVA de la notaría y el Registro", mortgage: "Si firmas una hipoteca", free: "Gestoría y tasación: sin precio oficial", taxes: "Los impuestos de la compra", examples: "Ejemplos", faq: "Preguntas frecuentes", sources: "Fuentes oficiales", limits: "Qué no calcula" },
-    ca: { who: "Qui paga cada despesa", notary: "Notaria: l'aranzel del Reial decret 1426/1989", copies: "Còpies i folis de l'escriptura", registry: "Registre de la Propietat: l'aranzel del Reial decret 1427/1989", owners: "Si compreu diverses persones", vpo: "Habitatge protegit (HPO): les rebaixes", table: "Notaria i Registre per preu de l'habitatge", vat: "L'IVA de la notaria i el Registre", mortgage: "Si signes una hipoteca", free: "Gestoria i taxació: sense preu oficial", taxes: "Els impostos de la compra", examples: "Exemples", faq: "Preguntes freqüents", sources: "Fonts oficials", limits: "Què no calcula" },
-    en: { who: "Who pays each cost", notary: "Notary: the scale of Royal Decree 1426/1989", copies: "Copies and folios of the deed", registry: "Land Registry: the scale of Royal Decree 1427/1989", owners: "If several people buy", vpo: "Protected housing (VPO): the discounts", table: "Notary and Registry fees by price", vat: "VAT on the notary and Registry", mortgage: "If you sign a mortgage", free: "Gestoría and valuation: no official price", taxes: "The purchase taxes", examples: "Worked examples", faq: "Questions", sources: "Official sources", limits: "What it does not cover" },
+    es: { deedCost: "¿Cuánto cuesta escriturar una casa? Notaría y Registro con IVA", who: "Quién paga cada gasto", notary: "Notaría: el arancel del Real Decreto 1426/1989", copies: "Copias y folios de la escritura", registry: "Registro de la Propiedad: el arancel del Real Decreto 1427/1989", owners: "Si compráis varias personas", vpo: "Vivienda protegida (VPO): las rebajas", table: "Notaría y Registro por precio de la vivienda", vat: "El IVA de la notaría y el Registro", mortgage: "Si firmas una hipoteca", free: "Gestoría y tasación: sin precio oficial", taxes: "Los impuestos de la compra", examples: "Ejemplos", faq: "Preguntas frecuentes", sources: "Fuentes oficiales", limits: "Qué no calcula" },
+    ca: { deedCost: "Quant costa escripturar una casa? Notaria i Registre amb IVA", who: "Qui paga cada despesa", notary: "Notaria: l'aranzel del Reial decret 1426/1989", copies: "Còpies i folis de l'escriptura", registry: "Registre de la Propietat: l'aranzel del Reial decret 1427/1989", owners: "Si compreu diverses persones", vpo: "Habitatge protegit (HPO): les rebaixes", table: "Notaria i Registre per preu de l'habitatge", vat: "L'IVA de la notaria i el Registre", mortgage: "Si signes una hipoteca", free: "Gestoria i taxació: sense preu oficial", taxes: "Els impostos de la compra", examples: "Exemples", faq: "Preguntes freqüents", sources: "Fonts oficials", limits: "Què no calcula" },
+    en: { deedCost: "How much does signing the deeds cost? Notary and Registry with VAT", who: "Who pays each cost", notary: "Notary: the scale of Royal Decree 1426/1989", copies: "Copies and folios of the deed", registry: "Land Registry: the scale of Royal Decree 1427/1989", owners: "If several people buy", vpo: "Protected housing (VPO): the discounts", table: "Notary and Registry fees by price", vat: "VAT on the notary and Registry", mortgage: "If you sign a mortgage", free: "Gestoría and valuation: no official price", taxes: "The purchase taxes", examples: "Worked examples", faq: "Questions", sources: "Official sources", limits: "What it does not cover" },
   });
 
   const whoCols = L(locale, { es: ["Gasto", "Quién paga", "Norma"], ca: ["Despesa", "Qui paga", "Norma"], en: ["Cost", "Who pays", "Rule"] });
@@ -208,6 +209,11 @@ export function PurchaseCostsRoute({ locale }: { locale: PcLocale }) {
     es: ["Precio", "Notaría: escala", "Notaría: matriz con la rebaja del 5 %", "Registro: escala", "Registro: inscripción con las dos rebajas"],
     ca: ["Preu", "Notaria: escala", "Notaria: matriu amb la rebaixa del 5 %", "Registre: escala", "Registre: inscripció amb les dues rebaixes"],
     en: ["Price", "Notary: scale", "Notary: deed after the 5% rebate", "Registry: scale", "Registry: registration after both rebates"],
+  });
+  const deedCols = L(locale, {
+    es: ["Precio", "Notaría (sin IVA)", "Registro (sin IVA)", "IVA 21 %", "Total con IVA", "Paga el vendedor: la matriz", "Pagas tú: copias y Registro"],
+    ca: ["Preu", "Notaria (sense IVA)", "Registre (sense IVA)", "IVA 21 %", "Total amb IVA", "Paga el venedor: la matriu", "Pagues tu: còpies i Registre"],
+    en: ["Price", "Notary (before VAT)", "Registry (before VAT)", "VAT 21%", "Total with VAT", "Seller pays: the deed", "You pay: copies and Registry"],
   });
   const exCols = L(locale, {
     es: ["Caso", "Notaría", "Registro", "IVA de tus facturas", "Impuestos", "Total que pagas", "Paga el vendedor"],
@@ -277,6 +283,43 @@ export function PurchaseCostsRoute({ locale }: { locale: PcLocale }) {
               <CalculatorNextStep current="home-purchase-costs" locale={locale} />
 
               <AdSlot kind="top" locale={locale} path={crumbPath(crumbs)} />
+              {/* 27 Nov 2026: "cuánto cuesta escriturar una casa" and the notary-price queries; every cell is one engine run (page.ts deedCostTable). */}
+              <h2 id="cuanto-cuesta-escriturar">{hd.deedCost}</h2>
+              <p>
+                {L(locale, {
+                  es: `Notaría y Registro con su IVA, para una persona que compra una vivienda libre de segunda mano, con una escritura de ${EXAMPLE.folios} folios, la primera copia y una copia simple. Los impuestos de la compra van aparte:`,
+                  ca: `Notaria i Registre amb el seu IVA, per a una persona que compra un habitatge lliure de segona mà, amb una escriptura de ${EXAMPLE.folios} folis, la primera còpia i una còpia simple. Els impostos de la compra van a part:`,
+                  en: `Notary and Land Registry with their VAT, for one person buying a second-hand free-market home, with a ${EXAMPLE.folios}-folio deed, the first copy and one simple copy. The purchase taxes come on top:`,
+                })}
+              </p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table ci-stack-table">
+                  <thead>
+                    <tr>
+                      {deedCols.map((c) => (
+                        <th key={c} scope="col">
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {deedRows.map((row) => (
+                      <tr key={row.price} id={`escriturar-${row.price}`}>
+                        <th scope="row">{wholeEuros(row.price, locale)}</th>
+                        <td data-label={deedCols[1]}>{E(row.notary)}</td>
+                        <td data-label={deedCols[2]}>{E(row.registry)}</td>
+                        <td data-label={deedCols[3]}>{E(row.vat)}</td>
+                        <td data-label={deedCols[4]}>
+                          <strong>{E(row.total)}</strong>
+                        </td>
+                        <td data-label={deedCols[5]}>{E(row.seller)}</td>
+                        <td data-label={deedCols[6]}>{E(row.buyer)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <h2 id="quien-paga">{hd.who}</h2>
               <p>
                 {L(locale, {

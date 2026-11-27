@@ -73,6 +73,58 @@ export function feeTable(): FeeRow[] {
   });
 }
 
+/**
+ * "¿Cuánto cuesta escriturar una casa?" (27 Nov 2026): the whole notary and
+ * Registry bill with its IVA, by price, each row one engine run on the page's
+ * default deed (second-hand free-market home, one buyer, 20 folios, first copy
+ * and one simple copy). Queries (GSC 28 d to 26 Nov): "cuanto cuesta escriturar
+ * una casa" 4 at 29.5, "precio notario escritura vivienda" 4 at 53.5,
+ * "aranceles notariales compraventa vivienda" 5 at 49.2, "precio escritura
+ * matriz compraventa" 3 at 25, "honorarios notario escritura compraventa" 2 at
+ * 22, "coste notario escritura compraventa" 1 at 18. The scales were re-read in
+ * the BOE on 27 Nov 2026 (RD 1426/1989 and RD 1427/1989, "Última actualización
+ * publicada el 17/11/2011": «90,151816 euros», «4,5 por mil», «rebaja del 5 por
+ * 100»; «24,040484 euros», «1,75 por 1.000», «2.181,673939 euros»,
+ * «6,010121 euros»); the existing RULES_UNTIL guard covers them.
+ */
+export const DEED_PRICES = [100_000, 150_000, 200_000, 250_000, 300_000, 400_000, 500_000] as const;
+
+export interface DeedCostRow {
+  price: number;
+  /** Deed (matriz), first copy and simple copies, before IVA. */
+  notary: number;
+  /** Of which the deed itself (matriz), the seller's unless agreed (Código Civil art. 1455). */
+  deed: number;
+  /** Registration and presentation entry, before IVA. */
+  registry: number;
+  /** IVA on both bills, buyer's and seller's shares. */
+  vat: number;
+  /** Everything with IVA. */
+  total: number;
+  /** The buyer's share with IVA (copies + Registry). */
+  buyer: number;
+  /** The seller's share with IVA (the matriz). */
+  seller: number;
+}
+
+export function deedCostTable(): DeedCostRow[] {
+  return DEED_PRICES.map((price) => {
+    const r = calculate({ ...EXAMPLE, price }, COMMUNITIES);
+    if (r.status !== "ok" || !r.fees.vat) throw new Error(`deed cost ${price}: ${r.status === "ok" ? "no IVA" : r.reason}`);
+    const { notary, registry, vat } = r.fees;
+    return {
+      price,
+      notary: notary.total,
+      deed: notary.deed,
+      registry: registry.total,
+      vat: cents(vat.buyer + vat.seller),
+      total: cents(r.buyerFees + r.sellerFees),
+      buyer: r.buyerFees,
+      seller: r.sellerFees,
+    };
+  });
+}
+
 export type ExampleId = "resale" | "new" | "couple" | "vpo-resale" | "vpo-small";
 
 /** Worked examples, each one engine run (the tests pin them). */
@@ -113,7 +165,15 @@ export function pcFaq(locale: PcLocale): Faq[] {
   const couple = exampleResults().find((x) => x.id === "couple")!.result.fees.registry;
   const single300 = calculate({ ...EXAMPLE, price: 300_000 }, COMMUNITIES);
   const single = single300.status === "ok" ? single300.fees.registry : null;
-  return {
+  const deeds = deedCostTable();
+  const d = (price: number) => deeds.find((x) => x.price === price)!;
+  const [d150, d250, d400] = [d(150_000), d(250_000), d(400_000)];
+  const deedQ: Faq = {
+    es: { q: "¿Cuánto cuesta escriturar una casa?", a: `Notaría y Registro juntos, con el 21 % de IVA, rondan ${E(d150.total)} para una vivienda de 150.000 €, ${E(d250.total)} para una de 250.000 € y ${E(d400.total)} para una de 400.000 €, con una escritura de 20 folios, la primera copia y una copia simple (aranceles de los Reales Decretos 1426/1989 y 1427/1989). De eso, la escritura matriz (${E(d250.seller)} con IVA en la de 250.000 €) la paga el vendedor salvo pacto, y las copias y el Registro (${E(d250.buyer)}), el comprador. Aparte van los impuestos de la compra, que son lo caro.` },
+    ca: { q: "Quant costa escripturar una casa?", a: `Notaria i Registre junts, amb el 21 % d'IVA, volten els ${E(d150.total)} per a un habitatge de 150.000 €, ${E(d250.total)} per a un de 250.000 € i ${E(d400.total)} per a un de 400.000 €, amb una escriptura de 20 folis, la primera còpia i una còpia simple (aranzels dels reials decrets 1426/1989 i 1427/1989). D'això, l'escriptura matriu (${E(d250.seller)} amb IVA en la de 250.000 €) la paga el venedor llevat de pacte, i les còpies i el Registre (${E(d250.buyer)}), el comprador. A part hi ha els impostos de la compra, que són el més car.` },
+    en: { q: "How much does it cost to sign the deeds on a house in Spain?", a: `Notary and Land Registry together, with 21% VAT, come to about ${E(d150.total)} for a €150,000 home, ${E(d250.total)} for a €250,000 one and ${E(d400.total)} for a €400,000 one, with a 20-folio deed, the first copy and one simple copy (scales of Royal Decrees 1426/1989 and 1427/1989). Of that, the deed itself (${E(d250.seller)} with VAT on the €250,000 home) is the seller's unless agreed, and the copies and the Registry (${E(d250.buyer)}) the buyer's. The purchase taxes come on top, and they are the big item.` },
+  }[locale];
+  const rest: Faq[] = {
     es: [
       { q: "¿Cuánto cuesta la notaría al comprar un piso?", a: `Lo fija el arancel notarial (Real Decreto 1426/1989): una escala por tramos del precio, con una rebaja obligatoria del 5 %, más los folios de la matriz desde el quinto y las copias por folio. Para una vivienda de 250.000 € la escala da ${E(n.scale)}, ${E(n.deedScale)} tras la rebaja; con una escritura de 20 folios, una copia autorizada y una simple, la notaría suma ${E(n.total)} más el 21 % de IVA. Los folios cambian en cada escritura.` },
       { q: "¿Quién paga la notaría, el comprador o el vendedor?", a: "El Código Civil (art. 1455) pone la escritura matriz a cargo del vendedor y la primera copia y lo posterior a cargo del comprador, salvo que pactéis otra cosa en el contrato. Los impuestos de la compra los paga siempre el comprador, diga lo que diga el contrato (texto refundido del ITP, art. 8)." },
@@ -145,4 +205,5 @@ export function pcFaq(locale: PcLocale): Faq[] {
       { q: "Can I challenge the notary's or registrar's invoice?", a: "Yes. They must give you a signed invoice (minuta) with each concept, the base and the scale item applied, and you can challenge it within 15 working days of receiving it, with the notary or registrar or straight to their professional body (general rules ten of the notaries' scale and six of the registrars')." },
     ],
   }[locale];
+  return [deedQ, ...rest];
 }

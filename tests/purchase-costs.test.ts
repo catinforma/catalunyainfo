@@ -8,9 +8,9 @@ import { calcEditions, calcPath } from "../src/lib/programmatic/calculators/path
 import { COMMUNITIES } from "../src/lib/programmatic/home-purchase-tax/communities.ts";
 import { calculate as taxCalculate } from "../src/lib/programmatic/home-purchase-tax/engine.ts";
 import * as HT_RULES from "../src/lib/programmatic/home-purchase-tax/rules.ts";
-import { CALC_COPY, EXAMPLE, PC_LOCALES, lawEuros, pcEditions, readHash, taxDetailHref, writeHash } from "../src/lib/programmatic/purchase-costs/copy.ts";
+import { CALC_COPY, EXAMPLE, PC_LOCALES, euros, lawEuros, pcEditions, readHash, taxDetailHref, writeHash } from "../src/lib/programmatic/purchase-costs/copy.ts";
 import { calculate, feeRegime, scaleFee, taxInput, type PcInput } from "../src/lib/programmatic/purchase-costs/engine.ts";
-import { EXAMPLES, exampleResults, feeTable, pcFaq, pcMeta, pcSitemapEntries } from "../src/lib/programmatic/purchase-costs/page.ts";
+import { DEED_PRICES, EXAMPLES, deedCostTable, exampleResults, feeTable, pcFaq, pcMeta, pcSitemapEntries } from "../src/lib/programmatic/purchase-costs/page.ts";
 import {
   ARANCEL_REBATE,
   EXTRAS,
@@ -272,7 +272,7 @@ test("page: titles and descriptions fit, FAQ answers carry the engine's figures,
     assert.ok(m.description.length >= 70 && m.description.length <= 165, `${l} description ${m.description.length}`);
     assert.ok(m.h1.length > 20 && m.breadcrumb.length > 5);
     const faq = pcFaq(l);
-    assert.equal(faq.length, 8, l);
+    assert.equal(faq.length, 9, l);
     const all = faq.map((f) => f.a).join(" ");
     for (const figure of l === "en" ? ["€383.44", "€364.26", "€519.02", "€201.21", "€181.59", "€308.83", "€195.13"] : ["383,44 €", "364,26 €", "519,02 €", "201,21 €", "181,59 €", "308,83 €", "195,13 €"]) assert.ok(all.includes(figure), `${l}: ${figure}`);
   }
@@ -308,4 +308,26 @@ test("wiring: registry slugs, hub card next to the purchase taxes, next steps, l
   const engine = read("src/lib/programmatic/purchase-costs/engine.ts");
   assert.match(engine, /from "@\/lib\/programmatic\/home-purchase-tax\/engine"/);
   assert.doesNotMatch(engine, /kind: "flat"|brackets:/);
+});
+
+test('27 Nov: "¿Cuánto cuesta escriturar una casa?" table and FAQ, each row one engine run (notary + Registry + IVA)', () => {
+  const rows = deedCostTable();
+  assert.deepEqual(rows.map((r) => r.price), [...DEED_PRICES]);
+  // 250.000 €: the default example's figures (notary 519,02 = deed 460,42 + copies; Registry 181,59 + 6,01), IVA 21 % on both bills.
+  assert.deepEqual(rows.find((r) => r.price === 250_000), { price: 250_000, notary: 519.02, deed: 460.42, registry: 187.6, vat: 148.39, total: 855.01, buyer: 297.9, seller: 557.11 });
+  for (const r of rows) {
+    assert.ok(Math.abs(r.total - (r.notary + r.registry + r.vat)) < 0.011, `${r.price} total`);
+    assert.ok(Math.abs(r.total - (r.buyer + r.seller)) < 0.011, `${r.price} split`);
+    assert.ok(Math.abs(r.seller - r.deed * 1.21) < 0.011, `${r.price} seller = matriz + IVA`);
+  }
+  for (let i = 1; i < rows.length; i++) assert.ok(rows[i]!.total > rows[i - 1]!.total);
+  const q = { es: "¿Cuánto cuesta escriturar una casa?", ca: "Quant costa escripturar una casa?", en: "How much does it cost to sign the deeds on a house in Spain?" } as const;
+  for (const l of PC_LOCALES) {
+    const f = pcFaq(l)[0]!;
+    assert.equal(f.q, q[l]);
+    for (const price of [150_000, 250_000, 400_000]) assert.ok(f.a.includes(euros(rows.find((r) => r.price === price)!.total, l)), `${l} ${price}`);
+    assert.ok(f.a.includes(euros(557.11, l)) && f.a.includes(euros(297.9, l)), l);
+  }
+  const page = readFileSync("src/components/programmatic/purchase-costs/PurchaseCostsPage.tsx", "utf8");
+  assert.ok(page.indexOf('id="cuanto-cuesta-escriturar"') > 0 && page.indexOf('id="cuanto-cuesta-escriturar"') < page.indexOf('id="quien-paga"'), "the deed-cost table comes before who pays");
 });

@@ -10,6 +10,7 @@ import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { GIFT_AGENCY, GIFT_REGION_IN, giftCite, giftEditions, giftLawName, giftPath, type GiftLocale } from "@/lib/programmatic/gift-tax/copy";
 import { GIFT_RULES, giftDeadline, giftDefaultInput, giftExample, giftExampleResults, giftFaq, giftMeta } from "@/lib/programmatic/gift-tax/page";
 import { compareCopy, compareRows } from "@/lib/programmatic/gift-tax/compare";
+import { madridRelationCopy, madridRelationRows } from "@/lib/programmatic/gift-tax/madrid-by-relation";
 import { GIFT_PROFILES, type GiftQuoteRef } from "@/lib/programmatic/gift-tax/profiles";
 import { RULES_AS_OF, RULES_UNTIL, type GiftSource } from "@/lib/programmatic/gift-tax/regions/state";
 import type { GiftRegionId } from "@/lib/programmatic/gift-tax/regions/types";
@@ -109,7 +110,9 @@ export function GiftTaxBody({ region, locale, crumbs, nextStep, more }: { region
   const meta = giftMeta(region, locale);
   // 26 Nov 2026: the Valencia page compares the same gifts with Catalonia (gift-tax/compare.ts); its two questions join the FAQ.
   const cmp = region === "valencia" ? compareCopy(locale) : null;
-  const faq = [...giftFaq(region, locale), ...(cmp ? cmp.faq : [])];
+  // 27 Nov 2026: the Madrid page answers "by relationship" (son / brother / friend) in a table (gift-tax/madrid-by-relation.ts); its two questions join the FAQ.
+  const byRel = region === "madrid" ? madridRelationCopy(locale) : null;
+  const faq = [...giftFaq(region, locale), ...(cmp ? cmp.faq : []), ...(byRel ? byRel.faq : [])];
   const examples = giftExampleResults(region);
   const M = (n: number) => money(n, locale);
   const P = (n: number) => percent(n, locale);
@@ -484,6 +487,14 @@ export function GiftTaxBody({ region, locale, crumbs, nextStep, more }: { region
                   <h2 id="valencia-o-cataluna">{cmp.title}</h2>
                   <p>{cmp.intro}</p>
                   <Table cols={cmp.cols} rows={compareRows().map((r) => [r.label[locale], M(r.valencia), M(r.catalonia)])} />
+                </>
+              ) : null}
+
+              {byRel ? (
+                <>
+                  <h2 id="segun-parentesco">{byRel.title}</h2>
+                  <p>{byRel.intro}</p>
+                  <Table cols={byRel.cols} rows={madridRelationRows().map((r) => [M(r.amount), M(r.child.toPay), M(r.sibling.toPay), M(r.friend.toPay)])} />
                 </>
               ) : null}
 

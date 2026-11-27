@@ -137,6 +137,16 @@ export const SPECIAL_FINE = { alcoholDrugs: 1_000, jammer: 6_000, businessMin: 3
 /** Art. 81: up to +30 % for the seriousness, record, danger and proportionality. */
 export const GRADUATION_MAX = 0.3;
 
+/**
+ * Running a red light (27 Nov 2026, the FAQ "¿Cuánto tarda en llegar una
+ * multa…?", query "cuanto tarda en llegar una multa por saltarse un
+ * semaforo"): a grave under art. 76 k) («No respetar la luz roja de un
+ * semáforo.»), so 200 € (art. 80.1) and six months to prescribe (art. 112.1);
+ * the points are annex II no. 10. Read 27 Nov 2026 in the same consolidated
+ * text (curl + grep, "Última actualización publicada el 26/06/2026").
+ */
+export const RED_LIGHT = { article: "76 k", severity: "grave", annexRow: "10" } as const;
+
 /* -------------------------------------------------------------------------- */
 /* Fines without the 50 % (art. 93.2 as worded by Ley 18/2021)                 */
 /* -------------------------------------------------------------------------- */
@@ -447,6 +457,11 @@ export const QUOTE = {
   /** LSV art. 80.1. */
   amounts:
     "Las infracciones leves serán sancionadas con multa de hasta 100 euros; las graves, con multa de 200 euros, y las muy graves, con multa de 500 euros. No obstante, las infracciones consistentes en no respetar los límites de velocidad se sancionarán en la cuantía prevista en el anexo IV.",
+  /** LSV art. 76 k), read 27 Nov 2026. */
+  redLight: "k) No respetar la luz roja de un semáforo.",
+  /** LSV art. 89.1 and 89.2 c), read 27 Nov 2026: a camera fine is notified later. */
+  noticeOnTheSpot: "Las denuncias se notificarán en el acto al denunciado.",
+  noticeCamera: "Que se haya tenido conocimiento de la infracción a través de medios de captación y reproducción de imágenes que permitan la identificación del vehículo.",
   /** LSV art. 80.2 b). */
   noIdentifyFine: "La multa por la infracción prevista en el artículo 77. j) será el doble de la prevista para la infracción originaria que la motivó, si es infracción leve, y el triple, si es infracción grave o muy grave.",
   /** LSV art. 77 h) and j). */
