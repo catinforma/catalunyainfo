@@ -15951,3 +15951,19 @@ Only facts the page already states with sources (JEC Acuerdo 418/2026; Correos "
 **Review 2026-12-03:** `snapshot.py page vot-per-correu 7`, `page voto-por-correo 7`, `page postal-vote-spain 7`.
 
 **Outcome:** _pending_
+
+## 2026-11-27 (batch 9B, ci-enginyeria) — Seasonal "coming up" link on the static templates rebuilt on its four switch nights (ca/es/en) (review 2026-12-10)
+
+**Why.** Batch 8U's seasonal link (`continue-reading.ts` SEASON, `continue-templates.ts`) sits on templates that are `revalidate = false` (date pages, Christmas fair towns, English holiday towns, most calculators), so it kept the link it was built with until the next deploy, and went stale at each window switch. The fair town and English town pages also dated it by the fairs' last read (26 Nov), so it stayed on the bridge-window pick until a data re-read.
+
+**Changed.** New `src/lib/engagement/seasonal-refresh.ts`: on 9 Dec, 23 Dec, 1 Jan and 7 Jan (the day after each SEASON window; Madrid day of the 00:05 run) the nightly cron (`api/cron/publish-scheduled`, response field `seasonalPagesRefreshed`) revalidates and purges by URL 351 pages: 102 date pages, 117 calculators, 103 fair town pages, 29 English holiday towns. Empty every other night. The ca/es holiday town pages are left to `holidayRefreshPaths` (full refresh 9 Dec, 26 Dec, 2 Jan, 7 Jan: lag of 3 nights after 23 Dec and 1 night after 1 Jan, accepted so as not to add two more purge-everything nights). The fair `TownPage` and `EnglishTownPage` now give the seasonal link the Madrid day (their one clock; everything else stays dated by the data read). Same link today as before (27 Nov and 26 Nov are in the same window). No title, description, H1 or lead touched.
+
+**Baseline.** None needed (navigation; `related_content_click` with `link_context: "seasonal_next"` in GA4 from 8U).
+
+**Tests.** New `tests/seasonal-refresh.test.ts` (switch nights in Europe/Madrid, page list, empty on every other night of 2026-27, the link of every listed page changes only on a switch night from 28 Nov to 20 Jan, cron wiring). Clock-free assertions in `christmas-fairs`, `holiday-english` and `town-shops-line` tests now allow exactly that one call.
+
+**Go-live.** Deploy before 9 Dec. Nothing to install on the server (same 23:05 UTC timer). Check `journalctl -u catalunyainfo-cron` on 9 Dec: `seasonalPagesRefreshed: 351`.
+
+**Review 2026-12-10:** the cron response of 9 Dec; spot-check that a Catalan date page shows the Christmas lottery guide as "Per a aquests dies".
+
+**Outcome:** _pending_

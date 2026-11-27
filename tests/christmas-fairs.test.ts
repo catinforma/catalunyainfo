@@ -1005,7 +1005,14 @@ test("deterministic: no clock in the server code of the family", () => {
     "src/components/programmatic/christmas-fairs/parts.tsx",
     "src/components/programmatic/christmas-fairs/routes.tsx",
   ]) {
-    const source = readFileSync(join(ROOT, file), "utf8");
+    let source = readFileSync(join(ROOT, file), "utf8");
+    if (file.endsWith("TownPage.tsx")) {
+      // The one exception (27 Nov 2026, batch 9B): the seasonal "coming up" link reads the Madrid day, and the nightly
+      // cron rebuilds the town pages on the nights it changes (lib/engagement/seasonal-refresh.ts, tests/seasonal-refresh.test.ts).
+      const seasonal = /const onward = townFamilyOnward\(\{\s*self: townPath\(locale, town\.slug\),\s*locale,\s*today: todayInCatalonia\(\),/;
+      assert.match(source, seasonal, "the seasonal link's clock");
+      source = source.replace(seasonal, "");
+    }
     assert.ok(!/new Date\(\)|Date\.now\(\)|todayInCatalonia\(\)/.test(source), file);
   }
   // The browser component reads the clock only after mount.

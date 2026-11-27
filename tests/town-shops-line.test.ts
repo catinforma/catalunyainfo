@@ -118,7 +118,10 @@ test("the page prints the line under the H1, before the table, with no clock of 
   assert.ok(ca.indexOf("<TownShopsLine") < ca.indexOf("<HolidayStatus"));
   const en = read("src/components/programmatic/holidays/EnglishTownPage.tsx");
   assert.ok(en.indexOf("<TownShopsLine") < en.indexOf('<h2 id="holidays-2026"'), "en: before the table");
-  assert.ok(!en.includes("todayInCatalonia"), "the English page itself stays clock-free");
+  // The page's one clock is the seasonal link's (27 Nov 2026, batch 9B; rebuilt on its switch nights by
+  // lib/engagement/seasonal-refresh.ts); the shops line and everything else stay clock-free.
+  assert.equal(en.match(/todayInCatalonia\(\)/g)?.length, 1, "one clock only");
+  assert.match(en, /guides,\s*today: todayInCatalonia\(\),\s*\}\);/, "the English page's only clock is the seasonal link's");
   // Same anchors as the table's section.
   const section = read("src/components/programmatic/holidays/ChristmasShops.tsx");
   assert.ok(section.includes('id="botigues-nadal"') && section.includes('id="christmas-shops"'));

@@ -6,6 +6,7 @@ import { timingSafeEqual } from "node:crypto";
 import { getDb, schema } from "@/lib/db/client";
 import { pruneExpiredSessions } from "@/lib/auth/session";
 import { REVALIDATE_NIGHTLY_PATTERN } from "@/lib/content/day-dependent";
+import { seasonalRefreshPaths } from "@/lib/engagement/seasonal-refresh";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
@@ -59,6 +60,11 @@ export async function GET(request: Request) {
   // Madrid day: rebuilt every night, ahead of the first visitors of the day.
   const marketPaths = weeklyMarketsRefreshPaths();
   for (const path of marketPaths) revalidate(path);
+  // The seasonal "coming up" link of the static templates (date pages,
+  // calculators, Christmas fair towns, English holiday towns) changes on four
+  // nights only (9 Dec, 23 Dec, 1 Jan, 7 Jan): rebuilt on those, ~350 URLs.
+  const seasonalPaths = seasonalRefreshPaths(todayInCatalonia());
+  for (const path of seasonalPaths) revalidate(path);
 
   const db = getDb();
   if (!db) {
@@ -121,6 +127,7 @@ export async function GET(request: Request) {
     weekendPagesRefreshed: weekendPaths.length,
     holidayPagesRefreshed: holidayPaths.length,
     weeklyMarketPagesRefreshed: marketPaths.length,
+    seasonalPagesRefreshed: seasonalPaths.length,
     flaggedForUpdate: stale.length,
     sessionsPruned,
     cdnPurge,

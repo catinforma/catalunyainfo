@@ -328,7 +328,16 @@ test("deterministic: the English copy depends on the snapshot only, never on the
     "src/components/programmatic/holidays/EnglishTownPage.tsx",
     "src/components/programmatic/holidays/EnglishHubPage.tsx",
   ]) {
-    const source = readFileSync(join(ROOT, file), "utf8");
+    let source = readFileSync(join(ROOT, file), "utf8");
+    if (file.endsWith("EnglishTownPage.tsx")) {
+      // The one exception (27 Nov 2026, batch 9B): the seasonal "coming up" link reads the Madrid day, and the nightly
+      // cron rebuilds these pages on the nights it changes (lib/engagement/seasonal-refresh.ts, tests/seasonal-refresh.test.ts).
+      const imported = /import \{ todayInCatalonia \} from "@\/lib\/content\/holidays\/calendar";\n/;
+      const seasonal = /guides,\s*today: todayInCatalonia\(\),\s*\}\);/;
+      assert.match(source, imported);
+      assert.match(source, seasonal, "the seasonal link's clock");
+      source = source.replace(imported, "").replace(seasonal, "");
+    }
     assert.doesNotMatch(source, /new Date\(\)|Date\.now\(|todayInCatalonia/, file);
   }
   // "Is today a holiday here?" is the existing client component, which reads the date after mount.

@@ -14,6 +14,7 @@ import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { townOnward } from "@/lib/engagement/continue-templates";
 import { townNextStep } from "@/lib/engagement/next-step-towns";
 import { townHub } from "@/lib/engagement/town-hub";
@@ -96,14 +97,16 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
     "school",
   ];
   // The seasonal link at the foot (lib/engagement/continue-templates.ts), which never repeats a link of the next-step box,
-  // the town hub or the guides list. Clock-free like the rest of the page: dated by the day the fairs were last read.
+  // the town hub or the guides list. The page's one clock (27 Nov 2026, batch 9B): the link is for the days ahead, so it
+  // reads the Madrid day, and the nightly cron rebuilds this page on the nights the link changes
+  // (lib/engagement/seasonal-refresh.ts). Everything else stays dated by the day the fairs were last read.
   const onward = townOnward({
     slug: m.slug,
     locale: "en",
     step: townNextStep(m.slug, name, "en", crumbPath(englishTownCrumbs(m))),
     hub: townHub(m.slug, "en", "holidays", familyLastChecked()),
     guides,
-    today: familyLastChecked(),
+    today: todayInCatalonia(),
   });
 
   return (
