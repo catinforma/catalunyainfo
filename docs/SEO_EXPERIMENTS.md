@@ -16169,3 +16169,8 @@ Each heading is an FAQPage item with the printed text (`faq-schema-mirrors-page`
 **Review 2026-12-25:** the per-page lines above with the same script cut (page regex `/(dia|day)/[^/]*-2027/`, 28 d); success = "pasqua granada 2027" moves from 7.0 towards 5 with clicks on `/ca/festius/dia/17-maig-2027/`, the "what day is"/"day" queries get clicks on the EN pages, and the family's CTR rises at the same or better position.
 
 **Outcome:** _pending_
+
+## 2026-11-27 — Pensions 2027 calculator: INE flash CPI for November filled (factual update)
+- URLs: /es/calculadoras/subida-pensiones-2027/, /ca/calculadores/pujada-pensions-2027/, /en/calculators/spain-pension-increase-2027/
+- Change: `NOVEMBER_FLASH` = 4.1 % (INE indicador adelantado del IPC, noviembre 2026, published 27 Nov 09:00; read on www.ine.es home page: «El indicador adelantado del IPC sitúa su variación anual en el 4,1% en noviembre, ocho décimas menos que la registrada en octubre»). The engine now averages 11 final months + the flash; title, lead, table, how-to, examples and FAQ switch to the "flash" state by design (planned state switch, not an experiment).
+- Baseline: see the 26 Nov pensions entries (GSC 28 d). Review 2026-12-15 (final CPI for November; replace flash state) and 2026-12-27 (GSC).

@@ -53,8 +53,8 @@
    "files": 7
   },
   "christmas-fairs": {
-   "date": "2026-11-27T03:41:34.593Z",
-   "fingerprint": "v1:d45a4db067858996599331405c1a9432",
+   "date": "2026-11-27T04:32:35.000Z",
+   "fingerprint": "v1:8bdb4c147d4bc1ab11144d647657bcdb",
    "files": 26
   },
   "elections": {
@@ -93,9 +93,9 @@
    "files": 6
   },
   "gift-tax": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:6ff537cbb95d1f8f0ac51b445f216e42",
-   "files": 30
+   "date": "2026-11-27T06:21:47.000Z",
+   "fingerprint": "v1:720dd7229b301af771f81d2232dd94d4",
+   "files": 31
   },
   "gordo": {
    "date": "2026-11-27T02:04:31.000Z",
@@ -108,8 +108,8 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-27T03:41:34.593Z",
-   "fingerprint": "v1:e7a4c5a2adc58980cb922802137d2f5b",
+   "date": "2026-11-27T06:58:45.000Z",
+   "fingerprint": "v1:364781cb9b84b5c67c952b13a1637392",
    "files": 54
   },
   "holidays-report": {
@@ -198,8 +198,8 @@
    "files": 9
   },
   "pensions-2027": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:5e4c3f0f8f6f5d7cacc4f527db4cf3e6",
+   "date": "2026-11-27T08:08:59.200Z",
+   "fingerprint": "v1:04e594a0212dbfe9ab19e34f435752f1",
    "files": 12
   },
   "plusvalia": {
@@ -213,8 +213,8 @@
    "files": 13
   },
   "purchase-costs": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:5586f0ed55719bdaa2d6837bc909d7bd",
+   "date": "2026-11-27T06:21:47.000Z",
+   "fingerprint": "v1:0d78c0b5d26e6e865bef866fea1997e3",
    "files": 9
   },
   "pvpc": {
@@ -258,19 +258,19 @@
    "files": 12
   },
   "spain-2027": {
-   "date": "2026-11-27T01:22:30.000Z",
-   "fingerprint": "v1:dbac0203566c36d10b79943463f92faa",
-   "files": 30
+   "date": "2026-11-27T06:46:40.000Z",
+   "fingerprint": "v1:98d0c741505985cdd481cdf903aa4f42",
+   "files": 32
   },
   "spain-2027-days": {
-   "date": "2026-11-27T01:22:30.000Z",
-   "fingerprint": "v1:5c89e49b56d3aaff10639377fe792a31",
-   "files": 22
+   "date": "2026-11-27T06:46:40.000Z",
+   "fingerprint": "v1:1c75a3bb34c645d26ebfd7a96df8b3a1",
+   "files": 24
   },
   "spain-2027-editions": {
-   "date": "2026-11-27T01:22:30.000Z",
-   "fingerprint": "v1:a926d94bdeeb4e0c5a08d58bb6782b60",
-   "files": 38
+   "date": "2026-11-27T06:46:40.000Z",
+   "fingerprint": "v1:54b366beadb6c2eba77321f301bb6305",
+   "files": 40
   },
   "today": {
    "date": "2026-11-27T00:28:06.000Z",
@@ -278,8 +278,8 @@
    "files": 12
   },
   "traffic-fines": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:e779d0cb90400e54632cdf8d3af4db94",
+   "date": "2026-11-27T07:03:57.000Z",
+   "fingerprint": "v1:0640053b0fdeafbd378a7e6a4bcaa164",
    "files": 10
   },
   "treasury-bills": {

@@ -76,7 +76,16 @@ export interface FlashFigure {
  * title, lead, table, how-to, examples and FAQ of the three editions switch
  * to "flash". Never type a forecast here. Then run tests/pensions-2027.test.ts.
  */
-export const NOVEMBER_FLASH: FlashFigure | null = null;
+// Filled 27 Nov 2026 09:15 (head). Read on www.ine.es (home page, "27 noviembre 2026", curl + grep):
+// «El indicador adelantado del IPC sitúa su variación anual en el 4,1% en noviembre, ocho décimas menos
+// que la registrada en octubre.» The headline links the CPI page below (the press-release pages answered
+// 503 at 09:07-09:15 under load).
+export const NOVEMBER_FLASH: FlashFigure | null = {
+  month: "2026-11",
+  value: 4.1,
+  published: "2026-11-27",
+  url: "https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176802&menu=ultiDatos&idp=1254735976607",
+};
 
 export interface OfficialMinimum {
   id: MinimumId;
