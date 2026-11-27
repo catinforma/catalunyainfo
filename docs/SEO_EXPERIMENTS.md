@@ -15480,3 +15480,32 @@ Not changed, and why: how-to-vote (already answers "can foreigners vote", EU mun
 **Files.** `scripts/ads-cls-lab.mjs` (WARM, OVERLAYS, adtrafficquality in the block list). No page code, ad slot, AdSense loader or consent banner changed.
 
 **Outcome:** _pending owner decision_
+## 2026-11-27 (night) — Batch 8G, weather guide (ci-edicio): answer-first month sections, AEMET day counts, FAQs in the searchers' words (body/FAQ only; ca/es/en; no title, meta, H1, lead or month H3 touched) (review 2026-12-03 and 2026-12-23)
+
+**URLs.** `/en/guides/barcelona-weather-by-month/`, `/es/guias/tiempo-barcelona-mes-a-mes/`, `/ca/guies/temps-barcelona-mes-a-mes/` (`climate`).
+
+**Windows.** Title/description of 11 Nov (to 9 Dec) and the month H3s of 19 Nov (reviews 26 Nov, 3 Dec) are open: **not touched** (texts and anchor ids identical; a test pins title, description and lead). The change sits under the H3s, so **the 3 Dec H3 review reads a page whose month paragraphs now open with a bold answer line: say so when reviewing** (the 25 Nov extras are also under the H3s).
+
+**Why.** GSC 28 d (31 Oct-26 Nov, `snapshot.py page … 28`): EN 37 clicks / 11,171 impr / 0.3 %; "barcelona weather january" 856 at 9.2 (0 clicks), "august" 763 at 8.1, "by month" 554 at 9.8, "temperature by month" 410 at 9.6, "average temperature in barcelona in january" 135 at 2.5, "weather in barcelona in december and january" 40 at 7.8, "when is (the) rainy season in barcelona" 14 at ~8, "barcelona weather february" 14 at 6.6, "does it snow in barcelona in december" 4 at 9.5. Daily EN impressions fell from ~500 (to 16 Nov) to 98-300 (17-26 Nov). ES 8 / 1,377 (spike from 22 Nov, ~200/day; "temperatura barcelona" 44 at 3.5, "cuando empieza el invierno en barcelona" 30 at 5.0, "cual es el mes mas frio" 19 at 5.8). CA 8 / 670, pos ~5.4. What ranks above us on "barcelona weather january" / "is it cold in barcelona in february" (web search 27 Nov): single-month pages (easyJet, barcelona.com, TUI, weatherapi, Rough Guides, Thomas Cook, weather2travel, WeatherSpark) that open with a one-line high/low/rain answer, then sea temperature and what to wear. No query with "sea"/"water" reaches our page.
+
+**What.**
+1. Every month H3 is now followed by a bold one-line answer from the AEMET 0076 row: "**January: 13.6 °C (56 °F) by day and 4.7 °C (40 °F) at night on average, with 3.7 rainy days.**" / "**Enero: 13,6 °C de día y 4,7 °C de noche de media, con 3,7 días de lluvia.**" / "**Gener: …**"; the detail follows (mean, el Raval, rain mm, sunshine, humidity, records).
+2. New official datum per month: AEMET 0076 day counts (same table, read with curl 27 Nov 01:37 CET): clear days (DD), frost (DH), snow (DN), thunderstorm (DT ≥ 1), zeros left out ("On average the airport has 7.5 clear days, 1.4 days of frost and 0.1 days of snow.").
+3. "What to pack" label → "What to wear and pack" / "Qué ponerte y qué llevar" / "Què posar-te i què portar" (advice unchanged).
+4. Links: January → Barcelona in January and February 2027 (`barcelonaWinter`); December → when winter starts (`winterStart`), beside the existing single Barcelona in December link.
+5. Seven FAQs (FAQPage via the existing `faq` block, now 26): "Is it cold in Barcelona in February?", "What is the weather like in Barcelona in December and January?", "When is the rainy season in Barcelona?", "Does it snow in Barcelona in December?" (0.0 Dec, 0.1 Jan, 0.2 Feb, 0.4 a year), March, April, June; ca/es equivalents. All figures computed from NORMALS/DAY_COUNTS/RAVAL.
+6. Verified date 30 Oct → 27 Nov: the 0076 table re-read, same T/TM/Tm/R/H/DR/I values, help text still "periodo 1981-2010 de un conjunto de observatorios". Still no 1991-2020 station table on AEMET's website; Meteocat climatologies page returned 502 today (no new claim made about it).
+
+**Not done.** Sea temperature: no official monthly series (Puertos del Estado report URLs tried returned 404/HTML; no PDF tool to read the one PDF found) — left out. No compact 12-month table: the full AEMET table already sits right after the lead. Title/meta not touched (window to 9 Dec).
+
+**Baseline (28 d to 26 Nov).** As in "Why": EN 37 / 11,171 / 0.3 %; ES 8 / 1,377; CA 8 / 670.
+
+**Prediction.** Right if by 23 Dec "barcelona weather january" and "barcelona weather by month" move from ~9 to ≤ 7 with CTR ≥ 0.5 %, or the month FAQs win month snippets ("is it cold in barcelona in february", "weather in barcelona in december and january"); wrong if the month queries lose > 1.5 positions with no CTR gain (then revert item 1, keep 2-5).
+
+**Tests.** New `tests/climate-answer-first-27nov.test.ts` (5); `climate-months` (FAQ count 19 → 26), `batch02` (verifiedAt), `barcelona-december`, `barcelona-winter`, `winter-start`, `inline-anchor-links`, `internal-link-audit-round2`, `related-filter`, `day-trips-21nov`, `llms-and-metadata`, `design-pass-27nov`, `en-editions-27nov` pass; `tsc --noEmit` clean. `seo:body-dates`: no climate family (the article is a CMS body); the run only moved other workers' families (shopsChristmas, christmas-fairs, fuel, holidays…), so body-dates.json is not committed here.
+
+**Publish.** Group `climate`. IndexNow `/ca/guies/temps-barcelona-mes-a-mes/ /es/guias/tiempo-barcelona-mes-a-mes/ /en/guides/barcelona-weather-by-month/`.
+
+**Review 2026-12-03** (with the H3 review: `snapshot.py page barcelona-weather-by-month 7`) and **2026-12-23** (`page barcelona-weather-by-month 28`, `page tiempo-barcelona-mes 28`, `page temps-barcelona-mes 28`, per query as above).
+
+**Outcome:** _pending_

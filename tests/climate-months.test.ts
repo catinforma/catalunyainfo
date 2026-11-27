@@ -94,7 +94,7 @@ test("climate months: no sea temperature is printed (no official monthly series)
     const airport = blocks.find((b) => b.type === "table")!;
     assert.ok(!airport.headers?.some((h) => /mar|sea|agua|aigua/i.test(h)), `${locale}: no sea column`);
     const faq = blocks.find((b) => b.type === "faq")!;
-    assert.equal(faq.items?.length, 19, `${locale}: 15 FAQs and 4 new`);
+    assert.equal(faq.items?.length, 26, `${locale}: 15 FAQs, 7 in the searchers' words (27 Nov) and 4 (25 Nov)`);
     const last4 = faq.items!.slice(-4);
     assert.match(last4[0]!.answer, /(\d+ (hours|horas|hores) de sol|hours of sunshine|horas de sol|hores de sol)/);
     assert.match(last4[3]!.answer, /9 h 12 min/);

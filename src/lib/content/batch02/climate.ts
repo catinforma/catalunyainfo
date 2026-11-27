@@ -43,14 +43,23 @@ import {
  *
  * Not printed: September and annual sunshine at the airport (AEMET shows no
  * value), any monthly sea temperature (no official monthly average exists for
- * Barcelona), and AEMET's 1991-2020 rainfall reproduced by the MAPA yearbook
- * (its February column is a misprint).
+ * Barcelona; on 27 Nov 2026 no Puertos del Estado monthly report for the
+ * Barcelona buoy could be read either), and AEMET's 1991-2020 rainfall
+ * reproduced by the MAPA yearbook (its February column is a misprint).
+ *
+ * 27 Nov 2026 (batch 8G): each month opens with a bold one-line answer
+ * (monthSummary) and gets AEMET's clear/frost/snow/storm day counts from the
+ * same 0076 table; seven FAQs in the searchers' words.
  */
 
 // 30 Oct 2026: AEMET 0076 normals re-read (same values, still "Periodo:
 // 1981-2010"); relative humidity added from the same table. Records, the
 // Raval sheet and IGN as read on 28 Oct (historical values).
-const VERIFIED = "2026-10-30";
+// 27 Nov 2026 (batch 8G): the 0076 page re-read with curl at 01:37 CET, same
+// T/TM/Tm/R/H/DR/I values; the help text still reads "periodo 1981-2010 de un
+// conjunto de observatorios" (no 1991-2020 station table). The day counts
+// DN, DT, DH and DD below were added from the same table.
+const VERIFIED = "2026-11-27";
 
 const SOURCES: B2Source[] = [
   { name: "Valores climatológicos normales: Barcelona Aeropuerto", url: "https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/valoresclimatologicos?l=0076&k=cat", publisher: "AEMET" },
@@ -118,6 +127,29 @@ const YEAR: [number, number, number, number, number] = [16.1, 20.3, 11.8, 588, 5
 /** AEMET 0076, 1981-2010: mean relative humidity (%) per month, then the year (column H). */
 const HUMIDITY = [70, 70, 70, 69, 70, 68, 67, 68, 70, 73, 71, 69] as const;
 const HUMIDITY_YEAR = 69;
+
+/**
+ * AEMET 0076, 1981-2010, same table (read 27 Nov 2026): average number of days
+ * per month with snow (DN, "Número medio mensual/anual de días de nieve"),
+ * thunderstorm (DT), frost (DH, "días de helada") and clear sky (DD, "días
+ * despejados"): [DN, DT, DH, DD]. Year row: 0.4, 19.9, 3.8, 70.4.
+ */
+const DAY_COUNTS: [number, number, number, number][] = [
+  [0.1, 0.3, 1.4, 7.5],
+  [0.2, 0.4, 1.2, 4.8],
+  [0.1, 0.8, 0.3, 5.3],
+  [0.0, 1.3, 0.0, 4.0],
+  [0.0, 1.7, 0.0, 4.3],
+  [0.0, 1.5, 0.0, 6.8],
+  [0.0, 1.3, 0.0, 10.2],
+  [0.0, 3.5, 0.0, 6.8],
+  [0.0, 3.5, 0.0, 4.3],
+  [0.0, 2.8, 0.0, 3.8],
+  [0.1, 1.2, 0.3, 5.5],
+  [0.0, 0.4, 1.0, 7.0],
+];
+/** The year row of the same columns. */
+const DAY_COUNTS_YEAR: [number, number, number, number] = [0.4, 19.9, 3.8, 70.4];
 
 /** °C to whole °F, for the English edition: a unit conversion, not a new figure. */
 const toF = (celsius: number) => Math.round((celsius * 9) / 5 + 32);
@@ -244,26 +276,59 @@ const MONTH_NOTE: Record<Locale, (string | null)[]> = {
   en: ["The coldest month.", null, null, null, null, "Tropical nights become common in the city centre.", "The driest and sunniest month.", "The warmest month and, with September, the one with the most thunderstorm days.", "The second-wettest month.", "The wettest month.", "Temperatures drop sharply: the average high falls almost 5 degrees from October.", "The month with the least sunshine."],
 };
 
+/**
+ * The one-line answer that opens each month (27 Nov 2026, batch 8G): what the
+ * month queries ask ("barcelona weather january") in a bold first sentence,
+ * from the AEMET row, before the detail.
+ */
+export function monthSummary(locale: Locale, i: number): string {
+  const [, high, low, , days] = NORMALS[i]!;
+  const f = (v: number) => fmt(locale, v);
+  const month = MONTHS[locale][i] ?? "";
+  if (locale === "en") return `**${month}: ${f(high)} °C (${toF(high)} °F) by day and ${f(low)} °C (${toF(low)} °F) at night on average, with ${f(days)} rainy days.**`;
+  if (locale === "es") return `**${month}: ${f(high)} °C de día y ${f(low)} °C de noche de media, con ${f(days)} días de lluvia.**`;
+  return `**${month}: ${f(high)} °C de dia i ${f(low)} °C de nit de mitjana, amb ${f(days)} dies de pluja.**`;
+}
+
+/** "7.5 clear days, 1.4 days of frost and 0.1 days of snow" (AEMET DD, DH, DN, DT; zeros left out). */
+function daysSentence(locale: Locale, i: number): string {
+  const [snow, storm, frost, clear] = DAY_COUNTS[i]!;
+  const f = (v: number) => fmt(locale, v);
+  const W = {
+    ca: { clear: "dies serens", frost: "dies de glaçada", snow: "dies de neu", storm: "dies de tempesta", and: " i ", open: "De mitjana, a l'aeroport hi ha " },
+    es: { clear: "días despejados", frost: "días de helada", snow: "días de nieve", storm: "días de tormenta", and: " y ", open: "De media, en el aeropuerto hay " },
+    en: { clear: "clear days", frost: "days of frost", snow: "days of snow", storm: "days with thunderstorms", and: " and ", open: "On average the airport has " },
+  }[locale];
+  const parts = [`${f(clear)} ${W.clear}`];
+  if (frost > 0) parts.push(`${f(frost)} ${W.frost}`);
+  if (snow > 0) parts.push(`${f(snow)} ${W.snow}`);
+  if (storm >= 1) parts.push(`${f(storm)} ${W.storm}`);
+  const list = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(", ")}${W.and}${parts[parts.length - 1]}`;
+  return `${W.open}${list}.`;
+}
+
 function monthText(locale: Locale, i: number): string {
-  const [mean, high, low, rain, days, sun] = NORMALS[i]!;
+  const [mean, high, low, rain, , sun] = NORMALS[i]!;
   const [cHigh, cLow, , tropical] = RAVAL[i]!;
   const [rMax, dMax, rMin, dMin] = RECORDS[i]!;
   const f = (v: number) => fmt(locale, v);
   const note = MONTH_NOTE[locale][i];
   const lead = note ? `${note} ` : "";
+  const summary = monthSummary(locale, i);
+  const counts = daysSentence(locale, i);
   if (locale === "en") {
     const sunPart = sun === null ? " (AEMET gives no sunshine figure for September)" : `; sunshine: ${sun} hours`;
     const trop = tropical >= 1 ? ` El Raval averages ${f(tropical)} tropical nights (lows above 20 °C).` : "";
-    return `${lead}Average high ${f(high)} °C (${toF(high)} °F) and low ${f(low)} °C (${toF(low)} °F) at the airport (mean ${f(mean)} °C, ${toF(mean)} °F); in el Raval, in the centre, ${f(cHigh)} and ${f(cLow)} °C (${toF(cHigh)} and ${toF(cLow)} °F). Rain: ${rain} mm on ${f(days)} days on average${sunPart}; humidity ${HUMIDITY[i]} %.${trop} Records for the month at the airport: ${f(rMax)} °C (${toF(rMax)} °F) ${onDay(locale, dMax)} and ${f(rMin)} °C (${toF(rMin)} °F) ${onDay(locale, dMin)}.`;
+    return `${summary} ${lead}At the airport the average high is ${f(high)} °C, the low ${f(low)} °C and the mean ${f(mean)} °C (${toF(mean)} °F); in el Raval, in the centre, ${f(cHigh)} and ${f(cLow)} °C (${toF(cHigh)} and ${toF(cLow)} °F). Rain: ${rain} mm${sunPart}; humidity ${HUMIDITY[i]} %. ${counts}${trop} Records for the month at the airport: ${f(rMax)} °C (${toF(rMax)} °F) ${onDay(locale, dMax)} and ${f(rMin)} °C (${toF(rMin)} °F) ${onDay(locale, dMin)}.`;
   }
   if (locale === "es") {
     const sunPart = sun === null ? " (la AEMET no da horas de sol para septiembre)" : `, y hay ${sun} horas de sol`;
     const trop = tropical >= 1 ? ` El Raval suma de media ${f(tropical)} noches tropicales (mínimas por encima de 20 °C).` : "";
-    return `${lead}Máxima media de ${f(high)} °C y mínima de ${f(low)} °C en el aeropuerto (media de ${f(mean)} °C); en el Raval, en el centro, ${f(cHigh)} y ${f(cLow)} °C. Caen ${rain} mm de lluvia en ${f(days)} días de media${sunPart}.${trop} Récords del mes en el aeropuerto: ${f(rMax)} °C ${onDay(locale, dMax)} y ${f(rMin)} °C ${onDay(locale, dMin)}.`;
+    return `${summary} ${lead}Máxima media de ${f(high)} °C y mínima de ${f(low)} °C en el aeropuerto (media de ${f(mean)} °C); en el Raval, en el centro, ${f(cHigh)} y ${f(cLow)} °C. Caen ${rain} mm de lluvia${sunPart}. ${counts}${trop} Récords del mes en el aeropuerto: ${f(rMax)} °C ${onDay(locale, dMax)} y ${f(rMin)} °C ${onDay(locale, dMin)}.`;
   }
   const sunPart = sun === null ? " (l'AEMET no dona hores de sol per al setembre)" : `, i hi ha ${sun} hores de sol`;
   const trop = tropical >= 1 ? ` El Raval suma de mitjana ${f(tropical)} nits tropicals (mínimes per sobre de 20 °C).` : "";
-  return `${lead}Màxima mitjana de ${f(high)} °C i mínima de ${f(low)} °C a l'aeroport (mitjana de ${f(mean)} °C); al Raval, al centre, ${f(cHigh)} i ${f(cLow)} °C. Hi cauen ${rain} mm de pluja en ${f(days)} dies de mitjana${sunPart}.${trop} Rècords del mes a l'aeroport: ${f(rMax)} °C ${onDay(locale, dMax)} i ${f(rMin)} °C ${onDay(locale, dMin)}.`;
+  return `${summary} ${lead}Màxima mitjana de ${f(high)} °C i mínima de ${f(low)} °C a l'aeroport (mitjana de ${f(mean)} °C); al Raval, al centre, ${f(cHigh)} i ${f(cLow)} °C. Hi cauen ${rain} mm de pluja${sunPart}. ${counts}${trop} Rècords del mes a l'aeroport: ${f(rMax)} °C ${onDay(locale, dMax)} i ${f(rMin)} °C ${onDay(locale, dMin)}.`;
 }
 
 type T = {
@@ -303,6 +368,22 @@ const WINTER_LINK: Record<Locale, string> = {
   ca: `Festius, botigues, Carnaval i Santa Eulàlia al gener i al febrer: ${b2link("barcelonaWinter", "ca", "Barcelona al gener i al febrer del 2027")}.`,
   es: `Festivos, tiendas, Carnaval y Santa Eulàlia en enero y febrero: ${b2link("barcelonaWinter", "es", "Barcelona en enero y febrero de 2027")}.`,
   en: `Holidays, shops, Carnival and Santa Eulàlia in January and February: ${b2link("barcelonaWinter", "en", "Barcelona in January and February 2027")}.`,
+};
+
+/**
+ * 27 Nov 2026 (batch 8G): January links the January-February hub too (the
+ * "weather in barcelona in december and january" searchers), and December the
+ * winter-start guide (shortest day, IGN). Group `climate`.
+ */
+const JANUARY_LINK: Record<Locale, string> = {
+  ca: `Què obre, què passa i els festius del gener, dia a dia: ${b2link("barcelonaWinter", "ca", "Barcelona al gener i al febrer del 2027")}.`,
+  es: `Qué abre, qué pasa y los festivos de enero, día a día: ${b2link("barcelonaWinter", "es", "Barcelona en enero y febrero de 2027")}.`,
+  en: `What's open, what's on and the January holidays, day by day: ${b2link("barcelonaWinter", "en", "Barcelona in January and February 2027")}.`,
+};
+const WINTER_START_LINK: Record<Locale, string> = {
+  ca: `El dia més curt de l'any i l'hora exacta en què comença l'hivern: ${b2link("winterStart", "ca", "quan comença l'hivern")}.`,
+  es: `El día más corto del año y la hora exacta en que empieza el invierno: ${b2link("winterStart", "es", "cuándo empieza el invierno")}.`,
+  en: `The shortest day of the year and the exact time winter begins: ${b2link("winterStart", "en", "when winter starts in Spain")}.`,
 };
 
 const RAINY_LINK: Record<Locale, string> = {
@@ -478,6 +559,64 @@ function monthFigures(i: number) {
  * sentence (May, July, September) and for daylight (IGN table); every number
  * is read from the tables above or from climate-months.ts.
  */
+/**
+ * 27 Nov 2026 (batch 8G): questions in the words of the month queries in
+ * Search Console ("is it cold in barcelona in february", "weather in barcelona
+ * in december and january", "when is the rainy season in barcelona", "does it
+ * snow in barcelona in december") and the months the FAQ did not cover yet
+ * (March, April, June). Every number is read from the AEMET 0076 rows above
+ * (NORMALS, DAY_COUNTS) or the Raval sheet.
+ */
+function searcherFaq(locale: Locale): { question: string; answer: string }[] {
+  const f = (v: number) => fmt(locale, v);
+  const temp = (v: number) => (locale === "en" ? `${f(v)} °C (${toF(v)} °F)` : `${f(v)} °C`);
+  const m = (i: number) => {
+    const [, high, low, rain, days, sun] = NORMALS[i]!;
+    const [snow, storm, frost] = DAY_COUNTS[i]!;
+    return { high, low, rain, days, sun, snow, storm, frost, cityLow: RAVAL[i]![1] };
+  };
+  const [jan, feb, mar, apr, jun, sep, oct, jul, dec] = [m(0), m(1), m(2), m(3), m(5), m(8), m(9), m(6), m(11)];
+  const yearSnow = f(DAY_COUNTS_YEAR[0]);
+  const month = (i: number) => (locale === "en" ? MONTHS.en[i] : (MONTHS[locale][i] ?? "").toLowerCase());
+  const plain = (i: number, x: ReturnType<typeof m>) =>
+    ({
+      ca: `Màximes mitjanes de ${temp(x.high)} i mínimes de ${temp(x.low)} a l'aeroport, amb ${x.rain} mm de pluja en ${f(x.days)} dies i ${x.sun} hores de sol (AEMET, 1981-2010).`,
+      es: `Máximas medias de ${temp(x.high)} y mínimas de ${temp(x.low)} en el aeropuerto, con ${x.rain} mm de lluvia en ${f(x.days)} días y ${x.sun} horas de sol (AEMET, 1981-2010).`,
+      en: `Average highs of ${temp(x.high)} and lows of ${temp(x.low)} at the airport, with ${x.rain} mm of rain over ${f(x.days)} days and ${x.sun} hours of sunshine in ${month(i)} (AEMET, 1981-2010).`,
+    })[locale];
+  if (locale === "en") {
+    return [
+      { question: "Is it cold in Barcelona in February?", answer: `Cool rather than cold: average highs of ${temp(feb.high)} and lows of ${temp(feb.low)} at the airport, with frost on ${f(feb.frost)} days and snow on ${f(feb.snow)} days in the month on average (AEMET, 1981-2010). In el Raval, in the centre, the average February low is ${temp(feb.cityLow)} (Meteocat, 2010-2025).` },
+      { question: "What is the weather like in Barcelona in December and January?", answer: `December: highs of ${temp(dec.high)} and lows of ${temp(dec.low)}, ${f(dec.days)} rainy days and ${dec.sun} hours of sunshine. January, the coldest month: ${temp(jan.high)} and ${temp(jan.low)}, ${f(jan.days)} rainy days and ${jan.sun} hours of sunshine (AEMET, airport, 1981-2010). A coat and layers for the evenings are enough.` },
+      { question: "When is the rainy season in Barcelona?", answer: `Autumn. October is the wettest month (${oct.rain} mm on ${f(oct.days)} days) and September the second (${sep.rain} mm on ${f(sep.days)} days), with thunderstorms on ${f(oct.storm)} days in October and ${f(sep.storm)} in September. July is the driest, with ${jul.rain} mm (AEMET, airport, 1981-2010).` },
+      { question: "Does it snow in Barcelona in December?", answer: `Almost never. AEMET's average at the airport is ${f(dec.snow)} days of snow in December, ${f(jan.snow)} in January and ${f(feb.snow)} in February: ${yearSnow} a year (1981-2010).` },
+      { question: "What is the weather like in Barcelona in March?", answer: plain(2, mar) },
+      { question: "What is the weather like in Barcelona in April?", answer: plain(3, apr) },
+      { question: "What is the weather like in Barcelona in June?", answer: plain(5, jun) },
+    ];
+  }
+  if (locale === "es") {
+    return [
+      { question: "¿Hace frío en Barcelona en febrero?", answer: `Más fresco que frío: máximas medias de ${temp(feb.high)} y mínimas de ${temp(feb.low)} en el aeropuerto, con ${f(feb.frost)} días de helada y ${f(feb.snow)} de nieve de media en el mes (AEMET, 1981-2010). En el Raval, en el centro, la mínima media de febrero es de ${temp(feb.cityLow)} (Meteocat, 2010-2025).` },
+      { question: "¿Qué tiempo hace en Barcelona en diciembre y enero?", answer: `Diciembre: máximas de ${temp(dec.high)} y mínimas de ${temp(dec.low)}, ${f(dec.days)} días de lluvia y ${dec.sun} horas de sol. Enero, el mes más frío: ${temp(jan.high)} y ${temp(jan.low)}, ${f(jan.days)} días de lluvia y ${jan.sun} horas de sol (AEMET, aeropuerto, 1981-2010). Basta con un abrigo y capas para la noche.` },
+      { question: "¿Cuándo es la época de lluvias en Barcelona?", answer: `En otoño. Octubre es el mes más lluvioso (${oct.rain} mm en ${f(oct.days)} días) y septiembre el segundo (${sep.rain} mm en ${f(sep.days)} días), con tormenta ${f(oct.storm)} días en octubre y ${f(sep.storm)} en septiembre. Julio es el más seco, con ${jul.rain} mm (AEMET, aeropuerto, 1981-2010).` },
+      { question: "¿Nieva en Barcelona en diciembre?", answer: `Casi nunca. La media de la AEMET en el aeropuerto es de ${f(dec.snow)} días de nieve en diciembre, ${f(jan.snow)} en enero y ${f(feb.snow)} en febrero: ${yearSnow} al año (1981-2010).` },
+      { question: "¿Qué tiempo hace en Barcelona en marzo?", answer: plain(2, mar) },
+      { question: "¿Qué tiempo hace en Barcelona en abril?", answer: plain(3, apr) },
+      { question: "¿Qué tiempo hace en Barcelona en junio?", answer: plain(5, jun) },
+    ];
+  }
+  return [
+    { question: "Fa fred a Barcelona al febrer?", answer: `Més aviat fresc que fred: màximes mitjanes de ${temp(feb.high)} i mínimes de ${temp(feb.low)} a l'aeroport, amb ${f(feb.frost)} dies de glaçada i ${f(feb.snow)} de neu de mitjana al mes (AEMET, 1981-2010). Al Raval, al centre, la mínima mitjana del febrer és de ${temp(feb.cityLow)} (Meteocat, 2010-2025).` },
+    { question: "Quin temps fa a Barcelona al desembre i al gener?", answer: `Desembre: màximes de ${temp(dec.high)} i mínimes de ${temp(dec.low)}, ${f(dec.days)} dies de pluja i ${dec.sun} hores de sol. Gener, el mes més fred: ${temp(jan.high)} i ${temp(jan.low)}, ${f(jan.days)} dies de pluja i ${jan.sun} hores de sol (AEMET, aeroport, 1981-2010). N'hi ha prou amb un abric i capes per al vespre.` },
+    { question: "Quan és l'època de pluges a Barcelona?", answer: `A la tardor. L'octubre és el mes més plujós (${oct.rain} mm en ${f(oct.days)} dies) i el setembre el segon (${sep.rain} mm en ${f(sep.days)} dies), amb tempesta ${f(oct.storm)} dies a l'octubre i ${f(sep.storm)} al setembre. El juliol és el més sec, amb ${jul.rain} mm (AEMET, aeroport, 1981-2010).` },
+    { question: "Neva a Barcelona al desembre?", answer: `Gairebé mai. La mitjana de l'AEMET a l'aeroport és de ${f(dec.snow)} dies de neu al desembre, ${f(jan.snow)} al gener i ${f(feb.snow)} al febrer: ${yearSnow} l'any (1981-2010).` },
+    { question: "Quin temps fa a Barcelona al març?", answer: plain(2, mar) },
+    { question: "Quin temps fa a Barcelona a l'abril?", answer: plain(3, apr) },
+    { question: "Quin temps fa a Barcelona al juny?", answer: plain(5, jun) },
+  ];
+}
+
 function extraFaq(locale: Locale): { question: string; answer: string }[] {
   const f = (v: number) => fmt(locale, v);
   const temp = (v: number) => (locale === "en" ? `${f(v)} °C (${toF(v)} °F)` : `${f(v)} °C`);
@@ -490,8 +629,10 @@ function extraFaq(locale: Locale): { question: string; answer: string }[] {
   const sep = m(8);
   const dec = sunMonth(11);
   const jun = sunMonth(5);
+  const more = searcherFaq(locale);
   if (locale === "en") {
     return [
+      ...more,
       { question: "What is the weather like in Barcelona in May?", answer: `Average highs of ${temp(may.high)} and lows of ${temp(may.low)} at the airport, with ${may.rain} mm of rain over about ${f(may.days)} days and ${may.sun} hours of sunshine (AEMET, 1981-2010).` },
       { question: "What is the weather like in Barcelona in July?", answer: `Average highs of ${temp(jul.high)} and lows of ${temp(jul.low)} at the airport. It is the driest month, with ${jul.rain} mm of rain, and the sunniest, with ${jul.sun} hours (AEMET, 1981-2010).` },
       { question: "What is the weather like in Barcelona in September?", answer: `Average highs of ${temp(sep.high)} and lows of ${temp(sep.low)} at the airport, with ${sep.rain} mm of rain over about ${f(sep.days)} days, the second-wettest month (AEMET, 1981-2010). AEMET gives no sunshine figure for September.` },
@@ -500,6 +641,7 @@ function extraFaq(locale: Locale): { question: string; answer: string }[] {
   }
   if (locale === "es") {
     return [
+      ...more,
       { question: "¿Qué tiempo hace en Barcelona en mayo?", answer: `Máximas medias de ${temp(may.high)} y mínimas de ${temp(may.low)} en el aeropuerto, con ${may.rain} mm de lluvia en unos ${f(may.days)} días y ${may.sun} horas de sol (AEMET, 1981-2010).` },
       { question: "¿Qué tiempo hace en Barcelona en julio?", answer: `Máximas medias de ${temp(jul.high)} y mínimas de ${temp(jul.low)} en el aeropuerto. Es el mes más seco, con ${jul.rain} mm de lluvia, y el más soleado, con ${jul.sun} horas (AEMET, 1981-2010).` },
       { question: "¿Qué tiempo hace en Barcelona en septiembre?", answer: `Máximas medias de ${temp(sep.high)} y mínimas de ${temp(sep.low)} en el aeropuerto, con ${sep.rain} mm de lluvia en unos ${f(sep.days)} días, el segundo mes más lluvioso (AEMET, 1981-2010). La AEMET no da horas de sol para septiembre.` },
@@ -507,6 +649,7 @@ function extraFaq(locale: Locale): { question: string; answer: string }[] {
     ];
   }
   return [
+    ...more,
     { question: "Quin temps fa a Barcelona al maig?", answer: `Màximes mitjanes de ${temp(may.high)} i mínimes de ${temp(may.low)} a l'aeroport, amb ${may.rain} mm de pluja en uns ${f(may.days)} dies i ${may.sun} hores de sol (AEMET, 1981-2010).` },
     { question: "Quin temps fa a Barcelona al juliol?", answer: `Màximes mitjanes de ${temp(jul.high)} i mínimes de ${temp(jul.low)} a l'aeroport. És el mes més sec, amb ${jul.rain} mm de pluja, i el més assolellat, amb ${jul.sun} hores (AEMET, 1981-2010).` },
     { question: "Quin temps fa a Barcelona al setembre?", answer: `Màximes mitjanes de ${temp(sep.high)} i mínimes de ${temp(sep.low)} a l'aeroport, amb ${sep.rain} mm de pluja en uns ${f(sep.days)} dies, el segon mes més plujós (AEMET, 1981-2010). L'AEMET no dona hores de sol per al setembre.` },
@@ -554,8 +697,9 @@ function body(locale: Locale) {
     ...MONTHS[locale].flatMap((_, i) => [
       monthQueryHeading(locale, i),
       ...paras(monthText(locale, i), ...monthExtras(locale, i, monthFigures(i))),
+      ...(i === 0 ? paras(JANUARY_LINK[locale]) : []),
       ...(i === 1 ? paras(WINTER_LINK[locale]) : []),
-      ...(i === 11 ? paras(DECEMBER_LINK[locale]) : []),
+      ...(i === 11 ? paras(`${DECEMBER_LINK[locale]} ${WINTER_START_LINK[locale]}`) : []),
     ]),
     ...h2(t.seasonsTitle),
     list(...t.seasons),

@@ -1016,7 +1016,7 @@ test("climate: humidity column from AEMET, °F in English, the answer in the EN 
   assert.match(en.seoDescription, /^Month by month: .*January highs of 13\.6 °C \(56 °F\), August 28\.5 °C \(83 °F\)/);
   const first = bodyToPlainText(en.blocks).slice(0, 220);
   assert.match(first, /January.*coldest.*13\.6 °C \(56 °F\)/, "answer in the first lines");
-  assert.equal(CLIMATE.verifiedAt, "2026-10-30");
+  assert.equal(CLIMATE.verifiedAt, "2026-11-27"); // AEMET 0076 re-read in batch 8G (same values)
 });
 
 /**

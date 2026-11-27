@@ -194,7 +194,8 @@ export function packText(locale: Locale, i: number, f: Figures): string {
   return T[locale][i] ?? "";
 }
 
-const pack: Record<Locale, string> = { ca: "Què posar a la maleta", es: "Qué meter en la maleta", en: "What to pack" };
+// 27 Nov 2026 (batch 8G): "what to wear" is the searchers' wording; the advice is unchanged.
+const pack: Record<Locale, string> = { ca: "Què posar-te i què portar", es: "Qué ponerte y qué llevar", en: "What to wear and pack" };
 const daylightLabel: Record<Locale, string> = { ca: "Llum", es: "Luz", en: "Daylight" };
 
 function holidaysOfMonth(i: number): Holiday[] {
