@@ -54,7 +54,10 @@ test("the page prints every FAQ question, and the layout emits FAQPage from the 
   const page = readFileSync(new URL("../src/components/programmatic/employment/UnemploymentPage.tsx", import.meta.url), "utf8");
   assert.match(page, /ex2\.faq\.map\(\(f, i\) =>/);
   assert.match(page, /<h3>\{f\.q\}<\/h3>/);
-  assert.match(page, /faq=\{ex2\.faq\}/);
+  // 27 Nov 2026 (batch 8J): the three extra questions (unemployment-faq.ts) are printed too and join the FAQPage.
+  assert.match(page, /const faqLd = \[\.\.\.ex2\.faq, \.\.\.extraFaq\]/);
+  assert.match(page, /extraFaq\.map\(\(f\) =>/);
+  assert.match(page, /faq=\{faqLd\}/);
   const layout = readFileSync(new URL("../src/components/programmatic/employment/CalcLayout.tsx", import.meta.url), "utf8");
   assert.match(layout, /"@type": "FAQPage"/);
   // The unemployment page and (26 Nov 2026) the dismissal page pass questions; the settlement calculator stays without FAQPage.

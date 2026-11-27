@@ -16,6 +16,8 @@ import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { money, percent, subsidyEditions, subsidyPath, type SubLocale } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { DEFAULT_INPUT, checkSubsidy, type SubsidyResult } from "@/lib/programmatic/unemployment-subsidy/engine";
+import { subsidyCaseRows, subsidyExamplesCopy } from "@/lib/programmatic/unemployment-subsidy/examples";
+import { SOC_SOURCE, socCopy } from "@/lib/programmatic/employment/catalonia-soc";
 import {
   AMOUNT_BANDS,
   CAE_JOBS,
@@ -445,7 +447,17 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };
-  const faqSchema = { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+  // 27 Nov 2026 (batch 8J): six cases from the checker's own engine, the SOC registration in Catalonia, three more questions (examples.ts, catalonia-soc.ts).
+  const ex8 = subsidyExamplesCopy(locale);
+  const soc = socCopy(locale);
+  const caseRows = subsidyCaseRows().map(({ id, result }) => [
+    ex8.labels[id]!,
+    result.kind === "over52" ? ex8.labels.over52kind! : ex8.labels[result.kind ?? "exhausted"]!,
+    result.months === null ? ex8.untilRetirement : months(result.months),
+    result.total === null ? `${m(result.firstMonthly)} / ${L(locale, { es: "mes", ca: "mes", en: "month" })}` : m(result.total),
+  ]);
+  const allFaq = [...faq, ...ex8.faq];
+  const faqSchema = { "@type": "FAQPage", mainEntity: allFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
 
   return (
     <>
@@ -503,6 +515,11 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               <Table head={insHead} rows={insRows} caption={lgss("art. 277.2")} />
               <p>{durationText[2]}</p>
 
+              <h2 id="ejemplos">{ex8.title}</h2>
+              <p>{ex8.intro}</p>
+              <Table head={ex8.cols} rows={caseRows} caption={ex8.caption} />
+              <p className="text-sm text-[var(--color-muted)]">{ex8.note}</p>
+
               <h2 id="mayores-52">{h.over52}</h2>
               {over52Text.map((p) => (
                 <p key={p}>{p}</p>
@@ -523,6 +540,17 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               <p>
                 {L(locale, { es: "¿Aún tienes derecho al paro contributivo (360 días cotizados o más)?", ca: "Encara tens dret a l'atur contributiu (360 dies cotitzats o més)?", en: "Still entitled to contributory benefit (360 days of contributions or more)?" })}{" "}
                 <Link href={paro}>{L(locale, { es: "Calcula tu paro", ca: "Calcula el teu atur", en: "Work out your unemployment benefit" })}</Link>.
+              </p>
+
+              <h2 id="cataluna">{soc.heading}</h2>
+              {soc.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+              <p className="text-sm text-[var(--color-muted)]">
+                <a href={SOC_SOURCE.url} rel="noopener" target="_blank">
+                  {soc.sourceName}
+                </a>{" "}
+                · {soc.readLine}
               </p>
 
               <h2 id="ingreso-minimo-vital">{h.imv}</h2>
@@ -548,7 +576,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               </p>
 
               <h2 id="preguntas">{h.faq}</h2>
-              {faq.map((f) => (
+              {allFaq.map((f) => (
                 <section key={f.q}>
                   <h3>{f.q}</h3>
                   <p>{f.a}</p>

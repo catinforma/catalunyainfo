@@ -23,8 +23,8 @@
    "files": 3
   },
   "block:shopsChristmas": {
-   "date": "2026-11-27T00:13:55.754Z",
-   "fingerprint": "v1:39160a23d45c58a8280e774114f6f1a7",
+   "date": "2026-11-27T00:35:17.000Z",
+   "fingerprint": "v1:90cbf74e663e989472e3657ca5e37ca6",
    "files": 22
   },
   "block:touristTax": {
@@ -68,9 +68,9 @@
    "files": 9
   },
   "employment": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:40b082be5a2bdec257d6e51b7037f216",
-   "files": 25
+   "date": "2026-11-27T01:03:11.000Z",
+   "fingerprint": "v1:35afa6e624808c54874022515cd572cd",
+   "files": 27
   },
   "euribor": {
    "date": "2026-11-27T00:47:59.034Z",
@@ -108,9 +108,9 @@
    "files": 13
   },
   "holidays": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:5aab75da047fa0e5e7bfedce871c5b9c",
-   "files": 53
+   "date": "2026-11-27T00:52:01.000Z",
+   "fingerprint": "v1:7f8e8e43dc72d24c319a9ff2ec94f734",
+   "files": 54
   },
   "holidays-report": {
    "date": "2026-11-25T08:11:30.000Z",
@@ -138,9 +138,9 @@
    "files": 27
   },
   "ipc": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:20c8cb8944b9be295152e55847efecc0",
-   "files": 11
+   "date": "2026-11-27T01:10:17.932Z",
+   "fingerprint": "v1:6876ac1df68e961fbfc2812111d2fd70",
+   "files": 12
   },
   "iprem": {
    "date": "2026-11-27T00:47:59.034Z",
@@ -223,9 +223,9 @@
    "files": 19
   },
   "rent-update": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:e577203dc4741104982d8e864d8b45be",
-   "files": 13
+   "date": "2026-11-27T01:10:17.932Z",
+   "fingerprint": "v1:19e2614b6950b318d5ab8b27ea0037c0",
+   "files": 14
   },
   "reservoirs": {
    "date": "2026-11-27T00:47:59.034Z",
@@ -233,9 +233,9 @@
    "files": 23
   },
   "retirement-age": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:a612a78e11a7d6253187b68f3144b6e9",
-   "files": 9
+   "date": "2026-11-27T01:10:17.932Z",
+   "fingerprint": "v1:4af447e536382e194ef5756ed895cfa8",
+   "files": 10
   },
   "rodalies": {
    "date": "2026-11-27T00:47:59.034Z",
@@ -243,9 +243,9 @@
    "files": 22
   },
   "self-employed": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:d1f3af75220f451ea24e5d77d90b178a",
-   "files": 8
+   "date": "2026-11-27T01:10:17.932Z",
+   "fingerprint": "v1:60c4821ca937a3b7b58662fe180f5ee9",
+   "files": 9
   },
   "sick-leave": {
    "date": "2026-11-27T00:47:59.034Z",
@@ -288,9 +288,9 @@
    "files": 15
   },
   "unemployment-subsidy": {
-   "date": "2026-11-27T00:47:59.034Z",
-   "fingerprint": "v1:e6cfd559129172136da74165e5a498ff",
-   "files": 8
+   "date": "2026-11-27T01:03:11.000Z",
+   "fingerprint": "v1:aeb12e858018e8919a0cb1235b555c6b",
+   "files": 9
   },
   "warnings": {
    "date": "2026-11-27T00:47:59.034Z",

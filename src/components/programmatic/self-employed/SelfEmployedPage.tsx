@@ -15,6 +15,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { netSalaryPath } from "@/lib/programmatic/net-salary/copy";
 import { bandName, bandRangeText, money, percent, selfEmployedEditions, selfEmployedPath, type SeLocale } from "@/lib/programmatic/self-employed/copy";
+import { earningsCopy, earningsRows } from "@/lib/programmatic/self-employed/examples";
 import { DEFAULT_INPUT, bandTable, calculateSelfEmployed, contribution, type SelfEmployedResult } from "@/lib/programmatic/self-employed/engine";
 import {
   BANDS_2026,
@@ -312,9 +313,13 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };
+  // 27 Nov 2026 (batch 8J): contributions by yearly net earnings from the engine, and the "1.000 € al mes" question (self-employed/examples.ts).
+  const ex8 = earningsCopy(locale);
+  const ex8Rows = earningsRows();
+  const allFaq = [...faq.slice(0, 2), ...ex8.faq, ...faq.slice(2)];
   const faqSchema = {
     "@type": "FAQPage",
-    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: allFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
   const quoteFooter = (url: string, label: string) => (
     <footer className="text-sm">
@@ -385,6 +390,39 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
                         </td>
                         <td data-label={cols[5]} className="whitespace-nowrap tabular-nums">
                           {m(maxMonthly)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 id="segun-ingresos">{ex8.title}</h2>
+              <p>{ex8.intro}</p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table ci-stack-table">
+                  <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex8.caption}</caption>
+                  <thead>
+                    <tr>
+                      {ex8.cols.map((c) => (
+                        <th key={c} scope="col">
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ex8Rows.map(({ net, r }) => (
+                      <tr key={net}>
+                        <th scope="row" className="font-normal whitespace-nowrap tabular-nums">
+                          {m(net, 0)}
+                        </th>
+                        <td data-label={ex8.cols[1]} className="whitespace-nowrap tabular-nums">
+                          {m(r.monthlyEarnings)}
+                        </td>
+                        <td data-label={ex8.cols[2]}>{ex8.band(r)}</td>
+                        <td data-label={ex8.cols[3]} className="whitespace-nowrap tabular-nums">
+                          {m(r.full.monthly)} ({m(r.full.annual)})
                         </td>
                       </tr>
                     ))}
@@ -478,7 +516,7 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
               </ul>
 
               <h2 id="preguntas">{h.faq}</h2>
-              {faq.map((f) => (
+              {allFaq.map((f) => (
                 <section key={f.q}>
                   <h3>{f.q}</h3>
                   <p>{f.a}</p>

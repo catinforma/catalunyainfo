@@ -7,6 +7,8 @@ import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 import { HOWTO_LINKS, unemploymentHowTo } from "@/lib/programmatic/employment/unemployment-howto";
 import { daysRows, exampleCopy } from "@/lib/programmatic/employment/unemployment-examples";
+import { extraUnemploymentFaq } from "@/lib/programmatic/employment/unemployment-faq";
+import { SOC_SOURCE, socCopy } from "@/lib/programmatic/employment/catalonia-soc";
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { UnemploymentCalculator, type UnemploymentInitial } from "./UnemploymentCalculator";
@@ -68,6 +70,10 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
   const howTo = unemploymentHowTo(locale);
   const ex2 = exampleCopy(locale);
   const dayRows = daysRows();
+  // 27 Nov 2026 (batch 8J): the maximum, "2025 vs 2026" and the SOC registration in Catalonia (unemployment-faq.ts, catalonia-soc.ts).
+  const extraFaq = extraUnemploymentFaq(locale);
+  const soc = socCopy(locale);
+  const faqLd = [...ex2.faq, ...extraFaq];
 
   const copy = {
     es: {
@@ -172,7 +178,7 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
   }[locale];
 
   return (
-    <CalcLayout calcKey="unemployment" locale={locale} meta={UNEMPLOYMENT_META[locale]} lead={copy.lead} sources={["lgssArt269", "lgssArt270", "lgss", "sepeAmounts", "sepeContributory", "pge2023", "cotizacion2026"]} faq={ex2.faq}>
+    <CalcLayout calcKey="unemployment" locale={locale} meta={UNEMPLOYMENT_META[locale]} lead={copy.lead} sources={["lgssArt269", "lgssArt270", "lgss", "sepeAmounts", "sepeContributory", "pge2023", "cotizacion2026"]} faq={faqLd}>
       <UnemploymentCalculator locale={locale} initial={UNEMPLOYMENT_EXAMPLE} />
       <p>{copy.pay}</p>
       <CalculatorNextStep current="unemployment" locale={locale} />
@@ -344,12 +350,29 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
         ))}
       </ul>
 
+      <h2 id="cataluna">{soc.heading}</h2>
+      {soc.paragraphs.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+      <p className="text-sm text-[var(--color-muted)]">
+        <a href={SOC_SOURCE.url} rel="noopener" target="_blank">
+          {soc.sourceName}
+        </a>{" "}
+        · {soc.readLine}
+      </p>
+
       <h2 id="preguntas">{ex2.faqTitle}</h2>
       {ex2.faq.map((f, i) => (
         <section key={f.q}>
           <h3>{f.q}</h3>
           <p>{f.a}</p>
           {i === ex2.faq.length - 1 ? <p>{copy.pay}</p> : null}
+        </section>
+      ))}
+      {extraFaq.map((f) => (
+        <section key={f.q}>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
         </section>
       ))}
     </CalcLayout>

@@ -16,6 +16,7 @@ import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { bareDay, elDay, ipcEditions, ipcPath, monthText, rate, signedRate, type IpcLocale } from "@/lib/programmatic/ipc/copy";
 import { CATALONIA_IPC, cataloniaSection } from "@/lib/programmatic/ipc/catalonia";
+import { IPC_FAQ_TITLE, ipcFaq } from "@/lib/programmatic/ipc/faq";
 import { flashAfter, freshnessText, ipcMeta, leadText } from "@/lib/programmatic/ipc/page";
 import { INE_LINKS, IPC_SERIES, IPC_SERIES_IDS, calendarRows, hasCalendarFor, ipcApiUrl, ipcTableUrl, latestFigures, nextReleases, tableRows } from "@/lib/programmatic/ipc/series";
 import type { ServerIpcData } from "@/lib/programmatic/ipc/server";
@@ -64,7 +65,9 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
   const nextYearOut = hasCalendarFor(data.releases, year + 1);
   const next = nextReleases(data, data.today);
   const flash = flashAfter(data);
-  const catalonia = cataloniaSection(locale, latest);
+  const catalonia = cataloniaSection(locale, latest, CATALONIA_IPC, new Map(data.series.general.map((p) => [p.month, p.value])));
+  // 27 Nov 2026 (batch 8J): questions in the searchers' words, built from the same data as the lead (lib/programmatic/ipc/faq.ts).
+  const faq = ipcFaq(locale, data, data.today);
   const day = (iso: string) => bareDay(iso, locale);
 
   const h = L(locale, {
@@ -193,8 +196,59 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
                     <>
                       <h2 id="catalunya">{catalonia.heading}</h2>
                       <p>{catalonia.text}</p>
+                      <p>{catalonia.provincesText}</p>
+                      <div className="ci-table-scroll">
+                        <table className="ci-local-table">
+                          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{catalonia.provincesCaption}</caption>
+                          <thead>
+                            <tr>
+                              {catalonia.provincesCols.map((c) => (
+                                <th key={c} scope="col">
+                                  {c}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {catalonia.provinces.map((p) => (
+                              <tr key={p.name}>
+                                <th scope="row" className="font-normal">
+                                  {p.name}
+                                </th>
+                                <td>{p.annual}</td>
+                                <td>{p.monthly}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="ci-table-scroll">
+                        <table className="ci-local-table">
+                          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{catalonia.historyCaption}</caption>
+                          <thead>
+                            <tr>
+                              {catalonia.historyCols.map((c) => (
+                                <th key={c} scope="col">
+                                  {c}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {catalonia.history.map((r) => (
+                              <tr key={r.month}>
+                                <th scope="row" className="font-normal">
+                                  {r.month}
+                                </th>
+                                <td>{r.catalonia}</td>
+                                <td>{r.spain}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                       <p className="text-sm text-[var(--color-muted)]">
-                        <A href={CATALONIA_IPC.tableUrl}>{catalonia.source}</A>
+                        <A href={CATALONIA_IPC.tableUrl}>{catalonia.source}</A> · <A href={CATALONIA_IPC.provincesTableUrl}>{catalonia.provincesSource}</A>
                       </p>
                     </>
                   ) : null}
@@ -301,6 +355,18 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
                 <p key={p}>{p}</p>
               ))}
 
+              {faq.length ? (
+                <>
+                  <h2 id="preguntas">{IPC_FAQ_TITLE[locale]}</h2>
+                  {faq.map((f) => (
+                    <section key={f.q}>
+                      <h3>{f.q}</h3>
+                      <p>{f.a}</p>
+                    </section>
+                  ))}
+                </>
+              ) : null}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 {IPC_SERIES_IDS.map((id) => (
@@ -320,7 +386,7 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), faq.length ? { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) } : null])} />
       <SiteFooter locale={locale} />
     </>
   );

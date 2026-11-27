@@ -14,10 +14,11 @@ import { SourcesPolicyLink } from "@/components/SourcesPolicyLink";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
-import { DECIMALS, SERIES_LABEL, elDay, monthText, pct, rentEditions, rentPath, type RentLocale } from "@/lib/programmatic/rent-update/copy";
+import { DECIMALS, SERIES_LABEL, elDay, euros, monthText, pct, rentEditions, rentPath, type RentLocale } from "@/lib/programmatic/rent-update/copy";
 import { defaultExample } from "@/lib/programmatic/rent-update/engine";
 import { SERIES, tableUrl } from "@/lib/programmatic/rent-update/ine";
 import { lastMonths, leadText, nextRelease, rentFaq, rentMeta } from "@/lib/programmatic/rent-update/page";
+import { rentExamplesCopy, rentRows } from "@/lib/programmatic/rent-update/examples";
 import { DF6_QUOTE, GENCAT_LATEST_RESOLUTIONS, IRAV_DEFINITION_ES, NORMS, OFFICIAL_LINKS, RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import type { ServerRentData } from "@/lib/programmatic/rent-update/server";
 import { breadcrumbSchema, calculatorAppSchema, graph } from "@/lib/seo/jsonld";
@@ -256,7 +257,10 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
       "It stacks with the IRAV cap of LAU art. 18.1: the lower of the two counts. The reference index limit is the upper value the Ministry's state system (SERPAVI) gives for each home. Shop and office leases are outside it.",
     ],
   });
-  const faq = rentFaq(locale);
+  // 27 Nov 2026 (batch 8J): rents updated today from the engine, and two questions built from the same results (rent-update/examples.ts).
+  const ex8 = rentExamplesCopy(locale, data.series, data.today);
+  const ex8Rows = ex8 ? rentRows(data.series, data.today) : null;
+  const faq = [...(ex8?.faq ?? []), ...rentFaq(locale)];
 
   const disclaimer = L(locale, {
     es: `Es un cálculo orientativo con los datos oficiales del INE y las normas publicadas en el BOE (revisadas ${elDay(RENT_RULES_AS_OF, "es")}), no asesoramiento jurídico. Lo que diga tu contrato, un nuevo pacto con el casero, si la renta supera el índice de referencia, si el arrendador es gran tenedor o un cambio de ley posterior pueden cambiar el resultado. Ante una discrepancia, consulta un profesional o la oficina de vivienda de tu ayuntamiento.`,
@@ -328,6 +332,38 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                 INE: <A href={tableUrl(SERIES.ipc)}>{`${SERIES_LABEL[locale].ipc}, ${SERIES.ipc.code}`}</A> ·{" "}
                 <A href={tableUrl(SERIES.irav)}>{`IRAV, ${SERIES.irav.code}`}</A>
               </p>
+
+              {ex8 && ex8Rows ? (
+                <>
+                  <h2 id="ejemplos">{ex8.title}</h2>
+                  <p>{ex8.intro}</p>
+                  <div className="ci-table-scroll mt-4">
+                    <table className="ci-local-table ci-stack-table">
+                      <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{ex8.caption}</caption>
+                      <thead>
+                        <tr>
+                          {ex8.cols.map((c) => (
+                            <th key={c} scope="col">
+                              {c}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ex8Rows.map((r) => (
+                          <tr key={r.rent}>
+                            <th scope="row" className="font-normal">
+                              {euros(r.rent, locale)}
+                            </th>
+                            <td data-label={ex8.cols[1]}>{ex8.cell(r.flat)}</td>
+                            <td data-label={ex8.cols[2]}>{ex8.cell(r.shop)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : null}
 
               <h2 id="tope-2">{h.two}</h2>
               <p>{twoParas[0]}</p>

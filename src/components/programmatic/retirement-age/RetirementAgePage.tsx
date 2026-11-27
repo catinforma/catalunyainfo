@@ -22,6 +22,7 @@ import { OFFICIAL_LINKS as PENSION_LINKS } from "@/lib/programmatic/pensions-202
 import { COLUMN_LABEL, COLUMN_SHORT, coef, day, elDay, monthsText, retirementEditions, retirementPath, whole, ymText, type RaLocale } from "@/lib/programmatic/retirement-age/copy";
 import type { EarlyOutcome } from "@/lib/programmatic/retirement-age/engine";
 import { DEFAULT_INPUT, delayTable, examples, headline, retirementFaq, retirementMeta, type ExampleId } from "@/lib/programmatic/retirement-age/page";
+import { byContributionCopy, byContributionRows } from "@/lib/programmatic/retirement-age/by-contributions";
 import {
   ACTIVE_STEP,
   COLUMNS,
@@ -42,6 +43,7 @@ import {
   SOURCES,
   SUBSIDY_MONTHS,
   VOLUNTARY_COEFFICIENTS,
+  toMonths,
   type PhaseInRow,
   type YM,
 } from "@/lib/programmatic/retirement-age/rules";
@@ -401,9 +403,13 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };
+  // 27 Nov 2026 (batch 8J): the age by years contributed at 65, from the engine, and two questions (retirement-age/by-contributions.ts).
+  const byC = byContributionCopy(locale);
+  const byCRows = byContributionRows();
+  const allFaq = [...faq.slice(0, 3), ...byC.faq, ...faq.slice(3)];
   const faqSchema = {
     "@type": "FAQPage",
-    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: allFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
 
   const coefTable = (rows: typeof INVOLUNTARY_COEFFICIENTS, caption: string) => (
@@ -497,6 +503,34 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
               </div>
               <Quote text={QUOTE.art205a} href={LGSS_ANCHOR.art205} label={lgss("art. 205.1.a")} />
               <Quote text={QUOTE.dt7} href={LGSS_ANCHOR.dt7} label={lgss(L(locale, { es: "disposición transitoria séptima", ca: "disposició transitòria setena", en: "seventh transitional provision" }))} />
+
+              <h2 id="segun-cotizado">{byC.title}</h2>
+              <p>{byC.intro}</p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table ci-stack-table">
+                  <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{byC.caption}</caption>
+                  <thead>
+                    <tr>
+                      {byC.cols.map((c) => (
+                        <th key={c} scope="col">
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {byCRows.map((r) => (
+                      <tr key={toMonths(r.at65)}>
+                        <th scope="row" className="font-normal">
+                          {ymText(r.at65, locale)}
+                        </th>
+                        <td data-label={byC.cols[1]}>{ymText(r.y2026.age, locale)}</td>
+                        <td data-label={byC.cols[2]}>{ymText(r.y2027.age, locale)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <h2 id="como-se-calcula">{hd.count}</h2>
               <ul>
@@ -660,7 +694,7 @@ export function RetirementAgeRoute({ locale }: { locale: RaLocale }) {
               </ul>
 
               <h2 id="preguntas">{hd.faq}</h2>
-              {faq.map((f) => (
+              {allFaq.map((f) => (
                 <section key={f.q}>
                   <h3>{f.q}</h3>
                   <p>{f.a}</p>
