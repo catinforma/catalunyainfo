@@ -10,6 +10,7 @@ import { comarcaBySlug, municipalityBySlug, nextYearFor, unlistedTownBySlug } fr
 import { unlistedCopy } from "@/lib/programmatic/holidays/unlisted-copy";
 import { dateContent, dateTitle } from "@/lib/programmatic/holidays/dates";
 import { englishTownBySlug } from "@/lib/programmatic/holidays/english";
+import { hubFaq } from "@/lib/programmatic/holidays/hub-faq";
 import { englishHubCopy, englishTownDescription, englishTownFaq, englishTownTitle } from "@/lib/programmatic/holidays/english-copy";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 import {
@@ -72,7 +73,15 @@ export function HubRoute({ locale }: { locale: MuniLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), holidayHubDataset(locale), photoImageObject(hubPhoto("holidays", locale), hubPath(locale))])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(hubCrumbs(locale)),
+          holidayHubDataset(locale),
+          // The questions the hub prints (HubFaq, lib/programmatic/holidays/hub-faq.ts), as FAQPage.
+          faqSchema([{ type: "faq", items: hubFaq(locale) }]),
+          photoImageObject(hubPhoto("holidays", locale), hubPath(locale)),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );
@@ -207,7 +216,14 @@ export function EnglishHubRoute() {
       <main id="main">
         <EnglishHubPage />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(englishHubCrumbs()), englishHubDataset(), photoImageObject(hubPhoto("holidays", "en"), hubPath("en"))])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(englishHubCrumbs()),
+          englishHubDataset(),
+          faqSchema([{ type: "faq", items: hubFaq("en") }]),
+          photoImageObject(hubPhoto("holidays", "en"), hubPath("en")),
+        ])}
+      />
       <SiteFooter locale="en" />
     </>
   );

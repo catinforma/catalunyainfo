@@ -131,6 +131,7 @@ export const NIGHT_AFTER: Record<Locale, NightAfter> = {
       0: () => "La votació va acabar a les 20.00 i a les Canàries a les 21.00 (hora peninsular). Al 2023, Interior va començar a publicar resultats a les 21.00. L'escrutini provisional de la nit no és el resultat oficial: aquest surt de l'escrutini general de les juntes electorals, que la llei situa entre el 4 i el 7 de desembre, i es publica al BOE.",
       1: (url) => `El Ministeri de l'Interior facilita l'escrutini provisional (LOREG, article 98.2).${resultsSite("ca", url)} La informació oficial és a ${sites("ca")}. Desconfia de les xifres que no diuen quin percentatge de meses s'ha escrutat.`,
       2: () => "El diumenge 29 de novembre de 2026, de 9 a 20 h: es van escollir el Congrés i el Senat. La campanya va anar del 13 al 27 de novembre i el dissabte 28 va ser la jornada de reflexió. Les properes eleccions que fixa la llei són les municipals del 23 de maig de 2027.",
+      8: () => "Allà és una hora menys que a la península. Els col·legis van tancar a les 20.00 hora peninsular, les 19.00 a Londres, Lisboa i Dublín; a les Canàries es va votar fins a les 20.00 hora local (21.00 peninsular). L'escrutini provisional de la nit no és el resultat oficial: aquest surt de l'escrutini general de les juntes electorals, entre el 4 i el 7 de desembre.",
     },
   },
   es: {
@@ -166,6 +167,7 @@ export const NIGHT_AFTER: Record<Locale, NightAfter> = {
       0: () => "La votación terminó a las 20:00 y en Canarias a las 21:00 (hora peninsular). En 2023, Interior empezó a publicar resultados a las 21:00. El escrutinio provisional de la noche no es el resultado oficial: este sale del escrutinio general de las juntas electorales, que la ley sitúa entre el 4 y el 7 de diciembre, y se publica en el BOE.",
       1: (url) => `El Ministerio del Interior facilita el escrutinio provisional (LOREG, artículo 98.2).${resultsSite("es", url)} La información oficial está en ${sites("es")}. Desconfía de las cifras que no dicen qué porcentaje de mesas se ha escrutado.`,
       2: () => "El domingo 29 de noviembre de 2026, de 9 a 20 h: se eligieron el Congreso y el Senado. La campaña fue del 13 al 27 de noviembre y el sábado 28 fue la jornada de reflexión. Las próximas elecciones que fija la ley son las municipales del 23 de mayo de 2027.",
+      8: () => "Allí es una hora menos que en la península. Los colegios cerraron a las 20:00 hora peninsular, las 19:00 en Londres, Lisboa y Dublín; en Canarias se votó hasta las 20:00 hora local (21:00 peninsular). El escrutinio provisional de la noche no es el resultado oficial: ese sale del escrutinio general de las juntas electorales, entre el 4 y el 7 de diciembre.",
     },
   },
   en: {
@@ -202,6 +204,7 @@ export const NIGHT_AFTER: Record<Locale, NightAfter> = {
       1: (url) => `The Interior Ministry provides the provisional count (electoral law, article 98.2).${resultsSite("en", url)} Official information is on ${sites("en")}. Be wary of figures that do not say what share of polling tables has been counted.`,
       2: () => "On Sunday 29 November 2026, from 9:00 to 20:00: Spain elected the Congress and the Senate. The campaign ran from 13 to 27 November and Saturday 28 November was the day of reflection. The next elections the law sets are the municipal elections of 23 May 2027.",
       3: () => "Voting ran from 9:00 to 20:00 on Sunday 29 November 2026; anyone inside the polling place or at its door at 20:00 could still vote.",
+      9: () => "One hour earlier than in Barcelona. Polls closed at 20:00 Spanish mainland time on 29 November, 19:00 in London, Dublin and Lisbon (14:00 in New York); the Canary Islands, on UK time, voted until 20:00 local time. The provisional count of the night is not the official result: that comes from the electoral boards' general count, from 4 to 7 December.",
     },
   },
 };

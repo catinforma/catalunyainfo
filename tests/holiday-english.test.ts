@@ -312,7 +312,8 @@ test("JSON-LD: Dataset like the Catalan and Spanish town pages, FAQ in the searc
   assert.equal(hub.inLanguage, "en");
   const routes = readFileSync(join(ROOT, "src/components/programmatic/holidays/routes.tsx"), "utf8");
   assert.match(routes, /breadcrumbSchema\(englishTownCrumbs\(m\)\),\s*englishTownDataset\(m\),\s*\/\/[^\n]*\n\s*faqSchema\(/);
-  assert.match(routes, /breadcrumbSchema\(englishHubCrumbs\(\)\), englishHubDataset\(\)/);
+  // 27 Nov 2026: the hub's FAQPage (hub-faq.ts) follows its Dataset.
+  assert.match(routes, /breadcrumbSchema\(englishHubCrumbs\(\)\),\s*englishHubDataset\(\),\s*faqSchema\(\[\{ type: "faq", items: hubFaq\("en"\) \}\]\)/);
 });
 
 test("deterministic: the English copy depends on the snapshot only, never on the clock", () => {

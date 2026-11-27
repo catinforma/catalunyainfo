@@ -18,7 +18,7 @@ import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
-import { DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
+import { DateQuestions, GuideLinks, HolidayTable, HubFaq, Sources } from "./parts";
 
 /**
  * `/en/holidays/`: Catalonia's bank holidays for this year and next, and the
@@ -138,6 +138,9 @@ export function EnglishHubPage() {
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
           <DateQuestions locale="en" />
         </section>
+
+        {/* 27 Nov 2026: the questions people search with, answered from the tables above (lib/programmatic/holidays/hub-faq.ts). */}
+        <HubFaq locale="en" />
 
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "metroHours", "strikes", "decemberBridge", "school"]} locale="en" title={t.guidesTitle} />
 

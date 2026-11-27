@@ -16,7 +16,7 @@ import { comarcaAnchor, comarcaPath, hubPath, municipalityPath, type MuniLocale 
 import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 
-import { DateQuestions, GuideLinks, Sources } from "./parts";
+import { DateQuestions, GuideLinks, HubFaq, Sources } from "./parts";
 
 export function hubCrumbs(locale: MuniLocale): Crumb[] {
   const t = hubCopy(locale);
@@ -75,6 +75,9 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
           <DateQuestions locale={locale} />
         </section>
+
+        {/* 27 Nov 2026: the questions people search with, answered from the data the page prints (lib/programmatic/holidays/hub-faq.ts). */}
+        <HubFaq locale={locale} />
 
         {/* A licensed photograph of a festa major (lib/content/place-photos.ts), after the dated questions; lazy-loaded. */}
         <div className="ci-prose">

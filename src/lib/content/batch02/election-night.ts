@@ -320,7 +320,8 @@ const COPY: Record<Locale, T> = {
       { question: "S'inclou el vot dels catalans que viuen a l'estranger?", answer: "No a la nit electoral. El vot CERA es compta a l'escrutini general, uns dies després." },
       { question: "Quina diferència hi ha entre el vot en blanc i el vot nul?", answer: "El vot en blanc (el sobre sense papereta, o al Senat la papereta sense cap creu) és un vot vàlid: entra al total sobre el qual es calcula el mínim del 3 % de cada província, però no dona escons. El vot nul (papereta no oficial, papereta del Congrés ratllada o modificada, més de tres creus al Senat, paperetes de candidatures diferents al mateix sobre) no és vàlid i no compta per al repartiment (LOREG, articles 96 i 163)." },
       { question: "Com funciona la llei d'Hondt a les eleccions generals?", answer: "A cada província, les candidatures que no arriben al 3 % dels vots vàlids queden fora; els vots de les altres es divideixen per 1, 2, 3… fins al nombre d'escons, i els escons van als cocients més alts (LOREG, article 163). Al Senat no s'aplica: hi surten els quatre candidats més votats de cada província catalana." },
-      { question: "Es poden publicar enquestes la setmana de les eleccions?", answer: "No del 24 al 28 de novembre:la llei electoral prohibeix publicar-ne durant els cinc dies anteriors a la votació." },
+      { question: "Es poden publicar enquestes la setmana de les eleccions?", answer: "No del 24 al 28 de novembre: la llei electoral prohibeix publicar-ne durant els cinc dies anteriors a la votació." },
+      { question: "A quina hora surten els resultats a les Canàries, Portugal o el Regne Unit?", answer: "Allà és una hora menys que a la península. Els col·legis tanquen a les 20.00 hora peninsular, que són les 19.00 a Londres, Lisboa i Dublín; a les Canàries es vota fins a les 20.00 hora local (21.00 peninsular). Al 2023, Interior va començar a publicar resultats a les 21.00 hora peninsular, les 20.00 a les Canàries i al Regne Unit." },
     ],
   },
   es: {
@@ -428,6 +429,7 @@ const COPY: Record<Locale, T> = {
       { question: "¿Qué diferencia hay entre el voto en blanco y el voto nulo?", answer: "El voto en blanco (el sobre sin papeleta, o en el Senado la papeleta sin ninguna cruz) es un voto válido: entra en el total sobre el que se calcula el mínimo del 3 % de cada provincia, pero no da escaños. El voto nulo (papeleta no oficial, papeleta del Congreso tachada o modificada, más de tres cruces en el Senado, papeletas de candidaturas distintas en el mismo sobre) no es válido y no cuenta para el reparto (LOREG, artículos 96 y 163)." },
       { question: "¿Cómo funciona la ley D'Hondt en las elecciones generales?", answer: "En cada provincia, las candidaturas que no llegan al 3 % de los votos válidos quedan fuera; los votos de las demás se dividen por 1, 2, 3… hasta el número de escaños, y los escaños van a los cocientes más altos (LOREG, artículo 163). En el Senado no se aplica: salen los cuatro candidatos más votados de cada provincia catalana." },
       { question: "¿Se pueden publicar encuestas la semana de las elecciones?", answer: "No del 24 al 28 de noviembre: la ley electoral prohíbe publicarlas durante los cinco días anteriores a la votación." },
+      { question: "¿A qué hora salen los resultados en Canarias, Portugal o el Reino Unido?", answer: "Allí es una hora menos que en la península. Los colegios cierran a las 20:00 hora peninsular, que son las 19:00 en Londres, Lisboa y Dublín; en Canarias se vota hasta las 20:00 hora local (21:00 peninsular). En 2023, Interior empezó a publicar resultados a las 21:00 hora peninsular, las 20:00 en Canarias y en el Reino Unido." },
     ],
   },
   en: {
@@ -526,6 +528,9 @@ const COPY: Record<Locale, T> = {
     ],
     warnTitle: "Beware of unofficial sites",
     warn: "Some sites already advertise “29N live results”, and at least one shows 2023 figures under 2026 headings. Before trusting a figure, check that it comes from the Interior Ministry and that it states the share of polling tables counted.",
+    // 27 Nov 2026: last FAQ (and its ca/es twins) in the time zones of English and abroad readers. Arithmetic only, on the
+    // times this page already sources: on 29 Nov 2026 the mainland is on CET (UTC+1); the UK, Ireland, Portugal and the
+    // Canary Islands on UTC+0; New York on EST (UTC-5). Past-tense answers from 30 Nov in election-after.ts (index 9; 8 in ca/es).
     faq: [
       { question: "When are the 2026 Spain general election results?", answer: `On the night of Sunday 29 November, after polls close at 20:00 (21:00 mainland time in the Canary Islands). In 2023 the Interior Ministry started publishing results at 21:00. ${SITE ? `For 29 November they are on its [official results site](${SITE}).` : "It has not announced the time or the results site for 29 November yet (checked on " + checkedDay("en", RESULTS_SITE_CHECKED) + ")."}` },
       { question: "Where can I see the 2026 Spain general election results?", answer: `On the Interior Ministry's results website and app, which it opens anew for each election (for the July 2023 election it announced them three days before). ${SITE ? `For 29 November, [this is the official site](${SITE}).` : "When it announces the 29 November ones, we will put the official link at the top of this page."} Be wary of figures that do not say what share of polling tables has been counted.` },
@@ -536,6 +541,7 @@ const COPY: Record<Locale, T> = {
       { question: "What is the difference between a blank vote and a null vote in Spain?", answer: "A blank vote (an envelope with no ballot, or a Senate ballot with no name marked) is valid: it is part of the total on which each province's 3 % threshold is worked out, but it wins no seat. A null vote (a non-official ballot, a Congress ballot with names crossed out or changed, more than three marks on the Senate ballot, ballots of different lists in one envelope) is not valid and plays no part in the seat count (electoral law, articles 96 and 163)." },
       { question: "How does the D'Hondt method work in Spain's general election?", answer: "In each province, lists with less than 3 % of the valid votes are left out; the others' votes are divided by 1, 2, 3… up to the number of seats, and the seats go to the highest quotients (electoral law, article 163). It does not apply to the Senate, where the four candidates with most votes in each Catalan province are elected." },
       { question: "Can polls be published in the week of the election?", answer: "Not from 24 to 28 November: the electoral law bans publishing them in the five days before the vote." },
+      { question: "What time are the Spanish election results in UK time?", answer: "One hour earlier than in Barcelona. Polls close at 20:00 Spanish mainland time, which is 19:00 in London, Dublin and Lisbon (14:00 in New York); the Canary Islands, on UK time, vote until 20:00 local time. In 2023 the Interior Ministry started publishing results at 21:00 mainland time: 20:00 in the UK, 15:00 in New York." },
     ],
   },
 };

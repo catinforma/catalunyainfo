@@ -74,6 +74,15 @@ import {
  * 24.00 h"; funicular "Del 26/10/2026 al 28/03/2027" unchanged). Read 25 Nov 2026, 11:50 UTC. VERIFIED unchanged
  * (tram, NitBus not re-read).
  *
+ * 27 Nov 2026 (English editions batch): TMB's EN hours page re-read
+ * (https://www.tmb.cat/en/barcelona-transport/operating-hours-metro-bus):
+ * "24 December From 05:00 to 23:00" and "31 December Continuous service
+ * throughout New Year's Eve". The "Christmas and New Year" tip said only "has
+ * run all night in recent years"; it now gives TMB's standing rule, and two
+ * FAQs ask it the way people search ("…on Christmas Eve?", "…all night on New
+ * Year's Eve?"). Tram hours for 24 Dec not repeated in them: tram.cat renders
+ * its timetable by script and could not be re-read with curl today.
+ *
  * 5 Nov 2026: the "Christmas and New Year" line now ends with one sentence
  * linking the new Christmas transport page (christmasTransportMention);
  * title and descriptions untouched. Goes out with `transport-nadal-links`.
@@ -217,7 +226,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Friday after midnight:** you have until about 2:00 on the metro; after that, NitBus.",
       "**Arriving late at the airport:** the airport metro follows the same hours; after it closes, use the NitBus.",
-      `**Christmas and New Year:** TMB announces the exact hours in December; New Year's Eve has run all night in recent years. ${christmasTransportMention("en")}`,
+      `**Christmas and New Year:** TMB's standing timetable has the metro close early on 24 December (last trains at 23:00) and run all night on 31 December into New Year's Day; it confirms any other Christmas change in December. ${christmasTransportMention("en")}`,
       `**Strike days:** if a strike covers TMB, the metro runs the minimum service the Generalitat sets; see ${b2link("strikes", "en", "what runs on strike days")}.`,
       `**Rodalies:** if your trip continues by train, check [Rodalies disruptions today](${rodaliesHub("en")}) first.`,
     ],
@@ -230,6 +239,8 @@ const COPY: Record<Locale, T> = {
       { question: "What time does the metro close on Sundays?", answer: "At midnight." },
       { question: "What are the Barcelona tram hours?", answer: "5:00 to midnight Monday to Thursday, Sundays and holidays; 5:00 to 2:00 on Fridays, Saturdays and nights before a holiday." },
       { question: "How do I get around Barcelona at night?", answer: "On the NitBus: from about 22:30 to 6:00 every night, about every 20 minutes on most lines, almost every line through Plaça de Catalunya." },
+      { question: "What time does the Barcelona metro close on Christmas Eve?", answer: "Earlier than usual: on 24 December the metro runs from 5:00 to 23:00, the time the last trains leave the end stations." },
+      { question: "Does the Barcelona metro run all night on New Year's Eve?", answer: "Yes. TMB runs the metro non-stop through the night of 31 December into 1 January, so you can get home after the midnight celebrations without a night bus." },
     ],
     note: "Special-night hours change from year to year: check TMB before a big night out.",
   },
@@ -290,7 +301,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Viernes después de medianoche:** tienes metro hasta las 2:00 aproximadamente; después, NitBus.",
       "**Llegada tarde al aeropuerto:** el metro del aeropuerto sigue el mismo horario; cuando cierra, queda el NitBus.",
-      `**Navidad y Fin de Año:** TMB anuncia el horario exacto en diciembre; los últimos años la Nochevieja ha funcionado toda la noche. ${christmasTransportMention("es")}`,
+      `**Navidad y Fin de Año:** el horario fijo de TMB adelanta el cierre del metro el 24 de diciembre (últimos trenes a las 23:00) y lo hace funcionar toda la noche del 31 de diciembre al día de Año Nuevo; cualquier otro cambio de Navidad lo confirma en diciembre. ${christmasTransportMention("es")}`,
       `**Días de huelga:** si la huelga afecta a TMB, el metro funciona con los servicios mínimos que fija la Generalitat; mira ${b2link("strikes", "es", "qué funciona los días de huelga")}.`,
       `**Rodalies:** si sigues el viaje en tren, mira antes [las incidencias de Rodalies hoy](${rodaliesHub("es")}).`,
     ],
@@ -303,6 +314,8 @@ const COPY: Record<Locale, T> = {
       { question: "¿Hasta qué hora funciona el metro el domingo?", answer: "Hasta medianoche (24:00)." },
       { question: "¿Cuál es el horario del tranvía de Barcelona?", answer: "De 5:00 a 24:00 de lunes a jueves, domingos y festivos, y de 5:00 a 2:00 los viernes, sábados y vísperas de festivo." },
       { question: "¿Cómo moverse por Barcelona de noche?", answer: "Con el NitBus: aproximadamente de 22:30 a 6:00 todas las noches, cada 20 minutos en la mayoría de líneas, casi todas por plaza Catalunya." },
+      { question: "¿A qué hora cierra el metro de Barcelona en Nochebuena?", answer: "Antes de lo habitual: el 24 de diciembre el metro funciona de 5:00 a 23:00, la hora a la que salen los últimos trenes de las cabeceras." },
+      { question: "¿Hay metro toda la noche en Nochevieja?", answer: "Sí. TMB mantiene el metro sin interrupción toda la noche del 31 de diciembre al 1 de enero, así que se puede volver a casa después de las campanadas sin bus nocturno." },
     ],
     note: "El horario de las noches especiales cambia cada año: consulta TMB antes de una noche señalada.",
   },
@@ -363,7 +376,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Divendres després de mitjanit:** tens metro fins a les 2:00 aproximadament; després, NitBus.",
       "**Arribada tard a l'aeroport:** el metro de l'aeroport segueix el mateix horari; quan tanca, queda el NitBus.",
-      `**Nadal i Cap d'Any:** TMB anuncia l'horari exacte al desembre; els últims anys la nit de Cap d'Any ha funcionat tota la nit. ${christmasTransportMention("ca")}`,
+      `**Nadal i Cap d'Any:** l'horari fix de TMB avança el tancament del metro el 24 de desembre (últims trens a les 23:00) i el fa funcionar tota la nit del 31 de desembre al dia de Cap d'Any; qualsevol altre canvi de Nadal el confirma al desembre. ${christmasTransportMention("ca")}`,
       `**Dies de vaga:** si la vaga afecta TMB, el metro funciona amb els serveis mínims que fixa la Generalitat; mira ${b2link("strikes", "ca", "què funciona els dies de vaga")}.`,
       `**Rodalies:** si continues el viatge en tren, mira abans [les incidències de Rodalies avui](${rodaliesHub("ca")}).`,
     ],
@@ -375,6 +388,8 @@ const COPY: Record<Locale, T> = {
       { question: "Quin és l'horari del metro el dissabte?", answer: "Obre a les 5:00 i no tanca fins a la mitjanit del diumenge." },
       { question: "Quin és l'horari del tramvia de Barcelona?", answer: "De 5:00 a 24:00 de dilluns a dijous, diumenges i festius, i de 5:00 a 2:00 els divendres, dissabtes i vigílies de festiu." },
       { question: "Com moure's per Barcelona de nit?", answer: "Amb el NitBus: aproximadament de 22:30 a 6:00 totes les nits, cada 20 minuts a la majoria de línies, gairebé totes per la plaça de Catalunya." },
+      { question: "A quina hora tanca el metro de Barcelona la nit de Nadal?", answer: "Abans del que és habitual: el 24 de desembre el metro funciona de 5:00 a 23:00, l'hora en què surten els últims trens de les capçaleres." },
+      { question: "Hi ha metro tota la nit per Cap d'Any?", answer: "Sí. TMB manté el metro sense interrupció tota la nit del 31 de desembre a l'1 de gener, de manera que es pot tornar a casa després de les campanades sense bus nocturn." },
     ],
     note: "L'horari de les nits especials canvia cada any: consulta TMB abans d'una nit assenyalada.",
   },

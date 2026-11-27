@@ -12,6 +12,7 @@ import { DATE_PAGES, datePath } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/question";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
+import { HUB_FAQ_TITLE, hubFaq } from "@/lib/programmatic/holidays/hub-faq";
 import { GUIDES, OFFICIAL, withHolidayHub, type GuideKey } from "@/lib/programmatic/holidays/links";
 import { caA, caDe } from "@/lib/programmatic/holidays/names";
 
@@ -75,6 +76,21 @@ export function DateQuestions({ locale, first, exclude, upcoming }: { locale: Da
         </div>
       ))}
     </>
+  );
+}
+
+/** The hubs' questions (lib/programmatic/holidays/hub-faq.ts); routes.tsx prints the same items as FAQPage. */
+export function HubFaq({ locale }: { locale: DateLocale }) {
+  return (
+    <section className="ci-prose mt-12" aria-labelledby="ci-hol-faq">
+      <h2 id="ci-hol-faq">{HUB_FAQ_TITLE[locale]}</h2>
+      {hubFaq(locale).map((item) => (
+        <div key={item.question}>
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+        </div>
+      ))}
+    </section>
   );
 }
 

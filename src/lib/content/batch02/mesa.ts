@@ -167,6 +167,13 @@ const EXCUSE_APP = "https://www.mesaselectorales.es/web-excusas-form/#/login";
  */
 const EMT_232 = "https://portaldogc.gencat.cat/utilsEADOP/PDF/9799/2181015.pdf";
 const LOREG_143 = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientocuarentaytres";
+/**
+ * 27 Nov 2026, FAQ "Can a foreign resident be called…?" (ca/es/en). LOREG consolidated text read that day:
+ * art. 26.2 "El Presidente y los vocales de cada Mesa son designados por sorteo público entre la totalidad de las
+ * personas incluidas en la lista de electores de la Mesa correspondiente"; art. 2.1 "El derecho de sufragio
+ * corresponde a los españoles mayores de edad". Said for general elections only (municipal rolls also carry EU
+ * citizens; not claimed here).
+ */
 
 /**
  * The 29N facts this guide prints, as data, for the town election pages
@@ -421,6 +428,7 @@ const COPY: Record<Locale, T> = {
       { question: "Tinc festa l'endemà de fer de membre de mesa?", answer: "Tens dret a cinc hores menys de feina l'endemà, en tots els casos. Per al 29N, el dilluns 30 de novembre." },
       { question: "Com sé si m'ha tocat ser membre de mesa?", answer: "No hi ha cap consulta en línia: només ho saps per la notificació, que t'han de fer en els tres dies següents al sorteig (del 31 d'octubre al 4 de novembre). Si tens dubtes, pregunta a l'Ajuntament o a la Junta Electoral de Zona." },
       { question: "Quines excuses s'accepten per no anar a la mesa?", answer: "S'accepten sempre, si les documentes: tenir de 65 a 69 anys, una discapacitat declarada, estar de baixa, estar embarassada de sis mesos o més, cuidar un lactant, menors de 12 anys o un familiar dependent, o haver estat a la mesa tres vegades en deu anys. Treballar o ser de vacances no n'és cap d'automàtica." },
+      { question: "Pot tocar fer de membre de mesa a un estranger resident?", answer: "En unes eleccions generals, no. Els membres de mesa se sortegen entre les persones de la llista d'electors de cada mesa (LOREG, article 26.2), i a les generals només hi voten els espanyols (article 2). Tenir NIE o TIE no et posa en aquesta llista, de manera que els estrangers residents, també els ciutadans de la UE, no poden sortir al sorteig." },
     ],
   },
   es: {
@@ -543,6 +551,7 @@ const COPY: Record<Locale, T> = {
       { question: "¿Tengo fiesta al día siguiente de ser miembro de mesa?", answer: "Tienes derecho a cinco horas menos de trabajo al día siguiente, en todos los casos. Para el 29N, el lunes 30 de noviembre." },
       { question: "¿Cómo sé si me ha tocado mesa electoral?", answer: "No hay ninguna consulta en línea: solo lo sabes por la notificación, que te deben hacer en los tres días siguientes al sorteo (del 31 de octubre al 4 de noviembre). Si tienes dudas, pregunta al Ayuntamiento o a la Junta Electoral de Zona." },
       { question: "¿Qué excusas se aceptan para no ir a la mesa electoral?", answer: "Se aceptan siempre, si las documentas: tener de 65 a 69 años, una discapacidad declarada, estar de baja, estar embarazada de seis meses o más, cuidar de un lactante, de menores de 12 años o de un familiar dependiente, o haber estado en la mesa tres veces en diez años. Trabajar o estar de vacaciones no es ninguna automática." },
+      { question: "¿Le puede tocar la mesa electoral a un extranjero residente?", answer: "En unas elecciones generales, no. Los miembros de mesa se sortean entre las personas de la lista de electores de cada mesa (LOREG, artículo 26.2), y en las generales solo votan los españoles (artículo 2). Tener NIE o TIE no te incluye en esa lista, así que los extranjeros residentes, también los ciudadanos de la UE, no pueden salir en el sorteo." },
     ],
   },
   en: {
@@ -656,6 +665,7 @@ const COPY: Record<Locale, T> = {
       { question: "What happens if I don't turn up?", answer: "It is an offence under article 143 of the electoral law: three months to a year in prison, or a day-fine of six to twenty-four months." },
       { question: "How do I know if I have been drawn?", answer: "There is no online lookup: you find out from the notification, which must reach you within three days of the draw (31 October to 4 November). If in doubt, ask your town hall or the Junta Electoral de Zona." },
       { question: "Which excuses are accepted?", answer: "Always accepted once documented: being 65 to 69, a recognised disability, sick leave, being six or more months pregnant, caring for a breastfed baby, children under 12 or a dependent relative, or having sat three times in ten years. Work or holidays are not automatic excuses." },
+      { question: "Can a foreign resident be called for polling-station duty?", answer: "Not in a general election. Polling-station members are drawn by lot from the people on each table's list of voters (electoral law, article 26.2), and only Spanish citizens vote in a general election (article 2). Having an NIE or a TIE does not put you on that list, so foreign residents, EU citizens included, cannot be drawn." },
     ],
   },
 };
