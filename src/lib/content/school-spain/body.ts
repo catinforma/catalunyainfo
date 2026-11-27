@@ -1376,6 +1376,7 @@ function hubFaq(regions: RegionCalendar[], locale: Locale): Block {
   const lastDays = groupsInWords(dayGroups(regions, "christmas", "last", latest), L);
   const firstDays = groupsInWords(dayGroups(regions, "christmas", "first", latest), L);
   const backDays = groupsInWords(dayGroups(regions, "christmas", "back", t(L, "como pronto", "com a molt aviat", "at the earliest")), L);
+  const backYear = regions.flatMap((r) => breakDaysAll(r, "christmas").map((x) => x.days.back)).sort()[0]!.slice(0, 4);
   const byEnd = [...regions].sort((a, b) => mainLevels(a).end.localeCompare(mainLevels(b).end));
   const earliestEnd = mainLevels(byEnd[0]!).end;
   const latestEnd = mainLevels(byEnd.at(-1)!).end;
@@ -1395,13 +1396,19 @@ function hubFaq(regions: RegionCalendar[], locale: Locale): Block {
         ),
       },
       {
+        // 27 Nov 2026: in the searchers' words ("cuándo se vuelve al cole después de Reyes 2027"); the year is the day back's.
         question: t(
           L,
-          "¿Cuándo se vuelve al colegio después de Navidad?",
-          "Quan es torna a l'escola després de Nadal?",
-          "When does school go back after Christmas in Spain?",
+          `¿Cuándo se vuelve al cole después de Navidad y Reyes ${backYear}?`,
+          `Quan es torna a l'escola després de Nadal i Reis ${backYear}?`,
+          `When does school go back after Christmas and Three Kings' Day ${backYear} in Spain?`,
         ),
-        answer: t(L, `Se vuelve a clase ${backDays}.`, `Es torna a classe ${backDays}.`, `School resumes ${backDays}.`),
+        answer: t(
+          L,
+          `Se vuelve a clase ${backDays}. La fila de cada comunidad, con su orden, está en la tabla de Navidad.`,
+          `Es torna a classe ${backDays}. La fila de cada comunitat, amb el seu text oficial, és a la taula de Nadal.`,
+          `School resumes ${backDays}. Each region's row, with its official text, is in the Christmas table.`,
+        ),
       },
       {
         question: t(L, "¿Cuándo termina el curso 2026-2027?", "Quan acaba el curs 2026-2027?", "When does the 2026-2027 school year end?"),

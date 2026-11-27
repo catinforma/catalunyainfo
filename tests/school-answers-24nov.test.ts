@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { resolveDateWindows } from "../src/lib/content/date-window.ts";
 import { daysBetween, todayInCatalonia } from "../src/lib/content/holidays/calendar.ts";
 import { SCHOOL_YEARS } from "../src/lib/content/school/calendar.ts";
 import { SCHOOL_ANSWERS_READ, SCHOOL_ANSWERS_REREAD_BY, buildBody } from "../src/lib/content/school/publish.ts";
@@ -28,7 +29,8 @@ test("under the lead: Christmas, Easter, today and tomorrow, free-choice days, n
       ["paragraph", "callout", "callout", "schoolCalendar", "callout", "callout"],
       locale,
     );
-    assert.equal(body.findIndex((b) => b.type === "heading"), 6, `${locale}: the first heading comes after the answers`);
+    // 27 Nov 2026: the Christmas section sits in date windows right after the answers; read the page as it is today.
+    assert.equal((resolveDateWindows(body as never) as Box[]).findIndex((b) => b.type === "heading"), 6, `${locale}: the first heading comes after the answers`);
     assert.equal(body[0]!.lead, true, `${locale}: the lead stays the first paragraph`);
   }
 });
