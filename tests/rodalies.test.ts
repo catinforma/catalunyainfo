@@ -725,7 +725,7 @@ test("transport passes, metro hours, airport and strikes guides gain exactly one
   }
   // Titles as the 28 Oct page-1 push left them (docs/SEO_EXPERIMENTS.md).
   assert.equal(HOURS.editions.ca.seoTitle, "Horari metro Barcelona avui: a quina hora obre i tanca");
-  assert.equal(TRANSPORT.editions.en.seoTitle, "Barcelona transport pass 2026: T-casual €13, 1 to 5 days"); // retitled 30 Oct (top-3 push)
+  assert.equal(TRANSPORT.editions.en.seoTitle, "T-casual Barcelona 2026: €13 for 10 trips, or T-dia for 24h"); // retitled 27 Nov (batch 9C, after the 30 Oct window)
   const route = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
   assert.match(route, /wants\("rodalies-links"\)/);
   for (const article of ["TRANSPORT", "HOURS", "AIRPORT", "STRIKES_GUIDE"]) {

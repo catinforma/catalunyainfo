@@ -484,7 +484,9 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
     const { seoTitle, seoDescription } = TRANSPORT.editions[locale];
     assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
     assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
-    assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
+    // 27 Nov (batch 9C): the ES title drops the price (0 clicks at 3-4 when the
+    // title gave the whole answer) and keeps it in the description; EN keeps it.
+    assert.match(locale === "en" ? seoTitle : seoDescription, /T-casual.*13/, `${locale}: T-casual price in the snippet`);
   }
   // TMB fare table and ATM press room re-read 25 Nov 2026 (no 2027 fares).
   assert.equal(TRANSPORT.verifiedAt, "2026-11-25");

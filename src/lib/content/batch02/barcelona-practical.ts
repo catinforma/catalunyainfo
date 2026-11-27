@@ -372,9 +372,9 @@ export const TRANSPORT: B2Article = {
       path: "guies/targetes-transport-barcelona",
       title:
         "Targetes de transport de Barcelona 2026: preu de la T-casual per zones, T-dia, T-usual i Hola Barcelona",
-      seoTitle: "Preus targetes TMB 2026: T-casual per zones, T-dia i T-usual",
+      seoTitle: "Preu T-casual Barcelona 2026 per zones i quan surt a compte",
       seoDescription:
-        "T-casual: 13 € (1 zona), 25,50 € (2) i 34,70 € (3). Preus del 2026 de totes les targetes per zones, on no valen i si surt més a compte la Hola Barcelona.",
+        "T-casual: 13 € en 1 zona, 25,50 € en 2 i 34,70 € en 3, deu viatges en metro, bus i tren. Quan surt millor la T-dia, la T-usual o la Hola Barcelona.",
       excerpt:
         "La targeta pensada per a turistes no sempre és la més barata. Compara els títols segons els dies, els trajectes i l'aeroport.",
       blocks: [
@@ -476,9 +476,9 @@ export const TRANSPORT: B2Article = {
       path: "guias/tarjetas-transporte-barcelona",
       title:
         "Tarjetas de transporte de Barcelona 2026: precio de la T-casual por zonas, T-dia, T-usual y Hola Barcelona",
-      seoTitle: "Precio T-casual Barcelona 2026: 13 € (1 zona) y 25,50 € (2)",
+      seoTitle: "T-casual Barcelona 2026: precio por zonas y cuándo compensa",
       seoDescription:
-        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Tarjetas de metro de Barcelona 2026: T-dia 12 €, T-usual 22,80 €, Hola Barcelona y cuál compensa.",
+        "T-casual: 13 € en 1 zona, 25,50 € en 2 y 34,70 € en 3, diez viajes en metro, bus y tren. Cuándo sale mejor la T-dia, la T-usual o la Hola Barcelona.",
       excerpt:
         "La tarjeta dirigida a turistas no siempre es la más barata. Compara los títulos según días, trayectos y aeropuerto.",
       blocks: [
@@ -575,9 +575,9 @@ export const TRANSPORT: B2Article = {
       path: "guides/barcelona-transport-passes",
       title:
         "Barcelona transport passes 2026: T-casual, T-dia, T-usual or Hola Barcelona, and what each costs",
-      seoTitle: "Barcelona transport pass 2026: T-casual €13, 1 to 5 days",
+      seoTitle: "T-casual Barcelona 2026: €13 for 10 trips, or T-dia for 24h",
       seoDescription:
-        "T-casual €13 for 10 journeys, T-dia €12 for 24 hours, Hola Barcelona from €12.50. 2026 prices by zone and days, airport metro rules and which to buy.",
+        "T-casual: €13 for 10 journeys in zone 1 on metro, bus, tram and train. 24-hour pass: T-dia €12, Hola Barcelona €12.50. Not valid at the airport metro.",
       excerpt:
         "The obvious tourist card is not automatically the cheapest. Compare the passes by days, journeys and airport use.",
       blocks: [

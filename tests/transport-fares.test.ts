@@ -135,3 +135,25 @@ test("date guard: ATM's 2027 fares are re-checked in mid-December and again by 1
     `On ${today} the Barcelona fares were last read on ${FARES_AS_OF}, before the ${due} re-check. Read ATM's press room (https://www.atm.cat/comunicacio/sala-de-premsa/notes-de-premsa) and TMB's fare table (${FARES_2026.sourceUrl}), plus the BOE/Ministry for a 2027 extension of RDL 17/2025. If the 2027 table is out: fill FARES_2027, point CURRENT_FARES at it, fix the prose the drift test lists, and publish the \`transport\` group. Then move FARES_AS_OF in src/lib/content/transport-cards/rates.ts.`,
   );
 });
+
+test("snippet (27 Nov 2026, batch 9C): T-casual first, the fare table's year, lengths, prices from the body", () => {
+  const first: Record<(typeof LOCALES)[number], RegExp> = {
+    ca: /^Preu T-casual Barcelona \d{4}/,
+    es: /^T-casual Barcelona \d{4}: precio/,
+    en: /^T-casual Barcelona \d{4}: €/,
+  };
+  for (const locale of LOCALES) {
+    const e = TRANSPORT.editions[locale];
+    assert.match(e.seoTitle, first[locale], `${locale}: the searched words ("t casual", "preu t casual") open the title`);
+    assert.ok(e.seoTitle.length <= 60, `${locale} title ${e.seoTitle.length}: ${e.seoTitle}`);
+    assert.ok(e.seoDescription.length > 80 && e.seoDescription.length <= 155, `${locale} description ${e.seoDescription.length}`);
+    assert.ok(e.seoTitle.includes(String(CURRENT_FARES.year)), `${locale}: the title's year is the fare table's (${CURRENT_FARES.year})`);
+    // The description gives the answer, and the page says it first.
+    const lead = bodyToPlainText(e.blocks.slice(0, 1));
+    const zone1 = locale === "en" ? "€13" : "13 €";
+    assert.ok(e.seoDescription.startsWith("T-casual: ") && e.seoDescription.includes(zone1), `${locale}: zone-1 price in the description`);
+    assert.ok(lead.includes(zone1), `${locale}: the lead states the same price`);
+  }
+  assert.match(TRANSPORT.editions.en.seoDescription, /T-dia €12/);
+  assert.match(TRANSPORT.editions.en.seoDescription, /airport metro/);
+});
