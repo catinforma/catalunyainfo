@@ -126,6 +126,15 @@ import { OPENING_2027, SHOPS } from "./shops";
  * description, H1 and lead wording untouched (window to 28 Nov); only the
  * check dates move.
  *
+ * 27 Nov 2026 (batch 8I): Barcelona and every council re-read. Barcelona: no
+ * programme yet (parade page still "Cavalcada de Reis 2026", /nadal/ca "Nadal
+ * 2025", press room tag "reis" newest 2 Jan 2026, tag "nadal-2026" only the
+ * lights); new on /nadal/ca/els-reis-dorient: the result of the 2027 sign-up
+ * draw (BARCELONA_NEWS_2027.results), which the sign-up sentence and a new
+ * FAQ now give. Vic has published its 2027 parade (reis-towns.ts). Reus,
+ * Sabadell and Granollers unchanged. Title, description, H1 and lead wording
+ * untouched (window to 28 Nov); only the check dates move.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights on a Barcelona shopping street), also the Christmas in Barcelona
  * hero, with its exact alt text and caption, because media rows are keyed by
@@ -133,7 +142,7 @@ import { OPENING_2027, SHOPS } from "./shops";
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const REIS_AS_OF = "2026-11-25";
+export const REIS_AS_OF = "2026-11-27";
 
 /* -------------------------------------------------------------------------- */
 /* The days, from the shared modules                                          */
@@ -345,6 +354,22 @@ export const BARCELONA_NEWS_2027 = {
   // 25 Nov 2026: the form answers "L'enquesta està en pausa i no s'hi pot accedir" (past the 23 Nov deadline).
   url: "https://inscripcions-ajuntament.barcelona.cat/index.php/469371?lang=ca",
   read: "2026-11-21",
+  /**
+   * The draw's result, linked from barcelona.cat/nadal/ca/els-reis-dorient ("Resultat de les inscripcions a la
+   * Cavalcada. Vols saber si participaràs a la Cavalcada 2027? Només cal que entris aquí per confirmar-ho"), a
+   * 4-page PDF "Cavalcada de Reis. Resultat del sorteig de la Crida 2027" (file dated 25 Nov 2026; read 27 Nov
+   * 2026): "Abans del 5 de desembre es posaran en contacte amb la gent afortunada pel sorteig, en cas contrari
+   * envieu un correu electrònic a Crida Ciutadana Reis cridaciutadanareis@bcn.cat". Four lists of entry numbers:
+   * "Els patges més petits de 8 a 10 anys", "Patges de benvinguda d'11 a 13 anys", "Assistents seguici de 14 a 17
+   * anys", "Col·laboradors tècnics de 18 anys endavant".
+   */
+  results: {
+    url: "https://www.barcelona.cat/barcelonacultura/sites/default/files/resultat_sorteig_crida_2027.pdf",
+    page: "https://www.barcelona.cat/nadal/ca/els-reis-dorient",
+    contactBy: "2026-12-05",
+    email: "cridaciutadanareis@bcn.cat",
+    read: "2026-11-27",
+  },
 } as const;
 
 /** True once the page's check date is past the sign-up deadline: the sentence then says they have closed. */
@@ -818,6 +843,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Cavalcada de Reis", url: U.bcnCulturaPopular, publisher: "Ajuntament de Barcelona, Cultura Popular" },
   { name: "Servei de Premsa: Reis", url: REIS_WATCH.barcelonaPress, publisher: "Ajuntament de Barcelona" },
   { name: "Inscripcions a la Cavalcada de Reis 2027", url: BARCELONA_NEWS_2027.url, publisher: "Ajuntament de Barcelona" },
+  { name: "Cavalcada de Reis: resultat del sorteig de la Crida 2027", url: BARCELONA_NEWS_2027.results.url, publisher: "Ajuntament de Barcelona" },
   { name: "Transport públic per a la Cavalcada de Reis de Barcelona 2026 (5/1/2026)", url: U.tmb2026, publisher: "TMB" },
   ...HOLIDAY_SOURCES_2027.slice(0, 1).map((s) => ({ name: s.name, url: s.url, publisher: s.publisher })),
   { name: SCHOOL_SOURCE.name, url: SCHOOL_SOURCE.url, publisher: SCHOOL_SOURCE.publisher },
@@ -1327,15 +1353,34 @@ function daysParas(locale: Locale): string[] {
 
 const RELATED = ["christmasBarcelona", "christmasTraditions", "barcelonaDecember", "newYear", "shops", "winterSales", "barcelonaWinter", "bridges2027", "hours"] as const;
 
+/** Where to see whether you were drawn, and what happens next (the council's PDF of the draw). */
+export function drawResultsSentence(locale: Locale): string {
+  const r = BARCELONA_NEWS_2027.results;
+  const by = dateYear(r.contactBy, locale);
+  // Past the contact deadline (by the page's check date, never the clock) the sentence says so.
+  const past = REIS_AS_OF > r.contactBy;
+  return past
+    ? {
+        ca: `El [resultat del sorteig](${r.url}) ja és públic: és una llista dels números d'inscripció escollits en cada franja d'edat. L'Ajuntament havia de contactar les persones seleccionades abans del ${by}; si el teu número hi surt i no t'han dit res, cal escriure a ${r.email}.`,
+        es: `El [resultado del sorteo](${r.url}) ya es público: es una lista de los números de inscripción elegidos en cada franja de edad. El Ayuntamiento tenía que contactar a las personas seleccionadas antes del ${by}; si tu número sale y no te han dicho nada, hay que escribir a ${r.email}.`,
+        en: `The [draw result](${r.url}) is out: a list of the entry numbers drawn in each age group. The City Council was to contact those selected before ${by}; if your number is on it and you have not heard from them, email ${r.email}.`,
+      }[locale]
+    : {
+        ca: `El [resultat del sorteig](${r.url}) ja és públic: és una llista dels números d'inscripció escollits en cada franja d'edat. L'Ajuntament es posa en contacte amb les persones seleccionades abans del ${by}; si el teu número hi surt i no t'han dit res, cal escriure a ${r.email}.`,
+        es: `El [resultado del sorteo](${r.url}) ya es público: es una lista de los números de inscripción elegidos en cada franja de edad. El Ayuntamiento se pone en contacto con las personas seleccionadas antes del ${by}; si tu número sale y no te han dicho nada, hay que escribir a ${r.email}.`,
+        en: `The [draw result](${r.url}) is out: a list of the entry numbers drawn in each age group. The City Council contacts those selected before ${by}; if your number is on it and you have not heard from them, email ${r.email}.`,
+      }[locale];
+}
+
 /** Barcelona's call for people to take part: open until 23 Nov 2026, then in the past tense. */
 function signupsSentence(): Record<Locale, string> {
   const n = BARCELONA_NEWS_2027;
   const d = (iso: string, locale: Locale) => dateYear(iso, locale);
   return SIGNUPS_CLOSED
     ? {
-        ca: `Ja s'hi està treballant: les [inscripcions per participar a la Cavalcada de Reis 2027](${n.url}), per a majors de 8 anys, van estar obertes del ${d(n.opens, "ca")} al ${d(n.closes, "ca")} i ja s'han tancat.`,
-        es: `Ya se está preparando: las [inscripciones para participar en la Cabalgata de Reyes 2027](${n.url}), para mayores de 8 años, estuvieron abiertas del ${d(n.opens, "es")} al ${d(n.closes, "es")} y ya se han cerrado.`,
-        en: `Preparations have started: [sign-ups to take part in the 2027 parade](${n.url}), for anyone aged 8 or over, ran from ${d(n.opens, "en")} to ${d(n.closes, "en")} and have now closed.`,
+        ca: `Ja s'hi està treballant: les [inscripcions per participar a la Cavalcada de Reis 2027](${n.url}), per a majors de 8 anys, van estar obertes del ${d(n.opens, "ca")} al ${d(n.closes, "ca")} i ja s'han tancat. ${drawResultsSentence("ca")}`,
+        es: `Ya se está preparando: las [inscripciones para participar en la Cabalgata de Reyes 2027](${n.url}), para mayores de 8 años, estuvieron abiertas del ${d(n.opens, "es")} al ${d(n.closes, "es")} y ya se han cerrado. ${drawResultsSentence("es")}`,
+        en: `Preparations have started: [sign-ups to take part in the 2027 parade](${n.url}), for anyone aged 8 or over, ran from ${d(n.opens, "en")} to ${d(n.closes, "en")} and have now closed. ${drawResultsSentence("en")}`,
       }
     : {
         ca: `Ja s'hi està treballant: l'Ajuntament ha obert les [inscripcions per participar a la Cavalcada de Reis 2027](${n.url}) del ${d(n.opens, "ca")} al ${d(n.closes, "ca")}, a les 23:59, per a majors de 8 anys.`,
@@ -1589,6 +1634,14 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
               en: `By entering the [City Council's draw](${BARCELONA_NEWS_2027.url}) by ${dateYear(BARCELONA_NEWS_2027.closes, "en")} at 23:59. It is open to ${signupAges.en}.`,
             }),
       },
+      ...(SIGNUPS_CLOSED
+        ? [
+            {
+              question: LL({ ca: "On es pot consultar el resultat del sorteig de la Cavalcada de Reis de Barcelona?", es: "¿Dónde se consulta el resultado del sorteo de la Cabalgata de Reyes de Barcelona?", en: "Where can I check the result of the Barcelona Three Kings parade draw?" }),
+              answer: LL({ ca: drawResultsSentence("ca"), es: drawResultsSentence("es"), en: drawResultsSentence("en") }),
+            },
+          ]
+        : []),
       {
         question: LL({ ca: "Quan és la Cavalcada de Reis 2027 a Girona?", es: "¿Cuándo es la Cabalgata de Reyes 2027 en Girona?", en: "When is the 2027 Three Kings parade in Girona?" }),
         answer: gironaSlot

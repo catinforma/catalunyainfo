@@ -41,6 +41,8 @@ import {
   type Parade,
   allTowns,
   SIGNUPS_CLOSED,
+  BARCELONA_NEWS_2027,
+  drawResultsSentence,
 } from "../src/lib/content/batch02/reis.ts";
 import { REIS_REREAD_BY, REIS_TOWNS, REIS_TOWNS_AS_OF, REIS_TOWNS_LEFT_OUT, rereadDue, townRowProblems } from "../src/lib/content/batch02/reis-towns.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
@@ -636,7 +638,7 @@ test("the publish route has the page's group and the links group, after the last
 
 test("21 Nov 2026: Sabadell, Reus and Granollers print their 2027 start time and council page; Barcelona's title is unchanged", () => {
   const filled = allTowns().filter((t) => t.slot);
-  assert.deepEqual(filled.map((t) => t.name).sort(), ["Granollers", "Reus", "Sabadell"]);
+  assert.deepEqual(filled.map((t) => t.name).sort(), ["Granollers", "Reus", "Sabadell", "Vic"]);
   for (const town of filled) {
     assert.deepEqual(paradeProblems(town.slot!, town.hosts), [], town.name);
     assert.equal(town.slot!.date, PARADE_DAY, `${town.name}: 2027 is the 5 January`);
@@ -738,4 +740,64 @@ test("Lleida: La Paeria's 18 Nov 2026 news (5 January parade, page draw, floats 
   assert.equal(new Date("2027-01-02T12:00:00Z").getUTCDay(), 6);
   // Date guard: the page prints no 2027 time for a town whose slot is empty, and the re-read checkpoints still apply.
   assert.ok(REIS_REREAD_BY.length === 4);
+});
+
+/* -------------------------------------------------------------------------- */
+/* 27 Nov 2026 re-read (batch 8I): Vic's 2027 parade, Barcelona's draw result  */
+/* -------------------------------------------------------------------------- */
+
+test("27 Nov 2026: Vic's 2027 parade (council note of 26 Nov) is filled from vic.cat, with the earlier 17:30 arrival, in ca, es and en", () => {
+  const vic = REIS_TOWNS.find((t) => t.key === "vic")!;
+  const slot = vic.y2027!;
+  assert.ok(slot, "Vic has published its 2027 parade");
+  assert.deepEqual(paradeProblems(slot, vic.hosts), []);
+  assert.equal(slot.date, PARADE_DAY);
+  assert.equal(slot.time, "17:30");
+  assert.equal(slot.endTime, "20:00");
+  assert.equal(slot.start, vic.y2026.start, "same start as 2026");
+  assert.deepEqual(slot.route, vic.y2026.route, "the council says the route is kept");
+  assert.equal(slot.end, "plaça Major");
+  assert.ok(slot.read <= REIS_TOWNS_AS_OF && slot.read <= REIS_AS_OF);
+  const expected: Record<Locale, RegExp> = {
+    ca: /mitja hora abans que altres anys/,
+    es: /media hora antes que otros años/,
+    en: /half an hour earlier than in other years/,
+  };
+  for (const locale of LOCALES) {
+    assert.match(body(locale), expected[locale], locale);
+    assert.ok(json(locale).includes(`](${slot.url})`), `${locale}: Vic's 2027 page is linked`);
+    const row = townRows(locale).find((r) => r[0] === "Vic")!;
+    assert.ok(row[3]!.includes("17:30"), `${locale}: Vic's 2027 time in the table`);
+  }
+});
+
+test("27 Nov 2026: Barcelona's 2027 sign-up draw result (council PDF) is in the sign-up sentence and in its own FAQ, ca/es/en", () => {
+  const r = BARCELONA_NEWS_2027.results;
+  assert.ok(BARCELONA_HOSTS.test(new URL(r.url).host) && BARCELONA_HOSTS.test(new URL(r.page).host));
+  assert.ok(r.read <= REIS_AS_OF);
+  assert.equal(r.contactBy, "2026-12-05");
+  assert.ok(SIGNUPS_CLOSED, "the draw result only makes sense once sign-ups have closed");
+  // The contact sentence is in the present until the page's check date passes 5 December, then in the past.
+  assert.equal(/es posa en contacte/.test(drawResultsSentence("ca")), REIS_AS_OF <= r.contactBy);
+  assert.equal(/was to contact/.test(drawResultsSentence("en")), REIS_AS_OF > r.contactBy);
+  const questions: Record<Locale, string> = {
+    ca: "On es pot consultar el resultat del sorteig de la Cavalcada de Reis de Barcelona?",
+    es: "¿Dónde se consulta el resultado del sorteo de la Cabalgata de Reyes de Barcelona?",
+    en: "Where can I check the result of the Barcelona Three Kings parade draw?",
+  };
+  assert.ok(reisSources().some((s) => s.url === r.url), "the PDF is a listed source");
+  for (const locale of LOCALES) {
+    const sentence = drawResultsSentence(locale);
+    assert.ok(sentence.includes(`](${r.url})`) && sentence.includes(r.email), locale);
+    assert.ok(sentence.includes(dateYear(r.contactBy, locale)), `${locale}: the contact deadline`);
+    assert.ok(body(locale).includes(r.email), `${locale}: in the body`);
+    const faq = REIS.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    const item = faq.items.find((i) => i.question === questions[locale]);
+    assert.ok(item, `${locale}: the draw FAQ`);
+    assert.ok(item!.answer.includes(r.url), `${locale}: the FAQ links the PDF`);
+  }
+  // Date guard: once the parade has been held the draw is history; by then Barcelona's 2027 slot must be filled
+  // (re-read Barcelona and drop or rewrite the draw sentence).
+  const today = new Date().toISOString().slice(0, 10);
+  if (today > PARADE_DAY) assert.ok(ANNOUNCED_2027.barcelona, "after the parade, re-read Barcelona and drop or rewrite the draw sentence");
 });

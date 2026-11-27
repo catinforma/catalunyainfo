@@ -53,8 +53,20 @@ import type { B2Key } from "./shared";
  * "programa de Reis 2027" PDF that answers a login page; royal camp tickets
  * from 28 December), Badalona (the children's draw was held). Santa Coloma's
  * site answers 403 to every request (REIS_TOWNS_LEFT_OUT).
+ * 27 Nov 2026: every `watch` page re-read (curl, HTTP 200 except Santa Coloma
+ * and Viladecans, 403 again). New: Vic (Christmas campaign note of 26 Nov:
+ * the Kings arrive at 17:30, half an hour earlier, same route, Plaça Major
+ * at about 20:00), filled as `y2027`. Not printed as 2027: Terrassa's
+ * yearless Christmas page (WordPress `modified` 2026-11-26, this season's
+ * page visits; its parade block still gives 18 h / 19.45 h / helicopter
+ * 16.45 h and the council's 2027 agenda has only the Torre-sana and
+ * District 2 neighbourhood parades), L'Hospitalet's /nadal/2026/ microsite
+ * (the same text as last season's, no year; its programme PDF is 18 Nov
+ * 2025's). Girona's parade page is half updated ("Dimarts 5 de gener de
+ * 2026 - 18 a 20 h", with "El dilluns 5 de gener" further down): not
+ * printed until the council's page is consistent.
  */
-export const REIS_TOWNS_AS_OF = "2026-11-25";
+export const REIS_TOWNS_AS_OF = "2026-11-27";
 
 /**
  * The re-read checkpoints: from each of these days on, REIS_TOWNS_AS_OF (and
@@ -547,7 +559,29 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       published: "2025-12-12",
       read: READ,
     },
-    y2027: null,
+    // 2027: news "Vic presenta la nova campanya de Nadal, 'Un Nadal ple de records'" (datetime 2026-11-26; read
+    // 27 Nov 2026): "Els Reis de l'Orient arribaran a Vic el 5 de gener a 2/4 de 6 de la tarda, mitja hora abans de
+    // l'horari habitual. Aquest canvi avançarà l'inici de la Cavalcada de Reis"; "la Cavalcada manté el recorregut i
+    // els trams inclusius de l'Espai calma i La primera fila, i estrenem una nova carrossa dedicada al patge major";
+    // "Els Reis d'Orient començaran el recorregut al passeig de la Generalitat" ... (the same streets as 2026) ...
+    // "seguirà pel carrer de Jacint Verdaguer fins a arribar a la plaça Major, cap a les 8 del vespre"; "prop de 800
+    // participants, 12 carrosses, 250 teiers"; the pages Rusconi and Elisea "recolliran les cartes dels infants els
+    // dies 1, 2 i 3 de gener, en horari de tarda, a la Casa Masferrer i al Palau Bojons".
+    y2027: {
+      date: "2027-01-05",
+      time: "17:30",
+      start: "passeig de la Generalitat",
+      route: ["parc de Jaume Balmes", "carrer d'Anselm Clavé", "carrer de la Soledat", "carrer de l'Hospital d'en Cloquer", "carrer del Molí d'en Saborit", "carrer de Francesc M. Masferrer", "carrer del Bisbe Torras i Bages", "plaça de Santa Teresa", "rambla del Passeig", "plaça de Santa Clara", "rambla del Carme", "rambla de les Davallades", "rambla de l'Hospital", "carrer del Doctor Junyent", "carrer de Mossèn Josep Gudiol", "plaça de l'Estació", "carrer de Jacint Verdaguer"],
+      end: "plaça Major",
+      endTime: "20:00",
+      url: "https://www.vic.cat/ajuntament/comunicacio-i-protocol/noticies/vic-presenta-la-nova-campanya-de-nadal-un-nadal-ple-de-records",
+      read: "2026-11-27",
+      notes: {
+        ca: "L'Ajuntament ho va anunciar el 26 de novembre de 2026: els Reis arriben a dos quarts de sis de la tarda, mitja hora abans que altres anys, i arriben a la plaça Major cap a les 20:00, on els rep l'alcalde. El recorregut és el mateix que el 2026, amb l'espai de calma al carrer del Molí d'en Saborit i primera fila per a persones amb mobilitat reduïda a la plaça de Santa Teresa, i hi ha una carrossa nova del patge major. Els patges Rusconi i Elisea recullen cartes l'1, el 2 i el 3 de gener a la tarda, a la Casa Masferrer i al Palau Bojons.",
+        es: "El Ayuntamiento lo anunció el 26 de noviembre de 2026: los Reyes llegan a las cinco y media de la tarde, media hora antes que otros años, y llegan a la plaza Major hacia las 20:00, donde los recibe el alcalde. El recorrido es el mismo que en 2026, con el espacio de calma en la calle del Molí d'en Saborit y primera fila para personas con movilidad reducida en la plaza de Santa Teresa, y hay una carroza nueva del paje mayor. Los pajes Rusconi y Elisea recogen cartas el 1, el 2 y el 3 de enero por la tarde, en la Casa Masferrer y en el Palau Bojons.",
+        en: "The council announced it on 26 November 2026: the Kings arrive at 17:30, half an hour earlier than in other years, and reach Plaça Major at about 20:00, where the mayor welcomes them. The route is the same as in 2026, with the calm area on Carrer del Molí d'en Saborit and a front row for people with reduced mobility in Plaça de Santa Teresa, and there is a new float for the chief page. The pages Rusconi and Elisea collect letters on the afternoons of 1, 2 and 3 January at Casa Masferrer and Palau Bojons.",
+      },
+    },
     news2027: {
       published: "2026-10-19",
       url: "https://www.vic.cat/ajuntament/comunicacio-i-protocol/noticies/ja-estan-obertes-les-inscripcions-per-a-participar-a-la-cavalcada-de-reis-2027",
@@ -736,10 +770,10 @@ export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; read: 
     // for "la cavalcada de reis del 5 de gener de 2026"). The 2025 edition's details are not printed as 2026's.
     name: "Santa Coloma de Gramenet",
     watch: "https://ajuntamentinforma.gramenet.cat/les-noticies/",
-    // Read 25 Nov 2026: www.gramenet.cat and ajuntamentinforma.gramenet.cat answer 403 (BunkerWeb) to a plain request:
+    // Read 25 and 27 Nov 2026: www.gramenet.cat and ajuntamentinforma.gramenet.cat answer 403 (BunkerWeb) to a plain request:
     // nothing about the 2027 parade could be read. Not published yet as far as we can read; re-checked from the
     // REIS_REREAD_BY days.
-    read: "2026-11-25",
+    read: "2026-11-27",
     status: "could not be read (403): no 2027 parade details",
     reason: {
       ca: "Santa Coloma de Gramenet no hi és perquè la web de l'Ajuntament ja no conserva l'horari ni el recorregut del 2026.",
@@ -752,7 +786,7 @@ export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; read: 
     // with a bot challenge, and has no archived copy. Search snippets are not a source.
     name: "Viladecans",
     watch: "https://www.viladecans.cat/es/navidad-y-reyes",
-    read: "2026-11-25",
+    read: "2026-11-27",
     status: "bot challenge (403): could not be read",
     reason: {
       ca: "Viladecans tampoc, perquè la seva web no s'ha pogut consultar.",
@@ -765,8 +799,8 @@ export const REIS_TOWNS_LEFT_OUT: readonly { name: string; watch: string; read: 
     // but no year or weekday, and no dated council page of Dec 2025-Jan 2026 confirms it: it cannot be labelled 2026.
     name: "Vilanova i la Geltrú",
     watch: "https://www.vilanova.cat/cavalcada_de_reis",
-    read: "2026-11-25",
-    status: "undated page, no 2027 details: not published yet (read 25 Nov 2026)",
+    read: "2026-11-27",
+    status: "undated page, no 2027 details: not published yet (read 27 Nov 2026)",
     reason: {
       ca: "I Vilanova i la Geltrú només publica una pàgina de la cavalcada sense data, de manera que no podem dir que sigui la del 2026.",
       es: "Y Vilanova i la Geltrú solo publica una página de la cabalgata sin fecha, así que no podemos decir que sea la de 2026.",
