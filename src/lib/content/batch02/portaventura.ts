@@ -85,7 +85,19 @@ import { withGlance } from "./day-trip-glance";
  * this page does not explain).
  */
 
-const VERIFIED = "2026-10-30";
+// 27 Nov 2026 (ci-fonts, batch 8V; the date guard of day-trip-glance.ts was
+// 5 Dec): calendar feed re-read for Nov 2026 - Jan 2027, unchanged (daily
+// 10:30-18:00, 19:00 on 5-7 Dec, 27-30 Dec and 1-4 Jan; closed from 7 Jan).
+// Rodalies planner (serveisgrs.rodalies.gencat.cat/api/timetables, stations
+// 71801 Sants, 71500 Tarragona, 65411 Salou - Port Aventura) for 2, 9, 15 and
+// 19 Dec 2026: R17 8:33, 10:33, 12:33 (1 h 24), back 11:11, 13:11, 21:41
+// (1 h 26), 9.35 EUR; RT2 and R17 Tarragona-park exactly the rows of the train
+// table, 13 min, 2.70 EUR: unchanged. Ticket cards (/en/tickets/portaventura,
+// /en/tickets/ferrari-land) changed: "1 day PortAventura Park ... Adult (11-59
+// years) from €43 €39 /person Junior/senior ... from €39 €35"; "1 day, 2
+// parks ... from €55 €47 ... from €50 €43"; Ferrari Land "from €19" / "€17"
+// unchanged. The online prices are printed with their read date.
+const VERIFIED = "2026-11-27";
 
 const SOURCES: B2Source[] = [
   { name: "PortAventura World — dates and times", url: "https://www.portaventuraworld.com/en/dates-times", publisher: "PortAventura World" },
@@ -152,7 +164,7 @@ const COPY: Record<Locale, T> = {
       ["19 Feb – 17 Mar 2027", "Friday evenings 16:00–21:00 (19 and 26 Feb, 5 and 12 Mar) and Wednesday 17 Mar 16:00–21:00; weekends 10:30–18:00 (20–21 and 27–28 Feb, 6–7 and 13–14 Mar)"],
       ["From 18 Mar 2027", "Daily from 10:30; closing 18:00 on 18–19 Mar, 20:00 on 20 Mar and 25–28 Mar, 19:00 on 21–24 and 29–31 Mar (April and May are in the calendar too)"],
     ],
-    calNote: "From PortAventura World's official opening calendar, read on 30 October and re-read on 23 November 2026 (November to January); on 25 November it also lists the hours for February to May 2027.",
+    calNote: "From PortAventura World's official opening calendar, read on 30 October and re-read on 23 and 27 November 2026 (November to January, unchanged); on 25 November it also lists the hours for February to May 2027.",
     otherCaption: "Ferrari Land and Caribe Aquatic Park",
     otherHeaders: ["Park", "When it opens"],
     otherRows: [
@@ -162,7 +174,7 @@ const COPY: Record<Locale, T> = {
     otherNote: "Official opening calendar, read on 30 October 2026; November and December re-read on 23 November.",
     ticketsTitle: "PortAventura ticket prices",
     tickets: [
-      "Prices depend on the date. On the official site a one-day ticket for PortAventura Park starts **from €43** for adults (11 to 59) and €39 for juniors (4 to 10) and seniors (60 and over); one day in two parks, adding Ferrari Land, from €55 (€50 junior and senior); Ferrari Land alone from €19 (€17). On 23 November 2026 the official site showed those day tickets discounted online to €37 (€33 junior and senior) and €44 (€40) for two parks; promotions change, so check the price for your date. Buying at the ticket office costs **€10 more** for park and two-park tickets (€7 more for Ferrari Land alone).",
+      "Prices depend on the date. On the official site a one-day ticket for PortAventura Park starts **from €43** for adults (11 to 59) and €39 for juniors (4 to 10) and seniors (60 and over); one day in two parks, adding Ferrari Land, from €55 (€50 junior and senior); Ferrari Land alone from €19 (€17). On 27 November 2026 the official site showed those day tickets discounted online to €39 (€35 junior and senior) and €47 (€43) for two parks; promotions change, so check the price for your date. Buying at the ticket office costs **€10 more** for park and two-park tickets (€7 more for Ferrari Land alone).",
       "Rodalies sells a **combined train + ticket**: return train from any Rodalies station to Salou-Port Aventura plus a day ticket to PortAventura Park, **€41.95** for adults and €37.95 for children 4 to 10, over-60s and pensioners, valid while the park is open until 6 January 2027. Renfe does not allow changes or cancellations.",
     ],
     trainTitle: "PortAventura by train from Barcelona: timetable",
@@ -178,7 +190,7 @@ const COPY: Record<Locale, T> = {
       ["RT2, Tarragona → park", "6:37, 7:23, 15:53, 16:53, 17:53, 18:53, 19:52, 20:52 (plus the R17 at 9:44, 11:44, 13:44)", "13 min"],
       ["RT2, park → Tarragona", "6:59, 7:46, 14:31, 16:31, 17:31, 18:31, 19:31, 20:31 (plus the R17 at 11:11, 13:11, 21:41)", "13 min"],
     ],
-    trainNote: "Rodalies' 2026 R17 and RT2 timetable, the same every day, read on 28 October 2026. It can change for works or strikes: check Rodalies for your date.",
+    trainNote: "Rodalies' 2026 R17 and RT2 timetable, the same every day, read on 28 October 2026 and re-read in Rodalies' journey planner on 27 November for dates up to 19 December, unchanged. It can change for works or strikes: check Rodalies for your date.",
     tipsTitle: "Before you go",
     tips: [
       "**Buy online:** the ticket office adds up to €10 per ticket.",
@@ -191,7 +203,7 @@ const COPY: Record<Locale, T> = {
       { question: "When does PortAventura reopen in 2027?", answer: "Its official calendar, read on 25 November 2026, shows PortAventura Park open from 19 February 2027: Friday evenings 16:00 to 21:00 and weekends 10:30 to 18:00 until 17 March, then daily from 18 March. Ferrari Land is marked open from 19 March and Caribe Aquatic Park from 22 May 2027." },
       { question: "Is PortAventura open in winter?", answer: "Yes until 6 January 2027, every day. It is closed from 7 January to 18 February 2027." },
       { question: "Is PortAventura open in January 2027?", answer: "Only from 1 to 6 January (10:30 to 19:00 on 1-4 January, to 18:00 on 5 and 6 January). From 7 January it is closed until it reopens on Friday 19 February 2027 (evening only)." },
-      { question: "How much is a PortAventura ticket?", answer: "From €43 for an adult one-day ticket and €39 for children 4 to 10 and over-60s, depending on the date (online discounts can lower it: €37 and €33 on 23 November 2026); €10 more at the ticket office." },
+      { question: "How much is a PortAventura ticket?", answer: "From €43 for an adult one-day ticket and €39 for children 4 to 10 and over-60s, depending on the date (online discounts can lower it: €39 and €35 on 27 November 2026); €10 more at the ticket office." },
       { question: "How far is the station from PortAventura?", answer: "Salou-Port Aventura station is about a 10-minute walk from the park, according to Renfe." },
       { question: "How do I get to PortAventura by train from Barcelona?", answer: "On one of the three direct R17 trains from Sants (8:33, 10:33 or 12:33, 1 h 24), or by regional train to Tarragona and the RT2 shuttle to Salou-Port Aventura." },
       { question: "When does Halloween at PortAventura end?", answer: "It ended on 15 November 2026. The Christmas season runs from 20 November 2026 to 6 January 2027." },
@@ -209,7 +221,7 @@ const COPY: Record<Locale, T> = {
       ["19 feb – 17 mar 2027", "Viernes por la tarde de 16:00 a 21:00 (19 y 26 feb, 5 y 12 mar) y miércoles 17 mar de 16:00 a 21:00; fines de semana de 10:30 a 18:00 (20–21 y 27–28 feb, 6–7 y 13–14 mar)"],
       ["Desde el 18 mar 2027", "Cada día desde las 10:30; cierre a las 18:00 el 18–19 mar, a las 20:00 el 20 mar y el 25–28 mar, a las 19:00 el 21–24 y el 29–31 mar (abril y mayo también figuran en el calendario)"],
     ],
-    calNote: "Del calendario oficial de apertura de PortAventura World, consultado el 30 de octubre y de nuevo el 23 de noviembre de 2026 (de noviembre a enero); el 25 de noviembre incluye también los horarios de febrero a mayo de 2027.",
+    calNote: "Del calendario oficial de apertura de PortAventura World, consultado el 30 de octubre y de nuevo el 23 y el 27 de noviembre de 2026 (de noviembre a enero, sin cambios); el 25 de noviembre incluye también los horarios de febrero a mayo de 2027.",
     otherCaption: "Ferrari Land y Caribe Aquatic Park",
     otherHeaders: ["Parque", "Cuándo abre"],
     otherRows: [
@@ -219,7 +231,7 @@ const COPY: Record<Locale, T> = {
     otherNote: "Calendario oficial de apertura, consultado el 30 de octubre de 2026; noviembre y diciembre, de nuevo el 23 de noviembre.",
     ticketsTitle: "Precio de las entradas de PortAventura",
     tickets: [
-      "Los precios dependen de la fecha. En la web oficial, la entrada de un día a PortAventura Park empieza **desde 43 €** para adultos (de 11 a 59 años) y 39 € para junior (de 4 a 10) y sénior (60 o más); un día en dos parques, con Ferrari Land, desde 55 € (50 € junior y sénior); Ferrari Land sola, desde 19 € (17 €). El 23 de noviembre de 2026 la web oficial mostraba esas entradas de un día con descuento en línea, a 37 € (33 € junior y sénior) y a 44 € (40 €) la de dos parques; las promociones cambian, así que mira el precio para tu fecha. Comprar en taquilla cuesta **10 € más** en las entradas de PortAventura Park y de dos parques (7 € más en Ferrari Land sola).",
+      "Los precios dependen de la fecha. En la web oficial, la entrada de un día a PortAventura Park empieza **desde 43 €** para adultos (de 11 a 59 años) y 39 € para junior (de 4 a 10) y sénior (60 o más); un día en dos parques, con Ferrari Land, desde 55 € (50 € junior y sénior); Ferrari Land sola, desde 19 € (17 €). El 27 de noviembre de 2026 la web oficial mostraba esas entradas de un día con descuento en línea, a 39 € (35 € junior y sénior) y a 47 € (43 €) la de dos parques; las promociones cambian, así que mira el precio para tu fecha. Comprar en taquilla cuesta **10 € más** en las entradas de PortAventura Park y de dos parques (7 € más en Ferrari Land sola).",
       "Rodalies vende un **billete combinado tren + entrada**: tren de ida y vuelta desde cualquier estación de Rodalies hasta Salou-Port Aventura y entrada de un día a PortAventura Park, **41,95 €** para adultos y 37,95 € para niños de 4 a 10 años, mayores de 60 y pensionistas, válido mientras el parque abre, hasta el 6 de enero de 2027. Renfe no admite cambios ni anulaciones.",
     ],
     trainTitle: "Horarios del tren de Barcelona a PortAventura",
@@ -247,7 +259,7 @@ const COPY: Record<Locale, T> = {
       { question: "¿Cuándo cierra PortAventura?", answer: "Después del 6 de enero de 2027. PortAventura Park está cerrado del 7 de enero al 18 de febrero de 2027." },
       { question: "¿Cuándo abre PortAventura en 2027?", answer: "Su calendario oficial, consultado el 25 de noviembre de 2026, muestra PortAventura Park abierto desde el 19 de febrero de 2027: viernes por la tarde de 16:00 a 21:00 y fines de semana de 10:30 a 18:00 hasta el 17 de marzo, y cada día desde el 18 de marzo. Ferrari Land figura abierto desde el 19 de marzo y Caribe Aquatic Park, desde el 22 de mayo de 2027." },
       { question: "¿Abre PortAventura en invierno?", answer: "Sí hasta el 6 de enero de 2027, todos los días. Cierra del 7 de enero al 18 de febrero de 2027." },
-      { question: "¿Cuánto cuesta la entrada a PortAventura?", answer: "Desde 43 € la entrada de adulto de un día y 39 € para niños de 4 a 10 años y mayores de 60, según la fecha (los descuentos en línea pueden bajarlo: 37 € y 33 € el 23 de noviembre de 2026); 10 € más en taquilla." },
+      { question: "¿Cuánto cuesta la entrada a PortAventura?", answer: "Desde 43 € la entrada de adulto de un día y 39 € para niños de 4 a 10 años y mayores de 60, según la fecha (los descuentos en línea pueden bajarlo: 39 € y 35 € el 27 de noviembre de 2026); 10 € más en taquilla." },
       { question: "¿A qué distancia está la estación de PortAventura?", answer: "La estación de Salou-Port Aventura está a unos 10 minutos a pie del parque, según Renfe." },
       { question: "¿Cómo se va a PortAventura en tren desde Barcelona?", answer: "En uno de los tres R17 directos desde Sants (8:33, 10:33 o 12:33, 1 h 24), o en regional hasta Tarragona y la lanzadera RT2 hasta Salou-Port Aventura." },
       { question: "¿Cuándo termina Halloween en PortAventura?", answer: "Terminó el 15 de noviembre de 2026. La temporada de Navidad va del 20 de noviembre de 2026 al 6 de enero de 2027." },
@@ -265,7 +277,7 @@ const COPY: Record<Locale, T> = {
       ["19 febr – 17 març 2027", "Divendres a la tarda de 16:00 a 21:00 (19 i 26 febr, 5 i 12 març) i dimecres 17 març de 16:00 a 21:00; caps de setmana de 10:30 a 18:00 (20–21 i 27–28 febr, 6–7 i 13–14 març)"],
       ["Des del 18 març 2027", "Cada dia des de les 10:30; tancament a les 18:00 el 18–19 març, a les 20:00 el 20 març i el 25–28 març, a les 19:00 el 21–24 i el 29–31 març (abril i maig també hi són al calendari)"],
     ],
-    calNote: "Del calendari oficial d'obertura de PortAventura World, consultat el 30 d'octubre i de nou el 23 de novembre de 2026 (de novembre a gener); el 25 de novembre inclou també els horaris de febrer a maig de 2027.",
+    calNote: "Del calendari oficial d'obertura de PortAventura World, consultat el 30 d'octubre i de nou el 23 i el 27 de novembre de 2026 (de novembre a gener, sense canvis); el 25 de novembre inclou també els horaris de febrer a maig de 2027.",
     otherCaption: "Ferrari Land i Caribe Aquatic Park",
     otherHeaders: ["Parc", "Quan obre"],
     otherRows: [
@@ -275,7 +287,7 @@ const COPY: Record<Locale, T> = {
     otherNote: "Calendari oficial d'obertura, consultat el 30 d'octubre de 2026; novembre i desembre, de nou el 23 de novembre.",
     ticketsTitle: "Preu de les entrades de PortAventura",
     tickets: [
-      "Els preus depenen de la data. Al web oficial, l'entrada d'un dia a PortAventura Park comença **des de 43 €** per a adults (d'11 a 59 anys) i 39 € per a júnior (de 4 a 10) i sènior (60 o més); un dia a dos parcs, amb Ferrari Land, des de 55 € (50 € júnior i sènior); Ferrari Land sola, des de 19 € (17 €). El 23 de novembre de 2026 el web oficial mostrava aquestes entrades d'un dia amb descompte en línia, a 37 € (33 € júnior i sènior) i a 44 € (40 €) la de dos parcs; les promocions canvien, així que mira el preu per a la teva data. Comprar a taquilla costa **10 € més** a les entrades de PortAventura Park i de dos parcs (7 € més a Ferrari Land sola).",
+      "Els preus depenen de la data. Al web oficial, l'entrada d'un dia a PortAventura Park comença **des de 43 €** per a adults (d'11 a 59 anys) i 39 € per a júnior (de 4 a 10) i sènior (60 o més); un dia a dos parcs, amb Ferrari Land, des de 55 € (50 € júnior i sènior); Ferrari Land sola, des de 19 € (17 €). El 27 de novembre de 2026 el web oficial mostrava aquestes entrades d'un dia amb descompte en línia, a 39 € (35 € júnior i sènior) i a 47 € (43 €) la de dos parcs; les promocions canvien, així que mira el preu per a la teva data. Comprar a taquilla costa **10 € més** a les entrades de PortAventura Park i de dos parcs (7 € més a Ferrari Land sola).",
       "Rodalies ven un **bitllet combinat tren + entrada**: tren d'anada i tornada des de qualsevol estació de Rodalies fins a Salou-Port Aventura i entrada d'un dia a PortAventura Park, **41,95 €** per a adults i 37,95 € per a infants de 4 a 10 anys, majors de 60 i pensionistes, vàlid mentre el parc és obert, fins al 6 de gener de 2027. Renfe no hi admet canvis ni anul·lacions.",
     ],
     trainTitle: "Horaris del tren de Barcelona a PortAventura",
@@ -303,7 +315,7 @@ const COPY: Record<Locale, T> = {
       { question: "Quan tanca PortAventura?", answer: "Després del 6 de gener de 2027. PortAventura Park és tancat del 7 de gener al 18 de febrer de 2027." },
       { question: "Quan obre PortAventura el 2027?", answer: "El seu calendari oficial, consultat el 25 de novembre de 2026, mostra PortAventura Park obert des del 19 de febrer de 2027: divendres a la tarda de 16:00 a 21:00 i caps de setmana de 10:30 a 18:00 fins al 17 de març, i cada dia des del 18 de març. Ferrari Land hi figura obert des del 19 de març i Caribe Aquatic Park, des del 22 de maig de 2027." },
       { question: "Obre PortAventura a l'hivern?", answer: "Sí fins al 6 de gener de 2027, cada dia. Tanca del 7 de gener al 18 de febrer de 2027." },
-      { question: "Quant costa l'entrada a PortAventura?", answer: "Des de 43 € l'entrada d'adult d'un dia i 39 € per a infants de 4 a 10 anys i majors de 60, segons la data (els descomptes en línia el poden abaixar: 37 € i 33 € el 23 de novembre de 2026); 10 € més a taquilla." },
+      { question: "Quant costa l'entrada a PortAventura?", answer: "Des de 43 € l'entrada d'adult d'un dia i 39 € per a infants de 4 a 10 anys i majors de 60, segons la data (els descomptes en línia el poden abaixar: 39 € i 35 € el 27 de novembre de 2026); 10 € més a taquilla." },
       { question: "A quina distància és l'estació de PortAventura?", answer: "L'estació de Salou-Port Aventura és a uns 10 minuts a peu del parc, segons Renfe." },
       { question: "Com s'hi va a PortAventura en tren des de Barcelona?", answer: "Amb un dels tres R17 directes des de Sants (8:33, 10:33 o 12:33, 1 h 24), o amb regional fins a Tarragona i la llançadora RT2 fins a Salou-Port Aventura." },
       { question: "Quan acaba Halloween a PortAventura?", answer: "Va acabar el 15 de novembre de 2026. La temporada de Nadal va del 20 de novembre de 2026 al 6 de gener de 2027." },

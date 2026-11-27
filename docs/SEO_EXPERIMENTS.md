@@ -15890,3 +15890,33 @@ Why: the titles now follow the searched word order ("tren barcelona sitges", "ba
 **Review 2026-12-11.** GA4 landing page report 3-10 Dec for the 15 pages above (pages per session, sessions), `related_content_click` by `link_context` = `seasonal_next` split by template (page path prefix).
 
 **Outcome:** _pending_
+
+## 2026-11-27 (batch 8V, ci-fonts) — Núria rack railway: FGC's winter 2026-27 fares and timetable (from 1 Dec), December calendar, ski opening, "Despertem els tions"; PortAventura re-read (online price 39 €) — date guards moved (ca/es/en) (review 2026-12-11)
+
+**URLs.** `/ca/escapades/vall-de-nuria-cremallera/`, `/es/escapadas/vall-de-nuria-cremallera/`, `/en/day-trips/vall-de-nuria-rack-railway/` (group `nuria`); `/ca/escapades/portaventura-des-de-barcelona/`, `/es/escapadas/portaventura-desde-barcelona/`, `/en/day-trips/portaventura-from-barcelona/` (group `portaventura`).
+
+**Why.** `tests/day-trip-glance.test.ts` would fail on 1 Dec (Núria: FGC's 2026 fares "vigents fins el 30 de novembre de 2026") and 5 Dec (PortAventura: Christmas hours, RT2).
+
+**Windows.** Núria: title untouched; lead and meta description last changed 28 Oct 2026 (outside 28 days) — both now give the winter fare (factual update: the 34 € fare lapses on 30 Nov). PortAventura: title, description, H1 and lead untouched (body only).
+
+**Read today (curl + grep; PDF with pdftotext and pdftoppm, colour rows and calendars read visually and cross-checked with the HTML calendar).**
+- FGC winter leaflet `pirineu365.cat/wp-content/uploads/2026/11/VdN_Cremallera-Flyer-Tarifes-i-Horaris-HIVERN-26-27_V4-1-1.pdf` (linked from `pirineu365.cat/valldenuria/estacio/informacio-practica/`): return Ribes / Queralbs 35,50 / 32,50 € (14-64), 23 / 21 € (4-13), 30 / 26,50 € (65+); single 24,50 / 22,50, 16 / 14,50, 21 / 19 €; season ticket 114,50 / 72,50 €; winter season ticket 80 / 51 € "Vàlid de l'1 de desembre al 30 d'abril"; «vigents fins a 30 de novembre de 2027». Low season = autumn rows + 8.35 from Ribes-Enllaç «Circula sempre que l'estació d'esquí estigui oberta»; Friday rows «menys el 25 de desembre». High season last train down 18.05; 19.00 «tots els divendres, el 5, 26, 27, 28, 29 i 30 de desembre, tots els dissabtes de gener i febrer i el 6 i 13 de març». December: high 5-8 and 26-31, «Horari especial» 25, low the rest.
+- **Conflict (noted on the page):** the Vall de Núria shop (`pirineu365.cat/valldenuria/estacio/tarifes/`) still sells 34 € return, season 104 / 66 €, winter season 62,50 / 39,50 €; turistren.cat still shows «Preus vàlids per a la temporada 2026». The page prints the leaflet (higher) from 1 Dec and says the shop still showed the 2026 prices on 27 Nov.
+- Ski: rates page unchanged (Ripollès 387 € to 8 Dec / 455 €, Pirineu365 730 €, day 23,50 €, day + cremallera 41 €); slope calendar open 4-8, 12-13 Dec and daily from 19 Dec; FGC news of 6 Nov: «obriran ... del 4 de desembre al 4 d'abril».
+- turistren.cat news of 26 Nov: «Despertem els tions», 5, 29 and 30 Dec, return cremallera + theatre visit «per 18 € els adults i 11,50 € els infants i grans de 65 anys», «sortida a les 15:30 h i tornada a les 19:00 h».
+- November: still only FGC's 2025 notice; 2026 calendar: weekdays «Tancat», 28-29 Nov open. Renfe TreNatura 40,20 / 30,70 € unchanged. Rodalies R3 notice unchanged (50 %, Sant Martí de Centelles).
+- PortAventura: calendar feed Nov 2026-Jan 2027 unchanged; Rodalies planner for 2, 9, 15, 19 Dec: R17 and RT2 rows, 9,35 / 2,70 € unchanged; ticket cards now «from €43 €39» (junior/senior 39 → 35), two parks 55 → 47 (50 → 43), Ferrari Land 19 / 17 unchanged; Rodalies combined ticket 41,95 / 37,95 € unchanged.
+
+**Changed.** Núria (`nuria.ts`): lead, note, fares table (winter), its note (2026 fares to 30 Nov), season tickets, winter pass with the conflict, timetable (8.35 ski-day row, Friday label, high-season text, read note), November line, new section "El cremallera al desembre i a l'hivern 2026-2027" (calendar, ski opening, tions), FAQ (fares, last train, single, free, ski pass) + new FAQ "El cremallera funciona al desembre?", meta description (winter fare), `VERIFIED` 2026-11-27, three sources added. Glance (`day-trip-glance.ts`): Núria NOTE and row (27 Nov; its source link is now the winter leaflet on pirineu365.cat, test allowlist extended), `NURIA_READ`; PortAventura NOTE, row and note (39 € online, 27 Nov). PortAventura (`portaventura.ts`): ticket paragraph, FAQ price, calendar and train notes, `VERIFIED` 2026-11-27.
+
+**Baseline (GSC 31 Oct-27 Nov, `snapshot.py page … 28`).** `vall-de-nuria` 44 clicks / 2,019 impr / ~10.6 ("horaris cremallera núria 2026" 78 impr at 6.5, "horaris cremallera nuria hivern" 18 at 8.4, "cremallera nuria preu" 10 at 16.5); `rack-railway` 24 / 786 / ~8.2; `portaventura` 8 / 1,235 / ~12.3.
+
+**Prediction.** By 11 Dec: Núria gains impressions on "hivern"/"desembre"/"preu 2027" queries and holds ≤ 7 on "horaris cremallera núria"; PortAventura unchanged (body only). Revert rule: none (facts).
+
+**Date guard.** `GLANCE_REREAD_BY.nuria` 2026-12-01 → **2026-12-03** (re-read once the winter fares apply: did the shop and Turistren switch? drop the "fins al 30 de novembre" figures; before the ski opening on 4 Dec); `GLANCE_REREAD_BY.portaventura` 2026-12-05 → **2026-12-15** (planner read to 19 Dec; online price is a promotion). Tests: new `tests/nuria-winter-27nov.test.ts` (3); `day-trip-glance` (Núria date 27 Nov, winter facts, guard ≤ 4 Dec; PortAventura "€39 online"), `batch02` (Núria lead 35,50, season 114,50, 2026 fare kept; PortAventura price dated 27 Nov, old 37/33 gone), `ski-reread-23nov` (read date 27 Nov).
+
+**Go-live.** Deploy, then `publish.sh nuria portaventura`. IndexNow: `/ca/escapades/vall-de-nuria-cremallera/ /es/escapadas/vall-de-nuria-cremallera/ /en/day-trips/vall-de-nuria-rack-railway/ /ca/escapades/portaventura-des-de-barcelona/ /es/escapadas/portaventura-desde-barcelona/ /en/day-trips/portaventura-from-barcelona/`.
+
+**Review 2026-12-11**: `snapshot.py page vall-de-nuria 14`, `page rack-railway 14`, `page portaventura 14`.
+
+**Outcome:** _pending_

@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
 import { TARRAGONA } from "../src/lib/content/batch02/coast-trips.ts";
 import { ANDORRA } from "../src/lib/content/batch02/andorra.ts";
-import { GLANCE_READ, GLANCE_REREAD_BY, type GlanceKey } from "../src/lib/content/batch02/day-trip-glance.ts";
+import { GLANCE_READ, GLANCE_REREAD_BY, NURIA_READ, type GlanceKey } from "../src/lib/content/batch02/day-trip-glance.ts";
 import { GIRONA } from "../src/lib/content/batch02/day-trips.ts";
 import { FIGUERES } from "../src/lib/content/batch02/figueres.ts";
 import { NURIA } from "../src/lib/content/batch02/nuria.ts";
@@ -27,9 +27,13 @@ const blocks = (a: Article, locale: string) => a.editions[locale]!.blocks as B[]
 
 const ARTICLES: Record<GlanceKey, Article> = { girona: GIRONA, figueres: FIGUERES, tarragona: TARRAGONA, andorra: ANDORRA, portaventura: PORTAVENTURA, nuria: NURIA };
 const DATE = { ca: "25 de novembre de 2026", es: "25 de noviembre de 2026", en: "25 November 2026" } as const;
+// Núria re-read again on 27 Nov 2026 (winter 2026-27 leaflet, batch 8V).
+const NURIA_DATE = { ca: "27 de novembre de 2026", es: "27 de noviembre de 2026", en: "27 November 2026" } as const;
+const dateFor = (key: string, locale: keyof typeof DATE) => (key === "nuria" ? NURIA_DATE : DATE)[locale];
 
 test("every guide says, near the top, that its transport was re-read on 25 Nov 2026", () => {
   assert.equal(GLANCE_READ, "2026-11-25");
+  assert.equal(NURIA_READ, "2026-11-27");
   for (const [key, article] of Object.entries(ARTICLES)) {
     for (const locale of LOCALES) {
       const bl = blocks(article, locale);
@@ -37,7 +41,7 @@ test("every guide says, near the top, that its transport was re-read on 25 Nov 2
       assert.ok(leadAt >= 0, `${key}/${locale}: lead`);
       const callouts = bl.slice(leadAt + 1, leadAt + 5).filter((b) => b.type === "callout" && b.tone === "official");
       assert.ok(callouts.length >= 1, `${key}/${locale}: official callout within four blocks of the lead`);
-      assert.ok(callouts.some((c) => c.text!.includes(DATE[locale])), `${key}/${locale}: callout carries ${DATE[locale]}`);
+      assert.ok(callouts.some((c) => c.text!.includes(dateFor(key, locale))), `${key}/${locale}: callout carries ${dateFor(key, locale)}`);
     }
   }
 });
@@ -76,17 +80,17 @@ test("Núria and PortAventura: compact transport table with four columns and a r
       assert.match(t!.caption!, caption);
       assert.ok(t!.rows!.every((r) => r.length === 4), `${locale}: rectangular`);
       assert.ok(t!.rows!.every((r) => /\]\(https:\/\//.test(r[3]!)), `${locale}: every row names and links its source`);
-      assert.match(t!.note!, /25/, `${locale}: read date`);
+      assert.match(t!.note!, article === NURIA ? /27/ : /25/, `${locale}: read date`);
     }
   }
   const nuria = JSON.stringify(blocks(NURIA, "en").find((b) => b.type === "table" && b.headers!.length === 4)!.rows);
-  for (const fact of ["€34", "€31", "40 minutes", "30 November 2026", "Sant Martí de Centelles", "50%"]) assert.ok(nuria.includes(fact), `Núria: ${fact}`);
+  for (const fact of ["€35.50", "€32.50", "From 1 December", "€34", "€31", "40 minutes", "30 November 2026", "Sant Martí de Centelles", "50%"]) assert.ok(nuria.includes(fact), `Núria: ${fact}`);
   const pa = JSON.stringify(blocks(PORTAVENTURA, "en").find((b) => b.type === "table" && b.headers!.length === 4)!.rows);
-  for (const fact of ["1 h 24", "8:33", "10:33", "12:33", "€9.35", "69 min + 13 min", "€2.70", "From €43", "€37 online"]) assert.ok(pa.includes(fact), `PortAventura: ${fact}`);
+  for (const fact of ["1 h 24", "8:33", "10:33", "12:33", "€9.35", "69 min + 13 min", "€2.70", "From €43", "€39 online", "27 November 2026"]) assert.ok(pa.includes(fact), `PortAventura: ${fact}`);
 });
 
 test("no source link in a glance table points off the operators' own pages", () => {
-  const allowed = /^\]?\(https:\/\/(rodalies\.gencat\.cat|turistren\.cat|www\.portaventuraworld\.com)\//;
+  const allowed = /^\]?\(https:\/\/(rodalies\.gencat\.cat|turistren\.cat|pirineu365\.cat|www\.portaventuraworld\.com)\//;
   for (const article of [NURIA, PORTAVENTURA]) {
     for (const locale of LOCALES) {
       const t = blocks(article, locale).find((b) => b.type === "table" && b.headers!.length === 4)!;
@@ -122,5 +126,6 @@ test("date guard: each guide's figures are re-read by its date (Núria's fares e
       `${key}: transport, fares and (PortAventura) calendar were last read on ${GLANCE_READ}. Re-read them (Rodalies planner, Renfe GTFS, FGC Turistren, PortAventura feed, operators), update day-trip-glance.ts NOTE/TABLES and move GLANCE_REREAD_BY.${key}.`,
     );
   }
-  assert.ok(GLANCE_REREAD_BY.nuria > "2026-11-30", "Núria's fares are valid until 30 Nov 2026");
+  assert.ok(GLANCE_REREAD_BY.nuria > "2026-11-30", "Núria: re-read once the winter fares apply (1 Dec 2026)");
+  assert.ok(GLANCE_REREAD_BY.nuria <= "2026-12-04", "Núria: re-read before the ski area opens on 4 Dec 2026");
 });

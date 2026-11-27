@@ -1247,7 +1247,9 @@ test("portaventura: the standard price leads, no ended promotion, the winter clo
     assert.match(lead, /20 (de )?(novembre|noviembre|November) (al|to) 6 (de )?(gener|enero|January)/, `${locale}: Christmas season in the lead`);
     const text = bodyToPlainText(edition.blocks);
     assert.doesNotMatch(text, /descompte de Halloween|descuento de Halloween|Halloween discount|Halloween promotion|promoció de Halloween|promoción de Halloween/, `${locale}: ended promotion`);
-    assert.match(text, /23 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the discounted price carries its date`);
+    // 27 Nov 2026 re-read (batch 8V): the online price moved to 39 / 35 and carries that date.
+    assert.match(text, /27 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the discounted price carries its date`);
+    assert.doesNotMatch(text, /37 € i 33 €|37 € y 33 €|€37 and €33/, `${locale}: old online price`);
     assert.match(lead, /19 (de )?(febrer|febrero|February)/, `${locale}: winter closure`);
     assert.match(bodyToPlainText(edition.blocks), walk[locale], `${locale}: walk from the station`);
     assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
@@ -1278,7 +1280,8 @@ test("ripolles: the comarca in Idescat's figures and a villages table; setcases 
 });
 
 test("nuria: the lead answers the price; free travel, November and the ski pass are answered from FGC", () => {
-  const fare = { ca: /34 € anada i tornada/, es: /34 € ida y vuelta/, en: /€34 return/ } as const;
+  // 27 Nov 2026: winter 2026-27 fares from 1 Dec (35,50), the 2026 ones (34) kept to 30 Nov.
+  const fare = { ca: /35,50 € anada i tornada/, es: /35,50 € ida y vuelta/, en: /€35\.50 return/ } as const;
   const free = { ca: /0 a 3 anys/, es: /0 a 3 años/, en: /under 4/ } as const;
   for (const locale of LOCALES) {
     const blocks = NURIA.editions[locale].blocks as { type: string; lead?: boolean; text?: string }[];
@@ -1287,7 +1290,8 @@ test("nuria: the lead answers the price; free travel, November and the ski pass 
     assert.match(lead, /30 de novembre|30 de noviembre|30 November/, `${locale}: lead dates the fares`);
     const text = bodyToPlainText(NURIA.editions[locale].blocks);
     assert.match(text, free[locale], `${locale}: says who rides free`);
-    assert.match(text, /104/, `${locale}: annual season ticket`);
+    assert.match(text, /114[,.]50/, `${locale}: annual season ticket (winter leaflet)`);
+    assert.match(text, /(34 €|€34)/, `${locale}: the 2026 fare until 30 Nov`);
     assert.match(text, /2026-2027|2026-27/, `${locale}: ski-pass status for the coming season`);
     assert.match(text, /3 (al|to) 30 (de )?(novembre|noviembre|November)/, `${locale}: last November's weekday closure`);
     assert.ok(NURIA.editions[locale].seoTitle.length <= 60, `${locale}: seoTitle fits`);

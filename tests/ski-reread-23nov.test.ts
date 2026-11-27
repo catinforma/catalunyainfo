@@ -86,6 +86,7 @@ test("nuria: the 2026-27 ski passes are no longer 'not published'", () => {
     const text = bodyToPlainText(NURIA.editions[locale].blocks);
     assert.doesNotMatch(text, /encara no havia publicat els forfets|aún no había publicado los forfaits|had not yet published the 2026-27 ski passes|ski passes were not out yet/, `${locale}: stale ski-pass line`);
     assert.match(text, /387 €|€387/, `${locale}: Ripollès season pass`);
-    assert.match(text, /23 de novembre de 2026|23 de noviembre de 2026|23 November 2026/, `${locale}: read date printed`);
+    // Re-read again on 27 Nov 2026 (batch 8V, winter leaflet).
+    assert.match(text, /27 de novembre de 2026|27 de noviembre de 2026|27 November 2026/, `${locale}: read date printed`);
   }
 });

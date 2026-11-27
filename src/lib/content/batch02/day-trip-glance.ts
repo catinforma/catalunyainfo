@@ -62,13 +62,29 @@ export type GlanceKey = "girona" | "figueres" | "tarragona" | "andorra" | "porta
 export const GLANCE_READ = "2026-11-25";
 
 /**
- * Each guide's own re-read date: a test fails from that day. Núria's fares end
- * on 30 Nov 2026; Renfe's timetable file covers services to 7 Dec; PortAventura's
+ * Núria was re-read again on 27 Nov 2026 (batch 8V): FGC's winter 2026-27
+ * leaflet (pirineu365.cat/wp-content/uploads/2026/11/VdN_Cremallera-Flyer-
+ * Tarifes-i-Horaris-HIVERN-26-27_V4-1-1.pdf): return 35,50 EUR from Ribes and
+ * 32,50 from Queralbs (adult), 23 / 21 (4-13), "vigents fins a 30 de novembre
+ * de 2027"; the 2026 leaflet's 34 / 31 still apply to 30 Nov. Turistren's page
+ * (unchanged, "Preus vàlids per a la temporada 2026") and the Vall de Núria
+ * shop (still 34 EUR) disagree with the leaflet until they switch; the copy
+ * prints the leaflet. Rodalies' R3 notice re-read the same day, unchanged.
+ */
+export const NURIA_READ = "2026-11-27";
+
+/**
+ * Each guide's own re-read date: a test fails from that day. Núria: re-read on
+ * 1-2 Dec 2026 once the winter fares apply (did the shop and Turistren switch
+ * to 35,50? drop the "until 30 November" figures) and before the ski area opens
+ * on 4 Dec; Renfe's timetable file covers services to 7 Dec; PortAventura's
  * Christmas hours and the RT2 timetable change in early December.
  */
 export const GLANCE_REREAD_BY: Record<GlanceKey, string> = {
-  nuria: "2026-12-01",
-  portaventura: "2026-12-05",
+  nuria: "2026-12-03",
+  // 27 Nov re-read: calendar to 6 Jan and trains to 19 Dec unchanged, online
+  // prices changed (39 / 35). Next: before the Christmas holidays.
+  portaventura: "2026-12-15",
   girona: "2026-12-07",
   figueres: "2026-12-07",
   tarragona: "2026-12-07",
@@ -103,14 +119,14 @@ const NOTE: Record<GlanceKey, Copy> = {
     en: "Re-read on each operator's timetable page on 25 November 2026, unchanged: Andbus (€33 single and €56 return from the airport, buying online; 3 h 15 from T1 and 2 h 45 from Diagonal) and Direct Bus (8 departures from Sants, 6:15 to 23:45; about 3 hours).",
   },
   portaventura: {
-    ca: "Tornats a llegir el 25 de novembre de 2026: el calendari oficial ja publica els horaris de febrer a maig de 2027 (vegeu la taula d'horaris) i les entrades (des de 43 €, 37 € en línia) i els trens R17 i RT2 segueixen igual.",
-    es: "Releídos el 25 de noviembre de 2026: el calendario oficial ya publica los horarios de febrero a mayo de 2027 (véase la tabla de horarios) y las entradas (desde 43 €, 37 € en línea) y los trenes R17 y RT2 siguen igual.",
-    en: "Re-read on 25 November 2026: the official calendar now publishes the hours for February to May 2027 (see the opening-times table) and the tickets (from €43, €37 online) and the R17 and RT2 trains are unchanged.",
+    ca: "Tornats a llegir el 25 de novembre de 2026: el calendari oficial ja publica els horaris de febrer a maig de 2027 (vegeu la taula d'horaris). Rellegits el 27 de novembre: calendari fins al 6 de gener i trens R17 i RT2 fins al 19 de desembre, sense canvis; l'entrada d'un dia surt ara a 39 € en línia (des de 43 €).",
+    es: "Releídos el 25 de noviembre de 2026: el calendario oficial ya publica los horarios de febrero a mayo de 2027 (véase la tabla de horarios). Releídos el 27 de noviembre: calendario hasta el 6 de enero y trenes R17 y RT2 hasta el 19 de diciembre, sin cambios; la entrada de un día sale ahora a 39 € en línea (desde 43 €).",
+    en: "Re-read on 25 November 2026: the official calendar now publishes the hours for February to May 2027 (see the opening-times table). Re-read on 27 November: the calendar to 6 January and the R17 and RT2 trains to 19 December are unchanged; a one-day ticket is now €39 online (from €43).",
   },
   nuria: {
-    ca: "Tornats a llegir a FGC Turistren el 25 de novembre de 2026, sense canvis: tarifes del cremallera (encara vigents fins al 30 de novembre) i pujada d'uns 40 minuts; avís de l'R3 de Rodalies llegit el mateix dia.",
-    es: "Releídos en FGC Turistren el 25 de noviembre de 2026, sin cambios: tarifas del cremallera (aún vigentes hasta el 30 de noviembre) y subida de unos 40 minutos; aviso de la R3 de Rodalies leído el mismo día.",
-    en: "Re-read on FGC Turistren on 25 November 2026, unchanged: the rack railway fares (still valid until 30 November) and the climb of about 40 minutes; Rodalies' R3 notice read the same day.",
+    ca: "Tornats a llegir a FGC el 27 de novembre de 2026: el fullet d'hivern 2026-2027 puja el cremallera a 35,50 € d'anada i tornada des de Ribes des de l'1 de desembre (34 € fins al 30 de novembre) i manté la pujada d'uns 40 minuts; l'avís de l'R3 de Rodalies, llegit el mateix dia, no canvia.",
+    es: "Releídos en FGC el 27 de noviembre de 2026: el folleto de invierno 2026-2027 sube el cremallera a 35,50 € de ida y vuelta desde Ribes desde el 1 de diciembre (34 € hasta el 30 de noviembre) y mantiene la subida de unos 40 minutos; el aviso de la R3 de Rodalies, leído el mismo día, no cambia.",
+    en: "Re-read on FGC on 27 November 2026: the winter 2026-27 leaflet raises the rack railway to €35.50 return from Ribes from 1 December (€34 until 30 November) and keeps the climb at about 40 minutes; Rodalies' R3 notice, read the same day, is unchanged.",
   },
 };
 
@@ -128,7 +144,8 @@ const HEADERS: Record<Locale, string[]> = {
 };
 
 const PLANNER = "https://rodalies.gencat.cat/ca/horaris/";
-const FGC = "https://turistren.cat/trens/cremallera-de-nuria/";
+/** FGC's winter 2026-27 leaflet (27 Nov 2026): the winter fares are not on Turistren yet. */
+const FGC_WINTER = "https://pirineu365.cat/wp-content/uploads/2026/11/VdN_Cremallera-Flyer-Tarifes-i-Horaris-HIVERN-26-27_V4-1-1.pdf";
 const R3 = "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3";
 const PA_TICKETS = "https://www.portaventuraworld.com/en/tickets/portaventura";
 
@@ -139,28 +156,28 @@ const TABLES: Partial<Record<GlanceKey, Record<Locale, GlanceTable>>> = {
       caption: "Com arribar a la Vall de Núria des de Barcelona",
       headers: HEADERS.ca,
       rows: [
-        ["Cremallera de Núria, de Ribes-Enllaç a la Vall de Núria", "Uns 40 minuts", "34 € d'anada i tornada des de Ribes i 31 € des de Queralbs (adult); infants de 4 a 13 anys, 22 i 20 €; fins a 3 anys, gratis. Tarifes vigents fins al 30 de novembre de 2026", `[FGC Turistren](${FGC})`],
+        ["Cremallera de Núria, de Ribes-Enllaç a la Vall de Núria", "Uns 40 minuts", "Des de l'1 de desembre, 35,50 € d'anada i tornada des de Ribes i 32,50 € des de Queralbs (adult); infants de 4 a 13 anys, 23 i 21 €; fins a 3 anys, gratis. Fins al 30 de novembre de 2026, 34 i 31 €", `[FGC, fullet d'hivern 2026-2027](${FGC_WINTER})`],
         ["R3 de Rodalies fins a Ribes-Enllaç", "Més llarg que l'habitual: l'R3 circula amb el 50 % dels trens d'abans del 20 de gener i, des del 16 de novembre, els trens surten de Sant Martí de Centelles (obres entre la Garriga i Figaró)", "Consulta el cercador de Rodalies", `[Rodalies, avís de l'R3](${R3})`],
       ],
-      note: "Llegit el 25 de novembre de 2026. Rodalies no publica una durada de Barcelona a Ribes-Enllaç mentre duren les obres: consulta'n els horaris el mateix dia.",
+      note: "Llegit el 27 de novembre de 2026 (fullet d'hivern 2026-2027 d'FGC). Rodalies no publica una durada de Barcelona a Ribes-Enllaç mentre duren les obres: consulta'n els horaris el mateix dia.",
     },
     es: {
       caption: "Cómo llegar a la Vall de Núria desde Barcelona",
       headers: HEADERS.es,
       rows: [
-        ["Cremallera de Núria, de Ribes-Enllaç a la Vall de Núria", "Unos 40 minutos", "34 € de ida y vuelta desde Ribes y 31 € desde Queralbs (adulto); niños de 4 a 13 años, 22 y 20 €; hasta 3 años, gratis. Tarifas vigentes hasta el 30 de noviembre de 2026", `[FGC Turistren](${FGC})`],
+        ["Cremallera de Núria, de Ribes-Enllaç a la Vall de Núria", "Unos 40 minutos", "Desde el 1 de diciembre, 35,50 € de ida y vuelta desde Ribes y 32,50 € desde Queralbs (adulto); niños de 4 a 13 años, 23 y 21 €; hasta 3 años, gratis. Hasta el 30 de noviembre de 2026, 34 y 31 €", `[FGC, folleto de invierno 2026-2027](${FGC_WINTER})`],
         ["R3 de Rodalies hasta Ribes-Enllaç", "Más largo de lo habitual: la R3 circula con el 50 % de los trenes de antes del 20 de enero y, desde el 16 de noviembre, los trenes salen de Sant Martí de Centelles (obras entre La Garriga y Figaró)", "Consulta el buscador de Rodalies", `[Rodalies, aviso de la R3](${R3})`],
       ],
-      note: "Leído el 25 de noviembre de 2026. Rodalies no publica una duración de Barcelona a Ribes-Enllaç mientras duran las obras: consulta los horarios el mismo día.",
+      note: "Leído el 27 de noviembre de 2026 (folleto de invierno 2026-2027 de FGC). Rodalies no publica una duración de Barcelona a Ribes-Enllaç mientras duran las obras: consulta los horarios el mismo día.",
     },
     en: {
       caption: "How to get to the Vall de Núria from Barcelona",
       headers: HEADERS.en,
       rows: [
-        ["Núria rack railway, Ribes-Enllaç to the Vall de Núria", "About 40 minutes", "€34 return from Ribes and €31 from Queralbs (adult); children 4 to 13, €22 and €20; under 4, free. Fares valid until 30 November 2026", `[FGC Turistren](${FGC})`],
+        ["Núria rack railway, Ribes-Enllaç to the Vall de Núria", "About 40 minutes", "From 1 December, €35.50 return from Ribes and €32.50 from Queralbs (adult); children 4 to 13, €23 and €21; under 4, free. Until 30 November 2026, €34 and €31", `[FGC winter 2026-27 leaflet](${FGC_WINTER})`],
         ["Rodalies R3 to Ribes-Enllaç", "Longer than usual: the R3 runs 50% of the trains it had before 20 January and, since 16 November, its trains start at Sant Martí de Centelles (works between La Garriga and Figaró)", "Check Rodalies' journey planner", `[Rodalies, R3 notice](${R3})`],
       ],
-      note: "Read on 25 November 2026. Rodalies publishes no journey time from Barcelona to Ribes-Enllaç while the works last: check the timetable on the day.",
+      note: "Read on 27 November 2026 (FGC's winter 2026-27 leaflet). Rodalies publishes no journey time from Barcelona to Ribes-Enllaç while the works last: check the timetable on the day.",
     },
   },
   portaventura: {
@@ -170,9 +187,9 @@ const TABLES: Partial<Record<GlanceKey, Record<Locale, GlanceTable>>> = {
       rows: [
         ["R17 directe, de Barcelona-Sants a Salou-Port Aventura", "1 h 24; 3 trens al dia (8:33, 10:33 i 12:33 des de Sants); l'estació és a 10 minuts a peu del parc", "9,35 € el senzill", `[Rodalies, cercador d'horaris](${PLANNER})`],
         ["Regional fins a Tarragona i RT2 fins al parc", "69 min + 13 min", "8,60 € + 2,70 € el senzill", `[Rodalies, cercador d'horaris](${PLANNER})`],
-        ["Entrada d'un dia a PortAventura Park (adult)", "Obre cada dia fins al 6 de gener, normalment de 10:30 a 18:00", "Des de 43 € (37 € en línia el 25 de novembre de 2026)", `[PortAventura World, entrades](${PA_TICKETS})`],
+        ["Entrada d'un dia a PortAventura Park (adult)", "Obre cada dia fins al 6 de gener, normalment de 10:30 a 18:00", "Des de 43 € (39 € en línia el 27 de novembre de 2026)", `[PortAventura World, entrades](${PA_TICKETS})`],
       ],
-      note: "Llegit el 25 de novembre de 2026. Els horaris i els preus canvien amb la data: consulta'ls per al teu dia.",
+      note: "Llegit el 25 i el 27 de novembre de 2026. Els horaris i els preus canvien amb la data: consulta'ls per al teu dia.",
     },
     es: {
       caption: "Cómo llegar a PortAventura desde Barcelona y cuánto cuesta",
@@ -180,9 +197,9 @@ const TABLES: Partial<Record<GlanceKey, Record<Locale, GlanceTable>>> = {
       rows: [
         ["R17 directo, de Barcelona-Sants a Salou-Port Aventura", "1 h 24; 3 trenes al día (8:33, 10:33 y 12:33 desde Sants); la estación está a 10 minutos a pie del parque", "9,35 € el sencillo", `[Rodalies, buscador de horarios](${PLANNER})`],
         ["Regional hasta Tarragona y RT2 hasta el parque", "69 min + 13 min", "8,60 € + 2,70 € el sencillo", `[Rodalies, buscador de horarios](${PLANNER})`],
-        ["Entrada de un día a PortAventura Park (adulto)", "Abre cada día hasta el 6 de enero, normalmente de 10:30 a 18:00", "Desde 43 € (37 € en línea el 25 de noviembre de 2026)", `[PortAventura World, entradas](${PA_TICKETS})`],
+        ["Entrada de un día a PortAventura Park (adulto)", "Abre cada día hasta el 6 de enero, normalmente de 10:30 a 18:00", "Desde 43 € (39 € en línea el 27 de noviembre de 2026)", `[PortAventura World, entradas](${PA_TICKETS})`],
       ],
-      note: "Leído el 25 de noviembre de 2026. Los horarios y los precios cambian con la fecha: consúltalos para tu día.",
+      note: "Leído el 25 y el 27 de noviembre de 2026. Los horarios y los precios cambian con la fecha: consúltalos para tu día.",
     },
     en: {
       caption: "How to get to PortAventura from Barcelona and what it costs",
@@ -190,9 +207,9 @@ const TABLES: Partial<Record<GlanceKey, Record<Locale, GlanceTable>>> = {
       rows: [
         ["Direct R17, Barcelona-Sants to Salou-Port Aventura", "1 h 24; 3 trains a day (8:33, 10:33 and 12:33 from Sants); the station is a 10-minute walk from the park", "€9.35 single", `[Rodalies, journey planner](${PLANNER})`],
         ["Regional train to Tarragona and the RT2 to the park", "69 min + 13 min", "€8.60 + €2.70 single", `[Rodalies, journey planner](${PLANNER})`],
-        ["One-day ticket to PortAventura Park (adult)", "Open every day until 6 January, usually 10:30 to 18:00", "From €43 (€37 online on 25 November 2026)", `[PortAventura World, tickets](${PA_TICKETS})`],
+        ["One-day ticket to PortAventura Park (adult)", "Open every day until 6 January, usually 10:30 to 18:00", "From €43 (€39 online on 27 November 2026)", `[PortAventura World, tickets](${PA_TICKETS})`],
       ],
-      note: "Read on 25 November 2026. Times and prices change with the date: check them for your day.",
+      note: "Read on 25 and 27 November 2026. Times and prices change with the date: check them for your day.",
     },
   },
 };
