@@ -23,6 +23,7 @@ import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, weekday
 import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
 import { dateQuestion } from "./question";
+import { town2027BridgeFaq, town2027Days, town2027Heading } from "./town-2027";
 import type { SnapshotMunicipality } from "./types";
 
 /**
@@ -465,7 +466,8 @@ export function municipalityCopy(
       cols: { date: "Data", weekday: "Dia", name: "Festa", scope: "Àmbit", place: "Nucli", days: `Festius locals ${YEAR}` },
       scope: { catalonia: "Tot Catalunya", local: "Local", aran: "Aran" },
       nucleiTitle: m.local.length > 0 ? "Nuclis amb festius propis" : `Festius locals de cada nucli ${caDe(m.name)}`,
-      nextTitle: `I el ${NEXT}?`,
+      // 27 Nov 2026: the searchers' words ("festius vic 2027", "calendari laboral reus 2027"), was "I el 2027?".
+      nextTitle: town2027Heading(m, "ca"),
       nextPending: [
         `Els festius locals ${caDe(m.name)} per al ${NEXT} encara no s'han publicat. Cada any els fixa una ordre del Departament d'Empresa i Treball, a proposta de cada ajuntament; la del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.`,
         `Quan es publiqui l'ordre del ${NEXT}, n'afegirem els dos dies aquí. Mentrestant, no els dones per repetits: els ajuntaments canvien de dia més sovint del que sembla.`,
@@ -533,7 +535,8 @@ export function municipalityCopy(
     cols: { date: "Fecha", weekday: "Día", name: "Fiesta", scope: "Ámbito", place: "Núcleo", days: `Festivos locales ${YEAR}` },
     scope: { catalonia: "Toda Cataluña", local: "Local", aran: "Arán" },
     nucleiTitle: m.local.length > 0 ? "Núcleos con festivos propios" : `Festivos locales de cada núcleo de ${name}`,
-    nextTitle: `¿Y en ${NEXT}?`,
+    // 27 Nov 2026: the searchers' words ("festivos mataro 2027", "calendario laboral badalona 2027"), was "¿Y en 2027?".
+    nextTitle: town2027Heading(m, "es"),
     nextPending: [
       `Los festivos locales de ${name} para ${NEXT} todavía no se han publicado. Cada año los fija una orden del Departament d'Empresa i Treball, a propuesta de cada ayuntamiento; la de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.`,
       `Cuando se publique la orden de ${NEXT}, añadiremos aquí los dos días. Mientras tanto, no los des por repetidos: los ayuntamientos cambian de día más a menudo de lo que parece.`,
@@ -610,6 +613,9 @@ export function municipalityFaq(
   const own = m.local.length > 0;
   const aran = isAran(m);
   const regionalNext = joinList(regionalDays(NEXT, aran).map((d) => dayMonth(d.date, locale)), locale);
+  // "¿Hay puente con las fiestas locales de 2027 en …?" once the town's 2027 days are known (town-2027.ts).
+  const bridge = town2027BridgeFaq(m, locale, town2027Days(m, next, approved));
+  const bridgeItems: MunicipalityFaqItem[] = bridge ? [bridge] : [];
   const asked = Object.keys(LOCAL_DATE_PAGES)
     .filter((iso) => iso >= today)
     .sort()
@@ -656,6 +662,7 @@ export function municipalityFaq(
             ? `Els festius locals ${caDe(m.name)} el ${NEXT} seran ${wdList(council.local, "ca")}, ${councilLabel(council, "ca")}. Se sumen als dotze ${aran ? "de l'Aran" : "de tot Catalunya"}, que ja són oficials (Ordre EMT/52/2026): ${regionalNext}.`
             : `Els dotze festius ${aran ? "de l'Aran" : "de tot Catalunya"} del ${NEXT} ja són oficials (Ordre EMT/52/2026): ${regionalNext}. Els dos festius locals ${caDe(m.name)} del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de l'ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025.`,
       },
+      ...bridgeItems,
       ...asked.map(dateItem),
     ];
   }
@@ -677,6 +684,7 @@ export function municipalityFaq(
           ? `Los festivos locales de ${name} en ${NEXT} serán ${wdList(council.local, "es")}, ${councilLabel(council, "es")}. Se suman a los doce ${aran ? "de Arán" : "de toda Cataluña"}, que ya son oficiales (Orden EMT/52/2026): ${regionalNext}.`
           : `Los doce festivos ${aran ? "de Arán" : "de toda Cataluña"} de ${NEXT} ya son oficiales (Orden EMT/52/2026): ${regionalNext}. Los dos festivos locales de ${name} para ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta del ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025.`,
     },
+    ...bridgeItems,
     ...asked.map(dateItem),
   ];
 }

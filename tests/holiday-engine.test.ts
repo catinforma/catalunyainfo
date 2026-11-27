@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { town2027Days } from "../src/lib/programmatic/holidays/town-2027.ts";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -1112,7 +1113,9 @@ test("town page: the next holiday in the static HTML, rebuilt by the cron the ni
   // The page prints it first, and the browser-computed answer stays out of search snippets.
   const page = readFileSync(join(ROOT, "src/components/programmatic/holidays/MunicipalityPage.tsx"), "utf8");
   assert.ok(page.indexOf("upcoming.lead") < page.indexOf("<HolidayStatus"), "the next holiday before the live box");
-  assert.ok(page.indexOf("<HolidayStatus") < page.indexOf("t.nextLead ?"), "the live box before the notes");
+  // 27 Nov 2026: the 2027 days moved from the notes under the live box to the first screen (Town2027FirstLine).
+  assert.ok(page.indexOf("<Town2027FirstLine") < page.indexOf("<HolidayStatus"), "the 2027 line before the live box");
+  assert.doesNotMatch(page, /t\.nextLead \?/);
   const status = readFileSync(join(ROOT, "src/components/programmatic/holidays/HolidayStatus.tsx"), "utf8");
   assert.equal(status.match(/className="ci-today"[^>]*data-nosnippet/g)?.length, 2);
 });
@@ -1399,6 +1402,8 @@ test("town FAQ: hoy, mañana, calendario laboral 2027 and the next two asked dat
       "¿Hoy es festivo en Barcelona?",
       "¿Mañana es festivo en Barcelona?",
       "¿Cuál es el calendario laboral 2027 de Barcelona?",
+      // 27 Nov 2026: the long-weekend question once the town's 2027 days are known (town-2027.ts).
+      "¿Hay puente con las fiestas locales de 2027 en Barcelona?",
       "¿El lunes 2 de noviembre es festivo en Barcelona?",
       "¿El miércoles 11 de noviembre es festivo en Barcelona?",
     ],
@@ -1408,13 +1413,13 @@ test("town FAQ: hoy, mañana, calendario laboral 2027 and the next two asked dat
   // labelled; without council data it says the local days are not out yet.
   assert.match(es[2]!.answer, /serán el lunes 17 de mayo y el viernes 24 de septiembre, aprobados por el Ayuntamiento \(decreto de alcaldía del 4 de junio de 2026\), pendientes de la orden del DOGC/);
   assert.match(municipalityFaq(bcn, "es", null, "2026-10-31", null)[2]!.answer, /todavía no se han publicado/);
-  assert.match(es[3]!.answer, /^No: en Barcelona es laborable\./);
-  assert.equal(es[3]!.link?.href, "/es/festivos/dia/1-noviembre-2026/");
+  assert.match(es[4]!.answer, /^No: en Barcelona es laborable\./);
+  assert.equal(es[4]!.link?.href, "/es/festivos/dia/1-noviembre-2026/");
   // A town whose own local day is asked about says yes; one where only a nucleus has it says so.
   for (const m of SNAPSHOT.municipalities) {
     for (const locale of ["ca", "es"] as const) {
       const faq = municipalityFaq(m, locale, null, "2026-11-01");
-      assert.equal(faq.length, 5, m.slug);
+      assert.equal(faq.length, town2027Days(m).state === "pending" ? 5 : 6, m.slug);
       for (const item of faq) assert.ok(!/undefined|NaN|\$\{|\{\w+\}/.test(item.question + item.answer), `${m.slug} ${locale}: ${item.answer}`);
       const nov11 = faq.find((i) => i.question.includes("11 de novembre") || i.question.includes("11 de noviembre"))!;
       if (m.local.includes("2026-11-11")) assert.match(nov11.answer, /^Sí/, m.slug);
@@ -1423,7 +1428,7 @@ test("town FAQ: hoy, mañana, calendario laboral 2027 and the next two asked dat
     }
   }
   // After the last asked date there is nothing left to ask about.
-  assert.equal(municipalityFaq(bcn, "ca", null, "2027-01-01").length, 3);
+  assert.equal(municipalityFaq(bcn, "ca", null, "2027-01-01").length, 4);
 });
 
 test("town pages link the work and school calendars with the year in the anchor", () => {

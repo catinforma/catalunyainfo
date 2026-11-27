@@ -24,12 +24,16 @@ import { dayMonth, longDate, weekdayDayMonth } from "@/lib/programmatic/holidays
 import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
+import { town2027Line } from "@/lib/programmatic/holidays/first-screen";
+import { dateQuestion } from "@/lib/programmatic/holidays/question";
+import { town2027DateLink, town2027Days } from "@/lib/programmatic/holidays/town-2027";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { EnglishChristmasShops } from "./ChristmasShops";
 import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources, TownQuickLinks } from "./parts";
+import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources, Town2027FirstLine, TownQuickLinks } from "./parts";
 
 /**
  * `/en/holidays/<slug>/`: one town of the English selection. Server-rendered
@@ -74,6 +78,10 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
   const name = enName(m);
   const faq = englishTownFaq(m, next);
   const answers = townDateAnswers(m);
+  // 2027: one line on the first screen and one date-page link in the section (lib/programmatic/holidays/town-2027.ts).
+  const days2027 = town2027Days(m, next, council);
+  const dateLink = town2027DateLink(m, "en", days2027);
+  const dateLink2027 = dateLink && !isLowDemandPath(datePath("en", dateLink.date)) ? dateLink : null;
   const others = englishTowns().filter((o) => o.slug !== m.slug);
   const guides: GuideKey[] = [
     "holidayToday",
@@ -101,8 +109,10 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
         <div className="ci-prose">
           {/* The shop answer for the next Sunday or holiday (lib/programmatic/holidays/shops-line.ts, 24 Nov 2026). */}
           <TownShopsLine m={m} locale="en" tight />
+          {/* 2027 on the first screen (first-screen.ts town2027Line, 27 Nov 2026), above the 2026 table. */}
+          <Town2027FirstLine line={town2027Line(m, "en", days2027)} anchor="holidays-2027" />
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
-          <h2 id="holidays-2026" className="mt-0">{t.tableTitle}</h2>
+          <h2 id="holidays-2026">{t.tableTitle}</h2>
           <HolidayTable rows={yearRows(m, YEAR, "en")} locale="en" caption={t.tableCaption} />
 
           <p className="ci-lead">
@@ -112,11 +122,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair
               (no date passed: the fair counts by the day the fairs were last read, so this page stays clock-free). */}
           <NextStep step={townNextStep(m.slug, name, "en", crumbPath(englishTownCrumbs(m)))} locale="en" />
-          {t.nextLead ? (
-            <p className="ci-callout ci-callout-official">
-              {t.nextLead} <a href="#holidays-2027">{`The ${NEXT} calendar`}</a>
-            </p>
-          ) : null}
+          {/* The 2027 days that sat here (t.nextLead) are on the first screen now (Town2027FirstLine). */}
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
 
@@ -175,6 +181,12 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
               </a>
             </p>
           )}
+          {/* One of the town's 2027 days that has a date page: who else is off (town-2027.ts town2027DateLink). */}
+          {dateLink2027 ? (
+            <p>
+              {dateLink2027.lead} <Link href={datePath("en", dateLink2027.date)}>{dateQuestion(dateLink2027.date, "en")}</Link>
+            </p>
+          ) : null}
           {/* The 2027 leave planner, with this town picked. */}
           <LeavePlaceLink locale="en" placeId={m.slug} place={name} />
           {/* The working-days calculator, with this place picked. */}

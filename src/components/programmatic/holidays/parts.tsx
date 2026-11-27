@@ -5,6 +5,7 @@ import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
 import { BOE_2027 } from "@/lib/programmatic/holidays/boe-2027";
 import type { CouncilSource } from "@/lib/programmatic/holidays/copy";
+import type { Town2027Line } from "@/lib/programmatic/holidays/first-screen";
 import { DATE_PAGES, datePath } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/question";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
@@ -246,6 +247,19 @@ function source(key: SourceKey) {
 }
 
 /** "Font: <the council's page> — Ajuntament de …. Consultada el …", under the council's own days. */
+/**
+ * The town's 2027 local days in one line on the first screen (first-screen.ts
+ * `town2027Line`), with a jump to the page's 2027 section. Plain server HTML.
+ */
+export function Town2027FirstLine({ line, anchor }: { line: Town2027Line; anchor: string }) {
+  return (
+    <p className="ci-callout ci-callout-official" data-town-2027={line.state}>
+      <strong>{line.strong}</strong>
+      {line.text} <a href={`#${anchor}`}>{line.link}</a>
+    </p>
+  );
+}
+
 export function CouncilSourceLine({ source }: { source: CouncilSource }) {
   return (
     <p className="text-sm">

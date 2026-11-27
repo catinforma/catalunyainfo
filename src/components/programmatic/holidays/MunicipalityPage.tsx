@@ -38,7 +38,8 @@ import {
   yearRows,
 } from "@/lib/programmatic/holidays/data";
 import { municipalityDatePages } from "@/lib/programmatic/holidays/dates";
-import { TODAY_FIRST, firstScreenOrder, pastRowsLabel, splitRowsByDate, townTodayAnswer } from "@/lib/programmatic/holidays/first-screen";
+import { TODAY_FIRST, firstScreenOrder, pastRowsLabel, splitRowsByDate, town2027Line, townTodayAnswer } from "@/lib/programmatic/holidays/first-screen";
+import { town2027DateLink, town2027Days } from "@/lib/programmatic/holidays/town-2027";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { OFFICIAL } from "@/lib/programmatic/holidays/links";
 import { caComarca, joinList } from "@/lib/programmatic/holidays/names";
@@ -49,7 +50,7 @@ import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { ChristmasShops } from "./ChristmasShops";
 import { TownShopsLine } from "./TownShopsLine";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources, TownQuickLinks } from "./parts";
+import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources, Town2027FirstLine, TownQuickLinks } from "./parts";
 
 const STATUS_LABELS: Record<MuniLocale, StatusLabels> = {
   ca: {
@@ -127,6 +128,11 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const answer = todayFirst ? townTodayAnswer(m, locale, todayInCatalonia()) : null;
   const halves = todayFirst ? splitRowsByDate(rows, todayInCatalonia()) : null;
   const split = halves && halves.upcoming.length > 0 && halves.past.length > 0 ? halves : null;
+  // 2027: one line on the first screen and one date-page link in the section (lib/programmatic/holidays/town-2027.ts).
+  const days2027 = town2027Days(m, next, councilApproved2027(m.slug));
+  const line2027 = town2027Line(m, locale, days2027);
+  const dateLink = town2027DateLink(m, locale, days2027);
+  const dateLink2027 = dateLink && !isLowDemandPath(datePath(locale, dateLink.date)) ? dateLink : null;
 
   return (
     <article>
@@ -160,9 +166,11 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               <Fragment key={part}>
                 {/* ca: the shop answer for the next Sunday or holiday above the table (shops-line.ts); es has it under its answer. */}
                 {todayFirst ? null : <TownShopsLine m={m} locale={locale} tight />}
-                <h2 id="festius-2026" className={todayFirst ? undefined : "mt-0"}>
-                  {t.tableTitle}
-                </h2>
+                {/* 2027 on the first screen, both editions (first-screen.ts town2027Line, 27 Nov 2026): the town's
+                    days, who set them, or "pending"; the 2027 section below has the source and the table. */}
+                <Town2027FirstLine line={line2027} anchor="festius-2027" />
+                {/* No mt-0 on ca any more: the 2027 line above it is always there (27 Nov 2026). */}
+                <h2 id="festius-2026">{t.tableTitle}</h2>
                 {split ? (
                   <>
                     <HolidayTable rows={split.upcoming} locale={locale} caption={t.tableCaption} />
@@ -205,11 +213,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             labels={STATUS_LABELS[locale]}
           />
 
-          {t.nextLead ? (
-            <p className="ci-callout ci-callout-official">
-              {t.nextLead} <a href="#festius-2027">{locale === "ca" ? `Calendari del ${NEXT}` : `Calendario de ${NEXT}`}</a>
-            </p>
-          ) : null}
+          {/* The 2027 days that sat here (t.nextLead) are on the first screen now (Town2027FirstLine). */}
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
           {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
@@ -283,6 +287,12 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               <DateList dates={regionalDays(NEXT, isAran(m)).map((d) => d.date)} locale={locale} />
             </>
           )}
+          {/* One of the town's 2027 days that has a date page: who else is off (town-2027.ts town2027DateLink). */}
+          {dateLink2027 ? (
+            <p>
+              {dateLink2027.lead} <Link href={datePath(locale, dateLink2027.date)}>{dateQuestion(dateLink2027.date, locale)}</Link>
+            </p>
+          ) : null}
           {/* The 2027 leave planner, with this town picked. */}
           <LeavePlaceLink locale={locale} placeId={m.slug} place={name} />
           {/* The working-days calculator, with this place picked. */}

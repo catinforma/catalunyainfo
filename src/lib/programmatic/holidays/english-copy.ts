@@ -11,6 +11,7 @@ import { dayMonth, dayPair, weekdayDayMonth, weekdayName } from "./format";
 import { GUIDES } from "./links";
 import { joinList } from "./names";
 import { DATE_PAGES, type DatePage } from "./paths";
+import { town2027BridgeFaq, town2027Days, town2027Heading } from "./town-2027";
 import type { SnapshotMunicipality } from "./types";
 
 /**
@@ -194,7 +195,8 @@ export function englishTownCopy(
     tableCaption: `Catalonia-wide and local public holidays in ${name}, ${YEAR}`,
     nucleiTitle: own ? "Villages with holidays of their own" : `Local holidays in each village of ${name}`,
     nucleiCols: { place: "Village", days: `Local holidays ${YEAR}` },
-    nextTitle: `Public holidays in ${name} in ${NEXT}`,
+    // 27 Nov 2026: the searchers' words ("bank holidays barcelona 2027"), was "Public holidays in <town> in 2027".
+    nextTitle: town2027Heading(m, "en"),
     nextLead: council ? `Local holidays in ${NEXT}: ${dayPair(council.local[0], council.local[1], "en")}, ${councilLabel(council, "en")}.` : null,
     next: next
       ? [`The local holidays in ${name} in ${NEXT} are ${wdDates(next.local)}, on top of Catalonia's ${regionalCount(NEXT)}.`]
@@ -376,6 +378,7 @@ export function englishTownFaq(
   const regional2026 = regionalDays(YEAR, aran);
   const regionalNext = regionalDays(NEXT, aran);
   const locals = own ? `its ${count(m.local.length)} local ${m.local.length === 1 ? "holiday" : "holidays"}, ${wdDates(m.local)}` : "the local holidays of each village, listed in the table";
+  const bridge = town2027BridgeFaq(m, "en", town2027Days(m, next, approved));
 
   return [
     {
@@ -398,6 +401,8 @@ export function englishTownFaq(
           ? `The local holidays will be ${wdDates(council.local)}, ${councilLabel(council, "en")}. Catalonia's ${regionalNext.length} are official (Order EMT/52/2026): ${dates(regionalNext.map((d) => d.date))}.`
           : `Catalonia's ${regionalNext.length} public holidays for ${NEXT} are official (Order EMT/52/2026): ${dates(regionalNext.map((d) => d.date))}. The local holidays of ${name} for ${NEXT} have not been published yet; the order for ${YEAR} came out on 17 December 2025.`,
     },
+    // "Do <town>'s 2027 local holidays make a long weekend?" once the days are known (town-2027.ts).
+    ...(bridge ? [bridge] : []),
     {
       question: `Are shops open on public holidays in ${name}?`,
       answer: `Shops on the general timetable may open on only ten Sundays and public holidays a year. In ${name} in ${YEAR} they are ${dates(m.shops)}. Bakeries, pastry shops, convenience stores, florists and pharmacies, among others, are outside these limits (Llei 18/2017, article 37).`,

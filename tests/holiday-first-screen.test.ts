@@ -46,7 +46,9 @@ test("the town page renders its first screen from firstScreenOrder, before the n
 
 test("English town pages keep the table first (too little data at the 19 Nov review)", () => {
   const page = read("src/components/programmatic/holidays/EnglishTownPage.tsx");
-  assert.ok(page.indexOf('<h2 id="holidays-2026" className="mt-0">') < page.indexOf('<p className="ci-lead">'));
+  // 27 Nov 2026: the one-line 2027 box sits above the table (holiday-town-2027.test.ts), so the h2 lost its mt-0.
+  assert.ok(page.indexOf('<h2 id="holidays-2026">') > -1);
+  assert.ok(page.indexOf('<h2 id="holidays-2026">') < page.indexOf('<p className="ci-lead">'));
 });
 
 test("Barcelona on 18 Nov 2026: no holiday until the next one, named with its date", () => {

@@ -300,6 +300,8 @@ test("JSON-LD: Dataset like the Catalan and Spanish town pages, FAQ in the searc
         `Is tomorrow a holiday in ${enName(m)}?`,
         `What are the public holidays in ${enName(m)} in ${YEAR}?`,
         `What are the bank holidays in ${enName(m)} in ${NEXT}?`,
+        // 27 Nov 2026: the long-weekend question once the town's 2027 days are known (town-2027.ts).
+        ...(councilApproved2027(m.slug) ? [`Do ${enName(m)}'s ${NEXT} local holidays make a long weekend?`] : []),
         `Are shops open on public holidays in ${enName(m)}?`,
       ],
     );
